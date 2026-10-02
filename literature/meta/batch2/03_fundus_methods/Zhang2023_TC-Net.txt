@@ -1,0 +1,28 @@
+文献ID: M-TCNET-2023
+PDF: literature/batch2/03_fundus_methods/Zhang2023_TC-Net.pdf
+批次: batch2
+角色: 专用多病灶
+主任务纳入: 是。眼底实验是 IDRiD 与 DDR 的四类分割；另有一个皮肤病灶实验，不并入眼底榜
+归类: 主比较-关系或Transformer
+身份核对: 一致
+题名: TC-Net: A joint learning framework based on CNN and vision transformer for multi-lesion medical images segmentation
+作者: Zhongxiang Zhang, Guangmin Sun, Kun Zheng, Jin-Kui Yang, Xiao-rong Zhu, Yu Li
+年份: 2023
+出处: Computers in Biology and Medicine 161:106967
+标识: doi:10.1016/j.compbiomed.2023.106967
+任务: CNN 与 Transformer 联合的多病灶分割
+成像: 彩色眼底，以及皮肤图像
+病灶: 眼底为 EX, HE, MA, SE
+数据: IDRiD, DDR，另有皮肤病灶库
+标注粒度: 细像素。论文给出 IDRiD 与 DDR 的像素占比
+模型族: CNN 编码器与 Transformer 编码器并联，LLCS 融合，动态循环 focal 损失
+额外输入: 仅图像
+报告指标: AUC、像素准确率、mIoU、mDice。对照包括 U-Net、DeepLabv3+、L-Seg、Swin-UNet
+代码: 已读全文未发现 GitHub 或代码发布声明
+权重: 未发现
+重训轨: 主比较集。无官方代码，不能复现
+摘要: 用卷积保留局部、用 Transformer 保留长程依赖，并专门处理病灶像素极少的不平衡。眼底结果在 IDRiD 和 DDR 上。MLNet 引用了它。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。
+
+复现笔记 2026-10-02: 按正文和插图写的网络在 reproductions/Zhang2023_TC-Net，说明在该目录的 DESIGN.md。没有官方代码，这一步也没有训练。额外输入：无，只有 RGB。随机种子 20230513。表 2、表 3 和表 6 的数字只作事后对照。

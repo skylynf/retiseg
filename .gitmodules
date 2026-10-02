@@ -1,0 +1,84 @@
+[submodule "official_code/bin_loss"]
+	path = official_code/bin_loss
+	url = https://github.com/guomugong/bin_loss
+[submodule "official_code/caffe-fcn"]
+	path = official_code/caffe-fcn
+	url = https://github.com/BVLC/caffe
+[submodule "official_code/DDR-dataset"]
+	path = official_code/DDR-dataset
+	url = https://github.com/nkicsl/DDR-dataset
+[submodule "official_code/DeepLabv3plus"]
+	path = official_code/DeepLabv3plus
+	url = https://github.com/tensorflow/models
+[submodule "official_code/FCT"]
+	path = official_code/FCT
+	url = https://github.com/Thanos-DB/FullyConvolutionalTransformer
+[submodule "official_code/H2Former"]
+	path = official_code/H2Former
+	url = https://github.com/NKUhealong/H2Former
+[submodule "official_code/HACDR-Net"]
+	path = official_code/HACDR-Net
+	url = https://github.com/xqh180110910537/HACDR-Net
+[submodule "official_code/hed"]
+	path = official_code/hed
+	url = https://github.com/s9xie/hed
+[submodule "official_code/HRNet-pose-pytorch"]
+	path = official_code/HRNet-pose-pytorch
+	url = https://github.com/microsoft/human-pose-estimation.pytorch
+[submodule "official_code/HRNet-Semantic-Segmentation"]
+	path = official_code/HRNet-Semantic-Segmentation
+	url = https://github.com/HRNet/HRNet-Semantic-Segmentation
+[submodule "official_code/L-Seg"]
+	path = official_code/L-Seg
+	url = https://github.com/guomugong/L-Seg
+[submodule "official_code/M2MRF"]
+	path = official_code/M2MRF
+	url = https://github.com/CVIU-CSU/M2MRF-Lesion-Segmentation
+[submodule "official_code/MedSAM"]
+	path = official_code/MedSAM
+	url = https://github.com/bowang-lab/MedSAM
+[submodule "official_code/Nested-UNet"]
+	path = official_code/Nested-UNet
+	url = https://github.com/MrGiovanni/Nested-UNet
+[submodule "official_code/PerSAM"]
+	path = official_code/PerSAM
+	url = https://github.com/ZrrSkywalker/Personalize-SAM
+[submodule "official_code/ResNeSt"]
+	path = official_code/ResNeSt
+	url = https://github.com/zhanghang1989/ResNeSt.git
+[submodule "official_code/retinal-lesions"]
+	path = official_code/retinal-lesions
+	url = https://github.com/WeiQijie/retinal-lesions
+[submodule "official_code/sam2"]
+	path = official_code/sam2
+	url = https://github.com/facebookresearch/sam2
+[submodule "official_code/SAM2-UNet"]
+	path = official_code/SAM2-UNet
+	url = https://github.com/WZH0120/SAM2-UNet
+[submodule "official_code/SAM-Adapter"]
+	path = official_code/SAM-Adapter
+	url = https://github.com/tianrun-chen/SAM-Adapter-PyTorch
+[submodule "official_code/SAMed"]
+	path = official_code/SAMed
+	url = https://github.com/hitachinsk/SAMed
+[submodule "official_code/segment-anything"]
+	path = official_code/segment-anything
+	url = https://github.com/facebookresearch/segment-anything
+[submodule "official_code/Swin-Transformer"]
+	path = official_code/Swin-Transformer
+	url = https://github.com/microsoft/Swin-Transformer
+[submodule "official_code/Swin-Unet"]
+	path = official_code/Swin-Unet
+	url = https://github.com/HuCaoFighting/Swin-Unet
+[submodule "official_code/TP-DRSeg"]
+	path = official_code/TP-DRSeg
+	url = https://github.com/WangShuhui-23/TP-DRSeg
+[submodule "official_code/UPerNet"]
+	path = official_code/UPerNet
+	url = https://github.com/CSAILVision/unifiedparsing
+[submodule "official_code/UTNet"]
+	path = official_code/UTNet
+	url = https://github.com/yhygao/UTNet.git
+[submodule "official_code/WSRFNet"]
+	path = official_code/WSRFNet
+	url = https://github.com/xuanli01/WSRFNet

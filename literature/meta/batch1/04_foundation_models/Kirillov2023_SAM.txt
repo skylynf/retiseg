@@ -1,0 +1,26 @@
+文献ID: F-SAM-2023
+PDF: literature/batch1/04_foundation_models/Kirillov2023_SAM.pdf
+批次: batch1
+角色: 通用基础模型
+主任务纳入: 基线
+归类: 基线-基础模型未做本病
+身份核对: 一致
+题名: Segment Anything
+作者: Alexander Kirillov et al.
+年份: 2023
+出处: ICCV
+标识: arXiv:2304.02643
+任务: 可提示自然图像分割
+成像: 自然图像
+病灶: 无
+数据: SA-1B
+标注粒度: 不适用
+模型族: ViT 加提示解码器
+额外输入: 点、框、掩膜
+报告指标: 自然图像
+代码: https://github.com/facebookresearch/segment-anything
+权重: 官方权重
+重训轨: 基线。本病上的零样本以统一协议重跑
+摘要: 直接用于眼底小病灶时接近失败。这个现象要在统一协议下复核，不直接引用别人的表。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

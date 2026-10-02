@@ -1,0 +1,29 @@
+文献识别记录索引
+
+每篇 PDF 对应一份同名 txt，放在 literature/meta/ 下，目录与 PDF 相同。
+三篇补齐文献已归位，missing 目录已删除。官方代码克隆记录见 literature/synthesis/04_代码审计.txt，仓库在 official_code/。
+总表：literature/meta/LEDGER.tsv
+范围定义：literature/scope_definition.txt
+
+归类与下一步：
+literature/synthesis/01_研究设计.txt
+literature/synthesis/02_数据集归类.txt
+literature/synthesis/03_模型归类.txt
+literature/synthesis/04_代码审计.txt
+
+阅读新文献时，复制任意一份 txt 的字段，不要另起格式。
+归类只能使用这些标签：
+模板
+综述
+数据集-细像素
+数据集-粗或区域
+数据集-检出级
+数据集-分级依赖
+主比较-CNN多尺度
+主比较-关系或Transformer
+主比较-半监督
+主比较-基础模型适配
+单病灶
+基线-通用分割
+基线-基础模型未做本病
+OCTA独立任务

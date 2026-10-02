@@ -1,0 +1,46 @@
+模型归类
+对应 Nature Methods 把模型分成单特征和多特征。这里分成五族。族用来解释，不是榜单。同一族先比较，再比较族之间。
+
+族 1  通用分割基线
+第一轮必含：U-Net（B-UNET-2015）、DeepLabv3+（B-DEEPLAB-2018）、HRNet（B-HRNET-2020）、Swin-Unet（B-SWINUNET-2022）、FCT（B-FCT-2023，重复 PDF 只计一次）。
+可选：UPerNet、UNet++、FCN、HED、SegNet。Swin Transformer 本身是分类骨干，不是分割模型。
+
+族 2  专用多尺度 CNN，只用眼底图像
+优先重训，作者给出了仓库：L-Seg、SAA、M2MRF、HACDR-Net、WSRFNet。
+未发现完整代码：CARNet、PMCNet、MLNet、LezioSeg、HEDNet 加条件对抗。
+未到本地：Guo 2024 多尺度框架、CLC-Net。
+
+族 3  关系或混合结构
+RTNet：图像加血管。这是额外输入是否有用的专用模型。未发现作者代码。
+VTA：ViT、空间先验和双曲嵌入。未发现代码。
+H2Former：通用混合模型，但完整做了 IDRiD 四类。其他器官的分数不要并进来。
+未到本地：TC-Net。若实验不是 DR 四类，移出主比较集。
+
+族 4  半监督
+比较的是弱标签怎么用。
+SSMD-UNet：EyePACS 无标注重建，FGADR 与 IDRiD 上一主多辅。划分是作者自划的。
+Zhou 等，CVPR 2019：像素标签和图像级分级互相约束。
+轨 A 可以记录原文；轨 B 必须改到官方划分或公开的固定划分。
+
+族 5  基础模型
+原文未做本病、只作基线：SAM、SAM 2、MedSAM、SAMed、SAM-Adapter、PerSAM、SAM2-UNet。
+已经在 IDRiD 或 DDR 上实验：TP-DRSeg（图像加文本）、Chen 2025（冻结 SAM 2）、Learnable Ophthalmology SAM（一眼样本；微动脉瘤和软性渗出失败）。
+零样本、几何提示、参数高效微调和全量微调必须分开，不能合成一个 SAM 分数。
+
+单病灶旁支
+bin loss、双分支网络、SS-MAF：硬性渗出。
+Dai 2018：微动脉瘤检出，使用临床报告。
+
+和 Nature Methods 的对应
+仅图像的专用网络，对应单特征。
+加血管或加文本，对应多特征。
+数据集内官方测试，对应已见。
+跨数据集，对应未见。
+细标注相对粗标注，对应阴性样本来源。
+有代码才进轨 B。
+
+第一批准备重训的名单
+基线：U-Net、DeepLabv3+、HRNet、Swin-Unet、FCT。
+专用且已给出仓库：L-Seg、SAA、M2MRF、HACDR-Net、WSRFNet、Lesion-Net、TP-DRSeg。
+已有公开权重、可按统一协议重跑：SAM、SAM 2、MedSAM、SAMed、PerSAM。
+其余主比较模型在仓库确认之前只做原文审计。

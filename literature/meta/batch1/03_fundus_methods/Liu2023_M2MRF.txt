@@ -1,0 +1,26 @@
+文献ID: M-M2MRF-2023
+PDF: literature/batch1/03_fundus_methods/Liu2023_M2MRF.pdf
+批次: batch1
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致，arXiv:2111.00193
+题名: M2MRF
+作者: Qing Liu, Haotian Liu, Wei Ke, Yixiong Liang
+年份: 2023
+出处: Pattern Recognition 136:109191
+标识: arXiv:2111.00193
+任务: 微小病灶分割
+成像: 彩色眼底
+病灶: 四类，强调小病灶
+数据: DDR, IDRiD
+标注粒度: 细像素
+模型族: 多对多特征重组，装在 HRNet 上
+额外输入: 仅图像
+报告指标: 与重组算子和 Transformer 比较
+代码: https://github.com/CVIU-CSU/M2MRF-Lesion-Segmentation
+权重: 待核实
+重训轨: 主比较集，优先重训
+摘要: 普通重组会淹没成团的小病灶。M2MRF 把一块区域同时重组到多个目标位置。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

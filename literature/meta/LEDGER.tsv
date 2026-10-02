@@ -1,0 +1,62 @@
+文献ID	归类	主任务纳入	重训轨	PDF	题名
+T-NM-2026	模板	否	不重训	batch1/00_template/Lu2026_TCR_epitope_NatureMethods.pdf	Assessment of computational methods in predicting TCR-epitope binding recognition
+T-NM-2026-SI	模板	否	不重训	batch1/00_template/Lu2026_TCR_epitope_SI.pdf	Supplementary information for the Nature Methods assessment
+R-PLAYOUT-2024	综述	作为先前基准	不把文中临时基线当作专用模型	batch1/01_prior_reviews/Playout2024_cross_dataset_generalization.pdf	Cross-dataset generalization for retinal lesions segmentation
+R-SEBASTIAN-2023	综述	否，范围更宽	不重训	batch1/01_prior_reviews/applsci-13-05111.pdf	A survey on diabetic retinopathy lesion detection and segmentation
+R-TAHIR-2024	综述	否，只覆盖微动脉瘤	不重训	batch1/01_prior_reviews/s11042-023-18089-52.pdf	Advances in retinal microaneurysms detection, segmentation and datasets
+D-IDRID-2018	数据集-细像素	是	官方划分用于数据集内测试	batch1/02_datasets/data-03-00025.pdf	Indian Diabetic Retinopathy Image Dataset (IDRiD)
+D-IDRID-CHAL-2020	数据集-细像素	是	作为协议，不重训	batch1/02_datasets/Porwal2020_IDRiD_challenge.pdf	IDRiD: Diabetic Retinopathy - Segmentation and Grading Challenge
+D-DDR-2019	数据集-细像素	是	官方划分是数据集内主协议	batch1/02_datasets/li2019.pdf	Diagnostic assessment of deep learning algorithms for diabetic retinopathy screening
+D-FGADR-2021	数据集-粗或区域	是	跨数据集实验中的粗标注来源	batch1/02_datasets/Zhou2021_FGADR.pdf	A benchmark for studying diabetic retinopathy: segmentation, grading, and transferability
+D-MAPLES-2024	数据集-细像素	是	细标注外部测试	batch1/02_datasets/MAPLES-DR_2024_ScientificData.pdf	MAPLES-DR
+D-MESSIDOR-2014	数据集-分级依赖	否	不单独做分割	batch1/02_datasets/Decenciere2014_MESSIDOR.pdf	Feedback on a publicly distributed image database: the MESSIDOR database
+D-RETLESION-2020	数据集-粗或区域	数据用于粒度实验；Lesion-Net 进入主比较	有代码，可列入重训候选	batch1/02_datasets/Wei2020_RetinalLesions_LesionNet.pdf	Learn to segment retinal lesions and beyond
+D-DIARETDB1-2007	数据集-粗或区域	谨慎纳入	可作外部测试，须单独说明真值	batch1/02_datasets/Kauppi2007_DIARETDB1.pdf	The DIARETDB1 diabetic retinopathy database and evaluation protocol
+D-DIARETDB0-2006	数据集-粗或区域	否	不进入像素主榜	batch1/02_datasets/Kauppi2006_DIARETDB0.pdf	DIARETDB0
+D-EOPHTHA-2013	数据集-细像素	两类外部测试	不参与四类平均	batch1/02_datasets/Decenciere2013_eophtha_TeleOphta.pdf	TeleOphta
+D-ROC-2010	数据集-检出级	病灶级旁支	不计算像素 Dice	batch1/02_datasets/TMI-2009-0430_author.pdf	Retinopathy Online Challenge
+M-LSEG-2019	主比较-CNN多尺度	是	主比较集，优先重训	batch1/03_fundus_methods/guo2019.pdf	L-Seg
+M-BINLOSS-2020	单病灶	旁支	单病灶旁支；损失可进入因素实验	batch1/03_fundus_methods/guo2020.pdf	Bin loss for hard exudates segmentation
+M-RTNET-2022	主比较-关系或Transformer	是	主比较集；无作者代码则不能凭论文表排名	batch1/03_fundus_methods/Huang2022_RTNet.pdf	RTNet
+M-SAA-2022	主比较-CNN多尺度	是	主比较集。官方仓库是空的，目前不能重训	batch1/03_fundus_methods/bo2022.pdf	SAA: scale-aware attention block
+M-M2MRF-2023	主比较-CNN多尺度	是	主比较集，优先重训	batch1/03_fundus_methods/Liu2023_M2MRF.pdf	M2MRF
+M-HACDR-2024	主比较-CNN多尺度	是	主比较集，优先重训	batch1/03_fundus_methods/Xu2024_HACDR-Net.pdf	HACDR-Net
+M-WSRF-2024	主比较-CNN多尺度	是	主比较集，优先重训；其指标定义可作为主指标先例	batch1/03_fundus_methods/Li2024_WSRFNet.pdf	WSRFNet
+M-CARNET-2022	主比较-CNN多尺度	是	主比较集；无代码则只做原文审计	batch1/03_fundus_methods/Guo2022_CARNet.pdf	CARNet
+M-HEDGAN-2020	主比较-CNN多尺度	是	主比较集；无代码则不重训	batch1/03_fundus_methods/Xiao2020_HEDNet_cGAN.pdf	Improving lesion segmentation using adversarial learning
+M-MLNET-2024	主比较-CNN多尺度	是	主比较集。带星号的数字是该文自己重跑的	batch1/03_fundus_methods/algorithms-17-00164-v2.pdf	Multi-scale attention and lesion perception
+M-SSMAF-2022	单病灶	旁支	单病灶旁支	batch1/03_fundus_methods/2211.09404v1.pdf	SS-MAF hard exudate segmentation
+M-DAI-2018	单病灶	旁支	不进入像素主榜	batch1/03_fundus_methods/dai2018.pdf	Clinical report guided retinal microaneurysm detection
+M-DBEX-2021	单病灶	旁支	单病灶旁支	batch1/03_fundus_methods/Liu2022_dual_branch_exudate.pdf	Dual-branch network for hard exudate segmentation
+F-SAM-2023	基线-基础模型未做本病	基线	基线。本病上的零样本以统一协议重跑	batch1/04_foundation_models/Kirillov2023_SAM.pdf	Segment Anything
+F-SAM2-2024	基线-基础模型未做本病	基线	基线。本病适配见 Chen 2025	batch1/04_foundation_models/Ravi2024_SAM2.pdf	SAM 2
+F-MEDSAM-2024	基线-基础模型未做本病	基线	基线，在 IDRiD 与 DDR 上按同一提示协议重跑	batch1/04_foundation_models/Ma2024_MedSAM.pdf	Segment anything in medical images
+F-TPDRSEG-2024	主比较-基础模型适配	是	主比较集。论文链接失效，现有仓库没有训练代码，目前不能重训	batch1/04_foundation_models/Li2024_TP-DRSeg.pdf	TP-DRSeg
+F-SAM2DR-2025	主比较-基础模型适配	是	主比较集；无代码则只作方法记录	batch1/04_foundation_models/Adapting-Segment-Anything-2-for-Diabetic-Retinopathy-Lesion-Segmentation.pdf	Adapting Segment Anything 2 for diabetic retinopathy lesion segmentation
+O-DRAC-2023	OCTA独立任务	否，单独成章	独立任务	batch1/05_octa/Qian2023_DRAC.pdf	DRAC challenge with ultra-wide OCTA
+B-UNET-2015	基线-通用分割	基线	所有主实验的必含基线	batch1/06_general_backbones/Ronneberger2015_U-Net.pdf	U-Net
+B-FCN-2015	基线-通用分割	基线	可选基线	batch1/06_general_backbones/Long2015_FCN.pdf	Fully convolutional networks
+B-DEEPLAB-2018	基线-通用分割	基线	必含通用基线	batch1/06_general_backbones/Chen2018_DeepLabv3plus.pdf	DeepLabv3+
+B-HRNET-2020	基线-通用分割	基线	必含基线	batch1/06_general_backbones/Wang2020_HRNet.pdf	HRNet
+B-SWIN-2021	基线-通用分割	基线	不单独当分割模型；分割用 Swin-Unet	batch1/06_general_backbones/Liu2021_Swin_Transformer.pdf	Swin Transformer
+B-UPERNET-2018	基线-通用分割	基线	可选解码头基线	batch1/06_general_backbones/Xiao2018_UPerNet.pdf	UPerNet
+M-PMCNET-2022	主比较-CNN多尺度	是	主比较集；目前不可重训	batch2/03_fundus_methods/He2022_PMCNet.pdf	PMCNet
+M-H2FORMER-2023	主比较-关系或Transformer	是，按通用模型解释	主比较集中的通用混合模型	batch2/03_fundus_methods/He2023_H2Former.pdf	H2Former
+M-SSMD-2023	主比较-半监督	是	半监督分支。划分是作者自划的 70/5/25，不能和官方划分混报	batch2/03_fundus_methods/Ullah2023_SSMD-UNet.pdf	SSMD-UNet
+M-VTA-2023	主比较-关系或Transformer	是	主比较集。MLNet 带星号的 VTA 是别人重跑的，两套数字都要注明来源	batch2/03_fundus_methods/Wang2023_VTA_hyperbolic.pdf	VTA plus hyperbolic embeddings
+M-LEZIO-2023	主比较-CNN多尺度	是	主比较集	batch2/03_fundus_methods/electronics-12-04940.pdf	LezioSeg
+M-ZHOUCL-2019	主比较-半监督	是	半监督分支	batch2/03_fundus_methods/Zhou_Collaborative_Learning_of_Semi-Supervised_Segmentation_and_Classification_for_Medical_Images_CVPR_2019_paper.pdf	Collaborative learning of semi-supervised segmentation and classification
+F-SAMAD-2023	基线-基础模型未做本病	基线	基线，在 IDRiD 与 DDR 上重跑	batch2/04_foundation_models/Chen2023_SAM-Adapter.pdf	SAM-Adapter
+F-OPHSAM-2023	主比较-基础模型适配	是	主比较集的少样本基础模型	batch2/04_foundation_models/Qiu2023_Learnable_Ophthalmology_SAM.pdf	Learnable Ophthalmology SAM
+B-FCT-2023	基线-通用分割	基线	必含基线。TP-DRSeg 把它当作专用分割对照	batch2/04_foundation_models/Tragakis2023_FCT.pdf	Fully Convolutional Transformer
+B-FCT-2023-DUP	基线-通用分割	否	不单独入库两次	batch2/04_foundation_models/Tragakis2023_FCT_WACV.pdf	Fully Convolutional Transformer
+F-SAM2UNET-2024	基线-基础模型未做本病	结构参考	可选基线。本病对应实验是 Chen 2025	batch2/04_foundation_models/Xiong2024_SAM2-UNet.pdf	SAM2-UNet
+F-SAMED-2023	基线-基础模型未做本病	基线	基线，在 IDRiD 与 DDR 上重跑	batch2/04_foundation_models/Zhang2023_SAMed.pdf	SAMed
+F-PERSAM-2024	基线-基础模型未做本病	基线	基线。已有报告在 DR 上接近失败，需自己复核	batch2/04_foundation_models/Zhang2024_PerSAM.pdf	PerSAM
+B-SWINUNET-2022	基线-通用分割	基线	Transformer 分割基线	batch2/06_general_backbones/Cao2022_Swin-Unet.pdf	Swin-Unet
+B-HED-2015	基线-通用分割	基线	不单独当病灶模型	batch2/06_general_backbones/Xie2015_HED.pdf	Holistically-nested edge detection
+B-UNETPP-2018	基线-通用分割	基线	可选基线	batch2/06_general_backbones/Zhou2018_UNet++.pdf	UNet++
+B-SEGNET-2017	基线-通用分割	基线	第一轮不必跑	batch2/06_general_backbones/Badrinarayanan2017_SegNet.pdf	SegNet
+M-GUO2024-2024	主比较-CNN多尺度	是	主比较集。没有官方 GitHub，目前不能克隆复现	batch1/03_fundus_methods/Guo2024_deep_multiscale.pdf	Diabetic Retinopathy Lesion Segmentation Using Deep Multi-scale Framework
+M-CLC-2023	主比较-CNN多尺度	是	主比较集。无官方代码，不能复现	batch2/03_fundus_methods/Wang2023_CLC-Net.pdf	CLC-Net: Contextual and local collaborative network for lesion segmentation in diabetic retinopathy images
+M-TCNET-2023	主比较-关系或Transformer	是。眼底实验是 IDRiD 与 DDR 的四类分割；另有一个皮肤病灶实验，不并入眼底榜	主比较集。无官方代码，不能复现	batch2/03_fundus_methods/Zhang2023_TC-Net.pdf	TC-Net: A joint learning framework based on CNN and vision transformer for multi-lesion medical images segmentation

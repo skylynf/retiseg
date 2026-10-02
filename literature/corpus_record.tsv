@@ -1,0 +1,59 @@
+file	batch	role	identity_check	in_primary_task	note
+batch1/00_template/Lu2026_TCR_epitope_NatureMethods.pdf	template	method_template	match	no	Nature Methods ????????? DR ??
+batch1/00_template/Lu2026_TCR_epitope_SI.pdf	template	method_template	match	no	???????
+batch1/01_prior_reviews/Playout2024_cross_dataset_generalization.pdf	batch1	prior_benchmark	match	yes	????????????? arXiv:2405.08329
+batch1/01_prior_reviews/applsci-13-05111.pdf	batch1	survey	match	partial	Sebastian 2023???????????????
+batch1/01_prior_reviews/s11042-023-18089-52.pdf	batch1	survey	match	partial	Tahir 2024????????
+batch1/02_datasets/data-03-00025.pdf	batch1	dataset	match	yes	Porwal 2018 IDRiD ?????
+batch1/02_datasets/Porwal2020_IDRiD_challenge.pdf	batch1	dataset	match_manuscript	yes	IDRiD ?????? MedIA ???????????
+batch1/02_datasets/li2019.pdf	batch1	dataset	match_accepted_manuscript	yes	Li 2019 DDR
+batch1/02_datasets/Zhou2021_FGADR.pdf	batch1	dataset	match_preprint	yes	Zhou FGADR?arXiv:2008.09772??? TMI 2021
+batch1/02_datasets/MAPLES-DR_2024_ScientificData.pdf	batch1	dataset	match	yes	Lepetit-Aimon 2024????????? MESSIDOR
+batch1/02_datasets/Decenciere2014_MESSIDOR.pdf	batch1	dataset_dependency	match	no	????MAPLES-DR ?????
+batch1/02_datasets/Wei2020_RetinalLesions_LesionNet.pdf	batch1	dataset_and_method	match	yes	Wei ICPR 2020????????
+batch1/02_datasets/Kauppi2007_DIARETDB1.pdf	batch1	dataset	match	yes	89 ?????????
+batch1/02_datasets/Kauppi2006_DIARETDB0.pdf	batch1	dataset	match	partial	130 ????????????? mask
+batch1/02_datasets/Decenciere2013_eophtha_TeleOphta.pdf	batch1	dataset	match	yes	?? e-ophtha-MA ? e-ophtha-EX
+batch1/02_datasets/TMI-2009-0430_author.pdf	batch1	dataset	match_author_version	partial	Niemeijer ROC?TMI 2010?DOI 10.1109/TMI.2009.2033909??? MA ??
+batch1/03_fundus_methods/guo2019.pdf	batch1	method_multi	match	yes	L-Seg???????
+batch1/03_fundus_methods/guo2020.pdf	batch1	method_single	match	partial	bin loss???????
+batch1/03_fundus_methods/Huang2022_RTNet.pdf	batch1	method_multi	match_preprint	yes	RTNet?arXiv:2201.11037??? TMI 2022
+batch1/03_fundus_methods/bo2022.pdf	batch1	method_multi	match	yes	SAA?ISBI 2022?PDF ? DOI ? 10.1109/ISBI52829.2022.9761529
+batch1/03_fundus_methods/Liu2023_M2MRF.pdf	batch1	method_multi	match_preprint	yes	M2MRF?arXiv:2111.00193
+batch1/03_fundus_methods/Xu2024_HACDR-Net.pdf	batch1	method_multi	match	yes	HACDR-Net?AAAI 2024
+batch1/03_fundus_methods/Li2024_WSRFNet.pdf	batch1	method_multi	match	yes	WSRFNet?IJCAI 2024
+batch1/03_fundus_methods/Guo2022_CARNet.pdf	batch1	method_multi	match	yes	Yanfei Guo CARNet??? Song Guo
+batch1/03_fundus_methods/Xiao2020_HEDNet_cGAN.pdf	batch1	method_multi	match	yes	HEDNet+cGAN?IDRiD ??
+batch1/03_fundus_methods/algorithms-17-00164-v2.pdf	batch1	method_multi	match	yes	Bian 2024 MLNet
+batch1/03_fundus_methods/2211.09404v1.pdf	batch1	method_single	match	partial	Zhang SS-MAF?arXiv:2211.09404???????
+batch1/03_fundus_methods/dai2018.pdf	batch1	method_single	match_accepted_manuscript	partial	Dai MS-CNN?MA ???DOI 10.1109/TMI.2018.2794988?????????
+batch1/03_fundus_methods/Liu2022_dual_branch_exudate.pdf	batch1	method_single	match_preprint	partial	????????arXiv:2012.01665
+batch1/04_foundation_models/Kirillov2023_SAM.pdf	batch1	foundation	match	no	?? SAM??? DR ???
+batch1/04_foundation_models/Ravi2024_SAM2.pdf	batch1	foundation	match	no	?? SAM 2
+batch1/04_foundation_models/Ma2024_MedSAM.pdf	batch1	foundation	match	partial	MedSAM??????????????
+batch1/04_foundation_models/Li2024_TP-DRSeg.pdf	batch1	foundation_on_DR	match	yes	? IDRiD ? DDR ??? SAM ??
+batch1/04_foundation_models/Adapting-Segment-Anything-2-for-Diabetic-Retinopathy-Lesion-Segmentation.pdf	batch1	foundation_on_DR	match	yes	Chen 2025 ISBI?DOI 10.1109/ISBI60581.2025.10981048
+batch1/05_octa/Qian2023_DRAC.pdf	batch1	octa_separate	match	no	UW-OCTA?????
+batch1/06_general_backbones/Ronneberger2015_U-Net.pdf	batch1	baseline	match	no	????
+batch1/06_general_backbones/Chen2018_DeepLabv3plus.pdf	batch1	baseline	match	no	????
+batch1/06_general_backbones/Wang2020_HRNet.pdf	batch1	baseline	match	no	????
+batch1/06_general_backbones/Liu2021_Swin_Transformer.pdf	batch1	baseline	match	no	???????????
+batch1/06_general_backbones/Long2015_FCN.pdf	batch1	baseline	match	no	????
+batch1/06_general_backbones/Xiao2018_UPerNet.pdf	batch1	baseline	match	no	????
+batch2/03_fundus_methods/He2022_PMCNet.pdf	batch2	method_multi	match_preprint	yes	PMCNet?IDRiD?DDR?E-ophtha
+batch2/03_fundus_methods/He2023_H2Former.pdf	batch2	method_general_with_DR	match_author_version	yes	?????????????? IDRiD ??
+batch2/03_fundus_methods/Ullah2023_SSMD-UNet.pdf	batch2	method_multi	match	yes	????FGADR ? IDRiD
+batch2/03_fundus_methods/Wang2023_VTA_hyperbolic.pdf	batch2	method_multi	match	yes	VTA+HBE?IDRiD ? DDR
+batch2/03_fundus_methods/electronics-12-04940.pdf	batch2	method_multi	match	yes	LezioSeg?IDRiD ? E-ophtha
+batch2/03_fundus_methods/Zhou_Collaborative_Learning_of_Semi-Supervised_Segmentation_and_Classification_for_Medical_Images_CVPR_2019_paper.pdf	batch2	method_multi	match	yes	Zhou ????????????? CVPR 2019???????????MLNet ?????? CVPR 2020?? PDF ??
+batch2/04_foundation_models/Zhang2023_SAMed.pdf	batch2	foundation	match	no	???? SAM ??
+batch2/04_foundation_models/Chen2023_SAM-Adapter.pdf	batch2	foundation	match	no	?? SAM ????????
+batch2/04_foundation_models/Zhang2024_PerSAM.pdf	batch2	foundation	match	no	??? SAM?????
+batch2/04_foundation_models/Qiu2023_Learnable_Ophthalmology_SAM.pdf	batch2	foundation_on_DR	match	yes	???????IDRiD ? HE/EX ???MA/SE ??
+batch2/04_foundation_models/Tragakis2023_FCT.pdf	batch2	baseline	match	no	? WACV ????
+batch2/04_foundation_models/Tragakis2023_FCT_WACV.pdf	batch2	baseline	duplicate	no	? Tragakis2023_FCT.pdf ?????????
+batch2/04_foundation_models/Xiong2024_SAM2-UNet.pdf	batch2	foundation	match	no	?? DR ?????
+batch2/06_general_backbones/Cao2022_Swin-Unet.pdf	batch2	baseline	match	no	????
+batch2/06_general_backbones/Xie2015_HED.pdf	batch2	baseline	match	no	HEDNet ???????
+batch2/06_general_backbones/Zhou2018_UNet++.pdf	batch2	baseline	match	no	????
+batch2/06_general_backbones/Badrinarayanan2017_SegNet.pdf	batch2	baseline	match	no	????

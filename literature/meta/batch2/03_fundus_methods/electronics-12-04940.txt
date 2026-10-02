@@ -1,0 +1,26 @@
+文献ID: M-LEZIO-2023
+PDF: literature/batch2/03_fundus_methods/electronics-12-04940.pdf
+批次: batch2
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致
+题名: LezioSeg
+作者: Mohammed Yousef Salem Ali et al.
+年份: 2023
+出处: Electronics 12:4940
+标识: doi:10.3390/electronics12234940
+任务: 四类分割
+成像: 彩色眼底
+病灶: 四类
+数据: IDRiD, E-ophtha
+标注粒度: 细像素
+模型族: ASPP 与门控跳跃连接
+额外输入: 仅图像
+报告指标: AUPR
+代码: 已读文本未发现作者代码
+权重: 未发现
+重训轨: 主比较集
+摘要: 轻量多尺度 CNN。E-ophtha 上只能评价 MA 和 EX。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

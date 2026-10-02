@@ -1,0 +1,26 @@
+文献ID: M-BINLOSS-2020
+PDF: literature/batch1/03_fundus_methods/guo2020.pdf
+批次: batch1
+角色: 单病灶
+主任务纳入: 旁支
+归类: 单病灶
+身份核对: 一致
+题名: Bin loss for hard exudates segmentation
+作者: Song Guo et al.
+年份: 2020
+出处: Neurocomputing 392:314-324
+标识: doi:10.1016/j.neucom.2018.10.049
+任务: 硬性渗出分割
+成像: 彩色眼底
+病灶: EX
+数据: 渗出数据
+标注粒度: 像素
+模型族: CNN 加 bin loss
+额外输入: 仅图像
+报告指标: 渗出分割
+代码: https://github.com/guomugong/bin_loss 已克隆到 official_code/bin_loss。只有 Caffe 损失层，没有完整训练工程。
+权重: 待核实
+重训轨: 单病灶旁支；损失可进入因素实验
+摘要: 类别平衡交叉熵仍会把背景判成渗出。bin loss 是 top-k 损失的快速形式。不进入四类平均榜。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

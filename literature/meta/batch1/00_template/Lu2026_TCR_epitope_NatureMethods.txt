@@ -1,0 +1,26 @@
+文献ID: T-NM-2026
+PDF: literature/batch1/00_template/Lu2026_TCR_epitope_NatureMethods.pdf
+批次: 模板
+角色: 方法学模板
+主任务纳入: 否
+归类: 模板
+身份核对: 一致
+题名: Assessment of computational methods in predicting TCR-epitope binding recognition
+作者: Yanping Lu et al.
+年份: 2026
+出处: Nature Methods 23:248-259
+标识: doi:10.1038/s41592-025-02910-0
+任务: TCR-表位结合预测的统一评估
+成像: 不适用
+病灶: 不适用
+数据: 21 个数据来源
+标注粒度: 不适用
+模型族: 评估框架
+额外输入: 阴性样本来源；已见与未见表位；原文权重与重训
+报告指标: 主指标 AUPRC
+代码: 论文写评估代码在 GitHub，链接在排版中被截断
+权重: 不适用
+重训轨: 不重训
+摘要: 评估约 50 个模型，其中约 31 个可以在统一数据上重训。原文结果和重训结果分开，并用独立测试集解释性能。本文只用它的体例，不把它算作糖尿病视网膜病变文献。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

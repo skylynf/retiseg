@@ -1,0 +1,26 @@
+文献ID: D-EOPHTHA-2013
+PDF: literature/batch1/02_datasets/Decenciere2013_eophtha_TeleOphta.pdf
+批次: batch1
+角色: 数据集
+主任务纳入: 两类外部测试
+归类: 数据集-细像素
+身份核对: 一致
+题名: TeleOphta
+作者: E. Decenciere et al.
+年份: 2013
+出处: IRBM 34:196-203
+标识: doi:10.1016/j.irbm.2013.01.010
+任务: 远程筛查，附带病灶轮廓
+成像: 彩色眼底
+病灶: e-ophtha-MA 与 e-ophtha-EX
+数据: 公开子集
+标注粒度: 像素轮廓
+模型族: 系统论文
+额外输入: 只有两类
+报告指标: 筛查与检出
+代码: https://www.adcis.net/en/third-party/e-ophtha/
+权重: 不适用
+重训轨: 不参与四类平均
+摘要: e-ophtha 的来源。只能报告 MA 与 EX。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

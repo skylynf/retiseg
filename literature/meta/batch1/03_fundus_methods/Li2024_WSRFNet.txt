@@ -1,0 +1,26 @@
+文献ID: M-WSRF-2024
+PDF: literature/batch1/03_fundus_methods/Li2024_WSRFNet.pdf
+批次: batch1
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致
+题名: WSRFNet
+作者: Xuan Li, Xiangqian Wu
+年份: 2024
+出处: IJCAI
+标识: IJCAI 2024
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: EX, HE, SE, MA
+数据: IDRiD, DDR
+标注粒度: 细像素
+模型族: 小波可逆下采样加按尺度循环反馈
+额外输入: 仅图像
+报告指标: 分类 AUPR、Dice、IoU
+代码: https://github.com/xuanli01/WSRFNet 已克隆到 official_code/WSRFNet。仓库有 model.py、dataset.py、test.py，没有训练脚本，也没有权重。
+权重: 待核实
+重训轨: 主比较集，优先重训；其指标定义可作为主指标先例
+摘要: 先前工作主要设计融合模块，本文改为提高每一尺度特征的质量，并明确采用 AUPR。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

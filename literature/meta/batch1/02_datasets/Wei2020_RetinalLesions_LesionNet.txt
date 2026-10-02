@@ -1,0 +1,26 @@
+文献ID: D-RETLESION-2020
+PDF: literature/batch1/02_datasets/Wei2020_RetinalLesions_LesionNet.pdf
+批次: batch1
+角色: 数据集与模型
+主任务纳入: 数据用于粒度实验；Lesion-Net 进入主比较
+归类: 数据集-粗或区域
+身份核对: 一致
+题名: Learn to segment retinal lesions and beyond
+作者: Qijie Wei, Xirong Li et al.
+年份: 2020
+出处: ICPR
+标识: arXiv:1912.11619
+任务: 八类分割、病灶分类、分级
+成像: 彩色眼底
+病灶: MA、视网膜内出血、硬性渗出、棉絮斑、玻璃体积血、视网膜前出血、NV、纤维增殖
+数据: 公开 1593 张
+标注粒度: 偏粗
+模型族: Lesion-Net
+额外输入: 扩展标签不并入四类平均
+报告指标: F1 与分级
+代码: https://github.com/WeiQijie/retinal-lesions
+权重: 待打开仓库
+重训轨: 有代码，可列入重训候选
+摘要: 八类最全的公开像素集，标注风格与细像素集不同。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

@@ -1,0 +1,26 @@
+文献ID: B-FCT-2023-DUP
+PDF: literature/batch2/04_foundation_models/Tragakis2023_FCT_WACV.pdf
+批次: batch2
+角色: 重复文件
+主任务纳入: 否
+归类: 基线-通用分割
+身份核对: 与 B-FCT-2023 重复
+题名: Fully Convolutional Transformer
+作者: Athanasios Tragakis et al.
+年份: 2023
+出处: WACV
+标识: 与 B-FCT-2023 相同
+任务: 同 B-FCT-2023
+成像: 同左
+病灶: 无
+数据: 同左
+标注粒度: 像素
+模型族: 同左
+额外输入: 无
+报告指标: Dice
+代码: 同 B-FCT-2023
+权重: 同左
+重训轨: 不单独入库两次
+摘要: 与 Tragakis2023_FCT.pdf 内容相同。分析时只计一次。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

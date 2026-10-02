@@ -1,0 +1,26 @@
+文献ID: B-SEGNET-2017
+PDF: literature/batch2/06_general_backbones/Badrinarayanan2017_SegNet.pdf
+批次: batch2
+角色: 历史基线
+主任务纳入: 基线
+归类: 基线-通用分割
+身份核对: 一致
+题名: SegNet
+作者: Vijay Badrinarayanan, Alex Kendall, Roberto Cipolla
+年份: 2017
+出处: IEEE TPAMI
+标识: arXiv:1511.00561
+任务: 语义分割
+成像: 道路场景
+病灶: 无
+数据: CamVid 等
+标注粒度: 像素
+模型族: 记录池化位置的编码-解码
+额外输入: 无
+报告指标: 分割
+代码: 已读文本未核到稳定仓库
+权重: 历史
+重训轨: 第一轮不必跑
+摘要: 早期编码-解码基线。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

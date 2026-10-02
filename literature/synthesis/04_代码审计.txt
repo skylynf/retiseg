@@ -1,0 +1,66 @@
+代码与复现审计
+只记作者自己的代码。依赖库、参赛者仓库和数据集下载页不记成模型官方代码。
+克隆目录：official_code/。全部使用 git clone --depth 1。权重若在 Git LFS 或外链，这次没有下载。
+
+已克隆，并且仓库里有训练入口
+HACDR-Net          official_code/HACDR-Net                         https://github.com/xqh180110910537/HACDR-Net
+M2MRF              official_code/M2MRF                             https://github.com/CVIU-CSU/M2MRF-Lesion-Segmentation
+H2Former           official_code/H2Former                          https://github.com/NKUhealong/H2Former
+                   PDF 链接不完整。仓库作者与论文作者 Along He 一致，含 idrid_train.py。
+FCT                official_code/FCT                               https://github.com/Thanos-DB/FullyConvolutionalTransformer
+                   PDF 在 https://github.com/Thanos-DB/ 处截断。
+Swin-Unet          official_code/Swin-Unet                         https://github.com/HuCaoFighting/Swin-Unet
+SAM-Adapter        official_code/SAM-Adapter                       https://github.com/tianrun-chen/SAM-Adapter-PyTorch
+                   PDF 只给了项目页。
+SAM2-UNet          official_code/SAM2-UNet                         https://github.com/WZH0120/SAM2-UNet
+SAMed              official_code/SAMed                             https://github.com/hitachinsk/SAMed
+MedSAM             official_code/MedSAM                            https://github.com/bowang-lab/MedSAM
+SAM 2              official_code/sam2                              https://github.com/facebookresearch/sam2
+UNet++             official_code/Nested-UNet                       https://github.com/MrGiovanni/Nested-UNet
+HRNet 分割         official_code/HRNet-Semantic-Segmentation       https://github.com/HRNet/HRNet-Semantic-Segmentation
+                   论文正文指向 https://github.com/HRNet 。分割代码在这个子仓库。
+HRNet 姿态         official_code/HRNet-pose-pytorch                https://github.com/Microsoft/human-pose-estimation.pytorch
+                   这是论文点名的仓库，任务是姿态估计，不是病灶分割。
+UPerNet            official_code/UPerNet                           https://github.com/CSAILVision/unifiedparsing
+Swin Transformer   official_code/Swin-Transformer                  https://github.com/microsoft/Swin-Transformer
+                   PDF 只写到 OpenMMLab 和 rwightman。这是作者的官方仓库，训练入口是 main.py。
+DeepLabv3+         official_code/DeepLabv3plus                     tensorflow/models 的 research/deeplab 稀疏检出
+HED                official_code/hed                               https://github.com/s9xie/hed
+                   仓库含 Caffe 模型，没有独立的 train.py。
+FCN                official_code/caffe-fcn                         https://github.com/BVLC/caffe
+                   论文指向 Caffe Model Zoo 的 FCN 条目。克隆的是整个 Caffe，不是单独的病灶模型。
+
+已克隆，但不能直接重训
+L-Seg              official_code/L-Seg                             只有 Caffe prototxt、损失层和部分结果图
+bin loss           official_code/bin_loss                          只有 Caffe 损失层
+WSRFNet            official_code/WSRFNet                           有模型和 test.py，没有训练脚本
+SAA                official_code/SAA                               https://github.com/nkicsl/SAA 是空仓库
+TP-DRSeg           official_code/TP-DRSeg                          论文链接 wxliii/TP-DRSeg 返回 404。WangShuhui-23/TP-DRSeg 只有 README
+SAM                official_code/segment-anything                  官方推理代码。训练代码不在仓库里，权重要另下
+PerSAM             official_code/PerSAM                            有推理和少量权重文件，没有 train.py
+DDR                official_code/DDR-dataset                       官方数据说明。图像在百度网盘和 Google Drive，不在 Git 里
+Retinal-Lesions    official_code/retinal-lesions                   官方数据说明。图像不在 Git 里
+
+没有克隆，因为不是这篇论文的官方模型代码
+RTNet 中的 qubvel/segmentation_models.pytorch
+IDRiD 挑战稿中的 matterport/Mask_RCNN
+M2MRF 中的 open-mmlab/mmsegmentation
+SAM 论文中的 serengil/retinaface
+MedSAM 中截断的 google-deepmind
+
+需要另行取得，本地没有官方 GitHub
+CLC-Net            全文没有作者仓库。文中的 GitHub 只是 DDR 数据集
+TC-Net             全文没有代码链接
+Guo 2024           没有 GitHub。脚注是 Google Drive：https://drive.google.com/drive/folders/18bsix3hbh3TUxaD3lOPXBM9yJOgW0JHt?usp=sharing
+                   正文没有说明里面是代码还是数据。本地文件是 SSRN 预印本
+PMCNet             PDF 写将发布代码，链接不完整。GitHub 上没有这篇论文的仓库
+CARNet、HEDNet+cGAN、MLNet、SS-MAF、Dai 2018、双分支渗出、VTA、SSMD-UNet、LezioSeg、Zhou 2019、Chen 2025 SAM2-DR、Learnable Ophthalmology SAM、Playout 2024
+                   已读 PDF，没有作者代码
+U-Net 2015         论文没有 GitHub
+SegNet             已读文本没有稳定的作者仓库
+
+数据集页面，不是模型代码
+IDRiD              https://idrid.grand-challenge.org/
+FGADR              https://csyizhou.github.io/FGADR/
+e-ophtha           https://www.adcis.net/en/third-party/e-ophtha/
+DRAC               https://drac22.grand-challenge.org/

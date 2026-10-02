@@ -1,0 +1,16 @@
+classes: [MA, HE, EX, SE]
+prob_levels: 65535
+image_hist_bins: 4096
+fixed_threshold: 0.5
+use_fov: true
+label_policy: multilabel        # multilabel | m2mrf_overwrite
+m2mrf_n_thresholds: 11
+lesion_metrics: true
+connectivity: 8
+# Provisional; set from the training-set ground-truth distribution before freezing.
+lesion_size_edges_rel_diameter: [0.0, 0.01, 0.03, .inf]
+lesion_size_names: [small, medium, large]
+bootstrap:
+  n: 2000
+  seed: 0
+  ci: 0.95

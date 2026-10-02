@@ -1,0 +1,26 @@
+文献ID: D-MESSIDOR-2014
+PDF: literature/batch1/02_datasets/Decenciere2014_MESSIDOR.pdf
+批次: batch1
+角色: 图像来源
+主任务纳入: 否
+归类: 数据集-分级依赖
+身份核对: 一致
+题名: Feedback on a publicly distributed image database: the MESSIDOR database
+作者: Etienne Decenciere et al.
+年份: 2014
+出处: Image Analysis and Stereology 33:231-234
+标识: doi:10.5566/ias.1155
+任务: 分级
+成像: 彩色眼底
+病灶: 无像素病灶真值
+数据: 1200 张
+标注粒度: 图像级
+模型族: 数据
+额外输入: MAPLES 的图像本体
+报告指标: 分级
+代码: 数据集发布页
+权重: 不适用
+重训轨: 不单独做分割
+摘要: 没有病灶 mask。保留是因为 MAPLES-DR 的标签贴在这些图像上。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

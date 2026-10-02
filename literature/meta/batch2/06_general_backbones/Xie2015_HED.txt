@@ -1,0 +1,26 @@
+文献ID: B-HED-2015
+PDF: literature/batch2/06_general_backbones/Xie2015_HED.pdf
+批次: batch2
+角色: 结构来源
+主任务纳入: 基线
+归类: 基线-通用分割
+身份核对: 一致
+题名: Holistically-nested edge detection
+作者: Saining Xie, Zhuowen Tu
+年份: 2015
+出处: ICCV
+标识: arXiv:1504.06375
+任务: 边缘检测
+成像: 自然图像
+病灶: 无
+数据: BSDS 等
+标注粒度: 边缘
+模型族: 嵌套侧输出
+额外输入: 无
+报告指标: 边缘
+代码: https://github.com/s9xie/hed
+权重: 公开
+重训轨: 不单独当病灶模型
+摘要: HEDNet 来自这个边缘检测网络，不是一篇独立的 DR 论文。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

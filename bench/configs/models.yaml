@@ -1,0 +1,54 @@
+# Model registry. One entry per model variant that enters any table.
+# repro_level: R0 no code | R1 model definition only | R2 inference code + weights
+#              R3 training code | R4 training code + weights + splits + environment
+# track: A original weights | B unified retraining of official code | C re-implementation from the paper
+# tier: 1 main table | 2 if time allows | 3 paper audit only
+# Status as of the 2026-10-02 code audit (literature/synthesis/04_*.txt); update after author replies.
+
+general:
+  - {name: U-Net,       repo: null,                                      repro_level: R3, tracks: [B], tier: 1, notes: "no author repo; use a reference PyTorch implementation"}
+  - {name: DeepLabv3+,  repo: official_code/DeepLabv3plus,               repro_level: R3, tracks: [B], tier: 1, notes: "official repo is TensorFlow; use a PyTorch port with matching backbone"}
+  - {name: HRNet,       repo: official_code/HRNet-Semantic-Segmentation, repro_level: R3, tracks: [B], tier: 1}
+  - {name: nnU-Net,     repo: null,                                      repro_level: R4, tracks: [B], tier: 1, notes: "to clone: MIC-DKFZ/nnUNet"}
+  - {name: Swin-Unet,   repo: official_code/Swin-Unet,                   repro_level: R3, tracks: [B], tier: 1}
+  - {name: FCT,         repo: official_code/FCT,                         repro_level: R3, tracks: [B], tier: 1}
+  - {name: UNet++,      repo: official_code/Nested-UNet,                 repro_level: R3, tracks: [B], tier: 2}
+  - {name: UPerNet,     repo: official_code/UPerNet,                     repro_level: R3, tracks: [B], tier: 2}
+
+fundus_multiscale:
+  - {name: M2MRF,       repo: official_code/M2MRF,      repro_level: R4, tracks: [A, B], tier: 1, notes: "mmseg 0.8 / torch 1.6; weights on Google Drive; README: paper reports mean of 3 runs, code reports best"}
+  - {name: HACDR-Net,   repo: official_code/HACDR-Net,  repro_level: R3, tracks: [B],    tier: 1, notes: "mmseg 0.30 / mmcv-full 1.6.2; no released weights found"}
+  - {name: WSRFNet,     repo: official_code/WSRFNet,    repro_level: R1, tracks: [A, C], tier: 2, notes: "model.py + test.py only; weights by email"}
+  - {name: L-Seg,       repo: official_code/L-Seg,      repro_level: R1, tracks: [C],    tier: 2, notes: "Caffe prototxt and loss layer"}
+  - {name: SAA,         repo: official_code/SAA,        repro_level: R0, tracks: [C],    tier: 2, notes: "official repo empty"}
+  - {name: CARNet,      repo: null, repro_level: R0, tracks: [], tier: 3}
+  - {name: PMCNet,      repo: null, repro_level: R0, tracks: [], tier: 3}
+  - {name: MLNet,       repo: null, repro_level: R0, tracks: [], tier: 3}
+  - {name: LezioSeg,    repo: null, repro_level: R0, tracks: [], tier: 3}
+  - {name: HEDNet-cGAN, repo: null, repro_level: R0, tracks: [], tier: 3}
+  - {name: Guo2024,     repo: null, repro_level: R0, tracks: [], tier: 3, notes: "Google Drive link of unknown content"}
+  - {name: CLC-Net,     repo: null, repro_level: R0, tracks: [], tier: 3}
+
+relational_transformer:
+  - {name: H2Former,    repo: official_code/H2Former, repro_level: R3, tracks: [B], tier: 1, notes: "softmax single-label output"}
+  - {name: RTNet,       repo: null, repro_level: R0, tracks: [C], tier: 2, notes: "image + vessel input"}
+  - {name: VTA,         repo: null, repro_level: R0, tracks: [],  tier: 3}
+  - {name: TC-Net,      repo: null, repro_level: R0, tracks: [],  tier: 3}
+
+semi_supervised:
+  - {name: SSMD-UNet,   repo: null, repro_level: R0, tracks: [], tier: 3, notes: "author split 70/5/25; EyePACS pretraining overlaps Retinal-Lesions source"}
+  - {name: Zhou2019-CL, repo: null, repro_level: R0, tracks: [], tier: 3}
+
+foundation:
+  - {name: SAM,          repo: official_code/segment-anything, repro_level: R2, tracks: [B], tier: 1, modes: [zero_shot, oracle_prompt]}
+  - {name: SAM2,         repo: official_code/sam2,             repro_level: R3, tracks: [B], tier: 1, modes: [zero_shot, oracle_prompt]}
+  - {name: SAM3,         repo: null,                           repro_level: R2, tracks: [B], tier: 1, modes: [text_prompt], notes: "to clone"}
+  - {name: MedSAM,       repo: official_code/MedSAM,           repro_level: R3, tracks: [B], tier: 1, modes: [oracle_prompt, full_finetune]}
+  - {name: SAMed,        repo: official_code/SAMed,            repro_level: R3, tracks: [B], tier: 1, modes: [peft]}
+  - {name: SAM-Adapter,  repo: official_code/SAM-Adapter,      repro_level: R3, tracks: [B], tier: 1, modes: [peft]}
+  - {name: SAM2-UNet,    repo: official_code/SAM2-UNet,        repro_level: R3, tracks: [B], tier: 1, modes: [peft]}
+  - {name: RETFound,     repo: null,                           repro_level: R3, tracks: [B], tier: 1, modes: [encoder_decoder], notes: "to clone: rmaphoh/RETFound_MAE; add UPerNet head"}
+  - {name: PerSAM,       repo: official_code/PerSAM,           repro_level: R2, tracks: [B], tier: 2, modes: [one_shot]}
+  - {name: TP-DRSeg,     repo: official_code/TP-DRSeg,         repro_level: R0, tracks: [],  tier: 3, notes: "paper link 404; mirror has README only"}
+  - {name: SAM2-DR-Chen2025, repo: null,                       repro_level: R0, tracks: [],  tier: 3}
+  - {name: Ophthalmology-SAM, repo: null,                      repro_level: R0, tracks: [],  tier: 3}

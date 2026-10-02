@@ -1,0 +1,28 @@
+文献ID: M-CLC-2023
+PDF: literature/batch2/03_fundus_methods/Wang2023_CLC-Net.pdf
+批次: batch2
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致
+题名: CLC-Net: Contextual and local collaborative network for lesion segmentation in diabetic retinopathy images
+作者: Xiyue Wang, Yuqi Fang, Sen Yang, Delong Zhu, Minghui Wang, Jing Zhang, Jun Zhang, Jun Cheng, Kai-yu Tong, Xiao Han
+年份: 2023
+出处: Neurocomputing 527:100-109
+标识: doi:10.1016/j.neucom.2023.01.013
+任务: 四类同时分割，并带辅助分类
+成像: 彩色眼底
+病灶: HE, MA, EX, SE
+数据: IDRiD, E-ophtha, DDR
+标注粒度: IDRiD 与 DDR 为细像素；E-ophtha 只有 MA 和 EX
+模型族: 上下文分支加局部分支，SE-ResNeXt-50，注意力融合
+额外输入: 仅图像
+报告指标: 文中与 SegNet、Attention U-Net、DeepLabv3+、UNet++、CE-Net、CPFNet 比较
+代码: 没有作者自己的 GitHub。PDF 中唯一的 GitHub 是 DDR 数据集 https://github.com/nkicsl/DDR-dataset ，不是 CLC-Net。文中还写 L-Seg 当时未发布代码。
+权重: 未发现
+重训轨: 主比较集。无官方代码，不能复现
+摘要: 用上下文分支和局部分支同时分割四类病灶，并用辅助分类减轻过拟合。TP-DRSeg 引用了它。三个公开数据集上的数字只能当作原文汇报。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。
+
+复现笔记（2026-10-02）: 无官方代码。按论文写了结构复现，目录 reproductions/Wang2023_CLC-Net。假设固定在该目录 DESIGN.md，种子 20230108。额外输入：仅图像。尚未训练。原文表格仍只作原文汇报，不能写成重训结果。

@@ -1,0 +1,26 @@
+文献ID: B-FCT-2023
+PDF: literature/batch2/04_foundation_models/Tragakis2023_FCT.pdf
+批次: batch2
+角色: 重训基线
+主任务纳入: 基线
+归类: 基线-通用分割
+身份核对: 一致。与 WACV 文件重复，只计这一份
+题名: Fully Convolutional Transformer
+作者: Athanasios Tragakis et al.
+年份: 2023
+出处: WACV
+标识: arXiv:2206.00566
+任务: 多种医学分割
+成像: MRI、皮肤等
+病灶: 原文无 DR
+数据: ACDC、Synapse、Spleen、ISIC
+标注粒度: 像素
+模型族: 卷积加 Transformer
+额外输入: 无
+报告指标: Dice
+代码: PDF 路径在 https://github.com/Thanos-DB/ 处截断。完整官方仓库是 https://github.com/Thanos-DB/FullyConvolutionalTransformer ，已克隆到 official_code/FCT。训练入口是 PyTorch/main.py 与 TensorFlow/main.py，本地没有权重。
+权重: 待核实
+重训轨: 必含基线。TP-DRSeg 把它当作专用分割对照
+摘要: 医学 Transformer 分割基线。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

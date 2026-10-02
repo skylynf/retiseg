@@ -1,0 +1,26 @@
+文献ID: M-RTNET-2022
+PDF: literature/batch1/03_fundus_methods/Huang2022_RTNet.pdf
+批次: batch1
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-关系或Transformer
+身份核对: 一致，预印本对应 TMI 2022
+题名: RTNet
+作者: Shiqi Huang, Jianan Li, Yuze Xiao, Ning Shen, Tingfa Xu
+年份: 2022
+出处: IEEE TMI 41:1596-1607
+标识: arXiv:2201.11037
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: EX, HE, SE, MA
+数据: IDRiD, DDR
+标注粒度: 细像素
+模型族: 病灶自注意力加病灶-血管交叉注意力
+额外输入: 血管
+报告指标: AUPR 等
+代码: 未发现作者仓库。PDF 中的 qubvel/segmentation_models.pytorch 是依赖库
+权重: 未发现
+重训轨: 主比较集；无作者代码则不能凭论文表排名
+摘要: 把病灶之间以及病灶和血管的关系写进结构。这是仅图像与图像加血管这一对对照的核心模型。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

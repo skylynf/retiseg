@@ -1,0 +1,26 @@
+文献ID: O-DRAC-2023
+PDF: literature/batch1/05_octa/Qian2023_DRAC.pdf
+批次: batch1
+角色: 独立任务
+主任务纳入: 否，单独成章
+归类: OCTA独立任务
+身份核对: 一致
+题名: DRAC challenge with ultra-wide OCTA
+作者: Bo Qian, Hao Chen et al.
+年份: 2023
+出处: arXiv:2304.02389
+标识: arXiv:2304.02389
+任务: 病灶分割、图像质量、分级
+成像: 超广角 OCTA
+病灶: IRMA, 无灌注区, 新生血管
+数据: 分割任务训练 109、测试 65
+标注粒度: 像素
+模型族: 挑战
+额外输入: 不是彩色眼底
+报告指标: 平均 Dice，辅以 IoU
+代码: https://drac22.grand-challenge.org/
+权重: 不适用
+重训轨: 独立任务
+摘要: 公开的 OCTA 分割基准。前十名平均 Dice 大约 0.41 到 0.61，IRMA 最难。不与眼底四类混合。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。
