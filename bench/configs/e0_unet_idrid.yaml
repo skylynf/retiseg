@@ -1,0 +1,15 @@
+# E0: one U-Net run that checks data, training, probability maps and evaluation.
+# The 512-pixel longer side is the pipeline setting. It is not the main-table
+# resolution; that comparison is experiment E7.
+experiment: E0
+model: U-Net
+dataset: dataset/prepared/IDRiD
+split_train: train
+split_val: val
+split_test: test
+fov_diameter: 512
+epochs: 30
+batch_size: 4
+lr: 0.0001
+seed: 0
+num_workers: 2

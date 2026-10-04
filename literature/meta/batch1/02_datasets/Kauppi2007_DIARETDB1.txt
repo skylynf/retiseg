@@ -23,4 +23,4 @@ PDF: literature/batch1/02_datasets/Kauppi2007_DIARETDB1.pdf
 重训轨: 可作外部测试，须单独说明真值
 摘要: 专家圈的是区域，不是精确轮廓。像素 Dice 不能和 IDRiD 直接并列。
 
-管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。
+管理备注: 2026-10-03 本地有两份压缩包。用 dataset/DiaRetDB1 V2.1：89 张图，四名专家的 XML，官方 28/61。dataset/DIARETDB1 的包内是 DIARETDB0，不用。像素指标必须写明真值是区域共识，不是细轮廓。

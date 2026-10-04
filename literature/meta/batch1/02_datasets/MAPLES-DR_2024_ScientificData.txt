@@ -23,4 +23,4 @@ PDF: literature/batch1/02_datasets/MAPLES-DR_2024_ScientificData.pdf
 重训轨: 细标注外部测试
 摘要: 在已有公开图像上重做细标注，并明确对比了粗标注数据集。
 
-管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。
+管理备注: 2026-10-03 本地还没有这份数据。标注用 maples-dr 包，首次加载从 Figshare 自动下载。原图是 MESSIDOR，要单独准备。

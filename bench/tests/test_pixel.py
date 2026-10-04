@@ -4,7 +4,9 @@ import numpy as np
 import pytest
 from sklearn.metrics import average_precision_score
 
-from bench.common.io import PROB_LEVELS
+from PIL import Image
+
+from bench.common.io import PROB_LEVELS, _read_binary
 from bench.eval import pixel
 
 L = PROB_LEVELS
@@ -131,6 +133,25 @@ def test_threshold_level_and_confusion():
     assert s["dice"] == pytest.approx(4 / 6) and s["iou"] == pytest.approx(2 / 4)
 
 
+@pytest.mark.skipif(not M2MRF_METRICS.exists(), reason="M2MRF repository not cloned")
+def test_streamed_author_scores_match_the_original_function():
+    from bench.eval.m2mrf_stream import AuthorAccumulator
+
+    sigmoid_metrics = _load_m2mrf_sigmoid_metrics()
+    rng = np.random.default_rng(7)
+    results, labels = [], []
+    acc = AuthorAccumulator()
+    for _ in range(2):
+        label = rng.integers(0, 5, size=(30, 40))
+        prob = np.clip(rng.random((4, 30, 40)), 0, 1)
+        results.append((prob, True, True))
+        labels.append(label)
+        acc.add(prob, label)
+    _, _, _, maupr = sigmoid_metrics(results, labels, 5, compute_aupr=True)
+    _, _, aupr = acc.scores()
+    assert aupr[1:] == pytest.approx(maupr[1:], abs=1e-12)
+
+
 def test_best_dice_threshold_separable():
     q = np.array([int(0.2 * L)] * 50 + [int(0.7 * L)] * 50)
     gt = np.array([False] * 50 + [True] * 50)
@@ -138,3 +159,15 @@ def test_best_dice_threshold_separable():
     t = pixel.best_dice_threshold(pos, neg, L)
     tp, fp, fn = pixel.confusion_at(pos, neg, pixel.level_for_threshold(t, L))
     assert (tp, fp, fn) == (50, 0, 0)
+
+
+def test_rgba_mask_ignores_a_constant_alpha(tmp_path):
+    image = np.zeros((4, 5, 4), dtype=np.uint8)
+    image[..., 3] = 255
+    image[1, 2, 0] = 255
+    path = tmp_path / "mask.png"
+    Image.fromarray(image, mode="RGBA").save(path)
+    mask = _read_binary(path)
+    assert mask.shape == (4, 5)
+    assert int(mask.sum()) == 1
+    assert bool(mask[1, 2])

@@ -1,8 +1,20 @@
 代码与复现审计
 只记作者自己的代码。依赖库、参赛者仓库和数据集下载页不记成模型官方代码。
-克隆目录：official_code/。全部使用 git clone --depth 1。权重若在 Git LFS 或外链，这次没有下载。
+克隆目录：official_code/。全部使用 git clone --depth 1。本仓库只保存提交指针。另一台机器先克隆本仓库，再执行 git submodule update --init --depth 1。DeepLabv3plus 的上游是 tensorflow/models，本地只用 research/deeplab；B1 的 DeepLab 走 torchvision，不导入这个目录。写这份清单时没有下载权重。之后为 E1 下载了 M2MRF 的 IDRiD 和 DDR 检查点，见 00。其余仓库的权重状态仍如下。
+
+2026-10-04 补克隆，浅克隆，已登记为子模块。权重都不在 Git 里。
+nnU-Net           official_code/nnUNet                            https://github.com/MIC-DKFZ/nnUNet
+                  训练入口 nnunetv2/run/run_training.py。
+RETFound          official_code/RETFound                          https://github.com/rmaphoh/RETFound_MAE
+                  main_finetune.py 是疾病分类微调。分割仍需另加 UPerNet 头。权重在 Hugging Face。
+SAM 3             official_code/sam3                              https://github.com/facebookresearch/sam3
+                  训练入口 sam3/train/train.py。检查点需在 Hugging Face 申请。
+Attention-DeepLab official_code/Attention-DeepLab                 https://github.com/arunajithesh123/Diabetic-Retinopathy-Lesion-Segmentation-through-Attention-Mechanisms
+                  有 train.py。尚未冒烟，不升入第二层。
 
 已克隆，并且仓库里有训练入口
+PMCNet             official_code/PMCNet                            https://github.com/NKUhealong/PMCNet
+                   子模块提交 4051483。2026-10-03 克隆。有 train.py。权重目录是空的。自带数据只有各一张样例图。环境是 TensorFlow 1.13 和 Keras 2.3.1。作者代码不复制进本仓库。
 HACDR-Net          official_code/HACDR-Net                         https://github.com/xqh180110910537/HACDR-Net
 M2MRF              official_code/M2MRF                             https://github.com/CVIU-CSU/M2MRF-Lesion-Segmentation
 H2Former           official_code/H2Former                          https://github.com/NKUhealong/H2Former
@@ -33,13 +45,13 @@ FCN                official_code/caffe-fcn                         https://githu
 已克隆，但不能直接重训
 L-Seg              official_code/L-Seg                             只有 Caffe prototxt、损失层和部分结果图
 bin loss           official_code/bin_loss                          只有 Caffe 损失层
-WSRFNet            official_code/WSRFNet                           有模型和 test.py，没有训练脚本
+WSRFNet            official_code/WSRFNet                           有 model.py、dataset.py、test.py。2026-10-03 核对远程仓库，仍然没有训练脚本。权重须邮件向 xuanli@stu.hit.edu.cn 索取。
 SAA                official_code/SAA                               https://github.com/nkicsl/SAA 是空仓库
 TP-DRSeg           official_code/TP-DRSeg                          论文链接 wxliii/TP-DRSeg 返回 404。WangShuhui-23/TP-DRSeg 只有 README
 SAM                official_code/segment-anything                  官方推理代码。训练代码不在仓库里，权重要另下
 PerSAM             official_code/PerSAM                            有推理和少量权重文件，没有 train.py
 DDR                official_code/DDR-dataset                       官方数据说明。图像在百度网盘和 Google Drive，不在 Git 里
-Retinal-Lesions    official_code/retinal-lesions                   官方数据说明。图像不在 Git 里
+Retinal-Lesions    official_code/retinal-lesions                   官方数据说明，没有训练脚本。图像不在 Git 里。Lesion-Net 不按这份仓库重训
 
 没有克隆，因为不是这篇论文的官方模型代码
 RTNet 中的 qubvel/segmentation_models.pytorch
@@ -53,7 +65,6 @@ CLC-Net            全文没有作者仓库。文中的 GitHub 只是 DDR 数据
 TC-Net             全文没有代码链接
 Guo 2024           没有 GitHub。脚注是 Google Drive：https://drive.google.com/drive/folders/18bsix3hbh3TUxaD3lOPXBM9yJOgW0JHt?usp=sharing
                    正文没有说明里面是代码还是数据。本地文件是 SSRN 预印本
-PMCNet             PDF 写将发布代码，链接不完整。GitHub 上没有这篇论文的仓库
 CARNet、HEDNet+cGAN、MLNet、SS-MAF、Dai 2018、双分支渗出、VTA、SSMD-UNet、LezioSeg、Zhou 2019、Chen 2025 SAM2-DR、Learnable Ophthalmology SAM、Playout 2024
                    已读 PDF，没有作者代码
 U-Net 2015         论文没有 GitHub

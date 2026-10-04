@@ -38,6 +38,20 @@ def test_accumulator_strata_and_f1():
     assert r["by_size"]["large"]["recall"] == 1.0
 
 
+def test_negative_image_predictions_are_false_positives():
+    pred = _disk((40, 40), 20, 20, 4)
+    gt = np.zeros((40, 40), dtype=bool)
+    match = lesion.match_lesions(pred, gt)
+    assert match["n_pred"] == 1 and match["n_pred_tp"] == 0 and match["gt_area"].size == 0
+    acc = lesion.LesionAccumulator([0.0, np.inf], ["all"])
+    acc.add(match, fov_area=1600)
+    result = acc.result()
+    assert result["n_negative_images"] == 1
+    assert result["n_negative_images_with_prediction"] == 1
+    assert result["precision"] == 0.0
+    assert result["n_gt_lesions"] == 0
+
+
 def test_no_predictions_gives_nan_precision():
     gt = _disk((50, 50), 25, 25, 5)
     acc = lesion.LesionAccumulator([0.0, np.inf], ["all"])

@@ -5,13 +5,22 @@
 总表：literature/meta/LEDGER.tsv
 范围定义：literature/scope_definition.txt
 
-归类与下一步：
+规划文件：
+literature/synthesis/00_进度.txt
 literature/synthesis/01_研究设计.txt
 literature/synthesis/02_数据集归类.txt
 literature/synthesis/03_模型归类.txt
 literature/synthesis/04_代码审计.txt
+literature/synthesis/05_实验计划.txt
+literature/synthesis/06_检索.txt
+literature/synthesis/07_本地数据.txt
+literature/synthesis/08_全文筛选.txt
+literature/synthesis/09_第一批任务.txt
 
 阅读新文献时，复制任意一份 txt 的字段，不要另起格式。
+账本以 LEDGER.tsv 和 meta 下的 txt 为准。txt 的 PDF 字段从仓库根目录写起。有全文时，PDF 文件名与 txt 同名。
+literature/manifest.csv 是 download_papers.py 当时写出的下载记录，文件名可以和后来的磁盘名不同，不拿它当目录。
+literature/corpus_record.tsv 是早期文件清单。备注里的中文已经损坏的行改为指向 LEDGER，不要根据问号改归类。
 归类只能使用这些标签：
 模板
 综述

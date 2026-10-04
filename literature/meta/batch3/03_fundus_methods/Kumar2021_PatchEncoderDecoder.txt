@@ -1,0 +1,25 @@
+文献ID: M-PATCHED-2021
+PDF: 未下载
+批次: batch3
+角色: 专用多病灶
+主任务纳入: 是，摘要只写了 MA、出血和硬性渗出，不进四类平均
+归类: 主比较-CNN多尺度
+身份核对: 摘要确认
+题名: Segmentation of Retinal Lesions in Fundus Images: A Patch Based Approach Using Encoder-Decoder Neural Network
+作者: E. Sudheer Kumar et al.
+年份: 2021
+出处: ICACCS
+标识: doi:10.1109/icaccs51430.2021.9441964
+任务: 三类像素分割
+成像: 彩色眼底
+病灶: MA, HE, EX
+数据: IDRiD
+标注粒度: 细像素
+模型族: 编码器-解码器
+额外输入: 仅图像
+报告指标: 敏感度、特异度、准确率
+代码: 摘要未给出仓库
+权重: 未见发布权重
+重训轨: 主比较集。没有训练代码则只做原文审计
+摘要: 滑窗切块后输出病灶概率图。摘要没有软性渗出。99.97% 的准确率不能当作 AUPR。
+管理备注: 2026-10-03 由第四节优先名单的摘要筛选入库。原文表格数字只能标成原文汇报。论文 PDF 未逐页核对的，身份以题名和 DOI 为准。

@@ -40,7 +40,7 @@ B-DEEPLAB-2018	基线-通用分割	基线	必含通用基线	batch1/06_general_b
 B-HRNET-2020	基线-通用分割	基线	必含基线	batch1/06_general_backbones/Wang2020_HRNet.pdf	HRNet
 B-SWIN-2021	基线-通用分割	基线	不单独当分割模型；分割用 Swin-Unet	batch1/06_general_backbones/Liu2021_Swin_Transformer.pdf	Swin Transformer
 B-UPERNET-2018	基线-通用分割	基线	可选解码头基线	batch1/06_general_backbones/Xiao2018_UPerNet.pdf	UPerNet
-M-PMCNET-2022	主比较-CNN多尺度	是	主比较集；目前不可重训	batch2/03_fundus_methods/He2022_PMCNet.pdf	PMCNet
+M-PMCNET-2022	主比较-CNN多尺度	是	有训练代码，可以进轨 B。没有作者权重，不能进轨 A	batch2/03_fundus_methods/He2022_PMCNet.pdf	PMCNet
 M-H2FORMER-2023	主比较-关系或Transformer	是，按通用模型解释	主比较集中的通用混合模型	batch2/03_fundus_methods/He2023_H2Former.pdf	H2Former
 M-SSMD-2023	主比较-半监督	是	半监督分支。划分是作者自划的 70/5/25，不能和官方划分混报	batch2/03_fundus_methods/Ullah2023_SSMD-UNet.pdf	SSMD-UNet
 M-VTA-2023	主比较-关系或Transformer	是	主比较集。MLNet 带星号的 VTA 是别人重跑的，两套数字都要注明来源	batch2/03_fundus_methods/Wang2023_VTA_hyperbolic.pdf	VTA plus hyperbolic embeddings
@@ -60,3 +60,29 @@ B-SEGNET-2017	基线-通用分割	基线	第一轮不必跑	batch2/06_general_ba
 M-GUO2024-2024	主比较-CNN多尺度	是	主比较集。没有官方 GitHub，目前不能克隆复现	batch1/03_fundus_methods/Guo2024_deep_multiscale.pdf	Diabetic Retinopathy Lesion Segmentation Using Deep Multi-scale Framework
 M-CLC-2023	主比较-CNN多尺度	是	主比较集。无官方代码，不能复现	batch2/03_fundus_methods/Wang2023_CLC-Net.pdf	CLC-Net: Contextual and local collaborative network for lesion segmentation in diabetic retinopathy images
 M-TCNET-2023	主比较-关系或Transformer	是。眼底实验是 IDRiD 与 DDR 的四类分割；另有一个皮肤病灶实验，不并入眼底榜	主比较集。无官方代码，不能复现	batch2/03_fundus_methods/Zhang2023_TC-Net.pdf	TC-Net: A joint learning framework based on CNN and vision transformer for multi-lesion medical images segmentation
+M-BAYES-2021	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	未下载	Deep Bayesian baseline for segmenting diabetic retinopathy lesions
+M-PATCHED-2021	主比较-CNN多尺度	是，摘要只写了 MA、出血和硬性渗出，不进四类平均	主比较集。没有训练代码则只做原文审计	未下载	Segmentation of Retinal Lesions in Fundus Images: A Patch Based Approach Using Encoder-Decoder Neural Network
+M-DRGNET-2022	主比较-关系或Transformer	是	主比较集。没有训练代码则只做原文审计	batch3/03_fundus_methods/Hasan2022_DRG-Net.pdf	DRG-Net
+M-DBUNET-2023	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	batch3/03_fundus_methods/Yin2023_DB-UNet.pdf	DB-U-Net
+M-CRNET-2023	主比较-半监督	是	主比较集的半监督。轨 B 必须用官方划分，无标签池不能临时再划	未下载	CR-Net
+M-DFFR-2023	主比较-CNN多尺度	是，只有出血、硬性渗出和视盘，不进四类平均	主比较集。没有训练代码则只做原文审计	未下载	DFFR-U-Net
+M-CASCADE-2024	主比较-关系或Transformer	是	主比较集。没有训练代码则只做原文审计	未下载	Cascade U-Net with Transformer
+M-DEEPLABDR-2024	主比较-CNN多尺度	是	不替代基线 B-DEEPLAB-2018。这是在 IDRiD 上的专用实验，原文准确率不进主表	未下载	Advanced Segmentation of Diabetic Retinopathy Lesions Using DeepLabv3+
+M-R2UNET-2024	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	未下载	R2U-Net for fundus lesions
+M-MSAG-2024	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	batch3/03_fundus_methods/Xu2024_MSAG.pdf	MSAG
+M-LFRC-2024	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	batch3/03_fundus_methods/Fu2024_LFRC-Net.pdf	LFRC-Net
+M-BISEPRO-2024	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	未下载	BiSeNet V2-Pro
+M-MCFNET-2024	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	未下载	MCFNet
+M-PGAFT-2024	主比较-关系或Transformer	是	主比较集的多特征模型。血管掩码的来源必须在表里写明	batch3/03_fundus_methods/Xu2024_PGAFT.pdf	Prior-guided attention fusion Transformer
+M-MSGDA-2024	主比较-关系或Transformer	是	主比较集。没有训练代码则只做原文审计	未下载	MSGDA-Net
+M-HFM-2024	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	未下载	HFM-Seg
+M-FFRT-2024	主比较-关系或Transformer	是，摘要只写 MA、HE、EX，不进四类平均	主比较集。没有训练代码则只做原文审计	未下载	FFRTNet
+M-ATTDL-2025	主比较-CNN多尺度	是	主比较集。有训练入口，可列入轨 B，尚未接入 bench	未下载	Attention-DeepLab
+M-WSSE-2025	主比较-关系或Transformer	是	主比较集的未见实验。FGADR 结果单独列，不并进细像素平均	未下载	WSSE
+M-RESU-2025	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	未下载	Residual attention U-Net
+M-TEDR-2026	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	batch3/03_fundus_methods/Qi2026_TEDR-YNet.pdf	TEDR-YNet
+D-TJDR-2023	数据集-细像素	否。公开四类像素集，但含 133° 超广角，不并进 IDRiD/DDR 平均	不重训。可选外部集，超广角单独一列	batch3/02_datasets/Mao2023_TJDR.pdf	TJDR
+D-REFIDRID-2026	数据集-细像素	否。不替换官方 IDRiD 的原分辨率和官方划分	不重训。可作标注修订的敏感性分析，不作为主协议真值	batch3/02_datasets/Chankhachon2026_RefinedIDRiD.pdf	Refined IDRiD
+M-CSIF-2026	主比较-CNN多尺度	是	主比较集。没有训练代码则只做原文审计	batch3/03_fundus_methods/Wang2026_CSIF.pdf	Information flow redistribution
+M-RILBP-2023	主比较-CNN多尺度	是。IDRiD 四类进入主比较。e-ophtha 上的出血和软性渗出结果不采信	主比较集。没有训练代码则只做原文审计	batch3/03_fundus_methods/Geetha2023_RILBP-YNet.pdf	RILBP-YNet
+M-TVFNET-2026	主比较-关系或Transformer	是	主比较集。文本标签列必须和 TP-DRSeg 分开	batch3/03_fundus_methods/Guo2026_TVFNet.pdf	TVFNet

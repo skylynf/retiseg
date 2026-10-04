@@ -18,8 +18,8 @@ PDF: literature/batch1/03_fundus_methods/Li2024_WSRFNet.pdf
 模型族: 小波可逆下采样加按尺度循环反馈
 额外输入: 仅图像
 报告指标: 分类 AUPR、Dice、IoU
-代码: https://github.com/xuanli01/WSRFNet 已克隆到 official_code/WSRFNet。仓库有 model.py、dataset.py、test.py，没有训练脚本，也没有权重。
-权重: 待核实
+代码: https://github.com/xuanli01/WSRFNet 已克隆到 official_code/WSRFNet。2026-10-03 再次核对远程仓库，根目录仍是 README、model.py、dataset.py、test.py、eval_metrics.py、wavelets.py。没有 train.py。
+权重: 不在仓库里。README 写明向 xuanli@stu.hit.edu.cn 索取，并限于非商业用途。
 重训轨: 主比较集，优先重训；其指标定义可作为主指标先例
 摘要: 先前工作主要设计融合模块，本文改为提高每一尺度特征的质量，并明确采用 AUPR。
 

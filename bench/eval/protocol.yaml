@@ -2,15 +2,45 @@ classes: [MA, HE, EX, SE]
 prob_levels: 65535
 image_hist_bins: 4096
 fixed_threshold: 0.5
-use_fov: true
+use_fov: true               # black-border mask, luminance > 10; not the author metric
+# Evaluation always reads the original four masks. A missing mask file is an
+# all-negative image for that class, not an ignored image and not an unknown.
+# The exclusive overwrite used by softmax training targets is not applied here.
 label_policy: multilabel        # multilabel | m2mrf_overwrite
+evaluation_labels: original_four_class
+missing_mask_file: empty_negative
 m2mrf_n_thresholds: 11
 lesion_metrics: true
 connectivity: 8
-# Provisional; set from the training-set ground-truth distribution before freezing.
-lesion_size_edges_rel_diameter: [0.0, 0.01, 0.03, .inf]
+# Many-to-many overlap. A ground-truth component is detected if any predicted
+# pixel overlaps it. A predicted component is a true positive if it overlaps
+# any ground-truth pixel of that class. There is no one-to-one matching and
+# no minimum IoU. Size uses the ground-truth equivalent diameter over the FOV
+# equivalent diameter. Precision, recall and F1 are pooled over the split.
+lesion_match: many_to_many_any_overlap
+# An image with no ground-truth component of that class is negative. Predicted
+# components on it are false positives in lesion precision. Per-image Dice is
+# missing (not zero) when that image has no positive pixels. Those images
+# still contribute negative pixels to AUPR.
+negative_image: no_ground_truth_component
+# Training images only: IDRiD train 44 and DDR train 383.
+# Small/medium is the microaneurysm median, medium/large is the haemorrhage median,
+# each rounded up to the next 0.001. Validation and test images were not used.
+# The denominator is the black-border mask (luminance > 10), rewritten 2026-10-04
+# after Otsu cut the dark half of the retina. Counts: bench/eval/lesion_size_freeze.json.
+lesion_size_edges_rel_diameter: [0.0, 0.005, 0.011, .inf]
 lesion_size_names: [small, medium, large]
+# Image bootstrap of pooled AUPR. Each replicate draws test images with
+# replacement, pools their histograms, and recomputes AUPR. The interval is
+# the percentile interval. A replicate with no positive pixels is dropped.
+# Paired comparisons reuse the same image indices. This is not a pixel
+# bootstrap and not a lesion bootstrap. The seed mean and standard deviation
+# are a separate summary.
 bootstrap:
   n: 2000
   seed: 0
   ci: 0.95
+  unit: test_image
+  method: percentile
+  empty_positive: drop
+  paired: shared_image_indices

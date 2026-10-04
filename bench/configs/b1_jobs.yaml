@@ -1,0 +1,664 @@
+# B1 table. gpu is a placeholder in 0-7. launch_b1.py --submit
+# assigns free cards round-robin. One process, one card.
+# The table lists 64 formal jobs. The current batch is one seed:
+# seed 0 on every model and both datasets, 16 jobs.
+# Order: --smoke, then --submit --seed0 (train and validation only),
+# then --submit --score-seed0. Do not use --rest in this batch.
+jobs:
+  - name: B1_unet_idrid_seed0_runner
+    model: U-Net
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_unet_idrid_seed0.yaml
+    script: bench/train.py
+  - name: B1_unet_idrid_seed1
+    model: U-Net
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_unet_idrid_seed1.yaml
+    script: bench/train.py
+  - name: B1_unet_idrid_seed2
+    model: U-Net
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_unet_idrid_seed2.yaml
+    script: bench/train.py
+  - name: B1_unet_idrid_seed3
+    model: U-Net
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_unet_idrid_seed3.yaml
+    script: bench/train.py
+  - name: B1_unet_idrid_seed4
+    model: U-Net
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_unet_idrid_seed4.yaml
+    script: bench/train.py
+  - name: B1_unet_ddr_seed0
+    model: U-Net
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_unet_ddr_seed0.yaml
+    script: bench/train.py
+  - name: B1_unet_ddr_seed1
+    model: U-Net
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg
+    config: bench/configs/cells/b1_unet_ddr_seed1.yaml
+    script: bench/train.py
+  - name: B1_unet_ddr_seed2
+    model: U-Net
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg
+    config: bench/configs/cells/b1_unet_ddr_seed2.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_idrid_seed0
+    model: DeepLabv3
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_idrid_seed0.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_idrid_seed1
+    model: DeepLabv3
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_idrid_seed1.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_idrid_seed2
+    model: DeepLabv3
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_idrid_seed2.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_idrid_seed3
+    model: DeepLabv3
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_idrid_seed3.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_idrid_seed4
+    model: DeepLabv3
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_idrid_seed4.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_ddr_seed0
+    model: DeepLabv3
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_ddr_seed0.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_ddr_seed1
+    model: DeepLabv3
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_ddr_seed1.yaml
+    script: bench/train.py
+  - name: B1_deeplabv3_ddr_seed2
+    model: DeepLabv3
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_ddr_seed2.yaml
+    script: bench/train.py
+  - name: B1_hrnet_idrid_seed0
+    model: HRNet
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_idrid_seed0.yaml
+    script: bench/train.py
+  - name: B1_hrnet_idrid_seed1
+    model: HRNet
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_idrid_seed1.yaml
+    script: bench/train.py
+  - name: B1_hrnet_idrid_seed2
+    model: HRNet
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_idrid_seed2.yaml
+    script: bench/train.py
+  - name: B1_hrnet_idrid_seed3
+    model: HRNet
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_idrid_seed3.yaml
+    script: bench/train.py
+  - name: B1_hrnet_idrid_seed4
+    model: HRNet
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_idrid_seed4.yaml
+    script: bench/train.py
+  - name: B1_hrnet_ddr_seed0
+    model: HRNet
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_ddr_seed0.yaml
+    script: bench/train.py
+  - name: B1_hrnet_ddr_seed1
+    model: HRNet
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_ddr_seed1.yaml
+    script: bench/train.py
+  - name: B1_hrnet_ddr_seed2
+    model: HRNet
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_ddr_seed2.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_idrid_seed0
+    model: Swin-Unet
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_idrid_seed0.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_idrid_seed1
+    model: Swin-Unet
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_idrid_seed1.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_idrid_seed2
+    model: Swin-Unet
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_idrid_seed2.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_idrid_seed3
+    model: Swin-Unet
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_idrid_seed3.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_idrid_seed4
+    model: Swin-Unet
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_idrid_seed4.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_ddr_seed0
+    model: Swin-Unet
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_ddr_seed0.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_ddr_seed1
+    model: Swin-Unet
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_ddr_seed1.yaml
+    script: bench/train.py
+  - name: B1_swin_unet_ddr_seed2
+    model: Swin-Unet
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_ddr_seed2.yaml
+    script: bench/train.py
+  - name: B1_fct_idrid_seed0
+    model: FCT
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_fct_idrid_seed0.yaml
+    script: bench/train.py
+  - name: B1_fct_idrid_seed1
+    model: FCT
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_fct_idrid_seed1.yaml
+    script: bench/train.py
+  - name: B1_fct_idrid_seed2
+    model: FCT
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_fct_idrid_seed2.yaml
+    script: bench/train.py
+  - name: B1_fct_idrid_seed3
+    model: FCT
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_fct_idrid_seed3.yaml
+    script: bench/train.py
+  - name: B1_fct_idrid_seed4
+    model: FCT
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_fct_idrid_seed4.yaml
+    script: bench/train.py
+  - name: B1_fct_ddr_seed0
+    model: FCT
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_fct_ddr_seed0.yaml
+    script: bench/train.py
+  - name: B1_fct_ddr_seed1
+    model: FCT
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg
+    config: bench/configs/cells/b1_fct_ddr_seed1.yaml
+    script: bench/train.py
+  - name: B1_fct_ddr_seed2
+    model: FCT
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg
+    config: bench/configs/cells/b1_fct_ddr_seed2.yaml
+    script: bench/train.py
+  - name: B1_h2former_idrid_seed0
+    model: H2Former
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_idrid_seed0.yaml
+    script: bench/train.py
+  - name: B1_h2former_idrid_seed1
+    model: H2Former
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_idrid_seed1.yaml
+    script: bench/train.py
+  - name: B1_h2former_idrid_seed2
+    model: H2Former
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_idrid_seed2.yaml
+    script: bench/train.py
+  - name: B1_h2former_idrid_seed3
+    model: H2Former
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_idrid_seed3.yaml
+    script: bench/train.py
+  - name: B1_h2former_idrid_seed4
+    model: H2Former
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_idrid_seed4.yaml
+    script: bench/train.py
+  - name: B1_h2former_ddr_seed0
+    model: H2Former
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_ddr_seed0.yaml
+    script: bench/train.py
+  - name: B1_h2former_ddr_seed1
+    model: H2Former
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_ddr_seed1.yaml
+    script: bench/train.py
+  - name: B1_h2former_ddr_seed2
+    model: H2Former
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_ddr_seed2.yaml
+    script: bench/train.py
+  - name: B1_m2mrf_idrid_seed0
+    model: M2MRF
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_idrid_seed0.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_m2mrf_idrid_seed1
+    model: M2MRF
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_idrid_seed1.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_m2mrf_idrid_seed2
+    model: M2MRF
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_idrid_seed2.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_m2mrf_idrid_seed3
+    model: M2MRF
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_idrid_seed3.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_m2mrf_idrid_seed4
+    model: M2MRF
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_idrid_seed4.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_m2mrf_ddr_seed0
+    model: M2MRF
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_ddr_seed0.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_m2mrf_ddr_seed1
+    model: M2MRF
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_ddr_seed1.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_m2mrf_ddr_seed2
+    model: M2MRF
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_ddr_seed2.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+  - name: B1_hacdr_idrid_seed0
+    model: HACDR-Net
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_idrid_seed0.yaml
+    script: bench/scripts/train_hacdr_b1.py
+  - name: B1_hacdr_idrid_seed1
+    model: HACDR-Net
+    dataset: IDRiD
+    seed: 1
+    gpu: 1
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_idrid_seed1.yaml
+    script: bench/scripts/train_hacdr_b1.py
+  - name: B1_hacdr_idrid_seed2
+    model: HACDR-Net
+    dataset: IDRiD
+    seed: 2
+    gpu: 2
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_idrid_seed2.yaml
+    script: bench/scripts/train_hacdr_b1.py
+  - name: B1_hacdr_idrid_seed3
+    model: HACDR-Net
+    dataset: IDRiD
+    seed: 3
+    gpu: 3
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_idrid_seed3.yaml
+    script: bench/scripts/train_hacdr_b1.py
+  - name: B1_hacdr_idrid_seed4
+    model: HACDR-Net
+    dataset: IDRiD
+    seed: 4
+    gpu: 4
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_idrid_seed4.yaml
+    script: bench/scripts/train_hacdr_b1.py
+  - name: B1_hacdr_ddr_seed0
+    model: HACDR-Net
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_ddr_seed0.yaml
+    script: bench/scripts/train_hacdr_b1.py
+  - name: B1_hacdr_ddr_seed1
+    model: HACDR-Net
+    dataset: DDR
+    seed: 1
+    gpu: 6
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_ddr_seed1.yaml
+    script: bench/scripts/train_hacdr_b1.py
+  - name: B1_hacdr_ddr_seed2
+    model: HACDR-Net
+    dataset: DDR
+    seed: 2
+    gpu: 7
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_ddr_seed2.yaml
+    script: bench/scripts/train_hacdr_b1.py
+smoke:
+  - name: smoke_unet_idrid_seed0
+    model: U-Net
+    dataset: IDRiD
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_unet_idrid_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_deeplabv3_idrid_seed0
+    model: DeepLabv3
+    dataset: IDRiD
+    seed: 0
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_idrid_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_hrnet_idrid_seed0
+    model: HRNet
+    dataset: IDRiD
+    seed: 0
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_idrid_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_swin_unet_idrid_seed0
+    model: Swin-Unet
+    dataset: IDRiD
+    seed: 0
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_idrid_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_fct_idrid_seed0
+    model: FCT
+    dataset: IDRiD
+    seed: 0
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_fct_idrid_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_h2former_idrid_seed0
+    model: H2Former
+    dataset: IDRiD
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_idrid_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_m2mrf_idrid_seed0
+    model: M2MRF
+    dataset: IDRiD
+    seed: 0
+    gpu: 6
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_idrid_seed0.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+    max_steps: 20
+  - name: smoke_hacdr_idrid_seed0
+    model: HACDR-Net
+    dataset: IDRiD
+    seed: 0
+    gpu: 7
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_idrid_seed0.yaml
+    script: bench/scripts/train_hacdr_b1.py
+    max_steps: 20
+  - name: smoke_unet_ddr_seed0
+    model: U-Net
+    dataset: DDR
+    seed: 0
+    gpu: 0
+    env: retiseg
+    config: bench/configs/cells/b1_unet_ddr_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_deeplabv3_ddr_seed0
+    model: DeepLabv3
+    dataset: DDR
+    seed: 0
+    gpu: 1
+    env: retiseg
+    config: bench/configs/cells/b1_deeplabv3_ddr_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_hrnet_ddr_seed0
+    model: HRNet
+    dataset: DDR
+    seed: 0
+    gpu: 2
+    env: retiseg
+    config: bench/configs/cells/b1_hrnet_ddr_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_swin_unet_ddr_seed0
+    model: Swin-Unet
+    dataset: DDR
+    seed: 0
+    gpu: 3
+    env: retiseg
+    config: bench/configs/cells/b1_swin_unet_ddr_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_fct_ddr_seed0
+    model: FCT
+    dataset: DDR
+    seed: 0
+    gpu: 4
+    env: retiseg
+    config: bench/configs/cells/b1_fct_ddr_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_h2former_ddr_seed0
+    model: H2Former
+    dataset: DDR
+    seed: 0
+    gpu: 5
+    env: retiseg
+    config: bench/configs/cells/b1_h2former_ddr_seed0.yaml
+    script: bench/train.py
+    max_steps: 20
+  - name: smoke_m2mrf_ddr_seed0
+    model: M2MRF
+    dataset: DDR
+    seed: 0
+    gpu: 6
+    env: retiseg-m2mrf
+    config: bench/configs/cells/b1_m2mrf_ddr_seed0.yaml
+    script: bench/scripts/train_m2mrf_b1.py
+    max_steps: 20
+  - name: smoke_hacdr_ddr_seed0
+    model: HACDR-Net
+    dataset: DDR
+    seed: 0
+    gpu: 7
+    env: retiseg-hacdr
+    config: bench/configs/cells/b1_hacdr_ddr_seed0.yaml
+    script: bench/scripts/train_hacdr_b1.py
+    max_steps: 20

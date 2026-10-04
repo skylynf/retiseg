@@ -1,4 +1,5 @@
 .venv/
+.venv-train/
 .pytest_cache/
 __pycache__/
 *.py[cod]
@@ -7,3 +8,8 @@ __pycache__/
 
 # Empty upstream clone with no commits yet.
 official_code/SAA/
+
+# Downloaded dataset archives stay local.
+dataset/
+runs/
+pretrained/

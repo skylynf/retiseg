@@ -1,0 +1,25 @@
+文献ID: M-DEEPLABDR-2024
+PDF: 未下载
+批次: batch3
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 摘要确认
+题名: Advanced Segmentation of Diabetic Retinopathy Lesions Using DeepLabv3+
+作者: Meher Boulaabi et al.
+年份: 2024
+出处: AICCSA
+标识: doi:10.1109/aiccsa63423.2024.10912539
+任务: 四类各自二值分割后再合并
+成像: 彩色眼底
+病灶: MA, HE, EX, SE
+数据: IDRiD
+标注粒度: 细像素
+模型族: DeepLabv3+
+额外输入: 仅图像
+报告指标: 准确率 99%
+代码: 摘要未给出仓库
+权重: 未见发布权重
+重训轨: 不替代基线 B-DEEPLAB-2018。这是在 IDRiD 上的专用实验，原文准确率不进主表
+摘要: 每一类单独训一个二值模型。99% 准确率主要由阴性像素贡献，主指标仍用 AUPR。
+管理备注: 2026-10-03 由第四节优先名单的摘要筛选入库。原文表格数字只能标成原文汇报。论文 PDF 未逐页核对的，身份以题名和 DOI 为准。

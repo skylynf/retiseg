@@ -1,0 +1,25 @@
+文献ID: M-ATTDL-2025
+PDF: 未下载
+批次: batch3
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 摘要确认
+题名: Attention-DeepLab
+作者: Aruna Jithesh et al.
+年份: 2025
+出处: ICMLA
+标识: doi:10.1109/icmla66185.2025.00118
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: MA, HE, EX, SE
+数据: DDR 757 张
+标注粒度: 细像素
+模型族: DeepLabv3+ 加注意力
+额外输入: 仅图像
+报告指标: mAP、mIoU
+代码: https://github.com/arunajithesh123/Diabetic-Retinopathy-Lesion-Segmentation-through-Attention-Mechanisms 有 train.py。论文摘要里的 taeheej 仓库只有跳转说明。2026-10-04 浅克隆到 official_code/Attention-DeepLab，提交 236d049。尚未冒烟。
+权重: 未见发布权重
+重训轨: 主比较集。有训练入口，可列入轨 B，尚未接入 bench
+摘要: 在 DDR 官方规模的 757 张上分四类。相对 DeepLabv3+，mAP 从 0.3010 到 0.3326。
+管理备注: 2026-10-03 由第四节优先名单的摘要筛选入库。原文表格数字只能标成原文汇报。论文 PDF 未逐页核对的，身份以题名和 DOI 为准。

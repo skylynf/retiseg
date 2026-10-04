@@ -1,0 +1,30 @@
+# One retrain of M2MRF-C on the official IDRiD training images (01-54).
+# Settings are the author's fcn_hr48-M2MRF-C_40k_idrid_bdice.py and
+# schedule_40k_idrid.py. This is not B1: the crop, loss and label merge
+# are theirs. The released checkpoint's seed is not in the repository.
+# Seed 0 here is one draw of that recipe.
+experiment: E1r
+model: M2MRF-C
+dataset: IDRiD
+train_ids: official_train
+pretrained: runs/E1_m2mrf/hrnetv2_w48-d2186c55.pth
+pretrained_source: open-mmlab://msra/hrnetv2_w48
+loss: binary_dice
+smooth: 1.0e-5
+optimizer: sgd
+lr: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+schedule: poly
+power: 0.9
+min_lr: 0.0001
+iterations: 40000
+# samples_per_gpu is 1 and README launches 4 GPUs, so the effective batch is 4.
+# The paper also writes batch size 4. One GPU stacks these 4 images so
+# BatchNorm sees the same count SyncBN would synchronise.
+batch_size: 4
+image_scale: [1440, 960]
+crop_size: [960, 1440]
+ratio_range: [0.5, 2.0]
+flip_ratio: 0
+seed: 0

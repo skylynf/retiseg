@@ -1,0 +1,25 @@
+文献ID: M-CASCADE-2024
+PDF: 未下载
+批次: batch3
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-关系或Transformer
+身份核对: 摘要确认
+题名: Cascade U-Net with Transformer
+作者: Haiyang Zheng et al.
+年份: 2024
+出处: International Journal of Imaging Systems and Technology
+标识: doi:10.1002/ima.23163
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: MA, HE, EX, SE
+数据: IDRiD、DDR；DIARETDB1 为区域标注
+标注粒度: 细像素为主
+模型族: 级联 U-Net 加 Transformer
+额外输入: 仅图像
+报告指标: PR-AUC、ROC-AUC、Dice、IoU
+代码: 摘要未给出仓库
+权重: 未见发布权重
+重训轨: 主比较集。没有训练代码则只做原文审计
+摘要: 先粗分割再细分割。DIARETDB1 的数字必须注明真值是区域，不并进细像素平均。
+管理备注: 2026-10-03 由第四节优先名单的摘要筛选入库。原文表格数字只能标成原文汇报。论文 PDF 未逐页核对的，身份以题名和 DOI 为准。

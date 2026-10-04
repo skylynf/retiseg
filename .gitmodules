@@ -82,3 +82,18 @@
 [submodule "official_code/WSRFNet"]
 	path = official_code/WSRFNet
 	url = https://github.com/xuanli01/WSRFNet
+[submodule "official_code/nnUNet"]
+	path = official_code/nnUNet
+	url = https://github.com/MIC-DKFZ/nnUNet.git
+[submodule "official_code/RETFound"]
+	path = official_code/RETFound
+	url = https://github.com/rmaphoh/RETFound_MAE.git
+[submodule "official_code/sam3"]
+	path = official_code/sam3
+	url = https://github.com/facebookresearch/sam3.git
+[submodule "official_code/Attention-DeepLab"]
+	path = official_code/Attention-DeepLab
+	url = https://github.com/arunajithesh123/Diabetic-Retinopathy-Lesion-Segmentation-through-Attention-Mechanisms.git
+[submodule "official_code/PMCNet"]
+	path = official_code/PMCNet
+	url = https://github.com/NKUhealong/PMCNet.git

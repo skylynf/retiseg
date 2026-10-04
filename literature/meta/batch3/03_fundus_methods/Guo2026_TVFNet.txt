@@ -1,0 +1,26 @@
+文献ID: M-TVFNET-2026
+PDF: literature/batch3/03_fundus_methods/Guo2026_TVFNet.pdf
+批次: batch3
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-关系或Transformer
+身份核对: PDF 与题名一致。和已入库的 TP-DRSeg 不是同一篇
+题名: TVFNet
+作者: Yanfei Guo et al.
+年份: 2026
+出处: Neural Computing and Applications
+标识: doi:10.1007/s00521-026-12310-w
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: MA, HE, EX, SE
+数据: IDRiD、DDR、FGADR、e-ophtha
+标注粒度: IDRiD 与 DDR 为细像素，FGADR 为粗标注，e-ophtha 只有两类
+模型族: ResNeXt-50，加上病灶数量和尺度的文本注意力
+额外输入: 病灶类别数和尺度的文本标签。这是训练时由标注派生的分类监督，不是临床报告，也不是 SAM 的概念提示
+报告指标: AUC_PR、AUC_ROC、准确率、Dice
+代码: 全文未给出仓库
+权重: 未见发布权重
+重训轨: 主比较集。没有训练代码则只做原文审计。文本标签列必须和 TP-DRSeg、SAM 文本提示分开
+摘要: DDR 使用 383/149/225，与官方划分一致。FGADR 用了作者自己的比例。e-ophtha 和 FGADR 不进四类平均。出版日 2026-07-30，在冻结日之前。
+
+管理备注: 2026-10-03 用根目录全文入库。原文表格数字只能标成原文汇报。

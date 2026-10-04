@@ -1,0 +1,623 @@
+"""Print or start the B1 jobs listed in bench/configs/b1_jobs.yaml.
+
+Without --submit the command only prints the table and the commands it would
+run. --smoke prints or submits the short runs. --submit is what starts a
+process. Each process gets one GPU through CUDA_VISIBLE_DEVICES. The gpu
+column in the table is a placeholder in 0-7; --submit walks the free cards
+and queues leftover jobs on the same card. Distributed launch is not used.
+
+    python bench/scripts/launch_b1.py
+    python bench/scripts/launch_b1.py --smoke
+    python bench/scripts/launch_b1.py --submit --smoke
+    python bench/scripts/launch_b1.py --submit --seed0
+    python bench/scripts/launch_b1.py --submit --score-seed0
+
+--submit alone does not launch the 64 formal jobs. The current batch is one
+seed: seed 0 on every model and both datasets. That wave is training and
+validation only; --score-seed0 writes its test maps afterwards. --rest is
+the other seeds and is not this batch. Changing the budget means rerunning
+seed 0.
+"""
+
+import argparse
+import ast
+import importlib.util
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+import threading
+from collections import defaultdict
+from dataclasses import replace
+from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+import yaml
+
+# Order is the B1 table order. H2Former is inserted only when WRAPPERS names it.
+_REQUIRED = ("U-Net", "DeepLabv3", "HRNet", "Swin-Unet", "FCT", "M2MRF", "HACDR-Net")
+_H2FORMER = "H2Former"
+_SLUG = {
+    "U-Net": "unet",
+    "DeepLabv3": "deeplabv3",
+    "HRNet": "hrnet",
+    "Swin-Unet": "swin_unet",
+    "FCT": "fct",
+    "H2Former": "h2former",
+    "M2MRF": "m2mrf",
+    "HACDR-Net": "hacdr",
+}
+_BINDING = {
+    "U-Net": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "DeepLabv3": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "HRNet": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "Swin-Unet": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "FCT": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "H2Former": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "M2MRF": ("retiseg-m2mrf", "bench/scripts/train_m2mrf_b1.py", "bench/scripts/predict_m2mrf_b1.py"),
+    "HACDR-Net": ("retiseg-hacdr", "bench/scripts/train_hacdr_b1.py", "bench/scripts/predict_hacdr_b1.py"),
+}
+_FORMAL_PAIRS = [("IDRiD", seed) for seed in range(5)] + [("DDR", seed) for seed in range(3)]
+_CELL_KEYS = {
+    "experiment",
+    "model",
+    "dataset",
+    "split_train",
+    "split_val",
+    "split_test",
+    "fov_diameter",
+    "seed",
+    "num_workers",
+    "batch_size",
+}
+_SMOKE_STEPS = 20
+_DIST_VARS = ("WORLD_SIZE", "RANK", "LOCAL_RANK", "GROUP_RANK", "MASTER_ADDR", "MASTER_PORT")
+_PROTECTED_EXACT = {"B1_unet_idrid_seed0"}
+_PROTECTED_PREFIX = ("E0_", "E1_", "E1r_")
+
+
+def _string_key(node):
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    raise SystemExit("WRAPPERS keys in bench/models/registry.py must be strings")
+
+
+def registered_wrappers():
+    """Read WRAPPERS without importing the model modules.
+
+    Importing the registry pulls in torch. Printing the table does not need a
+    GPU stack, so the names are taken from the source assignment.
+    """
+    path = _ROOT / "bench" / "models" / "registry.py"
+    tree = ast.parse(path.read_text())
+    imported = set()
+    found = None
+    for node in tree.body:
+        if isinstance(node, ast.ImportFrom) and node.module and node.module.startswith("bench.models."):
+            for alias in node.names:
+                imported.add(alias.name)
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name) and target.id == "WRAPPERS":
+                found = node.value
+    if not isinstance(found, ast.Dict):
+        raise SystemExit("bench/models/registry.py has no WRAPPERS dict")
+    names = {}
+    for key, value in zip(found.keys, found.values):
+        label = _string_key(key)
+        if not isinstance(value, ast.Name) or value.id not in imported:
+            raise SystemExit(f"{label} is not bound to an imported wrapper class")
+        names[label] = value.id
+    return names
+
+
+def active_models():
+    wrapped = registered_wrappers()
+    missing = [name for name in _REQUIRED if name not in wrapped]
+    if missing:
+        raise SystemExit(
+            "missing registered models: " + ", ".join(missing) + ". No substitute model is added."
+        )
+    models = list(_REQUIRED)
+    if _H2FORMER in wrapped:
+        models.insert(5, _H2FORMER)
+    else:
+        print(
+            "blocked: H2Former is not in WRAPPERS, so it stays out of the table. "
+            "The other registered models are unchanged.",
+            flush=True,
+        )
+    return models
+
+
+def load_document(path):
+    document = yaml.safe_load(Path(path).read_text())
+    if not isinstance(document, dict):
+        raise ValueError(f"{path} must be a mapping with jobs and smoke")
+    return document
+
+
+def existing_file(path_str):
+    path = Path(path_str)
+    if path.is_file():
+        return path
+    rooted = _ROOT / path_str
+    if rooted.is_file():
+        return rooted
+    raise FileNotFoundError(path_str)
+
+
+def run_dir_for(job, smoke):
+    slug = _SLUG[job["model"]]
+    dataset = str(job["dataset"]).lower()
+    seed = int(job["seed"])
+    if smoke:
+        path = Path("runs") / "smoke" / f"{slug}_{dataset}_seed{seed}"
+    elif job["model"] == "U-Net" and job["dataset"] == "IDRiD" and seed == 0:
+        path = Path("runs") / "B1_unet_idrid_seed0_runner"
+    else:
+        path = Path("runs") / f"B1_{slug}_{dataset}_seed{seed}"
+    name = path.name
+    if name in _PROTECTED_EXACT or name.startswith(_PROTECTED_PREFIX):
+        raise SystemExit(f"refusing run directory {path}")
+    if smoke:
+        if path.parts[:2] != ("runs", "smoke") or name.startswith("B1_"):
+            raise SystemExit(f"smoke run directory must stay under runs/smoke, got {path}")
+    elif "smoke" in path.parts:
+        raise SystemExit(f"formal run directory must not use runs/smoke, got {path}")
+    return path
+
+
+def check_job(job, smoke, placeholder=True):
+    required = ("name", "model", "dataset", "seed", "gpu", "env", "config", "script")
+    missing = [key for key in required if key not in job]
+    if missing:
+        raise ValueError(f"job is missing {missing}")
+    if job["model"] not in _BINDING:
+        raise ValueError(f"unknown model {job['model']!r}")
+    env_name, script, predict_script = _BINDING[job["model"]]
+    if job["env"] != env_name:
+        raise ValueError(f"{job['model']} env is {job['env']!r}, expected {env_name}")
+    if job["script"] != script:
+        raise ValueError(f"{job['model']} script is {job['script']!r}, expected {script}")
+    if not existing_file(job["script"]).is_file():
+        raise FileNotFoundError(job["script"])
+    if not existing_file(predict_script).is_file():
+        raise FileNotFoundError(predict_script)
+    config_path = existing_file(job["config"])
+    config = yaml.safe_load(config_path.read_text())
+    allowed = set(_CELL_KEYS)
+    # The U-Net card leaves both epochs and iterations at 0. The cell is the
+    # cap. Loss, learning rate and the patience of 20 stay on the card.
+    if job["model"] == "U-Net":
+        allowed.add("epochs")
+    extra = set(config) - allowed
+    if extra:
+        raise ValueError(f"{config_path} has extra keys {sorted(extra)}")
+    if job["model"] == "U-Net" and int(config.get("epochs") or 0) != 200:
+        raise ValueError(f"{config_path} must set epochs: 200; the U-Net card does not set a step count")
+    if config.get("experiment") != "B1":
+        raise ValueError(f"{config_path} is not a B1 cell")
+    if config["model"] != job["model"]:
+        raise ValueError(f"{config_path} model is {config['model']!r}, job says {job['model']!r}")
+    if Path(config["dataset"]).name != job["dataset"]:
+        raise ValueError(f"{config_path} dataset does not match job dataset {job['dataset']!r}")
+    if int(config["seed"]) != int(job["seed"]):
+        raise ValueError(f"{config_path} seed is {config['seed']}, job says {job['seed']}")
+    if int(config["fov_diameter"]) != 1440:
+        raise ValueError(f"{config_path} fov_diameter must be 1440")
+    for key, expected in (("split_train", "train"), ("split_val", "val"), ("split_test", "test")):
+        if config[key] != expected:
+            raise ValueError(f"{config_path} {key} must be {expected!r}")
+    if int(config["num_workers"]) != 4:
+        raise ValueError(f"{config_path} num_workers must be 4")
+    gpu = int(job["gpu"])
+    if gpu < 0 or (placeholder and gpu > 7):
+        raise ValueError(f"gpu placeholder must be 0-7, got {gpu}")
+    if smoke:
+        if int(job.get("max_steps", -1)) != _SMOKE_STEPS:
+            raise ValueError(f"smoke max_steps must be {_SMOKE_STEPS}")
+        if job["dataset"] not in ("IDRiD", "DDR") or int(job["seed"]) != 0:
+            raise ValueError("smoke is seed 0 on IDRiD and DDR")
+    elif "max_steps" in job:
+        raise ValueError("formal jobs do not set max_steps")
+    return config, run_dir_for(job, smoke)
+
+
+def select_jobs(document, smoke, models):
+    key = "smoke" if smoke else "jobs"
+    rows = document.get(key)
+    if not rows:
+        raise ValueError(f"b1_jobs.yaml has no {key}")
+    chosen = []
+    for job in rows:
+        if job["model"] == _H2FORMER and _H2FORMER not in models:
+            continue
+        if job["model"] not in models:
+            raise ValueError(f"{job['model']} is not an active B1 model")
+        chosen.append(job)
+    if smoke:
+        expected_smoke = {(model, dataset) for model in models for dataset in ("IDRiD", "DDR")}
+        found_smoke = {(job["model"], job["dataset"]) for job in chosen}
+        if found_smoke != expected_smoke:
+            missing = sorted(expected_smoke - found_smoke)
+            extra = sorted(found_smoke - expected_smoke)
+            raise ValueError(f"smoke must list each model on IDRiD and DDR at seed 0; missing={missing} extra={extra}")
+        if any(int(job["seed"]) != 0 for job in chosen):
+            raise ValueError("smoke seed must be 0")
+    else:
+        expected = {(model, dataset, seed) for model in models for dataset, seed in _FORMAL_PAIRS}
+        found = {(job["model"], job["dataset"], int(job["seed"])) for job in chosen}
+        if found != expected:
+            missing = sorted(expected - found)
+            extra = sorted(found - expected)
+            raise ValueError(f"formal table mismatch missing={missing} extra={extra}")
+        if len(chosen) != len(models) * len(_FORMAL_PAIRS):
+            raise ValueError("formal task count does not match registered models times 8")
+    return chosen
+
+
+def python_argv(env_name):
+    """Interpreter for a conda env name, or for a path to a virtualenv."""
+    candidate = Path(env_name)
+    if candidate.is_dir() and (candidate / "bin" / "python").is_file():
+        return [str(candidate / "bin" / "python")]
+    for tool in ("micromamba", "mamba", "conda"):
+        exe = shutil.which(tool)
+        if exe is None:
+            continue
+        try:
+            listed = subprocess.check_output([exe, "env", "list"], text=True, stderr=subprocess.DEVNULL)
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            continue
+        for line in listed.splitlines():
+            if not line or line.startswith("#"):
+                continue
+            if line.split()[0] == env_name:
+                return [exe, "run", "-n", env_name, "--no-capture-output", "python"]
+    for path in (
+        Path.home() / ".conda" / "envs" / env_name / "bin" / "python",
+        Path("/opt/conda/envs") / env_name / "bin" / "python",
+    ):
+        if path.is_file():
+            return [str(path)]
+    raise SystemExit(
+        f"could not find environment {env_name!r}. Use a conda env of that name, or set env to a virtualenv path."
+    )
+
+
+def _chain(py_argv, segments):
+    pieces = [shlex.join(list(py_argv) + list(segment)) for segment in segments]
+    prefix = "unset " + " ".join(_DIST_VARS) + ";"
+    return prefix + " " + " && ".join(pieces)
+
+
+def command_segments(job, config, run_dir, smoke, wave="formal"):
+    run_text = str(run_dir)
+    if smoke:
+        train = [
+            "bench/scripts/launch_b1.py",
+            "--capped-train",
+            "--script",
+            job["script"],
+            "--config",
+            job["config"],
+            "--run-dir",
+            run_text,
+            "--max-steps",
+            str(_SMOKE_STEPS),
+        ]
+    elif wave == "score-seed0":
+        train = [job["script"], "--config", job["config"], "--run-dir", run_text, "--score-only"]
+    elif wave == "seed0":
+        train = [job["script"], "--config", job["config"], "--run-dir", run_text, "--diagnostic"]
+    else:
+        train = [job["script"], "--config", job["config"], "--run-dir", run_text]
+    # A full train writes prob_val, prob_test and the two sensitivity directories.
+    # This command only evaluates the primary maps. Predicting again would
+    # score every job twice. Seed 0 diagnostic does not read the test split.
+    segments = [train]
+    if not smoke and wave in ("formal", "rest", "score-seed0"):
+        segments.append(
+            [
+                "-m",
+                "bench.eval.cli",
+                "evaluate",
+                "--data",
+                str(config["dataset"]),
+                "--split",
+                "test",
+                "--pred",
+                f"{run_text}/prob_test",
+                "--val-pred",
+                f"{run_text}/prob_val",
+                "--out",
+                f"{run_text}/metrics_test",
+            ]
+        )
+    return segments
+
+
+def format_task(job, run_dir):
+    return (
+        f"task name={job['name']} model={job['model']} dataset={job['dataset']} "
+        f"seed={int(job['seed'])} gpu={int(job['gpu'])} env={job['env']} "
+        f"config={job['config']} script={job['script']} run={run_dir}"
+    )
+
+
+def format_command(job, config, run_dir, smoke, py_argv=None, wave="formal"):
+    gpu = int(job["gpu"])
+    body = _chain(py_argv or ["python"], command_segments(job, config, run_dir, smoke, wave))
+    return f"export CUDA_VISIBLE_DEVICES={gpu}; {body}"
+
+
+def free_gpu_ids():
+    """GPU indexes with no compute process. Falls back to 0-7 when nvidia-smi is absent."""
+    try:
+        listing = subprocess.check_output(
+            ["nvidia-smi", "--query-gpu=index,uuid", "--format=csv,noheader"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+        busy_text = subprocess.check_output(
+            ["nvidia-smi", "--query-compute-apps=gpu_uuid", "--format=csv,noheader"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        print("nvidia-smi unavailable; --submit cycles GPU 0-7", flush=True)
+        return list(range(8))
+    busy = set()
+    for line in busy_text.splitlines():
+        uuid = line.split(",")[0].strip()
+        if uuid and uuid.lower() != "gpu_uuid":
+            busy.add(uuid)
+    free = []
+    for line in listing.splitlines():
+        if not line.strip():
+            continue
+        index, uuid = [part.strip() for part in line.split(",", 1)]
+        if uuid not in busy:
+            free.append(int(index))
+    if not free:
+        raise SystemExit("no free GPU; refusing to place a second process on a busy card")
+    print("free gpus: " + ",".join(str(gpu) for gpu in free), flush=True)
+    return free
+
+
+def _prepare_env(gpu):
+    env = os.environ.copy()
+    env["CUDA_VISIBLE_DEVICES"] = str(int(gpu))
+    env["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    for key in _DIST_VARS:
+        env.pop(key, None)
+    return env
+
+
+def _start(command, gpu):
+    print("submit " + command, flush=True)
+    return subprocess.Popen(command, cwd=_ROOT, env=_prepare_env(gpu), shell=True)
+
+
+def submit(jobs, smoke, wave="formal"):
+    missing = [
+        str(path)
+        for path in (_ROOT / "dataset" / "prepared" / "IDRiD", _ROOT / "dataset" / "prepared" / "DDR")
+        if not path.is_dir()
+    ]
+    if missing:
+        raise SystemExit("prepared dataset missing: " + ", ".join(missing))
+    free = free_gpu_ids()
+    assigned = []
+    for index, job in enumerate(jobs):
+        copied = dict(job)
+        copied["gpu"] = free[index % len(free)]
+        assigned.append(copied)
+    grouped = defaultdict(list)
+    for job in assigned:
+        config, run_dir = check_job(job, smoke, placeholder=False)
+        command = format_command(job, config, run_dir, smoke, python_argv(job["env"]), wave)
+        grouped[int(job["gpu"])].append(command)
+    errors = []
+
+    def _worker(gpu, queue):
+        for command in queue:
+            process = _start(command, gpu)
+            code = process.wait()
+            if code != 0:
+                errors.append(f"gpu {gpu} exited {code}: {command}")
+
+    threads = [threading.Thread(target=_worker, args=(gpu, queue)) for gpu, queue in grouped.items()]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    if errors:
+        raise SystemExit("\n".join(errors))
+
+
+def _load_train_module(script):
+    path = existing_file(script)
+    spec = importlib.util.spec_from_file_location("retiseg_b1_train_entry", path)
+    if spec is None or spec.loader is None:
+        raise SystemExit(f"could not load {script}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _cap_resolve(original):
+    def wrapped(recipe, config, n_train):
+        resolved, deviations, per_epoch = original(recipe, config, n_train)
+        if int(resolved.iterations) > _SMOKE_STEPS:
+            deviations = list(deviations)
+            deviations.append(
+                f"smoke stops after {_SMOKE_STEPS} optimizer steps; "
+                f"the resolved step count {int(resolved.iterations)} is not run"
+            )
+            resolved = replace(resolved, iterations=_SMOKE_STEPS)
+        return resolved, deviations, per_epoch
+
+    return wrapped
+
+
+def capped_train(script, config, run_dir, max_steps):
+    """Train one smoke job and stop after 20 optimizer steps.
+
+    Formal recipes are unchanged. The cap is applied only in this process,
+    after the author recipe has been resolved, and only for a runs/smoke directory.
+    """
+    if int(max_steps) != _SMOKE_STEPS:
+        raise SystemExit(f"smoke max steps must be {_SMOKE_STEPS}")
+    path = Path(run_dir)
+    if path.parts[:2] != ("runs", "smoke"):
+        raise SystemExit(f"capped train only writes under runs/smoke, got {run_dir}")
+    os.chdir(_ROOT)
+    for key in _DIST_VARS:
+        os.environ.pop(key, None)
+    module = _load_train_module(script)
+    if not hasattr(module, "resolve_recipe") or not hasattr(module, "train"):
+        raise SystemExit(f"{script} does not expose resolve_recipe and train")
+    module.resolve_recipe = _cap_resolve(module.resolve_recipe)
+    module.train(config, run_dir, diagnostic=True)
+
+
+def assert_seed0_current(seed0_jobs):
+    """Refuse later seeds when seed 0 is missing or was trained on another budget."""
+    import json
+
+    from bench.data.b1_input import EXPECTED_COUNTS
+    from bench.models.registry import build_model
+    from bench.runtime import budget_signature, micro_batch_and_deviations, optimizer_step_sizes, resolve_recipe
+
+    for job in seed0_jobs:
+        config, run_dir = check_job(job, False)
+        directory = _ROOT / run_dir
+        recipe_path = directory / "recipe.json"
+        history_path = directory / "history.jsonl"
+        diagnostic_path = directory / "diagnostic.json"
+        if not recipe_path.is_file() or not history_path.is_file() or not diagnostic_path.is_file():
+            raise SystemExit(
+                f"{run_dir} has no finished seed-0 diagnostic. "
+                "Run --submit --seed0 and read training and validation before the other seeds."
+            )
+        diagnostic = json.loads(diagnostic_path.read_text())
+        if diagnostic.get("test_split_read") is not False:
+            raise SystemExit(f"{run_dir} read the test split during the diagnostic")
+        saved = json.loads(recipe_path.read_text())
+        model = build_model(job["model"])
+        n_train = EXPECTED_COUNTS[job["dataset"]]["train"]
+        resolved, _deviations, _per_epoch = resolve_recipe(model.author_recipe(job["dataset"]), config, n_train)
+        micro, _batch_deviations = micro_batch_and_deviations(config, resolved)
+        fresh = {
+            "iterations": int(resolved.iterations),
+            "epochs": int(resolved.epochs),
+            "loss": str(resolved.loss),
+            "optimizer": str(resolved.optimizer),
+            "lr": float(resolved.lr),
+            "weight_decay": float(resolved.weight_decay),
+            "schedule": str(resolved.schedule),
+            "batch_size": int(micro),
+            "nominal_effective_batch_size": int(resolved.effective_batch_size),
+            "step_image_counts": optimizer_step_sizes(n_train, micro, resolved.effective_batch_size),
+        }
+        try:
+            current = budget_signature(saved)
+        except KeyError as exc:
+            raise SystemExit(f"{run_dir} {exc}. Rerun seed 0.") from exc
+        if current != budget_signature(fresh):
+            raise SystemExit(
+                f"{run_dir} was trained under a different budget. Rerun seed 0 before the other seeds."
+            )
+        rows = [json.loads(line) for line in history_path.read_text().splitlines() if line.strip()]
+        if not rows:
+            raise SystemExit(f"{run_dir} has an empty training history")
+        early_path = directory / "early_stop.json"
+        stopped = early_path.is_file() and bool(json.loads(early_path.read_text()).get("stopped_early"))
+        if not stopped and int(rows[-1]["iteration"]) != int(fresh["iterations"]):
+            raise SystemExit(
+                f"{run_dir} stopped at iteration {rows[-1]['iteration']}, "
+                f"budget is {fresh['iterations']}. Rerun seed 0."
+            )
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Print B1 jobs, or start one wave with --submit.")
+    parser.add_argument("--jobs", default=str(_ROOT / "bench" / "configs" / "b1_jobs.yaml"))
+    parser.add_argument("--submit", action="store_true")
+    parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--seed0", action="store_true")
+    parser.add_argument("--rest", action="store_true")
+    parser.add_argument("--score-seed0", action="store_true")
+    parser.add_argument("--capped-train", action="store_true")
+    parser.add_argument("--script", default=None)
+    parser.add_argument("--config", default=None)
+    parser.add_argument("--run-dir", default=None)
+    parser.add_argument("--max-steps", type=int, default=_SMOKE_STEPS)
+    args = parser.parse_args(argv)
+    if args.capped_train:
+        if not args.script or not args.config or not args.run_dir:
+            raise SystemExit("--capped-train needs --script, --config and --run-dir")
+        capped_train(args.script, args.config, args.run_dir, args.max_steps)
+        return
+    selected = []
+    if args.smoke:
+        selected.append("smoke")
+    if args.seed0:
+        selected.append("seed0")
+    if args.rest:
+        selected.append("rest")
+    if args.score_seed0:
+        selected.append("score-seed0")
+    if len(selected) > 1:
+        raise SystemExit("pass only one of --smoke, --seed0, --rest, --score-seed0")
+    if args.submit and not selected:
+        raise SystemExit(
+            "refusing to submit all 64 formal jobs at once. "
+            "The current batch is seed 0. "
+            "Run --submit --smoke, then --submit --seed0, read training and validation only, "
+            "then --submit --score-seed0. Do not use --rest in this batch. "
+            "If the budget changes, rerun seed 0."
+        )
+    wave = selected[0] if selected else "formal"
+    models = active_models()
+    document = load_document(args.jobs)
+    formal = select_jobs(document, False, models)
+    if wave == "smoke":
+        jobs = select_jobs(document, True, models)
+    elif wave in ("seed0", "score-seed0"):
+        jobs = [job for job in formal if int(job["seed"]) == 0]
+    elif wave == "rest":
+        jobs = [job for job in formal if int(job["seed"]) != 0]
+    else:
+        jobs = formal
+    if args.submit and wave in ("rest", "score-seed0"):
+        assert_seed0_current([job for job in formal if int(job["seed"]) == 0])
+    for job in jobs:
+        config, run_dir = check_job(job, wave == "smoke")
+        print(format_task(job, run_dir), flush=True)
+        print("command " + format_command(job, config, run_dir, wave == "smoke", wave=wave), flush=True)
+    print(f"{wave} tasks: {len(jobs)}", flush=True)
+    if not args.submit:
+        if wave == "formal":
+            print(
+                "not submitted. Do not launch all 64 at once; "
+                "the current batch is seed 0: "
+                "--submit --smoke, then --submit --seed0, then --submit --score-seed0. "
+                "Do not use --rest in this batch.",
+                flush=True,
+            )
+        else:
+            print("not submitted; pass --submit to launch this wave", flush=True)
+        return
+    submit(jobs, wave == "smoke", wave)
+
+
+if __name__ == "__main__":
+    main()

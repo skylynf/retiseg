@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-ROOT = Path("/home/lelel/research/retiseg/literature")
+ROOT = Path(__file__).resolve().parents[1]
 UA = "retiseg-lit-bot/0.1 (academic literature collection; mailto:research@localhost)"
 EMAIL = "research@localhost"
 

@@ -1,0 +1,28 @@
+# Track B1, frozen before the first retraining run.
+# B1 compares adapted source recipes under this fixed data and evaluation
+# setup. It is not an architecture ranking. After 2026-10-04, a recipe change
+# may use training loss and validation loss only. The U-Net bce_dice revision
+# already saw a test mAUPR; that dependence is recorded on the U-Net recipe.
+# Shared by every model. Loss, optimizer and iteration count stay at that
+# model's own default and are recorded in its run directory, not here.
+# Track A does not use this file. Author checkpoints keep the resize,
+# normalization and label merge written in the author's config.
+experiment: B1
+# Longer side of the black-border crop, in pixels. The mask is luminance > 10,
+# not Otsu. Predictions are resized back to the original image before scoring.
+# Author checkpoints do not crop to this mask.
+fov_diameter: 1440
+eval_protocol: bench/eval/protocol.yaml
+label_policy: multilabel
+use_fov: true
+datasets: [IDRiD, DDR]
+splits:
+  IDRiD: {train: train, val: val, test: test}
+  DDR: {train: train, val: val, test: test}
+# Registered design is five IDRiD seeds and three DDR seeds.
+# The current batch runs seed 0 only. See literature/synthesis/09_第一批任务.txt.
+seeds:
+  IDRiD: 5
+  DDR: 3
+primary_metric: mAUPR
+# E0 used a 512 longer side and 30 epochs. Those settings are not B1.

@@ -1,0 +1,9 @@
+experiment: B1
+model: HACDR-Net
+dataset: dataset/prepared/IDRiD
+split_train: train
+split_val: val
+split_test: test
+fov_diameter: 1440
+seed: 0
+num_workers: 4

@@ -21,7 +21,13 @@ def _boot_ap(w, pos, neg):
 
 
 def bootstrap_aupr_ci(pos, neg, n_boot=2000, seed=0, ci=0.95):
-    """Percentile CI of pooled AUPR, resampling test images. pos/neg: (n_images, n_bins)."""
+    """Percentile CI of pooled AUPR.
+
+    The resample unit is the test image. Each replicate draws images with
+    replacement, pools their histograms and recomputes AUPR. A replicate with
+    no positive pixels is dropped. This is not a pixel or lesion bootstrap.
+    pos/neg: (n_images, n_bins).
+    """
     w = _bootstrap_weights(pos.shape[0], n_boot, seed)
     ap = _boot_ap(w, pos, neg)
     ap = ap[~np.isnan(ap)]

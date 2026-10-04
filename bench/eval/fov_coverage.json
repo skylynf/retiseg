@@ -1,0 +1,230 @@
+{
+ "rule": "On the training split only, every class must have deep_fraction < 0.001. Deep means more than 2 pixels outside the FOV in 8-connectivity. Test counts are not used for this decision.",
+ "accepted": true,
+ "datasets": {
+  "IDRiD": {
+   "train": {
+    "n_images": 44,
+    "fov_fraction": 0.6959317416861841,
+    "per_class": {
+     "MA": {
+      "lesion_pixels": 568488,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "HE": {
+      "lesion_pixels": 3995702,
+      "outside_pixels": 292,
+      "deep_pixels": 90,
+      "outside_fraction": 7.307852287282686e-05,
+      "deep_fraction": 2.2524202255323346e-05,
+      "worst_image": {
+       "image_id": "IDRiD_35",
+       "deep": 90,
+       "lesion": 368997
+      }
+     },
+     "EX": {
+      "lesion_pixels": 4475712,
+      "outside_pixels": 3,
+      "deep_pixels": 0,
+      "outside_fraction": 6.70284415083008e-07,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "SE": {
+      "lesion_pixels": 1028347,
+      "outside_pixels": 52,
+      "deep_pixels": 0,
+      "outside_fraction": 5.0566588904328985e-05,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     }
+    }
+   },
+   "test_report_only": {
+    "n_images": 27,
+    "fov_fraction": 0.6997205119746926,
+    "per_class": {
+     "MA": {
+      "lesion_pixels": 323896,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "HE": {
+      "lesion_pixels": 3516519,
+      "outside_pixels": 48423,
+      "deep_pixels": 48416,
+      "outside_fraction": 0.013770151675563249,
+      "deep_fraction": 0.013768161070649697,
+      "worst_image": {
+       "image_id": "IDRiD_61",
+       "deep": 48416,
+       "lesion": 1186642
+      }
+     },
+     "EX": {
+      "lesion_pixels": 3577920,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "SE": {
+      "lesion_pixels": 595892,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     }
+    }
+   },
+   "accepted_on_train": true,
+   "failed_classes": []
+  },
+  "DDR": {
+   "train": {
+    "n_images": 383,
+    "fov_fraction": 0.575461513411161,
+    "per_class": {
+     "MA": {
+      "lesion_pixels": 443015,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "HE": {
+      "lesion_pixels": 5805085,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "EX": {
+      "lesion_pixels": 3384651,
+      "outside_pixels": 12,
+      "deep_pixels": 0,
+      "outside_fraction": 3.545417237995882e-06,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "SE": {
+      "lesion_pixels": 1088148,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     }
+    }
+   },
+   "test_report_only": {
+    "n_images": 225,
+    "fov_fraction": 0.5668016524258142,
+    "per_class": {
+     "MA": {
+      "lesion_pixels": 167014,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "HE": {
+      "lesion_pixels": 5943427,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     },
+     "EX": {
+      "lesion_pixels": 3776735,
+      "outside_pixels": 263,
+      "deep_pixels": 122,
+      "outside_fraction": 6.963686888277838e-05,
+      "deep_fraction": 3.230303423459681e-05,
+      "worst_image": {
+       "image_id": "007-4482-200",
+       "deep": 122,
+       "lesion": 34368
+      }
+     },
+     "SE": {
+      "lesion_pixels": 297556,
+      "outside_pixels": 0,
+      "deep_pixels": 0,
+      "outside_fraction": 0.0,
+      "deep_fraction": 0.0,
+      "worst_image": {
+       "image_id": null,
+       "deep": 0,
+       "lesion": 0
+      }
+     }
+    }
+   },
+   "accepted_on_train": true,
+   "failed_classes": []
+  }
+ }
+}

@@ -38,9 +38,16 @@ def load_split(dataset_dir, split):
 
 
 def _read_binary(path):
+    """Positive wherever a color or gray value is above zero.
+
+    An RGBA file keeps a constant alpha of 255 on the background, so the alpha
+    channel is not a lesion. This is the same rule as bench.data.masks.binary_mask.
+    """
     arr = np.asarray(Image.open(path))
+    if arr.ndim == 3 and arr.shape[-1] == 4:
+        arr = arr[..., :3]
     if arr.ndim == 3:
-        arr = arr.any(axis=2)
+        arr = arr.any(axis=-1)
     return arr > 0
 
 

@@ -1,9 +1,17 @@
 """Connected-component (lesion-level) detection metrics.
 
-A ground-truth lesion counts as detected if any predicted-positive pixel overlaps it;
-a predicted component counts as a true positive if it overlaps any ground-truth pixel.
-Lesion size is the equivalent diameter divided by the FOV equivalent diameter, so that
-size strata are comparable across datasets with different image resolutions.
+Matching is many-to-many, not a one-to-one assignment. An 8-connected
+ground-truth lesion is detected if any predicted-positive pixel overlaps it.
+A predicted component is a true positive if it overlaps any ground-truth pixel
+of that class; otherwise it is a false positive. One lesion may be hit by
+several predictions, and one prediction may hit several lesions.
+
+An image with no ground-truth component of that class is a negative image.
+Every predicted component on it is a false positive and enters precision.
+It does not enter recall. Per-image Dice stays missing when the image has no
+positive pixels, rather than being recorded as zero.
+
+Lesion size is the equivalent diameter divided by the FOV equivalent diameter.
 """
 
 import numpy as np
@@ -40,6 +48,9 @@ class LesionAccumulator:
         self.detected = []
         self.n_pred = 0
         self.n_pred_tp = 0
+        self.n_images = 0
+        self.n_negative_images = 0
+        self.n_negative_images_with_prediction = 0
 
     def add(self, match, fov_area):
         fov_diam = equivalent_diameter(fov_area)
@@ -47,6 +58,11 @@ class LesionAccumulator:
         self.detected.append(match["gt_detected"])
         self.n_pred += match["n_pred"]
         self.n_pred_tp += match["n_pred_tp"]
+        self.n_images += 1
+        if match["gt_area"].size == 0:
+            self.n_negative_images += 1
+            if match["n_pred"] > 0:
+                self.n_negative_images_with_prediction += 1
 
     def result(self):
         rel = np.concatenate(self.rel_diam) if self.rel_diam else np.zeros(0)
@@ -71,6 +87,9 @@ class LesionAccumulator:
         return {
             "n_gt_lesions": n_gt,
             "n_pred_components": self.n_pred,
+            "n_images": self.n_images,
+            "n_negative_images": self.n_negative_images,
+            "n_negative_images_with_prediction": self.n_negative_images_with_prediction,
             "recall": float(recall),
             "precision": float(precision),
             "f1": float(f1),

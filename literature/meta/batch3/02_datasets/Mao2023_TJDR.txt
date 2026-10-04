@@ -1,0 +1,25 @@
+文献ID: D-TJDR-2023
+PDF: literature/batch3/02_datasets/Mao2023_TJDR.pdf
+批次: batch3
+角色: 数据集
+主任务纳入: 否。本地已有。公开四类像素集，但含 133° 超广角，不并进 IDRiD/DDR 平均
+归类: 数据集-细像素
+身份核对: PDF 与题名一致
+题名: TJDR
+作者: Jingxin Mao et al.
+年份: 2023
+出处: arXiv:2312.15389
+标识: doi:10.48550/arxiv.2312.15389
+任务: 提供四类像素标注
+成像: 彩色眼底。257 张 Topcon 35–50°，304 张 Zeiss CLARUS 500、133°
+病灶: MA, HE, EX, SE
+数据: 同济医院 561 张
+标注粒度: 细像素，Labelme 多边形
+模型族: 无
+额外输入: 无
+报告指标: 无模型主结果
+代码: https://github.com/NekoPii/TJDR 只有说明。图像在 dataset/TJDR 的三个独立 zip 里，接口 bench.data.open_tjdr
+权重: 不适用
+重训轨: 不重训。可选外部集，超广角单独一列
+摘要: 561 张。官方训练 448 张、测试 113 张，没有验证集。掩码值 EX=1、HE=2、MA=3、SE=4。2048 是常规视野，3912 是 133°。
+管理备注: 2026-10-03 核对三个 zip，未解压。不进入当前训练，也不并进 IDRiD/DDR 平均。

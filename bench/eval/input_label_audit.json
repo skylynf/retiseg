@@ -1,0 +1,1255 @@
+{
+  "evaluation_labels": "original_four_class",
+  "note": "Disappearance is an 8-connected component inside the field of view that nearest-neighbour resize does not sample. softmax_overwrite_removed is the training target of an exclusive head. Evaluation does not use that target.",
+  "forward_sizes": {
+    "long_side_1440": null,
+    "h2former_960": [
+      960,
+      960
+    ],
+    "fct_384": [
+      384,
+      384
+    ],
+    "swin_224": [
+      224,
+      224
+    ]
+  },
+  "datasets": {
+    "IDRiD": {
+      "train": {
+        "n_images": 44,
+        "lesion_disappearance": {
+          "long_side_1440": {
+            "MA": {
+              "components": 1931,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "components": 1125,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 6269,
+              "disappeared": 1,
+              "ratio": 0.0001595150741745095
+            },
+            "SE": {
+              "components": 86,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "components": 1931,
+              "disappeared": 2,
+              "ratio": 0.0010357327809425167
+            },
+            "HE": {
+              "components": 1125,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 6269,
+              "disappeared": 7,
+              "ratio": 0.0011166055192215665
+            },
+            "SE": {
+              "components": 86,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "components": 1931,
+              "disappeared": 21,
+              "ratio": 0.010875194199896427
+            },
+            "HE": {
+              "components": 1125,
+              "disappeared": 1,
+              "ratio": 0.0008888888888888889
+            },
+            "EX": {
+              "components": 6269,
+              "disappeared": 358,
+              "ratio": 0.0571063965544744
+            },
+            "SE": {
+              "components": 86,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "components": 1931,
+              "disappeared": 309,
+              "ratio": 0.16002071465561885
+            },
+            "HE": {
+              "components": 1125,
+              "disappeared": 13,
+              "ratio": 0.011555555555555555
+            },
+            "EX": {
+              "components": 6269,
+              "disappeared": 1620,
+              "ratio": 0.2584144201627054
+            },
+            "SE": {
+              "components": 86,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          }
+        },
+        "softmax_overwrite_removed": {
+          "original_fov": {
+            "MA": {
+              "positive": 568488,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 3995410,
+              "removed": 1368,
+              "ratio": 0.00034239289584798554
+            },
+            "EX": {
+              "positive": 4475709,
+              "removed": 651,
+              "ratio": 0.00014545181556709785
+            },
+            "SE": {
+              "positive": 1028295,
+              "removed": 178,
+              "ratio": 0.0001731020767386791
+            }
+          },
+          "long_side_1440": {
+            "MA": {
+              "positive": 100734,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 706761,
+              "removed": 267,
+              "ratio": 0.0003777797586454261
+            },
+            "EX": {
+              "positive": 794562,
+              "removed": 124,
+              "ratio": 0.0001560608234473836
+            },
+            "SE": {
+              "positive": 183111,
+              "removed": 34,
+              "ratio": 0.00018567972432022108
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "positive": 53681,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 377543,
+              "removed": 140,
+              "ratio": 0.00037081868820240346
+            },
+            "EX": {
+              "positive": 423619,
+              "removed": 60,
+              "ratio": 0.0001416367065688744
+            },
+            "SE": {
+              "positive": 97571,
+              "removed": 15,
+              "ratio": 0.00015373420381055845
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "positive": 8659,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 60403,
+              "removed": 25,
+              "ratio": 0.00041388672748042315
+            },
+            "EX": {
+              "positive": 67894,
+              "removed": 11,
+              "ratio": 0.00016201726220284562
+            },
+            "SE": {
+              "positive": 15651,
+              "removed": 4,
+              "ratio": 0.00025557472365983003
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "positive": 2932,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 20591,
+              "removed": 7,
+              "ratio": 0.0003399543489874217
+            },
+            "EX": {
+              "positive": 23006,
+              "removed": 4,
+              "ratio": 0.00017386768669042858
+            },
+            "SE": {
+              "positive": 5296,
+              "removed": 1,
+              "ratio": 0.00018882175226586103
+            }
+          }
+        }
+      },
+      "val": {
+        "n_images": 10,
+        "lesion_disappearance": {
+          "long_side_1440": {
+            "MA": {
+              "components": 481,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "components": 240,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 1257,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "SE": {
+              "components": 26,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "components": 481,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "components": 240,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 1257,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "SE": {
+              "components": 26,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "components": 481,
+              "disappeared": 4,
+              "ratio": 0.008316008316008316
+            },
+            "HE": {
+              "components": 240,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 1257,
+              "disappeared": 36,
+              "ratio": 0.028639618138424822
+            },
+            "SE": {
+              "components": 26,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "components": 481,
+              "disappeared": 79,
+              "ratio": 0.16424116424116425
+            },
+            "HE": {
+              "components": 240,
+              "disappeared": 1,
+              "ratio": 0.004166666666666667
+            },
+            "EX": {
+              "components": 1257,
+              "disappeared": 229,
+              "ratio": 0.18217979315831345
+            },
+            "SE": {
+              "components": 26,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          }
+        },
+        "softmax_overwrite_removed": {
+          "original_fov": {
+            "MA": {
+              "positive": 136475,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 2502615,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "positive": 843778,
+              "removed": 35,
+              "ratio": 4.1480104956517e-05
+            },
+            "SE": {
+              "positive": 220694,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          },
+          "long_side_1440": {
+            "MA": {
+              "positive": 24294,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 445497,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "positive": 150239,
+              "removed": 4,
+              "ratio": 2.662424536904532e-05
+            },
+            "SE": {
+              "positive": 39261,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "positive": 12983,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 237194,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "positive": 80021,
+              "removed": 1,
+              "ratio": 1.2496719611102086e-05
+            },
+            "SE": {
+              "positive": 20942,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "positive": 2058,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 37896,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "positive": 12812,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "SE": {
+              "positive": 3345,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "positive": 715,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 12910,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "positive": 4359,
+              "removed": 1,
+              "ratio": 0.00022941041523285156
+            },
+            "SE": {
+              "positive": 1125,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          }
+        }
+      },
+      "test": {
+        "n_images": 27,
+        "lesion_disappearance": {
+          "long_side_1440": {
+            "MA": {
+              "components": 1085,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "components": 534,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 4116,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "SE": {
+              "components": 38,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "components": 1085,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "components": 534,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 4116,
+              "disappeared": 4,
+              "ratio": 0.0009718172983479105
+            },
+            "SE": {
+              "components": 38,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "components": 1085,
+              "disappeared": 14,
+              "ratio": 0.012903225806451613
+            },
+            "HE": {
+              "components": 534,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 4116,
+              "disappeared": 169,
+              "ratio": 0.04105928085519922
+            },
+            "SE": {
+              "components": 38,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "components": 1085,
+              "disappeared": 178,
+              "ratio": 0.1640552995391705
+            },
+            "HE": {
+              "components": 534,
+              "disappeared": 4,
+              "ratio": 0.00749063670411985
+            },
+            "EX": {
+              "components": 4116,
+              "disappeared": 1018,
+              "ratio": 0.24732750242954324
+            },
+            "SE": {
+              "components": 38,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          }
+        },
+        "softmax_overwrite_removed": {
+          "original_fov": {
+            "MA": {
+              "positive": 323896,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 3468096,
+              "removed": 113,
+              "ratio": 3.258271974016867e-05
+            },
+            "EX": {
+              "positive": 3577920,
+              "removed": 1662,
+              "ratio": 0.0004645156962704588
+            },
+            "SE": {
+              "positive": 595892,
+              "removed": 11,
+              "ratio": 1.8459720889020157e-05
+            }
+          },
+          "long_side_1440": {
+            "MA": {
+              "positive": 56663,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 612684,
+              "removed": 20,
+              "ratio": 3.264325492423501e-05
+            },
+            "EX": {
+              "positive": 627478,
+              "removed": 295,
+              "ratio": 0.00047013600476829466
+            },
+            "SE": {
+              "positive": 105351,
+              "removed": 1,
+              "ratio": 9.49207886019117e-06
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "positive": 30534,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 327545,
+              "removed": 10,
+              "ratio": 3.053015616174877e-05
+            },
+            "EX": {
+              "positive": 336655,
+              "removed": 159,
+              "ratio": 0.0004722935943324769
+            },
+            "SE": {
+              "positive": 56331,
+              "removed": 1,
+              "ratio": 1.775221458876995e-05
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "positive": 4901,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 52349,
+              "removed": 2,
+              "ratio": 3.820512330703547e-05
+            },
+            "EX": {
+              "positive": 53781,
+              "removed": 22,
+              "ratio": 0.00040906639891411466
+            },
+            "SE": {
+              "positive": 8995,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "positive": 1659,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 17873,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "positive": 18199,
+              "removed": 9,
+              "ratio": 0.0004945326666300346
+            },
+            "SE": {
+              "positive": 3084,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          }
+        }
+      }
+    },
+    "DDR": {
+      "train": {
+        "n_images": 383,
+        "lesion_disappearance": {
+          "long_side_1440": {
+            "MA": {
+              "components": 5783,
+              "disappeared": 1,
+              "ratio": 0.00017292062943109114
+            },
+            "HE": {
+              "components": 4739,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "EX": {
+              "components": 13416,
+              "disappeared": 9,
+              "ratio": 0.0006708407871198568
+            },
+            "SE": {
+              "components": 730,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "components": 5783,
+              "disappeared": 72,
+              "ratio": 0.012450285319038561
+            },
+            "HE": {
+              "components": 4739,
+              "disappeared": 29,
+              "ratio": 0.006119434479848069
+            },
+            "EX": {
+              "components": 13416,
+              "disappeared": 319,
+              "ratio": 0.023777579010137148
+            },
+            "SE": {
+              "components": 730,
+              "disappeared": 12,
+              "ratio": 0.01643835616438356
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "components": 5783,
+              "disappeared": 666,
+              "ratio": 0.11516513920110669
+            },
+            "HE": {
+              "components": 4739,
+              "disappeared": 153,
+              "ratio": 0.03228529225575016
+            },
+            "EX": {
+              "components": 13416,
+              "disappeared": 2262,
+              "ratio": 0.1686046511627907
+            },
+            "SE": {
+              "components": 730,
+              "disappeared": 64,
+              "ratio": 0.08767123287671233
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "components": 5783,
+              "disappeared": 1985,
+              "ratio": 0.3432474494207159
+            },
+            "HE": {
+              "components": 4739,
+              "disappeared": 395,
+              "ratio": 0.08335091791517198
+            },
+            "EX": {
+              "components": 13416,
+              "disappeared": 4741,
+              "ratio": 0.3533840190816935
+            },
+            "SE": {
+              "components": 730,
+              "disappeared": 131,
+              "ratio": 0.17945205479452056
+            }
+          }
+        },
+        "softmax_overwrite_removed": {
+          "original_fov": {
+            "MA": {
+              "positive": 443015,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 5805085,
+              "removed": 9370,
+              "ratio": 0.0016141021190904182
+            },
+            "EX": {
+              "positive": 3384639,
+              "removed": 11581,
+              "ratio": 0.003421635217227007
+            },
+            "SE": {
+              "positive": 1088148,
+              "removed": 68,
+              "ratio": 6.249149931810746e-05
+            }
+          },
+          "long_side_1440": {
+            "MA": {
+              "positive": 263138,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 3712029,
+              "removed": 5562,
+              "ratio": 0.0014983719146590719
+            },
+            "EX": {
+              "positive": 2092489,
+              "removed": 8793,
+              "ratio": 0.004202172627908677
+            },
+            "SE": {
+              "positive": 734115,
+              "removed": 56,
+              "ratio": 7.628232633851644e-05
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "positive": 120063,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 1691251,
+              "removed": 2528,
+              "ratio": 0.0014947515182548302
+            },
+            "EX": {
+              "positive": 950726,
+              "removed": 3930,
+              "ratio": 0.004133683101124825
+            },
+            "SE": {
+              "positive": 329003,
+              "removed": 23,
+              "ratio": 6.990817712908392e-05
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "positive": 19255,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 270558,
+              "removed": 437,
+              "ratio": 0.0016151804788622033
+            },
+            "EX": {
+              "positive": 151965,
+              "removed": 619,
+              "ratio": 0.004073306353436647
+            },
+            "SE": {
+              "positive": 52599,
+              "removed": 3,
+              "ratio": 5.703530485370444e-05
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "positive": 6549,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 92011,
+              "removed": 124,
+              "ratio": 0.0013476649531034334
+            },
+            "EX": {
+              "positive": 51711,
+              "removed": 224,
+              "ratio": 0.004331766935468276
+            },
+            "SE": {
+              "positive": 17937,
+              "removed": 1,
+              "ratio": 5.5750682945866085e-05
+            }
+          }
+        }
+      },
+      "val": {
+        "n_images": 149,
+        "lesion_disappearance": {
+          "long_side_1440": {
+            "MA": {
+              "components": 2556,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "components": 1342,
+              "disappeared": 1,
+              "ratio": 0.0007451564828614009
+            },
+            "EX": {
+              "components": 1920,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "SE": {
+              "components": 349,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "components": 2556,
+              "disappeared": 28,
+              "ratio": 0.010954616588419406
+            },
+            "HE": {
+              "components": 1342,
+              "disappeared": 6,
+              "ratio": 0.004470938897168405
+            },
+            "EX": {
+              "components": 1920,
+              "disappeared": 37,
+              "ratio": 0.019270833333333334
+            },
+            "SE": {
+              "components": 349,
+              "disappeared": 1,
+              "ratio": 0.0028653295128939827
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "components": 2556,
+              "disappeared": 311,
+              "ratio": 0.12167449139280125
+            },
+            "HE": {
+              "components": 1342,
+              "disappeared": 34,
+              "ratio": 0.02533532041728763
+            },
+            "EX": {
+              "components": 1920,
+              "disappeared": 281,
+              "ratio": 0.14635416666666667
+            },
+            "SE": {
+              "components": 349,
+              "disappeared": 6,
+              "ratio": 0.017191977077363897
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "components": 2556,
+              "disappeared": 946,
+              "ratio": 0.3701095461658842
+            },
+            "HE": {
+              "components": 1342,
+              "disappeared": 99,
+              "ratio": 0.07377049180327869
+            },
+            "EX": {
+              "components": 1920,
+              "disappeared": 604,
+              "ratio": 0.3145833333333333
+            },
+            "SE": {
+              "components": 349,
+              "disappeared": 11,
+              "ratio": 0.03151862464183381
+            }
+          }
+        },
+        "softmax_overwrite_removed": {
+          "original_fov": {
+            "MA": {
+              "positive": 176705,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 1387428,
+              "removed": 1813,
+              "ratio": 0.0013067344755908054
+            },
+            "EX": {
+              "positive": 500045,
+              "removed": 64,
+              "ratio": 0.0001279884810367067
+            },
+            "SE": {
+              "positive": 713769,
+              "removed": 56,
+              "ratio": 7.845675561701335e-05
+            }
+          },
+          "long_side_1440": {
+            "MA": {
+              "positive": 99073,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 693917,
+              "removed": 1190,
+              "ratio": 0.0017149025027488878
+            },
+            "EX": {
+              "positive": 223424,
+              "removed": 41,
+              "ratio": 0.00018350759094815238
+            },
+            "SE": {
+              "positive": 406520,
+              "removed": 48,
+              "ratio": 0.00011807537144543934
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "positive": 46200,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 320058,
+              "removed": 516,
+              "ratio": 0.0016122077873385449
+            },
+            "EX": {
+              "positive": 100628,
+              "removed": 22,
+              "ratio": 0.00021862702229995628
+            },
+            "SE": {
+              "positive": 189824,
+              "removed": 18,
+              "ratio": 9.482467970330411e-05
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "positive": 7374,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 51232,
+              "removed": 83,
+              "ratio": 0.0016200811992504685
+            },
+            "EX": {
+              "positive": 16048,
+              "removed": 4,
+              "ratio": 0.0002492522432701894
+            },
+            "SE": {
+              "positive": 30314,
+              "removed": 4,
+              "ratio": 0.00013195223329154845
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "positive": 2487,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 17425,
+              "removed": 29,
+              "ratio": 0.0016642754662840745
+            },
+            "EX": {
+              "positive": 5485,
+              "removed": 1,
+              "ratio": 0.00018231540565177758
+            },
+            "SE": {
+              "positive": 10323,
+              "removed": 1,
+              "ratio": 9.687106461300009e-05
+            }
+          }
+        }
+      },
+      "test": {
+        "n_images": 225,
+        "lesion_disappearance": {
+          "long_side_1440": {
+            "MA": {
+              "components": 2041,
+              "disappeared": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "components": 6457,
+              "disappeared": 2,
+              "ratio": 0.0003097413659594239
+            },
+            "EX": {
+              "components": 8320,
+              "disappeared": 7,
+              "ratio": 0.0008413461538461539
+            },
+            "SE": {
+              "components": 214,
+              "disappeared": 0,
+              "ratio": 0.0
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "components": 2041,
+              "disappeared": 24,
+              "ratio": 0.011758941695247428
+            },
+            "HE": {
+              "components": 6457,
+              "disappeared": 92,
+              "ratio": 0.014248102834133499
+            },
+            "EX": {
+              "components": 8320,
+              "disappeared": 244,
+              "ratio": 0.029326923076923077
+            },
+            "SE": {
+              "components": 214,
+              "disappeared": 3,
+              "ratio": 0.014018691588785047
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "components": 2041,
+              "disappeared": 247,
+              "ratio": 0.12101910828025478
+            },
+            "HE": {
+              "components": 6457,
+              "disappeared": 628,
+              "ratio": 0.0972587889112591
+            },
+            "EX": {
+              "components": 8320,
+              "disappeared": 1661,
+              "ratio": 0.1996394230769231
+            },
+            "SE": {
+              "components": 214,
+              "disappeared": 24,
+              "ratio": 0.11214953271028037
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "components": 2041,
+              "disappeared": 685,
+              "ratio": 0.33561979421852034
+            },
+            "HE": {
+              "components": 6457,
+              "disappeared": 1410,
+              "ratio": 0.21836766300139385
+            },
+            "EX": {
+              "components": 8320,
+              "disappeared": 3151,
+              "ratio": 0.37872596153846155
+            },
+            "SE": {
+              "components": 214,
+              "disappeared": 36,
+              "ratio": 0.16822429906542055
+            }
+          }
+        },
+        "softmax_overwrite_removed": {
+          "original_fov": {
+            "MA": {
+              "positive": 167014,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 5943427,
+              "removed": 1540,
+              "ratio": 0.0002591097694983046
+            },
+            "EX": {
+              "positive": 3776472,
+              "removed": 43439,
+              "ratio": 0.01150253464079702
+            },
+            "SE": {
+              "positive": 297556,
+              "removed": 3,
+              "ratio": 1.0082135799647797e-05
+            }
+          },
+          "long_side_1440": {
+            "MA": {
+              "positive": 96006,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 3212650,
+              "removed": 950,
+              "ratio": 0.00029570603707219895
+            },
+            "EX": {
+              "positive": 1847333,
+              "removed": 22717,
+              "ratio": 0.01229718735062926
+            },
+            "SE": {
+              "positive": 163576,
+              "removed": 1,
+              "ratio": 6.113366263999609e-06
+            }
+          },
+          "h2former_960": {
+            "MA": {
+              "positive": 43703,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 1479154,
+              "removed": 442,
+              "ratio": 0.00029881946031312494
+            },
+            "EX": {
+              "positive": 836946,
+              "removed": 10140,
+              "ratio": 0.01211547698417819
+            },
+            "SE": {
+              "positive": 74707,
+              "removed": 1,
+              "ratio": 1.3385626514249e-05
+            }
+          },
+          "fct_384": {
+            "MA": {
+              "positive": 6969,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 236828,
+              "removed": 75,
+              "ratio": 0.0003166855270491665
+            },
+            "EX": {
+              "positive": 133859,
+              "removed": 1634,
+              "ratio": 0.012206874397687119
+            },
+            "SE": {
+              "positive": 11913,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          },
+          "swin_224": {
+            "MA": {
+              "positive": 2407,
+              "removed": 0,
+              "ratio": 0.0
+            },
+            "HE": {
+              "positive": 80619,
+              "removed": 21,
+              "ratio": 0.00026048450117218026
+            },
+            "EX": {
+              "positive": 45648,
+              "removed": 580,
+              "ratio": 0.012705923589204346
+            },
+            "SE": {
+              "positive": 4073,
+              "removed": 0,
+              "ratio": 0.0
+            }
+          }
+        }
+      }
+    }
+  }
+}
