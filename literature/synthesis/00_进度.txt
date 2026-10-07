@@ -75,6 +75,7 @@ GPU 0–1 被其他用户的 vLLM 占满。GPU 2–3 上各有一个其他用户
 U-Net IDRiD 探测已结束（42000 步，10342 秒），它的 environment.json 写的是 e2a3c48，实际代码是 0cfff98。
 e2a3c48 已被 0217b55 取代，保留在分支 server-local-e2a3c48。服务器 main 现为 origin/main（e66e4c0）加一个提交：原始数据测试改为检查发布目录本身，因为服务器上的 dataset/iDRID 只有一个残缺的 zip，dataset/DDR/OIA-DDR 是空目录。合并后 retiseg 下 137 个测试通过、11 个跳过，test_hacdr_recipe 9 个通过。
 H2Former 在 e66e4c0 上重新冒烟，B1 和 B-std 共 4 个任务仍然显存不足，报错在 basic_module.py:190 的前向，一次要分配 12.36GB。激活重计算只省反向要存的激活，第一层一个块的前向仍要同时放下几份 2×窗口数×头数×3600×3600 的注意力矩阵。批 1 加重计算能跑完 20 步和验证，但显存峰值 39.45GB（卡上共 40.96GB），余量太小。
+用户决定（同日）：第一批不跑 H2Former。它移出 WRAPPERS，B1 和 B-std 的种子 0 各剩 14 个任务；包装器和重计算代码保留。
 
 其余数据集导出（2026-10-07，本机，单进程逐张，ulimit -v 16000000，共约 13 分钟）
 代码 53f8b03 及其后一次提交，入口 bench/scripts/prepare_datasets.py。名单在任何训练之前冻结并提交：bench/data/splits/{TJDR_std,TJDR_uwf,FGADR,Retinal-Lesions}.json。

@@ -5,7 +5,7 @@ import pytest
 import torch
 from torch import nn
 
-from bench.models.registry import build_model
+from bench.models.h2former import H2Former
 from bench.runtime import build_loss
 
 REPO = Path(__file__).resolve().parents[2]
@@ -15,7 +15,7 @@ REPO = Path(__file__).resolve().parents[2]
 def model():
     # 960 with window 60 materializes a 6 GiB attention map. Keep the check on CPU
     # so a 16 GiB GPU that is already partly occupied can still run it.
-    return build_model("H2Former").cpu().eval()
+    return H2Former().cpu().eval()
 
 
 def test_forward_is_five_maps_at_960(model):

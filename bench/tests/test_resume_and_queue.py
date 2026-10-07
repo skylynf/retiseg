@@ -240,7 +240,7 @@ def test_a_job_counts_as_running_until_its_exit_line_or_its_process_is_gone(tmp_
 
 
 def test_only_keeps_the_named_models_of_a_wave(capsys):
-    main(["--jobs", "bench/configs/bs_jobs.yaml", "--smoke", "--only", "H2Former,M2MRF"])
+    main(["--jobs", "bench/configs/bs_jobs.yaml", "--smoke", "--only", "M2MRF,HACDR-Net"])
     out = capsys.readouterr().out
     assert "smoke tasks: 4" in out
     with pytest.raises(SystemExit, match="unknown models"):

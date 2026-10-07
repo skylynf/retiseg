@@ -225,7 +225,7 @@ def test_registry_builds_unet_and_refuses_unregistered_names():
     assert isinstance(model, UNet)
     from bench.models.registry import WRAPPERS
 
-    assert "H2Former" in WRAPPERS
+    assert "H2Former" not in WRAPPERS
     with pytest.raises(KeyError, match="models.yaml"):
         build_model("not-a-model")
 
@@ -241,18 +241,18 @@ def test_jobs_file_lists_the_formal_table_and_launch_only_prints(capsys):
     assert "gpu=0" in out
     assert "not submitted" in out
     assert "runs/B1_unet_idrid_seed0_runner" in out
-    assert "formal tasks: 64" in out
-    assert "Do not launch all 64" in out
-    with pytest.raises(SystemExit, match="refusing to submit all 64"):
+    assert "formal tasks: 56" in out
+    assert "Do not launch all 56" in out
+    with pytest.raises(SystemExit, match="refusing to submit all 56"):
         launch_main(["--submit"])
     launch_main(["--smoke"])
     smoke_out = capsys.readouterr().out
-    assert "smoke tasks: 16" in smoke_out
+    assert "smoke tasks: 14" in smoke_out
     assert "smoke_hacdr_ddr_seed0" in smoke_out
     assert "dataset=DDR" in smoke_out
     launch_main(["--seed0"])
     seed_out = capsys.readouterr().out
-    assert "seed0 tasks: 16" in seed_out
+    assert "seed0 tasks: 14" in seed_out
     assert "--diagnostic" in seed_out
     assert "bench.eval.cli" not in seed_out
     assert "bench.eval.cli" in out
