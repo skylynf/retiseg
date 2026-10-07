@@ -69,6 +69,9 @@ B1 seed0（进行中，GPU 2–3）：16 个任务，最长的两个 DeepLabv3 �
 启动器（同日）：console.log 的开始行加 host 和 pid；重新提交同一波次时，仍在运行的任务跳过。旧格式的开始行没有 pid，没有结束行就当作仍在运行，确认进程已死后用 RETISEG_IGNORE_RUNNING=1 放行。--only 只提交指定模型。
 提交号（同日）：environment.json 原来在训练结束时读 HEAD，长任务中途 git pull 会记成新提交。现改为进程启动时读一次。在这次修正之前启动的任务（两个 B1 DeepLabv3、四个探测）如果在 pull 之后结束，environment.json 里写的是新提交号，实际运行的是 0cfff98，以 stages.tsv 为准；这几个模型用到的代码在两次提交之间没有变化。
 
+论文素材（2026-10-07）
+新建 14：把到目前为止所有要进论文的处理方法和数字按方法小节整理成可直接改写的版本，另列 19 条备注（局限、补充说明、审稿回复）。以后每项会进论文的决定在同一次提交里写进 14。
+
 其余数据集导出（2026-10-07，本机，单进程逐张，ulimit -v 16000000，共约 13 分钟）
 代码 53f8b03 及其后一次提交，入口 bench/scripts/prepare_datasets.py。名单在任何训练之前冻结并提交：bench/data/splits/{TJDR_std,TJDR_uwf,FGADR,Retinal-Lesions}.json。
 结果（dataset/prepared/<库>/report.json，逐张统计在 export_cases.jsonl）：
