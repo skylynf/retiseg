@@ -30,7 +30,7 @@ def test_catalog_covers_local_and_pending():
     assert (REPO / by_name["DDR-grading"].path).is_file()
 
 
-@_needs("dataset/iDRID")
+@_needs("dataset/iDRID/A. Segmentation")
 def test_idrid_official_split_and_held_out_validation():
     data = open_idrid(REPO)
     splits = data.splits()
@@ -45,7 +45,7 @@ def test_idrid_official_split_and_held_out_validation():
     assert data.image_path("IDRiD_81").is_file()
 
 
-@_needs("dataset/iDRID")
+@_needs("dataset/iDRID/A. Segmentation")
 def test_idrid_missing_lesion_file_is_a_negative_mask():
     data = open_idrid(REPO)
     present = data.read_mask("IDRiD_53", "MA")
@@ -58,7 +58,7 @@ def test_idrid_missing_lesion_file_is_a_negative_mask():
     assert 0 < exudate.mean() < 0.1
 
 
-@_needs("dataset/DDR")
+@_needs("dataset/DDR/OIA-DDR/DDR-dataset.zip.001")
 def test_official_ddr_counts_and_validation_label_folder():
     data = open_ddr(REPO)
     assert len(data.parts) == 10
