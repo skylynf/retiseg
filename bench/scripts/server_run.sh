@@ -5,6 +5,7 @@
 #   bash bench/scripts/server_run.sh check      data, weights, GPUs, test suite
 #   bash bench/scripts/server_run.sh cache      1440 canvas caches
 #   bash bench/scripts/server_run.sh smoke      B1 and B-std smoke, 20 steps each
+#   bash bench/scripts/server_run.sh resmoke M2MRF,H2Former   smoke of the named models only
 #   bash bench/scripts/server_run.sh probe      B-std budget probe, 4 jobs
 #   bash bench/scripts/server_run.sh e1r        M2MRF author retrain, effective batch 4
 #   bash bench/scripts/server_run.sh b1-seed0   B1 seed 0, train and validation
@@ -163,6 +164,11 @@ case "$stage" in
     tool="$(pick_tool)"
     background smoke bash -c "$tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --submit --smoke; \
 $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --jobs $BS_JOBS --submit --smoke" ;;
+  resmoke)
+    [ -n "${2:-}" ] || { echo "usage: server_run.sh resmoke MODEL[,MODEL]" >&2; exit 1; }
+    tool="$(pick_tool)"
+    background "resmoke_${2//,/_}" bash -c "$tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --submit --smoke --only $2; \
+$tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --jobs $BS_JOBS --submit --smoke --only $2" ;;
   probe) stage_probe ;;
   e1r) stage_e1r ;;
   b1-seed0) require_clean; launch b1_seed0 --submit --seed0 ;;

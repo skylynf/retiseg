@@ -32,7 +32,7 @@ LOSS_PARAM_KEYS = {
 LOSS_META_KEYS = {"early_stop_patience"}
 
 
-def git_commit():
+def _head():
     try:
         return subprocess.check_output(
             ["git", "rev-parse", "HEAD"],
@@ -42,6 +42,15 @@ def git_commit():
         ).strip()
     except (subprocess.CalledProcessError, FileNotFoundError):
         return ""
+
+
+# Taken when the process imports this module. environment.json is written after
+# training, and a git pull during a long run must not relabel the code it ran.
+_COMMIT_AT_START = _head()
+
+
+def git_commit():
+    return _COMMIT_AT_START
 
 
 def run_directory(config):

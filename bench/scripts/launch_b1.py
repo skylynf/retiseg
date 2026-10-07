@@ -32,6 +32,7 @@ import importlib.util
 import os
 import shlex
 import shutil
+import socket
 import subprocess
 import sys
 import threading
@@ -477,6 +478,43 @@ def finished_marker(run_dir, smoke, wave):
     return Path(run_dir) / "metrics_test.json"
 
 
+def _pid_alive(pid):
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def in_progress(run_dir):
+    """Why the last "== start" in console.log looks unfinished, or None.
+
+    A start line with host and pid counts as running only while that process
+    is alive on this host. Older start lines have no pid, and a start on
+    another host cannot be checked, so both count as running until
+    RETISEG_IGNORE_RUNNING=1.
+    """
+    log = _ROOT / run_dir / "console.log"
+    if not log.is_file():
+        return None
+    start = None
+    for line in log.read_text(errors="replace").splitlines():
+        if line.startswith("== start "):
+            start = line
+        elif line.startswith("== exit ") and start is not None:
+            start = None
+    if start is None or os.environ.get("RETISEG_IGNORE_RUNNING") == "1":
+        return None
+    fields = start.split()
+    host = fields[fields.index("host") + 1] if "host" in fields[:-1] else None
+    pid = fields[fields.index("pid") + 1] if "pid" in fields[:-1] else None
+    if host == socket.gethostname() and pid is not None and pid.isdigit():
+        return start if _pid_alive(int(pid)) else None
+    return start
+
+
 def run_queue(commands, gpus, start=None):
     """Run (label, command) pairs on a shared queue, one process per GPU at a time.
 
@@ -527,12 +565,16 @@ def submit(jobs, smoke, wave="formal"):
         if marker is not None and (_ROOT / marker).is_file():
             print(f"skip {job['name']}: {marker} exists", flush=True)
             continue
+        running = in_progress(run_dir)
+        if running is not None:
+            print(f"skip {job['name']}: still running ({running})", flush=True)
+            continue
         # CUDA_VISIBLE_DEVICES comes from the environment of the worker that runs it.
         body = _chain(python_argv(job["env"]), command_segments(copied, config, run_dir, smoke, wave))
         log = shlex.quote(str(Path(run_dir) / "console.log"))
         body = (
             f"mkdir -p {shlex.quote(str(run_dir))} && "
-            f"{{ echo \"== start {wave} $(date -Is) gpu $CUDA_VISIBLE_DEVICES\"; {body}; rc=$?; "
+            f"{{ echo \"== start {wave} $(date -Is) gpu $CUDA_VISIBLE_DEVICES host $(hostname) pid $$\"; {body}; rc=$?; "
             f"echo \"== exit $rc $(date -Is)\"; exit $rc; }} >> {log} 2>&1"
         )
         commands.append((job["name"], body))
@@ -677,6 +719,7 @@ def main(argv=None):
     parser.add_argument("--config", default=None)
     parser.add_argument("--run-dir", default=None)
     parser.add_argument("--max-steps", type=int, default=_SMOKE_STEPS)
+    parser.add_argument("--only", default=None, help="comma-separated model names; other jobs of the wave are left out")
     args = parser.parse_args(argv)
     if args.capped_train:
         if not args.script or not args.config or not args.run_dir:
@@ -714,6 +757,12 @@ def main(argv=None):
         jobs = [job for job in formal if int(job["seed"]) != 0]
     else:
         jobs = formal
+    if args.only:
+        only = {name.strip() for name in args.only.split(",") if name.strip()}
+        unknown = sorted(only - set(models))
+        if unknown:
+            raise SystemExit(f"--only names unknown models: {unknown}")
+        jobs = [job for job in jobs if job["model"] in only]
     if args.submit and wave in ("rest", "score-seed0"):
         assert_seed0_current([job for job in formal if int(job["seed"]) == 0])
     for job in jobs:

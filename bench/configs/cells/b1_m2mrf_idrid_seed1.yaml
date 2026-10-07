@@ -7,3 +7,6 @@ split_test: test
 fov_diameter: 1440
 seed: 1
 num_workers: 4
+# 1440 canvas x 4 does not fit a 40GB A100 (server smoke 2026-10-07).
+# Two images per pass, accumulated to the author effective batch of 4.
+batch_size: 2

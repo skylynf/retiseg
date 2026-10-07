@@ -125,12 +125,37 @@ if version < (1, 10):
     raise SystemExit("torch %s is below 1.10.0" % torch.__version__)
 assert mmcv.__version__ == "1.6.2", mmcv.__version__
 assert mmseg.__version__ == "0.30.0", mmseg.__version__
+if torch.cuda.is_available():
+    a = torch.randn(64, 64, device="cuda")
+    (a @ a).sum().item()
+    print("retiseg-hacdr cuda matmul ok, LD_LIBRARY_PATH", __import__("os").environ.get("LD_LIBRARY_PATH", ""))
 print("retiseg-hacdr", torch.__version__, "mmcv", mmcv.__version__, "mmseg", mmseg.__version__)'
+}
+
+# A login shell that exports a system CUDA (11.8 on the 2026-10 server, set in
+# ~/.bashrc) makes torch 1.10 load that cuBLAS, and a plain matmul fails.
+# Activation of retiseg-hacdr replaces LD_LIBRARY_PATH with the env's own lib
+# and restores it on deactivate. `conda run` and `micromamba run` both activate.
+pin_hacdr_libs() {
+  local prefix dir
+  prefix="$("$TOOL" run -n retiseg-hacdr python -c 'import sys; print(sys.prefix)')"
+  dir="${prefix}/etc/conda"
+  mkdir -p "${dir}/activate.d" "${dir}/deactivate.d"
+  cat > "${dir}/activate.d/retiseg_ld_library_path.sh" <<EOF
+export RETISEG_SAVED_LD_LIBRARY_PATH="\${LD_LIBRARY_PATH:-}"
+export LD_LIBRARY_PATH="${prefix}/lib"
+EOF
+  cat > "${dir}/deactivate.d/retiseg_ld_library_path.sh" <<'EOF'
+export LD_LIBRARY_PATH="${RETISEG_SAVED_LD_LIBRARY_PATH:-}"
+unset RETISEG_SAVED_LD_LIBRARY_PATH
+EOF
+  echo "retiseg-hacdr activation sets LD_LIBRARY_PATH=${prefix}/lib"
 }
 
 install_hacdr() {
   ensure_env retiseg-hacdr 3.8
   write_repo_pth retiseg-hacdr
+  pin_hacdr_libs
   if hacdr_ok; then
     echo "retiseg-hacdr already matches the HACDR-Net README pins"
     return 0

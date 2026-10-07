@@ -24,6 +24,8 @@
 6. bash bench/scripts/server_run.sh smoke
    B1 的 16 个任务跑完，再跑 B-std 的 16 个，每个 20 步，都只用训练集和验证集，目录在 runs/smoke。
    看：每个任务的 console.log 最后一行是 “== exit 0”；记下显存峰值（nvidia-smi）和每步耗时。显存不够的模型，在它的 cell 里加 batch_size（必须能整除有效批），用梯度累积补足；改动提交后再进入下一步。
+   只重跑个别模型：bash bench/scripts/server_run.sh resmoke M2MRF,H2Former（B1 和 B-std 各跑一遍，只跑这几个模型）。
+   2026-10-07 第一次冒烟：28/32 通过；M2MRF B1 改成批 2 累积到 4，H2Former 加了激活重计算，待 resmoke 确认。
 
 三、并行的第一轮（三件事互不依赖，可以同时开）
 7. bash bench/scripts/server_run.sh probe          占 GPU 0–3（PROBE_GPUS 可改）
@@ -48,11 +50,13 @@
 五、中断与恢复
 所有训练命令都带 --resume。卡掉线、进程被杀以后，原样再执行同一阶段：已完成的任务跳过（seed0 看 diagnostic.json，打分阶段看 metrics_test.json），没完成的从 resume.pt 接着训，权重与不中断时逐位相同。resume.pt 只在验证时写，所以最多损失一次验证间隔。
 预算改过以后不能续训：resume.pt 里记了预算签名，签名不一致时报错，此时删掉那个运行目录重跑。
+同一波次还在跑时可以再提交一次（例如另开几张卡）：console.log 里有开始行、没有结束行、且该进程仍活着的任务会跳过。旧开始行（2026-10-07 之前）没有进程号，一律当作仍在运行；确认进程已死后加 RETISEG_IGNORE_RUNNING=1。
+在一波还在跑时 git pull 是安全的：已在跑的任务不受影响，排在后面的任务启动时读新的 cell 和代码，environment.json 记的是它启动时的提交号。
 
 六、记录管理
 1. 代码和协议：每个正式阶段开始前，bench/ 必须已提交。server_run.sh 在有未提交改动时拒绝启动（RETISEG_ALLOW_DIRTY=1 可以强制，但会记成 dirty+allowed）。每个运行目录的 environment.json 记下提交号。
 2. 阶段台账：runs/logs/stages.tsv，每启动一个阶段写一行：时间、阶段、提交号、工作区状态、日志路径、进程号。阶段日志在 runs/logs/<时间>_<阶段>.log。
-3. 任务日志：每个任务的输出写在各自的 runs/<运行>/console.log，开头一行 “== start 波次 时间 gpu”，结尾一行 “== exit 退出码 时间”。
+3. 任务日志：每个任务的输出写在各自的 runs/<运行>/console.log，开头一行 “== start 波次 时间 gpu 卡号 host 主机 pid 进程号”，结尾一行 “== exit 退出码 时间”。
 4. 总表：bash bench/scripts/server_run.sh status 打印所有运行的状态（running、failed、trained、scored），并写入 runs/status.tsv。测试 mAUPR 只在 metrics_test.json 已存在时显示。
 5. runs/ 不进 Git。每个阶段结束后，把小文件拉回工作站备份（检查点和概率图留在服务器）：
    rsync -a --include='*/' --include='*.json' --include='*.jsonl' --include='*.log' --include='*.tsv' --include='*.yaml' \

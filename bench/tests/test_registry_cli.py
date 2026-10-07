@@ -10,8 +10,25 @@ from bench.tests.test_evaluate import _write_preds, toy_dataset  # noqa: F401
 REPO = Path(__file__).resolve().parents[2]
 
 
+def _declared_repos():
+    """Submodule paths and ignored clones; a fresh checkout may not have them on disk."""
+    declared = set()
+    for name in (".gitmodules", ".gitignore"):
+        path = REPO / name
+        if not path.is_file():
+            continue
+        for line in path.read_text().splitlines():
+            line = line.strip()
+            if line.startswith("path ="):
+                declared.add(line.split("=", 1)[1].strip())
+            elif line.startswith("official_code/"):
+                declared.add(line.rstrip("/"))
+    return declared
+
+
 def test_model_registry_is_consistent():
     reg = yaml.safe_load((REPO / "bench/configs/models.yaml").read_text())
+    declared = _declared_repos()
     assert set(reg) <= set(FAMILIES)
     names = []
     for family, entries in reg.items():
@@ -21,7 +38,7 @@ def test_model_registry_is_consistent():
             assert set(e["tracks"]) <= set(TRACKS), e
             assert e["tier"] in (1, 2, 3), e
             if e["repo"]:
-                assert (REPO / e["repo"]).is_dir(), e
+                assert (REPO / e["repo"]).is_dir() or e["repo"].rstrip("/") in declared, e
             if "C" in e["tracks"]:
                 assert e["tier"] == 2, e
     assert len(names) == len(set(names))

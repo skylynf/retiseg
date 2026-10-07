@@ -58,6 +58,17 @@ B-std 实现（协议在 bench/configs/bs_frozen.yaml，代码 bench/bstd.py、b
 预算探测的入口：cell 里写 budget_probe: 2，即两倍暂定预算、验证间隔不变，且只能带 --diagnostic 运行。U-Net 和 M2MRF 的 4 个探测 cell 由 make_bs_jobs.py 生成（bs_probe_*）。
 每个任务的输出写在 runs/<运行>/console.log；阶段台账在 runs/logs/stages.tsv；总表由 run_status.py 生成，写入 runs/status.tsv。
 
+服务器第一批（2026-10-07，提交 0cfff98，40GB A100 × 8）
+env：两个环境建好。retiseg 为 torch 2.6+cu124，M2MRF 在其中能构建。retiseg-hacdr 为 torch 1.10、mmcv 1.6.2、mmseg 0.30。服务器 ~/.bashrc 第 141 行把 LD_LIBRARY_PATH 指向系统 CUDA 11.8，torch 1.10 因此加载了不匹配的 cuBLAS，最简单的矩阵乘也失败。服务器上没有改 bashrc，而是让 retiseg-hacdr 激活时使用自己的 lib 目录，之后 HACDR 9 个测试全过。这一步已写进 cluster_env.sh（pin_hacdr_libs），hacdr_ok 也加了 GPU 矩阵乘检查。
+check：retiseg 下 123 个测试通过。7 个失败都要服务器上没有的原始数据（DDR 分卷压缩包、DiaRetDB、TJDR、official_code/SAA），训练用不到；这些测试已改为数据缺失时跳过。ResNet 的 ImageNet 权重已预取。
+cache：1440 画布缓存，IDRiD 81 张，DDR 757 张。
+smoke：32 个任务中 28 个通过，4 个失败都是显存不足。B1 M2MRF 在 1440 画布上批 4 放不下 40GB。H2Former 在 B1 和 B-std 中批 1 也超过 40GB：window_size 为 960/16 = 60，第一层一个窗口 3600 个词元。官方 BasicLayer 虽然接收 use_checkpoint，forward 里却从不使用它。
+处理：B1 M2MRF 的 8 个 cell 设 batch_size: 2，梯度累积回作者的有效批 4，BN 一次看见 2 张图，偏差写进 recipe。H2Former 包装器给每个 Swin 块加了激活重计算（torch.utils.checkpoint），计算本身不变，DropPath 的随机数重放；小尺寸网络上已核对梯度与不重计算时一致。两者都要重新冒烟：server_run.sh resmoke M2MRF,H2Former。
+探测（进行中，GPU 4–7）：U-Net IDRiD 18900/42000、U-Net DDR 18810/83600、M2MRF IDRiD 8400/42000、M2MRF DDR 8360/83600 步。验证 mAUPR 仍在上升（U-Net IDRiD 0.51，M2MRF IDRiD 0.49），还不能定预算。
+B1 seed0（进行中，GPU 2–3）：16 个任务，最长的两个 DeepLabv3 先跑（30000 步 × 16 张，预计各约 50 小时）。M2MRF 和 H2Former 还在队列里，开始时读到的是新 cell 和新包装器代码。
+启动器（同日）：console.log 的开始行加 host 和 pid；重新提交同一波次时，仍在运行的任务跳过。旧格式的开始行没有 pid，没有结束行就当作仍在运行，确认进程已死后用 RETISEG_IGNORE_RUNNING=1 放行。--only 只提交指定模型。
+提交号（同日）：environment.json 原来在训练结束时读 HEAD，长任务中途 git pull 会记成新提交。现改为进程启动时读一次。在这次修正之前启动的任务（两个 B1 DeepLabv3、四个探测）如果在 pull 之后结束，environment.json 里写的是新提交号，实际运行的是 0cfff98，以 stages.tsv 为准；这几个模型用到的代码在两次提交之间没有变化。
+
 作者邮件（2026-10-03）
 无代码文章已发索取邮件，期限从发出日起 4 周。回复、附件和到期未回写进对应 meta。
 两篇不在这批信里：PMCNet 已有 train.py，子模块提交 4051483，没有作者训练权重。WSRFNet 有推理代码、没有 train.py，权重信还没发，地址 xuanli@stu.hit.edu.cn。

@@ -1,4 +1,7 @@
 import json
+import os
+import socket
+import subprocess
 from dataclasses import replace
 
 import pytest
@@ -8,7 +11,7 @@ from torch.utils.data import DataLoader, Dataset
 from bench.data.b1_input import collate
 from bench.models.unet import UNet
 from bench.runtime import evaluation_interval
-from bench.scripts.launch_b1 import estimated_hours, longest_first, run_queue
+from bench.scripts.launch_b1 import estimated_hours, in_progress, longest_first, main, run_queue
 from bench.train import run_training
 
 
@@ -213,3 +216,32 @@ def test_shared_queue_runs_longest_first_and_frees_cards_as_they_finish():
     errors = run_queue([("a", "ok"), ("b", "bad"), ("c", "ok")], [0, 1], start=_start)
     assert sorted(command for command, _gpu in started) == ["bad", "ok", "ok"]
     assert len(errors) == 1 and "bad" in errors[0]
+
+
+def test_a_job_counts_as_running_until_its_exit_line_or_its_process_is_gone(tmp_path, monkeypatch):
+    log = tmp_path / "console.log"
+    assert in_progress(tmp_path) is None
+    log.write_text("== start seed0 2026-10-07T10:00:00+08:00 gpu 2\nstep 1\n")
+    assert in_progress(tmp_path).startswith("== start seed0")
+    monkeypatch.setenv("RETISEG_IGNORE_RUNNING", "1")
+    assert in_progress(tmp_path) is None
+    monkeypatch.delenv("RETISEG_IGNORE_RUNNING")
+    log.write_text(log.read_text() + "== exit 1 2026-10-07T11:00:00+08:00\n")
+    assert in_progress(tmp_path) is None
+    host = socket.gethostname()
+    log.write_text(log.read_text() + f"== start seed0 2026-10-07T12:00:00+08:00 gpu 2 host {host} pid {os.getpid()}\n")
+    assert in_progress(tmp_path) is not None
+    gone = subprocess.Popen(["true"])
+    gone.wait()
+    log.write_text(log.read_text() + f"== start seed0 2026-10-07T13:00:00+08:00 gpu 2 host {host} pid {gone.pid}\n")
+    assert in_progress(tmp_path) is None
+    log.write_text(log.read_text() + "== start seed0 2026-10-07T14:00:00+08:00 gpu 2 host elsewhere pid 1\n")
+    assert in_progress(tmp_path) is not None
+
+
+def test_only_keeps_the_named_models_of_a_wave(capsys):
+    main(["--jobs", "bench/configs/bs_jobs.yaml", "--smoke", "--only", "H2Former,M2MRF"])
+    out = capsys.readouterr().out
+    assert "smoke tasks: 4" in out
+    with pytest.raises(SystemExit, match="unknown models"):
+        main(["--jobs", "bench/configs/bs_jobs.yaml", "--smoke", "--only", "NoSuchNet"])

@@ -169,6 +169,33 @@ class _AuthorCEDice(nn.Module):
         return self.ce(logits, labels) + self.dice(logits, labels)
 
 
+def _checkpointed_layer_forward(self, x):
+    from torch.utils.checkpoint import checkpoint
+
+    for blk in self.blocks:
+        if self.training and torch.is_grad_enabled():
+            x = checkpoint(blk, x, use_reentrant=False)
+        else:
+            x = blk(x)
+    return x
+
+
+def _checkpoint_swin_blocks(net):
+    """Recompute each Swin block in backward instead of storing its activations.
+
+    window_size is image_size // 16 = 60, so a stage-0 window holds 3600
+    tokens and batch 1 does not fit in 40GB with stored activations.
+    BasicLayer takes use_checkpoint but its forward never reads it
+    (models/basic_module.py:301-325). The arithmetic is unchanged and the
+    RNG state is replayed, so DropPath draws the same masks.
+    """
+    import types
+
+    for layer in net.swin_layers:
+        layer.use_checkpoint = True
+        layer.forward = types.MethodType(_checkpointed_layer_forward, layer)
+
+
 def _recipe():
     # idrid_train.py is the only fundus training script. DDR is named in
     # datasets/dataset.py:36 as a png path, with no separate optimizer settings.
@@ -201,7 +228,9 @@ def _recipe():
             "this recipe follows idrid_train.py. "
             "Four-plane targets overlap in M2MRF order EX, HE, SE, MA, so MA is kept. "
             "Training loads torchvision ResNet-34 ImageNet weights after the stem is rebuilt to 3 channels, matched by name and shape, which includes conv1. "
-            "idrid_train.py loads resnet34.pth the same way, but its released conv1 has 4 channels so that tensor is skipped."
+            "idrid_train.py loads resnet34.pth the same way, but its released conv1 has 4 channels so that tensor is skipped. "
+            "Swin blocks are recomputed in backward (activation checkpointing) so batch 2 at 960 fits a 40GB A100; "
+            "the forward and gradients are the same computation."
         ),
         source_of_settings=(
             "official_code/H2Former/idrid_train.py:27 batch_size 2; :28 base_lr 0.0001; :29 num_classes 5; "
@@ -239,6 +268,7 @@ class H2Former(SegmentationWrapper, nn.Module):
         res34_swin_MS = _load_res34_swin_MS()
         self.net = res34_swin_MS(self.card.forward_size[0], _NUM_CLASSES)
         _rgb_stem(self.net)
+        _checkpoint_swin_blocks(self.net)
 
     def author_recipe(self, dataset: str) -> AuthorRecipe:
         if dataset not in ("IDRiD", "DDR"):

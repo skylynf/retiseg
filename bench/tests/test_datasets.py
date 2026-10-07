@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from bench.data.catalog import catalog
 from bench.data.ddr import EXPECTED_GRADING, EXPECTED_SEGMENTATION, open_ddr
 from bench.data.diaretdb import open_diaretdb0, open_diaretdb1
@@ -9,6 +11,13 @@ from bench.data.tjdr import EXPECTED, open_tjdr
 REPO = Path(__file__).resolve().parents[2]
 
 
+def _needs(*paths):
+    """The raw releases stay on the workstation; the server has only dataset/prepared and iDRID."""
+    missing = [path for path in paths if not (REPO / path).exists()]
+    return pytest.mark.skipif(bool(missing), reason=f"raw data not on this machine: {missing}")
+
+
+@_needs("dataset/DDR", "dataset/TJDR", "dataset/DIARETDB1")
 def test_catalog_covers_local_and_pending():
     names = [r.name for r in catalog(REPO)]
     assert names[:5] == ["IDRiD", "DDR-grading", "DDR-lesion", "DIARETDB1", "DIARETDB0"]
@@ -21,6 +30,7 @@ def test_catalog_covers_local_and_pending():
     assert (REPO / by_name["DDR-grading"].path).is_file()
 
 
+@_needs("dataset/iDRID")
 def test_idrid_official_split_and_held_out_validation():
     data = open_idrid(REPO)
     splits = data.splits()
@@ -35,6 +45,7 @@ def test_idrid_official_split_and_held_out_validation():
     assert data.image_path("IDRiD_81").is_file()
 
 
+@_needs("dataset/iDRID")
 def test_idrid_missing_lesion_file_is_a_negative_mask():
     data = open_idrid(REPO)
     present = data.read_mask("IDRiD_53", "MA")
@@ -47,6 +58,7 @@ def test_idrid_missing_lesion_file_is_a_negative_mask():
     assert 0 < exudate.mean() < 0.1
 
 
+@_needs("dataset/DDR")
 def test_official_ddr_counts_and_validation_label_folder():
     data = open_ddr(REPO)
     assert len(data.parts) == 10
@@ -62,6 +74,7 @@ def test_official_ddr_counts_and_validation_label_folder():
     assert not data.read_mask("train", "007-1774-100", "EX").any()
 
 
+@_needs("dataset/DIARETDB1", "dataset/DiaRetDB V2.1")
 def test_diaretdb1_is_v21_and_diaretdb0_is_in_the_other_folder():
     db1 = open_diaretdb1(REPO)
     splits = db1.splits()
@@ -76,6 +89,7 @@ def test_diaretdb1_is_v21_and_diaretdb0_is_in_the_other_folder():
     assert "DIARETDB1" in db0.stored_under
 
 
+@_needs("dataset/TJDR")
 def test_tjdr_split_and_class_values():
     data = open_tjdr(REPO)
     splits = data.splits()
