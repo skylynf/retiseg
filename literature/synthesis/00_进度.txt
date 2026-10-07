@@ -69,6 +69,9 @@ B1 seed0（进行中，GPU 2–3）：16 个任务，最长的两个 DeepLabv3 �
 启动器（同日）：console.log 的开始行加 host 和 pid；重新提交同一波次时，仍在运行的任务跳过。旧格式的开始行没有 pid，没有结束行就当作仍在运行，确认进程已死后用 RETISEG_IGNORE_RUNNING=1 放行。--only 只提交指定模型。
 提交号（同日）：environment.json 原来在训练结束时读 HEAD，长任务中途 git pull 会记成新提交。现改为进程启动时读一次。在这次修正之前启动的任务（两个 B1 DeepLabv3、四个探测）如果在 pull 之后结束，environment.json 里写的是新提交号，实际运行的是 0cfff98，以 stages.tsv 为准；这几个模型用到的代码在两次提交之间没有变化。
 
+整体安排与文章结构（2026-10-07）
+总纲写在 13：三个问题、研究设计、实验清单和状态、分阶段排期、对照模板的文章结构、扩展数据和补充表。之后的排期变化记在这里，并同步改 13 的第三、四节。
+
 其余数据集方案（2026-10-07）
 读了 TJDR、FGADR、DiaRetDB1、Retinal-Lesions 四篇原文和 Playout 2024，核对了磁盘上的 FGADR、TJDR、DiaRetDB1 v2.1。方案在 12。
 用户决定（同日）：主表角色请本项目参照模板论文自定；FGADR 用 70/30；DiaRetDB1 用 High=1.0、Medium=0.75、Low=0.25、平均 ≥0.75，按原文计数校验后冻结。
