@@ -70,7 +70,9 @@ B1 seed0（进行中，GPU 2–3）：16 个任务，最长的两个 DeepLabv3 �
 提交号（同日）：environment.json 原来在训练结束时读 HEAD，长任务中途 git pull 会记成新提交。现改为进程启动时读一次。在这次修正之前启动的任务（两个 B1 DeepLabv3、四个探测）如果在 pull 之后结束，environment.json 里写的是新提交号，实际运行的是 0cfff98，以 stages.tsv 为准；这几个模型用到的代码在两次提交之间没有变化。
 
 其余数据集方案（2026-10-07）
-读了 TJDR、FGADR、DiaRetDB1、Retinal-Lesions 四篇原文和 Playout 2024，核对了磁盘上的 FGADR、TJDR、DiaRetDB1 v2.1。方案在 12，三处待用户确认：TJDR 常规和 FGADR 是否进 B-std 主表；FGADR 用 70/30 还是 50/50；DiaRetDB1 的置信度映射。
+读了 TJDR、FGADR、DiaRetDB1、Retinal-Lesions 四篇原文和 Playout 2024，核对了磁盘上的 FGADR、TJDR、DiaRetDB1 v2.1。方案在 12。
+用户决定（同日）：主表角色请本项目参照模板论文自定；FGADR 用 70/30；DiaRetDB1 用 High=1.0、Medium=0.75、Low=0.25、平均 ≥0.75，按原文计数校验后冻结。
+按模板（重训报内部测试和独立测试，独立来源整体排除在训练之外，结论以独立测试为准）定为：主表只在 IDRiD、DDR 上训练，训练任务不增加；TJDR 常规、TJDR 超广角、FGADR、Retinal-Lesions、DiaRetDB1 都是独立测试来源，主表每个检查点都在上面推理。TJDR 常规和 FGADR 作为训练来源只用于代表模型的交叉效应（E3b，30 个任务）和训练量实验（E8）。这取代 10 第四节“TJDR 常规视野准备好后加入 E2”。
 核对中发现：FGADR 已在磁盘上（07 第七节），许可禁止发布派生数据，所以 FGADR 的概率图不能公开；FGADR 部分掩码有低灰度噪声，不能用“大于 0 即阳性”；Retinal-Lesions 的灰度 127 是作者排除的标注，需要忽略区支持；Lesion-Net 原文数字不在公开的 1593 张上算，不能直接对比；TJDR 原文没说按患者划分，要做近重复审计。
 
 作者邮件（2026-10-03）
