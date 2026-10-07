@@ -46,7 +46,11 @@ DIARETDB0
 三、本地还没有
 
 MAPLES-DR：标注用 maples-dr 包从 Figshare 自动下载。原图是 MESSIDOR，要另外准备。
-e-ophtha、Retinal-Lesions：2026-10-03 已申请。Retinal-Lesions 已获批，尚未下载（2026-10-07）。
+e-ophtha、Retinal-Lesions：2026-10-03 已申请。
+Retinal-Lesions（2026-10-07 到位）：dataset/retinal-lesions/retinal-lesions-v20191227.zip，所有成员 ZipCrypto 加密；已解压到同目录 retinal-lesions-v20191227/，读取器优先读解压目录。
+  1593 张 RGB 896×896 JPEG，文件名保留 Kaggle 的“编号_left/right”：1505 名患者，88 名双眼都在。dr_grades.csv 三列：image id、kaggle label、our label；README 的分级计数（0:166、1:337、2:929、3:99、4:62）对应 our label。
+  掩码 lesion_segs_896x896/<id>/<病灶>.png，共 4143 个，全部是 L 模式 896×896，取值只有 0、127、255。17 张图没有任何掩码。文件名：microaneurysm 1435、retinal_hemorrhage 1302、hard_exudate 807、cotton_wool_spots 471、neovascularization 68、fibrous_proliferation 28、preretinal_hemorrhage 19、vitreous_hemorrhage 13。
+  127 出现在 MA、HE、NV、vHE、pHE，不出现在 EX、SE、FiP。
 FGADR 已到，见第七节。
 
 四、可以直接读、但不并进主平均

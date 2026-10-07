@@ -36,6 +36,32 @@ def field_of_view(image, threshold=BORDER_LUMINANCE):
     return ndimage.binary_fill_holes(mask)
 
 
+CORNER = 40
+CORNER_MARGIN = 3
+CORNER_SPREAD = 5
+
+
+def border_threshold(image):
+    """BORDER_LUMINANCE, raised above a uniform gray border.
+
+    DiaRetDB1 image072 has a flat border at luminance 22, so the fixed value
+    takes the whole frame. The four CORNER-pixel squares are border on every
+    release used here. If they are flat (1st to 99th percentile within
+    CORNER_SPREAD) the threshold becomes their median plus CORNER_MARGIN when
+    that is higher. Used by the independent-source exports; IDRiD and DDR keep
+    the masks written with the fixed value.
+    """
+    gray = _luminance(image)
+    c = CORNER
+    corners = np.concatenate(
+        [gray[:c, :c].ravel(), gray[:c, -c:].ravel(), gray[-c:, :c].ravel(), gray[-c:, -c:].ravel()]
+    )
+    low, mid, high = np.percentile(corners, [1, 50, 99])
+    if high - low > CORNER_SPREAD:
+        return float(BORDER_LUMINANCE)
+    return float(max(BORDER_LUMINANCE, mid + CORNER_MARGIN))
+
+
 def lesion_outside(mask, fov, margin=2):
     """Count lesion pixels outside the field of view.
 

@@ -13,6 +13,10 @@
    rsync -a pretrained SERVER:retiseg/
    rsync -a runs/E1_m2mrf SERVER:retiseg/runs/
    dataset/prepared 约 0.7GB，dataset/iDRID 约 1.5GB（只有 E1r 读原始 IDRiD），runs/E1_m2mrf 含 HRNet-W48 ImageNet 权重和两份作者权重。
+   2026-10-07 起 dataset/prepared 另有 TJDR_std、TJDR_uwf、FGADR、DiaRetDB1、RetinalLesions，合计约 10GB。已经同步过 IDRiD、DDR 的话，只补新目录即可，rsync 会跳过没变的文件：
+     rsync -a --info=progress2 dataset/prepared/ SERVER:retiseg/dataset/prepared/
+   FGADR 和 Retinal-Lesions 的许可只允许研究使用、不得再分发：只放在项目自己的服务器上，不放进共享盘或公开存储，它们的概率图同样不外传。
+   服务器不需要原始 zip；新库的导出和名单核对都在工作站上做。
 3. bash bench/scripts/server_run.sh env
    建 retiseg（PyTorch 2.x，CUDA 12）和 retiseg-hacdr（PyTorch 1.10，CUDA 11.3，mmcv-full 1.6.2）。两个环境都要打印出自检行，M2MRF 要打印 “builds in retiseg”。
 4. bash bench/scripts/server_run.sh check

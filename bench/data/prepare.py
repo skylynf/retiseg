@@ -25,7 +25,7 @@ import numpy as np
 from PIL import Image
 
 from bench.common.io import LESION_CLASSES
-from bench.data.fov import field_of_view
+from bench.data.fov import border_threshold, field_of_view
 from bench.data.lesion_size import relative_diameters
 
 PREPARED = {
@@ -224,7 +224,9 @@ def export_cases(dest, image_ids, load_case, log=print):
                         raise ValueError(f"{image_id} {cls}: mask {array.shape[:2]} != image {shape}")
             if set(case["masks"]) != set(LESION_CLASSES):
                 raise ValueError(f"{image_id} must give all four classes, got {sorted(case['masks'])}")
-            fov = field_of_view(image)
+            threshold = border_threshold(image)
+            fov = field_of_view(image, threshold)
+            case.setdefault("stats", {})["fov_threshold"] = threshold
             image_path = dest / "images" / f"{image_id}.{case['ext']}"
             image_path.parent.mkdir(parents=True, exist_ok=True)
             image_path.write_bytes(case["bytes"])
@@ -283,7 +285,10 @@ def write_report(dest, extra=None):
                 for cls, count in by_class.items():
                     slot = layer_images.setdefault(layer, {})
                     slot[cls] = slot.get(cls, 0) + int(count > 0)
-            _add(summary["sums"], {k: v for k, v in e.items() if k not in ("id", "size", "fov_fraction")})
+            _add(summary["sums"], {k: v for k, v in e.items() if k not in ("id", "size", "fov_fraction", "fov_threshold")})
+        summary["raised_fov_threshold"] = {
+            e["id"]: e["fov_threshold"] for e in entries if e.get("fov_threshold", 10.0) != 10.0
+        }
         summary["layer_images_with"] = layer_images
         summary["sizes"] = [list(s) for s in summary["sizes"]]
         report["splits"][split] = summary

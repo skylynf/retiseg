@@ -155,6 +155,22 @@ def test_ignore_region_is_left_out_of_that_class_only(tmp_path):
     assert result["per_class"]["MA"]["aupr"] < 0.7
 
 
+def test_border_threshold_rises_only_above_a_flat_gray_border():
+    from bench.data.fov import BORDER_LUMINANCE, border_threshold, field_of_view
+
+    yy, xx = np.ogrid[:200, :200]
+    disk = (yy - 100) ** 2 + (xx - 100) ** 2 <= 70**2
+    image = np.full((200, 200, 3), 22, dtype=np.uint8)
+    image[disk] = 90
+    assert border_threshold(image) == pytest.approx(25.0, abs=1e-3)
+    assert field_of_view(image, border_threshold(image)).sum() == disk.sum()
+    image[~disk] = 1
+    assert border_threshold(image) == BORDER_LUMINANCE
+    noisy = image.copy()
+    noisy[:40, :40] = np.random.default_rng(0).integers(0, 60, (40, 40, 1))
+    assert border_threshold(noisy) == BORDER_LUMINANCE
+
+
 def test_image_path_finds_the_one_file(tmp_path):
     (tmp_path / "images").mkdir()
     (tmp_path / "images" / "x.png").write_bytes(b"")

@@ -70,8 +70,20 @@ def catalog(repo_root):
             "needed only as the images underneath MAPLES-DR",
         ),
         DatasetRecord("e-ophtha", "fine_partial", "applied", "", "application sent 2026-10-03; MA and EX only"),
-        DatasetRecord("FGADR", "coarse", "applied", "", "application sent 2026-10-03"),
-        DatasetRecord("Retinal-Lesions", "coarse", "applied", "", "application sent 2026-10-03"),
+        DatasetRecord(
+            "FGADR",
+            "mixed",
+            "ready_zip",
+            "dataset/FGADR/FGADR-Seg-set_Release.zip",
+            "1842 images 1280px; masks positive at >= 128; IRMA 159, NV 49; no redistribution of derived data",
+        ),
+        DatasetRecord(
+            "Retinal-Lesions",
+            "coarse",
+            "ready_unpacked",
+            "dataset/retinal-lesions/retinal-lesions-v20191227",
+            "1593 EyePACS images 896px; gray 127 is an ignore region; zip is password-protected",
+        ),
         DatasetRecord(
             "TJDR",
             "fine_mixed_fov",

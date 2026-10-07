@@ -142,6 +142,21 @@ E5 基础模型：零样本和理想提示只需推理，覆盖全部测试集�
 7. Retinal-Lesions 下载后：核对、导出、E4。
 每一步完成后写进 00，划分名单在第一次训练之前提交。
 
+八、实现与核对（2026-10-07，提交 53f8b03）
+代码：bench/data/{splits,tjdr,fgadr,retlesion,diaretdb,prepare}.py，入口 bench/scripts/prepare_datasets.py（splits、check-diaretdb1、export、report）。
+名单：不写进 .py，冻结为 bench/data/splits/<库>.json，和代码一起提交；有原始数据时 bench/tests/test_new_datasets.py 重新抽一次，必须完全相同。
+  TJDR_std 172/30/55，TJDR_uwf 209/37/58，FGADR 1096/193/553，Retinal-Lesions 951/164/478（按患者，测试占 30.0%）。与第三节第 4 条的计划一致。
+  分层内名额按最大余数分配，总数为 round(比例 × 总数)；各层按名称排序后依次从同一个 PCG64(20261003) 抽。
+FGADR 核对：每一类掩码都有 1–254 的抗锯齿边缘，不只是 IRMA；RGB 掩码三个通道相同。按 ≥128 取阳性，被去掉的 1–127 像素数逐类记在 report.json 的 dropped_below_128。
+DiaRetDB1 核对（只看真值）：
+  椭圆角度：763 个椭圆的代表点在“屏幕上逆时针”方向下全部落在自己的椭圆里，反方向只有 728 个，按前者定。
+  阳性图数：8 个里对上 6 个。训练 HE 是 22（原文 21），测试 MA 是 21（原文 20），各多一张。换映射（1/0.75/0.25、1/(2/3)/(1/3)、1/0.75/0.5）、坐标按 1 起算、多边形不含边线、圆半径减半像素，结果都一样，所以不是映射或画法造成的，可能是 v2.1 的标注文件与原文所用版本不同。
+  处理：按用户确认的 High=1.0、Medium=0.75、Low=0.25 冻结，两处差异写进 diaretdb.KNOWN_COUNT_DIFFERENCES；导出前重新核对，出现其他差异就停。
+  导出：masks 为共识 ≥0.75；masks_union 为任一专家标过；experts 每类一张 uint8，每名专家占两位，保留原始置信等级，以后换映射不必重读 XML。splits 的 train 为空，val 是官方训练 28 张，只用于选阈值。
+Retinal-Lesions 核对见 07。127 写成 ignore/<CLS>；评测已支持（视野内且不在该类忽略区才计入），训练损失尚未支持，E4 训练前要补。
+导出结果与视野核对见 00“其余数据集导出”。DiaRetDB1 image072 背景是灰色，视野改用 fov.border_threshold（只用于新库）。
+尚未做：独立测试推理的接线（推理和画布缓存仍写死 .jpg 和 IDRiD/DDR，新库是 PNG，要改用 io.image_path）；DiaRetDB1 图像级 ROC/WER 和区域级命中；标注风格审计；泄漏审计。
+
 七、用户决定（2026-10-07）
 1. 主表角色：用户请本项目参照模板论文自定。定为第二节：主表只在 IDRiD、DDR 上训练，TJDR、FGADR、DiaRetDB1、Retinal-Lesions 作独立测试来源；TJDR_std、FGADR 作训练来源只出现在代表模型的影响因素实验里。这取代 10 第四节“TJDR 常规视野准备好后加入 E2”的建议。
 2. FGADR 划分：70/30，测试 30%，其余按 85/15 分训练和验证。
