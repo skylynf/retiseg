@@ -1,0 +1,26 @@
+文献ID: D-IDRID-2018
+PDF: literature/papers/02_datasets/Porwal2018_IDRiD.pdf
+批次: batch1
+角色: 数据集
+主任务纳入: 是
+归类: 数据集-细像素
+身份核对: 一致
+题名: Indian Diabetic Retinopathy Image Dataset (IDRiD)
+作者: Prasanna Porwal et al.
+年份: 2018
+出处: Data 3(3):25
+标识: doi:10.3390/data3030025
+任务: 分级、病灶分割、视盘
+成像: 彩色眼底
+病灶: MA 81, EX 81, HE 80, SE 40，另有视盘
+数据: 516 张中 81 张有像素标注
+标注粒度: 细像素，专家复核轮廓
+模型族: 数据
+额外输入: 同时有 DR/DME 分级和黄斑中心
+报告指标: 挑战协议见另一篇
+代码: https://idrid.grand-challenge.org/
+权重: 不适用
+重训轨: 官方划分用于数据集内测试
+摘要: 四类里样本最少、标注最细的公开集。软性渗出只有约 40 张。分辨率高，下采样会损失微动脉瘤。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

@@ -1,0 +1,26 @@
+文献ID: D-DDR-2019
+PDF: literature/papers/02_datasets/Li2019_DDR.pdf
+批次: batch1
+角色: 数据集
+主任务纳入: 是
+归类: 数据集-细像素
+身份核对: 一致，接受稿
+题名: Diagnostic assessment of deep learning algorithms for diabetic retinopathy screening
+作者: Tao Li, Yingqi Gao, Kai Wang, Song Guo, Hanruo Liu, Hong Kang
+年份: 2019
+出处: Information Sciences 501:511-522
+标识: doi:10.1016/j.ins.2019.06.011
+任务: 分级、检测、分割
+成像: 彩色眼底，多家医院、多种相机
+病灶: EX, HE, MA, SE
+数据: 13673 张分级，757 张像素标注，官方 train/val/test
+标注粒度: 细像素
+模型族: 数据
+额外输入: 同时有检测框
+报告指标: 作者已指出分割难于分级
+代码: https://github.com/nkicsl/DDR-dataset
+权重: 不适用
+重训轨: 官方划分是数据集内主协议
+摘要: 四类细像素标注里规模最大的公开集，测试集也更大。分级分数不能代表分割难度。
+
+管理备注: 2026-10-03 的 dataset/DDR/archive.zip 只有分级图 12524 张，没有病灶分割标注。分割子集仍待从官方网盘下载。

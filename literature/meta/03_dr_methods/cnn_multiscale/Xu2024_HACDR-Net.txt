@@ -1,0 +1,26 @@
+文献ID: M-HACDR-2024
+PDF: literature/papers/03_dr_methods/cnn_multiscale/Xu2024_HACDR-Net.pdf
+批次: batch1
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致
+题名: HACDR-Net
+作者: QiHao Xu et al.
+年份: 2024
+出处: AAAI
+标识: doi:10.1609/aaai.v38i6.28453
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: MA, HE, EX, SE
+数据: 公开眼底病灶集
+标注粒度: 细像素
+模型族: 异构卷积
+额外输入: 仅图像
+报告指标: 多病灶分割
+代码: https://github.com/xqh180110910537/HACDR-Net
+权重: 待核实
+重训轨: 主比较集，优先重训
+摘要: 用不同感受野处理尺度差很大的病灶。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

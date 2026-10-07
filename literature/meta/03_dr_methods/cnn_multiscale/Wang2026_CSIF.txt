@@ -1,0 +1,26 @@
+文献ID: M-CSIF-2026
+PDF: literature/papers/03_dr_methods/cnn_multiscale/Wang2026_CSIF.pdf
+批次: batch3
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: PDF 与题名一致
+题名: Information flow redistribution
+作者: Jiale Wang et al.
+年份: 2026
+出处: Applied Soft Computing
+标识: doi:10.1016/j.asoc.2026.114555
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: MA, HE, EX, SE
+数据: DDR、IDRiD
+标注粒度: 细像素
+模型族: 跨层空间与通道信息流
+额外输入: 仅图像
+报告指标: IoU、Dice、AUPR。DDR 测试集平均 AUPR 50.96
+代码: 全文未给出仓库
+权重: 未见发布权重
+重训轨: 主比较集。没有训练代码则只做原文审计
+摘要: 用自上而下的空间信息流和自下而上的通道信息流补深层和浅层各自缺的信息。DDR 长边缩到 1024，IDRiD 也做了缩放。原文 AUPR 不是原分辨率。出版日 2026-01-03，在冻结日之前。
+
+管理备注: 2026-10-03 用根目录全文入库。原文表格数字只能标成原文汇报。

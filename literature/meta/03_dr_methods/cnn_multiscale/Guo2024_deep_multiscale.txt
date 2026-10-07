@@ -1,0 +1,26 @@
+文献ID: M-GUO2024-2024
+PDF: literature/papers/03_dr_methods/cnn_multiscale/Guo2024_deep_multiscale.pdf
+批次: batch1
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致。本地是 SSRN 预印本（abstract 4379846），不是 Biomedical Signal Processing and Control 的期刊排版版。题目、作者和实验与拟收录的 Guo, Yang, Yu 2024 相同。
+题名: Diabetic Retinopathy Lesion Segmentation Using Deep Multi-scale Framework
+作者: Tianjiao Guo, Jie Yang, Qi Yu
+年份: 2024
+出处: Biomedical Signal Processing and Control 88:105050；本地文件为投稿预印本
+标识: doi:10.1016/j.bspc.2023.105050；SSRN abstract 4379846
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: MA, HE, EX, 棉絮斑
+数据: IDRiD, DDR, DIARETDB1，以及一个本地私有集
+标注粒度: IDRiD 与 DDR 为细像素；DIARETDB1 为专家区域
+模型族: 多个输入尺度的全卷积网络，再用一个 CNN 学习融合权重。骨干沿用 CE-Net
+额外输入: 仅图像
+报告指标: AUPR
+代码: 正文没有 GitHub。脚注给出一个 Google Drive 文件夹，正文没有写明其中是代码、权重还是补充材料：https://drive.google.com/drive/folders/18bsix3hbh3TUxaD3lOPXBM9yJOgW0JHt?usp=sharing
+权重: 未发现
+重训轨: 主比较集。没有官方 GitHub，目前不能克隆复现
+摘要: 把同一张眼底缩放到多个尺度，分别训练 FCN，再用网络预测融合权重，以同时照顾大小差异很大的病灶。实验包含 IDRiD、DDR 和 DIARETDB1。WSRFNet 与 MLNet 把它列为对照。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

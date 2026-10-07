@@ -1,0 +1,26 @@
+文献ID: B-UPERNET-2018
+PDF: literature/papers/05_general_baselines/Xiao2018_UPerNet.pdf
+批次: batch1
+角色: 重训基线
+主任务纳入: 基线
+归类: 基线-通用分割
+身份核对: 一致
+题名: UPerNet
+作者: Tete Xiao et al.
+年份: 2018
+出处: ECCV
+标识: arXiv:1807.10221
+任务: 统一感知解析
+成像: 场景图像
+病灶: 无
+数据: 场景数据
+标注粒度: 像素
+模型族: 特征金字塔解码头
+额外输入: 无
+报告指标: 解析指标
+代码: https://github.com/CSAILVision/unifiedparsing
+权重: 公开
+重训轨: 可选解码头基线
+摘要: 通用多尺度解码头。专用反馈模块应先和这种标准头比较。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

@@ -2,7 +2,7 @@
 
 Wang 等，Neurocomputing 527 (2023) 100–109。doi:10.1016/j.neucom.2023.01.013。
 
-文献编号 M-CLC-2023。PDF 在 `literature/batch2/03_fundus_methods/Wang2023_CLC-Net.pdf`。没有作者代码，也没有公开权重。这里的结构、损失和超参数按论文第 3 节、第 4.1 节和图 2、图 3 实现。论文没写的量写在下面的假设里，并固定在 `clcnet/assumptions.py`。这些假设不拿原文表格里的 AUPR 来回改。
+文献编号 M-CLC-2023。PDF 在 `literature/papers/03_dr_methods/cnn_multiscale/Wang2023_CLC-Net.pdf`。没有作者代码，也没有公开权重。这里的结构、损失和超参数按论文第 3 节、第 4.1 节和图 2、图 3 实现。论文没写的量写在下面的假设里，并固定在 `clcnet/assumptions.py`。这些假设不拿原文表格里的 AUPR 来回改。
 
 原文表格只放在 `paper_reported.tsv`，来源列是「原文汇报」，用来事后对照。
 

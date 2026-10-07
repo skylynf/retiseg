@@ -1,0 +1,26 @@
+文献ID: B-FCN-2015
+PDF: literature/papers/05_general_baselines/Long2015_FCN.pdf
+批次: batch1
+角色: 重训基线
+主任务纳入: 基线
+归类: 基线-通用分割
+身份核对: 一致
+题名: Fully convolutional networks
+作者: Jonathan Long, Evan Shelhamer, Trevor Darrell
+年份: 2015
+出处: CVPR
+标识: arXiv:1411.4038
+任务: 语义分割
+成像: 自然图像
+病灶: 无
+数据: PASCAL 等
+标注粒度: 像素
+模型族: 全卷积
+额外输入: 无
+报告指标: IoU
+代码: https://github.com/BVLC/caffe/wiki/Model-Zoo#fcn
+权重: 历史权重
+重训轨: 可选基线
+摘要: 全卷积分割的起点。第一轮不是必跑。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

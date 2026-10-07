@@ -1,0 +1,81 @@
+本地数据
+原始发布目录保持不动。读取入口在 bench/data/，多数接口直接读压缩包。
+评测目录按 bench/common/io.py，由 bench/data/prepare.py 写出。dataset/prepared/ 下 IDRiD、DDR、TJDR_std、TJDR_uwf、FGADR、RetinalLesions、DiaRetDB1 都已写好（新库 2026-10-07 导出，见 00）。
+角色见 12 第零节。下面只写磁盘上有什么、缺什么。
+
+一、可以直接读的
+
+IDRiD 分割
+路径：dataset/iDRID/A. Segmentation
+接口：bench.data.open_idrid
+81 张，4288×2848。官方训练 IDRiD_01 到 IDRiD_54，共 54 张；官方测试 IDRiD_55 到 IDRiD_81，共 27 张。
+病灶是 MA、HE、EX、SE 的像素标注，文件名带 _MA、_HE、_EX、_SE。没有对应文件就表示这张图上该类是阴性。训练集里 IDRiD_43 没有出血图。软性渗出不是每张都有。
+视盘标注在同一发布里，类名是 OD。它不进入四类病灶接口。
+没有官方验证集。从 54 张官方训练集里，用 NumPy Generator(PCG64(20261003)) 抽出 10 张作为验证集，名单写死在 bench/data/idrid.py 的 VAL_IDS。其余 44 张是 train。报告测试指标只用 test。train_official 是抽出验证集之前的 54 张，不用它在 test 上挑阈值。
+统一目录：dataset/prepared/IDRiD，81 张，划分 44/10/27。
+同目录下还有 B. Disease Grading.zip 和 C. Localization.zip，没有解压，不进分割接口。
+发布里没有视野 mask。
+
+DIARETDB1，版本 2.1
+路径：dataset/DiaRetDB1 V2.1/archive/ddb1_v02_01
+接口：bench.data.open_diaretdb1
+89 张 png。官方划分在 ddb1_v02_01_train_plain.txt 和 ddb1_v02_01_test_plain.txt，训练 28 张，测试 61 张。
+每张图四个专家 XML。标注是多边形或圆，类型为 Red_small_dots、Haemorrhages、Hard_exudates、Soft_exudates，另有视盘。置信度是 High 或 Medium。
+接口只返回这些标记，不栅格化成像素 mask。共识规则还没冻结，所以不能和 IDRiD 的细像素 mask 放进同一个评测调用。
+
+OIA-DDR
+路径：dataset/DDR/OIA-DDR/DDR-dataset.zip.001 到 .010
+接口：bench.data.open_ddr
+十个分卷是同一个 zip，不是十个独立压缩包。.001 以 PK 开头，中央目录在末尾，共 18249 个文件。2026-10-03 核对过，抽读的图像和四类 mask 能解开。
+分级：train 6835、valid 2733、test 4105，合计 13673，与各自的 txt 名单一致。
+病灶分割：train 383、valid 149、test 225，合计 757。每张图都有 EX、HE、MA、SE 四张 tif，全黑表示该类没有病灶。图像和 mask 的文件名一一对应。检出 xml 与分割图像也一一对应。分辨率不统一，抽到的有 2592×1728 和 2960×2935。
+验证集的 mask 目录名是 segmentation label。训练集和测试集的目录名是 label。
+测试集里 007-6219-300 和 007-6325-400 不在分级名单中。分割文件本身是齐的，这两张留在官方测试集里。
+dataset/DDR/archive.zip 是另一份裁过黑边的分级图，12524 张，没有病灶 mask。分割实验不用它。
+统一目录：dataset/prepared/DDR，分割 383/149/225。
+
+二、在磁盘上，但不能当病灶分割集
+
+DDR 的 archive.zip 见上一节，不重复使用。
+
+DIARETDB0
+路径：dataset/DIARETDB1/archive (1)/diaretdb0_v_1_1
+文件夹名叫 DIARETDB1，内容是 DIARETDB0。130 张眼底图、130 张名为 valid 的二值图、130 个 .dot 文件。dot 的第一行是图像级有没有红色小点、出血、硬性渗出，不是四类像素轮廓。
+接口：bench.data.open_diaretdb0。不进入像素主榜。
+
+三、本地还没有
+
+MAPLES-DR：标注用 maples-dr 包从 Figshare 自动下载。原图是 MESSIDOR，要另外准备。
+e-ophtha：2026-10-03 已申请，未批。
+Retinal-Lesions（2026-10-07 到位）：dataset/retinal-lesions/retinal-lesions-v20191227.zip，所有成员 ZipCrypto 加密；已解压到同目录 retinal-lesions-v20191227/，读取器优先读解压目录。
+  1593 张 RGB 896×896 JPEG，文件名保留 Kaggle 的“编号_left/right”：1505 名患者，88 名双眼都在。dr_grades.csv 三列：image id、kaggle label、our label；README 的分级计数（0:166、1:337、2:929、3:99、4:62）对应 our label。
+  掩码 lesion_segs_896x896/<id>/<病灶>.png，共 4143 个，全部是 L 模式 896×896，取值只有 0、127、255。17 张图没有任何掩码。文件名：microaneurysm 1435、retinal_hemorrhage 1302、hard_exudate 807、cotton_wool_spots 471、neovascularization 68、fibrous_proliferation 28、preretinal_hemorrhage 19、vitreous_hemorrhage 13。
+  127 出现在 MA、HE、NV、vHE、pHE，不出现在 EX、SE、FiP。
+FGADR 已到，见第七节。
+
+四、可以直接读、但不并进主平均
+
+TJDR
+路径：dataset/TJDR，三个各自完整的 zip。接口 bench.data.open_tjdr 直接读压缩包，没有解压。
+训练 448 张，测试 113 张，没有官方验证集。导出目录 dataset/prepared/TJDR_std 和 TJDR_uwf，验证集做法见 12。图像和标注都是 png，一一对应。标注是调色板图，0 为背景，EX=1，HE=2，MA=3，SE=4。
+2048×2048 来自 Topcon，视野约 35–50°。3912×3912 来自 Zeiss CLARUS 500，视野 133°。field 返回 standard 或 ultrawide。这两档不能放进同一个平均，也不能和 IDRiD、DDR 混成一个数。
+
+五、检索已经确认、磁盘上还没有
+
+Refined IDRiD：https://zenodo.org/records/17615903 。81 张已被裁成 1024×1024，并改过标注。主协议仍用官方 IDRiD。
+
+六、调用
+
+from bench.data import open_idrid, open_ddr, open_diaretdb1, open_tjdr, catalog
+data = open_idrid(".")
+data.splits()["test"]
+data.read_mask("IDRiD_01", "MA")
+
+七、FGADR（2026-10-07 核对）
+路径：dataset/FGADR/FGADR-Seg-set_Release.zip，未解压。只有 Seg-set，没有 Grade-set。
+1842 张，全部 1280×1280，视野是内切圆。EX、SE、HE（Hemohedge_Masks）、MA 每张都有掩码，IRMA 159 张，NV 49 张。分级在 Seg-set/DR_Seg_Grading_Label.csv。
+文件名后缀 _1 有 1000 张（0–4 级），_2 有 254 张、_3 有 588 张（只有 3、4 级）。
+部分掩码是 RGB；IRMA 掩码有大量 1–16 的低灰度值，导出按 ≥128 二值化。
+许可禁止再发布图像和派生数据。用法和划分见 12。
+
+DIARETDB1 v2.1 补充（2026-10-07）：图像 1500×1152，视野宽约 1420、上下被截。XML 的置信度是 High、Medium、Low；除四类外还有 IRMA、Neovascularisation、Disc、Fundus_area。栅格化规则见 12。

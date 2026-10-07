@@ -3,7 +3,7 @@
 #              R3 training code | R4 training code + weights + splits + environment
 # track: A original weights | B unified retraining of official code | C re-implementation from the paper
 # tier: 1 main table | 2 if time allows | 3 paper audit only
-# Status as of the 2026-10-02 code audit (literature/synthesis/04_*.txt); update after author replies.
+# Status as of the 2026-10-02 code audit (literature/04_代码审计.txt); update after author replies.
 
 general:
   - {name: U-Net,       repo: null,                                      repro_level: R3, tracks: [B], tier: 1, notes: "no author repo; use a reference PyTorch implementation"}

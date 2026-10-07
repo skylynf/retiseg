@@ -1,0 +1,26 @@
+文献ID: D-DIARETDB1-2007
+PDF: literature/papers/02_datasets/Kauppi2007_DIARETDB1.pdf
+批次: batch1
+角色: 数据集
+主任务纳入: 谨慎纳入
+归类: 数据集-粗或区域
+身份核对: 一致
+题名: The DIARETDB1 diabetic retinopathy database and evaluation protocol
+作者: Tomi Kauppi et al.
+年份: 2007
+出处: BMVC
+标识: BMVC 2007
+任务: 病灶检出
+成像: 彩色眼底
+病灶: MA, HE, 硬性渗出, 软性渗出
+数据: 89 张
+标注粒度: 四名专家的区域与置信度
+模型族: 数据与协议
+额外输入: 无
+报告指标: 依赖置信度阈值的 ROC
+代码: 数据库页面
+权重: 不适用
+重训轨: 可作外部测试，须单独说明真值
+摘要: 专家圈的是区域，不是精确轮廓。像素 Dice 不能和 IDRiD 直接并列。
+
+管理备注: 2026-10-03 本地有两份压缩包。用 dataset/DiaRetDB1 V2.1：89 张图，四名专家的 XML，官方 28/61。dataset/DIARETDB1 的包内是 DIARETDB0，不用。像素指标必须写明真值是区域共识，不是细轮廓。

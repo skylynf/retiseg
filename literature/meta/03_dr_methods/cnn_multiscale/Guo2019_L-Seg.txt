@@ -1,0 +1,26 @@
+文献ID: M-LSEG-2019
+PDF: literature/papers/03_dr_methods/cnn_multiscale/Guo2019_L-Seg.pdf
+批次: batch1
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致
+题名: L-Seg
+作者: Song Guo, Tao Li, Hong Kang, Ning Li, Yujun Zhang, Kai Wang
+年份: 2019
+出处: Neurocomputing 349:52-63
+标识: doi:10.1016/j.neucom.2019.04.008
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: SE, EX, MA, HE
+数据: 后来的工作在 IDRiD 与 DDR 上反复引用
+标注粒度: 像素
+模型族: CNN 多尺度融合
+额外输入: 仅图像
+报告指标: 分割重叠
+代码: https://github.com/guomugong/L-Seg 已克隆到 official_code/L-Seg。内容是 Caffe 的 prototxt 和自定义损失层，以及部分 IDRiD 结果图，不是完整的可直接重训工程。
+权重: 待打开仓库
+重训轨: 主比较集，优先重训
+摘要: 早期把四类放进一个网络。小病灶在深层没有响应，所以做多尺度融合。后续论文把它当基线，必须自己重训。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

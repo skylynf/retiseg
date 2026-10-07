@@ -1,0 +1,26 @@
+文献ID: M-RILBP-2023
+PDF: literature/papers/03_dr_methods/cnn_multiscale/Geetha2023_RILBP-YNet.pdf
+批次: batch3
+角色: 专用多病灶
+主任务纳入: 是。IDRiD 四类进入主比较。e-ophtha 上的出血和软性渗出结果不采信
+归类: 主比较-CNN多尺度
+身份核对: PDF 与题名一致。检索曾把这个 DOI 错配成先验引导 Transformer
+题名: RILBP-YNet
+作者: Geetha Pavani P. et al.
+年份: 2023
+出处: Biomedical Signal Processing and Control
+标识: doi:10.1016/j.bspc.2023.105205
+任务: 四类分割，另分视盘
+成像: 彩色眼底
+病灶: MA, HE, EX, SE, OD
+数据: IDRiD；e-ophtha 只有 MA 和 EX。DRIVE、STARE、CHASE-DB1 是血管集。另有一个本地私有集
+标注粒度: 细像素
+模型族: 双编码器，一支吃原图，一支吃同一张图的局部二值模式
+额外输入: 由原图算出的 LBP，不是另一套标注
+报告指标: AUC
+代码: 全文未给出仓库
+权重: 未见发布权重
+重训轨: 主比较集。没有训练代码则只做原文审计
+摘要: 并行编码器把纹理送进分割。视盘不进四类平均。文中写在 e-ophtha 上分割出血和软性渗出，与该库只有微动脉瘤和硬性渗出不符。血管库和私有库不进主榜。
+
+管理备注: 2026-10-03 用根目录全文入库。原文表格数字只能标成原文汇报。

@@ -21,7 +21,7 @@ PAPER = {
     "year": 2023,
     "venue": "Computers in Biology and Medicine 161:106967",
     "doi": "10.1016/j.compbiomed.2023.106967",
-    "pdf": "literature/batch2/03_fundus_methods/Zhang2023_TC-Net.pdf",
+    "pdf": "literature/papers/03_dr_methods/relation_transformer/Zhang2023_TC-Net.pdf",
 }
 
 # Section 4.2.

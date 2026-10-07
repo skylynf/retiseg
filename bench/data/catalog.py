@@ -1,4 +1,4 @@
-"""Local dataset inventory. Facts that need prose live in literature/synthesis/07_本地数据.txt."""
+"""Local dataset inventory. Facts that need prose live in docs/ops/07_本地数据.txt."""
 
 from dataclasses import dataclass
 from pathlib import Path
