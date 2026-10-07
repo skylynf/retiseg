@@ -68,6 +68,13 @@ smoke：32 个任务中 28 个通过，4 个失败都是显存不足。B1 M2MRF 
 B1 seed0（进行中，GPU 2–3）：16 个任务，最长的两个 DeepLabv3 先跑（30000 步 × 16 张，预计各约 50 小时）。M2MRF 和 H2Former 还在队列里，开始时读到的是新 cell 和新包装器代码。
 启动器（同日）：console.log 的开始行加 host 和 pid；重新提交同一波次时，仍在运行的任务跳过。旧格式的开始行没有 pid，没有结束行就当作仍在运行，确认进程已死后用 RETISEG_IGNORE_RUNNING=1 放行。--only 只提交指定模型。
 提交号（同日）：environment.json 原来在训练结束时读 HEAD，长任务中途 git pull 会记成新提交。现改为进程启动时读一次。在这次修正之前启动的任务（两个 B1 DeepLabv3、四个探测）如果在 pull 之后结束，environment.json 里写的是新提交号，实际运行的是 0cfff98，以 stages.tsv 为准；这几个模型用到的代码在两次提交之间没有变化。
+服务器核对与合并（2026-10-08，服务器时间）
+上面两段有两处与服务器实际不符，以这里为准。B1 seed0 不是在 0cfff98 上启动的：服务器先在本地提交 e2a3c48（B1 M2MRF 的 cell 设 batch_size: 2，并把 H2Former 移出 WRAPPERS），01:31 在 e2a3c48 上启动，所以队列是 14 个任务，没有 H2Former。H2Former 的 B1 seed0 要单独补：launch_b1.py --submit --seed0 --only H2Former。四个探测在 0cfff98 上启动。
+GPU 0–1 被其他用户的 vLLM 占满。GPU 2–3 上各有一个其他用户的 R 进程（466MB，利用率 0），启动器把它们当忙卡。B1 seed0 绕过这项检查放在 2–3 上，stages.tsv 记为 clean+gpus23_forced；探测用 PROBE_GPUS="4 5 6 7"。
+四个探测和 B1 seed0 的进程都继承了 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True。这个变量是冒烟排查显存时设的，只改变分配器管理显存的方式，不改变数值。torch 1.10 不认识这个选项，所以 retiseg-hacdr 的 etc/conda/activate.d 里加了一行 unset，否则队列里的两个 HACDR 任务会在启动时报错。
+U-Net IDRiD 探测已结束（42000 步，10342 秒），它的 environment.json 写的是 e2a3c48，实际代码是 0cfff98。
+e2a3c48 已被 0217b55 取代，保留在分支 server-local-e2a3c48。服务器 main 现为 origin/main（e66e4c0）加一个提交：原始数据测试改为检查发布目录本身，因为服务器上的 dataset/iDRID 只有一个残缺的 zip，dataset/DDR/OIA-DDR 是空目录。合并后 retiseg 下 137 个测试通过、11 个跳过，test_hacdr_recipe 9 个通过。
+H2Former 在 e66e4c0 上重新冒烟，B1 和 B-std 共 4 个任务仍然显存不足，报错在 basic_module.py:190 的前向，一次要分配 12.36GB。激活重计算只省反向要存的激活，第一层一个块的前向仍要同时放下几份 2×窗口数×头数×3600×3600 的注意力矩阵。批 1 加重计算能跑完 20 步和验证，但显存峰值 39.45GB（卡上共 40.96GB），余量太小。
 
 其余数据集导出（2026-10-07，本机，单进程逐张，ulimit -v 16000000，共约 13 分钟）
 代码 53f8b03 及其后一次提交，入口 bench/scripts/prepare_datasets.py。名单在任何训练之前冻结并提交：bench/data/splits/{TJDR_std,TJDR_uwf,FGADR,Retinal-Lesions}.json。
