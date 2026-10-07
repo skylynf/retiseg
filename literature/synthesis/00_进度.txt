@@ -69,6 +69,10 @@ B1 seed0（进行中，GPU 2–3）：16 个任务，最长的两个 DeepLabv3 �
 启动器（同日）：console.log 的开始行加 host 和 pid；重新提交同一波次时，仍在运行的任务跳过。旧格式的开始行没有 pid，没有结束行就当作仍在运行，确认进程已死后用 RETISEG_IGNORE_RUNNING=1 放行。--only 只提交指定模型。
 提交号（同日）：environment.json 原来在训练结束时读 HEAD，长任务中途 git pull 会记成新提交。现改为进程启动时读一次。在这次修正之前启动的任务（两个 B1 DeepLabv3、四个探测）如果在 pull 之后结束，environment.json 里写的是新提交号，实际运行的是 0cfff98，以 stages.tsv 为准；这几个模型用到的代码在两次提交之间没有变化。
 
+其余数据集方案（2026-10-07）
+读了 TJDR、FGADR、DiaRetDB1、Retinal-Lesions 四篇原文和 Playout 2024，核对了磁盘上的 FGADR、TJDR、DiaRetDB1 v2.1。方案在 12，三处待用户确认：TJDR 常规和 FGADR 是否进 B-std 主表；FGADR 用 70/30 还是 50/50；DiaRetDB1 的置信度映射。
+核对中发现：FGADR 已在磁盘上（07 第七节），许可禁止发布派生数据，所以 FGADR 的概率图不能公开；FGADR 部分掩码有低灰度噪声，不能用“大于 0 即阳性”；Retinal-Lesions 的灰度 127 是作者排除的标注，需要忽略区支持；Lesion-Net 原文数字不在公开的 1593 张上算，不能直接对比；TJDR 原文没说按患者划分，要做近重复审计。
+
 作者邮件（2026-10-03）
 无代码文章已发索取邮件，期限从发出日起 4 周。回复、附件和到期未回写进对应 meta。
 两篇不在这批信里：PMCNet 已有 train.py，子模块提交 4051483，没有作者训练权重。WSRFNet 有推理代码、没有 train.py，权重信还没发，地址 xuanli@stu.hit.edu.cn。

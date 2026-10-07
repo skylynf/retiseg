@@ -46,7 +46,8 @@ DIARETDB0
 三、本地还没有
 
 MAPLES-DR：标注用 maples-dr 包从 Figshare 自动下载。原图是 MESSIDOR，要另外准备。
-e-ophtha、FGADR、Retinal-Lesions：2026-10-03 已申请，结果未回。
+e-ophtha、Retinal-Lesions：2026-10-03 已申请。Retinal-Lesions 已获批，尚未下载（2026-10-07）。
+FGADR 已到，见第七节。
 
 四、可以直接读、但不并进主平均
 
@@ -65,3 +66,12 @@ from bench.data import open_idrid, open_ddr, open_diaretdb1, open_tjdr, catalog
 data = open_idrid(".")
 data.splits()["test"]
 data.read_mask("IDRiD_01", "MA")
+
+七、FGADR（2026-10-07 核对）
+路径：dataset/FGADR/FGADR-Seg-set_Release.zip，未解压。只有 Seg-set，没有 Grade-set。
+1842 张，全部 1280×1280，视野是内切圆。EX、SE、HE（Hemohedge_Masks）、MA 每张都有掩码，IRMA 159 张，NV 49 张。分级在 Seg-set/DR_Seg_Grading_Label.csv。
+文件名后缀 _1 有 1000 张（0–4 级），_2 有 254 张、_3 有 588 张（只有 3、4 级）。
+部分掩码是 RGB；IRMA 掩码有大量 1–16 的低灰度值，导出按 ≥128 二值化。
+许可禁止再发布图像和派生数据。用法和划分见 12。
+
+DIARETDB1 v2.1 补充（2026-10-07）：图像 1500×1152，视野宽约 1420、上下被截。XML 的置信度是 High、Medium、Low；除四类外还有 IRMA、Neovascularisation、Disc、Fundus_area。栅格化规则见 12。
