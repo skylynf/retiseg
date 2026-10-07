@@ -1,0 +1,9 @@
+# retiseg training env, on top of torch and torchvision from the CUDA 12 index.
+# Versions are the ones .venv-train ran E1, E1r and the B1 tests with.
+-r requirements-eval.txt
+timm==1.0.30
+einops==0.8.2
+opencv-python-headless==5.0.0.93
+yacs==0.1.8
+safetensors==0.8.0
+huggingface_hub==2.1.1

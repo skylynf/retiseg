@@ -19,6 +19,7 @@ if str(_ROOT) not in sys.path:
 import torch
 import yaml
 
+from bench.bstd import inference_for
 from bench.common.io import LESION_CLASSES, load_split
 from bench.models.hacdr import FGADR_CLASSES, lesion_class_index
 from bench.models.registry import build_model
@@ -60,8 +61,9 @@ def predict(config_path, checkpoint, pred_dir, split):
     model.eval()
     root = Path(config["dataset"])
     diameter = int(config["fov_diameter"])
+    inference = inference_for(config, model.card)
     for image_id in load_split(root, split):
-        predict_image(model, root, image_id, diameter, pred_dir, device)
+        predict_image(model, root, image_id, diameter, pred_dir, device, inference)
         print(image_id, flush=True)
 
 

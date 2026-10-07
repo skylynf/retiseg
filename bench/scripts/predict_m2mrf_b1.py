@@ -21,6 +21,7 @@ import torch
 import yaml
 from PIL import Image
 
+from bench.bstd import inference_for
 from bench.common.io import LESION_CLASSES, load_split, write_prob
 from bench.data.b1_input import load_example, pad_to_multiple
 from bench.models.m2mrf import M2MRF, bind_normalization, refuse_author_runs
@@ -88,6 +89,9 @@ def predict(config_path, checkpoint, pred_dir, split):
     bind_normalization(model, Path(config["dataset"]).name)
     root = Path(config["dataset"])
     diameter = int(config["fov_diameter"])
+    inference = inference_for(config, model.card)
+    if inference is not None and inference["window"] is not None:
+        raise RuntimeError("M2MRF is fully convolutional; a B-std window would need bench.infer here")
     image_ids = load_split(root, split)
     if model.network is None:
         load_example(

@@ -36,6 +36,7 @@ from bench.models.registry import build_model
 from bench.runtime import (
     assert_b1_frozen,
     assert_not_finished_run,
+    evaluation_interval,
     micro_batch_and_deviations,
     refuse_distributed,
     resolve_recipe,
@@ -96,7 +97,7 @@ def training_step(dataset_dir=None, device=None):
     return value
 
 
-def train(config_path, run_dir=None, diagnostic=False, score_only=False):
+def train(config_path, run_dir=None, diagnostic=False, score_only=False, resume=False):
     refuse_distributed()
     config_path = Path(config_path)
     config = yaml.safe_load(config_path.read_text())
@@ -128,6 +129,10 @@ def train(config_path, run_dir=None, diagnostic=False, score_only=False):
     if model.card.class_index != (2, 4, 1, 3):
         raise RuntimeError(f"HACDR-Net class_index {model.card.class_index} is not MA, HE, EX, SE = (2, 4, 1, 3)")
     declared = model.author_recipe(name)
+    if config.get("experiment") == "BS":
+        from bench.bstd import run_cell
+
+        return run_cell(config_path, config, model, declared, run_dir, predict, diagnostic, resume)
     mean = model.card.normalization["mean"]
     std = model.card.normalization["std"]
     train_set = PreparedSplit(
@@ -176,7 +181,16 @@ def train(config_path, run_dir=None, diagnostic=False, score_only=False):
     started = time.perf_counter()
     try:
         best = run_training(
-            model, train_loader, val_loader, resolved, config, run_dir, micro, per_epoch
+            model,
+            train_loader,
+            val_loader,
+            resolved,
+            config,
+            run_dir,
+            micro,
+            per_epoch,
+            eval_every=evaluation_interval(declared, config),
+            resume=resume,
         )
     finally:
         seconds = time.perf_counter() - started
@@ -208,10 +222,11 @@ def main(argv=None):
     parser.add_argument("--run-dir", default=None)
     parser.add_argument("--diagnostic", action="store_true")
     parser.add_argument("--score-only", action="store_true")
+    parser.add_argument("--resume", action="store_true", help="continue from run-dir/resume.pt when it exists")
     args = parser.parse_args(argv)
     if args.diagnostic and args.score_only:
         raise SystemExit("--diagnostic does not score the test split; drop one of the flags")
-    train(args.config, args.run_dir, diagnostic=args.diagnostic, score_only=args.score_only)
+    train(args.config, args.run_dir, diagnostic=args.diagnostic, score_only=args.score_only, resume=args.resume)
 
 
 if __name__ == "__main__":

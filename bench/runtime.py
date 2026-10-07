@@ -430,8 +430,16 @@ def lesion_probabilities(logits, card):
     raise ValueError(f"output_activation must be sigmoid or softmax, got {card.output_activation!r}")
 
 
+def atomic_save(payload, path):
+    """torch.save to a sibling temp file, then rename, so a crash never leaves half a file."""
+    path = Path(path)
+    tmp = path.with_name(path.name + ".tmp")
+    torch.save(payload, tmp)
+    os.replace(tmp, path)
+
+
 def save_checkpoint(path, model, config, step):
-    torch.save(
+    atomic_save(
         {
             "model": model.state_dict(),
             "config": config,
@@ -440,6 +448,25 @@ def save_checkpoint(path, model, config, step):
         },
         path,
     )
+
+
+DEFAULT_EVAL_EVERY = 1000
+
+
+def evaluation_interval(declared, config):
+    """Optimizer steps between validations, or None for every epoch.
+
+    A cell may set ``eval_every``. Otherwise a recipe whose budget is an
+    iteration count is validated every DEFAULT_EVAL_EVERY steps: DeepLabv3
+    on IDRiD has 3 steps per epoch and would otherwise validate and write a
+    checkpoint about 10,000 times. Epoch budgets keep one validation per
+    epoch, which is what U-Net patience counts.
+    """
+    if config.get("eval_every"):
+        return int(config["eval_every"])
+    if int(declared.iterations) > 0:
+        return DEFAULT_EVAL_EVERY
+    return None
 
 
 def write_recipe(path, dataset, recipe, declared, n_train, per_epoch, micro_batch, deviations):
@@ -502,7 +529,7 @@ def budget_signature(recipe_json):
     return signature
 
 
-def write_environment(path, seed, parameters, seconds, best_val_loss):
+def write_environment(path, seed, parameters, seconds, best_val_loss, best_key="best_val_loss"):
     if torch.cuda.is_available():
         gpu = torch.cuda.get_device_name(0)
     else:
@@ -517,7 +544,7 @@ def write_environment(path, seed, parameters, seconds, best_val_loss):
         "git": git_commit(),
         "parameters": int(parameters),
         "seconds": seconds,
-        "best_val_loss": best_val_loss,
+        best_key: best_val_loss,
     }
     Path(path).write_text(json.dumps(payload, indent=2) + "\n")
 

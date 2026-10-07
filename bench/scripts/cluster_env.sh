@@ -52,7 +52,7 @@ run_python() {
 }
 
 retiseg_ok() {
-  run_python retiseg -c 'import torch, torchvision, bench
+  run_python retiseg -c 'import torch, torchvision, bench, timm, einops, cv2, yacs
 version = torch.__version__.split("+")[0]
 if int(version.split(".")[0]) < 2:
     raise SystemExit("torch %s is not 2.x" % torch.__version__)
@@ -71,14 +71,25 @@ install_retiseg() {
   fi
   run_python retiseg -m pip install --upgrade pip
   run_python retiseg -m pip install torch torchvision --index-url "$TORCH_INDEX"
-  run_python retiseg -m pip install -r "$ROOT/bench/requirements-eval.txt"
+  run_python retiseg -m pip install -r "$ROOT/bench/requirements-train.txt"
   write_repo_pth retiseg
   retiseg_ok
 }
 
-# M2MRF README: pytorch 1.6.0, mmcv-full 1.2.0, local mmsegmentation 0.8.0, CUDA 10.2, Python 3.7.
+# M2MRF runs in retiseg. bench/models/m2mrf.py puts bench/compat ahead of
+# site-packages, so `import mmcv` is the compat package on PyTorch 2.x. E1
+# reproduced the author mIoU and mAUPR to the printed digits that way.
+# The README pins (PyTorch 1.6.0, CUDA 10.2) have no sm_80 kernels and do not
+# run on A100. retiseg-m2mrf is built only with RETISEG_M2MRF_LEGACY=1.
 # HACDR-Net README: PyTorch 1.10.0+, mmcv-full 1.6.2, mmsegmentation 0.30.0, Python 3.8, CUDA 10.1+.
-# Those pins cannot share one env, so retiseg-mmcv is not created.
+m2mrf_retiseg_ok() {
+  run_python retiseg -c 'from bench.models.m2mrf import M2MRF
+model = M2MRF()
+if model.network is None:
+    raise SystemExit("M2MRF did not build in retiseg: %s" % model.import_error)
+print("M2MRF builds in retiseg on torch", model.versions["torch"], "mmcv from", model.versions["mmcv_file"])'
+}
+
 m2mrf_ok() {
   run_python retiseg-m2mrf -c 'import mmcv, mmseg, torch
 assert torch.__version__.startswith("1.6.0"), torch.__version__
@@ -105,7 +116,10 @@ install_m2mrf() {
 }
 
 hacdr_ok() {
-  run_python retiseg-hacdr -c 'import mmcv, mmseg, torch
+  run_python retiseg-hacdr -c 'import mmcv, mmseg, torch, timm, einops, scipy, sklearn, PIL.Image
+assert hasattr(PIL.Image, "Resampling"), "pillow below 9.1"
+from timm.models.helpers import load_pretrained
+from timm.models.registry import register_model
 version = tuple(int(part) for part in torch.__version__.split("+")[0].split(".")[:2])
 if version < (1, 10):
     raise SystemExit("torch %s is below 1.10.0" % torch.__version__)
@@ -129,6 +143,10 @@ install_hacdr() {
   # The checkout is mmsegmentation 0.30.0 plus the HACDR modules. Editable
   # install uses that tree. A second copy from PyPI is not installed over it.
   run_python retiseg-hacdr -m pip install -e "$ROOT/official_code/HACDR-Net"
+  # ours.py imports timm.models.helpers.load_pretrained and timm.models.registry,
+  # transunet.py imports einops. bench.eval runs in this env after training.
+  run_python retiseg-hacdr -m pip install timm==0.6.13 einops==0.6.1 "pillow>=9.1" \
+    -r "$ROOT/bench/requirements-eval.txt"
   run_python retiseg-hacdr -m pip install mmcv-full==1.6.2 \
     -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
   write_repo_pth retiseg-hacdr
@@ -168,11 +186,13 @@ HACDR-Net: pretrained=None and load_from=None. No weight filename is declared.
 EOF
 }
 
-echo "M2MRF pins mmcv-full==1.2.0 and mmsegmentation 0.8.0."
-echo "HACDR-Net pins mmcv-full==1.6.2 and mmsegmentation 0.30.0."
-echo "The pins conflict, so the envs are retiseg-m2mrf and retiseg-hacdr. retiseg-mmcv is not created."
+echo "M2MRF runs in retiseg through bench/compat/mmcv."
+echo "HACDR-Net pins mmcv-full==1.6.2 and mmsegmentation 0.30.0 and gets retiseg-hacdr."
 
 install_retiseg
-install_m2mrf
+m2mrf_retiseg_ok
+if [ "${RETISEG_M2MRF_LEGACY:-0}" = "1" ]; then
+  install_m2mrf
+fi
 install_hacdr
 print_weights

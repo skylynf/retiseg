@@ -8,12 +8,16 @@ epochs is scored from last.pt, because that is the author budget. U-Net leaves
 both at 0 and is scored from best.pt. The other checkpoint is written beside
 it. The test split is never read during training.
 
+A cell with ``experiment: BS`` is handed to bench.bstd.run_cell: shared
+pixel budget, patch augmentation, and best.pt by validation mAUPR.
+
     python -m bench.train --config bench/configs/cells/b1_unet_idrid_seed0.yaml
     python bench/train.py --config bench/configs/cells/b1_unet_idrid_seed0.yaml
 """
 
 import argparse
 import json
+import math
 import shutil
 import sys
 import time
@@ -36,6 +40,8 @@ from bench.runtime import (
     accumulation_steps,
     assert_b1_frozen,
     assert_not_finished_run,
+    atomic_save,
+    evaluation_interval,
     micro_batch_and_deviations,
     refuse_distributed,
     resolve_recipe,
@@ -153,12 +159,81 @@ def _validate(model, loader, loss_fn, device):
     return loss_sum / seen
 
 
-def run_training(model, train_loader, val_loader, recipe, config, run_dir, micro_batch, steps_per_epoch, device=None):
-    """Run every optimizer step in ``recipe.iterations``. Returns the best val loss."""
+def _rng_state():
+    import random
+
+    import numpy as np
+
+    return {
+        "python": random.getstate(),
+        "numpy": np.random.get_state(),
+        "torch": torch.get_rng_state(),
+        "cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+    }
+
+
+def _set_rng_state(state):
+    import random
+
+    import numpy as np
+
+    random.setstate(state["python"])
+    np.random.set_state(state["numpy"])
+    torch.set_rng_state(state["torch"])
+    if state.get("cuda") is not None and torch.cuda.is_available():
+        torch.cuda.set_rng_state_all(state["cuda"])
+
+
+def _improved(value, best, select_by):
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return False
+    if best is None:
+        return True
+    return value > best if select_by == "val_maupr" else value < best
+
+
+def run_training(
+    model,
+    train_loader,
+    val_loader,
+    recipe,
+    config,
+    run_dir,
+    micro_batch,
+    steps_per_epoch,
+    device=None,
+    eval_every=None,
+    resume=False,
+    select_by="val_loss",
+    val_scorer=None,
+    resume_every_seconds=900,
+):
+    """Run every optimizer step in ``recipe.iterations``. Returns the best selection value.
+
+    Validation happens at the end of an epoch: every epoch when ``eval_every``
+    is None, otherwise at the first epoch end at or past each multiple of
+    ``eval_every``, and always at the final step. best.pt is written when the
+    selection value improves; last.pt once, at the final or early-stopped step.
+    resume.pt is written at a validation, at every one when ``eval_every`` is
+    set and at most every ``resume_every_seconds`` otherwise. Saving only at
+    epoch ends keeps the loader state exact on resume. ``select_by`` is ``val_loss`` (lower is better) or ``val_maupr``
+    (higher is better; needs ``val_scorer(model, device)`` returning a dict
+    with ``val_maupr`` and ``val_loss``). Early-stopping patience counts
+    validations.
+
+    With ``resume`` and an existing resume.pt, the model, optimizer, step,
+    selection state, RNG streams and loader generator are restored and the
+    loop continues. resume.pt is removed when the budget is finished.
+    """
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else:
         device = torch.device(device)
+    if select_by not in ("val_loss", "val_maupr"):
+        raise ValueError(f"select_by must be val_loss or val_maupr, got {select_by!r}")
+    if select_by == "val_maupr" and val_scorer is None:
+        raise ValueError("select_by val_maupr needs a val_scorer")
+    run_dir = Path(run_dir)
     model.to(device)
     loss_fn = model.build_loss(recipe).to(device)
     optimizer = model.build_optimizer(model.parameters(), recipe)
@@ -168,58 +243,137 @@ def run_training(model, train_loader, val_loader, recipe, config, run_dir, micro
     per_epoch = int(steps_per_epoch)
     if per_epoch < 1:
         raise ValueError("steps_per_epoch must be positive")
-    history_path = Path(run_dir) / "history.jsonl"
-    history_path.write_text("")
+    if eval_every is not None and int(eval_every) < 1:
+        raise ValueError("eval_every must be positive")
+    history_path = run_dir / "history.jsonl"
+    resume_path = run_dir / "resume.pt"
+    signature = {
+        "iterations": total,
+        "steps_per_epoch": per_epoch,
+        "effective_batch_size": effective,
+        "micro_batch": int(micro_batch),
+        "eval_every": None if eval_every is None else int(eval_every),
+        "select_by": select_by,
+    }
     best = None
     step = 0
     epoch = 0
     stale = 0
+    elapsed_before = 0.0
+    if resume and not resume_path.is_file() and (run_dir / "timing.json").is_file():
+        raise RuntimeError(f"{run_dir} already finished its budget; --resume does not train it again")
+    if resume and resume_path.is_file():
+        state = torch.load(resume_path, map_location="cpu", weights_only=False)
+        if state["signature"] != signature:
+            raise RuntimeError(
+                f"{resume_path} was written under {state['signature']}, this run is {signature}; "
+                "start a fresh run directory instead of resuming"
+            )
+        model.load_state_dict(state["model"])
+        optimizer.load_state_dict(state["optimizer"])
+        step, epoch, stale, best = int(state["step"]), int(state["epoch"]), int(state["stale"]), state["best"]
+        elapsed_before = float(state.get("elapsed", 0.0))
+        _set_rng_state(state["rng"])
+        if state.get("loader_generator") is not None and getattr(train_loader, "generator", None) is not None:
+            train_loader.generator.set_state(state["loader_generator"])
+        if hasattr(getattr(train_loader, "sampler", None), "set_epoch"):
+            train_loader.sampler.set_epoch(epoch)
+        kept = []
+        if history_path.is_file():
+            for line in history_path.read_text().splitlines():
+                if line.strip() and int(json.loads(line)["iteration"]) <= step:
+                    kept.append(line)
+        history_path.write_text("".join(line + "\n" for line in kept))
+        print(f"resumed at iteration {step}, epoch {epoch}", flush=True)
+    else:
+        history_path.write_text("")
     patience = int(recipe.loss_params.get("early_stop_patience", 0) or 0)
     stopped_early = False
+    started = time.perf_counter()
+    last_resume_save = started
+    next_eval = total if eval_every is None else min(total, (step // int(eval_every) + 1) * int(eval_every))
     while step < total:
         epoch += 1
         max_steps = min(int(per_epoch), total - step)
         train_loss, step, lr = _run_epoch(
             model, train_loader, loss_fn, optimizer, recipe, device, accum, effective, max_steps, step, total
         )
-        val_loss = _validate(model, val_loader, loss_fn, device)
+        if eval_every is not None and step < next_eval:
+            continue
+        if eval_every is not None:
+            next_eval = min(total, (step // int(eval_every) + 1) * int(eval_every))
         row = {
             "epoch": epoch,
             "iteration": step,
             "train_loss": train_loss,
-            "val_loss": val_loss,
-            "lr": lr,
         }
+        if val_scorer is not None:
+            scores = val_scorer(model, device)
+            row.update(scores)
+        else:
+            row["val_loss"] = _validate(model, val_loader, loss_fn, device)
+        row["lr"] = lr
         with history_path.open("a") as handle:
             handle.write(json.dumps(row) + "\n")
+        shown = row.get("val_maupr", row["val_loss"]) if select_by == "val_maupr" else row["val_loss"]
         print(
-            f"epoch {epoch} iter {step} train {train_loss:.4f} val {val_loss:.4f} lr {lr:.6g}",
+            f"epoch {epoch} iter {step} train {train_loss:.4f} {select_by} {shown:.4f} lr {lr:.6g}",
             flush=True,
         )
-        save_checkpoint(Path(run_dir) / "last.pt", model, config, step)
-        if best is None or val_loss < best:
-            best = val_loss
+        value = row[select_by]
+        if _improved(value, best, select_by):
+            best = value
             stale = 0
-            save_checkpoint(Path(run_dir) / "best.pt", model, config, step)
+            save_checkpoint(run_dir / "best.pt", model, config, step)
         else:
             stale += 1
+        now = time.perf_counter()
+        if step < total and (eval_every is not None or now - last_resume_save >= resume_every_seconds):
+            last_resume_save = now
+            atomic_save(
+                {
+                    "model": model.state_dict(),
+                    "optimizer": optimizer.state_dict(),
+                    "step": step,
+                    "epoch": epoch,
+                    "stale": stale,
+                    "best": best,
+                    "elapsed": elapsed_before + time.perf_counter() - started,
+                    "rng": _rng_state(),
+                    "loader_generator": (
+                        train_loader.generator.get_state()
+                        if getattr(train_loader, "generator", None) is not None
+                        else None
+                    ),
+                    "signature": signature,
+                },
+                resume_path,
+            )
         if patience and stale >= patience:
             stopped_early = True
             print(
-                f"early stop at epoch {epoch}: validation loss did not improve for {patience} epochs",
+                f"early stop at epoch {epoch}: {select_by} did not improve for {patience} validations",
                 flush=True,
             )
             break
     if not stopped_early and step != total:
         raise RuntimeError(f"stopped at step {step}, recipe iterations is {total}")
+    save_checkpoint(run_dir / "last.pt", model, config, step)
+    if not (run_dir / "best.pt").is_file():
+        save_checkpoint(run_dir / "best.pt", model, config, step)
+    if resume_path.is_file():
+        resume_path.unlink()
+    (run_dir / "timing.json").write_text(
+        json.dumps({"train_seconds_total": elapsed_before + time.perf_counter() - started}, indent=2) + "\n"
+    )
     if patience:
-        (Path(run_dir) / "early_stop.json").write_text(
+        (run_dir / "early_stop.json").write_text(
             json.dumps(
                 {
                     "patience": patience,
                     "stopped_early": stopped_early,
                     "iteration": int(step),
-                    "best_val_loss": best,
+                    "best_val_loss" if select_by == "val_loss" else "best_val_maupr": best,
                 },
                 indent=2,
             )
@@ -235,9 +389,16 @@ def checkpoint_roles(declared):
     return "best.pt", "last.pt"
 
 
+def roles_for(config, declared):
+    """B-std scores the highest validation mAUPR; B1 keeps checkpoint_roles."""
+    if config.get("experiment") == "BS":
+        return "best.pt", "last.pt"
+    return checkpoint_roles(declared)
+
+
 def score_run(config_path, run_dir, declared, predict_fn):
     config = yaml.safe_load(Path(config_path).read_text())
-    primary, sensitivity = checkpoint_roles(declared)
+    primary, sensitivity = roles_for(config, declared)
     run_dir = Path(run_dir)
     (run_dir / "checkpoint_roles.json").write_text(
         json.dumps(
@@ -268,7 +429,7 @@ def _score_existing(config_path, config, run_dir, predict_fn):
     print("scored the saved checkpoints", flush=True)
 
 
-def train(config_path, run_dir=None, diagnostic=False, score_only=False):
+def train(config_path, run_dir=None, diagnostic=False, score_only=False, resume=False):
     refuse_distributed()
     config_path = Path(config_path)
     config = yaml.safe_load(config_path.read_text())
@@ -294,6 +455,16 @@ def train(config_path, run_dir=None, diagnostic=False, score_only=False):
     if int(model.card.in_channels) != 3:
         raise ValueError("B1 prepared images are RGB; in_channels must be 3")
     declared = model.author_recipe(name)
+    if config.get("experiment") == "BS":
+        from bench.bstd import run_cell
+
+        def _pretrained():
+            if hasattr(model, "load_pretrained"):
+                print(f"pretrained tensors copied: {model.load_pretrained()}", flush=True)
+
+        return run_cell(
+            config_path, config, model, declared, run_dir, predict, diagnostic, resume, before_training=_pretrained
+        )
     mean = model.card.normalization["mean"]
     std = model.card.normalization["std"]
     train_set = PreparedSplit(
@@ -341,7 +512,16 @@ def train(config_path, run_dir=None, diagnostic=False, score_only=False):
             copied = model.load_pretrained()
             print(f"pretrained tensors copied: {copied}", flush=True)
         best = run_training(
-            model, train_loader, val_loader, resolved, config, run_dir, micro, per_epoch
+            model,
+            train_loader,
+            val_loader,
+            resolved,
+            config,
+            run_dir,
+            micro,
+            per_epoch,
+            eval_every=evaluation_interval(declared, config),
+            resume=resume,
         )
     finally:
         seconds = time.perf_counter() - started
@@ -373,10 +553,11 @@ def main(argv=None):
     parser.add_argument("--run-dir", default=None)
     parser.add_argument("--diagnostic", action="store_true")
     parser.add_argument("--score-only", action="store_true")
+    parser.add_argument("--resume", action="store_true", help="continue from run-dir/resume.pt when it exists")
     args = parser.parse_args(argv)
     if args.diagnostic and args.score_only:
         raise SystemExit("--diagnostic does not score the test split; drop one of the flags")
-    train(args.config, args.run_dir, diagnostic=args.diagnostic, score_only=args.score_only)
+    train(args.config, args.run_dir, diagnostic=args.diagnostic, score_only=args.score_only, resume=args.resume)
 
 
 if __name__ == "__main__":

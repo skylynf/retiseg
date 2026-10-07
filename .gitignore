@@ -1,5 +1,7 @@
 .venv/
 .venv-train/
+# Local py3.8 test environment and uv's Python download.
+.cache/
 .pytest_cache/
 __pycache__/
 *.py[cod]

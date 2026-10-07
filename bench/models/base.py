@@ -17,6 +17,8 @@ one of them only when the default named by the recipe cannot express the authors
 objective. Training, probability maps and evaluation stay outside the wrapper.
 """
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 

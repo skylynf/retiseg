@@ -1,0 +1,61 @@
+服务器执行手册（第一批，2026-10-07 起）
+
+命令都在 bench/scripts/server_run.sh 里，按阶段调用。本文件说明顺序、每一步之后看什么、记在哪里。本机内存只有 30GB，本机不跑训练，也不跑真实网络的前向；只做单元测试和打印任务表。
+
+一、准备（每台服务器一次）
+1. 代码
+   git clone git@github.com:skylynf/retiseg.git && cd retiseg
+   git submodule update --init official_code/M2MRF official_code/HACDR-Net official_code/H2Former \
+     official_code/HRNet-Semantic-Segmentation official_code/Swin-Unet official_code/FCT
+   只初始化包装器会导入的这几个子模块。tensorflow/models、caffe 等很大，又用不到，不要用 --recursive。
+2. 从工作站拷数据和权重（这些都不在 Git 里），在工作站上执行，SERVER 换成服务器地址，路径换成服务器上的仓库目录：
+   rsync -a --info=progress2 dataset/prepared dataset/iDRID SERVER:retiseg/dataset/
+   rsync -a pretrained SERVER:retiseg/
+   rsync -a runs/E1_m2mrf SERVER:retiseg/runs/
+   dataset/prepared 约 0.7GB，dataset/iDRID 约 1.5GB（只有 E1r 读原始 IDRiD），runs/E1_m2mrf 含 HRNet-W48 ImageNet 权重和两份作者权重。
+3. bash bench/scripts/server_run.sh env
+   建 retiseg（PyTorch 2.x，CUDA 12）和 retiseg-hacdr（PyTorch 1.10，CUDA 11.3，mmcv-full 1.6.2）。两个环境都要打印出自检行，M2MRF 要打印 “builds in retiseg”。
+4. bash bench/scripts/server_run.sh check
+   检查数据和权重，列出 GPU，下载一次 torchvision 的 ResNet-101 和 ResNet-34 ImageNet 权重，然后在两个环境里跑测试。测试不全过就停下，把输出发回来。
+5. bash bench/scripts/server_run.sh cache
+   建 IDRiD 和 DDR 的 1440 画布缓存，在 dataset/cache 下。源文件变了会报错，重跑这一步即可。
+
+二、冒烟
+6. bash bench/scripts/server_run.sh smoke
+   B1 的 16 个任务跑完，再跑 B-std 的 16 个，每个 20 步，都只用训练集和验证集，目录在 runs/smoke。
+   看：每个任务的 console.log 最后一行是 “== exit 0”；记下显存峰值（nvidia-smi）和每步耗时。显存不够的模型，在它的 cell 里加 batch_size（必须能整除有效批），用梯度累积补足；改动提交后再进入下一步。
+
+三、并行的第一轮（三件事互不依赖，可以同时开）
+7. bash bench/scripts/server_run.sh probe          占 GPU 0–3（PROBE_GPUS 可改）
+   U-Net 和 M2MRF 在 IDRiD、DDR 上以两倍暂定预算各跑一次种子 0，只训练和验证。目录 runs/BSprobe_*。
+8. bash bench/scripts/server_run.sh e1r            占 GPU 4（E1R_GPU 可改）
+   M2MRF 作者配方重训，有效批 4，4 万步，目录 runs/E1r_m2mrf_idrid_seed0_bs4_a100。本机那次在第 1120 步中断，不续。中断后再执行同一命令，会从 last.pt 接着跑。
+9. RETISEG_GPUS="5 6 7" bash bench/scripts/server_run.sh b1-seed0
+   B1 种子 0，16 个任务，只训练和验证。B1 的预算不取决于探测结果，可以先跑。
+   启动器开始时只取空闲的卡；RETISEG_GPUS 再把范围限制在 5–7，避免 probe 刚启动、还没占上卡时被抢。
+
+四、定预算，再跑主表
+10. bash bench/scripts/server_run.sh curves 'BSprobe_*'
+    看每条曲线的最高验证 mAUPR 在哪一步。最高点在后四分之一，说明暂定预算还不够，就把 bs_frozen.yaml 的 equivalent_epochs 改成探测值（IDRiD 2000、DDR 400）；最高点在前一半，暂定值就够。四条曲线结论不一致时，取较大的那个。
+    决定只看训练和验证，不看测试。把四条曲线的最高点、所在步数和最终取值写进 00 的 “预算探测” 段，连同 bs_frozen.yaml 一起提交，然后才跑下一步。
+11. bash bench/scripts/server_run.sh bs-seed0       B-std 种子 0，16 个任务
+12. 读 B1 和 B-std 种子 0 的训练和验证曲线（bash bench/scripts/server_run.sh curves 'BS_*'）。没有问题，再写测试概率图并评测：
+    bash bench/scripts/server_run.sh b1-score0
+    bash bench/scripts/server_run.sh bs-score0
+    启动器会先确认种子 0 的 recipe.json 与当前预算一致，不一致就拒绝。
+13. bash bench/scripts/server_run.sh bs-rest        B-std 种子 1、2，32 个任务
+
+五、中断与恢复
+所有训练命令都带 --resume。卡掉线、进程被杀以后，原样再执行同一阶段：已完成的任务跳过（seed0 看 diagnostic.json，打分阶段看 metrics_test.json），没完成的从 resume.pt 接着训，权重与不中断时逐位相同。resume.pt 只在验证时写，所以最多损失一次验证间隔。
+预算改过以后不能续训：resume.pt 里记了预算签名，签名不一致时报错，此时删掉那个运行目录重跑。
+
+六、记录管理
+1. 代码和协议：每个正式阶段开始前，bench/ 必须已提交。server_run.sh 在有未提交改动时拒绝启动（RETISEG_ALLOW_DIRTY=1 可以强制，但会记成 dirty+allowed）。每个运行目录的 environment.json 记下提交号。
+2. 阶段台账：runs/logs/stages.tsv，每启动一个阶段写一行：时间、阶段、提交号、工作区状态、日志路径、进程号。阶段日志在 runs/logs/<时间>_<阶段>.log。
+3. 任务日志：每个任务的输出写在各自的 runs/<运行>/console.log，开头一行 “== start 波次 时间 gpu”，结尾一行 “== exit 退出码 时间”。
+4. 总表：bash bench/scripts/server_run.sh status 打印所有运行的状态（running、failed、trained、scored），并写入 runs/status.tsv。测试 mAUPR 只在 metrics_test.json 已存在时显示。
+5. runs/ 不进 Git。每个阶段结束后，把小文件拉回工作站备份（检查点和概率图留在服务器）：
+   rsync -a --include='*/' --include='*.json' --include='*.jsonl' --include='*.log' --include='*.tsv' --include='*.yaml' \
+     --exclude='*' SERVER:retiseg/runs/ runs/
+6. 叙述记录：每个阶段的结论写进 00_进度.txt，一段一个日期，写清做了什么、看了哪些数、结论是什么、对应的提交号。改协议的决定（预算、批大小）写在 00，并与对应的配置一起提交。
+7. 不允许的事：看过测试指标以后再改预算、增强或选择规则；在 runs/ 里手工删改 history.jsonl 或 recipe.json。

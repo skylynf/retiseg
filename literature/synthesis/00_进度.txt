@@ -32,6 +32,31 @@ B1 冒烟（2026-10-04，同一张卡）
 E1r（2026-10-04 开始，本机 RTX 4060 Ti）
 按作者配方重训 M2MRF-C，用官方训练图 IDRiD_01–54，不用留出验证集之后的 44 张。二元 Dice（smooth 1e-5），SGD 0.01，动量 0.9，权重衰减 0.0005，poly（power 0.9，最低学习率 1e-4），4 万次迭代，批大小 1，缩放到 (1440, 960) 再随机裁成 960×1440，翻转概率 0，光度扰动。骨干从 ImageNet HRNet-W48 初始化，865/1513 个骨干参数被预训练覆盖。显存峰值 7.98GB。种子 0。作者没有公布那次权重的种子，所以这是同一配方的一次运行。4 万步用了 5.36 小时，最后一步损失 0.35。用第 40000 次迭代的权重，不挑检查点。作者指标：mIoU 32.86，mAUPR 57.63，mF 47.83。已发布权重是 50.17、67.55。本项目精确 mAUPR 0.493，已发布权重是 0.639。各类精确 AUPR：MA 0.282，HE 0.449，EX 0.746，SE 0.495。差距大于一次未知种子能解释的范围。该次结果留在 runs/E1r_m2mrf_idrid_seed0。当时把有效批大小写成了 1，作者启动脚本是 4 卡各 1 张。2026-10-04 起按有效批大小 4 重训，目录 runs/E1r_m2mrf_idrid_seed0_bs4。归一化一次看见 4 张图。学习率仍是 0.01。
 更正（2026-10-04）：已发布权重的精确 mAUPR 0.639 与这次重训的 0.493 不能归因于批大小。两次之间同时差着权重来源、增强、裁剪和是否留出验证集。只有把其余设定固定、只改批大小的对照做完，才能谈批大小的作用。bs4 那次就是这个对照，结果出来之前不写原因。
+bs4 中断（2026-10-07 核对）：runs/E1r_m2mrf_idrid_seed0_bs4/history.jsonl 最后一行是第 1120 次迭代，时间 2026-10-04 12:21，显存 14.45GB，目录里没有检查点。这次没有跑完，要在集群上从头重跑。
+
+规划审查（2026-10-07）
+上集群之前审查了 01、05、09 和 bench/ 代码，意见和完整实验逻辑在 10。本机 bench/tests 在 .venv-train 下 106 个通过、1 个跳过。审查发现 retiseg-m2mrf 的 PyTorch 1.6 加 CUDA 10.2 不支持 A100，而且 M2MRF 包装器实际导入的是 bench/compat/mmcv。哪些建议被采纳，采纳后再记在这里。
+
+审查采纳（2026-10-07，用户决定）
+主表改为 B-std，B1 降为第二列“来源配方”。第二节工程改动全部做。nnU-Net 和 E5 进第一批。
+已改：
+M2MRF 改用 retiseg 环境（PyTorch 2.x，bench/compat/mmcv），b1_jobs.yaml 和启动器同步。retiseg 环境补 requirements-train.txt（timm、einops、opencv、yacs）。retiseg-hacdr 补 timm 0.6.13、einops 0.6.1、pillow>=9.1 和评测依赖；本机 py3.8 环境下 test_hacdr_recipe 9 个全过。bench/models/base.py 加 from __future__ import annotations，py3.8 才能导入。
+按步数验证：B1 里按迭代数定预算的模型改为每 1000 步验证一次（cell 可设 eval_every），只在 epoch 结束时验证。last.pt 只在结束时写一次。
+断点续训：resume.pt 存模型、优化器、步数、epoch、选择状态、随机数状态和数据顺序，所有训练命令带 --resume。崩溃后续训与不中断运行的权重逐位相同（测试覆盖 B1 和 B-std，B-std 含 2 个加载进程）。
+动态队列：--submit 按预计耗时从长到短排进共享队列，哪张卡空出来就取下一个；已完成的任务跳过。
+画布缓存：python -m bench.data.canvas_cache --data dataset/prepared/IDRiD --diameter 1440（DDR 同样）。缓存含画布、四类掩码和画布视野，格式 2；源文件变化或格式不符会报错，不会静默复用。预测和评测不读缓存。
+B-std 实现（协议在 bench/configs/bs_frozen.yaml，代码 bench/bstd.py、bench/data/bs_input.py、bench/infer.py）：
+  训练量按像素计：一个等效 epoch 的块像素总数等于训练集画布像素总数。暂定 IDRiD 1000、DDR 200 个等效 epoch。
+  损失、优化器、学习率、权重衰减、调度形状和有效批大小沿用各模型 author_recipe；调度按 B-std 步数走；U-Net 的早停去掉。
+  增强各模型相同：0.5–2 倍随机尺度后裁块、水平翻转、90 度旋转、mmseg 参数的光度扰动。每个样本的随机性只由（种子，样本编号）决定。
+  卡片设了 forward_size 的模型（Swin-Unet 224、FCT 384、H2Former 960）按该尺寸裁块训练、重叠 0.5 滑窗推理；其余模型裁 960×960 训练、整画布推理。
+  一共验证 20 次，按画布上视野内的验证 mAUPR 选 best.pt 打分，last.pt 为敏感性分析。
+  任务表 bench/configs/bs_jobs.yaml 由 bench/scripts/make_bs_jobs.py 生成：8 个模型 × 2 个数据集 × 3 个种子，共 48 个任务，另有 16 个冒烟任务。启动命令统一加 --jobs bench/configs/bs_jobs.yaml，各波次顺序和 B1 一致。
+预算探测（未做）：U-Net 和 M2MRF 种子 0 以两倍预算跑一次，只看训练和验证曲线。验证 mAUPR 停止上升的位置决定 bs_frozen.yaml 的 equivalent_epochs，写回这里后再跑 --seed0。
+本机限制（2026-10-07）：本机内存只有 30GB，一次在 CPU 上对整张 1440 画布跑 H2Former 960 滑窗把内存占满，进程被强制停止。之后本机只跑小张量单元测试，并限制虚拟内存在 16GB 以内（ulimit -v 16000000）。真实网络的前向和显存检查一律放到服务器冒烟里做。
+服务器执行：顺序、命令和记录规则在 11_服务器执行.txt，命令在 bench/scripts/server_run.sh。本机没有验证过的是真实网络的显存和滑窗推理，由第 6 步冒烟检查。
+预算探测的入口：cell 里写 budget_probe: 2，即两倍暂定预算、验证间隔不变，且只能带 --diagnostic 运行。U-Net 和 M2MRF 的 4 个探测 cell 由 make_bs_jobs.py 生成（bs_probe_*）。
+每个任务的输出写在 runs/<运行>/console.log；阶段台账在 runs/logs/stages.tsv；总表由 run_status.py 生成，写入 runs/status.tsv。
 
 作者邮件（2026-10-03）
 无代码文章已发索取邮件，期限从发出日起 4 周。回复、附件和到期未回写进对应 meta。

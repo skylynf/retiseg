@@ -1,7 +1,9 @@
 """Write original-resolution 16-bit probability maps for one checkpoint.
 
 The network sees the field-of-view crop resized so its longer side is the
-configured diameter, then card.forward_size when that is set. Probabilities
+configured diameter, then card.forward_size when that is set. A B-std cell
+keeps the diameter canvas and uses card.forward_size as a sliding window
+instead (bench.infer). Probabilities
 are bilinearly resized back onto the crop. Pixels outside the field of view
 are 0. Files are written only through bench.common.io.write_prob.
 
@@ -27,7 +29,9 @@ import yaml
 from PIL import Image
 
 from bench.common.io import LESION_CLASSES, load_split, write_prob
+from bench.bstd import inference_for
 from bench.data.b1_input import load_example, pad_to_multiple
+from bench.infer import canvas_logits
 from bench.models.registry import build_model
 from bench.runtime import assert_not_finished_run, lesion_probabilities
 
@@ -40,7 +44,12 @@ def _resize_plane(plane, height, width):
     return np.clip(np.asarray(resized, dtype=np.float32), 0.0, 1.0)
 
 
-def predict_image(model, dataset_dir, image_id, diameter, pred_dir, device):
+def predict_image(model, dataset_dir, image_id, diameter, pred_dir, device, inference=None):
+    """``inference`` None is B1: the canvas, resized to card.forward_size when set.
+
+    A dict with ``window`` and ``overlap`` is B-std: the diameter canvas,
+    whole when window is None, otherwise overlapping windows of that size.
+    """
     model.eval()
     card = model.card
     canvas = load_example(
@@ -49,13 +58,18 @@ def predict_image(model, dataset_dir, image_id, diameter, pred_dir, device):
         diameter,
         card.normalization["mean"],
         card.normalization["std"],
-        card.forward_size,
+        card.forward_size if inference is None else None,
         masks=False,
     )
     content_h, content_w = canvas["tensor"].shape[-2:]
-    tensor = pad_to_multiple(canvas["tensor"], card.pad_multiple).unsqueeze(0).to(device)
     with torch.no_grad():
-        logits = model(tensor)[:, :, :content_h, :content_w]
+        if inference is None:
+            tensor = pad_to_multiple(canvas["tensor"], card.pad_multiple).unsqueeze(0).to(device)
+            logits = model(tensor)[:, :, :content_h, :content_w]
+        else:
+            logits = canvas_logits(
+                model, canvas["tensor"].to(device), card, inference["window"], inference["overlap"]
+            ).unsqueeze(0)
         prob = lesion_probabilities(logits, card)[0].detach().cpu().numpy()
     canvas_h, canvas_w = canvas["canvas_hw"]
     if (content_h, content_w) != (canvas_h, canvas_w):
@@ -84,9 +98,10 @@ def predict(config_path, checkpoint, pred_dir, split):
     model.eval()
     root = Path(config["dataset"])
     diameter = int(config["fov_diameter"])
+    inference = inference_for(config, model.card)
     with torch.no_grad():
         for image_id in load_split(root, split):
-            predict_image(model, root, image_id, diameter, pred_dir, device)
+            predict_image(model, root, image_id, diameter, pred_dir, device, inference)
             print(image_id, flush=True)
 
 

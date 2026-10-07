@@ -77,6 +77,17 @@ def normalize(image, mean, std):
     return torch.from_numpy(np.ascontiguousarray(tensor.transpose(2, 0, 1)))
 
 
+def apply_forward_size(image, masks, forward_size):
+    """Resize a canvas to the card's fixed input. None returns it unchanged."""
+    if forward_size is None:
+        return image, masks
+    height, width = int(forward_size[0]), int(forward_size[1])
+    image = _resize_rgb(image, height, width)
+    if masks is not None:
+        masks = [_resize_mask(mask, height, width) for mask in masks]
+    return image, masks
+
+
 def crop_resize(image, fov, diameter, forward_size=None, masks=None):
     """FOV bounding box, longer side to ``diameter``, then optional ``forward_size``.
 
@@ -93,13 +104,9 @@ def crop_resize(image, fov, diameter, forward_size=None, masks=None):
     masks_out = None
     if masks is not None:
         masks_out = [_resize_mask(mask[y0:y1, x0:x1], canvas_h, canvas_w) for mask in masks]
-    network_hw = (canvas_h, canvas_w)
-    if forward_size is not None:
-        height, width = int(forward_size[0]), int(forward_size[1])
-        image_out = _resize_rgb(image_out, height, width)
-        if masks_out is not None:
-            masks_out = [_resize_mask(mask, height, width) for mask in masks_out]
-        network_hw = (height, width)
+    canvas_fov = _resize_mask(fov[y0:y1, x0:x1], canvas_h, canvas_w)
+    image_out, masks_out = apply_forward_size(image_out, masks_out, forward_size)
+    network_hw = tuple(image_out.shape[:2])
     return {
         "image": image_out,
         "masks": masks_out,
@@ -108,7 +115,14 @@ def crop_resize(image, fov, diameter, forward_size=None, masks=None):
         "network_hw": network_hw,
         "original_hw": image.shape[:2],
         "fov": fov,
+        "canvas_fov": canvas_fov,
     }
+
+
+def canvas_hw(dataset_dir, image_id, diameter):
+    """Canvas size of one prepared image, from its field-of-view mask only."""
+    y0, y1, x0, x1 = crop_box(read_fov(dataset_dir, image_id))
+    return _scaled_hw(y1 - y0, x1 - x0, diameter)
 
 
 def read_jpg(dataset_dir, image_id):
@@ -175,12 +189,19 @@ class PreparedSplit(Dataset):
         self.mean = mean
         self.std = std
         self.forward_size = None if forward_size is None else (int(forward_size[0]), int(forward_size[1]))
+        from bench.data.canvas_cache import open_cache
+
+        self.cache = open_cache(self.root, self.diameter, self.ids)
 
     def __len__(self):
         return len(self.ids)
 
-    def __getitem__(self, index):
+    def canvas(self, index):
+        """RGB canvas and four masks at the network input, before augmentation."""
         image_id = self.ids[index]
+        if self.cache is not None:
+            image, masks = self.cache.load(image_id)
+            return apply_forward_size(image, masks, self.forward_size)
         canvas = load_example(
             self.root,
             image_id,
@@ -190,11 +211,23 @@ class PreparedSplit(Dataset):
             self.forward_size,
             masks=True,
         )
-        image = canvas["image"]
-        masks = canvas["masks"]
+        return canvas["image"], canvas["masks"]
+
+    def canvas_with_fov(self, index):
+        """Canvas, four masks and the canvas field of view. Needs forward_size None."""
+        if self.forward_size is not None:
+            raise ValueError("canvas_with_fov is the diameter canvas; this split resizes to forward_size")
+        image_id = self.ids[index]
+        if self.cache is not None:
+            image, masks = self.cache.load(image_id)
+            return image, masks, self.cache.load_fov(image_id)
+        canvas = load_example(self.root, image_id, self.diameter, self.mean, self.std, None, masks=True)
+        return canvas["image"], canvas["masks"], canvas["canvas_fov"]
+
+    def __getitem__(self, index):
+        image, masks = self.canvas(index)
         if self.augment and np.random.random() < 0.5:
             image = np.ascontiguousarray(image[:, ::-1])
             masks = [np.ascontiguousarray(mask[:, ::-1]) for mask in masks]
-            canvas["tensor"] = normalize(image, self.mean, self.std)
         target = torch.from_numpy(np.ascontiguousarray(np.stack(masks).astype(np.float32)))
-        return canvas["tensor"], target
+        return normalize(image, self.mean, self.std), target

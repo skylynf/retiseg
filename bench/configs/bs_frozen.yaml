@@ -1,0 +1,59 @@
+# Track B-std, the main retraining table. Written 2026-10-07, before any B1 or
+# B-std run read a test split. Revisions after the first BS run may use
+# training loss and validation mAUPR only. B1 stays as the second column.
+#
+# What is shared: data, splits, canvas, augmentation, training amount in
+# pixels, checkpoint selection, inference geometry and evaluation.
+# What stays per model: loss, optimizer, learning rate, weight decay,
+# schedule shape and effective batch, from author_recipe. The schedule runs
+# over the B-std step count, not the author's.
+experiment: BS
+fov_diameter: 1440
+eval_protocol: bench/eval/protocol.yaml
+label_policy: multilabel
+use_fov: true
+datasets: [IDRiD, DDR]
+splits:
+  IDRiD: {train: train, val: val, test: test}
+  DDR: {train: train, val: val, test: test}
+seeds:
+  IDRiD: 3
+  DDR: 3
+primary_metric: mAUPR
+
+# Training amount. One equivalent epoch is as many patch pixels as there are
+# canvas pixels in the training split, so a 224 patch model draws about 18
+# times more patches than a 960 patch model for the same epoch. Steps per
+# epoch = ceil(ceil(canvas pixels / patch pixels) / effective batch).
+# Provisional. Fixed after the budget probe (U-Net and M2MRF seed 0 at twice
+# this amount, train and validation only) shows validation mAUPR has stopped
+# rising; the probe result is written in literature/synthesis/00_进度.txt.
+equivalent_epochs:
+  IDRiD: 1000
+  DDR: 200
+# Validations per run, spaced in whole epochs. The checkpoint with the highest
+# validation mAUPR is scored; the last step is the sensitivity checkpoint.
+n_evals: 20
+select_by: val_maupr
+
+# Patch geometry. A model whose card sets forward_size trains on patches of
+# that size cut from the canvas and predicts with overlapping windows of the
+# same size. Every other model trains on fully_conv_patch and predicts on the
+# whole canvas.
+fully_conv_patch: [960, 960]
+window_overlap: 0.5
+
+# Augmentation, the same for every model. Parameters follow the mmseg
+# pipeline in the M2MRF and HACDR-Net author configs (ratio_range 0.5-2,
+# RandomCrop, RandomFlip, PhotoMetricDistortion), plus 90-degree rotation.
+# Padding past the scaled canvas is 0 after normalization, label background.
+augment:
+  scale_range: [0.5, 2.0]
+  hflip: 0.5
+  rot90: true
+  photometric:
+    p: 0.5
+    brightness_delta: 32
+    contrast_range: [0.5, 1.5]
+    saturation_range: [0.5, 1.5]
+    hue_delta_degrees: 18

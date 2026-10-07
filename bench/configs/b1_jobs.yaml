@@ -394,7 +394,7 @@ jobs:
     dataset: IDRiD
     seed: 0
     gpu: 0
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_idrid_seed0.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_m2mrf_idrid_seed1
@@ -402,7 +402,7 @@ jobs:
     dataset: IDRiD
     seed: 1
     gpu: 1
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_idrid_seed1.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_m2mrf_idrid_seed2
@@ -410,7 +410,7 @@ jobs:
     dataset: IDRiD
     seed: 2
     gpu: 2
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_idrid_seed2.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_m2mrf_idrid_seed3
@@ -418,7 +418,7 @@ jobs:
     dataset: IDRiD
     seed: 3
     gpu: 3
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_idrid_seed3.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_m2mrf_idrid_seed4
@@ -426,7 +426,7 @@ jobs:
     dataset: IDRiD
     seed: 4
     gpu: 4
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_idrid_seed4.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_m2mrf_ddr_seed0
@@ -434,7 +434,7 @@ jobs:
     dataset: DDR
     seed: 0
     gpu: 5
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_ddr_seed0.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_m2mrf_ddr_seed1
@@ -442,7 +442,7 @@ jobs:
     dataset: DDR
     seed: 1
     gpu: 6
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_ddr_seed1.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_m2mrf_ddr_seed2
@@ -450,7 +450,7 @@ jobs:
     dataset: DDR
     seed: 2
     gpu: 7
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_ddr_seed2.yaml
     script: bench/scripts/train_m2mrf_b1.py
   - name: B1_hacdr_idrid_seed0
@@ -577,7 +577,7 @@ smoke:
     dataset: IDRiD
     seed: 0
     gpu: 6
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_idrid_seed0.yaml
     script: bench/scripts/train_m2mrf_b1.py
     max_steps: 20
@@ -649,7 +649,7 @@ smoke:
     dataset: DDR
     seed: 0
     gpu: 6
-    env: retiseg-m2mrf
+    env: retiseg
     config: bench/configs/cells/b1_m2mrf_ddr_seed0.yaml
     script: bench/scripts/train_m2mrf_b1.py
     max_steps: 20

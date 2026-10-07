@@ -1,0 +1,10 @@
+experiment: BS
+model: M2MRF
+dataset: dataset/prepared/DDR
+split_train: train
+split_val: val
+split_test: test
+fov_diameter: 1440
+seed: 0
+num_workers: 4
+budget_probe: 2

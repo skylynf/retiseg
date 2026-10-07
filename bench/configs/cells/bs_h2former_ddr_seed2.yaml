@@ -1,0 +1,9 @@
+experiment: BS
+model: H2Former
+dataset: dataset/prepared/DDR
+split_train: train
+split_val: val
+split_test: test
+fov_diameter: 1440
+seed: 2
+num_workers: 4

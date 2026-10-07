@@ -28,6 +28,7 @@ from bench.models.m2mrf import M2MRF, bind_normalization, refuse_author_runs
 from bench.pretrained import hrnet_w48
 from bench.runtime import (
     assert_b1_frozen,
+    evaluation_interval,
     micro_batch_and_deviations,
     refuse_distributed,
     resolve_recipe,
@@ -51,12 +52,12 @@ def _record_versions(path, model):
     Path(path).write_text(json.dumps(payload, indent=2) + "\n")
 
 
-def train(config_path, run_dir=None, diagnostic=False, score_only=False):
+def train(config_path, run_dir=None, diagnostic=False, score_only=False, resume=False):
     refuse_distributed()
     config_path = Path(config_path)
     config = yaml.safe_load(config_path.read_text())
-    if config.get("experiment") != "B1" or config.get("model") != "M2MRF":
-        raise ValueError("this script trains B1 M2MRF; the author retrain stays in bench/train_m2mrf.py")
+    if config.get("experiment") not in ("B1", "BS") or config.get("model") != "M2MRF":
+        raise ValueError("this script trains B1 or BS M2MRF; the author retrain stays in bench/train_m2mrf.py")
     if "seed" not in config:
         raise ValueError("the cell config must set seed")
     name = dataset_name(config["dataset"])
@@ -77,6 +78,30 @@ def train(config_path, run_dir=None, diagnostic=False, score_only=False):
     if tuple(model.classes) != tuple(LESION_CLASSES):
         raise ValueError(f"M2MRF classes {model.classes} != {LESION_CLASSES}")
     declared = model.author_recipe(name)
+    if config.get("experiment") == "BS":
+        from bench.bstd import run_cell
+
+        def _pretrained():
+            if model.network is None:
+                raise RuntimeError(model.import_error or "M2MRF network was not imported")
+            weight_path = config.get("pretrained") or hrnet_w48()
+            copied = model.load_imagenet(weight_path)
+            print(f"pretrained tensors copied into backbone: {copied} from {weight_path}", flush=True)
+
+        if model.network is None:
+            raise RuntimeError(model.import_error or "M2MRF network was not imported")
+        return run_cell(
+            config_path,
+            config,
+            model,
+            declared,
+            run_dir,
+            predict,
+            diagnostic,
+            resume,
+            before_training=_pretrained,
+            extra_deviations=["learning rate stays at the author value; it is not multiplied by the GPU count"],
+        )
     mean = model.card.normalization["mean"]
     std = model.card.normalization["std"]
     # PreparedSplit is the B1 canvas. Its augment flag is the 0.5 horizontal flip.
@@ -119,7 +144,16 @@ def train(config_path, run_dir=None, diagnostic=False, score_only=False):
         )
         val_loader = _loader(val_set, 1, False, config["num_workers"], model.card.pad_multiple, config["seed"])
         best = run_training(
-            model, train_loader, val_loader, resolved, config, run_dir, micro, per_epoch
+            model,
+            train_loader,
+            val_loader,
+            resolved,
+            config,
+            run_dir,
+            micro,
+            per_epoch,
+            eval_every=evaluation_interval(declared, config),
+            resume=resume,
         )
     finally:
         seconds = time.perf_counter() - started
@@ -152,10 +186,11 @@ def main(argv=None):
     parser.add_argument("--run-dir", default=None)
     parser.add_argument("--diagnostic", action="store_true")
     parser.add_argument("--score-only", action="store_true")
+    parser.add_argument("--resume", action="store_true", help="continue from run-dir/resume.pt when it exists")
     args = parser.parse_args(argv)
     if args.diagnostic and args.score_only:
         raise SystemExit("--diagnostic does not score the test split; drop one of the flags")
-    train(args.config, args.run_dir, diagnostic=args.diagnostic, score_only=args.score_only)
+    train(args.config, args.run_dir, diagnostic=args.diagnostic, score_only=args.score_only, resume=args.resume)
 
 
 if __name__ == "__main__":
