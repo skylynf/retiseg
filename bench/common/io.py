@@ -6,6 +6,9 @@ Dataset directory (written by bench/data/*):
     <dataset_dir>/images/<id>.<ext>    original-resolution RGB image
     <dataset_dir>/masks/<CLS>/<id>.png binary mask; a missing file means no lesion of that class
     <dataset_dir>/fov/<id>.png         binary field-of-view mask
+    <dataset_dir>/ignore/<CLS>/<id>.png optional; pixels left out of that class in evaluation
+                                       and in the loss (Retinal-Lesions gray 127). Missing = none.
+    <dataset_dir>/masks_ext/<CLS>/<id>.png classes outside the four; never in the four-class mean
 
 Prediction directory (written by bench/predict.py):
     <pred_dir>/<CLS>/<id>.png          16-bit grayscale, probability = value / PROB_LEVELS,
@@ -62,6 +65,21 @@ def read_mask(dataset_dir, cls, image_id, shape=None):
 
 def read_fov(dataset_dir, image_id):
     return _read_binary(Path(dataset_dir) / "fov" / f"{image_id}.png")
+
+
+def read_ignore(dataset_dir, cls, image_id, shape):
+    path = Path(dataset_dir) / "ignore" / cls / f"{image_id}.png"
+    if not path.exists():
+        return np.zeros(shape, dtype=bool)
+    return _read_binary(path)
+
+
+def image_path(dataset_dir, image_id):
+    """The one image file of an id; IDRiD and DDR are .jpg, most other sources .png."""
+    found = sorted((Path(dataset_dir) / "images").glob(f"{image_id}.*"))
+    if len(found) != 1:
+        raise FileNotFoundError(f"expected one image for {image_id} in {dataset_dir}/images, found {len(found)}")
+    return found[0]
 
 
 def write_prob(pred_dir, cls, image_id, prob):

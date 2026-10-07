@@ -38,7 +38,8 @@ def _load_image(dataset_dir, pred_dir, image_id, classes, proto):
         masks = io.apply_m2mrf_overwrite(masks)
     elif proto["label_policy"] != "multilabel":
         raise ValueError(f"unknown label_policy {proto['label_policy']}")
-    valid = fov if proto["use_fov"] else np.ones_like(fov)
+    base = fov if proto["use_fov"] else np.ones_like(fov)
+    valid = {c: base & ~io.read_ignore(dataset_dir, c, image_id, fov.shape) for c in classes}
     probs = {}
     for c in classes:
         q = io.read_prob_quantized(pred_dir, c, image_id)
@@ -58,7 +59,7 @@ def pooled_histograms(dataset_dir, split, pred_dir, proto):
     for image_id in io.load_split(dataset_dir, split):
         _, valid, masks, probs = _load_image(dataset_dir, pred_dir, image_id, classes, proto)
         for c in classes:
-            pos, neg = pixel.histograms(probs[c], masks[c], valid, L)
+            pos, neg = pixel.histograms(probs[c], masks[c], valid[c], L)
             pooled[c][0] += pos
             pooled[c][1] += neg
     return pooled
@@ -106,7 +107,7 @@ def evaluate(dataset_dir, split, pred_dir, proto, val_pred_dir=None, val_split="
         fov, valid, masks, probs = _load_image(dataset_dir, pred_dir, image_id, classes, proto)
         fov_area = int(fov.sum())
         for c in classes:
-            pos, neg = pixel.histograms(probs[c], masks[c], valid, L)
+            pos, neg = pixel.histograms(probs[c], masks[c], valid[c], L)
             pooled[c][0] += pos
             pooled[c][1] += neg
             img_pos[c][i] = pixel.coarsen(pos, B)
@@ -117,8 +118,8 @@ def evaluate(dataset_dir, split, pred_dir, proto, val_pred_dir=None, val_split="
                 if tp + fn > 0:
                     img_dice[(c, tname)][i] = 2 * tp / (2 * tp + fp + fn)
                 if proto["lesion_metrics"]:
-                    pred_bin = (probs[c] >= q_min) & valid
-                    m = lesion.match_lesions(pred_bin, masks[c] & valid, proto["connectivity"])
+                    pred_bin = (probs[c] >= q_min) & valid[c]
+                    m = lesion.match_lesions(pred_bin, masks[c] & valid[c], proto["connectivity"])
                     lesion_acc[(c, tname)].add(m, fov_area)
 
     boot = proto["bootstrap"]

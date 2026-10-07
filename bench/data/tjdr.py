@@ -15,9 +15,19 @@ import numpy as np
 from PIL import Image
 
 from bench.common.io import LESION_CLASSES
+from bench.data import splits as split_lists
 
 CLASS_VALUE = {"EX": 1, "HE": 2, "MA": 3, "SE": 4}
 EXPECTED = {"train": 448, "test": 113}
+# The two fields are exported as two datasets. Official test stays whole;
+# 15% of each field's official training images become validation.
+FIELDS = {"TJDR_std": "standard", "TJDR_uwf": "ultrawide"}
+EXPECTED_FIELD = {
+    "TJDR_std": {"train": 172, "val": 30, "test": 55},
+    "TJDR_uwf": {"train": 209, "val": 37, "test": 58},
+}
+VAL_FRACTION = 0.15
+FIELD_DEGREES = {"standard": "35-50", "ultrawide": "133"}
 
 
 def _png_size(header):
@@ -62,7 +72,8 @@ class Tjdr:
 
     def field(self, image_id):
         archive, name = self._index[image_id]["image"]
-        width, height = _png_size(archive.read(name)[:24])
+        with archive.open(name) as handle:
+            width, height = _png_size(handle.read(24))
         if (width, height) == (2048, 2048):
             return "standard"
         if (width, height) == (3912, 3912):
@@ -81,6 +92,45 @@ class Tjdr:
         with Image.open(io.BytesIO(archive.read(name))) as image:
             labels = np.asarray(image)
         return labels == CLASS_VALUE[lesion]
+
+    def read_masks(self, image_id):
+        archive, name = self._index[image_id]["annotation"]
+        with Image.open(io.BytesIO(archive.read(name))) as image:
+            labels = np.asarray(image)
+        if labels.ndim != 2:
+            raise ValueError(f"{image_id} annotation is not a single-channel label map")
+        unknown = sorted(set(np.unique(labels).tolist()) - {0, *CLASS_VALUE.values()})
+        if unknown:
+            raise ValueError(f"{image_id} annotation has values {unknown} outside 0-4")
+        return {cls: labels == CLASS_VALUE[cls] for cls in LESION_CLASSES}
+
+    def read_image_bytes(self, image_id):
+        archive, name = self._index[image_id]["image"]
+        return archive.read(name)
+
+    def make_splits(self):
+        """Generate both field lists in one draw: standard first, then ultrawide."""
+        rng = split_lists.generator()
+        official = self.splits()
+        out = {}
+        for name, field in FIELDS.items():
+            train = [i for i in official["train"] if self.field(i) == field]
+            kept, val = split_lists.holdout({field: train}, VAL_FRACTION, rng)
+            test = sorted(i for i in official["test"] if self.field(i) == field)
+            out[name] = {"train": kept, "val": val, "test": test}
+        return out
+
+
+SPLIT_RULE = (
+    "Official TJDR test kept whole. Validation is 15% of the official training images of the same field, "
+    "drawn with Generator(PCG64(20261003)): standard field first, then ultrawide."
+)
+
+
+def frozen_splits(name):
+    if name not in FIELDS:
+        raise KeyError(name)
+    return split_lists.read_frozen(name)
 
 
 def open_tjdr(repo_root):
