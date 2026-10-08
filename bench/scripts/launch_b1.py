@@ -741,7 +741,9 @@ def queue_all(formal, gpus):
                 print(f"skip {wave} {job['name']}: {marker} exists", flush=True)
                 continue
             running = in_progress(run_dir)
-            if running is not None and wave != "score-seed0":
+            # A seed-0 training still running leaves its score item queued behind the gate;
+            # a score already running is skipped like any other running job.
+            if running is not None and (wave != "score-seed0" or running.startswith("== start score-seed0 ")):
                 print(f"skip {wave} {job['name']}: still running ({running})", flush=True)
                 continue
             key = (job["model"], job["dataset"])
