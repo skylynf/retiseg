@@ -144,7 +144,7 @@ E2 主表（B-std，B1 为第二列）：训练只在 IDRiD、DDR，训练任务
    排名检验（Friedman 加临界差图）按测试集计，共七个测试集；另报只用细粒度测试集的版本。
 E3a 独立测试：上面这一步本身，全部是推理，用 B-std 的 3 个种子和 B1 的种子 0。
 E3b 训练来源交叉效应（模板的 cross effects）：代表模型 U-Net、nnU-Net、M2MRF、SAM2-UNet、RETFound 加 UPerNet 在 TJDR_std、FGADR 上各训 3 个种子（5 × 2 × 3 = 30 个任务）。与 E2 合起来得到“训练集 {IDRiD、DDR、TJDR_std、FGADR} × 测试集 {全部}”的矩阵，表头标粒度档。
-   预算：沿用像素等效 epoch 的定义。IDRiD、DDR 的探测定出等效 epoch 以后，TJDR_std 和 FGADR 只用 U-Net 跑一次两倍预算的探测（2 个任务，几小时），看验证 mAUPR 是否在前一半见顶，再冻结写进 bs_frozen.yaml。只看训练和验证。
+   预算：沿用像素等效 epoch 的定义。IDRiD、DDR 的探测定出等效 epoch 以后，TJDR_std 和 FGADR 只用 U-Net 跑一次两倍预算的探测（2 个任务，几小时），按 11 第 10 步的规则判断（最高点落在探测最后 10% 才翻倍），再冻结写进 bs_frozen.yaml。只看训练和验证。
 E8 训练量（模板的 size effects）：原计划的 DDR 10%–100% 和 DDR+IDRiD 之外，再加一档“细粒度合并”（IDRiD+DDR+TJDR_std）和一档“全部合并”（再加 FGADR），只用代表模型，测试仍是全部测试集。这一档对应模板的“多来源合成训练集”。
 E4 标注粒度：代表模型 U-Net、nnU-Net、M2MRF、SAM2-UNet、RETFound 加 UPerNet。训练集六档：DDR；FGADR；Retinal-Lesions；DDR+FGADR；DDR+Retinal-Lesions；DDR+FGADR 抽 383 张。最后一档和 DDR+FGADR 对比，把“数据更多”和“标注更粗”分开。所有档的训练量（图像次数）相同。测试固定在细粒度库：IDRiD 测试、TJDR_std 测试、MAPLES-DR（到位后），再加 DiaRetDB1。
    同时做标注风格审计：每个库每类的“每图病灶数 × 平均面积”联合分布（Playout 2024 图 2 的做法），面积按视野直径归一化；扩展 bench/eval/label_audit.py。这张图放在 E4 的结果前面，先用数据说明各库为什么归到这一档。
