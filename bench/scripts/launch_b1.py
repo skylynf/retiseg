@@ -733,6 +733,7 @@ def main(argv=None):
     parser.add_argument("--run-dir", default=None)
     parser.add_argument("--max-steps", type=int, default=_SMOKE_STEPS)
     parser.add_argument("--only", default=None, help="comma-separated model names; other jobs of the wave are left out")
+    parser.add_argument("--datasets", default=None, help="comma-separated datasets, e.g. IDRiD; other jobs of the wave are left out")
     args = parser.parse_args(argv)
     if args.capped_train:
         if not args.script or not args.config or not args.run_dir:
@@ -776,6 +777,13 @@ def main(argv=None):
         if unknown:
             raise SystemExit(f"--only names unknown models: {unknown}")
         jobs = [job for job in jobs if job["model"] in only]
+    if args.datasets:
+        wanted = {name.strip() for name in args.datasets.split(",") if name.strip()}
+        known = {str(job["dataset"]) for job in formal}
+        unknown = sorted(wanted - known)
+        if unknown:
+            raise SystemExit(f"--datasets names unknown datasets: {unknown}; known: {sorted(known)}")
+        jobs = [job for job in jobs if str(job["dataset"]) in wanted]
     if args.submit and wave in ("rest", "score-seed0"):
         assert_seed0_current([job for job in formal if int(job["seed"]) == 0])
     for job in jobs:

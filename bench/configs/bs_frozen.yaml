@@ -25,9 +25,12 @@ primary_metric: mAUPR
 # canvas pixels in the training split, so a 224 patch model draws about 18
 # times more patches than a 960 patch model for the same epoch. Steps per
 # epoch = ceil(ceil(canvas pixels / patch pixels) / effective batch).
-# Provisional. Fixed after the budget probe (U-Net and M2MRF seed 0 at twice
-# this amount, train and validation only) shows validation mAUPR has stopped
-# rising; the probe result is written in docs/ops/00_进度.txt.
+# Fixed per dataset after the budget probe (U-Net and M2MRF seed 0 at twice
+# this amount, train and validation only): a dataset doubles only when a probe
+# peak falls in the last 10% of the probe steps. Probe results and the rule
+# revision are written in docs/ops/00_进度.txt.
+# IDRiD frozen 2026-10-08 (peaks at 15% and 80%). DDR provisional until the
+# M2MRF DDR probe finishes.
 equivalent_epochs:
   IDRiD: 1000
   DDR: 200

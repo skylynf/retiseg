@@ -10,6 +10,7 @@
 #   bash bench/scripts/server_run.sh e1r        M2MRF author retrain, effective batch 4
 #   bash bench/scripts/server_run.sh b1-seed0   B1 seed 0, train and validation
 #   bash bench/scripts/server_run.sh bs-seed0   B-std seed 0, after the budget is fixed
+#                                               (RETISEG_DATASETS=IDRiD submits one dataset)
 #   bash bench/scripts/server_run.sh bs-score0 | b1-score0   test maps and metrics for seed 0
 #   bash bench/scripts/server_run.sh bs-rest    B-std seeds 1 and 2
 #   bash bench/scripts/server_run.sh status | curves [GLOB]
@@ -173,7 +174,8 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
   e1r) stage_e1r ;;
   b1-seed0) require_clean; launch b1_seed0 --submit --seed0 ;;
   b1-score0) require_clean; launch b1_score0 --submit --score-seed0 ;;
-  bs-seed0) require_clean; launch bs_seed0 --jobs "$BS_JOBS" --submit --seed0 ;;
+  bs-seed0) require_clean; launch "bs_seed0${RETISEG_DATASETS:+_${RETISEG_DATASETS//,/_}}" --jobs "$BS_JOBS" --submit --seed0 \
+    ${RETISEG_DATASETS:+--datasets "$RETISEG_DATASETS"} ;;
   bs-score0) require_clean; launch bs_score0 --jobs "$BS_JOBS" --submit --score-seed0 ;;
   bs-rest) require_clean; launch bs_rest --jobs "$BS_JOBS" --submit --rest ;;
   status) py retiseg bench/scripts/run_status.py status --glob "${2:-*}" ;;
