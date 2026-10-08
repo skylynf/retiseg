@@ -1,0 +1,26 @@
+文献ID: B-SWIN-2021
+PDF: literature/papers/05_general_baselines/Liu2021_Swin_Transformer.pdf
+批次: batch1
+角色: 骨干
+主任务纳入: 基线
+归类: 基线-通用分割
+身份核对: 一致
+题名: Swin Transformer
+作者: Ze Liu et al.
+年份: 2021
+出处: ICCV
+标识: arXiv:2103.14030
+任务: 图像分类骨干
+成像: 自然图像
+病灶: 无
+数据: ImageNet
+标注粒度: 不适用
+模型族: 移动窗口 Transformer
+额外输入: 无
+报告指标: 分类
+代码: 开源实现，含 OpenMMLab
+权重: 公开骨干
+重训轨: 不单独当分割模型；分割用 Swin-Unet
+摘要: 分类骨干。和 Swin-Unet 分开记录。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

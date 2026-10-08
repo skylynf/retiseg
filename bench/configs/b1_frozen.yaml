@@ -20,7 +20,7 @@ splits:
   IDRiD: {train: train, val: val, test: test}
   DDR: {train: train, val: val, test: test}
 # Registered design is five IDRiD seeds and three DDR seeds.
-# The current batch runs seed 0 only. See literature/synthesis/09_第一批任务.txt.
+# The current batch runs seed 0 only. See docs/design/09_第一批任务.txt.
 seeds:
   IDRiD: 5
   DDR: 3

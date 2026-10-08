@@ -1,0 +1,26 @@
+文献ID: F-TPDRSEG-2024
+PDF: literature/papers/04_foundation_models/dr_adapted/Li2024_TP-DRSeg.pdf
+批次: batch1
+角色: 基础模型用于本病
+主任务纳入: 是
+归类: 主比较-基础模型适配
+身份核对: 一致
+题名: TP-DRSeg
+作者: Wenxue Li, Xinyu Xiong, Peng Xia, Lie Ju, Zongyuan Ge
+年份: 2024
+出处: MICCAI
+标识: arXiv:2406.15764
+任务: 文本提示的四类分割
+成像: 彩色眼底
+病灶: 四类
+数据: IDRiD, DDR
+标注粒度: 细像素
+模型族: SAM 加文本先验，参数高效微调
+额外输入: 文本
+报告指标: mDice, AUC-ROC, AUC-PR
+代码: 论文给出的 https://github.com/wxliii/TP-DRSeg 已返回 404。同论文作者署名的 https://github.com/WangShuhui-23/TP-DRSeg 只有 README，没有训练代码。已克隆后者到 official_code/TP-DRSeg，目前不能复现。
+权重: 待核实
+重训轨: 主比较集。论文链接失效，现有仓库没有训练代码，目前不能重训
+摘要: 第一次把专用模型和 SAM 系列放在同一张表。零样本接近失败，文本先验进一步提高。本项目改用 AUPR 和官方划分复核。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

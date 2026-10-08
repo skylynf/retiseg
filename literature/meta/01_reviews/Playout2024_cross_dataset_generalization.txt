@@ -1,0 +1,26 @@
+文献ID: R-PLAYOUT-2024
+PDF: literature/papers/01_reviews/Playout2024_cross_dataset_generalization.pdf
+批次: batch1
+角色: 先前基准
+主任务纳入: 作为先前基准
+归类: 综述
+身份核对: 一致，arXiv:2405.08329
+题名: Cross-dataset generalization for retinal lesions segmentation
+作者: Clement Playout, Farida Cheriet
+年份: 2024
+出处: arXiv:2405.08329
+标识: arXiv:2405.08329
+任务: 跨数据集病灶分割
+成像: 彩色眼底
+病灶: EX, CWS/SE, HE, MA
+数据: IDRiD, DDR, FGADR, Retinal-Lesions, MAPLES-DR
+标注粒度: 细、粗、混合三档
+模型族: U-Net 类基线、权重平均与集成
+额外输入: 无
+报告指标: 分割指标
+代码: 已读文本未发现作者代码
+权重: 未发现
+重训轨: 不把文中临时基线当作专用模型
+摘要: 最接近的已有工作。细标注数据集之间较容易迁移，混入粗标注的 Retinal-Lesions 往往会拉低细标注测试。本项目在此之上补上专用模型复现和基础模型。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

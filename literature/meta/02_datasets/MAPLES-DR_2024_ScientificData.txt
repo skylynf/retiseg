@@ -1,0 +1,26 @@
+文献ID: D-MAPLES-2024
+PDF: literature/papers/02_datasets/MAPLES-DR_2024_ScientificData.pdf
+批次: batch1
+角色: 数据集
+主任务纳入: 是
+归类: 数据集-细像素
+身份核对: 一致
+题名: MAPLES-DR
+作者: Gabriel Lepetit-Aimon, Clement Playout, Marie Carole Boucher, Renaud Duval, Michael H. Brent, Farida Cheriet
+年份: 2024
+出处: Scientific Data
+标识: doi:10.1038/s41597-024-03739-6
+任务: 解剖结构与病灶像素标注
+成像: MESSIDOR 彩色眼底
+病灶: MA, HE, EX, CWS，以及视盘、黄斑、血管等
+数据: 约 200 张
+标注粒度: 细像素，七名专科医师
+模型族: 数据
+额外输入: 图像须另取 MESSIDOR
+报告指标: 数据说明
+代码: 论文提到 LIV4D/AnnotationPlatform 与 gabriel-lepetitaimon/fundus-vessels-toolkit
+权重: 不适用
+重训轨: 细标注外部测试
+摘要: 在已有公开图像上重做细标注，并明确对比了粗标注数据集。
+
+管理备注: 2026-10-03 本地还没有这份数据。标注用 maples-dr 包，首次加载从 Figshare 自动下载。原图是 MESSIDOR，要单独准备。

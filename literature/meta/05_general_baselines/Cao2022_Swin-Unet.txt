@@ -1,0 +1,26 @@
+文献ID: B-SWINUNET-2022
+PDF: literature/papers/05_general_baselines/Cao2022_Swin-Unet.pdf
+批次: batch2
+角色: 重训基线
+主任务纳入: 基线
+归类: 基线-通用分割
+身份核对: 一致
+题名: Swin-Unet
+作者: Hu Cao et al.
+年份: 2022
+出处: ECCV Workshops
+标识: arXiv:2105.05537
+任务: 医学分割
+成像: 多种
+病灶: 原文无 DR
+数据: 医学集
+标注粒度: 像素
+模型族: 纯 Swin 的 U 形网络
+额外输入: 无
+报告指标: Dice
+代码: https://github.com/HuCaoFighting/Swin-Unet
+权重: 待核实
+重训轨: Transformer 分割基线
+摘要: 没有 DR 专用模块的 Transformer U-Net，用来对照 RTNet、VTA 和 H2Former。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

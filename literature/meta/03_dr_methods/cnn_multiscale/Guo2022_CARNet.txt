@@ -1,0 +1,26 @@
+文献ID: M-CARNET-2022
+PDF: literature/papers/03_dr_methods/cnn_multiscale/Guo2022_CARNet.pdf
+批次: batch1
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致
+题名: CARNet
+作者: Yanfei Guo, Yanjun Peng
+年份: 2022
+出处: Complex and Intelligent Systems 8:1681-1701
+标识: doi:10.1007/s40747-021-00630-4
+任务: 多病灶分割
+成像: 彩色眼底
+病灶: 多类 DR 病灶
+数据: IDRiD, E-ophtha, DDR
+标注粒度: 细像素为主
+模型族: 全图与图像块双编码器
+额外输入: 仅图像，但是全图加局部块
+报告指标: 分割指标
+代码: 已读文本未发现作者代码
+权重: 未发现
+重训轨: 主比较集；无代码则只做原文审计
+摘要: 整图提供上下文，图像块保留小病灶。作者是 Yanfei Guo，不是 L-Seg 的 Song Guo。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

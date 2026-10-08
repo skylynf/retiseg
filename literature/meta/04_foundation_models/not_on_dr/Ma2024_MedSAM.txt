@@ -1,0 +1,26 @@
+文献ID: F-MEDSAM-2024
+PDF: literature/papers/04_foundation_models/not_on_dr/Ma2024_MedSAM.pdf
+批次: batch1
+角色: 医学基础模型
+主任务纳入: 基线
+归类: 基线-基础模型未做本病
+身份核对: 一致
+题名: Segment anything in medical images
+作者: Jun Ma et al.
+年份: 2024
+出处: Nature Communications 15:654
+标识: doi:10.1038/s41467-024-44824-z
+任务: 跨模态医学分割
+成像: 十余种模态，眼底只占一小部分
+病灶: 多样
+数据: 约 157 万图像-掩膜对
+标注粒度: 各来源不同
+模型族: SAM 的医学微调
+额外输入: 框提示
+报告指标: 多模态 Dice
+代码: https://github.com/bowang-lab/MedSAM
+权重: 官方权重
+重训轨: 基线，在 IDRiD 与 DDR 上按同一提示协议重跑
+摘要: 眼底不是其主要训练分布。需要自己的四类 AUPR，而不是多模态平均 Dice。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

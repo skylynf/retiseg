@@ -14,7 +14,7 @@ PAPER = {
     "year": 2023,
     "venue": "Neurocomputing 527:100-109",
     "doi": "10.1016/j.neucom.2023.01.013",
-    "pdf": "literature/batch2/03_fundus_methods/Wang2023_CLC-Net.pdf",
+    "pdf": "literature/papers/03_dr_methods/cnn_multiscale/Wang2023_CLC-Net.pdf",
 }
 
 # Section 4.1 and Figure 2. These are written in the paper.

@@ -27,7 +27,7 @@ primary_metric: mAUPR
 # epoch = ceil(ceil(canvas pixels / patch pixels) / effective batch).
 # Provisional. Fixed after the budget probe (U-Net and M2MRF seed 0 at twice
 # this amount, train and validation only) shows validation mAUPR has stopped
-# rising; the probe result is written in literature/synthesis/00_进度.txt.
+# rising; the probe result is written in docs/ops/00_进度.txt.
 equivalent_epochs:
   IDRiD: 1000
   DDR: 200

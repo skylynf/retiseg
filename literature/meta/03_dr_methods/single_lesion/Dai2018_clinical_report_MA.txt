@@ -1,0 +1,26 @@
+文献ID: M-DAI-2018
+PDF: literature/papers/03_dr_methods/single_lesion/Dai2018_clinical_report_MA.pdf
+批次: batch1
+角色: 单病灶检出
+主任务纳入: 旁支
+归类: 单病灶
+身份核对: 一致，接受稿
+题名: Clinical report guided retinal microaneurysm detection
+作者: Ling Dai et al.
+年份: 2018
+出处: IEEE TMI
+标识: doi:10.1109/TMI.2018.2794988
+任务: 微动脉瘤检出
+成像: 彩色眼底加临床报告
+病灶: MA
+数据: 临床与公开眼底
+标注粒度: 候选区域
+模型族: 多筛 CNN
+额外输入: 临床报告
+报告指标: 检出
+代码: 已读文本未发现作者代码
+权重: 未发现
+重训轨: 不进入像素主榜
+摘要: 用报告监督找出可能的微动脉瘤区域。它是检出方法，不是四类分割。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

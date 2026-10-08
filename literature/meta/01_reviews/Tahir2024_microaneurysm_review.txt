@@ -1,0 +1,26 @@
+文献ID: R-TAHIR-2024
+PDF: literature/papers/01_reviews/Tahir2024_microaneurysm_review.pdf
+批次: batch1
+角色: 系统综述
+主任务纳入: 否，只覆盖微动脉瘤
+归类: 综述
+身份核对: 一致
+题名: Advances in retinal microaneurysms detection, segmentation and datasets
+作者: Muhammad Zeeshan Tahir, Muhammad Nasir, Sanyuan Zhang
+年份: 2024
+出处: Multimedia Tools and Applications 83:74897-74935
+标识: doi:10.1007/s11042-023-18089-5
+任务: 微动脉瘤检出与分割
+成像: 彩色眼底
+病灶: MA
+数据: DIARETDB, IDRiD, DDR, APTOS, ROC, e-ophtha, FGADR
+标注粒度: 区分图像级与像素级
+模型族: 综述
+额外输入: 无
+报告指标: 检出与分割指标
+代码: 不适用
+权重: 不适用
+重训轨: 不重训
+摘要: 把方法分成传统图像处理和深度学习。支持把 ROC 放在病灶级检出，不放进像素重叠榜。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。

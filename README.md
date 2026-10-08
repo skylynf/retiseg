@@ -1,6 +1,6 @@
 # retiseg
 
-眼底照片上四类糖尿病视网膜病变病灶（MA、HE、EX、SE）的统一评测和训练入口。文献账本在 `literature/meta/LEDGER.tsv`，进度在 `literature/synthesis/00_进度.txt`。
+眼底照片上四类糖尿病视网膜病变病灶（MA、HE、EX、SE）的统一评测和训练入口。文档按 Nature Methods 模板论文（Lu 2026）的路径组织，总索引在 `docs/README.txt`：论文写作在 `docs/paper/`，设计在 `docs/design/`，执行记录在 `docs/ops/`（进度 `docs/ops/00_进度.txt`）。文献在 `literature/`，账本是 `literature/LEDGER.tsv`，流程见 `literature/README.txt`。
 
 ## 克隆
 
@@ -32,4 +32,4 @@ git submodule update --init --depth 1 -- \
 - `runs/`：训练输出
 - `pretrained/`：ImageNet 等权重
 
-需要的权重见 `literature/synthesis/09_第一批任务.txt` 第九节。
+需要的权重见 `docs/design/09_第一批任务.txt` 第九节。

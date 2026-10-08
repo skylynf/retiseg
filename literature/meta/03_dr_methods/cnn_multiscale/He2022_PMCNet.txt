@@ -1,0 +1,26 @@
+文献ID: M-PMCNET-2022
+PDF: literature/papers/03_dr_methods/cnn_multiscale/He2022_PMCNet.pdf
+批次: batch2
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 一致
+题名: PMCNet
+作者: Along He, Kai Wang, Tao Li, Wang Bo, Hong Kang, Huazhu Fu
+年份: 2022
+出处: IEEE TMI 41:3146-3157
+标识: arXiv:2205.15720
+任务: 多类眼底病灶分割
+成像: 彩色眼底
+病灶: 多类 DR 病灶
+数据: 三个公开集
+标注粒度: 含细像素集
+模型族: 相邻层渐进融合加动态注意力
+额外输入: 仅图像
+报告指标: 多类分割
+代码: https://github.com/NKUhealong/PMCNet 已于 2026-10-03 克隆到 official_code/PMCNet。有 train.py、models.py、test.py、utils.py。训练入口是 python train.py，默认数据路径是 ./data/DDR/train，和仓库里自带的 ./data/train 不一致。环境写的是 Python 3.6、TensorFlow 1.13.1、Keras 2.3.1。
+权重: 仓库 weights/ 只有 readme.txt，没有训练好的模型。README 要求另下 ImageNet 预训练并放到仓库根目录。
+重训轨: 有训练代码，可以进轨 B。没有作者权重，不能进轨 A。
+摘要: 高低层特征尺度不同，直接相加会冲突。渐进融合用来减轻这种冲突。
+
+管理备注: 可在文末追加笔记。论文表格中的数字必须注明来源：原文汇报、作者权重或本项目重训。
