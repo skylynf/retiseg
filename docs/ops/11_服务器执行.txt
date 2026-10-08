@@ -39,6 +39,8 @@
 9. RETISEG_GPUS="5 6 7" bash bench/scripts/server_run.sh b1-seed0
    B1 种子 0，16 个任务，只训练和验证。B1 的预算不取决于探测结果，可以先跑。
    启动器开始时只取空闲的卡；RETISEG_GPUS 再把范围限制在 5–7，避免 probe 刚启动、还没占上卡时被抢。
+   空闲指该卡上计算进程占用的显存合计少于 RETISEG_BUSY_MIB（默认 2048）。别人只留一个闲置的 CUDA 上下文（约 0.5GB）时，这张卡照样能用；跑着训练或模型服务的卡不会被拿走。
+   2026-10-08 起 B1 暂停，这一步先不做，见 00。
 
 四、定预算，再跑主表
 10. bash bench/scripts/server_run.sh curves 'BSprobe_*'

@@ -386,7 +386,13 @@ def format_command(job, config, run_dir, smoke, py_argv=None, wave="formal"):
 
 
 def free_gpu_ids():
-    """GPU indexes with no compute process. Falls back to 0-7 when nvidia-smi is absent."""
+    """GPU indexes whose compute processes hold less than RETISEG_BUSY_MIB in total.
+
+    The default 2048 MiB lets a card through when another user only keeps an idle
+    CUDA context on it (about 0.5 GB), and still refuses cards running a training
+    or a model server. Falls back to 0-7 when nvidia-smi is absent.
+    """
+    limit_mib = float(os.environ.get("RETISEG_BUSY_MIB", "2048"))
     try:
         listing = subprocess.check_output(
             ["nvidia-smi", "--query-gpu=index,uuid", "--format=csv,noheader"],
@@ -394,18 +400,25 @@ def free_gpu_ids():
             stderr=subprocess.DEVNULL,
         )
         busy_text = subprocess.check_output(
-            ["nvidia-smi", "--query-compute-apps=gpu_uuid", "--format=csv,noheader"],
+            ["nvidia-smi", "--query-compute-apps=gpu_uuid,used_memory", "--format=csv,noheader,nounits"],
             text=True,
             stderr=subprocess.DEVNULL,
         )
     except (subprocess.CalledProcessError, FileNotFoundError):
         print("nvidia-smi unavailable; --submit cycles GPU 0-7", flush=True)
         return list(range(8))
-    busy = set()
+    held = {}
     for line in busy_text.splitlines():
-        uuid = line.split(",")[0].strip()
-        if uuid and uuid.lower() != "gpu_uuid":
-            busy.add(uuid)
+        parts = [part.strip() for part in line.split(",")]
+        uuid = parts[0]
+        if not uuid or uuid.lower() == "gpu_uuid":
+            continue
+        try:
+            mib = float(parts[1])
+        except (IndexError, ValueError):
+            mib = float("inf")
+        held[uuid] = held.get(uuid, 0.0) + mib
+    busy = {uuid for uuid, mib in held.items() if mib >= limit_mib}
     allowed = os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()
     free = []
     for line in listing.splitlines():
