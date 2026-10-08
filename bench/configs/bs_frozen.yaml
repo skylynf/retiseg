@@ -26,14 +26,15 @@ primary_metric: mAUPR
 # times more patches than a 960 patch model for the same epoch. Steps per
 # epoch = ceil(ceil(canvas pixels / patch pixels) / effective batch).
 # Fixed per dataset after the budget probe (U-Net and M2MRF seed 0 at twice
-# this amount, train and validation only): a dataset doubles only when a probe
-# peak falls in the last 10% of the probe steps. Probe results and the rule
-# revision are written in docs/ops/00_进度.txt.
-# IDRiD frozen 2026-10-08 (peaks at 15% and 80%). DDR provisional until the
-# M2MRF DDR probe finishes.
+# this amount, train and validation only): validation mAUPR is smoothed with a
+# centred 3-point mean (2 points at the ends), and a dataset doubles only when
+# a smoothed peak is at or after 90% of the probe steps. Probe results and the
+# rule revisions are written in docs/ops/00_进度.txt.
+# Frozen 2026-10-08. IDRiD stays at 1000 (smoothed peaks at 15% and 82%).
+# DDR doubles from 200 to 400 (smoothed peaks of both probes at 100%).
 equivalent_epochs:
   IDRiD: 1000
-  DDR: 200
+  DDR: 400
 # Validations per run, spaced in whole epochs. The checkpoint with the highest
 # validation mAUPR is scored; the last step is the sensitivity checkpoint.
 n_evals: 20

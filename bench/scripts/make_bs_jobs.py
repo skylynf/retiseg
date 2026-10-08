@@ -2,7 +2,9 @@
 
 One cell per model, dataset and seed in launch_b1._PAIRS["BS"]. Cells carry
 no budget keys; bs_frozen.yaml sets the budget. est_hours only orders the
-queue: rough A100 hours at the provisional budget, larger for slower nets.
+queue: A100 hours at the frozen budget. IDRiD values are the 2026-10-08 seed-0
+runs (Swin-Unet and H2Former guessed); DDR at 400 equivalent epochs draws about
+4 times the IDRiD patch pixels, so DDR is 4 times IDRiD.
 
     python bench/scripts/make_bs_jobs.py
 """
@@ -19,14 +21,14 @@ import yaml
 from bench.scripts.launch_b1 import _BINDING, _PAIRS, _SLUG, active_models
 
 EST_HOURS = {
-    "U-Net": (3, 5),
-    "DeepLabv3": (4, 7),
-    "HRNet": (4, 7),
-    "Swin-Unet": (2, 4),
-    "FCT": (3, 5),
-    "H2Former": (5, 9),
-    "M2MRF": (7, 12),
-    "HACDR-Net": (6, 10),
+    "U-Net": (1.5, 6),
+    "DeepLabv3": (4, 15),
+    "HRNet": (2.6, 10.5),
+    "Swin-Unet": (4, 16),
+    "FCT": (24, 96),
+    "H2Former": (5, 20),
+    "M2MRF": (3.5, 12.5),
+    "HACDR-Net": (6, 24),
 }
 # Budget probe: seed 0 at twice the frozen amount, train and validation only.
 # Not in bs_jobs.yaml; bench/scripts/server_run.sh probe runs them.

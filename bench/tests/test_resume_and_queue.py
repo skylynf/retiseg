@@ -218,6 +218,36 @@ def test_shared_queue_runs_longest_first_and_frees_cards_as_they_finish():
     assert len(errors) == 1 and "bad" in errors[0]
 
 
+def test_gated_items_wait_for_their_gate_and_closed_gates_drop_them():
+    started = []
+    opened = {"seed0": False}
+
+    class _Done:
+        def __init__(self, command):
+            self.command = command
+
+        def wait(self):
+            if self.command == "seed0":
+                opened["seed0"] = True
+            return 0
+
+    def _start(command, gpu):
+        started.append(command)
+        return _Done(command)
+
+    def after_seed0():
+        return "open" if opened["seed0"] else "wait"
+
+    items = [
+        ("later", "later", after_seed0),
+        ("dropped", "dropped", lambda: "never"),
+        ("seed0", "seed0"),
+    ]
+    errors = run_queue(items, [0], start=_start, poll_seconds=0.01)
+    assert started == ["seed0", "later"]
+    assert len(errors) == 1 and "dropped" in errors[0]
+
+
 def test_a_job_counts_as_running_until_its_exit_line_or_its_process_is_gone(tmp_path, monkeypatch):
     log = tmp_path / "console.log"
     assert in_progress(tmp_path) is None

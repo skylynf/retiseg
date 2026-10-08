@@ -13,6 +13,10 @@
 #                                               (RETISEG_DATASETS=IDRiD submits one dataset)
 #   bash bench/scripts/server_run.sh bs-score0 | b1-score0   test maps and metrics for seed 0
 #   bash bench/scripts/server_run.sh bs-rest    B-std seeds 1 and 2
+#   RETISEG_GPUS="2 3 4 5 6 7" bash bench/scripts/server_run.sh bs-queue
+#                                               one queue: seed 0, its test maps, then seeds 1 and 2;
+#                                               a model's later waves on a dataset wait for its own seed-0 diagnostic;
+#                                               cards still busy join when they free up
 #   bash bench/scripts/server_run.sh status | curves [GLOB]
 #
 # Long stages start in the background with nohup, so the SSH session can
@@ -176,6 +180,10 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
   b1-score0) require_clean; launch b1_score0 --submit --score-seed0 ;;
   bs-seed0) require_clean; launch "bs_seed0${RETISEG_DATASETS:+_${RETISEG_DATASETS//,/_}}" --jobs "$BS_JOBS" --submit --seed0 \
     ${RETISEG_DATASETS:+--datasets "$RETISEG_DATASETS"} ;;
+  bs-queue)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "bs-queue needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"2 3 4 5 6 7\"" >&2; exit 1; }
+    launch bs_queue --jobs "$BS_JOBS" --submit --queue-all ${RETISEG_DATASETS:+--datasets "$RETISEG_DATASETS"} ;;
   bs-score0) require_clean; launch bs_score0 --jobs "$BS_JOBS" --submit --score-seed0 ;;
   bs-rest) require_clean; launch bs_rest --jobs "$BS_JOBS" --submit --rest ;;
   status) py retiseg bench/scripts/run_status.py status --glob "${2:-*}" ;;

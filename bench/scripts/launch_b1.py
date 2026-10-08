@@ -36,6 +36,7 @@ import socket
 import subprocess
 import sys
 import threading
+import time
 from dataclasses import replace
 from pathlib import Path
 
@@ -385,14 +386,24 @@ def format_command(job, config, run_dir, smoke, py_argv=None, wave="formal"):
     return f"export CUDA_VISIBLE_DEVICES={gpu}; {body}"
 
 
-def free_gpu_ids():
-    """GPU indexes whose compute processes hold less than RETISEG_BUSY_MIB in total.
+def _busy_limit_mib():
+    return float(os.environ.get("RETISEG_BUSY_MIB", "2048"))
 
-    The default 2048 MiB lets a card through when another user only keeps an idle
-    CUDA context on it (about 0.5 GB), and still refuses cards running a training
-    or a model server. Falls back to 0-7 when nvidia-smi is absent.
+
+def _own_process(pid):
+    """True when pid belongs to this user; a process of ours of any size makes the card busy."""
+    try:
+        return os.stat(f"/proc/{int(pid)}").st_uid == os.getuid()
+    except (OSError, ValueError):
+        return False
+
+
+def gpu_memory_held():
+    """{GPU index: MiB held by compute processes}, or None when nvidia-smi is absent.
+
+    A card with any process of this user counts as fully held, because a small
+    job of ours (FCT holds about 1.4 GB) must not get a second job beside it.
     """
-    limit_mib = float(os.environ.get("RETISEG_BUSY_MIB", "2048"))
     try:
         listing = subprocess.check_output(
             ["nvidia-smi", "--query-gpu=index,uuid", "--format=csv,noheader"],
@@ -400,35 +411,59 @@ def free_gpu_ids():
             stderr=subprocess.DEVNULL,
         )
         busy_text = subprocess.check_output(
-            ["nvidia-smi", "--query-compute-apps=gpu_uuid,used_memory", "--format=csv,noheader,nounits"],
+            ["nvidia-smi", "--query-compute-apps=gpu_uuid,pid,used_memory", "--format=csv,noheader,nounits"],
             text=True,
             stderr=subprocess.DEVNULL,
         )
     except (subprocess.CalledProcessError, FileNotFoundError):
-        print("nvidia-smi unavailable; --submit cycles GPU 0-7", flush=True)
-        return list(range(8))
-    held = {}
+        return None
+    by_uuid = {}
     for line in busy_text.splitlines():
         parts = [part.strip() for part in line.split(",")]
         uuid = parts[0]
         if not uuid or uuid.lower() == "gpu_uuid":
             continue
         try:
-            mib = float(parts[1])
+            mib = float(parts[2])
         except (IndexError, ValueError):
             mib = float("inf")
-        held[uuid] = held.get(uuid, 0.0) + mib
-    busy = {uuid for uuid, mib in held.items() if mib >= limit_mib}
-    allowed = os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()
-    free = []
+        if len(parts) > 1 and _own_process(parts[1]):
+            mib = float("inf")
+        by_uuid[uuid] = by_uuid.get(uuid, 0.0) + mib
+    held = {}
     for line in listing.splitlines():
         if not line.strip():
             continue
         index, uuid = [part.strip() for part in line.split(",", 1)]
-        if allowed and index not in allowed:
+        held[int(index)] = by_uuid.get(uuid, 0.0)
+    return held
+
+
+def gpu_is_free(gpu):
+    held = gpu_memory_held()
+    if held is None:
+        return True
+    return held.get(int(gpu), float("inf")) < _busy_limit_mib()
+
+
+def free_gpu_ids():
+    """GPU indexes with no process of ours and less than RETISEG_BUSY_MIB held by others.
+
+    The default 2048 MiB lets a card through when another user only keeps an idle
+    CUDA context on it (about 0.5 GB), and still refuses cards running a training
+    or a model server. Falls back to 0-7 when nvidia-smi is absent.
+    """
+    held = gpu_memory_held()
+    if held is None:
+        print("nvidia-smi unavailable; --submit cycles GPU 0-7", flush=True)
+        return list(range(8))
+    allowed = os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()
+    free = []
+    for index in sorted(held):
+        if allowed and str(index) not in allowed:
             continue
-        if uuid not in busy:
-            free.append(int(index))
+        if held[index] < _busy_limit_mib():
+            free.append(index)
     if not free:
         raise SystemExit("no free GPU; refusing to place a second process on a busy card")
     print("free gpus: " + ",".join(str(gpu) for gpu in free), flush=True)
@@ -528,11 +563,15 @@ def in_progress(run_dir):
     return start
 
 
-def run_queue(commands, gpus, start=None):
-    """Run (label, command) pairs on a shared queue, one process per GPU at a time.
+def run_queue(commands, gpus, start=None, wait_free=False, poll_seconds=60):
+    """Run (label, command[, gate]) items on a shared queue, one process per GPU at a time.
 
-    Each GPU thread takes the next command when its previous process exits,
-    so a long job does not hold back the jobs queued behind it on that card.
+    Each GPU thread takes the first item whose gate is "open" when its previous
+    process exits, so a long job does not hold back the jobs queued behind it on
+    that card. A gate returns "open", "wait" or "never"; "never" drops the item
+    and records it as a failure. With wait_free, a thread also waits until its
+    card is free (see gpu_is_free) before it takes an item, so cards still
+    held by another launcher's jobs join the queue when those jobs end.
     Returns the list of failure messages.
     """
     start = start or _start
@@ -540,12 +579,34 @@ def run_queue(commands, gpus, start=None):
     lock = threading.Lock()
     errors = []
 
+    def _take():
+        with lock:
+            for item in list(pending):
+                gate = item[2] if len(item) > 2 else None
+                state = gate() if gate is not None else "open"
+                if state == "never":
+                    pending.remove(item)
+                    errors.append(f"not started: {item[0]}: its gate closed (seed 0 missing, failed or stale)")
+                elif state == "open":
+                    pending.remove(item)
+                    return item, False
+            return None, not pending
+
     def _worker(gpu):
         while True:
             with lock:
                 if not pending:
                     return
-                label, command = pending.pop(0)
+            if wait_free and not gpu_is_free(gpu):
+                time.sleep(poll_seconds)
+                continue
+            item, done = _take()
+            if done:
+                return
+            if item is None:
+                time.sleep(poll_seconds)
+                continue
+            label, command = item[0], item[1]
             process = start(command, gpu)
             code = process.wait()
             if code != 0:
@@ -593,6 +654,104 @@ def submit(jobs, smoke, wave="formal"):
         commands.append((job["name"], body))
         print(f"queued {job['name']} est {estimated_hours(job):g} h log {run_dir}/console.log", flush=True)
     errors = run_queue(commands, free)
+    if errors:
+        raise SystemExit("\n".join(errors))
+
+
+def last_exit_code(run_dir):
+    """Exit code of the last finished start in console.log; None if never started or still open."""
+    log = _ROOT / run_dir / "console.log"
+    if not log.is_file():
+        return None
+    code = None
+    for line in log.read_text(errors="replace").splitlines():
+        if line.startswith("== start "):
+            code = None
+        elif line.startswith("== exit "):
+            fields = line.split()
+            code = int(fields[2]) if len(fields) > 2 and fields[2].lstrip("-").isdigit() else -1
+    return code
+
+
+def seed0_gate(seed0_jobs):
+    """Gate that opens once every listed seed-0 job has a current, finished diagnostic."""
+    state = {"open": False}
+
+    def gate():
+        if state["open"]:
+            return "open"
+        for job in seed0_jobs:
+            _config, run_dir = check_job(job, False)
+            if (_ROOT / run_dir / "diagnostic.json").is_file():
+                continue
+            code = last_exit_code(run_dir)
+            return "never" if code not in (None, 0) else "wait"
+        try:
+            assert_seed0_current(seed0_jobs)
+        except SystemExit as exc:
+            print(f"gate closed: {exc}", flush=True)
+            return "never"
+        state["open"] = True
+        return "open"
+
+    return gate
+
+
+def _queue_item(job, wave, gate=None):
+    config, run_dir = check_job(job, False, placeholder=False)
+    body = _chain(python_argv(job["env"]), command_segments(job, config, run_dir, False, wave))
+    log = shlex.quote(str(Path(run_dir) / "console.log"))
+    body = (
+        f"mkdir -p {shlex.quote(str(run_dir))} && "
+        f"{{ echo \"== start {wave} $(date -Is) gpu $CUDA_VISIBLE_DEVICES host $(hostname) pid $$\"; {body}; rc=$?; "
+        f"echo \"== exit $rc $(date -Is)\"; exit $rc; }} >> {log} 2>&1"
+    )
+    return (job["name"], body, gate) if gate is not None else (job["name"], body)
+
+
+def queue_all(formal, gpus):
+    """One queue for seed 0, the seed-0 test maps and seeds 1+, on fixed cards.
+
+    Seed 0 goes first. The test maps of seed 0 and the other seeds of one model
+    on one dataset wait until that model's seed-0 job on that dataset has a
+    finished diagnostic on the current budget, so one slow model does not hold
+    back the others. Jobs already finished or still running are skipped.
+    """
+    missing = [
+        str(path)
+        for path in (_ROOT / "dataset" / "prepared" / "IDRiD", _ROOT / "dataset" / "prepared" / "DDR")
+        if not path.is_dir()
+    ]
+    if missing:
+        raise SystemExit("prepared dataset missing: " + ", ".join(missing))
+    seed0 = [job for job in formal if int(job["seed"]) == 0]
+    gates = {(job["model"], job["dataset"]): seed0_gate([job]) for job in seed0}
+    plan = []
+    for wave, jobs in (
+        ("seed0", longest_first(seed0)),
+        ("score-seed0", longest_first(seed0)),
+        ("rest", longest_first([job for job in formal if int(job["seed"]) != 0])),
+    ):
+        for job in jobs:
+            placed = dict(job)
+            placed["gpu"] = gpus[0]
+            _config, run_dir = check_job(placed, False, placeholder=False)
+            marker = finished_marker(run_dir, False, wave)
+            if (_ROOT / marker).is_file():
+                print(f"skip {wave} {job['name']}: {marker} exists", flush=True)
+                continue
+            running = in_progress(run_dir)
+            if running is not None and wave != "score-seed0":
+                print(f"skip {wave} {job['name']}: still running ({running})", flush=True)
+                continue
+            key = (job["model"], job["dataset"])
+            gate = None if wave == "seed0" else gates.get(key)
+            if wave != "seed0" and gate is None:
+                raise SystemExit(f"{job['name']}: no seed-0 job of {key[0]} on {key[1]} in this queue")
+            plan.append(_queue_item(placed, wave, gate))
+            print(f"queued {wave} {job['name']} est {estimated_hours(job):g} h", flush=True)
+    print(f"queue: {len(plan)} items on gpus {','.join(str(gpu) for gpu in gpus)}", flush=True)
+    errors = run_queue(plan, gpus, wait_free=True)
     if errors:
         raise SystemExit("\n".join(errors))
 
@@ -734,6 +893,11 @@ def main(argv=None):
     parser.add_argument("--max-steps", type=int, default=_SMOKE_STEPS)
     parser.add_argument("--only", default=None, help="comma-separated model names; other jobs of the wave are left out")
     parser.add_argument("--datasets", default=None, help="comma-separated datasets, e.g. IDRiD; other jobs of the wave are left out")
+    parser.add_argument(
+        "--queue-all",
+        action="store_true",
+        help="with --submit: seed 0, its test maps, then the other seeds, on the cards in RETISEG_GPUS",
+    )
     args = parser.parse_args(argv)
     if args.capped_train:
         if not args.script or not args.config or not args.run_dir:
@@ -751,10 +915,12 @@ def main(argv=None):
         selected.append("score-seed0")
     if len(selected) > 1:
         raise SystemExit("pass only one of --smoke, --seed0, --rest, --score-seed0")
+    if args.queue_all and selected:
+        raise SystemExit("--queue-all is its own wave; do not combine it with --smoke, --seed0, --rest or --score-seed0")
     models = active_models()
     document = load_document(args.jobs)
     formal = select_jobs(document, False, models)
-    if args.submit and not selected:
+    if args.submit and not selected and not args.queue_all:
         raise SystemExit(
             f"refusing to submit all {len(formal)} formal jobs at once. "
             "The current batch is seed 0. "
@@ -784,6 +950,16 @@ def main(argv=None):
         if unknown:
             raise SystemExit(f"--datasets names unknown datasets: {unknown}; known: {sorted(known)}")
         jobs = [job for job in jobs if str(job["dataset"]) in wanted]
+    if args.queue_all:
+        gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
+        if not gpus:
+            raise SystemExit("--queue-all needs RETISEG_GPUS, the cards this queue may use")
+        print(f"queue-all over {len(jobs)} registered jobs", flush=True)
+        if not args.submit:
+            print("not submitted; pass --submit to start the queue", flush=True)
+            return
+        queue_all(jobs, gpus)
+        return
     if args.submit and wave in ("rest", "score-seed0"):
         assert_seed0_current([job for job in formal if int(job["seed"]) == 0])
     for job in jobs:
