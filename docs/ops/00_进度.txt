@@ -190,6 +190,20 @@ B1 补位（队列日志 20261011_155738，28 项）：
 这两个特征对眼底图区分度很低。每张图到其他组最近邻的余弦，中位数是 0.948，最大值只有 0.979。Hamming 最小的对（距离 2）余弦也只有 0.91–0.95。Hamming 最小的 4 对、余弦最高的 1 对，再加 IDRiD_09/63、IDRiD_48/50，都拼图看过（runs/audit/leak_top_pairs.jpg）。血管走向都不同，不是同一只眼，只是左右眼、相机和构图相同。
 结论：IDRiD、DDR 的划分之间和两库之间，没有找到相同或近乎相同的图像。这个方法查不出同一患者在不同时间拍的照片。要查这一类，需要血管配准一类的特征。新库（TJDR 等）同步到服务器后用同一脚本再跑，TJDR 是重点。
 
+基础模型任务规划（2026-10-09 在本机写成，2026-10-11 变基到 068353b 后与本段同一次提交；只改文档）
+没有启动任何 E5 任务，没有读任何测试集，没有改 bench/ 的代码和配置。
+做了什么：按固定提交浅检出 segment-anything、sam2、sam3、MedSAM、SAMed、SAM-Adapter、SAM2-UNet、RETFound、PerSAM 九个子模块，逐个读训练和推理代码，配方和偏差按“文件:行”写进新文件 design/15_基础模型任务.txt（体例同 09）；14 的 M9 由“待补”改成可直接改写的方法，14 备注 9 改为已核对，新增备注 26–31（变基时远端已有 22–25，顺延）；05 的 E5 改为摘要并指向 15；13、12、README 同步。
+核对到的事实：
+  RETFound（Nature 版彩照权重）的预训练集 904,170 张 = MEH-MIDAS 815,468 + Kaggle EyePACS 88,702（Zhou 2023 方法部分）。88,702 是 Kaggle EyePACS 的全部，Retinal-Lesions 文件名就是 Kaggle 编号，所以 RETFound 在 Retinal-Lesions 一列不算独立测试。RETFound 的 AlzEye 版权重（mae_meh、dinov2_meh）模型卡没有提到 EyePACS；三份权重都需在 Hugging Face 申请，许可 CC BY-NC 4.0。
+  MedSAM 仓库自带的补充材料：训练用的眼底数据只有 REFUGE（视盘、视杯），IDRiD 只用于视盘外部验证。正式发表版的补充材料表号不同，需再核对。
+  作者代码与论文不一致：SAM-Adapter 构造 DDP 后取回 model.module，多卡不同步梯度，提示编码器两个张量因命名不符没有载入，README 的 demo.yaml 结构与检查点不符；SAM2-UNet 的 structure_loss 用旧参数 reduce='none'，加权 BCE 退化为平均 BCE；MedSAM 代码默认 1000 个 epoch、论文 150 个；SAMed 在 1/4 分辨率上算损失。
+  风险：SAM2-UNet 的加权 IoU（逐图、平滑 1）和 MedSAM 的 Dice（逐图、分母平方、平滑 1e-5）与 U-Net 塌缩（备注 21）同属一类机制。
+  代价：B-std 不开混合精度，矩阵乘是完整 fp32；ViT 类模型在这种设定下约慢 3 到 4 倍。按计算量粗估，E5 合计约 800 GPU 时（矩阵乘开 TF32 时），冒烟后重估。
+待用户决定（design/15 第十六节）：矩阵乘是否开 TF32；RETFound 主表用 natureCFP 还是 mae_meh；作者代码与论文不一致时按代码还是按论文；SAM2-UNet、MedSAM 若塌缩是否与 U-Net 一并处理；编码器对照的规模。
+需要尽早做：在 Hugging Face 申请 SAM 3（facebook/sam3）和 RETFound 两份权重（YukunZhou/RETFound_mae_natureCFP、RETFound_dinov2_meh）。
+变基时（2026-10-11）按上面 10-11、10-12 的记录改了 15：种子 1、2 与主表一样暂缓，E5 先跑种子 0；U-Net 整批 Dice 诊断写进塌缩风险的依据；E5 排在 13 第四节重排的第 4 步。E5 的设计本身没有变。
+论文草稿：用户 10-09 构建的 PDF（数字为模拟值，图表上有 simulated 标记）放进 docs/paper/retiseg_paper_draft.pdf，供合作者阅读。15 第十七节列出草稿里与 E5 设计不一致、要改的地方（方法中 PEFT 统一切 1024 块的说法、表 8 缺基础模型行、图 5d 缺 MAE ImageNet-1k）。
+
 论文素材（2026-10-07）
 新建 14：把到目前为止所有要进论文的处理方法和数字按方法小节整理成可直接改写的版本，另列 19 条备注（局限、补充说明、审稿回复）。以后每项会进论文的决定在同一次提交里写进 14。
 

@@ -1,0 +1,286 @@
+基础模型任务（E5）
+写给导师汇报。总纲在 13，实验做法在 05（E5 一条的细节以本文件为准），已经跑完的数字在 00，论文写法在 14 的 M9。体例同 09。
+日期 2026-10-09。本文件写成时没有启动任何 E5 任务，也没有读任何测试集。2026-10-11 按 00 里 10-11、10-12 的记录（种子 1、2 暂缓，U-Net 整批 Dice 诊断，B-std 种子 0 出数）改了第一、二、九、十三、十六、十七节，E5 的设计本身没有变。各模型的配方取自 official_code/ 下已固定的子模块：segment-anything dca509f、sam2 2b90b9f、sam3 2345a4a、MedSAM d71e8a1、SAMed e351840、SAM-Adapter 041277f、SAM2-UNet 01598e5、RETFound ae9a9ec、PerSAM a7e8724。文中“文件:行”都指这些提交，路径相对于 official_code/<仓库>/。
+任务表和共享设定还没有写：训练的两档并进 bench/configs/bs_jobs.yaml（由 make_bs_jobs.py 生成，与 B-std 同一张表）；推理的两档、全部提示、措辞和几何写进新文件 bench/configs/e5_frozen.yaml，在第一次 E5 推理或训练之前提交。
+
+一、结论
+E5 回答两件事：分割基础模型按各自设计的用法使用时，在眼底四类病灶上能做到什么程度；在与其他模型相同的数据、训练量和评测下，它们的适配版本是否胜过眼底专用模型和自动配置的 nnU-Net。四种用法看到的信息量不同，分开报告，互不排名：
+  a 零样本：不看任何标签。SAM、SAM 2 自动掩码，SAM 3 文本提示。
+  b 理想提示：提示由测试集真值生成，只作上界，临床上不可用。SAM、SAM 2 的点和框，MedSAM 的框。
+  c 参数高效微调：SAMed（LoRA）、SAM-Adapter（适配器）、SAM2-UNet（适配器加 U 形解码器）。
+  d 全量微调或编码器加解码头：MedSAM 全量微调；RETFound 编码器加 UPerNet 头。另做编码器对照：同一个 UPerNet 头、同一份配方，只换 ViT-L 编码器。
+c、d 两档的 5 个模型就是 B-std 主表的第四族（基础模型）：用同一份 bs_frozen.yaml，同样的预算、增强、选择规则和评测，设计上同样 3 个种子（按 10-11 的用户决定，与主表一样先只跑种子 0，种子 1、2 与主表其余种子一起补），与其余 9 个模型（7 个 B-std 模型加 nnU-Net 两种配置）一起进主表、独立测试（E3a）和按测试集的临界差图。a、b 两档只推理，单独成表。
+公平是这部分设计的核心，原则写在第三节。概括为五句：同一档里的模型面对完全相同的数据、提示和评测；训练档与 B-std 的其余模型共用全部共享项；每个模型保留它自己的方法（初始化权重、冻结范围、损失、优化器、学习率、调度形状、有效批、归一化、头的类型）；作者代码与论文不一致的地方按作者代码的实际行为执行，差异写进偏差清单；需要用标签做的选择只用验证集。另外逐个核对每个模型的预训练数据与测试集是否重叠。
+
+向导师汇报时先说下面几条限制。它们不改变这批任务，但会改变怎么读结果。
+1. a、b 两档不进主表。零样本的“按重叠分配类别”和 b 档整档都读了测试集真值，只能当上界读。
+2. 训练档的窗口按与 B-std 同一条规则取：网络里按输入尺寸建好绝对位置编码的 ViT 用作者的输入尺寸（SAMed 512、SAM-Adapter 1024、MedSAM 1024、RETFound 224），尺寸不受限的层级编码器（SAM2-UNet 的 Hiera）与全卷积模型一样切 960 块、整画布推理。所有模型都在 1440 画布的同一像素尺度上看图，差别只在一次看到的范围。
+3. 骨干大小不统一：SAMed 和 MedSAM 是 ViT-B，SAM-Adapter 是 ViT-H，SAM2-UNet 是 Hiera-L，RETFound 是 ViT-L。用的都是作者的主配置。主表给出总参数和可训练参数两列，不把差距单独归到“适配方式”上。
+4. 二分类头改四类的方式各模型不同（第七、八节）。这是让它们能做四类所必需的最小改动，写进偏差清单。
+5. RETFound（Nature 版权重）的彩照预训练集包含全部 88,702 张 Kaggle EyePACS，Retinal-Lesions 的 1593 张图就取自 Kaggle EyePACS。RETFound 在 Retinal-Lesions 这一列不算独立测试，加表注；临界差图另报去掉 Retinal-Lesions 的版本。
+6. 稀有类塌缩：SAM2-UNet 的加权 IoU 项和 MedSAM 的 Dice 都按每张图、每一类单独计算并带平滑项，与 U-Net（14 备注 21）同属一类机制，DDR 空块多的类有同样的风险。10-12 的诊断（00）已证实这一机制：U-Net 只把 Dice 改成整批计算、平滑 1e-5，DDR 验证 mAUPR 从 0.127 升到 0.544，四类都恢复输出。种子 0 先看逐类验证曲线，处理办法与 U-Net 绑定，由用户一并决定（第十六节第 4 条）。
+
+二、在整个计划中的位置
+Q2：c、d 两档进 B-std 主表，回答“统一条件下基础模型的适配是否胜过专用模型和 nnU-Net”。a、b 两档回答“不训练能做到哪里、提示给足时上界在哪里”。编码器对照回答“眼科预训练有没有用”。
+Q3：SAM2-UNet 和 RETFound 加 UPerNet 是 E3b、E4、E6–E9 的代表模型（05 第四节）。本文件冻结的配方就是它们在那些实验里的配方，冻结之后那些实验才能开始。
+Q1：这些基础模型都没有本病的作者权重（SAM2-UNet、SAMed 公开的权重训练在别的任务上），不进轨 A。TP-DRSeg、Chen 2025、Learnable Ophthalmology SAM 没有可用代码，只做原文审计（第三层）。
+
+模型分层（bench/configs/models.yaml 不改，38 个变体的计数不变）：
+  第一层：SAM、SAM 2、SAM 3、MedSAM、SAMed、SAM-Adapter、SAM2-UNet、RETFound 加 UPerNet。
+  第二层：PerSAM（单样本）。
+  编码器对照里的 MAE（ImageNet-1k）、DINOv2、ImageNet 有监督 ViT-L、RETFound-DINOv2 是实验条件，不作为登记的方法，写在 e5_frozen.yaml，不进 models.yaml。可选：RETFound-MAE 的 AlzEye 版、DINOv3 ViT-L。
+在 13 的排期里（第四节 10-11 的重排，E5 是第 4 步）：排在独立测试接线和 U-Net 修复的决定之后。a、b 两档只推理，可以插空卡提前跑；c、d 两档先跑种子 0；编码器对照排在 c、d 之后。
+
+三、公平性原则
+每一条写清对哪些模型起作用、为什么这样定。
+1. 同一档内条件完全相同。数据、划分、测试图、评测协议、提示（b 档）、文本措辞（SAM 3）、几何规则对同一档的所有模型都一样。四档之间不排名，图 5 和表 6 按档分块。
+2. 训练档与 B-std 共享项完全相同。1440 画布、按像素计的训练量（IDRiD 1000、DDR 400 个等效 epoch）、增强（0.5–2 倍尺度、翻转、90 度旋转、光度扰动）、20 次验证并按验证 mAUPR 选 best.pt、推理几何、评测，全部来自 bs_frozen.yaml，不为基础模型另开预算或选择规则。这样 c、d 两档的数字能与 U-Net、M2MRF、nnU-Net 放进同一张表、同一个 Friedman 检验。
+3. 每个模型保留自己的方法。属于方法的部分照作者：初始化权重和检查点版本、冻结哪些参数、LoRA 或适配器的位置和秩、头的类型、损失、优化器、学习率、权重衰减、调度形状、有效批、输入归一化。这与 B-std 对其他模型的处理一致（14 M7）。
+4. 像素尺度相同，窗口按同一条规则。所有模型都在 1440 画布上工作，病灶在网络输入里的像素大小相同。窗口：网络为固定输入尺寸建了绝对位置编码的（ViT 类），按作者的输入尺寸切块训练、重叠 0.5 滑窗推理，与 Swin-Unet、FCT 相同；输入尺寸不受限的（Hiera、卷积），切 960 块训练、整画布推理，与 U-Net、M2MRF 相同。作者在别的数据上选的缩放尺寸（SAM2-UNet 的 352）与全卷积模型的作者裁剪尺寸一样不用。理由见 09 第五节：整图缩到 224 或 384 时，DDR 训练集 34.3% 或 11.5% 的 MA 连通域从训练目标里消失。
+5. 照官方代码的实际行为。作者代码与论文描述不一致时按代码执行，作者自己的数字是用代码跑出来的。差异写进 recipe.json 的偏差和补充说明，本项目不替作者修。单卡执行带来的必要差异（多卡改梯度累积、BatchNorm 看到的张数）同样记录。逐条见第七、八、十五节；是否采用这条由第十六节第 3 条确认。
+6. 二分类改四类用最小改动，规则统一。作者头本来就是多类 softmax 的（SAMed），保留 softmax 加背景，重叠像素按 EX、HE、SE、MA 的覆盖顺序合成互斥标签，与 Swin-Unet、HACDR-Net 一样。作者头是单通道 sigmoid 的（SAM-Adapter、MedSAM、SAM2-UNet）改成四路 sigmoid：SAM 的掩码解码器本来就有 4 个掩码 token（1 个单掩码加 3 个多掩码），四个 token 依次作为 MA、HE、EX、SE，全部从预训练权重初始化；SAM2-UNet 把三个 64→1 的输出卷积改为 64→4。评测一律读原始四类可重叠掩码。
+7. 提示和措辞事先登记，所有模型共用。b 档的连通域、抽样顺序、框和点在 e5_frozen.yaml 和生成的提示文件里固定，SAM、SAM 2、MedSAM 读同一份。SAM 3 每类 3 种措辞在任何 SAM 3 推理之前写进 e5_frozen.yaml。
+8. 不看标签就不调参。a 档自动掩码的参数只用作者给的两套（库的默认值，以及作者 notebook 里“取更多掩码”的那套），不在任何数据上调。唯一用到标签的选择是 SAM 3 的措辞，只在 DDR 验证集上选，选定后用于全部测试集；测试集上“三种里最好的”只作上界。
+9. 调参对等。主表里的基础模型与其他模型一样不调参，只在 E2c 里做学习率 ×1/3、1、3 的名次检查。编码器对照是唯一的例外：五个编码器共用一份配方，一个学习率可能偏向某一种预训练，所以每个编码器都在 DDR 种子 0 上跑三档学习率，按验证 mAUPR 选定后再跑其余种子。
+10. 数值精度一致。训练档与 B-std 用同一套数值设定，不开混合精度（RETFound 和 SAMed_h 的作者代码开 fp16，写进偏差）。矩阵乘是否开 TF32 见第十六节第 1 条。
+11. 预训练数据逐个核对（第十节）。与某个测试集重叠的，该格加表注，并给出去掉该测试集的排名。
+12. 参数量报两列：总参数和可训练参数。训练档的总参数从约 0.94 亿到约 6.4 亿，可训练参数从约 420 万到约 3.5 亿。
+13. 稀有类塌缩按同一规则检查。训练档每个模型的种子 0 结束后看逐类验证 AUPR：某类一直停在该类像素占比附近，或后期掉回这个水平，记为塌缩（参照 00 中 U-Net DDR 的 SE 一直是 0.0017）。处理与 U-Net 绑定（14 备注 21），只依据训练和验证。
+
+四、共用部分
+数据与划分：与 B-std 相同。训练档只在 IDRiD（44/10/27）和 DDR（383/149/225）上训练。推理档在全部 7 个测试集上推理：IDRiD、DDR、TJDR_std、TJDR_uwf、FGADR、Retinal-Lesions、DiaRetDB1 的测试划分；另在 DDR 验证集上推理，用来选 SAM 3 措辞和推理档的 Dice 阈值。
+输出：与其他模型一样写原分辨率 16 位概率图，视野外记 0，所有指标由 bench/eval 离线计算；有忽略区的库照常跳过忽略区。
+推理档的两种几何：
+  G1 画布窗口（主结果）：在 1440 画布上按模型的原生输入切窗口（SAM、SAM 2、MedSAM 1024，SAM 3 1008），重叠 0.5，与训练档的像素尺度相同。TJDR_uwf 照 E3a 的规定，在原分辨率上切同样大小的窗口。
+  G2 整图（作者默认用法，对照）：视野裁剪后的整图交给模型自己的缩放。SAM 最长边缩到 1024 再补零（segment_anything/utils/transforms.py:16-31）；SAM 2 拉成 1024 方图（sam2/utils/transforms.py:27-35）；SAM 3 拉成 1008 方图（sam3/model/sam3_image_processor.py:22-27）；MedSAM 拉成 1024 方图（MedSAM_Inference.py:121-126）。
+  主结果用 G1，因为训练档和其他模型都在这个像素尺度上；G2 回答“按默认方式直接用会怎样”。
+补充指标“任意病灶”：四类真值取并集，预测取四类概率的逐像素最大值，算一个合并 AUPR。用于没有类别的零样本输出；对训练档和其余 B-std 模型同样计算，作为参照线。加进 protocol.yaml 时只新增这一项，不动已冻结的部分。
+Dice 阈值：训练档照 B-std，用训练来源的验证集选。推理档没有训练来源，统一用 DDR 验证集选出的每类阈值，另报固定 0.5。
+独立测试（E3a）：训练档的全部检查点在 5 个独立来源上推理，做法与 B-std 相同。
+
+五、a 零样本
+1. SAM（ViT-H，sam_vit_h_4b8939.pth）
+   SamAutomaticMaskGenerator，两套参数：
+     默认：points_per_side 32、pred_iou_thresh 0.88、stability_score_thresh 0.95、box_nms_thresh 0.7、crop_n_layers 0、min_mask_region_area 0（segment_anything/automatic_mask_generator.py:39-50）。库的说明写明这组值是为 ViT-H 选的（:56-57）。
+     更多掩码：作者 notebook 的一套，points_per_side 32、pred_iou_thresh 0.86、stability_score_thresh 0.92、crop_n_layers 1、crop_n_points_downscale_factor 2、min_mask_region_area 100（notebooks/automatic_mask_generator_example.ipynb:350-355）。
+   归一化和缩放用库自己的：pixel_mean 123.675、116.28、103.53，pixel_std 58.395、57.12、57.375，0–255 尺度（modeling/sam.py:27-28）。
+2. SAM 2（SAM 2.1 Hiera-L，sam2.1_hiera_large.pt）
+   固定提交里 checkpoints/download_ckpts.sh 只下载 2.1 版（:40-57），README 称 2.1 为改进版，零样本用它。SAM2-UNet 按作者要求用 2.0 版初始化（第七节），两者各用各的。
+   SAM2AutomaticMaskGenerator，两套参数：
+     默认：points_per_side 32、pred_iou_thresh 0.8、stability_score_thresh 0.95、mask_threshold 0、box_nms_thresh 0.7、use_m2m False、multimask_output True（sam2/automatic_mask_generator.py:40-55）。
+     更多掩码：作者 notebook 的一套，points_per_side 64、points_per_batch 128、pred_iou_thresh 0.7、stability_score_thresh 0.92、stability_score_offset 0.7、crop_n_layers 1、crop_n_points_downscale_factor 2、min_mask_region_area 25、use_m2m True，模型按 apply_postprocessing=False 构建（notebooks/automatic_mask_generator_example.ipynb:261、374-386）。
+   注意：SAM 2 的生成器把 min_mask_region_area 交给预测器做补洞和去碎点，自己的 postprocess_small_regions 从不调用；这一步依赖 CUDA 连通域算子，算子失败时静默跳过（sam2/utils/transforms.py:105-115）。服务器冒烟时确认这一步确实执行，结果写进 recipe.json。
+3. 自动掩码怎么变成概率图
+   自动掩码不带类别，每个掩码带 predicted_iou 和 stability_score。每个像素的分数取覆盖它的全部掩码（跨窗口）中 predicted_iou 的最大值，没有掩码覆盖的像素记 0。stability_score 的版本另报。
+   报两种：
+     任意病灶：不分配类别，用第四节的合并 AUPR 评。不用任何标签，这是零样本的主结果。
+     按重叠分配类别（上界）：每个掩码分给与它重叠像素最多的真值类别；与四类真值都不重叠的掩码分到全部四类，作为假阳性计入。这一步读了测试真值，只能当类别分配的上界，定位本身仍是模型自己的。两种结果写在不同目录，后者目录名带 oracle_class。
+   敏感性分析（同一批掩码，不另推理）：去掉面积超过“训练集最大病灶”的掩码。上限取 IDRiD 训练 44 张加 DDR 训练 383 张全部病灶连通域在画布上的最大面积，只看训练集，在推理之前算好写进 e5_frozen.yaml。自动掩码常把整个视野圆、视盘或大段血管分成一个掩码，这一项看它们对精度的影响。
+4. SAM 3（sam3.pt，Hugging Face facebook/sam3，需申请）
+   文本提示，每类 3 种措辞，在任何 SAM 3 推理之前写进 e5_frozen.yaml：
+     MA：microaneurysm；red dot；small red lesion
+     HE：retinal hemorrhage；blot hemorrhage；dark red patch
+     EX：hard exudate；yellow deposit；bright lesion
+     SE：cotton wool spot；soft exudate；white fluffy patch
+   主结果的措辞：在 DDR 验证集（G1）上按该类 AUPR 从三种里选一种，选定后用于全部 7 个测试集，选择结果写回 e5_frozen.yaml 并提交，再跑测试集。三种措辞的结果都报（措辞敏感性，图 5c），测试集上最好的一种标为上界。
+   概率：Sam3Processor 的置信阈值默认 0.5（sam3/model/sam3_image_processor.py:17），会截断 PR 曲线，所以设为 0，保留全部 200 个查询（sam3/model_builder.py:185）。每个像素的分数取各查询“分数 × 该查询掩码概率”的最大值。查询分数本身已是查询概率乘存在概率（sam3_image_processor.py:195-197）；state["masks_logits"] 存的其实是 sigmoid 之后的概率（:212-219），代码里按概率用。
+   输入：1008 方图，均值和标准差都是 0.5（sam3_image_processor.py:22-27）。set_image 对 numpy 输入会读错原图尺寸（:49-50），一律传 PIL 图。
+   环境：SAM 3 要求 Python ≥3.12、PyTorch ≥2.7、CUDA ≥12.6（sam3/README.md:67-71），单独建 retiseg-sam3。许可是 SAM License（README.md:377-380），与 SAM、SAM 2 的 Apache 2.0 不同，论文里写明。
+   可选（时间允许）：forward_grounding 输出里的 semantic_seg 头（sam3/model/maskformer_segmentation.py:236-237、336-340）也是逐像素的，作为第二种概率图。公开权重里这个头训练得如何，从代码判断不了。
+5. PerSAM（第二层，时间允许）
+   单样本：每类从训练集里按 PCG64(20261003) 抽一张含该类病灶的图作参考图和参考掩码。PerSAM 免训练；PerSAM-F 只训 2 个标量，AdamW 1e-3、1000 步（persam_f.py:28-29、130-133）。PerSAM 一次只给出一个目标（取相似度最高的一个点），预期在多病灶的眼底图上接近失败；做它是为了把“单样本”这一档补齐。检查点路径在代码里写死（persam.py:71），包装时改为参数传入并记偏差。
+
+六、b 理想提示（上界）
+1. 模型：SAM（ViT-H）点和框；SAM 2（2.1 Hiera-L）点和框；MedSAM（medsam_vit_b.pth）只有框。SAM 3 也有 SAM 1 式的点框接口（enable_inst_interactivity，sam3/model/sam3_image.py:628），列为可选。
+2. 提示怎么生成（规则写进 e5_frozen.yaml；生成的提示文件每个测试集一份，所有模型读同一份）：
+   在 1440 画布的真值上按类取八连通域。每张图每一类的提示数 k 取 1、5、10、20、全部。连通域多于 k 时，先按（行，列）排序，再用 PCG64(20261003) 按（图像编号，类别）派生的子流做一次无放回的随机排列，取前 k 个；所以较小 k 的提示是较大 k 的前缀，曲线上的点可以直接比较。
+   框：连通域的紧包围框，不加抖动。点：连通域内离边界最远的像素，一个正点。
+   用法照各模型作者的建议：单个点用 multimask_output=True，取 predicted IoU 最高的那个掩码；框用 multimask_output=False（segment_anything/predictor.py:115-120，notebooks/predictor_example.ipynb:343、607；SAM 2 的 notebook 相同）。MedSAM 照 MedSAM_Inference.py：框，multimask_output=False，先对 256 的低分辨率输出取 sigmoid 再双线性放大（:59-71）。每个提示单独解码一次。
+3. 窗口：G1 下每个提示在“包围框中心离窗口边缘最远”的那个窗口里解码，编码器每个窗口只算一次。G2 下整图编码一次。
+4. 概率图：每一类取该类全部提示所得掩码概率的逐像素最大值，没有提示覆盖的像素记 0。SAM、SAM 2 用 return_logits 取连续值后做 sigmoid。
+5. 报告：IDRiD、DDR 测试集上 k = 1、5、10、20、全部的曲线（MA、SE 分开画，图 5b）；k = 全部在 7 个测试集上都做。同时报每张图每类平均有多少个连通域（IDRiD 训练集每图约 44 个 MA、142 个 EX 连通域），说明按连通域给提示在临床上不现实。
+6. 归一化：SAM、SAM 2 用各自的库。MedSAM 推理按 MedSAM_Inference.py 缩到 1024 后逐图最小最大归一到 [0,1]，不经 SAM 的均值和标准差（:121-126；作者训练时同样跳过，train_one_gpu.py:223）。
+
+七、c 参数高效微调
+三个模型都走 B-std：共享项见第三节第 2 条，下面只写各自保留的部分和必要的改动。
+1. SAMed
+   来源：official_code/SAMed，ViT-B 主配置（SAMed_h、SAMed_s 是扩展，不用）。初始化 sam_vit_b_01ec64.pth（train.py:46）。
+   结构：图像编码器冻结；每个块的 qkv 上对 q、v 各加一个秩 4 的 LoRA，无偏置、无缩放（sam_lora_image_encoder.py:42-48、77-108；train.py:49）。提示编码器和掩码解码器全部可训（不给提示，提示编码器里实际只有 no_mask_embed 有梯度）。num_classes 设为 4，掩码 token 为 5 个，与类别数相关的解码器参数按作者代码随机初始化（segment_anything/build_sam.py:111、132-144）。
+   输入：512 窗口。位置编码在构建时插值到 32×32，全局注意力块的相对位置编码同样插值（build_sam.py:145-160）。归一化：pixel_mean 0、pixel_std 1，输入在 [0,1]（train.py:94-97），卡片写均值 0、标准差 1。
+   头：5 类 softmax，通道 0 为背景，class_index (1, 2, 3, 4)，重叠像素按覆盖顺序合成互斥标签。
+   损失：0.2 × 交叉熵 + 0.8 × Dice。Dice 用 softmax、含背景、整批合并计算、分母平方和、平滑 1e-5（trainer.py:22-27、79；utils.py:74-98）。
+   优化：AdamW，betas (0.9, 0.999)，权重衰减 0.1，学习率 0.005。README 的训练命令带 --warmup --AdamW（README.md:81；train.py:38、53；trainer.py:59-60）。有效批 24：每卡 12，两卡 DataParallel（train.py:33-35；trainer.py:50-51）。
+   调度：作者线性 warmup 250 步，再按 (1 − (t − 250)/总步数)^0.9 衰减，并在第 160/200 个 epoch 停下，停时学习率约为初始的 0.25（trainer.py:83-95、115-132）。B-std 按同一形状展开：调度长度取 B-std 步数 ÷ 0.8，warmup 占调度长度的 250/18600，跑满 B-std 步数后停。学习率在更新之后写入，与作者一致。
+   偏差：作者在 1/4 分辨率的 logits 上、对最近邻缩小的标签算损失（trainer.py:23-25；datasets/dataset_synapse.py:47）；B-std 统一在输入分辨率上算，logits 先双线性放大，也就是作者测试时用的 outputs['masks']（utils.py:132）。理由同第三节第 4 条：标签缩小 4 倍时 MA 连通域会从训练目标里消失。这是本项目对作者配方唯一的实质改动，单列说明。作者增强（90 度旋转加翻转、±20° 旋转）换成共享增强；作者两卡，这里单卡累积。
+2. SAM-Adapter
+   来源：official_code/SAM-Adapter 的 SAM（v1）适配器，ViT-H 主配置 configs/cod-sam-vit-h.yaml。README 训练命令用的 configs/demo.yaml 结构是 ViT-H，检查点却写成 ViT-L（demo.yaml:45、85-92），不用它。初始化 sam_vit_h_4b8939.pth。仓库主干上没有 SAM 2、SAM 3 适配器的代码（在另外的分支和一个压缩包里），不用。
+   结构：图像编码器冻结，适配器（prompt_generator）和整个掩码解码器可训，可训练参数约 425 万（train.py:174-176；models/sam.py:117-151）。适配器加在每个块之前，含图像高通 FFT 分支；配置里的 encoder_mode 等键不被读取，参数写死在 models/mmseg/models/sam/image_encoder.py:116-123。
+   输入：1024 窗口，ImageNet 均值和标准差（datasets/wrappers.py:39-42、75-78）。
+   头：四个掩码 token 作为四路 sigmoid。作者 multimask_output=False，只取第 0 个（models/sam.py:186）。
+   损失：BCEWithLogits + IoU 损失，1:1；IoU 损失逐图逐通道，没有平滑项（models/sam.py:48-54、248-254）。空块上 IoU 项是常数、梯度为 0，不会像 U-Net 那样把通道压向零。
+   优化：AdamW，学习率 2e-4，权重衰减取 PyTorch 默认的 0.01（配置没写，utils.py:90-96）。调度：按 epoch 的余弦退火，20 个 epoch，最低 1e-7，没有 warmup（train.py:108、190；cod-sam-vit-h.yaml:93-98）。B-std 展开成 20 段的阶梯余弦，每段学习率按作者第 e 个 epoch 的值。
+   有效批：配置每进程 2 张，README 用 4 卡，名义全局批 8。但 train.py 构造 DDP 之后立刻取回 model.module 训练（train.py:162-169），进程之间没有梯度同步，保存的是 0 号进程那一份，它每步看 2 张。按代码的实际行为，有效批取 2。
+   作者代码的另一处实际行为照搬并记偏差：提示编码器的两个预训练张量因命名不符没有载入，pe_layer 的高斯矩阵是新的随机数，no_mask_embed 从随机值开始训练；strict=False 让这一点静默发生（models/sam.py:148、151；train.py:171-172）。
+   显存：梯度要穿过全部 32 个冻结块，激活接近全量微调。冒烟先试批 2；放不下就批 1 累积 2；再放不下就对 ViT 块做激活重计算（与 H2Former 包装器相同，计算不变）。都写进偏差。
+3. SAM2-UNet
+   来源：official_code/SAM2-UNet。初始化 SAM 2.0 的 sam2_hiera_large.pt，作者 README 明确要求 2.0 版（README.md:34）。
+   结构：Hiera-L 主干冻结，48 个块前各加一个瓶颈 32 的适配器；RFB 加三级上采样的 U 形解码器；主输出和两个侧输出深监督（SAM2UNet.py:51-67、128-173）。可训练约 438 万，其中未使用的 up4 约 11 万参数也在优化器里，照搬。
+   输入：Hiera 的位置编码可插值，网络不要求固定尺寸，按全卷积模型处理：960 块训练、整画布推理（第三节第 4 条），不用作者的 352。pad_multiple 32。ImageNet 均值和标准差（dataset.py:56-64）。全局注意力块在 3912 的超广角整图上放不下，TJDR_uwf 按 E3a 给全卷积模型定的窗口滑窗。
+   头：三个 64→1 输出卷积改为 64→4，四路 sigmoid。推理只用主输出（test.py:35）。
+   损失：三个输出各算一次 structure_loss 后相加（train.py:58-62）。structure_loss 写的是加权 BCE 加加权 IoU（train.py:31-39），但 BCE 用了旧参数 reduce='none'，这个字符串为真，PyTorch 把它解析成 reduction='mean'，加权 BCE 因此退化为普通的平均 BCE。按代码实际行为实现；冒烟之前在服务器的 PyTorch 2.6 上用一行代码核对它确实返回标量，再冻结。加权 IoU 带平滑 1、按每张图每一类计算，空块上会把该通道往零推，与 U-Net 塌缩同构（第一节第 6 条）。
+   优化：AdamW，学习率 1e-3，权重衰减 5e-4；按 epoch 的余弦退火，20 个 epoch，最低 1e-7，没有 warmup（train.py:23-27、48-49、68）。B-std 展开成 20 段的阶梯余弦。有效批 12。
+   偏差：作者增强（水平、垂直翻转）换成共享增强；作者对标签做双三次缩放，标签不再是二值（dataset.py:27），B-std 的标签是最近邻、二值；解码器有 BatchNorm，显存不够时累积，BatchNorm 看到的是加载器批大小。
+
+八、d 全量微调与编码器加解码头
+1. MedSAM 全量微调
+   来源：official_code/MedSAM 的 train_one_gpu.py。初始化 medsam_vit_b.pth（作者在 SAM ViT-B 上用约 157 万个医学图像-掩码对训练得到）。
+   用法：MedSAM 原本每次都要一个框。主表要求全自动，所以训练和推理都不给提示（稀疏提示为空，稠密提示是 no_mask_embed），做法与 SAMed、SAM-Adapter 相同；四个掩码 token 作为四路 sigmoid。带框的用法在 b 档。
+   可训练：图像编码器和掩码解码器全部可训，提示编码器冻结，与作者相同（train_one_gpu.py:218-220、274-279），可训练约 9373 万。
+   输入：1024 窗口。归一化按作者二维 RGB 路径除以 255（utils/pre_grey_rgb.py:68-69；utils/README.md:98 写明眼底图这样处理），不经 SAM 的均值和标准差。
+   损失：monai DiceLoss（sigmoid、squared_pred、逐图逐通道、平滑 1e-5）+ BCEWithLogits，1:1（train_one_gpu.py:284-286、324-333），在输入分辨率上算，与作者相同（:242-247）。
+   优化：AdamW，学习率 1e-4，权重衰减 0.01，学习率不变，作者无增强（:169-174、277-279）。有效批取单卡脚本的 2（:166）。论文的全局批 160 来自 20 张卡（Ma 2024 第 12 页）；单卡累积到 160 会让 IDRiD 每个等效 epoch 从约 73 块凑整到 160 块，预算多出一倍以上，所以不用。
+   偏差：代码默认 1000 个 epoch、论文写 150 个，两者都不用，预算按 B-std。推理脚本是逐图最小最大归一，训练的二维路径是除以 255，这里训练和推理统一除以 255。
+2. RETFound 加 UPerNet（主表，代表模型）
+   编码器：RETFound_mae_natureCFP，ViT-L/16（models_vit.py:47-51），Hugging Face YukunZhou/RETFound_mae_natureCFP，需申请，许可 CC BY-NC 4.0。选这一份，因为它是 Nature 论文发布、引用最多的版本；它的预训练集包含 Kaggle EyePACS（第十节），Retinal-Lesions 一列加表注。另一种选择见第十六节第 2 条。
+   解码头：RETFound 仓库只有分类微调，没有分割代码，所以由本项目接一个固定的 UPerNet 头，与编码器对照共用（第 3 条）：取第 8、12、16、24 个块的输出，按 BEiT 和 MAE 做语义分割的方式变成步长 4、8、16、32 的四级特征（两次 2×2 反卷积、一次 2×2 反卷积、原样、2×2 最大池化）；UPerHead 通道 512，池化尺度 1、2、3、6；辅助 FCN 头接在步长 16 的那一级，损失权重 0.4。四路 sigmoid。
+   输入：224 窗口，即 RETFound 预训练和官方微调脚本的输入（train.sh 传 --input_size 224），ImageNet 均值和标准差（util/datasets.py:6、32-33）。
+   优化：照 RETFound 官方微调脚本 train.sh。有效批 24，学习率 = 5e-3 × 24/256 = 4.6875e-4（main_finetune.py:63、321-323）；AdamW，权重衰减 0.05，一维参数和位置编码不衰减；逐层学习率衰减 0.65，24 个块，颈部和头的倍数为 1（util/lr_decay.py）；drop path 0.2；前 20% 线性 warmup（10/50 个 epoch），之后半周期余弦降到 1e-6（util/lr_sched.py:8-20）。
+   损失：主头 BCE + 0.4 × 辅助头 BCE。作者分类用交叉熵；四类病灶可以重叠，改为 BCE，与 DeepLabv3、HRNet 的处理相同。
+   偏差：作者开 fp16 混合精度（main_finetune.py:356），这里不开；作者增强（RandAugment、随机缩放裁剪、随机擦除）换成共享增强；Nature 论文方法部分写的是批 16、学习率 5e-4，代码脚本是批 24，按代码。
+   载入核对：RETFound 代码 load_state_dict(strict=False) 把缺失和多余的键丢掉不报（main_finetune.py:223）。本项目包装器把这两组键写进 recipe.json，并要求编码器的块参数全部载入，否则拒绝训练（与 bench/pretrained.load_matching 的做法相同）。
+3. 编码器对照（只在 DDR 上训练，3 个种子）
+   目的：同一个 UPerNet 头、同一份配方、同一训练量，只换编码器，回答“眼科预训练有没有用”，并尽量把“预训练方法”和“预训练数据”分开。
+   必做五个 ViT-L 编码器：
+     RETFound-MAE（natureCFP）：ImageNet-1k 的 MAE 权重在 81.5 万张 MEH-MIDAS 和 8.9 万张 Kaggle EyePACS 彩照上续训。就是主表那一行，直接复用。
+     MAE ImageNet-1k（mae_pretrain_vit_large.pth，facebookresearch/mae）：RETFound-MAE 的起点，两者只差眼科续训。
+     RETFound-DINOv2（RETFound_dinov2_meh，ViT-L/14）：模型卡写的是在“部分 AlzEye 数据”上用 DINOv2 预训练；是否从 DINOv2 权重起步，待按原文核对。
+     DINOv2 ViT-L/14（timm vit_large_patch14_dinov2.lvd142m，LVD-142M）：RETFound 代码构建 RETFound-DINOv2 时用的同一个入口（models_vit.py:79-86）。
+     ImageNet 有监督 ViT-L/16（timm vit_large_patch16_224.augreg_in21k_ft_in1k）：有监督预训练的对照。
+   可选：RETFound-MAE 的 AlzEye 版（RETFound_mae_meh），与 RETFound-DINOv2 同数据、不同方法，可以把方法和数据完全分开，同时检查 EyePACS 预训练对 Retinal-Lesions 一列的影响；DINOv3 ViT-L/16（需申请）。
+   共用：224 窗口（ViT-L/16 是 14×14 个词元，ViT-L/14 是 16×16 个；词元的像素尺度由结构决定，不强行对齐）；第 2 条的头、损失、优化器、调度、drop path 和逐层衰减；各编码器用自己预训练时的归一化（timm 的 pretrained_cfg，augreg 的均值和标准差是 0.5）；位置编码按各自代码插值。
+   学习率：五个编码器各在 DDR 种子 0 上跑 ×1/3、×1、×3，按验证 mAUPR 选定，再用选定值跑种子 1、2。RETFound-MAE 的 ×1 就是主表的种子 0；它的 ×1/3 和 ×3 两次同时算作 E2c 里基础模型一族的名次检查。主表 RETFound 那一行始终用 ×1，与其他模型的规则相同。
+   测试：DDR 内部测试和 5 个独立测试都推理（只推理，代价小）。图 5d 画 DDR 内部测试和两个 TJDR 测试的平均。
+
+九、更新次数与代价
+窗口、头、有效批和优化器步数如下。步数 = 等效 epoch × ceil(ceil(画布像素/块像素)/有效批)。画布像素总数按 00 和 bs_jobs.yaml 里已有的步数反推：IDRiD 约 7557 万到 7609 万，DDR 约 7.668 亿到 7.705 亿；精确值和步数以冒烟写出的 recipe.json 为准。
+
+模型              窗口              头            有效批  IDRiD 优化器步    DDR 优化器步       可训练 / 总参数
+SAMed             512               5 类 softmax  24      13000             48800–49200        约 420 万 / 约 0.94 亿
+SAM-Adapter       1024              4 路 sigmoid  2       37000             146400–147200      约 425 万 / 约 6.4 亿
+SAM2-UNet         960，整画布推理    4 路 sigmoid  12      7000              28000              约 438 万 / 约 2.2 亿
+MedSAM 全量       1024              4 路 sigmoid  2       37000             146400–147200      约 9373 万 / 约 9373 万
+RETFound+UPerNet  224               4 路 sigmoid  24      63000–64000       254800–256000      全部 / 约 3.5 亿
+
+编码器对照的四个新编码器与 RETFound+UPerNet 的窗口和有效批相同，只在 DDR 上训练。
+代价（A100 小时，一个种子，IDRiD/DDR）只是按计算量的粗估，假设矩阵乘开 TF32；不开时以 ViT 为主的模型约慢 3 到 4 倍。冒烟测出每步耗时后改 make_bs_jobs.py 的 est_hours：
+  SAMed 约 1/3；SAM-Adapter 约 6/23；SAM2-UNet 约 1.5/5.5；MedSAM 约 1.2/4.5；RETFound+UPerNet 约 5.5/21。RETFound 一行偏贵，因为 UPerNet 头在步长 4 上的卷积与 ViT-L 本身的计算量相当，224 的块又多。
+  主表 c、d 两档：5 个模型 × 2 个库 × 3 个种子 = 30 个任务，另有 10 个冒烟任务，约 220 GPU 时。
+  编码器对照：4 个新编码器 × 3 个种子 = 12 个任务，约 290 GPU 时；三档学习率每个编码器多 2 次 = 10 个任务，约 230 GPU 时（其中 RETFound 的 2 次与 E2c 共用）。
+  a、b 两档推理：约 60 到 80 GPU 时，主要是 SAM ViT-H 和 SAM 2 在 7 个测试集上的自动掩码。
+  合计约 800 GPU 时，与 B-std 主表队列（约 640）同一量级。冒烟后重估，再定 13 阶段 2 的排期。
+  按 10-11 的决定先只跑种子 0 时：训练档约 75 GPU 时（10 个任务），编码器对照约 330（4 个新编码器各三档学习率，加 RETFound 的 ×1/3、×3，共 14 个任务），推理档不变；种子 1、2 约 340，以后补。
+
+十、预训练数据与泄漏
+逐个核对每个模型见过的数据与本项目 7 个测试集的关系。以原文和代码为准，核对不了的写明。
+  SAM：SA-1B，1100 万张授权的自然照片。未逐图审计，预计不含眼底。
+  SAM 2：SA-1B、SA-V 视频和内部数据。同上。
+  SAM 3：SA-Co，含 15 个外部数据集和合成数据，原文没有提到医学图像。无法审计，写明。
+  MedSAM：按仓库里的补充材料（official_code/MedSAM/assets/MedSAM_supp.pdf 第 3 页表 4），训练用的眼底数据只有 REFUGE（视盘、视杯）；IDRiD 只用于视盘的外部验证，没有进训练，病灶标注也没有用到。这份补充材料早于正式发表，表号与正式版不同，正式版的补充材料要再核对一次。
+  SAMed、SAM-Adapter、SAM2-UNet：只用 SAM 或 SAM 2 的初始化权重，作者各自的训练数据（腹部 CT、伪装物体等）不进本项目。
+  RETFound-MAE（natureCFP）：Nature 论文方法部分写明 904,170 张彩照中 815,468 张来自 MEH-MIDAS，88,702 张来自 Kaggle EyePACS；88,702 正是 Kaggle EyePACS 训练加测试的全部。Retinal-Lesions 的图像取自 Kaggle EyePACS，文件名就是 Kaggle 的“编号_左右眼”，所以这 1593 张图在 RETFound 预训练时都出现过（无标签）。按 12 第四节的规则，RETFound 在 Retinal-Lesions 一列不算独立测试，加表注；Friedman 检验和临界差图另报去掉 Retinal-Lesions 的 6 个测试集版本。其余 6 个测试集与 MEH-MIDAS 没有已知重叠。
+  RETFound_mae_meh、RETFound_dinov2_meh：模型卡写的是“部分 AlzEye 数据”（Moorfields），没有提到 EyePACS。
+  DINOv2：LVD-142M，由网络图像检索整理，可能包含网上公开的眼底图，无法审计，写明。MAE 和 augreg 用的 ImageNet-1k、ImageNet-21k：自然图像。
+  泄漏审计（14 M10）只能覆盖可以下载的集合。EyePACS 一项已由文件名直接确定，不必再算特征相似度。
+  出处：Zhou 等，Nature 622:156–163（2023）方法部分；Hugging Face YukunZhou/RETFound_mae_meh、RETFound_dinov2_meh 的模型卡；MedSAM 仓库 assets/MedSAM_supp.pdf；SAM 3 原文 arXiv:2511.16719 的数据部分。
+
+十一、代码怎么串起来
+沿用 B-std 的布局：bench/ 与 official_code/ 分开，官方仓库保持原样，包装器只导入网络。
+训练档（加进 bench/models/registry.py 的 WRAPPERS、launch_b1.py 的 _SLUG 和 _BINDING、make_bs_jobs.py 的 EST_HOURS）：
+  bench/models/samed.py        卡片：family foundation，forward_size (512, 512)，softmax，class_index (1, 2, 3, 4)，均值 0、标准差 1；自定义损失和 adjust_lr
+  bench/models/sam_adapter.py  卡片：forward_size (1024, 1024)，sigmoid；自定义损失（BCE + IoU）和阶梯余弦
+  bench/models/sam2_unet.py    卡片：forward_size None，pad_multiple 32，sigmoid；训练时 forward 返回三个输出，build_loss 对三个输出求和，推理只返回主输出；阶梯余弦
+  bench/models/medsam.py       卡片：forward_size (1024, 1024)，sigmoid，均值 0、标准差 1；自定义损失（monai 式 Dice + BCE）
+  bench/models/vit_upernet.py  一个包装器，按 encoder 键构建 RETFound-MAE、RETFound-DINOv2、MAE-IN1k、DINOv2、augreg 五种编码器；逐层衰减的参数分组写在 build_optimizer，warmup 加余弦写在 adjust_lr
+  调度能在包装器里覆盖 adjust_lr 的就不改共享的 bench/runtime.py（与 Swin-Unet 的做法相同）。
+  编码器对照的任务名带编码器键和学习率倍数，例如 bs_vitupernet-dinov2-lr3_ddr_seed0；它们不进主表的 Friedman 检验。
+推理档（新目录 bench/e5/）：
+  prompts.py     从画布真值生成 b 档的连通域、抽样顺序、框和点，写成 runs/E5_prompts/<库>.json，并记下真值文件的哈希
+  amg.py         SAM、SAM 2 自动掩码，G1 和 G2，两套参数；写“任意病灶”概率图和按重叠分配类别的上界概率图（两个目录）
+  sam3_text.py   SAM 3 文本提示，12 种措辞
+  oracle.py      SAM、SAM 2、MedSAM 的点框提示
+  persam.py      第二层
+  全部输出用 bench/common/io 的概率图格式，评测走 bench/eval/cli，不另写评测。
+bench/eval：加“任意病灶”合并 AUPR（第四节），protocol.yaml 只新增，配单元测试。
+bench/configs/e5_frozen.yaml：两种几何；自动掩码两套参数；SAM 3 措辞（以及在 DDR 验证集上选定的结果）；k 列表和提示规则；面积上限；编码器对照名单和学习率倍数；每个检查点的文件名、来源和 sha256。
+环境：retiseg（PyTorch 2.6，Python 3.11）跑 SAM、SAM 2（要求 Python ≥3.10、PyTorch ≥2.5.1，sam2/README.md:32）、SAMed、SAM-Adapter、SAM2-UNet、MedSAM 和 ViT 加 UPerNet。SAM2-UNet 自带一份 sam2 包，按路径导入，与 official_code/sam2 不混用。retiseg-sam3：Python 3.12、PyTorch ≥2.7、CUDA ≥12.6，只给 SAM 3 推理；cluster_env.sh 加一段自检。
+测试：每个包装器一个前向形状测试和配方测试（用缩小的配置；本机 ulimit -v 16000000 下跑不动 ViT-H，真实网络的显存在服务器冒烟里查）；提示生成的确定性测试（同一真值两次生成完全相同，k 的前缀关系成立）；任意病灶 AUPR 的单元测试；ViT 编码器的“块参数全部载入”测试。
+
+十二、提交前要在集群上确认的文件
+这些文件不在 Git 里。缺任何一个，对应任务在第一步之前退出，不会静默改成随机初始化。
+  pretrained/sam_vit_h_4b8939.pth      SAM 零样本和理想提示、SAM-Adapter、PerSAM
+  pretrained/sam_vit_b_01ec64.pth      SAMed
+  pretrained/sam2.1_hiera_large.pt     SAM 2 零样本和理想提示
+  pretrained/sam2_hiera_large.pt       SAM2-UNet（SAM 2.0 版，dl.fbaipublicfiles.com/segment_anything_2/072824/）
+  pretrained/medsam_vit_b.pth          MedSAM（作者 Google Drive）
+  sam3.pt                              Hugging Face facebook/sam3，需申请
+  RETFound_mae_natureCFP.pth、RETFound_dinov2_meh.pth   Hugging Face YukunZhou，需申请（可选再加 RETFound_mae_meh.pth）
+  pretrained/mae_pretrain_vit_large.pth
+  timm 缓存：vit_large_patch14_dinov2.lvd142m、vit_large_patch16_224.augreg_in21k_ft_in1k
+需要申请的三项（SAM 3、两份 RETFound）现在就提交申请。申请不到的，对应行记为“权重未获”，留在表里，不拿别的权重顶替。
+
+十三、执行顺序
+1. 本机：写包装器、bench/e5、e5_frozen.yaml 和测试；生成 b 档提示文件；只读训练集算面积上限。提交。
+2. 服务器：建 retiseg-sam3，取权重，跑测试。
+3. 冒烟：训练档 5 个模型 × 2 个库各 20 步（连同 SAM2-UNet 的 reduce='none' 核对）；推理档每种用法各跑 2 张验证图。记显存峰值和每步耗时，改 est_hours，必要时在 cell 里设 batch_size 累积或加激活重计算，提交后再进下一步。
+4. 推理档插空卡：先跑 DDR 验证集（选 SAM 3 措辞、推理档的 Dice 阈值），选择结果写进 e5_frozen.yaml 提交，再跑 7 个测试集。
+5. 训练档先跑种子 0 和种子 0 打分，用只排种子 0 的队列（与 11 第 14 条 b1-queue 的 --seed0-only 相同），与其他任务共用卡。种子 0 结束时看逐类验证曲线（第三节第 13 条）。种子 1、2 按 10-11 的用户决定暂缓，以后与 B-std 其余种子一起用 bs-queue 补。
+6. 编码器对照：DDR 种子 0 的三档学习率，选定；种子 1、2 同样暂缓。
+7. E3a 独立测试：训练档的全部检查点。
+出问题先砍（E5 内部）：PerSAM 和全部可选项；G2 和“更多掩码”在独立测试上的推理；编码器对照里 augreg 一行（整行砍，不只砍某个编码器的部分种子）。不砍：主表 c、d 两档的 5 个模型和 3 个种子，a 档主结果，b 档 k = 全部。
+
+十四、这批故意不做的事
+不让基础模型用真值框或点去训练。MedSAM 原配方带框训练，主表要求全自动，带框的用法放在 b 档。
+不做 SAM 3 的微调，不做 SAM 2、SAM 3 版的 SAM-Adapter，不做 SAMed_h、SAMed_s。
+不做 05 原计划里“整图缩到 1024 再微调”的对照。分辨率的作用由 E7 回答，SAM2-UNet 和 RETFound 加 UPerNet 都在 E7 的代表模型里。
+不为基础模型另调超参，第八节第 3 条编码器对照的三档学习率除外。
+不用测试集选措辞、自动掩码参数或提示数。
+不把 a、b 两档和主表排在一起，也不放进 Friedman 检验。
+不复现 TP-DRSeg、Chen 2025、Learnable Ophthalmology SAM（没有可用代码），只做原文审计。
+
+十五、已知的、应当写进补充材料的偏差
+每条都会出现在对应运行的 recipe.json。这里是汇报用的汇总。
+全员（训练档）：共享增强代替作者增强；1440 画布上按规则切块；按像素计的预算和按验证 mAUPR 选检查点；IDRiD 训练 44 张；单卡，作者的多卡改为累积；不开混合精度。
+SAMed：损失改在输入分辨率上算；调度按“B-std 步数 ÷ 0.8”展开，保留作者在 80% 处停下的形状；类别相关的解码器参数随机初始化（照作者）。
+SAM-Adapter：有效批按代码实际行为取 2（作者 DDP 没有同步梯度）；提示编码器两个张量没有载入（照作者）；四个掩码 token 作四类；配置里的增强开关和 encoder_mode 不被读取（照作者）。
+SAM2-UNet：352 改为 960 块、整画布推理；加权 BCE 实际是平均 BCE（照作者代码）；三个输出卷积 64→1 改为 64→4；未使用的 up4 仍在优化器里（照作者）。
+MedSAM：不给提示的全自动用法；四个掩码 token 作四类；有效批 2（单卡脚本），不用论文的 160；归一化统一为除以 255。
+RETFound+UPerNet：解码头和辅助头由本项目指定；交叉熵改为 BCE；不开 fp16；按代码的批 24、学习率 4.6875e-4，不按论文正文的批 16、5e-4。
+零样本：SAM 2 的补洞和去碎点依赖 CUDA 算子（核对是否执行）；SAM 3 置信阈值从 0.5 改为 0；SAM 3 传 PIL 图。
+理想提示：每个提示单独解码；点取 predicted IoU 最高的掩码；框不抖动。
+
+十六、需要用户决定的事（括号里是建议）
+1. 训练档的矩阵乘是否开 TF32（建议开）。PyTorch 默认卷积已经走 TF32，B-std 里的卷积模型一直在用；矩阵乘默认是完整 fp32，ViT 类模型因此慢 3 到 4 倍，SAM-Adapter 在 DDR 上一个种子会从约 23 小时变成约 85 小时。开了以后，E5 与已训完的 Swin-Unet、FCT 在矩阵乘精度上不同；可以用 SAM2-UNet 的 IDRiD 种子 0 开和不开各跑一次核对（约 3 GPU 时），差别若在种子波动之内就写一句说明。不开，则 E5 总代价约翻倍，要重排 13 的阶段 2。
+2. RETFound 主表用哪份权重（建议 natureCFP，Retinal-Lesions 加表注，另报去掉该列的排名）。另一个选择是 RETFound_mae_meh：没有 EyePACS，全部独立测试都干净，但 Nature 论文发布、读者熟悉的“RETFound”是 natureCFP。
+3. 作者代码与论文不一致时按哪边（建议按代码）。涉及 SAM-Adapter 的有效批（代码实际为 2，意图为 8）和两个没有载入的张量，以及 SAM2-UNet 退化的加权 BCE。按论文意图修正也说得通，但那样就是本项目修过的版本，要单列并说明。
+4. SAM2-UNet、MedSAM 若出现稀有类塌缩，是否与 U-Net 一并处理（建议绑定 14 备注 21 的决定：若 U-Net 改为整批计算，这两个模型种子 0 的验证曲线若同样塌缩，逐图项也改为整批，只依据训练和验证，重跑它们的全部种子；不塌缩就保持作者定义）。10-12 的 U-Net 诊断给出了这一改法有效的直接证据（第一节第 6 条）。
+5. 编码器对照的规模（建议五个必做编码器、三档学习率、3 个种子，约 520 GPU 时）。算力紧时整行砍 augreg，或只做两组“父子对照”（MAE-IN1k 对 RETFound-MAE，DINOv2 对 RETFound-DINOv2）。
+
+十七、与论文草稿的对应
+图 5a、表 6：四档分块。SAM 3 一行的措辞改为“在 DDR 验证集上选出”，测试集上最好的一种只在图 5c 里作上界。
+图 5b：IDRiD 测试，k = 1、5、10、20、全部，MA 和 SE 分开。
+图 5c：SAM 3 三种措辞。
+图 5d：编码器对照。草稿有四行，补上 MAE ImageNet-1k 一行（RETFound-MAE 的起点）。
+图 5e：每档最好的一个，对照专用模型和自动配置的参照。
+表 4、表 5：c、d 两档的 5 行与其他 9 行同表；参数列改为“总参数 / 可训练参数”两列。草稿里 SAM-Adapter 的 93.7M 是 ViT-B 的量级，ViT-H 约 6.4 亿。
+表 5 的 Retinal-Lesions 列：RETFound 一格加表注。表 6 的骨干一列与第五至八节一致：SAM ViT-H、SAM 2.1 Hiera-L、MedSAM ViT-B、SAMed ViT-B、SAM-Adapter ViT-H、SAM2-UNet Hiera-L（SAM 2.0）、RETFound ViT-L/16；表注里“骨干待确认”一句可以去掉。零样本两行另加“任意病灶”一列（第五节第 3 条的主结果）。
+表 8：补 5 行基础模型（初始化、头、损失、优化器、学习率、权重衰减、调度、有效批、窗口、推理方式、步数），数字取第七至九节。
+方法 Foundation models 一段：(c) 现在写的是三个模型都切 1024 块，改为按第三节第 4 条的窗口规则（SAMed 512，SAM-Adapter 和 MedSAM 1024，SAM2-UNet 960 块、整画布推理，RETFound 224）；(a) 加一句 SAM 3 措辞在 DDR 验证集上选；(d) 的编码器对照补 MAE ImageNet-1k 和 RETFound-DINOv2。
+
+十八、建议的口头汇报顺序
+1. E5 分四档：零样本、理想提示（上界）、参数高效微调、全量微调或编码器加解码头。后两档的 5 个模型直接进 B-std 主表，前两档单独成表，不和主表排名。
+2. 公平的三条底线：同档同条件；训练档与主表其余 9 个模型共用全部共享项；每个模型保留自己的方法，作者代码怎么做就怎么做，差异都写进偏差。
+3. 窗口规则与 B-std 相同：ViT 用作者的输入尺寸，Hiera 当全卷积处理；所有模型的像素尺度一样。
+4. 零样本自动掩码没有类别，主结果是“任意病灶”。按重叠分配类别和整个理想提示档都读了测试真值，只是上界。SAM 3 的措辞事先登记，在验证集上选。
+5. RETFound 的预训练用过全部 Kaggle EyePACS，Retinal-Lesions 一列不算它的独立测试。
+6. 编码器对照：同一个头、同一份配方，五个编码器各跑三档学习率，回答眼科预训练有没有用。
+7. 代价约 800 GPU 时（粗估），冒烟后重估；需要定的五件事在第十六节。

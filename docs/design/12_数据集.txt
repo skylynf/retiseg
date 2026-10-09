@@ -56,7 +56,7 @@ Retinal-Lesions（Wei 2020，ICPR；仓库 official_code/retinal-lesions）
   标注：45 名眼科医生用椭圆或多边形标注，每张至少三人；只保留分级多数一致的图，再按指南清理病灶。八类：MA、iHE、HaEx、CWS、vHE、pHE、NV、FiP。
   预处理：发布的图已按视野裁成正方形并缩到 896×896。掩码里灰度 127 是“不符合 AAO 分级指南”的标注，作者实验里排除了这些区域。
   划分：发布的 1593 张整体是作者测试集的一部分，没有训练划分。Lesion-Net 表 II 的数字是在作者完整测试集上算的（约 2450 张，含医院图），不是这 1593 张，不能和我们在这 1593 张上的结果直接对比。
-  风险：图像来自 EyePACS。SSMD-UNet 用 EyePACS 无标注数据预训练。RETFound 的彩照预训练集是否含 EyePACS，要按 RETFound 原文核对；该文不在 literature/ 里，需补下载。
+  风险：图像来自 EyePACS。SSMD-UNet 用 EyePACS 无标注数据预训练。RETFound 已核对（2026-10-09）：Nature 原文方法部分写明彩照预训练的 904,170 张中 88,702 张是 Kaggle EyePACS，即其训练加测试的全部，所以 Retinal-Lesions 的图都在 RETFound 预训练里出现过。处理见 design/15 第十节、14 备注 9。原文仍未放进 literature/，需补下载。
 
 二、角色（2026-10-07 用户确认：按模板论文的体例由本项目决定）
 
@@ -135,7 +135,7 @@ Retinal-Lesions
   1. 核对（已完成）：1593 张、896×896、八类掩码的目录结构、灰度 127 的分布、文件名含 Kaggle 编号。结果在 07。
   2. prepare_retlesion：四类取 255，127 写进忽略区，扩展四类进 masks_ext/。
   3. 角色：E4 的粗标注来源；E3 的一列测试。不进 B-std 主表。
-  4. 泄漏：和 EyePACS 预训练相关的模型（RETFound 待核对，SSMD-UNet）在这一列上的结果加脚注。按模板的做法，若预训练集确实含这些图，该模型在这一列上不算独立测试。
+  4. 泄漏：和 EyePACS 预训练相关的模型（RETFound 的 Nature 版权重已确认包含，SSMD-UNet）在这一列上的结果加脚注。按模板的做法，预训练集含这些图的模型在这一列上不算独立测试；排名另报去掉 Retinal-Lesions 的版本。
 
 五、进入哪些实验
 
