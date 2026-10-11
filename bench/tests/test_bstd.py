@@ -281,3 +281,52 @@ def test_run_cell_trains_and_selects_by_validation_maupr(tmp_path, monkeypatch):
     assert json.loads((run_dir / "diagnostic.json").read_text())["test_split_read"] is False
     best = max(rows, key=lambda row: row["val_maupr"])
     assert torch.load(run_dir / "best.pt", weights_only=False)["step"] == best["iteration"]
+
+
+def test_recipe_revision_merges_loss_params_and_is_recorded():
+    declared = _Tiny().author_recipe("IDRiD")
+    frozen = dict(FROZEN)
+    frozen["recipe_revisions"] = {
+        "tiny": {"loss_params": {"smooth": 1e-5, "batch_dice": True}, "reason": "rare-class collapse", "date": "2026-10-12"}
+    }
+    resolved, deviations, *_ = bstd.budget(declared, "IDRiD", frozen, 64 * 64 * 10, (32, 32), model_name="tiny")
+    assert resolved.loss_params == {"smooth": 1e-5, "batch_dice": True}
+    assert any("recipe revision 2026-10-12" in item for item in deviations)
+    plain, _dev, *_ = bstd.budget(declared, "IDRiD", frozen, 64 * 64 * 10, (32, 32), model_name="other")
+    assert plain.loss_params == {}
+    frozen["recipe_revisions"] = {"tiny": {"loss_params": {"smooth": 1e-5}}}
+    with pytest.raises(ValueError, match="reason and date"):
+        bstd.budget(declared, "IDRiD", frozen, 64 * 64 * 10, (32, 32), model_name="tiny")
+
+
+def test_frozen_file_has_no_revision_yet():
+    assert FROZEN["recipe_revisions"] == {}
+
+
+def test_lr_scale_takes_only_the_e2c_factors_and_scales_the_floor():
+    from bench.models.base import AuthorRecipe
+
+    assert bstd.lr_scale({}) == 1.0
+    assert bstd.lr_scale({"lr_scale": 1 / 3}) == pytest.approx(1 / 3)
+    with pytest.raises(ValueError):
+        bstd.lr_scale({"lr_scale": 2})
+    recipe = AuthorRecipe(
+        loss="dice", optimizer="sgd", lr=0.01, weight_decay=5e-4, schedule="poly", iterations=10, batch_size=1,
+        crop_size=(8, 8), pretrained="", optimizer_params={"momentum": 0.9, "min_lr": 1e-4},
+    )
+    scaled = bstd.scale_learning_rate(recipe, 3.0)
+    assert scaled.lr == pytest.approx(0.03) and scaled.optimizer_params["min_lr"] == pytest.approx(3e-4)
+    assert scaled.optimizer_params["momentum"] == 0.9 and recipe.lr == 0.01
+
+
+def test_budget_signature_compares_loss_params_through_json():
+    from bench.runtime import budget_signature
+
+    base = {
+        "iterations": 10, "epochs": 1, "loss": "dice", "optimizer": "sgd", "lr": 0.01, "weight_decay": 0.0,
+        "schedule": "poly", "batch_size": 1, "nominal_effective_batch_size": 1, "step_image_counts": [1],
+    }
+    saved = dict(base, recipe={"loss_params": {"weights": [0.5, 0.7]}})
+    fresh = dict(base, loss_params={"weights": (0.5, 0.7)})
+    assert budget_signature(saved) == budget_signature(fresh)
+    assert budget_signature(saved) != budget_signature(dict(base, loss_params={"weights": (0.5, 0.7), "smooth": 1e-5}))

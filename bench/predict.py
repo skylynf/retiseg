@@ -48,7 +48,8 @@ def predict_image(model, dataset_dir, image_id, diameter, pred_dir, device, infe
     """``inference`` None is B1: the canvas, resized to card.forward_size when set.
 
     A dict with ``window`` and ``overlap`` is B-std: the diameter canvas,
-    whole when window is None, otherwise overlapping windows of that size.
+    whole when window is None, otherwise overlapping windows of that size,
+    ``batch`` of them per forward pass (default 8).
     """
     model.eval()
     card = model.card
@@ -68,7 +69,12 @@ def predict_image(model, dataset_dir, image_id, diameter, pred_dir, device, infe
             logits = model(tensor)[:, :, :content_h, :content_w]
         else:
             logits = canvas_logits(
-                model, canvas["tensor"].to(device), card, inference["window"], inference["overlap"]
+                model,
+                canvas["tensor"].to(device),
+                card,
+                inference["window"],
+                inference["overlap"],
+                inference.get("batch", 8),
             ).unsqueeze(0)
         prob = lesion_probabilities(logits, card)[0].detach().cpu().numpy()
     canvas_h, canvas_w = canvas["canvas_hw"]

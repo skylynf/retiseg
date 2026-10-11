@@ -34,7 +34,8 @@ literature/（仓库根目录下）文献。04 代码审计、06 检索、08 全
 
 结果 3  统一重训，内部测试与独立测试（模板 Fig. 3，Performance of retrained models）
   本文：R4，图 4。E2 B-std 主表（3 种子）、nnU-Net、E2b B1 第二列、E2c 小规模调参、E3a 独立测试、内部与独立之差、排名
-  设计：05 第四节 E2、E2b、E2c、E3a；09（B1）；12 第二、五节；bench/configs/bs_frozen.yaml、b1_frozen.yaml
+  设计：05 第四节 E2、E2b、E2c、E3a；09（B1）；12 第二、五节；bench/configs/bs_frozen.yaml、b1_frozen.yaml、e3a_frozen.yaml（独立测试）、extra_jobs.yaml（E2c）
+  汇总：bench/scripts/summarize.py（内部对独立的表、按测试集的临界差，只读 json）
   执行：11；数字和状态在 00（审查采纳、服务器第一批）
   写法：14 的 M7、M8、M10、M11、M12；备注 1、5、6、14、15、16、17、18
   本文另加 R5 基础模型，图 5。E5 零样本、理想提示、参数高效微调、编码器加解码头；设计在 design/15（05 的 E5 是摘要），写法在 14 的 M9；备注 9、26–31

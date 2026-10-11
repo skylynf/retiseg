@@ -843,7 +843,7 @@ def assert_seed0_current(seed0_jobs):
             ids = load_split(dataset_dir, config["split_train"])
             pixels = bstd.canvas_pixels(dataset_dir, ids, int(config["fov_diameter"]))
             resolved, _deviations, _per_epoch, n_train, _eval_every = bstd.budget(
-                declared, job["dataset"], frozen, pixels, patch
+                declared, job["dataset"], frozen, pixels, patch, model_name=job["model"]
             )
         else:
             resolved, _deviations, _per_epoch = resolve_recipe(declared, config, n_train)
@@ -859,6 +859,7 @@ def assert_seed0_current(seed0_jobs):
             "batch_size": int(micro),
             "nominal_effective_batch_size": int(resolved.effective_batch_size),
             "step_image_counts": optimizer_step_sizes(n_train, micro, resolved.effective_batch_size),
+            "loss_params": resolved.loss_params,
         }
         try:
             current = budget_signature(saved)

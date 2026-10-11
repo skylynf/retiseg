@@ -17,7 +17,7 @@ c、d 两档的 5 个模型就是 B-std 主表的第四族（基础模型）：�
 2. 训练档的窗口按与 B-std 同一条规则取：网络里按输入尺寸建好绝对位置编码的 ViT 用作者的输入尺寸（SAMed 512、SAM-Adapter 1024、MedSAM 1024、RETFound 224），尺寸不受限的层级编码器（SAM2-UNet 的 Hiera）与全卷积模型一样切 960 块、整画布推理。所有模型都在 1440 画布的同一像素尺度上看图，差别只在一次看到的范围。
 3. 骨干大小不统一：SAMed 和 MedSAM 是 ViT-B，SAM-Adapter 是 ViT-H，SAM2-UNet 是 Hiera-L，RETFound 是 ViT-L。用的都是作者的主配置。主表给出总参数和可训练参数两列，不把差距单独归到“适配方式”上。
 4. 二分类头改四类的方式各模型不同（第七、八节）。这是让它们能做四类所必需的最小改动，写进偏差清单。
-5. RETFound（Nature 版权重）的彩照预训练集包含全部 88,702 张 Kaggle EyePACS，Retinal-Lesions 的 1593 张图就取自 Kaggle EyePACS。RETFound 在 Retinal-Lesions 这一列不算独立测试，加表注；临界差图另报去掉 Retinal-Lesions 的版本。
+5. RETFound（Nature 版权重）的彩照预训练集包含全部 88,702 张 Kaggle EyePACS，Retinal-Lesions 的 1593 张图就取自 Kaggle EyePACS。RETFound 在 Retinal-Lesions 这一列不算独立测试，加表注；临界差图另报去掉 Retinal-Lesions 的版本。2026-10-12 的泄漏审计又发现 FGADR 的 _3 批（588 张中至少 90 张与 Retinal-Lesions 是同一张照片）也来自 Kaggle EyePACS，所以 FGADR 一列同样加注，summarize.py 的 pretraining_overlap_removed 排名把 RETFound 的这两格都去掉。
 6. 稀有类塌缩：SAM2-UNet 的加权 IoU 项和 MedSAM 的 Dice 都按每张图、每一类单独计算并带平滑项，与 U-Net（14 备注 21）同属一类机制，DDR 空块多的类有同样的风险。10-12 的诊断（00）已证实这一机制：U-Net 只把 Dice 改成整批计算、平滑 1e-5，DDR 验证 mAUPR 从 0.127 升到 0.544，四类都恢复输出。种子 0 先看逐类验证曲线，处理办法与 U-Net 绑定，由用户一并决定（第十六节第 4 条）。
 
 二、在整个计划中的位置
@@ -187,7 +187,7 @@ RETFound+UPerNet  224               4 路 sigmoid  24      63000–64000       2
   SAM 3：SA-Co，含 15 个外部数据集和合成数据，原文没有提到医学图像。无法审计，写明。
   MedSAM：按仓库里的补充材料（official_code/MedSAM/assets/MedSAM_supp.pdf 第 3 页表 4），训练用的眼底数据只有 REFUGE（视盘、视杯）；IDRiD 只用于视盘的外部验证，没有进训练，病灶标注也没有用到。这份补充材料早于正式发表，表号与正式版不同，正式版的补充材料要再核对一次。
   SAMed、SAM-Adapter、SAM2-UNet：只用 SAM 或 SAM 2 的初始化权重，作者各自的训练数据（腹部 CT、伪装物体等）不进本项目。
-  RETFound-MAE（natureCFP）：Nature 论文方法部分写明 904,170 张彩照中 815,468 张来自 MEH-MIDAS，88,702 张来自 Kaggle EyePACS；88,702 正是 Kaggle EyePACS 训练加测试的全部。Retinal-Lesions 的图像取自 Kaggle EyePACS，文件名就是 Kaggle 的“编号_左右眼”，所以这 1593 张图在 RETFound 预训练时都出现过（无标签）。按 12 第四节的规则，RETFound 在 Retinal-Lesions 一列不算独立测试，加表注；Friedman 检验和临界差图另报去掉 Retinal-Lesions 的 6 个测试集版本。其余 6 个测试集与 MEH-MIDAS 没有已知重叠。
+  RETFound-MAE（natureCFP）：Nature 论文方法部分写明 904,170 张彩照中 815,468 张来自 MEH-MIDAS，88,702 张来自 Kaggle EyePACS；88,702 正是 Kaggle EyePACS 训练加测试的全部。FGADR 的 _3 批也来自 Kaggle EyePACS（2026-10-12 泄漏审计，14 备注 32），按同一规则处理。Retinal-Lesions 的图像取自 Kaggle EyePACS，文件名就是 Kaggle 的“编号_左右眼”，所以这 1593 张图在 RETFound 预训练时都出现过（无标签）。按 12 第四节的规则，RETFound 在 Retinal-Lesions 一列不算独立测试，加表注；Friedman 检验和临界差图另报去掉 Retinal-Lesions 的 6 个测试集版本。其余 6 个测试集与 MEH-MIDAS 没有已知重叠。
   RETFound_mae_meh、RETFound_dinov2_meh：模型卡写的是“部分 AlzEye 数据”（Moorfields），没有提到 EyePACS。
   DINOv2：LVD-142M，由网络图像检索整理，可能包含网上公开的眼底图，无法审计，写明。MAE 和 augreg 用的 ImageNet-1k、ImageNet-21k：自然图像。
   泄漏审计（14 M10）只能覆盖可以下载的集合。EyePACS 一项已由文件名直接确定，不必再算特征相似度。

@@ -1,7 +1,8 @@
 """Command line entry points.
 
     python -m bench.eval.cli evaluate --data DATASET_DIR --split test --pred PRED_DIR \
-        [--val-pred VAL_PRED_DIR] --out runs/<run>/metrics/<dataset>_test
+        [--val-pred VAL_PRED_DIR [--val-data TRAIN_SOURCE_DIR]] [--exclude ID,ID] \
+        --out runs/<run>/metrics/<dataset>_test
     python -m bench.eval.cli compare --a A.npz --b B.npz [--threshold fixed]
 """
 
@@ -21,7 +22,18 @@ def _evaluate(args):
         label_policy=args.label_policy,
         lesion_metrics=False if args.no_lesion else None,
     )
-    res = evaluate(args.data, args.split, args.pred, proto, args.val_pred, args.val_split, args.out)
+    exclude = [item for item in (args.exclude or "").split(",") if item]
+    res = evaluate(
+        args.data,
+        args.split,
+        args.pred,
+        proto,
+        args.val_pred,
+        args.val_split,
+        args.out,
+        val_dataset_dir=args.val_data,
+        exclude=exclude,
+    )
     print(json.dumps(res["summary"], indent=1))
 
 
@@ -29,7 +41,7 @@ def _compare(args):
     a, b = np.load(args.a), np.load(args.b)
     if not np.array_equal(a["image_ids"], b["image_ids"]):
         raise SystemExit("the two evaluations were not run on the same images")
-    classes = sorted({k.split("_")[0] for k in a.files if k.endswith("_pos")})
+    classes = sorted({k.split("_")[0] for k in a.files if k.endswith(f"_dice_{args.threshold}")})
     out = {}
     for c in classes:
         boot = stats.paired_bootstrap_aupr(a[f"{c}_pos"], a[f"{c}_neg"], b[f"{c}_pos"], b[f"{c}_neg"])
@@ -51,6 +63,8 @@ def main(argv=None):
     e.add_argument("--pred", required=True)
     e.add_argument("--val-pred")
     e.add_argument("--val-split", default="val")
+    e.add_argument("--val-data", help="dataset whose validation split picks the Dice thresholds (default: --data)")
+    e.add_argument("--exclude", help="comma-separated image ids left out of --split")
     e.add_argument("--out", required=True, help="output prefix; writes .json and .npz")
     e.add_argument("--protocol", default=DEFAULT_PROTOCOL)
     e.add_argument("--use-fov", choices=["yes", "no"])

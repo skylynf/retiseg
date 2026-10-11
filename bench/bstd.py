@@ -86,6 +86,27 @@ def canvas_pixels(dataset_dir, ids, diameter):
 
 
 PROBE_SCALES = (1, 2)
+# E2c: learning rate x 1/3 and x 3 of the recipe, seed 0, validation only.
+LR_SCALES = (1.0 / 3.0, 1.0, 3.0)
+
+
+def lr_scale(config):
+    """``lr_scale`` of a cell (E2c), 1 when absent. Only the frozen factors are accepted."""
+    value = float(config.get("lr_scale") or 1.0)
+    if not any(abs(value - allowed) < 1e-6 for allowed in LR_SCALES):
+        raise ValueError(f"lr_scale must be one of 1/3, 1, 3, got {value}")
+    return value
+
+
+def scale_learning_rate(recipe, factor):
+    """The whole schedule times ``factor``: lr, and min_lr where the recipe has a floor."""
+    optimizer_params = dict(recipe.optimizer_params)
+    loss_params = dict(recipe.loss_params)
+    for params in (optimizer_params, loss_params):
+        for key in ("lr", "min_lr"):
+            if key in params:
+                params[key] = float(params[key]) * factor
+    return replace(recipe, lr=float(recipe.lr) * factor, optimizer_params=optimizer_params, loss_params=loss_params)
 
 
 def probe_scale(config):
@@ -96,8 +117,24 @@ def probe_scale(config):
     return scale
 
 
-def budget(declared, name, frozen, pixels, patch, scale=1):
-    """Resolve the BS step count. Returns resolved recipe, deviations, steps per epoch, samples per epoch, eval_every."""
+def revision_for(model_name, frozen):
+    """A recipe revision written into bs_frozen.yaml after the first B-std runs, or None."""
+    revisions = frozen.get("recipe_revisions") or {}
+    revision = revisions.get(model_name)
+    if revision is None:
+        return None
+    unknown = set(revision) - {"loss_params", "reason", "date"}
+    if unknown or "loss_params" not in revision or not revision.get("reason") or not revision.get("date"):
+        raise ValueError(f"recipe revision of {model_name} needs loss_params, reason and date only, got {sorted(revision)}")
+    return revision
+
+
+def budget(declared, name, frozen, pixels, patch, scale=1, model_name=None):
+    """Resolve the BS step count. Returns resolved recipe, deviations, steps per epoch, samples per epoch, eval_every.
+
+    A recipe revision for ``model_name`` in bs_frozen.yaml (recipe_revisions)
+    is merged into loss_params here, so a run and the seed-0 gate see the same recipe.
+    """
     epochs = int(frozen["equivalent_epochs"][name]) * int(scale)
     effective = int(declared.effective_batch_size)
     patch_pixels = int(patch[0]) * int(patch[1])
@@ -108,6 +145,9 @@ def budget(declared, name, frozen, pixels, patch, scale=1):
     eval_epochs = max(1, epochs // (int(frozen["n_evals"]) * int(scale)))
     eval_every = eval_epochs * per_epoch
     loss_params = {key: value for key, value in declared.loss_params.items() if key != "early_stop_patience"}
+    revision = revision_for(model_name, frozen) if model_name is not None else None
+    if revision is not None:
+        loss_params = {**loss_params, **revision["loss_params"]}
     deviations = [
         f"B-std budget: {epochs} equivalent epochs of {pixels} canvas pixels; "
         f"{patches} patches of {patch[0]}x{patch[1]} per epoch, rounded up to {samples} "
@@ -117,6 +157,10 @@ def budget(declared, name, frozen, pixels, patch, scale=1):
     ]
     if "early_stop_patience" in declared.loss_params:
         deviations.append("early_stop_patience dropped; B-std runs the whole budget")
+    if revision is not None:
+        deviations.append(
+            f"recipe revision {revision['date']}: loss_params {revision['loss_params']}; {revision['reason']}"
+        )
     if int(scale) != 1:
         deviations.append(f"budget probe: {int(scale)} x the frozen equivalent epochs; train and validation only")
     if MAX_STEPS is not None and iterations > int(MAX_STEPS):
@@ -232,7 +276,15 @@ def run_cell(
     if scale != 1 and not diagnostic:
         raise ValueError("a budget probe is train and validation only; run it with --diagnostic")
     pixels = canvas_pixels(config["dataset"], source.ids, diameter)
-    resolved, deviations, per_epoch, samples, eval_every = budget(declared, name, frozen, pixels, patch, scale)
+    resolved, deviations, per_epoch, samples, eval_every = budget(
+        declared, name, frozen, pixels, patch, scale, model_name=card.name
+    )
+    factor = lr_scale(config)
+    if factor != 1.0:
+        if not diagnostic:
+            raise ValueError("lr_scale is the E2c learning-rate check; run it with --diagnostic")
+        resolved = scale_learning_rate(resolved, factor)
+        deviations = deviations + [f"E2c learning-rate check: lr and min_lr x {factor:g}; validation only"]
     override = config.get("diagnostic_loss_params")
     if override:
         if not diagnostic:

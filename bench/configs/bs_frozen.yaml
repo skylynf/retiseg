@@ -61,3 +61,11 @@ augment:
     contrast_range: [0.5, 1.5]
     saturation_range: [0.5, 1.5]
     hue_delta_degrees: 18
+
+# Recipe revisions after the first B-std runs, one entry per model, each with
+# loss_params (merged into the author recipe), reason and date. A revision
+# changes the budget signature, so the seed-0 gate refuses later seeds until
+# that model's seed 0 is rerun; move the old run directories aside first
+# (docs/ops/11). Empty: no revision adopted. The U-Net batch-Dice candidate
+# (14 note 21) would be {loss_params: {smooth: 1.0e-5, batch_dice: true}}.
+recipe_revisions: {}

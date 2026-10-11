@@ -550,6 +550,10 @@ def budget_signature(recipe_json):
     if missing:
         raise KeyError("recipe.json is missing " + ", ".join(missing))
     signature = {key: recipe_json[key] for key in keys}
+    # Loss parameters (a recipe revision changes only these). recipe.json keeps
+    # them under "recipe"; JSON turns tuples into lists, so both sides go through it.
+    loss_params = recipe_json.get("loss_params", (recipe_json.get("recipe") or {}).get("loss_params", {}))
+    signature["loss_params"] = json.loads(json.dumps(loss_params, sort_keys=True))
     signature["lr"] = float(signature["lr"])
     signature["weight_decay"] = float(signature["weight_decay"])
     signature["step_image_counts"] = [int(size) for size in signature["step_image_counts"]]

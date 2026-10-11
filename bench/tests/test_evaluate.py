@@ -99,3 +99,63 @@ def test_noisy_predictions_and_resolution_check(toy_dataset, tmp_path):
     io.write_prob(tmp_path / "pred", "MA", "t0", np.zeros((60, 80)))
     with pytest.raises(ValueError, match="original resolution"):
         evaluate(root, "test", tmp_path / "pred", proto)
+
+
+def test_any_lesion_and_image_level_outputs(toy_dataset, tmp_path):
+    root, truth = toy_dataset
+    _write_preds(tmp_path / "pred", truth)
+    proto = load_protocol()
+    proto["bootstrap"]["n"] = 50
+    res = evaluate(root, "test", tmp_path / "pred", proto, out_prefix=tmp_path / "m" / "toy")
+    assert res["summary"]["AUPR_any_lesion"] == pytest.approx(1.0)
+    assert res["any_lesion"]["n_positive_pixels"] > 0
+    for c in res["classes"]:
+        level = res["per_class"][c]["image_level"]["max"]
+        assert level["n_images"] == 3 and level["n_positive"] == 3
+    saved = np.load(tmp_path / "m" / "toy.npz")
+    assert saved["ANY_pos"].shape == (3, proto["image_hist_bins"])
+    assert saved["MA_img_label"].tolist() == [True, True, True]
+
+
+def test_any_lesion_skips_ignored_pixels_unless_another_class_marks_them(tmp_path):
+    from bench.eval.evaluate import any_lesion
+
+    base = np.ones((2, 3), bool)
+    masks = {"MA": np.array([[1, 0, 0], [0, 0, 0]], bool), "HE": np.array([[0, 1, 0], [0, 0, 0]], bool)}
+    ignore_ma = np.array([[0, 1, 1], [0, 0, 0]], bool)
+    valid = {"MA": base & ~ignore_ma, "HE": base.copy(), "_base": base}
+    probs = {"MA": np.full((2, 3), 3), "HE": np.full((2, 3), 7)}
+    truth, region, score = any_lesion(valid, masks, probs, ["MA", "HE"])
+    assert truth.tolist() == [[True, True, False], [False, False, False]]
+    # (0, 1) is ignored for MA but positive for HE, so it stays; (0, 2) is only ignored.
+    assert region.tolist() == [[True, True, False], [True, True, True]]
+    assert (score == 7).all()
+
+
+def test_thresholds_from_another_dataset_and_excluded_images(toy_dataset, tmp_path):
+    root, truth = toy_dataset
+    _write_preds(tmp_path / "pred", truth, noise=0.2)
+    other = tmp_path / "OTHER"
+    for name in ("meta.json",):
+        (other / name).parent.mkdir(parents=True, exist_ok=True)
+        (other / name).write_text((root / name).read_text())
+    (other / "splits.json").write_text(json.dumps({"train": [], "val": ["v0"], "test": []}))
+    for sub in ("fov", "masks/MA", "masks/HE", "masks/EX"):
+        (other / sub).mkdir(parents=True, exist_ok=True)
+        src = root / sub / "v0.png"
+        (other / sub / "v0.png").write_bytes(src.read_bytes())
+    proto = load_protocol(lesion_metrics=False)
+    proto["bootstrap"]["n"] = 50
+    own = evaluate(root, "test", tmp_path / "pred", proto, val_pred_dir=tmp_path / "pred", val_split="val")
+    moved = evaluate(
+        root, "test", tmp_path / "pred", proto, val_pred_dir=tmp_path / "pred", val_split="val",
+        val_dataset_dir=other, exclude=["t1"],
+    )
+    assert moved["n_images"] == 2 and moved["excluded_ids"] == ["t1"]
+    assert moved["val_dataset_dir"] == str(other)
+    # One validation image instead of two changes the chosen thresholds.
+    th_own = [own["per_class"][c]["thresholds"]["val_opt"]["threshold"] for c in own["classes"]]
+    th_moved = [moved["per_class"][c]["thresholds"]["val_opt"]["threshold"] for c in moved["classes"]]
+    assert th_own != th_moved
+    with pytest.raises(ValueError, match="not in test"):
+        evaluate(root, "test", tmp_path / "pred", proto, exclude=["nope"])

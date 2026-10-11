@@ -44,3 +44,24 @@ bootstrap:
   method: percentile
   empty_positive: drop
   paired: shared_image_indices
+# Added 2026-10-12, before any independent test split was read. Nothing above
+# changed; these two entries only add outputs.
+# Class-agnostic "any lesion" (design/15 section 4): ground truth is the union
+# of the four masks, the score is the pixelwise maximum of the four
+# probabilities. A pixel in some class's ignore region is left out unless it
+# is positive for another class. Exact pooled AUPR with the same image
+# bootstrap. It is the main zero-shot metric of E5 and a reference line for
+# every model; it never replaces the four-class mAUPR.
+any_lesion:
+  ground_truth: union_of_four
+  score: max_of_four
+  ignore: any_class_ignore_unless_positive
+# Image-level detection (DiaRetDB1 protocol, Kauppi 2007 section 4.1): one
+# score per image and class, the maximum probability inside the valid region,
+# with the mean of the top 100 values as a check. An image is positive when
+# its mask has a positive pixel inside the valid region. ROC AUC, EER and
+# WER(R) at true ROC points without interpolation (bench/eval/imagelevel.py).
+image_level:
+  score: max_in_valid
+  check_score_top_k: 100
+  wer_ratios: [0.1, 1, 10]

@@ -1,10 +1,13 @@
 """Training and prediction tensors for the B1 runner.
 
-Reads dataset/prepared/IDRiD and dataset/prepared/DDR only. Images are the
-JPEG files in images/. The field-of-view mask is the prepared luminance>10
-mask. Labels are four overlapping classes in the order MA, HE, EX, SE.
-Horizontal flip, probability 0.5, is the only augmentation, and only when
-``augment`` is true. Validation and prediction leave the image unflipped.
+Training reads dataset/prepared/IDRiD and dataset/prepared/DDR only
+(``PreparedSplit``). Prediction reads any prepared source: IDRiD and DDR
+images are the release JPEGs, the independent sources are PNG, and
+``read_image`` takes whichever one file images/<id>.* holds. The
+field-of-view mask is the prepared luminance>10 mask. Labels are four
+overlapping classes in the order MA, HE, EX, SE. Horizontal flip,
+probability 0.5, is the only augmentation, and only when ``augment`` is
+true. Validation and prediction leave the image unflipped.
 """
 
 from pathlib import Path
@@ -14,7 +17,7 @@ import torch
 from PIL import Image
 from torch.utils.data import Dataset
 
-from bench.common.io import LESION_CLASSES, load_split, read_fov, read_mask
+from bench.common.io import LESION_CLASSES, image_path, load_split, read_fov, read_mask
 from bench.data.fov import crop_box
 
 DATASETS = ("IDRiD", "DDR")
@@ -125,15 +128,13 @@ def canvas_hw(dataset_dir, image_id, diameter):
     return _scaled_hw(y1 - y0, x1 - x0, diameter)
 
 
-def read_jpg(dataset_dir, image_id):
-    path = Path(dataset_dir) / "images" / f"{image_id}.jpg"
-    if not path.is_file():
-        raise FileNotFoundError(f"prepared image must be a JPEG at {path}")
-    return np.asarray(Image.open(path).convert("RGB"))
+def read_image(dataset_dir, image_id):
+    """RGB array of the one file images/<id>.* (JPEG for IDRiD and DDR, PNG for the other sources)."""
+    return np.asarray(Image.open(image_path(dataset_dir, image_id)).convert("RGB"))
 
 
 def load_example(dataset_dir, image_id, diameter, mean, std, forward_size=None, masks=True):
-    image = read_jpg(dataset_dir, image_id)
+    image = read_image(dataset_dir, image_id)
     fov = read_fov(dataset_dir, image_id)
     label = None
     if masks:

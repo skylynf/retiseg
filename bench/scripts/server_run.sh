@@ -21,6 +21,12 @@
 #                                               B1 seed 0 and its test maps only; waits for busy cards
 #   NNUNET_GPU=4 bash bench/scripts/server_run.sh nnunet IDRiD default|resencm
 #                                               one nnU-Net job (bench/scripts/nnunet_run.sh)
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh extra E2c
+#                                               diagnostic jobs of bench/configs/extra_jobs.yaml (E2c learning-rate check)
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e3a [--seed0-only] [--only SOURCE,...]
+#                                               E3a independent tests of every scored source
+#                                               (bench/configs/e3a_frozen.yaml, bench/scripts/launch_e3a.py);
+#                                               needs the five independent prepared sets
 #   bash bench/scripts/server_run.sh status | curves [GLOB]
 #
 # Long stages start in the background with nohup, so the SSH session can
@@ -196,6 +202,17 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
     require_clean
     [ -n "${3:-}" ] && [ -n "${NNUNET_GPU:-}" ] || { echo "usage: NNUNET_GPU=4 server_run.sh nnunet IDRiD|DDR default|resencm" >&2; exit 1; }
     CUDA_VISIBLE_DEVICES="$NNUNET_GPU" background "nnunet_${3}_${2}" bash bench/scripts/nnunet_run.sh "$2" "$3" ;;
+  extra)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] && [ -n "${2:-}" ] || { echo "usage: RETISEG_GPUS=\"2 3\" server_run.sh extra E2c" >&2; exit 1; }
+    background "extra_$2" "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_extra.py --submit --experiment "$2" ;;
+  e3a)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "e3a needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"2 3\"" >&2; exit 1; }
+    for set in TJDR_std TJDR_uwf FGADR RetinalLesions DiaRetDB1; do
+      [ -d "dataset/prepared/$set" ] || { echo "dataset/prepared/$set missing; rsync it from the workstation (11 section 1)" >&2; exit 1; }
+    done
+    background e3a "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_e3a.py --submit "${@:2}" ;;
   bs-score0) require_clean; launch bs_score0 --jobs "$BS_JOBS" --submit --score-seed0 ;;
   bs-rest) require_clean; launch bs_rest --jobs "$BS_JOBS" --submit --rest ;;
   status) py retiseg bench/scripts/run_status.py status --glob "${2:-*}" ;;

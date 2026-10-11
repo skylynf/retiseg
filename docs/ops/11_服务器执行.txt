@@ -72,8 +72,34 @@
 最后 nnunet_bridge.py splits（两库各一次）写 splits_final.json；已存在且内容不同时报错。
 任务：NNUNET_GPU=4 bash bench/scripts/server_run.sh nnunet IDRiD default（或 DDR、resencm）。一个任务依次训练、预测验证和测试（--save_probabilities）、导出成 write_prob 图、评测，日志和结果在 runs/NN_<配置>_<库>_fold0。中断后原样再执行：训练用 nnU-Net 的 --c 续，已导出的划分跳过。
 
-八、独立测试的前提（E3a，未做）
-服务器的 dataset/prepared 目前只有 IDRiD 和 DDR。要先在工作站上按第一节第 2 步同步 TJDR_std、TJDR_uwf、FGADR、DiaRetDB1、RetinalLesions（约 10GB）。服务器上的 dataset/iDRID 只有残缺的 zip；E1r 和 predict_m2mrf.py 已改读 prepared 里逐字节相同的 JPEG，不再需要它。
+八、独立测试（E3a，2026-10-12 接线）
+协议在 bench/configs/e3a_frozen.yaml，做法和理由见 12 第五节、00 的 2026-10-12 本机一段。
+1. 数据（一次）：服务器的 dataset/prepared 只有 IDRiD 和 DDR。在工作站上执行
+     rsync -a --info=progress2 dataset/prepared/ SERVER:retiseg/dataset/prepared/
+   补上 TJDR_std、TJDR_uwf、FGADR、DiaRetDB1、RetinalLesions（约 10GB；rsync 跳过没变的 IDRiD、DDR）。FGADR、Retinal-Lesions 只放项目服务器（第一节第 2 步）。服务器上的 dataset/iDRID 只有残缺的 zip；E1r 和 predict_m2mrf.py 已改读 prepared 里逐字节相同的 JPEG，不再需要它。
+2. 先看计划，不占卡：
+     conda run -n retiseg python bench/scripts/launch_e3a.py [--seed0-only]
+   它列出每个能跑的来源 × 测试集：已打分的 B-std、B1 运行（有 metrics_test.json），nnU-Net 两种配置（有 checkpoint_final 和 metrics_test.json），M2MRF 两份作者权重。done.json 已在的跳过。
+3. 冒烟：每类来源先跑一个最小的测试集，核对输出尺寸、显存和耗时，再开全量。
+     CUDA_VISIBLE_DEVICES=2 conda run -n retiseg python -m bench.e3a run --run runs/BS_hrnet_idrid_seed0 --sets DiaRetDB1
+     CUDA_VISIBLE_DEVICES=2 conda run -n retiseg python -m bench.e3a run --run runs/BS_hrnet_ddr_seed0 --sets TJDR_uwf   （1440 窗口那条路）
+     CUDA_VISIBLE_DEVICES=3 conda run -n retiseg-hacdr python -m bench.e3a run --run runs/BS_hacdr_idrid_seed0 --sets DiaRetDB1
+     CUDA_VISIBLE_DEVICES=4 /home/qurr/miniconda3/envs/retiseg-nnunet/bin/python bench/scripts/nnunet_e3a.py --train DDR --plan default --sets IDRiD
+     CUDA_VISIBLE_DEVICES=5 conda run -n retiseg python -m bench.e3a author --model M2MRF --train IDRiD --sets DiaRetDB1
+   看 runs/E3a/<来源>/<测试集>/done.json 和 prob_test 的图尺寸（与原图相同）。显存不够时只改不影响数值的设置（nnU-Net 的 --not-on-device 把窗口累加移到 CPU），并写进 00；读过任何独立测试的指标之后，e3a_frozen.yaml 不再改。
+4. 全量：RETISEG_GPUS="2 3 4 5 6 7" bash bench/scripts/server_run.sh e3a --seed0-only
+   一个启动器管住这些卡，每个来源的每个测试集一个队列项，nnU-Net 的项（IDRiD 参照下 FGADR、Retinal-Lesions 放大到 3413，TJDR_uwf 按度对齐到约 9078）排在最前。卡上有本用户的进程就等。日志 runs/E3a/<来源>/<测试集>/console.log。种子 1、2 打完分以后去掉 --seed0-only 再提交一次，已完成的跳过。
+5. 拉回小文件（第六节第 5 条的 rsync 同样带回 runs/E3a 的 json），在工作站上 python bench/scripts/summarize.py --seed0-only，数字写进 00。
+
+九、主表以外的诊断任务和配方修订（2026-10-12）
+1. E2c 学习率检查：RETISEG_GPUS="..." bash bench/scripts/server_run.sh extra E2c
+   任务表 bench/configs/extra_jobs.yaml（bench/scripts/make_extra_jobs.py 生成）：HRNet、M2MRF × IDRiD、DDR × 学习率 ×1/3、×3，种子 0，只训练和验证（--diagnostic），目录 runs/E2c_<模型>_<库>_seed0_lr1o3 和 _lr3。×1 是 B-std 种子 0。读结果：python bench/scripts/summarize.py 写的 e2c.tsv。
+2. 配方修订（例如用户决定把 U-Net 改成整批 Dice）：
+   a. 在 bench/configs/bs_frozen.yaml 的 recipe_revisions 下写该模型的 loss_params、reason、date，提交；00 记一笔，14 改对应备注。
+   b. 服务器上把该模型旧的 B-std 运行目录整体挪开，保留作补充材料，例如
+        for d in runs/BS_unet_*_seed*; do mv "$d" "${d}_registered"; done
+      挪开以后启动器才会重跑它；不挪开时种子 0 被当成已完成，而预算签名（含 loss_params）不一致，后续种子的闸门会关上并报 Rerun seed 0。
+   c. 只重跑该模型的种子 0（训练加打分）：RETISEG_GPUS="..." conda run -n retiseg python bench/scripts/launch_b1.py --jobs bench/configs/bs_jobs.yaml --submit --queue-all --seed0-only --only U-Net。种子 1、2 以后与其他模型一起用 bs-queue。E3a 对新运行再跑一次（launch_e3a.py 把新的运行当作新来源，挪开的 _registered 目录不再列出）。
 
 五、中断与恢复
 所有训练命令都带 --resume。卡掉线、进程被杀以后，原样再执行同一阶段：已完成的任务跳过（seed0 看 diagnostic.json，打分阶段看 metrics_test.json），没完成的从 resume.pt 接着训，权重与不中断时逐位相同。resume.pt 只在验证时写，所以最多损失一次验证间隔。

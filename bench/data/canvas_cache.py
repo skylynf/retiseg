@@ -3,7 +3,7 @@
 Each entry is exactly what ``bench.data.b1_input.crop_resize`` returns for one
 prepared image at one diameter: the RGB canvas, the four nearest-resized
 lesion masks and the nearest-resized field of view. Training then reads one small file per step instead of decoding
-the original JPEG and four masks and resizing them again. Prediction and
+the original image and four masks and resizing them again. Prediction and
 evaluation do not read this cache; they stay at original resolution.
 
 Layout: dataset/cache/<dataset>/d<diameter>/<id>.npz and manifest.json.
@@ -36,9 +36,19 @@ def cache_dir(dataset_dir, diameter):
     return CACHE_ROOT / Path(dataset_dir).name / f"d{int(diameter)}"
 
 
+def _image_source(root, image_id):
+    """images/<id>.<ext> of the one image file; .jpg when there is none, recorded as missing.
+
+    IDRiD and DDR keep the key images/<id>.jpg, so caches built before PNG
+    sources were supported stay valid.
+    """
+    found = sorted((root / "images").glob(f"{image_id}.*"))
+    return found[0] if len(found) == 1 else root / "images" / f"{image_id}.jpg"
+
+
 def _sources(dataset_dir, image_id):
     root = Path(dataset_dir)
-    paths = [root / "images" / f"{image_id}.jpg", root / "fov" / f"{image_id}.png"]
+    paths = [_image_source(root, image_id), root / "fov" / f"{image_id}.png"]
     paths += [root / "masks" / cls / f"{image_id}.png" for cls in LESION_CLASSES]
     out = {}
     for path in paths:
@@ -52,9 +62,9 @@ def _sources(dataset_dir, image_id):
 
 
 def _canvas(dataset_dir, image_id, diameter):
-    from bench.data.b1_input import crop_resize, read_jpg
+    from bench.data.b1_input import crop_resize, read_image
 
-    image = read_jpg(dataset_dir, image_id)
+    image = read_image(dataset_dir, image_id)
     fov = read_fov(dataset_dir, image_id)
     masks = [read_mask(dataset_dir, cls, image_id, shape=image.shape[:2]) for cls in LESION_CLASSES]
     return crop_resize(image, fov, diameter, None, masks)

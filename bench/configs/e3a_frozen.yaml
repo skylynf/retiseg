@@ -1,0 +1,75 @@
+# E3a, independent tests. Written 2026-10-12, before any model was run on an
+# independent source; nothing below may change after an independent metric
+# has been read. Every finished checkpoint (B-std, B1, nnU-Net, author
+# weights) is applied unchanged to the test splits of the sources it was not
+# trained on: the other training source ("cross") and the five independent
+# sources. No label of a test source is used for anything but the metrics.
+experiment: E3a
+split: test
+eval_protocol: bench/eval/protocol.yaml
+
+# name: prepared directory, granularity tier (averages stay inside one tier).
+test_sets:
+  IDRiD: {data: dataset/prepared/IDRiD, tier: fine}
+  DDR: {data: dataset/prepared/DDR, tier: fine}
+  TJDR_std: {data: dataset/prepared/TJDR_std, tier: fine}
+  TJDR_uwf: {data: dataset/prepared/TJDR_uwf, tier: fine, field_degrees: 133}
+  FGADR: {data: dataset/prepared/FGADR, tier: mixed}
+  Retinal-Lesions: {data: dataset/prepared/RetinalLesions, tier: coarse}
+  DiaRetDB1: {data: dataset/prepared/DiaRetDB1, tier: region}
+# The internal test of a training source is its own metrics_test.json; E3a
+# writes every other test set.
+train_sources: [IDRiD, DDR]
+
+# Scale. A test image is shown at the pixel scale the model was trained at.
+# Standard-field sources (35-50 degrees; FGADR and Retinal-Lesions do not
+# state it) are matched by field-of-view size: the field-of-view box's long
+# side becomes the training reference. TJDR_uwf covers 133 degrees and is
+# matched by pixels per degree instead, reference * 133 / training field;
+# the field-of-view-matched version is the comparison (variant "fov").
+# References: B-std and B1, the 1440 canvas. nnU-Net, which trains at
+# original resolution, the median field-of-view long side of its training
+# split (IDRiD 3413, DDR 1658 on 2026-10-12; recomputed and recorded at run
+# time). Field of the training sources from their papers: IDRiD 50 degrees
+# (Kowa VX-10 alpha), DDR 45 degrees.
+train_field_degrees: {IDRiD: 50, DDR: 45}
+canvas_reference: 1440
+per_degree_sets: [TJDR_uwf]
+comparison_variants: {TJDR_uwf: fov}
+
+# Inference geometry, otherwise as in B-std and B1. A fully convolutional
+# model whose canvas is larger than this window in either side (only
+# TJDR_uwf at pixels per degree, about 3830 or 4256) runs overlapping windows
+# of this size instead of one pass over the canvas; models with a fixed
+# input keep their own window.
+large_canvas_window: [1440, 1440]
+window_overlap: 0.5
+
+# Thresholds for Dice, IoU and lesion-level metrics: fixed 0.5, and the
+# per-class threshold chosen on the validation split of the training source
+# (from that run's prob_val), never on the test source. Author weights have
+# no validation maps on our split and get the fixed threshold only.
+threshold_source: training_source_val
+
+# Author weights (E1): the released checkpoint with the author's own test
+# pipeline (whole image, keep-ratio resize to the config's test scale, the
+# author's normalization), as a user of the release would run it.
+author_weights:
+  M2MRF:
+    IDRiD: {checkpoint: runs/E1_m2mrf/fcn_hr48-M2MRF-C_40k_idrid.pth, trained_on: [IDRiD]}
+    DDR: {checkpoint: runs/E1_m2mrf/fcn_hr48-M2MRF-C_60k_ddr.pth, trained_on: [DDR]}
+
+# Near-duplicates of training images in a test set are removed from that
+# test set and listed (05 section 1, item 6). Leak audit 2026-10-12 over all
+# seven prepared sources (bench/scripts/leak_audit.py, hash, ResNet-34 and the
+# vessel signature; docs/ops/00): no image of IDRiD or DDR (any split) has a
+# near-duplicate in TJDR, FGADR, Retinal-Lesions or DiaRetDB1, so nothing is
+# removed for models trained on IDRiD or DDR. The overlaps found inside and
+# between the other sources (TJDR_uwf, FGADR, FGADR _3 with Retinal-Lesions)
+# matter only when those sources train a model (E3b, E4, E8) and are listed
+# in runs/audit/leak_all_vessel.json.
+exclude: {}
+
+# Outputs: runs/E3a/<source run>/<test set>[__<variant>]/prob_test (16-bit
+# maps as everywhere), metrics.json and metrics.npz from bench.eval, done.json.
+# FGADR and Retinal-Lesions maps stay on the project server (12 section 3.6).

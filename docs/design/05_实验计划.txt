@@ -20,7 +20,7 @@ Q3 决定因素：数据集、标注粒度、训练来源、输入分辨率、�
    二者已于 2026-10-04 浅克隆到 official_code/nnUNet 与 official_code/RETFound。RETFound 仓库里的微调入口是分类，UPerNet 解码头仍要另加。SAM 3 检查点需向 Hugging Face 申请。
    可选：VisionFM、FLAIR、MedSAM2。
 5. 文献。冻结日 2026-09-30。检索式和计数在 literature/06，全文取舍在 literature/08。新进主比较的模型，在有训练代码并完成冒烟之前只做原文审计。
-6. 泄漏审计。感知哈希加特征相似度，找数据集之间和划分之间的近重复图像，在 E3 出数之前做完。
+6. 泄漏审计。感知哈希加特征相似度，找数据集之间和划分之间的近重复图像，在 E3 出数之前做完。2026-10-12 已对七个库做完，并加了血管特征（结果在 00、14 的 M10）：IDRiD、DDR 与独立来源之间没有近重复。
    重点：独立测试图与 IDRiD、DDR 训练图之间（近重复则从独立测试去掉并列名单，对应模板用 CD-HIT 去相似序列）；Retinal-Lesions 来自 EyePACS，而 SSMD-UNet 用 EyePACS 无标注数据预训练；基础模型预训练集是否含 IDRiD、DDR、TJDR 等测试图（按各自论文核对）；IDRiD、DDR 的分割子集是否与各自的分级子集重叠；TJDR 同一患者随访图是否跨训练和测试。
 7. 评测实现。M2MRF 的 AUPR 只用 11 个阈值，无预测时在阈值 1.0 把精度记为 1，重叠像素按 EX、HE、SE、MA 覆盖。WSRFNet 声明沿用这套代码。
    主表用视野内的精确 AUPR。作者实现另报，用来解释和原文的差距。E0 和 E1 已经量过这个差距，数字在 00。bench/eval/ 保留阈值数、视野、标签覆盖三个开关。
@@ -69,10 +69,10 @@ E2 主表 B-std。训练只在 IDRiD、DDR 上，每个模型每个库 3 个种�
    模型：通用 U-Net、DeepLabv3、HRNet、Swin-Unet、FCT、H2Former；眼底专用 M2MRF、HACDR-Net；PMCNet 视 TF1 环境情况。基础模型的 c、d 两档见 E5。
    nnU-Net：用它自己的入口，2D，原分辨率；splits_final.json 写死本项目的 44/10 和 383/149；重叠像素按同一覆盖顺序合成互斥标签；--save_probabilities 导出 softmax，插值回原图后走同一个 bench.eval。预处理不受 B-std 约束，单独标注。跑默认配置和 ResEnc-M（Isensee 2024 nnU-Net Revisited 指出很多“超过基线”是基线没调好）。
 E2b 来源配方（B1）作第二列，种子 0，14 个任务（无 H2Former）；2026-10-08 起暂停，降为补充材料，有空卡再续。各模型来源配方经最小适配，回答“不调整训练量和增强，直接搬配方会怎样”。细节在 09。
-E2c 小规模调参。每个模型族选一个，学习率乘 1/3、1、3 三档，只看验证 mAUPR，检查名次变不变。
+E2c 小规模调参。每个模型族选一个，学习率乘 1/3、1、3 三档，只看验证 mAUPR，检查名次变不变。2026-10-12 接线：HRNet（通用）和 M2MRF（眼底专用）× 两库，cell 的 lr_scale 把学习率连同 poly 下限一起乘上，任务表 bench/configs/extra_jobs.yaml；nnU-Net 保留自己的调度，基础模型的三档学习率在 E5 编码器对照里。
 
 Q2/Q3 独立数据和影响因素
-E3a 独立测试。E1、E2 的全部检查点在 TJDR 常规、TJDR 超广角、FGADR、Retinal-Lesions、DiaRetDB1 的测试划分上推理，正文以独立测试为主，并报内部测试与独立测试之差。做法见 12 第五节。
+E3a 独立测试。E1、E2 的全部检查点在 TJDR 常规、TJDR 超广角、FGADR、Retinal-Lesions、DiaRetDB1 的测试划分上推理，正文以独立测试为主，并报内部测试与独立测试之差。做法见 12 第五节，协议 bench/configs/e3a_frozen.yaml，执行 11 第八节，汇总 bench/scripts/summarize.py。
 E3b 训练来源交叉效应。代表模型在 TJDR 常规、FGADR 上各训 3 个种子（30 个任务），与 E2 合成“训练集 × 测试集”矩阵，表头标粒度档。与 Playout 2024 的跨数据集结果对照。
 E4 标注粒度。代表模型，训练集六档：DDR；FGADR；Retinal-Lesions；DDR+FGADR；DDR+Retinal-Lesions；DDR+FGADR 抽 383 张。训练量相同，测试固定在细粒度库。先做标注风格审计（每图病灶数 × 平均面积）。细节在 12 第五节。
 E5 基础模型的四种用法，分开报告。逐模型配方、公平性原则、代价和待定事项在 design/15（2026-10-09），这里只写要点。
