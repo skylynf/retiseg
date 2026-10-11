@@ -5,6 +5,7 @@ A wrapper's own build_loss, build_optimizer or adjust_lr replaces the default
 for that piece; an unknown default name is an error.
 """
 
+import inspect
 import json
 import math
 import os
@@ -445,6 +446,16 @@ def atomic_save(payload, path):
     tmp = path.with_name(path.name + ".tmp")
     torch.save(payload, tmp)
     os.replace(tmp, path)
+
+
+def load_trusted(path, map_location="cpu"):
+    """torch.load for this project's own files, which pickle more than tensors.
+
+    torch 2.6 defaults to weights_only=True; torch 1.10 (retiseg-hacdr) has no such argument.
+    """
+    if "weights_only" in inspect.signature(torch.load).parameters:
+        return torch.load(path, map_location=map_location, weights_only=False)
+    return torch.load(path, map_location=map_location)
 
 
 def save_checkpoint(path, model, config, step):

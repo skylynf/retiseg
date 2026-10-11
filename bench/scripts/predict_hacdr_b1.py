@@ -24,7 +24,7 @@ from bench.common.io import LESION_CLASSES, load_split
 from bench.models.hacdr import FGADR_CLASSES, lesion_class_index
 from bench.models.registry import build_model
 from bench.predict import predict_image
-from bench.runtime import assert_not_finished_run, refuse_distributed
+from bench.runtime import assert_not_finished_run, load_trusted, refuse_distributed
 
 CLASS_INDEX = (2, 4, 1, 3)
 
@@ -54,7 +54,7 @@ def predict(config_path, checkpoint, pred_dir, split):
     if model.net is None:
         raise ImportError(model.import_error or "HACDR-Net network was not imported")
     _check_channels(model)
-    state = torch.load(checkpoint, map_location=device, weights_only=False)
+    state = load_trusted(checkpoint, map_location=device)
     if "model_name" in state and state["model_name"] != model.card.name:
         raise ValueError(f"checkpoint model {state['model_name']!r} != config model {model.card.name!r}")
     model.load_state_dict(state["model"])

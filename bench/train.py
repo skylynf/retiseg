@@ -42,6 +42,7 @@ from bench.runtime import (
     assert_not_finished_run,
     atomic_save,
     evaluation_interval,
+    load_trusted,
     micro_batch_and_deviations,
     refuse_distributed,
     resolve_recipe,
@@ -263,7 +264,7 @@ def run_training(
     if resume and not resume_path.is_file() and (run_dir / "timing.json").is_file():
         raise RuntimeError(f"{run_dir} already finished its budget; --resume does not train it again")
     if resume and resume_path.is_file():
-        state = torch.load(resume_path, map_location="cpu", weights_only=False)
+        state = load_trusted(resume_path)
         if state["signature"] != signature:
             raise RuntimeError(
                 f"{resume_path} was written under {state['signature']}, this run is {signature}; "
