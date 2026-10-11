@@ -30,7 +30,6 @@ import mmcv
 import torch
 
 from bench.common.io import LESION_CLASSES, M2MRF_OVERWRITE_ORDER, load_split, read_mask, write_prob
-from bench.data.idrid import open_idrid
 from bench.eval.m2mrf_stream import AuthorAccumulator
 from mmseg.models import build_segmentor
 
@@ -197,8 +196,7 @@ def _jsonable(obj):
 
 
 def _image_path(spec, image_id):
-    if spec is DATASETS["idrid"]:
-        return open_idrid(ROOT).image_path(image_id)
+    # prepare.write_case copies the release JPEG byte for byte, IDRiD included.
     path = spec["prepared"] / "images" / f"{image_id}.jpg"
     if not path.is_file():
         raise FileNotFoundError(path)
