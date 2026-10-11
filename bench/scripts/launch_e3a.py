@@ -112,12 +112,14 @@ def item_cost(kind, source, test, train_names, frozen):
     return _COST[kind] * total
 
 
-def command(source, env, argv, test=None, py_argv=None):
+def command(source, env, argv, test=None, py_argv=None, drop_maps=()):
     """Shell body of one queue item. ``py_argv`` None resolves the conda env (only when submitting)."""
     log_dir = Path("runs") / "E3a" / source
     if test is not None:
         log_dir = log_dir / test
         argv = list(argv) + ["--sets", test]
+        if test in drop_maps:
+            argv += ["--drop-maps", test]
     py_argv = python_argv(env) if py_argv is None else py_argv
     chain = "unset " + " ".join(_DIST_VARS) + "; " + shlex.join(list(py_argv) + list(argv))
     log = shlex.quote(str(log_dir / "console.log"))
@@ -133,7 +135,13 @@ def main(argv=None):
     parser.add_argument("--submit", action="store_true")
     parser.add_argument("--seed0-only", action="store_true", help="leave out B-std seeds 1 and 2")
     parser.add_argument("--only", help="comma-separated source names")
+    parser.add_argument(
+        "--drop-maps",
+        default="",
+        help="comma-separated test sets whose maps are removed after evaluation (e.g. FGADR,Retinal-Lesions)",
+    )
     args = parser.parse_args(argv)
+    drop = tuple(item.strip() for item in args.drop_maps.split(",") if item.strip())
     only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
     frozen = e3a.load_frozen()
     items = []
@@ -158,10 +166,10 @@ def main(argv=None):
     print(f"E3a queue: {len(items)} items", flush=True)
     if not args.submit:
         for _tier, _cost, _label, spec in items[:3]:
-            print("command " + command(*spec, py_argv=["python"]), flush=True)
+            print("command " + command(*spec, py_argv=["python"], drop_maps=drop), flush=True)
         print("not submitted; pass --submit (with RETISEG_GPUS) to start", flush=True)
         return
-    plan = [(label, command(*spec)) for _tier, _cost, label, spec in items]
+    plan = [(label, command(*spec, drop_maps=drop)) for _tier, _cost, label, spec in items]
     gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
     if not gpus:
         raise SystemExit("--submit needs RETISEG_GPUS, the cards this queue may use")

@@ -164,3 +164,14 @@ def test_nnunet_helpers(tmp_path):
     assert planes["MA"].shape == (20, 30)
     assert np.allclose(planes["MA"][fov], 0.25) and np.allclose(planes["EX"][fov], 0.75)
     assert (planes["HE"] == 0).all() and (planes["MA"][~fov] == 0).all()
+
+
+def test_drop_maps_removes_the_maps_after_the_metrics(tmp_path, monkeypatch):
+    test_run_source_end_to_end(tmp_path, monkeypatch)
+    out = tmp_path / "repo" / "runs" / "E3a" / "BS_tiny_idrid_seed0" / "TOY"
+    (out / "done.json").unlink()
+    frozen = e3a.load_frozen()
+    e3a.evaluate_set("BS_tiny_idrid_seed0", "TOY", "main", frozen, drop_maps=["TOY"])
+    done = json.loads((out / "done.json").read_text())
+    assert done["maps_dropped"] is True and not (out / "prob_test").exists()
+    assert (out / "metrics.npz").is_file()

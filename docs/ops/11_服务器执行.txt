@@ -89,6 +89,7 @@
    看 runs/E3a/<来源>/<测试集>/done.json 和 prob_test 的图尺寸（与原图相同）。显存不够时只改不影响数值的设置（nnU-Net 的 --not-on-device 把窗口累加移到 CPU），并写进 00；读过任何独立测试的指标之后，e3a_frozen.yaml 不再改。
 4. 全量：RETISEG_GPUS="2 3 4 5 6 7" bash bench/scripts/server_run.sh e3a --seed0-only
    一个启动器管住这些卡，每个来源的每个测试集一个队列项，nnU-Net 的项（IDRiD 参照下 FGADR、Retinal-Lesions 放大到 3413，TJDR_uwf 按度对齐到约 9078）排在最前。卡上有本用户的进程就等。日志 runs/E3a/<来源>/<测试集>/console.log。种子 1、2 打完分以后去掉 --seed0-only 再提交一次，已完成的跳过。
+   磁盘：每个来源在七个测试集上的概率图约 1–10GB（作者权重那种接近 0 的图压得很小，U-Net 那种噪声大的图每张 IDRiD 约 24MB），种子 0 的约 20 个来源合计可能上百 GB。先 df -h 看余量；不够时加 --drop-maps FGADR,Retinal-Lesions，这两个库的图按许可本来就不能公开，评测写完 metrics.npz（逐图直方图，够算 AUPR、bootstrap 和配对检验）后删掉 prob_test，done.json 记 maps_dropped。
 5. 拉回小文件（第六节第 5 条的 rsync 同样带回 runs/E3a 的 json），在工作站上 python bench/scripts/summarize.py --seed0-only，数字写进 00。
 
 九、主表以外的诊断任务和配方修订（2026-10-12）

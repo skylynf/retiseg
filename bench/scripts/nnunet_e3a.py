@@ -103,7 +103,7 @@ def build_predictor(train, plan, device, settings=None):
     return predictor
 
 
-def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=True):
+def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=True, drop_maps=()):
     import torch
 
     frozen = e3a.load_frozen()
@@ -163,7 +163,10 @@ def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=
                 },
             )
         if not predict_only:
-            e3a.evaluate_set(source, test_name, variant, frozen, train_dir=train_dir, val_pred_dir=run_dir / "prob_val")
+            e3a.evaluate_set(
+                source, test_name, variant, frozen, train_dir=train_dir, val_pred_dir=run_dir / "prob_val",
+                drop_maps=drop_maps,
+            )
 
 
 def main(argv=None):
@@ -174,8 +177,12 @@ def main(argv=None):
     parser.add_argument("--device")
     parser.add_argument("--predict-only", action="store_true")
     parser.add_argument("--not-on-device", action="store_true", help="sum the windows on the CPU, as nnUNetv2_predict --not_on_device")
+    parser.add_argument("--drop-maps", help="comma-separated test sets whose maps are removed after evaluation")
     args = parser.parse_args(argv)
-    run(args.train, args.plan, e3a._sets(args.sets), args.device, args.predict_only, on_device=not args.not_on_device)
+    run(
+        args.train, args.plan, e3a._sets(args.sets), args.device, args.predict_only,
+        on_device=not args.not_on_device, drop_maps=e3a._sets(args.drop_maps) or (),
+    )
 
 
 if __name__ == "__main__":

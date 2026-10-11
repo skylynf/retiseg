@@ -21,6 +21,7 @@ field-of-view-matched version is the variant "fov").
 
 import argparse
 import json
+import shutil
 import socket
 import statistics
 import sys
@@ -153,8 +154,13 @@ def environment():
     }
 
 
-def evaluate_set(source, test_name, variant, frozen, train_dir=None, val_pred_dir=None, record=None):
-    """bench.eval on one finished prediction directory; writes metrics.json/.npz and done.json."""
+def evaluate_set(source, test_name, variant, frozen, train_dir=None, val_pred_dir=None, record=None, drop_maps=()):
+    """bench.eval on one finished prediction directory; writes metrics.json/.npz and done.json.
+
+    A test set named in ``drop_maps`` loses its prob_test after the metrics are
+    written (metrics.npz keeps the per-image histograms for AUPR, bootstrap and
+    paired tests); done.json records it.
+    """
     from bench.eval.evaluate import evaluate, load_protocol
 
     directory = out_dir(source, test_name, variant)
@@ -184,9 +190,12 @@ def evaluate_set(source, test_name, variant, frozen, train_dir=None, val_pred_di
             "thresholds": "fixed and training-source val_opt" if use_val else "fixed only",
             "eval_seconds": round(time.perf_counter() - started, 1),
             "summary": result["summary"],
+            "maps_dropped": test_name in set(drop_maps or ()),
         }
     )
     (directory / "done.json").write_text(json.dumps(done, indent=1) + "\n")
+    if done["maps_dropped"]:
+        shutil.rmtree(pred_dir)
     print(f"{source} {set_dirname(test_name, variant)} mAUPR {result['summary']['mAUPR']:.4f}", flush=True)
     return result
 
@@ -240,7 +249,7 @@ def load_run_model(config, checkpoint, device):
     return model
 
 
-def run_source(run_dir, sets=None, device=None, predict_only=False):
+def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()):
     import torch
 
     from bench.predict import predict_image
@@ -311,6 +320,7 @@ def run_source(run_dir, sets=None, device=None, predict_only=False):
                 frozen,
                 train_dir=REPO / config["dataset"],
                 val_pred_dir=run_dir / "prob_val",
+                drop_maps=drop_maps,
             )
 
 
@@ -321,7 +331,7 @@ def author_source(model, train_name):
     return f"E1_{model.lower()}_{train_name.lower()}"
 
 
-def run_author(model_name, train_name, sets=None, device=None, predict_only=False):
+def run_author(model_name, train_name, sets=None, device=None, predict_only=False, drop_maps=()):
     """The released checkpoint through the author's own test pipeline (bench/predict_m2mrf.py)."""
     import numpy as np
     import torch
@@ -385,7 +395,7 @@ def run_author(model_name, train_name, sets=None, device=None, predict_only=Fals
                 },
             )
         if not predict_only:
-            evaluate_set(source, test_name, variant, frozen)
+            evaluate_set(source, test_name, variant, frozen, drop_maps=drop_maps)
 
 
 # ---- command line ---------------------------------------------------------------
@@ -435,12 +445,14 @@ def main(argv=None):
     r.add_argument("--sets")
     r.add_argument("--device")
     r.add_argument("--predict-only", action="store_true")
+    r.add_argument("--drop-maps", help="comma-separated test sets whose maps are removed after evaluation")
     a = sub.add_parser("author")
     a.add_argument("--model", required=True)
     a.add_argument("--train", required=True, choices=["IDRiD", "DDR"])
     a.add_argument("--sets")
     a.add_argument("--device")
     a.add_argument("--predict-only", action="store_true")
+    a.add_argument("--drop-maps")
     e = sub.add_parser("evaluate", help="evaluate finished predictions again or for the first time (CPU)")
     e.add_argument("--source", required=True, help="directory name under runs/E3a")
     e.add_argument("--sets")
@@ -449,9 +461,9 @@ def main(argv=None):
     if args.command == "plan":
         _plan(args)
     elif args.command == "run":
-        run_source(args.run, _sets(args.sets), args.device, args.predict_only)
+        run_source(args.run, _sets(args.sets), args.device, args.predict_only, _sets(args.drop_maps) or ())
     elif args.command == "author":
-        run_author(args.model, args.train, _sets(args.sets), args.device, args.predict_only)
+        run_author(args.model, args.train, _sets(args.sets), args.device, args.predict_only, _sets(args.drop_maps) or ())
     else:
         _evaluate(args)
 
