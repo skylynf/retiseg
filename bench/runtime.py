@@ -25,9 +25,9 @@ SCHEDULE_NAMES = ("none", "poly")
 LOSS_PARAM_KEYS = {
     "bce_with_logits": {"pos_weight", "reduction"},
     "ce": {"ignore_index", "label_smoothing", "reduction"},
-    "dice": {"smooth"},
-    "ce_dice": {"smooth", "ignore_index", "label_smoothing", "reduction"},
-    "bce_dice": {"smooth", "pos_weight", "reduction"},
+    "dice": {"smooth", "batch_dice"},
+    "ce_dice": {"smooth", "batch_dice", "ignore_index", "label_smoothing", "reduction"},
+    "bce_dice": {"smooth", "batch_dice", "pos_weight", "reduction"},
 }
 # Read by the runner, not by the loss module.
 LOSS_META_KEYS = {"early_stop_patience"}
@@ -114,10 +114,13 @@ class _BCEWithLogits(nn.Module):
 
 
 class _Dice(nn.Module):
-    def __init__(self, smooth=1.0, activation="sigmoid"):
+    """Soft Dice per image and class, or with batch_dice per class over the whole batch (nnU-Net)."""
+
+    def __init__(self, smooth=1.0, activation="sigmoid", batch_dice=False):
         super().__init__()
         self.smooth = float(smooth)
         self.activation = activation
+        self.batch_dice = bool(batch_dice)
 
     def forward(self, logits, target):
         if target.dtype in (torch.int32, torch.int64, torch.long):
@@ -137,6 +140,8 @@ class _Dice(nn.Module):
         if probs.shape != target.shape:
             raise ValueError(f"dice target shape {tuple(target.shape)} != logits {tuple(probs.shape)}")
         dims = tuple(range(2, probs.ndim))
+        if self.batch_dice:
+            dims = (0,) + dims
         intersection = (probs * target).sum(dim=dims)
         denom = probs.sum(dim=dims) + target.sum(dim=dims)
         score = (2 * intersection + self.smooth) / (denom + self.smooth)
@@ -164,10 +169,10 @@ class _CrossEntropy(nn.Module):
 class _BCEDice(nn.Module):
     """Binary cross-entropy with logits plus sigmoid Dice, each with weight 1."""
 
-    def __init__(self, smooth=1.0, pos_weight=None, reduction="mean"):
+    def __init__(self, smooth=1.0, pos_weight=None, reduction="mean", batch_dice=False):
         super().__init__()
         self.bce = _BCEWithLogits(pos_weight=pos_weight, reduction=reduction)
-        self.dice = _Dice(smooth=smooth, activation="sigmoid")
+        self.dice = _Dice(smooth=smooth, activation="sigmoid", batch_dice=batch_dice)
 
     def forward(self, logits, target):
         return self.bce(logits, target) + self.dice(logits, target)
@@ -176,10 +181,12 @@ class _BCEDice(nn.Module):
 class _CEDice(nn.Module):
     """Cross-entropy plus Dice, each with weight 1."""
 
-    def __init__(self, smooth=1.0, activation="sigmoid", ignore_index=-100, label_smoothing=0.0, reduction="mean"):
+    def __init__(
+        self, smooth=1.0, activation="sigmoid", ignore_index=-100, label_smoothing=0.0, reduction="mean", batch_dice=False
+    ):
         super().__init__()
         self.ce = _CrossEntropy(ignore_index=ignore_index, label_smoothing=label_smoothing, reduction=reduction)
-        self.dice = _Dice(smooth=smooth, activation=activation)
+        self.dice = _Dice(smooth=smooth, activation=activation, batch_dice=batch_dice)
 
     def forward(self, logits, target):
         return self.ce(logits, target) + self.dice(logits, target)

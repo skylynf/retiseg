@@ -172,6 +172,18 @@ def test_ce_dice_is_the_sum_of_the_two_terms():
     assert torch.allclose(both(logits, target), ce(logits, target) + dice(logits, target))
 
 
+def test_batch_dice_pools_the_batch_per_class():
+    torch.manual_seed(0)
+    logits = torch.randn(3, 4, 8, 8)
+    target = (torch.rand(3, 4, 8, 8) > 0.8).float()
+    base = replace(UNet().author_recipe("IDRiD"), loss="dice", loss_params={"smooth": 1e-5, "batch_dice": True})
+    probs = torch.sigmoid(logits)
+    inter = (probs * target).sum(dim=(0, 2, 3))
+    denom = probs.sum(dim=(0, 2, 3)) + target.sum(dim=(0, 2, 3))
+    expected = 1 - ((2 * inter + 1e-5) / (denom + 1e-5)).mean()
+    assert torch.allclose(build_loss(base, "sigmoid")(logits, target), expected)
+
+
 def test_softmax_planes_are_not_renormalized():
     card = ModelCard(
         name="Toy",

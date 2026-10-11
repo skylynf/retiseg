@@ -1,0 +1,12 @@
+experiment: BS
+model: U-Net
+dataset: dataset/prepared/IDRiD
+split_train: train
+split_val: val
+split_test: test
+fov_diameter: 1440
+seed: 0
+num_workers: 4
+# Candidate fix for the U-Net rare-class collapse (14 note 21): Dice over the
+# whole batch per class, smooth 1e-5, as in nnU-Net. Train and validation only.
+diagnostic_loss_params: {smooth: 1.0e-5, batch_dice: true}

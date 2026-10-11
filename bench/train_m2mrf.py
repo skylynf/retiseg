@@ -25,7 +25,7 @@ import mmcv
 import torch
 import yaml
 
-from bench.data.idrid import open_idrid
+from bench.data.idrid import _official_train as official_train
 from bench.predict_m2mrf import Cfg, author_label, model_cfg
 from mmseg.datasets.pipelines.transforms import (
     Normalize,
@@ -61,13 +61,16 @@ def _poly_lr(iteration, max_iters, base_lr=0.01, min_lr=1e-4, power=0.9):
 
 class OfficialTrain(torch.utils.data.Dataset):
     def __init__(self, repo_root):
-        data = open_idrid(repo_root)
-        self.ids = list(data.splits()["train_official"])
         prepared = Path(repo_root) / "dataset" / "prepared" / "IDRiD"
+        splits = json.loads((prepared / "splits.json").read_text())
+        self.ids = sorted(splits["train"] + splits["val"])
+        if self.ids != list(official_train()):
+            raise RuntimeError("prepared IDRiD train+val is not the official IDRiD_01-54")
         self.images = {}
         self.labels = {}
         for image_id in self.ids:
-            image = mmcv.imread(data.image_path(image_id))
+            # prepare.write_case copies the release JPEG byte for byte.
+            image = mmcv.imread(str(prepared / "images" / f"{image_id}.jpg"))
             label = author_label(prepared, image_id, image.shape[:2]).astype(np.uint8)
             self.images[image_id] = image
             self.labels[image_id] = label

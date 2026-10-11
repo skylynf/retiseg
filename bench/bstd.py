@@ -233,6 +233,12 @@ def run_cell(
         raise ValueError("a budget probe is train and validation only; run it with --diagnostic")
     pixels = canvas_pixels(config["dataset"], source.ids, diameter)
     resolved, deviations, per_epoch, samples, eval_every = budget(declared, name, frozen, pixels, patch, scale)
+    override = config.get("diagnostic_loss_params")
+    if override:
+        if not diagnostic:
+            raise ValueError("diagnostic_loss_params changes the model recipe; run it with --diagnostic")
+        resolved = replace(resolved, loss_params={**resolved.loss_params, **override})
+        deviations = deviations + [f"diagnostic loss_params {override}; not the main-table recipe"]
     micro, batch_deviations = micro_batch_and_deviations(config, resolved)
     deviations = deviations + batch_deviations + list(extra_deviations)
     train_set = PatchTrain(source, patch, samples, frozen["augment"], config["seed"])
