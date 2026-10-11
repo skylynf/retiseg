@@ -158,7 +158,7 @@ E5 基础模型：零样本和理想提示只需推理，覆盖全部测试集�
 2. FGADR：fgadr.py、阈值化导出、划分名单、导出报告。已完成。
 3. DiaRetDB1：栅格化、计数校验已完成；图像级 ROC/WER 未做。
 4. 忽略区：io、evaluate 已完成；训练损失未做。
-5. 标注风格审计和泄漏审计脚本。
+5. 标注风格审计未做。泄漏审计脚本 bench/scripts/leak_audit.py 已在 IDRiD、DDR 上跑完（2026-10-11，见 00）；新库同步到服务器后用同一脚本再跑。
 6. 服务器：把 dataset/prepared/TJDR_std、TJDR_uwf、FGADR、DiaRetDB1 同步过去，建 1440 画布缓存；新库的 U-Net 预算探测；E3 推理。
 7. Retinal-Lesions：核对和导出已完成；训练损失的忽略区补上后做 E4。
 每一步完成后写进 00，划分名单在第一次训练之前提交。
@@ -176,7 +176,7 @@ DiaRetDB1 核对（只看真值）：
   导出：masks 为共识 ≥0.75；masks_union 为任一专家标过；experts 每类一张 uint8，每名专家占两位，保留原始置信等级，以后换映射不必重读 XML。splits 的 train 为空，val 是官方训练 28 张，只用于选阈值。
 Retinal-Lesions 核对见 07。127 写成 ignore/<CLS>；评测已支持（视野内且不在该类忽略区才计入），训练损失尚未支持，E4 训练前要补。
 导出结果与视野核对见 00“其余数据集导出”。DiaRetDB1 image072 背景是灰色，视野改用 fov.border_threshold（只用于新库）。
-尚未做：独立测试推理的接线（推理和画布缓存仍写死 .jpg 和 IDRiD/DDR，新库是 PNG，要改用 io.image_path）；DiaRetDB1 图像级 ROC/WER 和区域级命中；标注风格审计；泄漏审计。
+尚未做：独立测试推理的接线（推理和画布缓存仍写死 .jpg 和 IDRiD/DDR，新库是 PNG，要改用 io.image_path）；DiaRetDB1 图像级 ROC/WER 和区域级命中；标注风格审计。泄漏审计已覆盖 IDRiD 与 DDR（2026-10-11）；新库还没同步到服务器，所以还没跑。
 
 七、用户决定（2026-10-07）
 1. 主表角色：用户请本项目参照模板论文自定。定为第二节：主表只在 IDRiD、DDR 上训练，TJDR、FGADR、DiaRetDB1、Retinal-Lesions 作独立测试来源；TJDR_std、FGADR 作训练来源只出现在代表模型的影响因素实验里。这取代原 10 第四节“TJDR 常规视野准备好后加入 E2”的建议（10 已并入 05 并删除）。

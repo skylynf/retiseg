@@ -171,6 +171,18 @@ U-Net 整批 Dice 诊断两库都结束，只看验证集，没有读测试集�
 E1r 到第 27820 步，共 40000 步，预计 07:00 前后训完，之后接力在 CPU 上打分。
 B1 补位队列：GPU 3 跑 DeepLabv3 DDR（第 10008/30000 步），GPU 4 跑 DeepLabv3 IDRiD（第 10002/30000 步），GPU 6 跑 M2MRF DDR（第 13056/60000 步）。两个 DeepLabv3 每小时约 780 步，还要约 26 小时；M2MRF DDR 每小时约 2900 步，还要约 16 小时。机器负载约 150（128 核，33 个用户），数据加载可能受 CPU 限制。队列里还有 HRNet DDR、M2MRF IDRiD（都从 resume.pt 接上）和 HACDR、U-Net、FCT、Swin-Unet 两库、HRNet IDRiD，然后是 14 项种子 0 打分。GPU 5、7、2 空出来后由队列接上。
 
+核对（2026-10-12 03:56，服务器时间）
+GPU 0–1 仍是其他用户的 vLLM。没有新的测试数字。U-Net 是否改成整批 Dice 并重跑种子 0，仍由用户决定。独立测试还没开始。
+E1r（GPU 2）：第 31140/40000 步，损失约 0.26，显存 29GB。10-11 14:11 开跑，每步约 1.6 秒，大约 08:00 前训完，然后在 CPU 上用第 40000 步权重打分。score_console.log 还是空的。
+ResEnc-M IDRiD（GPU 5）：第 995/1000 epoch，每 epoch 约 46 秒，几分钟后训完再预测。
+ResEnc-M DDR：03:02 结束第 999 epoch。验证概率已导出（149 张）。03:36 起在 GPU 7 上预测测试集，03:56 约 159/225 张，随后导出和评测。测试 mAUPR 还没有。
+B1 补位（队列日志 20261011_155738，28 项）：
+  DeepLabv3 DDR（GPU 3）第 11016/30000 步。02:07 是 10008；这一小时四十分约 570 步，比当时估的每小时 780 步慢。
+  DeepLabv3 IDRiD（GPU 4）第 12000/30000 步（02:07 是 10002）。
+  M2MRF DDR（GPU 6）第 19008/60000 步（02:07 是 13056）。
+  HRNet DDR（GPU 7）03:12 从 resume.pt 的第 320 步接上，现为第 864/15488 步。10-08 停在第 384 步；resume 只在验证时写，所以续训从 320 而不是 384。这张卡同时跑着 ResEnc-M DDR 的预测。
+  还在队列里的训练：M2MRF IDRiD，以及 HACDR、U-Net、FCT、Swin-Unet 两库和 HRNet IDRiD，然后是种子 0 打分。
+
 泄漏审计，IDRiD 与 DDR（2026-10-11 16:30，只用 CPU）
 入口 bench/scripts/leak_audit.py，输出 runs/audit/leak_idrid_ddr.json，共 838 张。
 逐字节：841 个图像文件的 md5 没有重复。
