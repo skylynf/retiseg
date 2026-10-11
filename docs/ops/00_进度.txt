@@ -140,6 +140,30 @@ B-std IDRiD 种子 0 在 12:09：U-Net（10:56）和 HRNet（12:07）结束；M2
 与原顺序的差别：种子 0 的曲线不再等人工看过才打分、开后续种子。曲线照常在种子 0 结束时看，发现问题就只停掉启动器，改完再重排。U-Net 用现配方进入队列；如果以后改它的损失，U-Net 的所有种子重跑。
 启动（2026-10-08 12:16 和 12:19，提交 8980469、dbbdc6b）：12:16 第一次启动时，shell 里还留着上一次的 RETISEG_DATASETS=IDRiD，所以只排进 IDRiD 的 21 项，GPU 7 先开了 HRNet IDRiD 的打分。12:19 只结束了那个启动器（进程 1091118），HRNet 的打分继续跑。修了一处：正在跑的打分不再重复排队。然后去掉该变量重新启动，RETISEG_GPUS="2 3 4 5 6 7"，进程 1099550，日志 runs/logs/20261008_121922_bs_queue.log。队列 48 项：DDR 种子 0 共 7 个；种子 0 打分 13 个（HRNet IDRiD 的那个已在跑）；种子 1、2 共 28 个。启动时 6 张卡都有任务（IDRiD 种子 0 的 5 个加 HRNet 打分），队列等卡空出来再接。09:30 的 IDRiD 启动器（993701）已经没有待排任务，等它那几个任务结束就会退出。
 
+核对（2026-10-11 13:45，服务器时间）
+统一队列（1099550）跑了 3 天，48 项里 45 项已结束，只剩 FCT DDR 的种子 1、2。最后一个种子 0 是 FCT DDR：10-08 12:26 开始，10-11 12:27 结束，72 小时（估计 96）。
+HACDR-Net 的 6 个任务都标为 failed(1)，训练其实都跑满了预算。失败在打分：predict_hacdr_b1.py 给 torch.load 传了 weights_only，retiseg-hacdr 的 torch 1.10 不认这个参数。f9a2d3d 在 runtime.py 加 load_trusted（参数存在时才传），HACDR 预测和共享的续训加载都改用它。13:50 用队列原来的命令在 GPU 4、5 上补打 HACDR 种子 0 的分，14:13 两个都结束。HACDR 种子 1、2 已训完、未打分。
+B-std 种子 0，测试集精确 mAUPR（MA、HE、EX、SE）：
+  IDRiD  HRNet 0.699（0.446、0.684、0.884、0.783）；Swin-Unet 0.692（0.478、0.709、0.894、0.685）；M2MRF 0.650（0.443、0.615、0.868、0.675）；U-Net 0.606（0.382、0.541、0.858、0.644）；HACDR-Net 0.562（0.359、0.502、0.827、0.560）；DeepLabv3 0.532（0.090、0.643、0.734、0.662）；FCT 0.259（0.077、0.163、0.684、0.110）。
+  DDR    HRNet 0.443（0.155、0.477、0.590、0.550）；Swin-Unet 0.432（0.174、0.479、0.650、0.424）；M2MRF 0.380（0.148、0.402、0.547、0.422）；DeepLabv3 0.371（0.036、0.447、0.614、0.387）；HACDR-Net 0.269（0.114、0.309、0.485、0.168）；FCT 0.176（0.001、0.163、0.524、0.014）；U-Net 0.119（0.006、0.010、0.460、0.000）。
+  对照：M2MRF 作者权重在同一协议下 IDRiD 0.639、DDR 0.401（E1）。B-std 的 M2MRF 在 IDRiD 上用 44 张训练图，三个种子 0.650、0.651、0.668。
+已有三个种子的（均值 ± 标准差）：IDRiD HRNet 0.700 ± 0.004，Swin-Unet 0.688 ± 0.003，M2MRF 0.657 ± 0.010，U-Net 0.594 ± 0.024，DeepLabv3 0.537 ± 0.006，FCT 0.298 ± 0.084（0.259、0.395、0.241）；DDR HRNet 0.447 ± 0.009，Swin-Unet 0.431 ± 0.001，DeepLabv3 0.377 ± 0.005，M2MRF 0.369 ± 0.011，U-Net 0.114 ± 0.009。
+看到的问题（都只记录，没有改配方或预算）：
+  U-Net DDR：塌缩与 10-08 的诊断一致，测试 SE 0.000、MA 0.006、HE 0.010，只剩 EX。IDRiD 的 U-Net 验证曲线上 SE 在 0.51 和 0.01 之间来回，best.pt 停在第 7350 步。
+  FCT：配方是 Adam 1e-3、学习率不衰减、只用 BCE、从零训练。DDR 上验证 mAUPR 前 20 万步一直是 0.002（类别先验水平），最后一次验证 0.175 仍在升；IDRiD 上 MA、SE 几乎没学到，三个种子差 0.15。这是配方本身的结果，不是程序错误，按冻结规则照报。
+  DeepLabv3：两个库的 MA 都最低（0.090、0.036），HE、SE 正常。torchvision 版没有 v3+ 解码器，输出步长 8 加双线性上采样，小病灶难以恢复。
+  05 的事后检查（best.pt 落在最后两次验证即标“可能没练够”）：DDR 7 个模型全部被标；IDRiD 被标的是 DeepLabv3、M2MRF、HACDR-Net、Swin-Unet。poly 调度在最后退火，最高点自然偏后，所以这个标记不一定说明训练量不够。按 11 第六节，看过测试数之后不改预算；这一条写进 14 备注 22，必要时补一次标明身份的敏感性分析。
+  DDR 验证集明显比测试集容易：较强的几个模型验证 mAUPR 比测试高 0.11 到 0.19（HRNet 0.617 对 0.443，Swin-Unet 0.620 对 0.432，M2MRF 0.558 对 0.380）。IDRiD 方向相反，测试比验证高 0.04 到 0.11。两库上验证和测试的模型名次大体一致。写进 14 备注 23。
+用户决定（2026-10-11）：种子 1、2 先不跑，先做种子 0 上的重要实验和分析。13:47 结束统一队列和正在跑的 FCT DDR 种子 1、2（进程组 1099550）。这两个任务开跑 1 小时 18 分，还没到第一次验证，没有 resume.pt，以后要从头跑。HACDR 种子 1、2 的打分也留到以后（只推理，约 1 小时）。
+
+下一步的启动（2026-10-11 14:11 起，服务器时间）
+GPU 0–1 仍被其他用户的 vLLM 占着，本项目用 2–7。
+E1r（GPU 2，提交 74155f3）：M2MRF 作者配方，有效批 4，种子 0，4 万步，目录 runs/E1r_m2mrf_idrid_seed0_bs4_a100。服务器上的 dataset/iDRID 只有残缺的 zip，原来的 train_m2mrf.py 读不到图。prepare.write_case 是把发布的 JPEG 逐字节拷进 dataset/prepared/IDRiD/images，所以训练改读这里，并核对 train+val 正好是官方 IDRiD_01–54；标签本来就从 prepared 读。predict_m2mrf.py 同样改读 prepared（df51f3d）。显存 29GB，每步约 1.5 秒，预计 16 小时。训完后由一个等待进程在 CPU 上用第 40000 步权重打分（不挑检查点，与第一次 E1r 相同），输出 author_idrid_test.json 和 metrics_test.json，日志 score_console.log。
+U-Net 塌缩的修复候选（GPU 3、5，74155f3）：14 备注 21 的方案，只换 U-Net 的 Dice，按整批每类合并、平滑 1e-5（nnU-Net 的定义）。实现为 cell 里的 diagnostic_loss_params，只能带 --diagnostic 运行，不读测试集，主表配方不变。cell 是 bs_diag_unet_batchdice_{idrid,ddr}_seed0，目录 runs/BSdiag_unet_batchdice_*，预算与主表相同（IDRiD 21000 步、DDR 83600 步）。小张量核对：原配方下空块每像素的梯度（0.00069）比含病灶块（0.00039）还大，整批 Dice 下空块梯度降到约十分之一。早期曲线：IDRiD 第 8400 步 SE 0.47（原配方同一步 0.04）；DDR 第 8360 步四类都在输出，mAUPR 0.231（原配方 0.064）。是否采用、是否重跑 U-Net 由用户决定。
+nnU-Net（GPU 4、6、7，提交 8a08c8c）：official_code/nnUNet 在 2edf346（服务器 HTTPS 连不上 GitHub，用 SSH 拉取），装在新环境 retiseg-nnunet（克隆 retiseg 后 pip install -e，torch 仍是 2.6.0）。bench/scripts/nnunet_bridge.py 把 prepared 的 JPEG 解码后存成 PNG（原分辨率，RGB 三通道）；标签按 M2MRF_OVERWRITE_ORDER（EX、HE、SE、MA，后者覆盖前者）合成互斥标签；训练例为 train+val，splits_final.json 写死本项目的 44/10 和 383/149，只有一折。规划和预处理全用 nnU-Net 自己的：默认配置两库都是 1024×1536 的块、批 2；ResEnc-M 在 IDRiD 上 384×640、批 13，DDR 上 512×512、批 12。用 nnU-Net 自己的 checkpoint_final.pth（1000 epoch），不按验证 mAUPR 挑。导出 softmax 概率（本来就在原图尺寸），视野外置 0，再走同一个 bench.eval。1 个 epoch 的冒烟在 runs/smoke 下跑通了预测、导出和评测（验证 mAUPR 0.058）。14:47 开始默认 IDRiD（GPU 4）、默认 DDR（GPU 6）、ResEnc-M DDR（GPU 7）；ResEnc-M IDRiD 由等待进程在 GPU 5 的 U-Net IDRiD 诊断结束后自动开始。目录 runs/NN_{default,resencm}_{idrid,ddr}_fold0，nnU-Net 自己的输出在 runs/nnunet。实测每个 epoch：默认配置两库都约 26 秒（1000 个约 7 小时），ResEnc-M DDR 约 41 秒（约 11.5 小时）。console.log 的输出有缓冲，进度看 runs/nnunet/<数据集>/<训练器__规划__2d>/fold_0/training_log_*.txt。nnU-Net 不固定随机种子，这是它的默认做法，写进 14。
+B1 种子 0（补位）：14:13 先在 GPU 4、6、7 上续跑，14:47 为 nnU-Net 让卡停掉，三个任务都从 resume.pt 接上过（DeepLabv3 DDR 第 5016 步、IDRiD 第 7002 步，M2MRF DDR 第 2016 步）。旧格式的开始行没有进程号，第一次续跑用 RETISEG_IGNORE_RUNNING=1 放行，进程早已不在。14:52 起改为 server_run.sh b1-queue（launch_b1.py --queue-all --seed0-only，只排种子 0 训练和种子 0 打分，共 28 项），卡 2、3、4、6、7，卡上有本项目进程时等待，空出来就接。GPU 5 不在这个队列里，留给 nnU-Net 的接力。
+没有做、需要用户的：独立测试 E3a。服务器 dataset/prepared 只有 IDRiD 和 DDR，TJDR、FGADR、DiaRetDB1、Retinal-Lesions（约 10GB）还在工作站上，要按 11 第一节第 2 步同步。推理和画布缓存仍写死 .jpg 和 IDRiD/DDR，也要先接线。
+
 论文素材（2026-10-07）
 新建 14：把到目前为止所有要进论文的处理方法和数字按方法小节整理成可直接改写的版本，另列 19 条备注（局限、补充说明、审稿回复）。以后每项会进论文的决定在同一次提交里写进 14。
 

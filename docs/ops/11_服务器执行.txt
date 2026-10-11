@@ -60,6 +60,20 @@
     一个启动器管住这几张卡，按顺序排三波：种子 0，种子 0 的测试概率图和评测，种子 1、2。某个模型在某个库上的后两波，要等这个模型在这个库上的种子 0 写出 diagnostic.json，而且预算签名与当前 bs_frozen.yaml 一致；这个种子 0 失败，它的后两波就不开，并记为失败。按模型分开等，是为了不让一个慢模型（FCT 在 DDR 上约 96 小时）拖住其他模型。卡上还有别的任务时，等它空出来再接：卡上有本用户的任何进程就算忙，别的用户的进程合计不少于 RETISEG_BUSY_MIB 才算忙。已完成或正在跑的任务跳过。
     与原顺序的差别：种子 0 的曲线不再等人工看过才打分、开后续种子，三波自动接上。曲线照常在种子 0 结束时看；发现问题就停掉启动器（只杀启动器进程，正在跑的训练不受影响），改完再重排。
     同一组卡上不要同时开两个启动器。
+14. 2026-10-11 起种子 1、2 暂缓（用户决定）。只排种子 0 的 B1：RETISEG_GPUS="2 3 4 6 7" bash bench/scripts/server_run.sh b1-queue（--queue-all --seed0-only，种子 0 训练和种子 0 打分，卡忙时等待）。B-std 的种子 1、2 以后再用 bs-queue。
+
+七、nnU-Net（2026-10-11 起）
+环境 retiseg-nnunet：conda create -n retiseg-nnunet --clone retiseg，再 pip install -e official_code/nnUNet。服务器 HTTPS 连不上 GitHub，子模块用 SSH 拉：
+  git -c url."git@github.com:".insteadOf="https://github.com/" submodule update --init --depth 1 official_code/nnUNet
+数据（一次）：bench/scripts/nnunet_bridge.py convert --data dataset/prepared/IDRiD --dataset-id 601（DDR 是 602），写到 dataset/nnunet/raw。然后设 nnUNet_raw、nnUNet_preprocessed（dataset/nnunet/preprocessed）、nnUNet_results（runs/nnunet），执行
+  nnUNetv2_plan_and_preprocess -d 601 602 -c 2d --verify_dataset_integrity
+  nnUNetv2_plan_experiment -d 601 602 -pl nnUNetPlannerResEncM
+  nnUNetv2_preprocess -d 601 602 -plans_name nnUNetResEncUNetMPlans -c 2d
+最后 nnunet_bridge.py splits（两库各一次）写 splits_final.json；已存在且内容不同时报错。
+任务：NNUNET_GPU=4 bash bench/scripts/server_run.sh nnunet IDRiD default（或 DDR、resencm）。一个任务依次训练、预测验证和测试（--save_probabilities）、导出成 write_prob 图、评测，日志和结果在 runs/NN_<配置>_<库>_fold0。中断后原样再执行：训练用 nnU-Net 的 --c 续，已导出的划分跳过。
+
+八、独立测试的前提（E3a，未做）
+服务器的 dataset/prepared 目前只有 IDRiD 和 DDR。要先在工作站上按第一节第 2 步同步 TJDR_std、TJDR_uwf、FGADR、DiaRetDB1、RetinalLesions（约 10GB）。服务器上的 dataset/iDRID 只有残缺的 zip；E1r 和 predict_m2mrf.py 已改读 prepared 里逐字节相同的 JPEG，不再需要它。
 
 五、中断与恢复
 所有训练命令都带 --resume。卡掉线、进程被杀以后，原样再执行同一阶段：已完成的任务跳过（seed0 看 diagnostic.json，打分阶段看 metrics_test.json），没完成的从 resume.pt 接着训，权重与不中断时逐位相同。resume.pt 只在验证时写，所以最多损失一次验证间隔。
