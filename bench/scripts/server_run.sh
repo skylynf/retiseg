@@ -17,6 +17,10 @@
 #                                               one queue: seed 0, its test maps, then seeds 1 and 2;
 #                                               a model's later waves on a dataset wait for its own seed-0 diagnostic;
 #                                               cards still busy join when they free up
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh b1-queue
+#                                               B1 seed 0 and its test maps only; waits for busy cards
+#   NNUNET_GPU=4 bash bench/scripts/server_run.sh nnunet IDRiD default|resencm
+#                                               one nnU-Net job (bench/scripts/nnunet_run.sh)
 #   bash bench/scripts/server_run.sh status | curves [GLOB]
 #
 # Long stages start in the background with nohup, so the SSH session can
@@ -184,6 +188,14 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
     require_clean
     [ -n "${RETISEG_GPUS:-}" ] || { echo "bs-queue needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"2 3 4 5 6 7\"" >&2; exit 1; }
     launch bs_queue --jobs "$BS_JOBS" --submit --queue-all ${RETISEG_DATASETS:+--datasets "$RETISEG_DATASETS"} ;;
+  b1-queue)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "b1-queue needs RETISEG_GPUS" >&2; exit 1; }
+    launch b1_queue --submit --queue-all --seed0-only ;;
+  nnunet)
+    require_clean
+    [ -n "${3:-}" ] && [ -n "${NNUNET_GPU:-}" ] || { echo "usage: NNUNET_GPU=4 server_run.sh nnunet IDRiD|DDR default|resencm" >&2; exit 1; }
+    CUDA_VISIBLE_DEVICES="$NNUNET_GPU" background "nnunet_${3}_${2}" bash bench/scripts/nnunet_run.sh "$2" "$3" ;;
   bs-score0) require_clean; launch bs_score0 --jobs "$BS_JOBS" --submit --score-seed0 ;;
   bs-rest) require_clean; launch bs_rest --jobs "$BS_JOBS" --submit --rest ;;
   status) py retiseg bench/scripts/run_status.py status --glob "${2:-*}" ;;

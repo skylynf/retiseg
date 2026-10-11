@@ -900,6 +900,7 @@ def main(argv=None):
         action="store_true",
         help="with --submit: seed 0, its test maps, then the other seeds, on the cards in RETISEG_GPUS",
     )
+    parser.add_argument("--seed0-only", action="store_true", help="with --queue-all: leave the other seeds out")
     args = parser.parse_args(argv)
     if args.capped_train:
         if not args.script or not args.config or not args.run_dir:
@@ -952,6 +953,10 @@ def main(argv=None):
         if unknown:
             raise SystemExit(f"--datasets names unknown datasets: {unknown}; known: {sorted(known)}")
         jobs = [job for job in jobs if str(job["dataset"]) in wanted]
+    if args.seed0_only:
+        if not args.queue_all:
+            raise SystemExit("--seed0-only goes with --queue-all; --seed0 is the plain seed-0 wave")
+        jobs = [job for job in jobs if int(job["seed"]) == 0]
     if args.queue_all:
         gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
         if not gpus:
