@@ -427,6 +427,20 @@ def micro_batch_and_deviations(config, recipe):
     return micro, deviations
 
 
+def apply_matmul_precision(model, config=None):
+    """TF32 matrix multiplies when the wrapper asks for them (E5); a diagnostic cell may override.
+
+    Every B-std run so far used PyTorch's defaults: TF32 convolutions, fp32
+    matrix multiplies. Training and prediction call this, so a model is
+    evaluated with the precision it was trained with.
+    """
+    tf32 = bool(getattr(model, "matmul_tf32", False))
+    if config is not None and config.get("matmul_tf32") is not None:
+        tf32 = bool(config["matmul_tf32"])
+    torch.backends.cuda.matmul.allow_tf32 = tf32
+    return tf32
+
+
 def lesion_probabilities(logits, card):
     """Map network logits to four lesion probabilities, MA HE EX SE.
 

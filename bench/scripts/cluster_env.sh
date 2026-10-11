@@ -52,7 +52,7 @@ run_python() {
 }
 
 retiseg_ok() {
-  run_python retiseg -c 'import torch, torchvision, bench, timm, einops, cv2, yacs
+  run_python retiseg -c 'import torch, torchvision, bench, timm, einops, cv2, yacs, hydra, icecream
 version = torch.__version__.split("+")[0]
 if int(version.split(".")[0]) < 2:
     raise SystemExit("torch %s is not 2.x" % torch.__version__)

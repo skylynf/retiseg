@@ -50,6 +50,15 @@ import yaml
 _REQUIRED = ("U-Net", "DeepLabv3", "HRNet", "Swin-Unet", "FCT", "M2MRF", "HACDR-Net")
 _H2FORMER = "H2Former"
 _SLUG = {
+    "SAMed": "samed",
+    "SAM-Adapter": "sam_adapter",
+    "SAM2-UNet": "sam2_unet",
+    "MedSAM": "medsam",
+    "RETFound": "retfound",
+    "ViT-UPerNet MAE-IN1k": "vitup_mae",
+    "ViT-UPerNet RETFound-DINOv2": "vitup_rfdinov2",
+    "ViT-UPerNet DINOv2": "vitup_dinov2",
+    "ViT-UPerNet augreg": "vitup_augreg",
     "U-Net": "unet",
     "DeepLabv3": "deeplabv3",
     "HRNet": "hrnet",
@@ -70,7 +79,19 @@ _BINDING = {
     # PyTorch 2.x. PyTorch 1.6 with CUDA 10.2 has no sm_80 kernels for A100.
     "M2MRF": ("retiseg", "bench/scripts/train_m2mrf_b1.py", "bench/scripts/predict_m2mrf_b1.py"),
     "HACDR-Net": ("retiseg-hacdr", "bench/scripts/train_hacdr_b1.py", "bench/scripts/predict_hacdr_b1.py"),
+    # E5 (design/15): B-std only, the shared runner, retiseg environment.
+    "SAMed": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "SAM-Adapter": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "SAM2-UNet": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "MedSAM": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "RETFound": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "ViT-UPerNet MAE-IN1k": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "ViT-UPerNet RETFound-DINOv2": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "ViT-UPerNet DINOv2": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "ViT-UPerNet augreg": ("retiseg", "bench/train.py", "bench/predict.py"),
 }
+# E5 training settings join the B-std table only (the B1 table is the source-recipe column).
+_E5 = ("SAMed", "SAM-Adapter", "SAM2-UNet", "MedSAM", "RETFound")
 _PAIRS = {
     "B1": [("IDRiD", seed) for seed in range(5)] + [("DDR", seed) for seed in range(3)],
     "BS": [("IDRiD", seed) for seed in range(3)] + [("DDR", seed) for seed in range(3)],
@@ -87,6 +108,8 @@ _CELL_KEYS = {
     "seed",
     "num_workers",
     "batch_size",
+    # B-std only: activation recomputation when a model needs it to fit (recorded as a deviation).
+    "activation_checkpointing",
 }
 _SMOKE_STEPS = 20
 _DIST_VARS = ("WORLD_SIZE", "RANK", "LOCAL_RANK", "GROUP_RANK", "MASTER_ADDR", "MASTER_PORT")
@@ -130,7 +153,7 @@ def registered_wrappers():
     return names
 
 
-def active_models():
+def active_models(experiment="B1"):
     wrapped = registered_wrappers()
     missing = [name for name in _REQUIRED if name not in wrapped]
     if missing:
@@ -146,6 +169,8 @@ def active_models():
             "The other registered models are unchanged.",
             flush=True,
         )
+    if experiment == "BS":
+        models += [name for name in _E5 if name in wrapped]
     return models
 
 
@@ -810,18 +835,17 @@ def capped_train(script, config, run_dir, max_steps):
 def fresh_signature(job, config):
     """Budget signature that the current code and frozen files give this job (recipe.json fields)."""
     from bench.data.b1_input import EXPECTED_COUNTS
-    from bench.models.registry import build_model
+    from bench.models.registry import recipe_and_card
     from bench.runtime import micro_batch_and_deviations, optimizer_step_sizes, resolve_recipe
 
-    model = build_model(job["model"])
     n_train = EXPECTED_COUNTS[job["dataset"]]["train"]
-    declared = model.author_recipe(job["dataset"])
+    declared, card = recipe_and_card(job["model"], job["dataset"])
     if experiment_of(job) == "BS":
         from bench import bstd
         from bench.common.io import load_split
 
         frozen = bstd.load_frozen()
-        patch, _window = bstd.geometry(model.card, frozen)
+        patch, _window = bstd.geometry(card, frozen)
         dataset_dir = _ROOT / config["dataset"]
         ids = load_split(dataset_dir, config["split_train"])
         pixels = bstd.canvas_pixels(dataset_dir, ids, int(config["fov_diameter"]))
@@ -942,8 +966,8 @@ def main(argv=None):
         raise SystemExit("pass only one of --smoke, --seed0, --rest, --score-seed0")
     if args.queue_all and selected:
         raise SystemExit("--queue-all is its own wave; do not combine it with --smoke, --seed0, --rest or --score-seed0")
-    models = active_models()
     document = load_document(args.jobs)
+    models = active_models(document.get("experiment", "B1"))
     formal = select_jobs(document, False, models)
     if args.submit and not selected and not args.queue_all:
         raise SystemExit(

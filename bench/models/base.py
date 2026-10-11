@@ -49,6 +49,9 @@ class ModelCard:
     # are the channel ids of MA, HE, EX, SE. Those four planes are not
     # renormalized after they are taken out.
     class_index: tuple = ()
+    # Windows per forward pass in sliding-window validation and prediction (bench.infer).
+    # It changes memory only; SAM's ViT-H holds 16 x 4096^2 attention maps per 1024 window.
+    window_batch: int = 8
 
     def __post_init__(self):
         if self.family not in FAMILIES:
@@ -72,6 +75,8 @@ class ModelCard:
             raise ValueError("sigmoid output keeps class_index empty; channels 0-3 are MA, HE, EX, SE")
         if self.output_activation == "softmax" and len(self.class_index) != 4:
             raise ValueError("softmax output needs class_index with the MA, HE, EX, SE channel ids")
+        if not isinstance(self.window_batch, int) or isinstance(self.window_batch, bool) or self.window_batch < 1:
+            raise ValueError("window_batch must be a positive integer")
 
 
 @dataclass

@@ -102,6 +102,23 @@
       挪开以后启动器才会重跑它；不挪开时种子 0 被当成已完成，而预算签名（含 loss_params）不一致，后续种子的闸门会关上并报 Rerun seed 0。
    c. 只重跑该模型的种子 0（训练加打分）：RETISEG_GPUS="..." conda run -n retiseg python bench/scripts/launch_b1.py --jobs bench/configs/bs_jobs.yaml --submit --queue-all --seed0-only --only U-Net。种子 1、2 以后与其他模型一起用 bs-queue。E3a 对新运行再跑一次（launch_e3a.py 把新的运行当作新来源，挪开的 _registered 目录不再列出）。
 
+十、E5 基础模型的训练档（2026-10-12 接线）
+1. 权重（不在 Git 里，放 pretrained/；工作站下载后 rsync 过去也可以）：
+     sam_vit_h_4b8939.pth、sam_vit_b_01ec64.pth        https://dl.fbaipublicfiles.com/segment_anything/
+     sam2_hiera_large.pt（SAM 2.0，SAM2-UNet 用）       https://dl.fbaipublicfiles.com/segment_anything_2/072824/
+     sam2.1_hiera_large.pt（SAM 2.1，零样本用）        https://dl.fbaipublicfiles.com/segment_anything_2/092824/
+     mae_pretrain_vit_large.pth                       https://dl.fbaipublicfiles.com/mae/pretrain/
+     medsam_vit_b.pth                                 MedSAM README 的 Google Drive 目录
+     RETFound_mae_natureCFP.pth、RETFound_dinov2_meh.pth   Hugging Face YukunZhou/…（需申请，CC BY-NC 4.0）
+     sam3.pt                                          Hugging Face facebook/sam3（需申请）
+     timm：vit_large_patch14_dinov2.lvd142m、vit_large_patch16_224.augreg_in21k_ft_in1k，由 timm 下载到 HF 缓存，或存成 pretrained/<名字>.safetensors
+   缺哪个文件，用到它的任务在第一步之前退出，不会改成随机初始化。来源也写在 bench/configs/e5_frozen.yaml。
+2. 环境：bash bench/scripts/server_run.sh env。retiseg 的自检加了 hydra 和 icecream，自检不过时会装 requirements-train.txt 里新加的 hydra-core 1.3.2、icecream 2.1.3（torch 已装好的不会重装）。
+3. 冒烟：bash bench/scripts/server_run.sh e5-smoke（5 个模型 × 两库，各 20 步，只训练和验证，目录 runs/smoke/bs_*）。记显存峰值和每步耗时，改 make_bs_jobs.py 的 EST_HOURS 后重新生成任务表。显存不够时，在该模型的 cell 里设 batch_size（必须整除有效批，梯度累积补足；RETFound 不能小于 2），再不够加 activation_checkpointing: true（激活重计算，计算不变，写进偏差）。SAM2-UNet 的 reduce='none' 已由 test_e5_models 在 PyTorch 2.6 上核对为平均 BCE；服务器的 check 阶段会再跑一次。
+4. 种子 0：RETISEG_GPUS="..." bash bench/scripts/server_run.sh e5-seed0（5 个模型 × 两库的种子 0 训练，然后写测试图打分；共用 b1-queue 那套排队）。每个模型种子 0 结束后看逐类验证曲线（15 第三节第 13 条）：SAM2-UNet、MedSAM 若某类停在像素占比附近，按与 U-Net 同一规则在 bs_frozen.yaml 写修订（batch_iou 或 batch_dice），用 bs-revise 重跑。
+5. TF32 核对：RETISEG_GPUS="..." bash bench/scripts/server_run.sh extra E5tf32，与主表 SAM2-UNet IDRiD 种子 0 比验证曲线，差别在种子波动之内就在 14 写一句。
+6. 编码器对照：RETISEG_GPUS="..." bash bench/scripts/server_run.sh extra E5enc（DDR 种子 0，14 个），按验证 mAUPR 选每个编码器的学习率，写进 e5_frozen.yaml 的 lr_choice 并提交，再跑其余种子（这一步的接线等选定后再做）。
+
 五、中断与恢复
 所有训练命令都带 --resume。卡掉线、进程被杀以后，原样再执行同一阶段：已完成的任务跳过（seed0 看 diagnostic.json，打分阶段看 metrics_test.json），没完成的从 resume.pt 接着训，权重与不中断时逐位相同。resume.pt 只在验证时写，所以最多损失一次验证间隔。
 预算改过以后不能续训：resume.pt 里记了预算签名，签名不一致时报错，此时删掉那个运行目录重跑。

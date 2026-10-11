@@ -21,6 +21,12 @@ import yaml
 from bench.scripts.launch_b1 import _BINDING, _PAIRS, _SLUG, active_models
 
 EST_HOURS = {
+    # E5 (design/15 section 9, by compute, matrix multiplies in TF32); replace with the smoke timings.
+    "SAMed": (1, 3),
+    "SAM-Adapter": (6, 23),
+    "SAM2-UNet": (1.5, 5.5),
+    "MedSAM": (1.2, 4.5),
+    "RETFound": (5.5, 21),
     "U-Net": (1.5, 6),
     "DeepLabv3": (4, 15),
     "HRNet": (2.6, 10.5),
@@ -78,7 +84,7 @@ def job(model, dataset, seed, smoke=False):
 
 
 def main():
-    models = active_models()
+    models = active_models("BS")
     jobs, smoke = [], []
     for model in models:
         for dataset, seed in _PAIRS["BS"]:

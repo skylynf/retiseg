@@ -194,6 +194,7 @@ RETFound+UPerNet  224               4 路 sigmoid  24      63000–64000       2
   出处：Zhou 等，Nature 622:156–163（2023）方法部分；Hugging Face YukunZhou/RETFound_mae_meh、RETFound_dinov2_meh 的模型卡；MedSAM 仓库 assets/MedSAM_supp.pdf；SAM 3 原文 arXiv:2511.16719 的数据部分。
 
 十一、代码怎么串起来
+2026-10-12 实现状态：训练档的 5 个包装器、编码器对照的 4 个变体、e5_frozen.yaml、任务表和服务器阶段已写好并有单元测试（00 的同日记录）。与下面原计划的差别：编码器对照的变体放在 vit_upernet.py 一个文件里（不是 encoder 键），注册为 EXPERIMENT_ONLY；共用部分在 bench/models/foundation.py；滑窗推理的批大小由 ModelCard.window_batch 给出（SAM-Adapter 1、MedSAM 2）。推理档（bench/e5/）还没写。
 沿用 B-std 的布局：bench/ 与 official_code/ 分开，官方仓库保持原样，包装器只导入网络。
 训练档（加进 bench/models/registry.py 的 WRAPPERS、launch_b1.py 的 _SLUG 和 _BINDING、make_bs_jobs.py 的 EST_HOURS）：
   bench/models/samed.py        卡片：family foundation，forward_size (512, 512)，softmax，class_index (1, 2, 3, 4)，均值 0、标准差 1；自定义损失和 adjust_lr

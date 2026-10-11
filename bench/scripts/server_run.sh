@@ -24,7 +24,10 @@
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh bs-revise U-Net
 #                                               after a recipe revision in bs_frozen.yaml: move the model's
 #                                               superseded runs to *_registered, then its seed 0 (train and score)
-#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh extra E2c
+#   bash bench/scripts/server_run.sh e5-smoke   20-step B-std smoke of the five E5 training settings (weights in pretrained/)
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-seed0
+#                                               E5 seed 0 on both sources, then its test maps (one queue, like b1-queue)
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh extra E2c | E5tf32 | E5enc
 #                                               diagnostic jobs of bench/configs/extra_jobs.yaml (E2c learning-rate check)
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e3a [--seed0-only] [--only SOURCE,...]
 #                                               E3a independent tests of every scored source
@@ -48,6 +51,7 @@ cd "$ROOT"
 LOGS="$ROOT/runs/logs"
 mkdir -p "$LOGS"
 BS_JOBS=bench/configs/bs_jobs.yaml
+E5_MODELS=SAMed,SAM-Adapter,SAM2-UNet,MedSAM,RETFound
 
 pick_tool() {
   local tool
@@ -210,6 +214,13 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
     [ -n "${RETISEG_GPUS:-}" ] && [ -n "${2:-}" ] || { echo "usage: RETISEG_GPUS=\"2 3\" server_run.sh bs-revise U-Net" >&2; exit 1; }
     py retiseg bench/scripts/retire_runs.py --model "$2" --apply
     launch "bs_revise_${2}" --jobs "$BS_JOBS" --submit --queue-all --seed0-only --only "$2" ;;
+  e5-smoke)
+    require_clean
+    launch e5_smoke --jobs "$BS_JOBS" --submit --smoke --only "$E5_MODELS" ;;
+  e5-seed0)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "e5-seed0 needs RETISEG_GPUS" >&2; exit 1; }
+    launch e5_seed0 --jobs "$BS_JOBS" --submit --queue-all --seed0-only --only "$E5_MODELS" ;;
   extra)
     require_clean
     [ -n "${RETISEG_GPUS:-}" ] && [ -n "${2:-}" ] || { echo "usage: RETISEG_GPUS=\"2 3\" server_run.sh extra E2c" >&2; exit 1; }

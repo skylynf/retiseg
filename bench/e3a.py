@@ -254,6 +254,9 @@ def load_run_model(config, checkpoint, device):
             if model.net is None:
                 raise ImportError(model.import_error or "HACDR-Net network was not imported")
             _check_channels(model)
+    from bench.runtime import apply_matmul_precision
+
+    apply_matmul_precision(model, config)
     state = load_trusted(checkpoint, map_location=device)
     if "model_name" in state and state["model_name"] != model.card.name:
         raise ValueError(f"checkpoint model {state['model_name']!r} != config model {model.card.name!r}")

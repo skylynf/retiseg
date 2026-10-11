@@ -2,6 +2,156 @@
 # Every job here is train and validation only (--diagnostic); none reads a test split.
 # Start: RETISEG_GPUS="..." bash bench/scripts/server_run.sh extra E2c
 jobs:
+- name: e5tf32_sam2_unet_idrid_seed0_fp32
+  experiment: E5tf32
+  model: SAM2-UNet
+  dataset: IDRiD
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5tf32_sam2_unet_idrid_seed0_fp32.yaml
+  script: bench/train.py
+  run_dir: runs/E5tf32_sam2_unet_idrid_seed0_fp32
+  est_hours: 4.5
+- name: e5enc_retfound_ddr_seed0_lr1o3
+  experiment: E5enc
+  model: RETFound
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_retfound_ddr_seed0_lr1o3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_retfound_ddr_seed0_lr1o3
+  est_hours: 21.0
+- name: e5enc_retfound_ddr_seed0_lr3
+  experiment: E5enc
+  model: RETFound
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_retfound_ddr_seed0_lr3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_retfound_ddr_seed0_lr3
+  est_hours: 21.0
+- name: e5enc_vitup_mae_ddr_seed0_lr1o3
+  experiment: E5enc
+  model: ViT-UPerNet MAE-IN1k
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_mae_ddr_seed0_lr1o3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_mae_ddr_seed0_lr1o3
+  est_hours: 21.0
+- name: e5enc_vitup_mae_ddr_seed0_lr1
+  experiment: E5enc
+  model: ViT-UPerNet MAE-IN1k
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_mae_ddr_seed0_lr1.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_mae_ddr_seed0_lr1
+  est_hours: 21.0
+- name: e5enc_vitup_mae_ddr_seed0_lr3
+  experiment: E5enc
+  model: ViT-UPerNet MAE-IN1k
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_mae_ddr_seed0_lr3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_mae_ddr_seed0_lr3
+  est_hours: 21.0
+- name: e5enc_vitup_rfdinov2_ddr_seed0_lr1o3
+  experiment: E5enc
+  model: ViT-UPerNet RETFound-DINOv2
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_rfdinov2_ddr_seed0_lr1o3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_rfdinov2_ddr_seed0_lr1o3
+  est_hours: 21.0
+- name: e5enc_vitup_rfdinov2_ddr_seed0_lr1
+  experiment: E5enc
+  model: ViT-UPerNet RETFound-DINOv2
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_rfdinov2_ddr_seed0_lr1.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_rfdinov2_ddr_seed0_lr1
+  est_hours: 21.0
+- name: e5enc_vitup_rfdinov2_ddr_seed0_lr3
+  experiment: E5enc
+  model: ViT-UPerNet RETFound-DINOv2
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_rfdinov2_ddr_seed0_lr3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_rfdinov2_ddr_seed0_lr3
+  est_hours: 21.0
+- name: e5enc_vitup_dinov2_ddr_seed0_lr1o3
+  experiment: E5enc
+  model: ViT-UPerNet DINOv2
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_dinov2_ddr_seed0_lr1o3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_dinov2_ddr_seed0_lr1o3
+  est_hours: 21.0
+- name: e5enc_vitup_dinov2_ddr_seed0_lr1
+  experiment: E5enc
+  model: ViT-UPerNet DINOv2
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_dinov2_ddr_seed0_lr1.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_dinov2_ddr_seed0_lr1
+  est_hours: 21.0
+- name: e5enc_vitup_dinov2_ddr_seed0_lr3
+  experiment: E5enc
+  model: ViT-UPerNet DINOv2
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_dinov2_ddr_seed0_lr3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_dinov2_ddr_seed0_lr3
+  est_hours: 21.0
+- name: e5enc_vitup_augreg_ddr_seed0_lr1o3
+  experiment: E5enc
+  model: ViT-UPerNet augreg
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_augreg_ddr_seed0_lr1o3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_augreg_ddr_seed0_lr1o3
+  est_hours: 21.0
+- name: e5enc_vitup_augreg_ddr_seed0_lr1
+  experiment: E5enc
+  model: ViT-UPerNet augreg
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_augreg_ddr_seed0_lr1.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_augreg_ddr_seed0_lr1
+  est_hours: 21.0
+- name: e5enc_vitup_augreg_ddr_seed0_lr3
+  experiment: E5enc
+  model: ViT-UPerNet augreg
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_augreg_ddr_seed0_lr3.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_augreg_ddr_seed0_lr3
+  est_hours: 21.0
 - name: e2c_hrnet_idrid_seed0_lr1o3
   experiment: E2c
   model: HRNet

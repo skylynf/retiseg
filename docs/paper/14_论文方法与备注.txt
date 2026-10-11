@@ -115,7 +115,8 @@ M9 基础模型（E5）
   预训练数据：RETFound 彩照预训练的 904,170 张图中有 88,702 张来自 Kaggle EyePACS，即其训练加测试的全部；Retinal-Lesions 的图像取自 Kaggle EyePACS（文件名即 Kaggle 编号），所以 RETFound 在 Retinal-Lesions 上的结果不算独立测试，表中加注，排名另报不含该测试集的版本。MedSAM 训练用的眼底数据只有 REFUGE 的视盘和视杯，IDRiD 只用于其视盘外部验证。SA-1B、SA-Co 和 LVD-142M 无法逐图审计，正文写明。
   出处：docs/design/15_基础模型任务.txt；bench/configs/e5_frozen.yaml（待写）；official_code/ 各子模块的固定提交；Zhou 2023（Nature）方法部分；Ma 2024 补充材料。
   已定（2026-10-12，用户授权按建议）：训练档矩阵乘开 TF32（另以 SAM2-UNet 的 IDRiD 种子 0 开、关各一次核对）；RETFound 主表用 natureCFP；作者代码与论文不一致时按代码；SAM2-UNet、MedSAM 的塌缩处理与 U-Net 同一规则；编码器对照全做。
-  待补：包装器、bench/e5、e5_frozen.yaml 和单元测试。SAM 3 与两份 RETFound 权重的申请。冒烟的显存、每步耗时和实际步数。SAM2-UNet 旧参数 reduce='none' 在 PyTorch 2.6 上的核对。SAM 3 措辞在 DDR 验证集上的选择结果。全部结果。
+  实现（2026-10-12）：bench/models/{sam2_unet,vit_upernet,samed,sam_adapter,medsam,foundation}.py，网络都由官方代码构建；参数量核对：SAM2-UNet 2.165 亿/可训练 438 万，SAM-Adapter 6.413 亿/425 万，MedSAM 9374 万（全可训），RETFound 加 UPerNet 3.526 亿；e5_frozen.yaml 已写（含零样本和理想提示设定）。
+  待补：bench/e5 推理档代码；SAM 3 与两份 RETFound 权重的申请；服务器冒烟的显存、每步耗时和实际步数；SAM 3 措辞在 DDR 验证集上的选择结果；全部结果。SAM2-UNet 的 reduce='none' 已在本机 PyTorch 2.6 上核对为平均 BCE（test_e5_models），服务器 check 阶段再核一次。
 
 M10 测试场景与泄漏审计
   内部测试：训练库自己的官方测试集。独立测试：从未参与训练的来源，整库排除在训练和内部测试之外，结论以独立测试为主（与 Lu 2026 用 IMMREP23、McPAS-TCR、VDJdb 作独立测试并用 CD-HIT 去相似序列的做法对应）。

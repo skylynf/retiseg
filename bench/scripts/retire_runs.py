@@ -37,7 +37,7 @@ def stale_runs(model, jobs_path=BS_JOBS):
     """(run_dir, reason) for every formal run of ``model`` that exists and is not current."""
     document = load_document(jobs_path)
     out = []
-    for job in select_jobs(document, False, active_models()):
+    for job in select_jobs(document, False, active_models("BS")):
         if job["model"] != model:
             continue
         config, run_dir = check_job(job, False)

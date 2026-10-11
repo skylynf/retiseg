@@ -33,7 +33,7 @@ from bench.bstd import inference_for
 from bench.data.b1_input import load_example, pad_to_multiple
 from bench.infer import canvas_logits
 from bench.models.registry import build_model
-from bench.runtime import assert_not_finished_run, lesion_probabilities
+from bench.runtime import apply_matmul_precision, assert_not_finished_run, lesion_probabilities
 
 
 def _resize_plane(plane, height, width):
@@ -97,6 +97,7 @@ def predict(config_path, checkpoint, pred_dir, split):
     assert_not_finished_run(pred_dir)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = build_model(config["model"]).to(device)
+    apply_matmul_precision(model, config)
     state = torch.load(checkpoint, map_location=device, weights_only=False)
     if "model_name" in state and state["model_name"] != model.card.name:
         raise ValueError(f"checkpoint model {state['model_name']!r} != config model {model.card.name!r}")

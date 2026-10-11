@@ -26,6 +26,7 @@ from bench.eval import pixel
 from bench.infer import canvas_logits
 from bench.runtime import (
     REPO,
+    apply_matmul_precision,
     lesion_probabilities,
     micro_batch_and_deviations,
     write_environment,
@@ -74,7 +75,7 @@ def inference_for(config, card, frozen=None):
         return None
     frozen = frozen or load_frozen()
     _, window = geometry(card, frozen)
-    return {"window": window, "overlap": float(frozen["window_overlap"])}
+    return {"window": window, "overlap": float(frozen["window_overlap"]), "batch": int(getattr(card, "window_batch", 8))}
 
 
 def canvas_pixels(dataset_dir, ids, diameter):
@@ -213,7 +214,9 @@ class ValScorer:
             tensor = normalize(image, self.split.mean, self.split.std).to(device)
             target = torch.from_numpy(np.stack(masks).astype(np.float32)).unsqueeze(0).to(device)
             with torch.no_grad():
-                logits = canvas_logits(model, tensor, self.card, self.window, self.overlap).unsqueeze(0)
+                logits = canvas_logits(
+                    model, tensor, self.card, self.window, self.overlap, int(getattr(self.card, "window_batch", 8))
+                ).unsqueeze(0)
                 loss_sum += float(self.loss_fn(logits, target))
                 prob = lesion_probabilities(logits, self.card)[0]
                 q = torch.round(prob.clamp(0.0, 1.0) * levels).long().cpu().numpy()
@@ -291,6 +294,18 @@ def run_cell(
             raise ValueError("diagnostic_loss_params changes the model recipe; run it with --diagnostic")
         resolved = replace(resolved, loss_params={**resolved.loss_params, **override})
         deviations = deviations + [f"diagnostic loss_params {override}; not the main-table recipe"]
+    if config.get("matmul_tf32") is not None and not diagnostic:
+        raise ValueError("matmul_tf32 in a cell is the TF32 check; run it with --diagnostic")
+    if apply_matmul_precision(model, config):
+        deviations = deviations + [
+            "matrix multiplies in TF32 (E5 decision 2026-10-12, design/15 section 16); convolutions in TF32 as in every B-std run"
+        ]
+    elif getattr(model, "matmul_tf32", False):
+        deviations = deviations + ["TF32 check: matrix multiplies in full fp32 for this diagnostic run"]
+    if config.get("activation_checkpointing"):
+        if not hasattr(model, "enable_activation_checkpointing"):
+            raise ValueError(f"{card.name} has no activation recomputation")
+        deviations = deviations + [model.enable_activation_checkpointing()]
     micro, batch_deviations = micro_batch_and_deviations(config, resolved)
     deviations = deviations + batch_deviations + list(extra_deviations)
     train_set = PatchTrain(source, patch, samples, frozen["augment"], config["seed"])

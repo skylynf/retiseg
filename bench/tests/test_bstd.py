@@ -177,7 +177,7 @@ def test_geometry_follows_forward_size():
 
     assert bstd.geometry(_Card, FROZEN) == ((224, 224), (224, 224))
     assert bstd.inference_for({"experiment": "B1"}, _Card) is None
-    assert bstd.inference_for({"experiment": "BS"}, _Card) == {"window": (224, 224), "overlap": 0.5}
+    assert bstd.inference_for({"experiment": "BS"}, _Card) == {"window": (224, 224), "overlap": 0.5, "batch": 8}
 
 
 def test_val_scorer_gives_one_for_a_perfect_model_and_ignores_outside_fov():

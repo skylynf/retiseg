@@ -1,6 +1,12 @@
 """Write the cells and bench/configs/extra_jobs.yaml for runs outside the B-std table.
 
-Now: E2c, the learning-rate check (05 E2c; 13 section 4 step 4). One model per
+E5tf32: SAM2-UNet IDRiD seed 0 with full-fp32 matrix multiplies, to compare
+with the TF32 seed 0 of the main table (design/15 section 16 item 1).
+E5enc: the encoder comparison's learning-rate sweep on DDR seed 0 (design/15
+section 8.3): RETFound's UPerNet head and recipe on five ViT-L encoders, learning rate
+x 1/3, 1, 3 (RETFound x 1 is the main-table DDR seed 0). The chosen rate is
+written to e5_frozen.yaml from validation before the other seeds run.
+E2c, the learning-rate check (05 E2c; 13 section 4 step 4). One model per
 family that is trained under B-std: HRNet for the general networks (the best
 of them on both sources) and M2MRF for the fundus-specific ones; nnU-Net keeps
 its own schedule and the foundation models get theirs in E5's encoder
@@ -25,6 +31,9 @@ from bench.scripts.make_bs_jobs import EST_HOURS, cell
 
 E2C_MODELS = ("HRNet", "M2MRF")
 E2C_FACTORS = {"lr1o3": 1.0 / 3.0, "lr3": 3.0}
+ENCODERS = ("RETFound", "ViT-UPerNet MAE-IN1k", "ViT-UPerNet RETFound-DINOv2", "ViT-UPerNet DINOv2", "ViT-UPerNet augreg")
+ENC_FACTORS = {"lr1o3": 1.0 / 3.0, "lr1": 1.0, "lr3": 3.0}
+ENC_HOURS = 21.0  # RETFound DDR estimate (design/15 section 9); ViT-L/14 has 256 tokens per 224 window instead of 196
 CELLS = _ROOT / "bench" / "configs" / "cells"
 JOBS = _ROOT / "bench" / "configs" / "extra_jobs.yaml"
 HEADER = """# Runs outside the B-std main table. Written by bench/scripts/make_extra_jobs.py; edit that script.
@@ -61,8 +70,49 @@ def e2c_jobs():
     return jobs
 
 
+def _job(name, experiment, model, dataset, body, hours):
+    slug = _SLUG[model]
+    env, script, _predict = _BINDING[model]
+    path = CELLS / f"{name}.yaml"
+    path.write_text(yaml.safe_dump(body, sort_keys=False))
+    return {
+        "name": name,
+        "experiment": experiment,
+        "model": model,
+        "dataset": dataset,
+        "seed": int(body["seed"]),
+        "env": env,
+        "config": f"bench/configs/cells/{name}.yaml",
+        "script": script,
+        "run_dir": f"runs/{experiment}_{name.split('_', 1)[1]}",
+        "est_hours": float(hours),
+    }
+
+
+def e5_jobs():
+    jobs = [
+        _job(
+            "e5tf32_sam2_unet_idrid_seed0_fp32",
+            "E5tf32",
+            "SAM2-UNet",
+            "IDRiD",
+            dict(cell("SAM2-UNet", "IDRiD", 0), matmul_tf32=False),
+            EST_HOURS["SAM2-UNet"][0] * 3,
+        )
+    ]
+    for model in ENCODERS:
+        for tag, factor in ENC_FACTORS.items():
+            if model == "RETFound" and tag == "lr1":
+                continue  # the main-table BS_retfound_ddr_seed0
+            body = cell(model, "DDR", 0)
+            if factor != 1.0:
+                body["lr_scale"] = float(factor)
+            jobs.append(_job(f"e5enc_{_SLUG[model]}_ddr_seed0_{tag}", "E5enc", model, "DDR", body, ENC_HOURS))
+    return jobs
+
+
 def main():
-    jobs = e2c_jobs()
+    jobs = e5_jobs() + e2c_jobs()
     JOBS.write_text(HEADER + yaml.safe_dump({"jobs": jobs}, sort_keys=False))
     print(f"wrote {len(jobs)} jobs to {JOBS.relative_to(_ROOT)}", flush=True)
 

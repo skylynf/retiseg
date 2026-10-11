@@ -39,6 +39,7 @@ def test_scale_rule_per_degree_for_uwf_and_fov_size_elsewhere():
 class _Card:
     def __init__(self, forward_size=None):
         self.forward_size = forward_size
+        self.window_batch = 8
 
 
 def test_inference_geometry():
@@ -51,7 +52,7 @@ def test_inference_geometry():
     assert e3a.inference_geometry(b1, _Card(), 3830, FROZEN)["window"] == (1440, 1440)
     assert e3a.inference_geometry(b1, _Card((224, 224)), 3830, FROZEN) is None
     swin = e3a.inference_geometry(bs, _Card((224, 224)), 4256, FROZEN)
-    assert swin["window"] == (224, 224)
+    assert swin["window"] == (224, 224) and swin["batch"] == 8
 
 
 class _Tiny(nn.Module, SegmentationWrapper):

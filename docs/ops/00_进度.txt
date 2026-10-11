@@ -240,6 +240,19 @@ B1 补位（队列日志 20261011_155738，28 项）：
    a. E5（design/15 第十六节）五项全部按建议：训练档矩阵乘开 TF32，另用 SAM2-UNet 的 IDRiD 种子 0 开和不开各跑一次核对；RETFound 主表用 natureCFP，Retinal-Lesions 和 FGADR 两列加注；作者代码与论文不一致时按代码；SAM2-UNet、MedSAM 若种子 0 的逐类验证曲线塌缩，逐图项改整批（与 U-Net 同一规则，只依据训练和验证）；编码器对照全做（五个编码器、三档学习率、3 个种子），算力紧时先整行砍 augreg。
    b. 以 FGADR、Retinal-Lesions、TJDR_uwf 训练时的去重：不改 10-07 冻结的划分，评测时去掉与该来源训练或验证图同一只眼的测试图。名单冻结在 bench/data/splits/leak_exclusions.json（bench/scripts/leak_exclusions.py 由审计生成，审计重跑时列出血管分数 ≥0.3 的全部配对）。阈值看图定：一般 0.5；FGADR 内部 0.33，因为 FGADR 的同一只眼看到 0.34 还是同一只眼（换了拍摄时间的也有），0.32 及以下的样例都是不同的眼（有几对是同一人的左右眼）。按此，以 FGADR 训练时 FGADR 测试集去掉 106 张（553 张的 19%；只取 0.5 会漏掉 43 张），Retinal-Lesions 测试集去掉 19 张；以 Retinal-Lesions 训练时 FGADR 测试集去掉 27 张、Retinal-Lesions 1 张；以 TJDR_uwf 训练时去掉 TJDR_test_021、023；以 IDRiD、DDR、TJDR_std 训练时不去掉。bench/e3a.py 按训练源自动应用。E3b 的“训练集 × 测试集”矩阵里，同一列对所有模型用同一个去重后的子集；E3a 的 FGADR 一列仍用完整的 553 张，去重子集作敏感性。
 
+E5 训练档接线（2026-10-12，本机，没有任何 E5 运行）
+c、d 两档的 5 个模型写成 B-std 包装器，网络都从 official_code 的作者代码构建，官方仓库一行不改：
+  SAM2-UNet（bench/models/sam2_unet.py）：作者的 SAM2UNet 类，build_sam2 绑到 CPU（它默认 cuda，启动器只为读配方而构建模型），三个 64→1 输出卷积改 64→4。总参数 2.165 亿、可训练 438 万，与 15 第九节一致。structure_loss 照抄，含 reduce='none'；本机 PyTorch 2.6 上测试确认它就是平均 BCE（test_e5_models）。
+  RETFound 加 UPerNet（bench/models/vit_upernet.py）：编码器用 RETFound 的 models_vit.RETFound_mae（timm 的 forward_intermediates 取第 8、12、16、24 块），本项目的 BEiT 式金字塔加 mmseg 式 UPerHead 和 FCN 辅助头；逐层衰减照 util/lr_decay.py（26 层，深层倍数 0.65^25），调度照 util/lr_sched.py（前 20% 从 0 线性升，再半余弦到 1e-6）。总参数 3.526 亿。载入时要求编码器的块参数全部来自检查点，否则拒绝训练（测试覆盖）。同一个文件给出编码器对照的四个变体（MAE-IN1k、RETFound-DINOv2、DINOv2、augreg），各用自己预训练时的归一化。UPerHead 的池化分支有 BatchNorm，训练批至少 2 个窗口（B-std 是 24）。
+  SAMed（samed.py）：作者 fork 的 sam_model_registry 和 LoRA_Sam，权重走作者自己的 load_from（位置编码和全局块的相对位置表插值，类别相关的解码器张量随机）；5 类 softmax、0.2 交叉熵加 0.8 整批 Dice 在输入分辨率上算；调度按“B-std 步数 ÷ 0.8”展开，warmup 占 250/18600，学习率在更新后写入，与作者顺序相同（测试逐步核对）。
+  SAM-Adapter（sam_adapter.py）：作者 SAM 类按 configs/cod-sam-vit-h.yaml 构建，strict=False 载入 sam_vit_h，冻结规则照 train.py:174-176；四个掩码 token 作四路 sigmoid，BCE 加无平滑 IoU，AdamW 2e-4（默认权重衰减 0.01），20 段阶梯余弦，有效批 2。总参数 6.413 亿、可训练 425 万。它的 models/mmseg 包导入 mmcv 并检查 1.1.4–1.7.0，bench/compat/mmcv（1.2.0 接口，M2MRF 也用）满足；配置里的 data_norm 0.5 不被数据包装器读取，实际是 ImageNet 均值和标准差，与 15 一致。
+  MedSAM（medsam.py）：MedSAM 的 _build_sam 先 Path(checkpoint) 再判空，传 None 会报错，所以用 MedSAM 自己的 modeling 类按 _build_sam 的参数搭同一个 ViT-B，再严格载入 medsam_vit_b.pth；不给提示，图像编码器和解码器可训，monai 式 Dice（逐图逐通道）加 BCE，AdamW 1e-4 常数。总参数 9374 万。
+  共用（bench/models/foundation.py）：按仓库隔离导入（SAMed、MedSAM 各有一份改过的 segment_anything，SAM2-UNet 自带 sam2 并在导入时注册 Hydra 配置）；权重只从 pretrained/ 读，缺文件在第一步之前报错并给出下载来源；可选的激活重计算不改参数名。
+接入：registry 加这 5 个和编码器对照的 4 个（后者是实验条件，不进 models.yaml）；recipe_and_card 让启动器的种子 0 闸门不必构建 ViT-H。B-std 任务表由 make_bs_jobs.py 重新生成为 12 个模型 × 2 库 × 3 种子 = 72 个任务、24 个冒烟（原 7 个模型的 cell 内容不变）；B1 表不含 E5。决定的落实：E5 包装器带 matmul_tf32，训练和推理都开矩阵乘 TF32 并写进偏差；cell 的 matmul_tf32 只能在诊断运行里改（TF32 核对）。ModelCard 加 window_batch（滑窗验证和预测时每次前向的窗口数，只影响显存）：SAM-Adapter 1、MedSAM 2，其余 8。
+extra_jobs.yaml 加 E5tf32（SAM2-UNet IDRiD 种子 0、矩阵乘全 fp32，1 个）和 E5enc（编码器对照 DDR 种子 0 的学习率三档，14 个，约 290 GPU 时）。bench/configs/e5_frozen.yaml 写下决定、权重来源、编码器对照、以及零样本和理想提示的全部设定（15 第四至六节，在任何 E5 推理之前）。环境：requirements-train.txt 加 hydra-core 1.3.2（SAM2-UNet 自带的 sam2 需要）和 icecream 2.1.3（SAMed 的 fork 导入），cluster_env.sh 的自检同步。服务器阶段：e5-smoke、e5-seed0（11 第十节）。
+测试：新增 test_e5_models 14 个，全套本机 182 个通过、2 个跳过；改动的模块 Python 3.8 编译通过。
+还没做：a、b 两档的推理代码（bench/e5/：理想提示生成、SAM 和 SAM 2 的自动掩码、点框解码、SAM 3 文本提示）和 retiseg-sam3 环境；PerSAM。真实权重的载入、显存和每步耗时要在服务器冒烟里确认。
+
 论文素材（2026-10-07）
 新建 14：把到目前为止所有要进论文的处理方法和数字按方法小节整理成可直接改写的版本，另列 19 条备注（局限、补充说明、审稿回复）。以后每项会进论文的决定在同一次提交里写进 14。
 
