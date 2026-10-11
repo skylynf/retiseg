@@ -128,7 +128,7 @@ def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=
             if predictor is None:
                 predictor = build_predictor(train, plan, device, settings)
             long_side = e3a.target_long_side(test_name, variant, train, reference, frozen)
-            ids, excluded = e3a.test_ids(test_name, frozen)
+            ids, excluded = e3a.test_ids(test_name, frozen, [train])
             data_dir = e3a.test_data_dir(test_name, frozen)
             factors = []
             started = time.perf_counter()

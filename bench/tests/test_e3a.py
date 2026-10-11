@@ -175,3 +175,19 @@ def test_drop_maps_removes_the_maps_after_the_metrics(tmp_path, monkeypatch):
     done = json.loads((out / "done.json").read_text())
     assert done["maps_dropped"] is True and not (out / "prob_test").exists()
     assert (out / "metrics.npz").is_file()
+
+
+def test_leak_exclusions_follow_the_training_sources(tmp_path):
+    table = {"by_training_source": {"FGADR": {"FGADR": ["a", "b"], "Retinal-Lesions": ["r"]}, "DDR": {"FGADR": []}}}
+    path = tmp_path / "x.json"
+    path.write_text(json.dumps(table))
+    assert e3a.leak_exclusions(["FGADR"], "FGADR", path) == {"a", "b"}
+    assert e3a.leak_exclusions(["DDR", "FGADR"], "Retinal-Lesions", path) == {"r"}
+    assert e3a.leak_exclusions(["DDR"], "FGADR", path) == set()
+
+
+def test_frozen_exclusions_leave_the_main_table_sources_untouched():
+    table = json.loads(e3a.LEAK_EXCLUSIONS.read_text())["by_training_source"]
+    for source in ("IDRiD", "DDR"):
+        assert all(not ids for ids in table[source].values())
+    assert len(table["FGADR"]["FGADR"]) == 106 and table["TJDR_uwf"]["TJDR_uwf"] == ["TJDR_test_021", "TJDR_test_023"]

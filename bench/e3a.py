@@ -36,6 +36,7 @@ import yaml
 
 REPO = _ROOT
 FROZEN_PATH = REPO / "bench" / "configs" / "e3a_frozen.yaml"
+LEAK_EXCLUSIONS = REPO / "bench" / "data" / "splits" / "leak_exclusions.json"
 OUT_ROOT = REPO / "runs" / "E3a"
 MAIN = "main"
 
@@ -99,11 +100,24 @@ def test_data_dir(test_name, frozen):
     return REPO / frozen["test_sets"][test_name]["data"]
 
 
-def test_ids(test_name, frozen):
+def leak_exclusions(train_names, test_name, path=None):
+    """Test images showing an eye one of ``train_names`` has seen (bench/data/splits/leak_exclusions.json)."""
+    path = Path(path) if path is not None else LEAK_EXCLUSIONS
+    if not path.is_file():
+        return set()
+    table = json.loads(path.read_text())["by_training_source"]
+    out = set()
+    for name in train_names:
+        out.update((table.get(name) or {}).get(test_name) or ())
+    return out
+
+
+def test_ids(test_name, frozen, train_names=()):
+    """Test ids of a set, without the frozen exclusions and the leak exclusions of the training sources."""
     from bench.common.io import load_split
 
     ids = load_split(test_data_dir(test_name, frozen), frozen["split"])
-    exclude = set((frozen.get("exclude") or {}).get(test_name) or ())
+    exclude = set((frozen.get("exclude") or {}).get(test_name) or ()) | leak_exclusions(train_names, test_name)
     return [image_id for image_id in ids if image_id not in exclude], sorted(exclude)
 
 
@@ -168,7 +182,8 @@ def evaluate_set(source, test_name, variant, frozen, train_dir=None, val_pred_di
     if not (directory / "predicted.json").is_file():
         raise FileNotFoundError(f"{directory} has no finished prediction (predicted.json)")
     proto = load_protocol(REPO / frozen["eval_protocol"])
-    _ids, excluded = test_ids(test_name, frozen)
+    predicted = json.loads((directory / "predicted.json").read_text())
+    _ids, excluded = test_ids(test_name, frozen, [predicted["train_source"]])
     use_val = val_pred_dir is not None and Path(val_pred_dir).is_dir()
     started = time.perf_counter()
     result = evaluate(
@@ -182,7 +197,6 @@ def evaluate_set(source, test_name, variant, frozen, train_dir=None, val_pred_di
         val_dataset_dir=train_dir if use_val else None,
         exclude=excluded,
     )
-    predicted = json.loads((directory / "predicted.json").read_text())
     done = dict(predicted)
     done.update(record or {})
     done.update(
@@ -278,7 +292,7 @@ def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()
                 model = load_run_model(config, checkpoint, device)
             long_side = target_long_side(test_name, variant, train_name, frozen["canvas_reference"], frozen)
             inference = inference_geometry(config, model.card, long_side, frozen)
-            ids, excluded = test_ids(test_name, frozen)
+            ids, excluded = test_ids(test_name, frozen, [train_name])
             data_dir = test_data_dir(test_name, frozen)
             started = time.perf_counter()
             with torch.no_grad():
@@ -363,7 +377,7 @@ def run_author(model_name, train_name, sets=None, device=None, predict_only=Fals
         if not (directory / "predicted.json").is_file():
             if network is None:
                 network, _meta = author.load_model(checkpoint, device)
-            ids, excluded = test_ids(test_name, frozen)
+            ids, excluded = test_ids(test_name, frozen, spec_frozen["trained_on"])
             data_dir = test_data_dir(test_name, frozen)
             started = time.perf_counter()
             for index, image_id in enumerate(ids):

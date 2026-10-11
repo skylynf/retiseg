@@ -21,6 +21,9 @@
 #                                               B1 seed 0 and its test maps only; waits for busy cards
 #   NNUNET_GPU=4 bash bench/scripts/server_run.sh nnunet IDRiD default|resencm
 #                                               one nnU-Net job (bench/scripts/nnunet_run.sh)
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh bs-revise U-Net
+#                                               after a recipe revision in bs_frozen.yaml: move the model's
+#                                               superseded runs to *_registered, then its seed 0 (train and score)
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh extra E2c
 #                                               diagnostic jobs of bench/configs/extra_jobs.yaml (E2c learning-rate check)
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e3a [--seed0-only] [--only SOURCE,...]
@@ -202,6 +205,11 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
     require_clean
     [ -n "${3:-}" ] && [ -n "${NNUNET_GPU:-}" ] || { echo "usage: NNUNET_GPU=4 server_run.sh nnunet IDRiD|DDR default|resencm" >&2; exit 1; }
     CUDA_VISIBLE_DEVICES="$NNUNET_GPU" background "nnunet_${3}_${2}" bash bench/scripts/nnunet_run.sh "$2" "$3" ;;
+  bs-revise)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] && [ -n "${2:-}" ] || { echo "usage: RETISEG_GPUS=\"2 3\" server_run.sh bs-revise U-Net" >&2; exit 1; }
+    py retiseg bench/scripts/retire_runs.py --model "$2" --apply
+    launch "bs_revise_${2}" --jobs "$BS_JOBS" --submit --queue-all --seed0-only --only "$2" ;;
   extra)
     require_clean
     [ -n "${RETISEG_GPUS:-}" ] && [ -n "${2:-}" ] || { echo "usage: RETISEG_GPUS=\"2 3\" server_run.sh extra E2c" >&2; exit 1; }

@@ -65,7 +65,17 @@ augment:
 # Recipe revisions after the first B-std runs, one entry per model, each with
 # loss_params (merged into the author recipe), reason and date. A revision
 # changes the budget signature, so the seed-0 gate refuses later seeds until
-# that model's seed 0 is rerun; move the old run directories aside first
-# (docs/ops/11). Empty: no revision adopted. The U-Net batch-Dice candidate
-# (14 note 21) would be {loss_params: {smooth: 1.0e-5, batch_dice: true}}.
-recipe_revisions: {}
+# that model's seed 0 is rerun; bench/scripts/retire_runs.py moves the old run
+# directories aside (docs/ops/11 section 9).
+# U-Net, adopted by the user 2026-10-12 (14 note 21): the registered per-image
+# sigmoid Dice with smoothing 1 drove the rare-class channels to zero under
+# patch training (DDR test SE 0.000; diagnosed 10-08 from training patches and
+# validation only). Dice pooled over the batch per class, smoothing 1e-5, as in
+# nnU-Net; the diagnostic runs with exactly these values reached validation
+# mAUPR 0.569 (IDRiD) and 0.544 (DDR). The decision came after the registered
+# recipe's test numbers had been read; those runs stay as "registered recipe".
+recipe_revisions:
+  U-Net:
+    loss_params: {smooth: 1.0e-5, batch_dice: true}
+    reason: "rare-class collapse of the per-image Dice (smooth 1) under patch training; batch Dice, smooth 1e-5 (14 note 21)"
+    date: "2026-10-12"

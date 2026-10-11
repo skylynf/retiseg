@@ -32,3 +32,27 @@ def test_vessel_signature_finds_the_same_eye_and_its_mirror():
     assert _score((eye, fov), (brighter, fov)) > 0.9
     assert _score((eye, fov), (mirror, fov[:, ::-1])) > 0.9
     assert _score((eye, fov), (other, other_fov)) < 0.4
+
+
+def test_exclusions_use_the_pair_threshold_and_only_seen_splits():
+    from bench.scripts import leak_exclusions as lx
+
+    def pair(a, b, score):
+        return {"a": dict(zip(("dataset", "split", "id"), a)), "b": dict(zip(("dataset", "split", "id"), b)), "vessel_ncc": score}
+
+    pairs = [
+        pair(("FGADR", "train", "t1"), ("FGADR", "test", "x1"), 0.34),  # FGADR internal: threshold 0.33
+        pair(("FGADR", "test", "x2"), ("FGADR", "val", "v1"), 0.31),  # below 0.33
+        pair(("FGADR", "train", "t2"), ("Retinal-Lesions", "test", "r1"), 0.95),
+        pair(("Retinal-Lesions", "train", "r2"), ("Retinal-Lesions", "test", "r3"), 0.45),  # below 0.5
+        pair(("FGADR", "test", "x3"), ("FGADR", "test", "x4"), 0.9),  # neither side seen
+        pair(("DDR", "train", "d1"), ("TJDR_std", "test", "s1"), 0.6),
+    ]
+    table, evidence = lx.exclusions(pairs, 0.3)
+    assert table["FGADR"]["FGADR"] == ["x1"]
+    assert table["FGADR"]["Retinal-Lesions"] == ["r1"]
+    assert table["Retinal-Lesions"]["Retinal-Lesions"] == []
+    assert table["DDR"]["TJDR_std"] == ["s1"] and table["IDRiD"]["TJDR_std"] == []
+    assert len(evidence) == 3
+    merged = lx.for_sources(table, ["DDR", "FGADR"])
+    assert merged["FGADR"] == ["x1"] and merged["TJDR_std"] == ["s1"]

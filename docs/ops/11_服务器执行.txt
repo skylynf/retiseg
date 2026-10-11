@@ -95,7 +95,7 @@
 九、主表以外的诊断任务和配方修订（2026-10-12）
 1. E2c 学习率检查：RETISEG_GPUS="..." bash bench/scripts/server_run.sh extra E2c
    任务表 bench/configs/extra_jobs.yaml（bench/scripts/make_extra_jobs.py 生成）：HRNet、M2MRF × IDRiD、DDR × 学习率 ×1/3、×3，种子 0，只训练和验证（--diagnostic），目录 runs/E2c_<模型>_<库>_seed0_lr1o3 和 _lr3。×1 是 B-std 种子 0。读结果：python bench/scripts/summarize.py 写的 e2c.tsv。
-2. 配方修订（例如用户决定把 U-Net 改成整批 Dice）：
+2. 配方修订（2026-10-12 用户决定 U-Net 改成整批 Dice，bs_frozen.yaml 已写好；直接执行 RETISEG_GPUS="..." bash bench/scripts/server_run.sh bs-revise U-Net，它做下面的 b、c 两步）：
    a. 在 bench/configs/bs_frozen.yaml 的 recipe_revisions 下写该模型的 loss_params、reason、date，提交；00 记一笔，14 改对应备注。
    b. 服务器上把该模型旧的 B-std 运行目录整体挪开，保留作补充材料，例如
         for d in runs/BS_unet_*_seed*; do mv "$d" "${d}_registered"; done

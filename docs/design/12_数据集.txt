@@ -151,7 +151,7 @@ E3a 独立测试：上面这一步本身，全部是推理，用 B-std 的 3 个
    阈值：Dice、IoU、病灶级用固定 0.5 和训练源验证集上选的每类阈值，不用测试源的标签。
    作者权重用作者自己的测试流水线。去重：IDRiD、DDR 的图在五个独立来源里都没有近重复（2026-10-12 审计），主表模型不去掉任何测试图。
    DiaRetDB1 的图像级 ROC/WER 已在 bench.eval 里实现（每类图像分数取视野内最大概率，另报前 100 像素平均）；区域级命中还没做。
-   以 TJDR_std、FGADR、Retinal-Lesions 训练时（E3b、E4、E8），要去掉与训练图同一只眼的测试图：FGADR 测试集有 63 张，FGADR 与 Retinal-Lesions 互相 90 张。名单在 runs/audit/leak_all.json，训练这些来源之前冻结进对应配置。
+   以 TJDR_std、FGADR、Retinal-Lesions、TJDR_uwf 训练时（E3b、E4、E8），去掉与训练、验证图同一只眼的测试图，名单按训练源冻结在 bench/data/splits/leak_exclusions.json（2026-10-12；阈值一般 0.5，FGADR 内部 0.33，见 14 备注 33）：以 FGADR 训练时 FGADR 测试去 106 张、Retinal-Lesions 去 19 张；以 Retinal-Lesions 训练时 FGADR 去 27 张、Retinal-Lesions 去 1 张；以 TJDR_uwf 训练时去 2 张；以 TJDR_std 训练时不去。bench/e3a.py 按训练源自动应用。
 E3b 训练来源交叉效应（模板的 cross effects）：代表模型 U-Net、nnU-Net、M2MRF、SAM2-UNet、RETFound 加 UPerNet 在 TJDR_std、FGADR 上各训 3 个种子（5 × 2 × 3 = 30 个任务）。与 E2 合起来得到“训练集 {IDRiD、DDR、TJDR_std、FGADR} × 测试集 {全部}”的矩阵，表头标粒度档。
    预算：沿用像素等效 epoch 的定义。IDRiD、DDR 的探测定出等效 epoch 以后，TJDR_std 和 FGADR 只用 U-Net 跑一次两倍预算的探测（2 个任务，几小时），按 11 第 10 步的规则判断（居中 3 点平滑后的最高点不早于探测总步数的 90% 才翻倍），再冻结写进 bs_frozen.yaml。只看训练和验证。
 E8 训练量（模板的 size effects）：原计划的 DDR 10%–100% 和 DDR+IDRiD 之外，再加一档“细粒度合并”（IDRiD+DDR+TJDR_std）和一档“全部合并”（再加 FGADR），只用代表模型，测试仍是全部测试集。这一档对应模板的“多来源合成训练集”。

@@ -1,0 +1,1780 @@
+{
+ "rule": "A model trained on a source leaves out, on every test set, the test images whose vessel signature correlates with one of that source's train or val images at or above the threshold of the pair of datasets. Several sources: the union.",
+ "audit": {
+  "file": "runs/audit/leak_all.json",
+  "command": "bench/scripts/leak_audit.py --min-vessel 0.3 (all seven prepared sources)",
+  "n_images": 4923,
+  "signature": "green black top-hat 5x5 at 192x192 of the field-of-view box, inner field of view (20 px eroded), normalized cross-correlation, max with the mirror"
+ },
+ "thresholds": {
+  "default": 0.5,
+  "FGADR~FGADR": 0.33
+ },
+ "by_training_source": {
+  "IDRiD": {
+   "IDRiD": [],
+   "DDR": [],
+   "TJDR_std": [],
+   "TJDR_uwf": [],
+   "FGADR": [],
+   "Retinal-Lesions": [],
+   "DiaRetDB1": []
+  },
+  "DDR": {
+   "IDRiD": [],
+   "DDR": [],
+   "TJDR_std": [],
+   "TJDR_uwf": [],
+   "FGADR": [],
+   "Retinal-Lesions": [],
+   "DiaRetDB1": []
+  },
+  "TJDR_std": {
+   "IDRiD": [],
+   "DDR": [],
+   "TJDR_std": [],
+   "TJDR_uwf": [],
+   "FGADR": [],
+   "Retinal-Lesions": [],
+   "DiaRetDB1": []
+  },
+  "TJDR_uwf": {
+   "IDRiD": [],
+   "DDR": [],
+   "TJDR_std": [],
+   "TJDR_uwf": [
+    "TJDR_test_021",
+    "TJDR_test_023"
+   ],
+   "FGADR": [],
+   "Retinal-Lesions": [],
+   "DiaRetDB1": []
+  },
+  "FGADR": {
+   "IDRiD": [],
+   "DDR": [],
+   "TJDR_std": [],
+   "TJDR_uwf": [],
+   "FGADR": [
+    "0062_1",
+    "0065_1",
+    "0075_1",
+    "0079_1",
+    "0085_1",
+    "0086_1",
+    "0115_1",
+    "0119_1",
+    "0136_1",
+    "0178_1",
+    "0271_1",
+    "0280_1",
+    "0281_1",
+    "0299_1",
+    "0303_1",
+    "0339_1",
+    "0348_1",
+    "0349_1",
+    "0372_1",
+    "0422_1",
+    "0424_1",
+    "0439_1",
+    "0463_1",
+    "0482_1",
+    "0488_1",
+    "0528_1",
+    "0540_1",
+    "0568_1",
+    "0594_1",
+    "0617_2",
+    "0654_1",
+    "0660_1",
+    "0701_1",
+    "0703_1",
+    "0704_1",
+    "0717_1",
+    "0741_1",
+    "0745_1",
+    "0762_1",
+    "0764_1",
+    "0791_1",
+    "0805_1",
+    "0831_1",
+    "0838_1",
+    "0847_1",
+    "0858_1",
+    "0887_1",
+    "0892_1",
+    "0904_1",
+    "0920_1",
+    "0936_1",
+    "0959_1",
+    "0968_1",
+    "0988_1",
+    "0995_1",
+    "1003_1",
+    "1006_1",
+    "1044_1",
+    "1054_1",
+    "1058_1",
+    "1076_1",
+    "1086_1",
+    "1120_1",
+    "1125_1",
+    "1128_1",
+    "1143_1",
+    "1162_1",
+    "1167_1",
+    "1207_1",
+    "1213_1",
+    "1246_1",
+    "1282_1",
+    "1287_1",
+    "1293_1",
+    "1298_1",
+    "1306_1",
+    "1324_1",
+    "1329_1",
+    "1331_1",
+    "1356_1",
+    "1375_1",
+    "1379_1",
+    "1380_1",
+    "1384_1",
+    "1447_1",
+    "1450_1",
+    "1451_1",
+    "1463_1",
+    "1465_1",
+    "1472_1",
+    "1482_1",
+    "1503_1",
+    "1546_1",
+    "1597_1",
+    "1603_1",
+    "1662_1",
+    "1685_1",
+    "1704_1",
+    "1763_1",
+    "1769_1",
+    "1772_1",
+    "1793_1",
+    "1797_1",
+    "1810_1",
+    "1812_1",
+    "1829_3"
+   ],
+   "Retinal-Lesions": [
+    "11206_right",
+    "1471_right",
+    "14917_right",
+    "16726_left",
+    "16726_right",
+    "18363_right",
+    "19018_right",
+    "28434_left",
+    "29004_right",
+    "29375_right",
+    "29464_left",
+    "30296_left",
+    "30301_left",
+    "32604_left",
+    "33236_right",
+    "5450_left",
+    "7531_right",
+    "870_right",
+    "9620_left"
+   ],
+   "DiaRetDB1": []
+  },
+  "Retinal-Lesions": {
+   "IDRiD": [],
+   "DDR": [],
+   "TJDR_std": [],
+   "TJDR_uwf": [],
+   "FGADR": [
+    "0050_3",
+    "0150_3",
+    "0235_3",
+    "0236_3",
+    "0272_3",
+    "0466_3",
+    "0627_3",
+    "0679_3",
+    "0706_3",
+    "0752_3",
+    "0778_3",
+    "0785_3",
+    "0833_3",
+    "0869_3",
+    "0929_3",
+    "1027_3",
+    "1036_3",
+    "1117_3",
+    "1141_3",
+    "1158_3",
+    "1313_3",
+    "1353_3",
+    "1397_3",
+    "1531_3",
+    "1558_3",
+    "1571_3",
+    "1740_3"
+   ],
+   "Retinal-Lesions": [
+    "26076_left"
+   ],
+   "DiaRetDB1": []
+  }
+ },
+ "counts": {
+  "IDRiD": {},
+  "DDR": {},
+  "TJDR_std": {},
+  "TJDR_uwf": {
+   "TJDR_uwf": 2
+  },
+  "FGADR": {
+   "FGADR": 106,
+   "Retinal-Lesions": 19
+  },
+  "Retinal-Lesions": {
+   "FGADR": 27,
+   "Retinal-Lesions": 1
+  }
+ },
+ "evidence": [
+  {
+   "source": "FGADR",
+   "seen": "train:0224_1",
+   "test_set": "FGADR",
+   "test_id": "0271_1",
+   "vessel_ncc": 1.0
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0322_1",
+   "test_set": "FGADR",
+   "test_id": "0741_1",
+   "vessel_ncc": 1.0
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0526_1",
+   "test_set": "FGADR",
+   "test_id": "1597_1",
+   "vessel_ncc": 1.0
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0878_1",
+   "test_set": "FGADR",
+   "test_id": "0988_1",
+   "vessel_ncc": 1.0
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0553_1",
+   "test_set": "FGADR",
+   "test_id": "0995_1",
+   "vessel_ncc": 1.0
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0037_1",
+   "test_set": "FGADR",
+   "test_id": "0348_1",
+   "vessel_ncc": 0.9685
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1404_1",
+   "test_set": "FGADR",
+   "test_id": "1282_1",
+   "vessel_ncc": 0.9546
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0496_1",
+   "test_set": "FGADR",
+   "test_id": "1797_1",
+   "vessel_ncc": 0.9419
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1297_1",
+   "test_set": "FGADR",
+   "test_id": "0704_1",
+   "vessel_ncc": 0.8814
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0441_1",
+   "test_set": "FGADR",
+   "test_id": "0703_1",
+   "vessel_ncc": 0.8372
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0597_1",
+   "test_set": "FGADR",
+   "test_id": "1324_1",
+   "vessel_ncc": 0.8319
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0231_1",
+   "test_set": "FGADR",
+   "test_id": "0079_1",
+   "vessel_ncc": 0.8278
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0278_1",
+   "test_set": "FGADR",
+   "test_id": "0303_1",
+   "vessel_ncc": 0.8076
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1319_1",
+   "test_set": "FGADR",
+   "test_id": "0887_1",
+   "vessel_ncc": 0.8073
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1328_1",
+   "test_set": "FGADR",
+   "test_id": "1603_1",
+   "vessel_ncc": 0.8017
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1314_1",
+   "test_set": "FGADR",
+   "test_id": "0540_1",
+   "vessel_ncc": 0.7957
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0921_1",
+   "test_set": "FGADR",
+   "test_id": "1685_1",
+   "vessel_ncc": 0.7895
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0328_1",
+   "test_set": "FGADR",
+   "test_id": "0463_1",
+   "vessel_ncc": 0.7627
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0671_1",
+   "test_set": "FGADR",
+   "test_id": "1685_1",
+   "vessel_ncc": 0.7561
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1175_1",
+   "test_set": "FGADR",
+   "test_id": "0079_1",
+   "vessel_ncc": 0.7552
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0596_1",
+   "test_set": "FGADR",
+   "test_id": "0303_1",
+   "vessel_ncc": 0.7464
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1590_1",
+   "test_set": "FGADR",
+   "test_id": "1810_1",
+   "vessel_ncc": 0.7341
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0663_1",
+   "test_set": "FGADR",
+   "test_id": "0920_1",
+   "vessel_ncc": 0.7338
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1000_1",
+   "test_set": "FGADR",
+   "test_id": "0349_1",
+   "vessel_ncc": 0.7332
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0517_1",
+   "test_set": "FGADR",
+   "test_id": "0959_1",
+   "vessel_ncc": 0.7307
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1092_1",
+   "test_set": "FGADR",
+   "test_id": "0701_1",
+   "vessel_ncc": 0.7252
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1563_1",
+   "test_set": "FGADR",
+   "test_id": "0463_1",
+   "vessel_ncc": 0.7217
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1053_1",
+   "test_set": "FGADR",
+   "test_id": "0847_1",
+   "vessel_ncc": 0.7172
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1314_1",
+   "test_set": "FGADR",
+   "test_id": "1086_1",
+   "vessel_ncc": 0.7144
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0324_1",
+   "test_set": "FGADR",
+   "test_id": "0065_1",
+   "vessel_ncc": 0.6989
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0541_1",
+   "test_set": "FGADR",
+   "test_id": "0065_1",
+   "vessel_ncc": 0.6989
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1190_1",
+   "test_set": "FGADR",
+   "test_id": "0062_1",
+   "vessel_ncc": 0.6916
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0376_1",
+   "test_set": "FGADR",
+   "test_id": "0281_1",
+   "vessel_ncc": 0.6878
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1691_1",
+   "test_set": "FGADR",
+   "test_id": "1143_1",
+   "vessel_ncc": 0.6848
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1045_1",
+   "test_set": "FGADR",
+   "test_id": "1329_1",
+   "vessel_ncc": 0.6827
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0839_1",
+   "test_set": "FGADR",
+   "test_id": "1120_1",
+   "vessel_ncc": 0.6796
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0093_1",
+   "test_set": "FGADR",
+   "test_id": "1006_1",
+   "vessel_ncc": 0.6753
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0330_1",
+   "test_set": "FGADR",
+   "test_id": "0079_1",
+   "vessel_ncc": 0.6731
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1129_1",
+   "test_set": "FGADR",
+   "test_id": "1329_1",
+   "vessel_ncc": 0.6689
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1477_1",
+   "test_set": "FGADR",
+   "test_id": "0119_1",
+   "vessel_ncc": 0.668
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1068_1",
+   "test_set": "FGADR",
+   "test_id": "0079_1",
+   "vessel_ncc": 0.6665
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0355_1",
+   "test_set": "FGADR",
+   "test_id": "1812_1",
+   "vessel_ncc": 0.6628
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0875_1",
+   "test_set": "FGADR",
+   "test_id": "1763_1",
+   "vessel_ncc": 0.6619
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0698_1",
+   "test_set": "FGADR",
+   "test_id": "0660_1",
+   "vessel_ncc": 0.6606
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0596_1",
+   "test_set": "FGADR",
+   "test_id": "1662_1",
+   "vessel_ncc": 0.6556
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1330_1",
+   "test_set": "FGADR",
+   "test_id": "1287_1",
+   "vessel_ncc": 0.6552
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1483_1",
+   "test_set": "FGADR",
+   "test_id": "0847_1",
+   "vessel_ncc": 0.649
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0967_1",
+   "test_set": "FGADR",
+   "test_id": "0439_1",
+   "vessel_ncc": 0.6489
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0005_1",
+   "test_set": "FGADR",
+   "test_id": "0805_1",
+   "vessel_ncc": 0.6459
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1759_1",
+   "test_set": "FGADR",
+   "test_id": "1772_1",
+   "vessel_ncc": 0.6457
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1135_1",
+   "test_set": "FGADR",
+   "test_id": "1329_1",
+   "vessel_ncc": 0.6413
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0535_1",
+   "test_set": "FGADR",
+   "test_id": "0119_1",
+   "vessel_ncc": 0.641
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1728_1",
+   "test_set": "FGADR",
+   "test_id": "0349_1",
+   "vessel_ncc": 0.6298
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0813_1",
+   "test_set": "FGADR",
+   "test_id": "0299_1",
+   "vessel_ncc": 0.6267
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1179_1",
+   "test_set": "FGADR",
+   "test_id": "1503_1",
+   "vessel_ncc": 0.6249
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1502_1",
+   "test_set": "FGADR",
+   "test_id": "0439_1",
+   "vessel_ncc": 0.6006
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1411_1",
+   "test_set": "FGADR",
+   "test_id": "0299_1",
+   "vessel_ncc": 0.6
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1553_1",
+   "test_set": "FGADR",
+   "test_id": "1685_1",
+   "vessel_ncc": 0.5902
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1728_1",
+   "test_set": "FGADR",
+   "test_id": "1769_1",
+   "vessel_ncc": 0.5893
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1123_1",
+   "test_set": "FGADR",
+   "test_id": "0764_1",
+   "vessel_ncc": 0.5872
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0222_1",
+   "test_set": "FGADR",
+   "test_id": "1772_1",
+   "vessel_ncc": 0.5854
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1713_1",
+   "test_set": "FGADR",
+   "test_id": "0968_1",
+   "vessel_ncc": 0.5845
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0276_1",
+   "test_set": "FGADR",
+   "test_id": "1306_1",
+   "vessel_ncc": 0.5819
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0555_1",
+   "test_set": "FGADR",
+   "test_id": "0847_1",
+   "vessel_ncc": 0.5781
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1059_1",
+   "test_set": "FGADR",
+   "test_id": "1603_1",
+   "vessel_ncc": 0.5778
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0639_1",
+   "test_set": "FGADR",
+   "test_id": "1246_1",
+   "vessel_ncc": 0.5776
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0408_1",
+   "test_set": "FGADR",
+   "test_id": "0178_1",
+   "vessel_ncc": 0.5685
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1387_1",
+   "test_set": "FGADR",
+   "test_id": "1356_1",
+   "vessel_ncc": 0.5607
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1206_1",
+   "test_set": "FGADR",
+   "test_id": "1293_1",
+   "vessel_ncc": 0.5595
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0947_1",
+   "test_set": "FGADR",
+   "test_id": "0372_1",
+   "vessel_ncc": 0.5564
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0257_1",
+   "test_set": "FGADR",
+   "test_id": "1662_1",
+   "vessel_ncc": 0.5552
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1123_1",
+   "test_set": "FGADR",
+   "test_id": "1704_1",
+   "vessel_ncc": 0.5524
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1432_1",
+   "test_set": "FGADR",
+   "test_id": "1282_1",
+   "vessel_ncc": 0.5518
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1171_1",
+   "test_set": "FGADR",
+   "test_id": "0439_1",
+   "vessel_ncc": 0.5493
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0221_1",
+   "test_set": "FGADR",
+   "test_id": "0303_1",
+   "vessel_ncc": 0.5482
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1249_1",
+   "test_set": "FGADR",
+   "test_id": "1379_1",
+   "vessel_ncc": 0.5458
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1730_2",
+   "test_set": "FGADR",
+   "test_id": "0617_2",
+   "vessel_ncc": 0.541
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0451_1",
+   "test_set": "FGADR",
+   "test_id": "1379_1",
+   "vessel_ncc": 0.5399
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0257_1",
+   "test_set": "FGADR",
+   "test_id": "1207_1",
+   "vessel_ncc": 0.5389
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0418_1",
+   "test_set": "FGADR",
+   "test_id": "0280_1",
+   "vessel_ncc": 0.5389
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0433_1",
+   "test_set": "FGADR",
+   "test_id": "1380_1",
+   "vessel_ncc": 0.5378
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0495_1",
+   "test_set": "FGADR",
+   "test_id": "0968_1",
+   "vessel_ncc": 0.5373
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0478_1",
+   "test_set": "FGADR",
+   "test_id": "1282_1",
+   "vessel_ncc": 0.5325
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0223_3",
+   "test_set": "FGADR",
+   "test_id": "1829_3",
+   "vessel_ncc": 0.5306
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0257_1",
+   "test_set": "FGADR",
+   "test_id": "0303_1",
+   "vessel_ncc": 0.5291
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1800_1",
+   "test_set": "FGADR",
+   "test_id": "0439_1",
+   "vessel_ncc": 0.5278
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1071_1",
+   "test_set": "FGADR",
+   "test_id": "0791_1",
+   "vessel_ncc": 0.5265
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1621_1",
+   "test_set": "FGADR",
+   "test_id": "0079_1",
+   "vessel_ncc": 0.5259
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1738_1",
+   "test_set": "FGADR",
+   "test_id": "1472_1",
+   "vessel_ncc": 0.5256
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0030_1",
+   "test_set": "FGADR",
+   "test_id": "0920_1",
+   "vessel_ncc": 0.5228
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1215_1",
+   "test_set": "FGADR",
+   "test_id": "1246_1",
+   "vessel_ncc": 0.5207
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0605_1",
+   "test_set": "FGADR",
+   "test_id": "1125_1",
+   "vessel_ncc": 0.5204
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1144_1",
+   "test_set": "FGADR",
+   "test_id": "0959_1",
+   "vessel_ncc": 0.5158
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1681_1",
+   "test_set": "FGADR",
+   "test_id": "1447_1",
+   "vessel_ncc": 0.5145
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1601_1",
+   "test_set": "FGADR",
+   "test_id": "0741_1",
+   "vessel_ncc": 0.5081
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0397_1",
+   "test_set": "FGADR",
+   "test_id": "0959_1",
+   "vessel_ncc": 0.4964
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1285_1",
+   "test_set": "FGADR",
+   "test_id": "1044_1",
+   "vessel_ncc": 0.4913
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0844_1",
+   "test_set": "FGADR",
+   "test_id": "1772_1",
+   "vessel_ncc": 0.4863
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1699_1",
+   "test_set": "FGADR",
+   "test_id": "1213_1",
+   "vessel_ncc": 0.4841
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0829_1",
+   "test_set": "FGADR",
+   "test_id": "1054_1",
+   "vessel_ncc": 0.4829
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1336_1",
+   "test_set": "FGADR",
+   "test_id": "0439_1",
+   "vessel_ncc": 0.4827
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0919_1",
+   "test_set": "FGADR",
+   "test_id": "1450_1",
+   "vessel_ncc": 0.4791
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0255_1",
+   "test_set": "FGADR",
+   "test_id": "1465_1",
+   "vessel_ncc": 0.4754
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1691_1",
+   "test_set": "FGADR",
+   "test_id": "1356_1",
+   "vessel_ncc": 0.4716
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0629_1",
+   "test_set": "FGADR",
+   "test_id": "0424_1",
+   "vessel_ncc": 0.4712
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0047_1",
+   "test_set": "FGADR",
+   "test_id": "0568_1",
+   "vessel_ncc": 0.4707
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0258_1",
+   "test_set": "FGADR",
+   "test_id": "1797_1",
+   "vessel_ncc": 0.4689
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1358_1",
+   "test_set": "FGADR",
+   "test_id": "1058_1",
+   "vessel_ncc": 0.4677
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1348_1",
+   "test_set": "FGADR",
+   "test_id": "0594_1",
+   "vessel_ncc": 0.4625
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0651_1",
+   "test_set": "FGADR",
+   "test_id": "0422_1",
+   "vessel_ncc": 0.4615
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1163_1",
+   "test_set": "FGADR",
+   "test_id": "0764_1",
+   "vessel_ncc": 0.46
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1163_1",
+   "test_set": "FGADR",
+   "test_id": "1704_1",
+   "vessel_ncc": 0.4596
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0649_1",
+   "test_set": "FGADR",
+   "test_id": "1380_1",
+   "vessel_ncc": 0.4551
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0369_1",
+   "test_set": "FGADR",
+   "test_id": "0936_1",
+   "vessel_ncc": 0.4537
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0749_1",
+   "test_set": "FGADR",
+   "test_id": "0568_1",
+   "vessel_ncc": 0.4535
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0046_1",
+   "test_set": "FGADR",
+   "test_id": "0424_1",
+   "vessel_ncc": 0.4483
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0732_1",
+   "test_set": "FGADR",
+   "test_id": "0085_1",
+   "vessel_ncc": 0.444
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0324_1",
+   "test_set": "FGADR",
+   "test_id": "1482_1",
+   "vessel_ncc": 0.4408
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0541_1",
+   "test_set": "FGADR",
+   "test_id": "1482_1",
+   "vessel_ncc": 0.4408
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0324_1",
+   "test_set": "FGADR",
+   "test_id": "0136_1",
+   "vessel_ncc": 0.4402
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0541_1",
+   "test_set": "FGADR",
+   "test_id": "0136_1",
+   "vessel_ncc": 0.4402
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0597_1",
+   "test_set": "FGADR",
+   "test_id": "0488_1",
+   "vessel_ncc": 0.439
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0291_1",
+   "test_set": "FGADR",
+   "test_id": "1379_1",
+   "vessel_ncc": 0.439
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1374_1",
+   "test_set": "FGADR",
+   "test_id": "1384_1",
+   "vessel_ncc": 0.4359
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1411_1",
+   "test_set": "FGADR",
+   "test_id": "0654_1",
+   "vessel_ncc": 0.4342
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0605_1",
+   "test_set": "FGADR",
+   "test_id": "1375_1",
+   "vessel_ncc": 0.4322
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0252_1",
+   "test_set": "FGADR",
+   "test_id": "0959_1",
+   "vessel_ncc": 0.4221
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1605_1",
+   "test_set": "FGADR",
+   "test_id": "1463_1",
+   "vessel_ncc": 0.419
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1799_1",
+   "test_set": "FGADR",
+   "test_id": "0703_1",
+   "vessel_ncc": 0.4176
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0481_1",
+   "test_set": "FGADR",
+   "test_id": "1450_1",
+   "vessel_ncc": 0.4175
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0850_1",
+   "test_set": "FGADR",
+   "test_id": "0831_1",
+   "vessel_ncc": 0.4171
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0035_1",
+   "test_set": "FGADR",
+   "test_id": "0858_1",
+   "vessel_ncc": 0.4148
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1019_1",
+   "test_set": "FGADR",
+   "test_id": "1128_1",
+   "vessel_ncc": 0.4142
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0596_1",
+   "test_set": "FGADR",
+   "test_id": "1207_1",
+   "vessel_ncc": 0.4117
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0919_1",
+   "test_set": "FGADR",
+   "test_id": "0075_1",
+   "vessel_ncc": 0.4077
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0132_1",
+   "test_set": "FGADR",
+   "test_id": "1546_1",
+   "vessel_ncc": 0.4044
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0951_1",
+   "test_set": "FGADR",
+   "test_id": "0654_1",
+   "vessel_ncc": 0.3998
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0171_1",
+   "test_set": "FGADR",
+   "test_id": "0654_1",
+   "vessel_ncc": 0.399
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0278_1",
+   "test_set": "FGADR",
+   "test_id": "1662_1",
+   "vessel_ncc": 0.3951
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0288_1",
+   "test_set": "FGADR",
+   "test_id": "1044_1",
+   "vessel_ncc": 0.3934
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1374_1",
+   "test_set": "FGADR",
+   "test_id": "0745_1",
+   "vessel_ncc": 0.3896
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0297_1",
+   "test_set": "FGADR",
+   "test_id": "1167_1",
+   "vessel_ncc": 0.3888
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1629_1",
+   "test_set": "FGADR",
+   "test_id": "1003_1",
+   "vessel_ncc": 0.3876
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1756_1",
+   "test_set": "FGADR",
+   "test_id": "1076_1",
+   "vessel_ncc": 0.3839
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0132_1",
+   "test_set": "FGADR",
+   "test_id": "0086_1",
+   "vessel_ncc": 0.382
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0020_1",
+   "test_set": "FGADR",
+   "test_id": "0115_1",
+   "vessel_ncc": 0.3794
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0696_1",
+   "test_set": "FGADR",
+   "test_id": "1162_1",
+   "vessel_ncc": 0.3794
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1650_1",
+   "test_set": "FGADR",
+   "test_id": "0482_1",
+   "vessel_ncc": 0.3778
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1222_1",
+   "test_set": "FGADR",
+   "test_id": "1793_1",
+   "vessel_ncc": 0.3762
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0327_1",
+   "test_set": "FGADR",
+   "test_id": "0717_1",
+   "vessel_ncc": 0.3759
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1549_1",
+   "test_set": "FGADR",
+   "test_id": "0892_1",
+   "vessel_ncc": 0.3755
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0132_1",
+   "test_set": "FGADR",
+   "test_id": "0762_1",
+   "vessel_ncc": 0.3748
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0183_1",
+   "test_set": "FGADR",
+   "test_id": "1463_1",
+   "vessel_ncc": 0.3718
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1808_1",
+   "test_set": "FGADR",
+   "test_id": "1331_1",
+   "vessel_ncc": 0.3648
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0683_1",
+   "test_set": "FGADR",
+   "test_id": "1380_1",
+   "vessel_ncc": 0.3617
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0171_1",
+   "test_set": "FGADR",
+   "test_id": "0299_1",
+   "vessel_ncc": 0.359
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0902_1",
+   "test_set": "FGADR",
+   "test_id": "0904_1",
+   "vessel_ncc": 0.358
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:1000_1",
+   "test_set": "FGADR",
+   "test_id": "1769_1",
+   "vessel_ncc": 0.3573
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0364_1",
+   "test_set": "FGADR",
+   "test_id": "0717_1",
+   "vessel_ncc": 0.3572
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0800_1",
+   "test_set": "FGADR",
+   "test_id": "0528_1",
+   "vessel_ncc": 0.3568
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0954_1",
+   "test_set": "FGADR",
+   "test_id": "1380_1",
+   "vessel_ncc": 0.3565
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0064_1",
+   "test_set": "FGADR",
+   "test_id": "0339_1",
+   "vessel_ncc": 0.3477
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0448_1",
+   "test_set": "FGADR",
+   "test_id": "1143_1",
+   "vessel_ncc": 0.3416
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0023_1",
+   "test_set": "FGADR",
+   "test_id": "1298_1",
+   "vessel_ncc": 0.3415
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0772_1",
+   "test_set": "FGADR",
+   "test_id": "0838_1",
+   "vessel_ncc": 0.3393
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1618_1",
+   "test_set": "FGADR",
+   "test_id": "1128_1",
+   "vessel_ncc": 0.339
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0694_1",
+   "test_set": "FGADR",
+   "test_id": "1287_1",
+   "vessel_ncc": 0.3371
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0699_1",
+   "test_set": "FGADR",
+   "test_id": "0717_1",
+   "vessel_ncc": 0.337
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0481_1",
+   "test_set": "FGADR",
+   "test_id": "0075_1",
+   "vessel_ncc": 0.3365
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0226_1",
+   "test_set": "FGADR",
+   "test_id": "1451_1",
+   "vessel_ncc": 0.3307
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0033_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "16726_left",
+   "vessel_ncc": 0.9779
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1501_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "16726_right",
+   "vessel_ncc": 0.9778
+  },
+  {
+   "source": "FGADR",
+   "seen": "val:0700_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "11206_right",
+   "vessel_ncc": 0.9761
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0073_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "29004_right",
+   "vessel_ncc": 0.976
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0400_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "18363_right",
+   "vessel_ncc": 0.9696
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1323_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "1471_right",
+   "vessel_ncc": 0.9679
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1345_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "30296_left",
+   "vessel_ncc": 0.9642
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1470_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "14917_right",
+   "vessel_ncc": 0.9608
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1015_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "28434_left",
+   "vessel_ncc": 0.9595
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0384_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "29464_left",
+   "vessel_ncc": 0.9558
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0214_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "870_right",
+   "vessel_ncc": 0.9502
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0978_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "9620_left",
+   "vessel_ncc": 0.9478
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0551_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "5450_left",
+   "vessel_ncc": 0.9434
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1346_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "29375_right",
+   "vessel_ncc": 0.9207
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1289_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "33236_right",
+   "vessel_ncc": 0.9171
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1107_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "7531_right",
+   "vessel_ncc": 0.9128
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:0948_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "30301_left",
+   "vessel_ncc": 0.7574
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1508_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "19018_right",
+   "vessel_ncc": 0.7381
+  },
+  {
+   "source": "FGADR",
+   "seen": "train:1716_3",
+   "test_set": "Retinal-Lesions",
+   "test_id": "32604_left",
+   "vessel_ncc": 0.7028
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:4428_left",
+   "test_set": "FGADR",
+   "test_id": "0706_3",
+   "vessel_ncc": 0.9856
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "val:31746_right",
+   "test_set": "FGADR",
+   "test_id": "0466_3",
+   "vessel_ncc": 0.9819
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:24235_right",
+   "test_set": "FGADR",
+   "test_id": "0785_3",
+   "vessel_ncc": 0.9816
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:658_right",
+   "test_set": "FGADR",
+   "test_id": "0236_3",
+   "vessel_ncc": 0.9814
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:15684_right",
+   "test_set": "FGADR",
+   "test_id": "0627_3",
+   "vessel_ncc": 0.978
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:25576_right",
+   "test_set": "FGADR",
+   "test_id": "1158_3",
+   "vessel_ncc": 0.9774
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:3425_right",
+   "test_set": "FGADR",
+   "test_id": "0235_3",
+   "vessel_ncc": 0.9773
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:3489_right",
+   "test_set": "FGADR",
+   "test_id": "0679_3",
+   "vessel_ncc": 0.9768
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:17409_left",
+   "test_set": "FGADR",
+   "test_id": "0050_3",
+   "vessel_ncc": 0.9726
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:3057_right",
+   "test_set": "FGADR",
+   "test_id": "0833_3",
+   "vessel_ncc": 0.9722
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "val:28975_right",
+   "test_set": "FGADR",
+   "test_id": "1027_3",
+   "vessel_ncc": 0.9715
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:3868_left",
+   "test_set": "FGADR",
+   "test_id": "1313_3",
+   "vessel_ncc": 0.9709
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:27050_right",
+   "test_set": "FGADR",
+   "test_id": "0150_3",
+   "vessel_ncc": 0.9701
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:3084_left",
+   "test_set": "FGADR",
+   "test_id": "1531_3",
+   "vessel_ncc": 0.9683
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:32507_right",
+   "test_set": "FGADR",
+   "test_id": "0869_3",
+   "vessel_ncc": 0.9676
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:8404_right",
+   "test_set": "FGADR",
+   "test_id": "0929_3",
+   "vessel_ncc": 0.9648
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:7398_left",
+   "test_set": "FGADR",
+   "test_id": "1740_3",
+   "vessel_ncc": 0.9639
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:19395_right",
+   "test_set": "FGADR",
+   "test_id": "1117_3",
+   "vessel_ncc": 0.9621
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:11697_right",
+   "test_set": "FGADR",
+   "test_id": "1571_3",
+   "vessel_ncc": 0.9613
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:33580_left",
+   "test_set": "FGADR",
+   "test_id": "1036_3",
+   "vessel_ncc": 0.9599
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:29873_left",
+   "test_set": "FGADR",
+   "test_id": "1397_3",
+   "vessel_ncc": 0.9551
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:21975_right",
+   "test_set": "FGADR",
+   "test_id": "0778_3",
+   "vessel_ncc": 0.9548
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:26997_right",
+   "test_set": "FGADR",
+   "test_id": "1141_3",
+   "vessel_ncc": 0.9523
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:28129_right",
+   "test_set": "FGADR",
+   "test_id": "0272_3",
+   "vessel_ncc": 0.9514
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:99_right",
+   "test_set": "FGADR",
+   "test_id": "1558_3",
+   "vessel_ncc": 0.9422
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "val:23621_left",
+   "test_set": "FGADR",
+   "test_id": "0752_3",
+   "vessel_ncc": 0.9408
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:16718_right",
+   "test_set": "FGADR",
+   "test_id": "1353_3",
+   "vessel_ncc": 0.9103
+  },
+  {
+   "source": "Retinal-Lesions",
+   "seen": "train:31593_left",
+   "test_set": "Retinal-Lesions",
+   "test_id": "26076_left",
+   "vessel_ncc": 0.5627
+  },
+  {
+   "source": "TJDR_uwf",
+   "seen": "train:TJDR_train_092",
+   "test_set": "TJDR_uwf",
+   "test_id": "TJDR_test_021",
+   "vessel_ncc": 1.0
+  },
+  {
+   "source": "TJDR_uwf",
+   "seen": "val:TJDR_train_101",
+   "test_set": "TJDR_uwf",
+   "test_id": "TJDR_test_023",
+   "vessel_ncc": 1.0
+  }
+ ]
+}

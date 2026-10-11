@@ -66,8 +66,9 @@ author_weights:
 # near-duplicate in TJDR, FGADR, Retinal-Lesions or DiaRetDB1, so nothing is
 # removed for models trained on IDRiD or DDR. The overlaps found inside and
 # between the other sources (TJDR_uwf, FGADR, FGADR _3 with Retinal-Lesions)
-# matter only when those sources train a model (E3b, E4, E8) and are listed
-# in runs/audit/leak_all_vessel.json.
+# matter only when those sources train a model (E3b, E4, E8); they are frozen
+# per training source in bench/data/splits/leak_exclusions.json (empty for
+# IDRiD and DDR), which bench/e3a.py applies on top of this list.
 exclude: {}
 
 # Outputs: runs/E3a/<source run>/<test set>[__<variant>]/prob_test (16-bit

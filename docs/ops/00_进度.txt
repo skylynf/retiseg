@@ -232,6 +232,14 @@ B1 补位（队列日志 20261011_155738，28 项）：
 测试：本机 .venv-train 下 bench/tests 163 个通过、2 个跳过（H2Former 960 的前向在本机内存限制下不跑）。改动的模块用 Python 3.8 编译通过（retiseg-hacdr 是 3.8）。
 服务器上要做的：把五个独立库同步过去，然后 RETISEG_GPUS=... server_run.sh e3a（11 第八节）；E2c 用 server_run.sh extra E2c。
 
+用户决定（2026-10-12）
+1. U-Net 采用整批 Dice。bench/configs/bs_frozen.yaml 的 recipe_revisions 写入 U-Net：loss_params {smooth: 1e-5, batch_dice: true}，与 10-11 的诊断运行完全相同（验证 mAUPR IDRiD 0.569、DDR 0.544）。只改 B-std；B1（来源配方，整张画布，没有塌缩）保留登记的配方。决定发生在原配方的测试数已读过之后，依据是 10-08 只用训练块和验证集做的诊断，14 备注 21 照此披露；原配方的 6 个运行改名为 *_registered，留作补充表。
+   执行（服务器）：RETISEG_GPUS="..." bash bench/scripts/server_run.sh bs-revise U-Net。它先用 bench/scripts/retire_runs.py 把签名与新配方不一致的 BS_unet_* 目录改名为 *_registered（有活进程的不动并报出），再排 U-Net 两库的种子 0（训练加打分，约 7.5 GPU 时）。种子 1、2 以后与其他模型一起补。新运行打完分后由 launch_e3a.py 当作新来源跑独立测试。
+   代码：预算签名含 loss_params，所以没重跑种子 0 之前 U-Net 的后续种子闸门是关的；launch_b1 的签名计算拆成 fresh_signature、signature_matches 两个函数，retire_runs.py 复用它们。
+2. 其余待定事项由本项目按建议定（用户授权）：
+   a. E5（design/15 第十六节）五项全部按建议：训练档矩阵乘开 TF32，另用 SAM2-UNet 的 IDRiD 种子 0 开和不开各跑一次核对；RETFound 主表用 natureCFP，Retinal-Lesions 和 FGADR 两列加注；作者代码与论文不一致时按代码；SAM2-UNet、MedSAM 若种子 0 的逐类验证曲线塌缩，逐图项改整批（与 U-Net 同一规则，只依据训练和验证）；编码器对照全做（五个编码器、三档学习率、3 个种子），算力紧时先整行砍 augreg。
+   b. 以 FGADR、Retinal-Lesions、TJDR_uwf 训练时的去重：不改 10-07 冻结的划分，评测时去掉与该来源训练或验证图同一只眼的测试图。名单冻结在 bench/data/splits/leak_exclusions.json（bench/scripts/leak_exclusions.py 由审计生成，审计重跑时列出血管分数 ≥0.3 的全部配对）。阈值看图定：一般 0.5；FGADR 内部 0.33，因为 FGADR 的同一只眼看到 0.34 还是同一只眼（换了拍摄时间的也有），0.32 及以下的样例都是不同的眼（有几对是同一人的左右眼）。按此，以 FGADR 训练时 FGADR 测试集去掉 106 张（553 张的 19%；只取 0.5 会漏掉 43 张），Retinal-Lesions 测试集去掉 19 张；以 Retinal-Lesions 训练时 FGADR 测试集去掉 27 张、Retinal-Lesions 1 张；以 TJDR_uwf 训练时去掉 TJDR_test_021、023；以 IDRiD、DDR、TJDR_std 训练时不去掉。bench/e3a.py 按训练源自动应用。E3b 的“训练集 × 测试集”矩阵里，同一列对所有模型用同一个去重后的子集；E3a 的 FGADR 一列仍用完整的 553 张，去重子集作敏感性。
+
 论文素材（2026-10-07）
 新建 14：把到目前为止所有要进论文的处理方法和数字按方法小节整理成可直接改写的版本，另列 19 条备注（局限、补充说明、审稿回复）。以后每项会进论文的决定在同一次提交里写进 14。
 

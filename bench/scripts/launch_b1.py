@@ -807,13 +807,66 @@ def capped_train(script, config, run_dir, max_steps):
     module.train(config, run_dir, diagnostic=True)
 
 
+def fresh_signature(job, config):
+    """Budget signature that the current code and frozen files give this job (recipe.json fields)."""
+    from bench.data.b1_input import EXPECTED_COUNTS
+    from bench.models.registry import build_model
+    from bench.runtime import micro_batch_and_deviations, optimizer_step_sizes, resolve_recipe
+
+    model = build_model(job["model"])
+    n_train = EXPECTED_COUNTS[job["dataset"]]["train"]
+    declared = model.author_recipe(job["dataset"])
+    if experiment_of(job) == "BS":
+        from bench import bstd
+        from bench.common.io import load_split
+
+        frozen = bstd.load_frozen()
+        patch, _window = bstd.geometry(model.card, frozen)
+        dataset_dir = _ROOT / config["dataset"]
+        ids = load_split(dataset_dir, config["split_train"])
+        pixels = bstd.canvas_pixels(dataset_dir, ids, int(config["fov_diameter"]))
+        resolved, _deviations, _per_epoch, n_train, _eval_every = bstd.budget(
+            declared, job["dataset"], frozen, pixels, patch, model_name=job["model"]
+        )
+    else:
+        resolved, _deviations, _per_epoch = resolve_recipe(declared, config, n_train)
+    micro, _batch_deviations = micro_batch_and_deviations(config, resolved)
+    return {
+        "iterations": int(resolved.iterations),
+        "epochs": int(resolved.epochs),
+        "loss": str(resolved.loss),
+        "optimizer": str(resolved.optimizer),
+        "lr": float(resolved.lr),
+        "weight_decay": float(resolved.weight_decay),
+        "schedule": str(resolved.schedule),
+        "batch_size": int(micro),
+        "nominal_effective_batch_size": int(resolved.effective_batch_size),
+        "step_image_counts": optimizer_step_sizes(n_train, micro, resolved.effective_batch_size),
+        "loss_params": resolved.loss_params,
+    }
+
+
+def signature_matches(run_dir, fresh):
+    """(True, "") when run_dir/recipe.json has the budget signature ``fresh``, else (False, reason)."""
+    import json
+
+    from bench.runtime import budget_signature
+
+    recipe_path = _ROOT / run_dir / "recipe.json"
+    if not recipe_path.is_file():
+        return False, "no recipe.json"
+    try:
+        current = budget_signature(json.loads(recipe_path.read_text()))
+    except KeyError as exc:
+        return False, str(exc)
+    if current != budget_signature(fresh):
+        return False, "trained under a different budget or recipe"
+    return True, ""
+
+
 def assert_seed0_current(seed0_jobs):
     """Refuse later seeds when seed 0 is missing or was trained on another budget."""
     import json
-
-    from bench.data.b1_input import EXPECTED_COUNTS
-    from bench.models.registry import build_model
-    from bench.runtime import budget_signature, micro_batch_and_deviations, optimizer_step_sizes, resolve_recipe
 
     for job in seed0_jobs:
         config, run_dir = check_job(job, False)
@@ -829,46 +882,14 @@ def assert_seed0_current(seed0_jobs):
         diagnostic = json.loads(diagnostic_path.read_text())
         if diagnostic.get("test_split_read") is not False:
             raise SystemExit(f"{run_dir} read the test split during the diagnostic")
-        saved = json.loads(recipe_path.read_text())
-        model = build_model(job["model"])
-        n_train = EXPECTED_COUNTS[job["dataset"]]["train"]
-        declared = model.author_recipe(job["dataset"])
-        if experiment_of(job) == "BS":
-            from bench import bstd
-            from bench.common.io import load_split
-
-            frozen = bstd.load_frozen()
-            patch, _window = bstd.geometry(model.card, frozen)
-            dataset_dir = _ROOT / config["dataset"]
-            ids = load_split(dataset_dir, config["split_train"])
-            pixels = bstd.canvas_pixels(dataset_dir, ids, int(config["fov_diameter"]))
-            resolved, _deviations, _per_epoch, n_train, _eval_every = bstd.budget(
-                declared, job["dataset"], frozen, pixels, patch, model_name=job["model"]
-            )
-        else:
-            resolved, _deviations, _per_epoch = resolve_recipe(declared, config, n_train)
-        micro, _batch_deviations = micro_batch_and_deviations(config, resolved)
-        fresh = {
-            "iterations": int(resolved.iterations),
-            "epochs": int(resolved.epochs),
-            "loss": str(resolved.loss),
-            "optimizer": str(resolved.optimizer),
-            "lr": float(resolved.lr),
-            "weight_decay": float(resolved.weight_decay),
-            "schedule": str(resolved.schedule),
-            "batch_size": int(micro),
-            "nominal_effective_batch_size": int(resolved.effective_batch_size),
-            "step_image_counts": optimizer_step_sizes(n_train, micro, resolved.effective_batch_size),
-            "loss_params": resolved.loss_params,
-        }
-        try:
-            current = budget_signature(saved)
-        except KeyError as exc:
-            raise SystemExit(f"{run_dir} {exc}. Rerun seed 0.") from exc
-        if current != budget_signature(fresh):
-            raise SystemExit(
-                f"{run_dir} was trained under a different budget. Rerun seed 0 before the other seeds."
-            )
+        fresh = fresh_signature(job, config)
+        same, reason = signature_matches(run_dir, fresh)
+        if not same:
+            if reason.startswith("trained under"):
+                raise SystemExit(
+                    f"{run_dir} was trained under a different budget. Rerun seed 0 before the other seeds."
+                )
+            raise SystemExit(f"{run_dir} {reason}. Rerun seed 0.")
         rows = [json.loads(line) for line in history_path.read_text().splitlines() if line.strip()]
         if not rows:
             raise SystemExit(f"{run_dir} has an empty training history")

@@ -299,8 +299,42 @@ def test_recipe_revision_merges_loss_params_and_is_recorded():
         bstd.budget(declared, "IDRiD", frozen, 64 * 64 * 10, (32, 32), model_name="tiny")
 
 
-def test_frozen_file_has_no_revision_yet():
-    assert FROZEN["recipe_revisions"] == {}
+def test_frozen_u_net_revision_is_the_batch_dice_of_the_diagnostic():
+    from bench.models.unet import UNet
+
+    revision = bstd.revision_for("U-Net", FROZEN)
+    diagnostic = yaml.safe_load((REPO / "bench/configs/cells/bs_diag_unet_batchdice_ddr_seed0.yaml").read_text())
+    assert revision["loss_params"] == diagnostic["diagnostic_loss_params"] == {"smooth": 1e-5, "batch_dice": True}
+    assert set(FROZEN["recipe_revisions"]) == {"U-Net"}
+    declared = UNet().author_recipe("DDR")
+    resolved, deviations, *_ = bstd.budget(declared, "DDR", FROZEN, 10**8, (960, 960), model_name="U-Net")
+    assert resolved.loss == "bce_dice" and resolved.loss_params == {"smooth": 1e-5, "batch_dice": True}
+    assert any("recipe revision 2026-10-12" in item for item in deviations)
+    # The B1 source recipe keeps the registered loss.
+    assert declared.loss_params["smooth"] == 1.0 and "batch_dice" not in declared.loss_params
+
+
+def test_signature_matches_flags_a_run_trained_before_a_revision(tmp_path, monkeypatch):
+    import json
+
+    from bench.scripts import launch_b1
+
+    fresh = {
+        "iterations": 10, "epochs": 1, "loss": "bce_dice", "optimizer": "adam", "lr": 1e-4, "weight_decay": 0.0,
+        "schedule": "none", "batch_size": 4, "nominal_effective_batch_size": 4, "step_image_counts": [4],
+        "loss_params": {"smooth": 1e-5, "batch_dice": True},
+    }
+    run = tmp_path / "runs" / "BS_unet_ddr_seed0"
+    run.mkdir(parents=True)
+    old = dict(fresh)
+    old.pop("loss_params")
+    old["recipe"] = {"loss_params": {"smooth": 1.0}}
+    (run / "recipe.json").write_text(json.dumps(old))
+    monkeypatch.setattr(launch_b1, "_ROOT", tmp_path)
+    same, reason = launch_b1.signature_matches(Path("runs/BS_unet_ddr_seed0"), fresh)
+    assert not same and "different" in reason
+    (run / "recipe.json").write_text(json.dumps(dict(old, recipe={"loss_params": fresh["loss_params"]})))
+    assert launch_b1.signature_matches(Path("runs/BS_unet_ddr_seed0"), fresh) == (True, "")
 
 
 def test_lr_scale_takes_only_the_e2c_factors_and_scales_the_floor():
