@@ -164,6 +164,13 @@ nnU-Net（GPU 4、6、7，提交 8a08c8c）：official_code/nnUNet 在 2edf346�
 B1 种子 0（补位）：14:13 先在 GPU 4、6、7 上续跑，14:47 为 nnU-Net 让卡停掉，三个任务都从 resume.pt 接上过（DeepLabv3 DDR 第 5016 步、IDRiD 第 7002 步，M2MRF DDR 第 2016 步）。旧格式的开始行没有进程号，第一次续跑用 RETISEG_IGNORE_RUNNING=1 放行，进程早已不在。14:52 起改为 server_run.sh b1-queue（launch_b1.py --queue-all --seed0-only，只排种子 0 训练和种子 0 打分，共 28 项），卡 2、3、4、6、7，卡上有本项目进程时等待，空出来就接。GPU 5 不在这个队列里，留给 nnU-Net 的接力。
 没有做、需要用户的：独立测试 E3a。服务器 dataset/prepared 只有 IDRiD 和 DDR，TJDR、FGADR、DiaRetDB1、Retinal-Lesions（约 10GB）还在工作站上，要按 11 第一节第 2 步同步。推理和画布缓存仍写死 .jpg 和 IDRiD/DDR，也要先接线。
 
+泄漏审计，IDRiD 与 DDR（2026-10-11 16:30，只用 CPU）
+入口 bench/scripts/leak_audit.py，输出 runs/audit/leak_idrid_ddr.json，共 838 张。
+逐字节：841 个图像文件的 md5 没有重复。
+近重复：两个特征。一是视野框的 DCT pHash（8×8 低频，去掉直流分量）。二是 ImageNet ResNet-34 池化特征的余弦相似度。列出跨划分、跨库的图对，条件是 Hamming ≤ 8 或余弦 ≥ 0.97，共 547 对。
+这两个特征对眼底图区分度很低。每张图到其他组最近邻的余弦，中位数是 0.948，最大值只有 0.979。Hamming 最小的对（距离 2）余弦也只有 0.91–0.95。Hamming 最小的 4 对、余弦最高的 1 对，再加 IDRiD_09/63、IDRiD_48/50，都拼图看过（runs/audit/leak_top_pairs.jpg）。血管走向都不同，不是同一只眼，只是左右眼、相机和构图相同。
+结论：IDRiD、DDR 的划分之间和两库之间，没有找到相同或近乎相同的图像。这个方法查不出同一患者在不同时间拍的照片。要查这一类，需要血管配准一类的特征。新库（TJDR 等）同步到服务器后用同一脚本再跑，TJDR 是重点。
+
 论文素材（2026-10-07）
 新建 14：把到目前为止所有要进论文的处理方法和数字按方法小节整理成可直接改写的版本，另列 19 条备注（局限、补充说明、审稿回复）。以后每项会进论文的决定在同一次提交里写进 14。
 
