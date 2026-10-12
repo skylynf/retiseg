@@ -309,3 +309,10 @@ Attention-DeepLab：official_code/Attention-DeepLab，236d049，有 train.py。�
 3. E10：data/cost_measured.tsv 收 00 里已实测的 GPU 时（7 个 B-std 模型 IDRiD、FCT DDR 72 小时、nnU-Net 默认 7.2 小时、ResEnc-M 12.8/11.4 小时）和 E5 包装器的参数量；collect_runs.py 改为也读 environment.json（parameters、seconds）和这两张表；ED10 横轴改为 IDRiD 训练时，加可训练参数列。新增 bench/scripts/cost_audit.py（服务器上跑一次：参数量、一张 1440 画布的 FLOPs、推理时间、推理峰值显存，写 data/cost_audit.tsv），本机只编译检查，未在真实权重上运行。
 4. 论文目录路径：paper/ 现在在 docs/paper/retiseg_paper/paper/，脚本里的仓库根目录改为向上查找 bench/configs/models.yaml，make 可在该目录直接运行；main.pdf 重建（24 页），docs/paper/retiseg_paper_draft.pdf 同步。
 服务器下一步（按 16 第六节）：停 B1 队列；U-Net 整批 Dice 重跑；同步五个独立库并跑 E3a；E5 冒烟；E2c 只排 DDR 的 4 个任务；bs_jobs.yaml、extra_jobs.yaml 重生成时按 16 改种子数和编码器对照。
+
+快照接入与任务单（2026-10-12，本机；依据服务器快照 retiseg_runs_handoff_20261012，快照时间 13:18 +0800，服务器提交 9b00b6e，两处未提交：00 的 09:08 一段和 HACDR-Net 子模块工作区）
+1. 快照里的 runs/ 小文件放进本机 runs/（gitignore）。paper/scripts/collect_runs.py 扩展后读入 42 份 metrics_test.json：B-std 7 个模型全部已打分种子、U-Net 新配方 IDRiD 种子 0 与旧配方的六个 *_registered 运行（作补充表，DDR 种子 0 另作 E9 的“交叉熵加逐图 Dice”一行）、nnU-Net 默认与 ResEnc-M 两库、E1r bs4（含作者函数的四类数）；environment.json 的参数量和耗时进 E10；E2c 的 ×1 参照取 B-std 种子 0 的最高验证 mAUPR。合并规则：有实测种子的（实验, 模型, 变体, 训练源, 测试集）组里不再保留占位种子，均值只在实测种子上算。
+2. 数字（都在 14 的 M6、M7）：三种子均值 IDRiD HRNet 0.700、Swin-Unet 0.689、M2MRF 0.657、DeepLabv3 0.537、FCT 0.298；DDR HRNet 0.447、Swin-Unet 0.431、DeepLabv3 0.377、M2MRF 0.369；单种子 nnU-Net 0.672/0.432、ResEnc-M 0.631/0.428、HACDR-Net 0.562/0.269、U-Net 整批 Dice IDRiD 0.658。E1r bs4：作者指标 61.19 对已发布权重 67.55、论文 67.24；本项目 0.549 对 0.639。11 阈值实现减精确 AUPR：IDRiD ±0.01 内；DDR FCT +0.168、HACDR +0.039、M2MRF +0.038、nnU-Net +0.035、HRNet +0.015、DeepLabv3 +0.005。
+3. 论文：R3 的 E1r 段、R4 内部测试段、R2 的实现对照句、讨论 Q1/Q2 按实数改写（E5 行和独立测试仍是占位，带 simulated 标记）；图 4a、表 4、图 2d/e、图 7c 的对应行为实数；ED10 的训练时为实测。main.pdf 重建。
+4. 代码：collect_runs.py 认 NN_*（含 _repN 重复运行）、E1r_*、E2c_*（要 timing.json）、*_registered、runs/E3a/<来源>/<测试集>/metrics.json；nnunet_run.sh 加 RETISEG_NN_REP 做重复运行；test_collect_runs 通过。
+5. 新建 docs/ops/17_服务器任务单.txt：给服务器 agent 的任务和顺序（HACDR 打分、E3a、权重下载与申请、E5 冒烟和种子 0、编码器对照三个、E1r 剩余、nnU-Net 补跑、cost_audit）和回传格式；本机下一步是 E5 推理档代码和 E3b/E4/E7/E8/E9 的 cell 接线（17 第九节）。13 第三节状态、README 索引同步。

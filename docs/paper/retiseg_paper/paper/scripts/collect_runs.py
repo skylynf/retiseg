@@ -6,6 +6,11 @@ Reads the files that bench.eval.cli evaluate writes (bench/eval/evaluate.py):
     runs/BS_<slug>_<dataset>_seed<k>/metrics_<testset>.json     any other test set
     runs/B1_<slug>_<dataset>_seed<k>/metrics_test.json          source recipe (E2b)
     runs/BS_<slug>_<dataset>_seed0/environment.json             E10: parameters, wall time
+    runs/BS_<slug>_<dataset>_seed<k>_registered/metrics_test.json  retired recipe (variant "registered"; U-Net DDR seed 0 also E9)
+    runs/NN_<default|resencm>_<dataset>_fold0/metrics_test.json    nnU-Net (E2, seed 0)
+    runs/E1r_<slug>_<dataset>_seed<k>_bs4*/metrics_test.json       author recipe (E1r), plus author_*_test.json for the authors' metric
+    runs/E2c_<slug>_<dataset>_seed0_<lr1o3|lr3>/history.jsonl       learning-rate check (best validation mAUPR; needs timing.json)
+    runs/E3a/<source>/<set>/metrics.json + done.json               independent tests (bench/e3a.py), main variant only
     data/cost_measured.tsv                                      E10 numbers recorded by hand (docs/ops/00)
     data/cost_audit.tsv                                         E10 numbers from bench/scripts/cost_audit.py
 
@@ -72,7 +77,14 @@ TESTSET = {  # suffix of metrics_<suffix>.json -> test set name
     "diaretdb1": "DiaRetDB1",
 }
 EXPERIMENT = {"BS": ("E2", "bstd"), "B1": ("E2b", "b1")}
-RUN = re.compile(r"^(BS|B1)_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)(?:_runner)?$")
+RUN = re.compile(r"^(BS|B1)_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)(?P<registered>_registered)?(?:_runner)?$")
+NN = re.compile(r"^NN_(?P<cfg>default|resencm)_(?P<dataset>idrid|ddr)_fold0(?:_rep(?P<rep>\d+))?$")
+NN_MODEL = {"default": "nnU-Net", "resencm": "nnU-Net ResEnc-M"}
+E1R = re.compile(r"^E1r_(?P<slug>[a-z0-9]+)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)_bs4(?:_[a-z0-9]+)?$")
+E2C = re.compile(r"^E2c_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed0_(?P<lr>lr1o3|lr3)$")
+E2C_LEVEL = {"lr1o3": "1/3", "lr3": "3"}
+E3A_SET = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "Retinal-Lesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1"}
+E1_AUTHOR = re.compile(r"^E1_(?P<slug>[a-z0-9]+)_(?P<dataset>idrid|ddr)$")
 
 
 def rows_from_report(report, experiment, variant, model, train, seed, test):
@@ -125,6 +137,16 @@ def collect_sheet(path):
     return pd.DataFrame([dict(experiment="E10", model=r.model, variant="", train_set="" if pd.isna(r.train_set) else r.train_set, seed=-1, test_set="", cls="", metric=r.metric, value=float(r.value), source="measured") for r in sheet.itertuples()])
 
 
+def best_val_maupr(run):
+    """Highest validation mAUPR in history.jsonl (the checkpoint-selection criterion of B-std)."""
+    hist = run / "history.jsonl"
+    if not hist.exists():
+        return None
+    vals = [json.loads(line).get("val_maupr") for line in hist.read_text().splitlines() if line.strip()]
+    vals = [v for v in vals if v is not None]
+    return max(vals) if vals else None
+
+
 def collect(runs_dir):
     rows, seen = [], []
     runs = sorted(Path(runs_dir).iterdir()) if Path(runs_dir).is_dir() else []
@@ -132,27 +154,121 @@ def collect(runs_dir):
         print(f"no runs directory at {runs_dir}; only the cost sheet is collected")
     for run in runs:
         m = RUN.match(run.name)
-        if not m or m["slug"] not in SLUG:
+        if m and m["slug"] in SLUG:
+            experiment, variant = EXPERIMENT[m.group(1)]
+            model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
+            if m["registered"]:
+                # runs of a recipe that was later revised (bs_frozen.yaml recipe_revisions): kept as a
+                # separate variant for the supplementary table; the U-Net DDR seed 0 is also the
+                # "CE + per-image Dice" row of E9.
+                variant = "registered"
+            env = run / "environment.json"
+            if experiment == "E2" and seed == 0 and variant == "bstd" and env.exists():
+                rows += rows_from_environment(json.loads(env.read_text()), model, train)
+                if train == "DDR" and model in ("HRNet-W48", "M2MRF"):
+                    v = best_val_maupr(run)
+                    if v is not None:
+                        rows.append(dict(experiment="E2c", model=model, variant="lr_x1", train_set=train, seed=0, test_set=f"{train}-val", cls="mean", metric="aupr", value=v, source="measured"))
+            for path in sorted(run.glob("metrics_*.json")):
+                suffix = path.stem[len("metrics_"):].lower()
+                if suffix not in TESTSET:
+                    continue
+                test = TESTSET[suffix] or train
+                report = json.loads(path.read_text())
+                rows += rows_from_report(report, experiment, variant, model, train, seed, test)
+                if variant == "registered" and model == "U-Net" and train == "DDR" and seed == 0 and test == "DDR":
+                    rows += rows_from_report(report, "E9", "loss:CE + per-image Dice", model, train, seed, test)
+                seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
             continue
-        experiment, variant = EXPERIMENT[m.group(1)]
-        model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
-        env = run / "environment.json"
-        if experiment == "E2" and seed == 0 and env.exists():
-            rows += rows_from_environment(json.loads(env.read_text()), model, train)
-        for path in sorted(run.glob("metrics_*.json")):
-            suffix = path.stem[len("metrics_"):].lower()
-            if suffix not in TESTSET:
+        m = NN.match(run.name)
+        if m:
+            model, train = NN_MODEL[m["cfg"]], DATASET[m["dataset"]]
+            seed = int(m["rep"] or 0)  # nnU-Net fixes no seed; the first run is "seed 0", repeats rep1, rep2 are seeds 1, 2
+            for path in sorted(run.glob("metrics_*.json")):
+                suffix = path.stem[len("metrics_"):].lower()
+                if suffix not in TESTSET:
+                    continue
+                test = TESTSET[suffix] or train
+                report = json.loads(path.read_text())
+                rows += rows_from_report(report, "E2", "bstd", model, train, seed, test)
+                seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
+            continue
+        m = E1R.match(run.name)
+        if m and m["slug"] in SLUG:
+            model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
+            test_json = run / "metrics_test.json"
+            if test_json.exists():
+                report = json.loads(test_json.read_text())
+                rows += rows_from_report(report, "E1r", "author_recipe", model, train, seed, train)
+                summ = report.get("summary", {})
+                for metric, key in (("aupr", "mAUPR"), ("aupr_11pt", "mAUPR_m2mrf_impl")):
+                    if summ.get(key) is not None:
+                        rows.append(dict(experiment="E1r", model=model, variant="author_recipe", train_set=train, seed=seed, test_set=train, cls="mean", metric=metric, value=float(summ[key]), source="measured"))
+                seen.append((run.name, test_json.name, report.get("summary", {}).get("mAUPR")))
+            author = next(iter(sorted(run.glob("author_*_test.json"))), None)
+            if author is not None:
+                a = json.loads(author.read_text())["author_metric"]
+                rows.append(dict(experiment="E1r", model=model, variant="author_recipe", train_set=train, seed=seed, test_set=train, cls="mean", metric="aupr_author_impl", value=float(a["mAUPR"]), source="measured"))
+                for cls, entry in a["per_class"].items():
+                    if cls in ("MA", "HE", "EX", "SE"):
+                        rows.append(dict(experiment="E1r", model=model, variant="author_recipe", train_set=train, seed=seed, test_set=train, cls=cls, metric="aupr_author_impl", value=float(entry["aupr"]), source="measured"))
+            continue
+        m = E2C.match(run.name)
+        if m and m["slug"] in SLUG:
+            if not (run / "timing.json").exists():
+                print(f"{run.name}: training not finished (no timing.json); skipped")
                 continue
-            test = TESTSET[suffix] or train
+            v = best_val_maupr(run)
+            if v is not None:
+                model, train = SLUG[m["slug"]], DATASET[m["dataset"]]
+                rows.append(dict(experiment="E2c", model=model, variant=f"lr_x{E2C_LEVEL[m['lr']]}", train_set=train, seed=0, test_set=f"{train}-val", cls="mean", metric="aupr", value=v, source="measured"))
+                seen.append((run.name, "history.jsonl", v))
+    return pd.DataFrame(rows), seen
+
+
+GROUP = ["experiment", "model", "variant", "train_set", "test_set"]
+
+
+def collect_e3a(runs_dir):
+    """runs/E3a/<source>/<set>[__variant]/metrics.json (bench/e3a.py). The main variant only; __fov and
+    other sensitivity variants go to the supplement later. Sources are B-std/nnU-Net run names or
+    E1_<model>_<train> for author weights (experiment E1, variant author_weights)."""
+    rows, seen = [], []
+    root = Path(runs_dir) / "E3a"
+    if not root.is_dir():
+        return pd.DataFrame(rows), seen
+    for src in sorted(root.iterdir()):
+        m = RUN.match(src.name)
+        nn = NN.match(src.name)
+        au = E1_AUTHOR.match(src.name)
+        if m and m["slug"] in SLUG and not m["registered"]:
+            experiment, variant = EXPERIMENT[m.group(1)]
+            model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
+        elif nn:
+            experiment, variant, model, train, seed = "E2", "bstd", NN_MODEL[nn["cfg"]], DATASET[nn["dataset"]], int(nn["rep"] or 0)
+        elif au and au["slug"] in SLUG:
+            experiment, variant, model, train, seed = "E1", "author_weights", SLUG[au["slug"]], DATASET[au["dataset"]], 0
+        else:
+            continue
+        for setdir in sorted(src.iterdir()):
+            if "__" in setdir.name or setdir.name not in E3A_SET or not (setdir / "done.json").exists():
+                continue
+            path = setdir / "metrics.json"
+            if not path.exists():
+                continue
             report = json.loads(path.read_text())
-            rows += rows_from_report(report, experiment, variant, model, train, seed, test)
-            seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
+            rows += rows_from_report(report, experiment, variant, model, train, seed, E3A_SET[setdir.name])
+            seen.append((f"E3a/{src.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
     return pd.DataFrame(rows), seen
 
 
 def merge(table, new):
+    """Replace placeholder rows by key; then drop the remaining placeholder rows of every
+    (experiment, model, variant, train_set, test_set) group that has at least one measured row,
+    so that seed means and intervals are computed over measured seeds only (a model with one
+    measured seed is reported with one seed, not with one measured and two simulated ones)."""
     if new.empty:
-        return table, 0, 0
+        return table, 0, 0, 0
     table = table.copy()
     table["seed"] = table["seed"].astype(int)
     idx = table.set_index(KEY).index
@@ -160,7 +276,11 @@ def merge(table, new):
     replace = idx.isin(new_idx)
     kept = table[~replace]
     added = int((~new_idx.isin(idx)).sum())
-    return pd.concat([kept, new], ignore_index=True), int(replace.sum()), added
+    merged = pd.concat([kept, new], ignore_index=True)
+    measured_groups = merged[merged.source == "measured"].set_index(GROUP).index.unique()
+    in_group = merged.set_index(GROUP).index.isin(measured_groups)
+    stale = (merged.source != "measured") & in_group
+    return merged[~stale].reset_index(drop=True), int(replace.sum()), added, int(stale.sum())
 
 
 def main():
@@ -170,16 +290,22 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     new, seen = collect(args.runs)
+    e3a, seen_e3a = collect_e3a(args.runs)
+    if len(e3a):
+        new = pd.concat([new, e3a], ignore_index=True)
+        seen += seen_e3a
     sheets = [collect_sheet(PAPER / "data" / f) for f in ("cost_measured.tsv", "cost_audit.tsv")]
     sheet = pd.concat([x for x in sheets if len(x)], ignore_index=True) if any(len(x) for x in sheets) else pd.DataFrame()
     new = pd.concat([sheet, new], ignore_index=True) if len(new) else sheet
+    if len(new):
+        new = new.drop_duplicates(subset=KEY, keep="last").reset_index(drop=True)  # environment.json beats the hand sheet
     if len(sheet):
         print(f"{len(sheet)} cost rows from data/cost_measured.tsv and data/cost_audit.tsv")
     for run, name, maupr in seen:
         print(f"{run}/{name}  mAUPR {maupr if maupr is None else round(maupr, 4)}")
     table = pd.read_csv(args.csv, keep_default_na=False)
-    merged, replaced, added = merge(table, new)
-    print(f"{len(seen)} reports, {len(new)} measured rows: {replaced} placeholder rows replaced, {added} rows with no placeholder counterpart added")
+    merged, replaced, added, stale = merge(table, new)
+    print(f"{len(seen)} reports, {len(new)} measured rows: {replaced} placeholder rows replaced, {added} rows with no placeholder counterpart added, {stale} placeholder seeds of measured groups dropped")
     left = merged[(merged.experiment.isin(["E2", "E2b"])) & (merged.source != "measured")]
     print(f"placeholder rows left in E2/E2b: {len(left)}")
     if not args.dry_run:

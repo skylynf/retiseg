@@ -4,6 +4,7 @@
 #
 #   CUDA_VISIBLE_DEVICES=4 bash bench/scripts/nnunet_run.sh IDRiD default
 #   CUDA_VISIBLE_DEVICES=5 bash bench/scripts/nnunet_run.sh DDR resencm
+#   RETISEG_NN_REP=rep1 CUDA_VISIBLE_DEVICES=4 bash bench/scripts/nnunet_run.sh IDRiD default   # repeat run
 #
 # Data come from bench/scripts/nnunet_bridge.py convert and splits; planning
 # and preprocessing are nnUNetv2_plan_and_preprocess (default) and
@@ -29,12 +30,14 @@ lower="$(echo "$dataset" | tr '[:upper:]' '[:lower:]')"
 bin=/home/qurr/miniconda3/envs/retiseg-nnunet/bin
 export nnUNet_raw="$ROOT/dataset/nnunet/raw"
 export nnUNet_preprocessed="$ROOT/dataset/nnunet/preprocessed"
-export nnUNet_results="$ROOT/runs/nnunet"
+# RETISEG_NN_REP=rep1 trains a repeat of the same plan (nnU-Net fixes no seed; docs/paper/16: three
+# default runs). The repeat gets its own nnU-Net results root and run directory.
+export nnUNet_results="$ROOT/runs/nnunet${RETISEG_NN_REP:+_$RETISEG_NN_REP}"
 export nnUNet_n_proc_DA="${nnUNet_n_proc_DA:-16}"
 unset PYTORCH_CUDA_ALLOC_CONF WORLD_SIZE RANK LOCAL_RANK GROUP_RANK MASTER_ADDR MASTER_PORT
 data="dataset/prepared/$dataset"
 folder="Dataset${id}_${dataset}"
-run="runs/NN_${plan}_${lower}_fold0"
+run="runs/NN_${plan}_${lower}_fold0${RETISEG_NN_REP:+_$RETISEG_NN_REP}"
 fold_dir="$nnUNet_results/$folder/nnUNetTrainer__${plans}__2d/fold_0"
 mkdir -p "$run"
 trap 'echo "== exit $? $(date -Is)" >> "$run/console.log"' EXIT

@@ -79,14 +79,17 @@ def main():
                   "lesion_recall_small", "lesion_recall_medium", "lesion_recall_large"}
         assert needed <= set(new["metric"]), needed - set(new["metric"])
         table = pd.read_csv(PAPER / "data" / "results.csv", keep_default_na=False)
-        merged, replaced, added = collect_runs.merge(table, new)
+        # the test starts from a placeholder-only table so that the merge arithmetic is checked
+        table = table[(table.experiment != "E2") | (table.source != "measured")]
+        merged, replaced, added, stale = collect_runs.merge(table, new)
         key = (merged.experiment == "E2") & (merged.model == "U-Net") & (merged.train_set == "DDR") & (merged.seed == 0) & (merged.test_set == "DDR")
         cell = merged[key & merged.metric.isin(needed)]
         assert (cell["source"] == "measured").all() and len(cell) == len(new), (len(cell), len(new))
-        assert replaced == len(new) and added == 0, (replaced, added)
-        assert len(merged) == len(table)
-        other = merged[(merged.experiment == "E2") & (merged.model == "U-Net") & (merged.seed == 1)]
-        assert (other["source"] == "placeholder").all()
+        assert replaced + added == len(new), (replaced, added)
+        # placeholder seeds of the measured (U-Net, DDR, DDR) group are dropped; other models keep theirs
+        other = merged[(merged.experiment == "E2") & (merged.model == "U-Net") & (merged.variant == "bstd") & (merged.train_set == "DDR") & (merged.test_set == "DDR")]
+        assert (other["source"] == "measured").all() and set(other["seed"]) == {0}, set(other["seed"])
+        assert len(merged) == len(table) - replaced - stale + len(new)
         assert new[new.metric == "lesion_recall_small"]["value"].isna().all()  # toy lesions are all large
         print(f"ok: {len(new)} rows from one report replaced {replaced} placeholder rows; nothing else changed")
     finally:

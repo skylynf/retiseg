@@ -60,7 +60,7 @@ REPRESENTATIVE = ["U-Net", "nnU-Net", "M2MRF", "SAM2-UNet", "RETFound + UPerNet"
 @lru_cache(maxsize=1)
 def results():
     df = pd.read_csv(PAPER / "data" / "results.csv", keep_default_na=False)
-    df["value"] = df["value"].astype(float)
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")  # NaN written by the evaluator (empty size stratum) reads back as NaN
     return df
 
 
