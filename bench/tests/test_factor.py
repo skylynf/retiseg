@@ -15,7 +15,7 @@ REPO = Path(__file__).resolve().parents[2]
 def _toy_prepared(root, name, n, seed, size=(48, 40), ignore=False):
     """A prepared dataset: images/<id>.png, fov, masks/<CLS>, splits.json (train = all but 2, val 1, test 1)."""
     rng = np.random.default_rng(seed)
-    base = root / "prepared" / name
+    base = root / "dataset" / "prepared" / name
     for sub in ("images", "fov", *[f"masks/{cls}" for cls in LESION_CLASSES]):
         (base / sub).mkdir(parents=True, exist_ok=True)
     ids = [f"{name}_{i:02d}" for i in range(n)]
@@ -152,7 +152,7 @@ def test_run_cell_trains_on_two_toy_sources_and_scores(tmp_path, monkeypatch):
     monkeypatch.setattr(factor, "reference_pixels", lambda ref, fz: 3 * 16 * 16)
 
     class Tiny(nn.Module, SegmentationWrapper):
-        card = ModelCard(name="M2MRF", family="fundus", track="B", repro_level="R0", source="test", pad_multiple=8)
+        card = ModelCard(name="M2MRF", family="fundus_multiscale", track="B", repro_level="R0", source="test", pad_multiple=8)
         classes = tuple(LESION_CLASSES)
 
         def __init__(self):

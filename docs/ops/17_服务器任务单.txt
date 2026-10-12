@@ -67,7 +67,7 @@
   4. bench/scripts/cost_audit.py 在服务器上跑一次（权重到位后；没有权重的模型会被跳过）：python bench/scripts/cost_audit.py --repeat 5，输出 docs/paper/retiseg_paper/paper/data/cost_audit.tsv，回传。
 
 十一、影响因素实验（E3b、E4、E7、E8、E9；28 个任务，约 330 GPU 时；不需要 E5 权重的部分可以在等权重时先跑）
-  1. 本机没有 torch，bench/tests/test_factor.py 在本机没跑：先在 retiseg 环境跑 python -m pytest bench/tests/test_factor.py -q，再跑整套 bench/tests。失败的先修再排任务。
+  1. 本机没有 torch，bench/tests/test_factor.py 在本机没跑：先在 retiseg 环境跑 python -m pytest bench/tests/test_factor.py -q，再跑整套 bench/tests。失败的先修再排任务。（工作站albert 2026-10-12：torch 2.11 下 test_factor.py 5 通过、1 跳过（缺 prepared DDR），修了测试自身两处，bench/factor.py 未改；整套结果见 00 同日记录。服务器 torch 2.6 下照旧跑一次。）
   2. 子集名单：python bench/scripts/make_subsets.py（读 dataset/prepared/DDR、FGADR 的 splits.json，写 bench/data/splits/subsets/ 三个 json），提交。
   3. 冒烟：挑 e9_unet_ddr_ce_seed0（最便宜）和 e4_m2mrf_ddr_fgadr383_seed0 各跑到第一次验证，看 recipe.json 的 factor 节、iterations 是否等于该模型 DDR 主表运行的 iterations、显存。E7 native 的 M2MRF 整画布推理（DDR 原分辨率约 1934×1956）核一次显存。
   4. 排队：RETISEG_GPUS="..." bash bench/scripts/server_run.sh factor E9；然后 E4、E8、E3b（U-Net、M2MRF 先；SAM2-UNet、RETFound 行等权重）、E7。launch_factor.py 按 est_hours 从长到短排，metrics_test.json 存在的跳过。
