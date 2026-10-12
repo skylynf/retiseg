@@ -345,3 +345,90 @@ def test_build_writes_a_deterministic_prompt_file_with_hashes_and_counts(tmp_pat
         fz.assert_ready(frozen, "b", "test", set_name="TJDR_uwf", prompts_dir=out, variant="fov")
     with pytest.raises(ValueError, match="no variant"):
         prompts.build("IDRiD", "test", variant="fov", frozen=frozen, out_dir=out, data_dir=root, long_side=60)
+
+
+# ---- step 4: bench/e5/score_rules.py ----------------------------------------------------------
+
+
+def _mask(rows, cols, top=0, left=0, iou=0.9, stability=0.8, shape=(8, 8)):
+    import numpy as np
+
+    from bench.e5.score_rules import Mask
+
+    seg = np.zeros(shape, bool)
+    seg[rows, cols] = True
+    return Mask(segmentation=seg, top=top, left=left, predicted_iou=iou, stability_score=stability)
+
+
+def test_pixel_score_is_the_max_over_covering_masks_across_windows():
+    import numpy as np
+    import pytest
+
+    from bench.e5 import score_rules as sr
+
+    a = _mask(slice(0, 4), slice(0, 4), iou=0.6, stability=0.95)
+    b = _mask(slice(2, 6), slice(2, 6), iou=0.9, stability=0.5)
+    score = sr.masks_to_score([a, b], (10, 10))
+    assert score.dtype == np.float32 and score.shape == (10, 10)
+    assert score[0, 0] == pytest.approx(0.6) and score[3, 3] == pytest.approx(0.9) and score[5, 5] == pytest.approx(0.9)
+    assert score[9, 9] == 0.0 and score[0, 5] == 0.0
+    by_stability = sr.masks_to_score([a, b], (10, 10), key="stability_score")
+    assert by_stability[3, 3] == pytest.approx(0.95) and by_stability[5, 5] == pytest.approx(0.5)
+    # a mask from the second window lands at its offset and is clipped at the canvas edge
+    c = _mask(slice(0, 8), slice(0, 8), top=6, left=6, iou=1.2)
+    score = sr.masks_to_score([c], (10, 10))
+    assert score[6, 6] == pytest.approx(1.0) and score[9, 9] == pytest.approx(1.0) and score[5, 6] == 0.0
+    assert c.canvas_area((10, 10)) == 16 and c.canvas_area((20, 20)) == 64
+    with pytest.raises(ValueError, match="score key"):
+        sr.masks_to_score([a], (10, 10), key="area")
+    with pytest.raises(ValueError, match="negative"):
+        sr.combine_max((10, 10), [(-1, 0, np.ones((2, 2)))])
+    four = sr.as_four(score)
+    assert list(four) == ["MA", "HE", "EX", "SE"] and all(four[cls] is score for cls in four)
+    record = {"segmentation": np.ones((3, 3), bool), "predicted_iou": 0.7, "stability_score": 0.6, "area": 9, "bbox": [0, 0, 3, 3]}
+    mask = sr.Mask.from_record(record, top=2, left=3)
+    assert mask.top == 2 and mask.left == 3 and mask.score() == 0.7 and mask.canvas_area((10, 10)) == 9
+
+
+def test_oracle_class_credits_the_most_overlapped_class_and_spreads_false_positives():
+    import numpy as np
+    import pytest
+
+    from bench.e5 import score_rules as sr
+
+    canvas_hw = (10, 10)
+    gt = [np.zeros(canvas_hw, bool) for _ in range(4)]
+    gt[0][0:3, 0:3] = True  # MA
+    gt[1][0:3, 2:6] = True  # HE, overlapping MA at column 2
+    mostly_he = _mask(slice(0, 3), slice(1, 6), iou=0.8)  # 3 MA pixels (cols 1-2 ... ) vs HE 12
+    assert sr.assign_classes(mostly_he, gt, canvas_hw) == [1]
+    tie = _mask(slice(0, 3), slice(2, 3), iou=0.5)  # column 2 is both MA and HE: 3 pixels each -> MA first
+    assert sr.assign_classes(tie, gt, canvas_hw) == [0]
+    nowhere = _mask(slice(7, 9), slice(7, 9), iou=0.4, shape=(10, 10))  # the default 8 x 8 window would cut it
+    assert sr.assign_classes(nowhere, gt, canvas_hw) == [0, 1, 2, 3]
+    maps = sr.oracle_class([mostly_he, tie, nowhere], gt, canvas_hw)
+    assert set(maps) == {"MA", "HE", "EX", "SE"}
+    assert maps["HE"][1, 4] == pytest.approx(0.8) and maps["MA"][1, 4] == 0.0
+    assert maps["MA"][1, 2] == pytest.approx(0.5) and maps["HE"][1, 2] == pytest.approx(0.8)
+    assert all(maps[cls][8, 8] == pytest.approx(0.4) for cls in maps)
+    assert maps["EX"][1, 4] == 0.0 and maps["SE"][1, 2] == 0.0
+    with pytest.raises(ValueError, match="ground-truth masks"):
+        sr.oracle_class([tie], gt[:2], canvas_hw)
+
+
+def test_area_cap_drops_masks_above_the_fraction_of_the_field_of_view():
+    import pytest
+
+    from bench.e5 import score_rules as sr
+
+    canvas_hw = (10, 10)
+    small = _mask(slice(0, 3), slice(0, 5))  # 15 pixels
+    large = _mask(slice(0, 5), slice(0, 5))  # 25 pixels
+    padded = _mask(slice(0, 8), slice(0, 8), top=6, left=6)  # 64 in the window, 16 on the canvas
+    assert sr.cap_pixels(0.02, 1000) == 20 and sr.cap_pixels(0.005, 1000) == 5 and sr.cap_pixels(1.0, 1000) is None
+    kept = sr.area_cap([small, large, padded], 0.02, 1000, canvas_hw)
+    assert kept == [small, padded]
+    assert sr.area_cap([small, large, padded], 1.0, 1000, canvas_hw) == [small, large, padded]
+    assert sr.area_cap([small, large, padded], 0.005, 1000, canvas_hw) == []
+    with pytest.raises(ValueError, match="fraction"):
+        sr.cap_pixels(0.0, 1000)
