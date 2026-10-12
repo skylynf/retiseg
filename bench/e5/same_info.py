@@ -60,6 +60,14 @@ def box_union_mask(prompts, k, canvas_hw, crop, original_hw):
     return mask
 
 
+def planned(frozen, model, tokens, set_name, split, variant=geo.MAIN):
+    """(source, {k: path}) of one reference run."""
+    source = out.source_name(TIER, model, "ref", *tokens)
+    canvas_variants = [] if variant == geo.MAIN else [variant]
+    base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
+    return source, {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in fz.k_levels(frozen)}
+
+
 def run(model, tokens, pred_dir, set_name, split, variant=geo.MAIN, frozen=None, data_dir=None, prompts_dir=None,
         evaluate=True, drop_maps=(), limit=None):
     """Restrict the reference maps to the k-box unions and evaluate; directories with predicted.json are left alone."""
@@ -73,10 +81,9 @@ def run(model, tokens, pred_dir, set_name, split, variant=geo.MAIN, frozen=None,
     if doc["set"] != set_name or doc["split"] != split or doc["variant"] != variant:
         raise ValueError(f"{prompt_path} is for {doc['set']}/{doc['split']}/{doc['variant']}, not {set_name}/{split}/{variant}")
     k_levels = fz.k_levels(frozen)
-    source = out.source_name(TIER, model, "ref", *tokens)
+    source, dirs = planned(frozen, model, tokens, set_name, split, variant)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
-    dirs = {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in k_levels}
     pending = [k for k, path in dirs.items() if out.needs_prediction(path, limit)]
     data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
     all_ids = load_split(data_dir, split)

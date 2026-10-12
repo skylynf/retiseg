@@ -237,6 +237,14 @@ def _file_sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def planned(frozen, model, kind, set_name, split, variant=geo.MAIN):
+    """(source, {k: path}) of one run."""
+    source = source_name(frozen, model, kind)
+    canvas_variants = [] if variant == geo.MAIN else [variant]
+    base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
+    return source, {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in fz.k_levels(frozen)}
+
+
 def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, decoder=None, frozen=None,
         data_dir=None, long_side=None, window=None, prompts_dir=None, evaluate=True, drop_maps=(), limit=None, pool=None):
     """Predict (and evaluate) one run; directories that already have predicted.json are left alone."""
@@ -255,10 +263,9 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
         raise ValueError(f"{prompt_path} was generated on a {doc['long_side']} canvas, this run uses {long_side}; regenerate it")
     pool_run = fz.is_pool_split(split)
     k_levels = fz.k_levels(frozen)
-    source = source_name(frozen, model, kind)
+    source, dirs = planned(frozen, model, kind, set_name, split, variant)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if pool_run else set_name
-    dirs = {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in k_levels}
     pending = [k for k, path in dirs.items() if out.needs_prediction(path, limit)]
     data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
     window_size = None if geometry == geo.G2 else int(window if window is not None else geo.window_size(frozen, model))

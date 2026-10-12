@@ -141,6 +141,21 @@ def _ids(data_dir, split, limit):
     return ids, all_ids[len(ids):]
 
 
+def planned(frozen, index, set_name, split, variant=geo.MAIN):
+    """(source, directory) of one phrase run."""
+    source = source_name(index)
+    canvas_variants = [] if variant == geo.MAIN else [variant]
+    base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
+    return source, out.out_dir(TIER, source, out.set_dirname(base, canvas_variants))
+
+
+def planned_selected(set_name, split, variant=geo.MAIN):
+    """The assembled a_sam3_selected directory of a set and split."""
+    canvas_variants = [] if variant == geo.MAIN else [variant]
+    base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
+    return out.out_dir(TIER, selected_source(), out.set_dirname(base, canvas_variants))
+
+
 def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, scorer=None, frozen=None, data_dir=None,
         long_side=None, window=None, evaluate=True, drop_maps=(), limit=None, pool=None, assemble=True):
     """Predict (and evaluate) one phrase index; assembles the selected source when the selection is filled and the three indices exist."""
@@ -149,11 +164,10 @@ def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, 
         raise ValueError(f"geometry must be one of {geo.GEOMETRIES}, got {geometry!r}")
     fz.assert_ready(frozen, TIER, split, model=MODEL)
     phrases = phrases_for(frozen, index)
-    source = source_name(index)
+    source, directory = planned(frozen, index, set_name, split, variant)
     pool_run = fz.is_pool_split(split)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if pool_run else set_name
-    directory = out.out_dir(TIER, source, out.set_dirname(base, canvas_variants))
     data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
     if long_side is None:
         long_side = geo.NATIVE if geometry == geo.G2 else geo.long_side_for(set_name, variant, frozen)
@@ -236,7 +250,7 @@ def assemble_selected(set_name, split, variant=geo.MAIN, frozen=None, data_dir=N
     if len(limits) != 1:
         raise ValueError(f"the phrase runs of {set_dir} were made with different --limit values {limits}; redo them alike")
     run_limit = limits.pop()
-    target = out.out_dir(TIER, selected_source(), set_dir)
+    target = planned_selected(set_name, split, variant)
     if not out.needs_prediction(target, run_limit):
         return target
     maps_dir = out.pred_dir(target, split)

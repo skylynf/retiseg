@@ -177,6 +177,17 @@ def targets_for(frozen, split, canvas_variants, selected_cap=None):
     return [(variant_tokens(canvas_variants, cap if pool_run else 1.0, kind), cap, kind) for cap in caps for kind in KINDS]
 
 
+def planned(frozen, model, density, set_name, split, variant=geo.MAIN):
+    """(source, {dirname: (tokens, cap, kind)}, {dirname: path}) of one run; a test split needs grid.selected."""
+    pool_run = fz.is_pool_split(split)
+    selected_cap = None if pool_run else fz.selected_pair(frozen)[1]
+    source = source_name(frozen, model, density)
+    canvas_variants = [] if variant == geo.MAIN else [variant]
+    base = out.pool_set_dirname(set_name) if pool_run else set_name
+    directories = {out.set_dirname(base, tokens): (tokens, cap, kind) for tokens, cap, kind in targets_for(frozen, split, canvas_variants, selected_cap)}
+    return source, directories, {name: out.out_dir(TIER, source, name) for name in directories}
+
+
 def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, device=None, generator=None, frozen=None,
         data_dir=None, long_side=None, window=None, evaluate=True, drop_maps=(), limit=None, pool=None):
     """Predict (and evaluate) one run; directories that already have predicted.json are left alone.
@@ -202,9 +213,7 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
         return {"source": source, "skipped": "budget_rule", "directories": []}
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if pool_run else set_name
-    targets = targets_for(frozen, split, canvas_variants, selected_cap)
-    directories = {out.set_dirname(base, tokens): (tokens, cap, kind) for tokens, cap, kind in targets}
-    dirs = {name: out.out_dir(TIER, source, name) for name in directories}
+    _source, directories, dirs = planned(frozen, model, density, set_name, split, variant)
     pending = [name for name, path in dirs.items() if out.needs_prediction(path, limit)]
     data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
     if long_side is None:

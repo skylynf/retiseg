@@ -35,6 +35,9 @@
 #                                               E3a independent tests of every scored source
 #                                               (bench/configs/e3a_frozen.yaml, bench/scripts/launch_e3a.py);
 #                                               needs the five independent prepared sets
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer [--pool-only|--test-only] [--only SOURCE,...] [--drop-maps FGADR,Retinal-Lesions] [--limit N]
+#                                               E5 inference tiers (zero-shot and oracle prompts; bench/scripts/launch_e5_infer.py);
+#                                               pool runs first, test sets once e5_frozen.yaml's selections are filled; SAM 3 in retiseg-sam3
 #   bash bench/scripts/server_run.sh status | curves [GLOB]
 #
 # Long stages start in the background with nohup, so the SSH session can
@@ -244,6 +247,13 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
       [ -d "dataset/prepared/$set" ] || { echo "dataset/prepared/$set missing; rsync it from the workstation (11 section 1)" >&2; exit 1; }
     done
     background e3a "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_e3a.py --submit "${@:2}" ;;
+  e5-infer)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "e5-infer needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"2 3\"" >&2; exit 1; }
+    for set in IDRiD DDR TJDR_std TJDR_uwf FGADR RetinalLesions DiaRetDB1; do
+      [ -d "dataset/prepared/$set" ] || { echo "dataset/prepared/$set missing; rsync it from the workstation (11 section 1)" >&2; exit 1; }
+    done
+    background e5_infer "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_e5_infer.py --submit "${@:2}" ;;
   bs-score0) require_clean; launch bs_score0 --jobs "$BS_JOBS" --submit --score-seed0 ;;
   bs-rest) require_clean; launch bs_rest --jobs "$BS_JOBS" --submit --rest ;;
   status) py retiseg bench/scripts/run_status.py status --glob "${2:-*}" ;;
