@@ -35,3 +35,9 @@ E5 推理档步骤 0：协议对齐到 16（2026-10-12，工作站albert）
 2. 改动：bench/configs/e5_frozen.yaml（头注、decisions.inference_scope、weights.used_by、新增 validation_pool、zero_shot.grid 替换两套作者参数和 area_cap、geometry.G1.TJDR_uwf、oracle 整节、outputs）；15 加 10-12 修订行并改第三节第 8 条、第四、五、六、十一、十三、十七节；14 M9 检查点、零样本、理想提示三段加一行已定；16 加修订行、E5a 行加一句；build_placeholder.py 去掉 k=10 和 SAM 点提示的占位（results.csv 要在有 pandas 的机器上重生成，现存问题 4）；新测试 bench/tests/test_e5_infer.py 两个用例。还没有读过任何 E5 指标，e5_frozen.yaml 的改动在它文件头允许的时间内。
 3. 测试：整套 168 通过、18 跳过、6 失败、4 错误（比基线多两个新用例，其余不变）。
 4. docs/notes(albert)/现存问题.txt 重建（分级 1–5），首批 7 条：H2Former 用例在上限下报错（1）、六个数据用例无 skipif（1）、本机缺 pandas/matplotlib/TeX（3）、占位数据待重生成（2）、子模块 __pycache__（1）、e5_frozen 与 16 不一致（5，本次已处理）、128 当选超预算（4）。
+
+E5 推理档步骤 1–6：协议读取、画布与窗口、提示文件、分数规则、输出布局（2026-10-12，工作站albert；步骤 1–4 提交 7b2d482、bdbfbd6、718e882、1f0bfb6，步骤 6 待提交）
+1. 新目录 bench/e5/：frozen.py 读 e5_frozen.yaml 并在读测试划分前检查两个 selected 和提示文件（池运行不要求）；geometry.py 给七个测试集的画布（标准视野 1440，TJDR_uwf 4256 加 fov 1440）、G1 窗口（复用 bench.infer 的网格，画布小于窗口时补零）和回贴原图；prompts.py 生成 b 档提示文件 runs/E5_prompts/<集>_<划分>[__变体].json（八连通域、行主序排序后 PCG64(20261003) 按图和类派生置换、紧框、EDT 最远点，记真值文件 sha256 和每图每类连通域数）；score_rules.py 把生成器的掩码拼成像素分数（跨窗口取最大、任意病灶四类同图、按重叠分类的上界、面积上限按视野比例）；outputs.py 定下 runs/E5/<档>/<来源>/<集>[__变体]/ 的布局和 predicted.json、done.json 的字段，池运行写在 <集>-val 下。原步骤 5（训练集最大连通域）因 D1 取消。
+2. 评测：bench/eval/evaluate.py 的 evaluate 加一个可选参数 val_thresholds，推理档把两个池运行合并直方图的每类 Dice 最优阈值直接传入，指标名与其他模型相同（dice_valopt 等）；不传时行为不变，test_evaluate 全部照旧通过；结果多记一个 val_thresholds_given 字段。
+3. 测试：bench/tests/test_e5_infer.py 共 16 个用例，全部玩具数据和假模型，不读 dataset/、不下权重；整套 182 / 18 / 6 / 4（比基线多的都是新用例，跳过 / 失败 / 错误三个数未变）。
+4. 顺带：TJDR_uwf 的 4256 画布切 1024 窗、重叠 0.5 是每边 8 个起点共 64 窗（E5推理档流程.txt 原估 49 算错，a 档算力估算随之改）。接下来是步骤 7 amg.py、8 prompted.py / same_info.py、9 sam3_text.py，仍只用假模型做单元测试；真实权重与数据的冒烟在服务器（17 第六节）。

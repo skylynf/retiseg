@@ -432,3 +432,142 @@ def test_area_cap_drops_masks_above_the_fraction_of_the_field_of_view():
     assert sr.area_cap([small, large, padded], 0.005, 1000, canvas_hw) == []
     with pytest.raises(ValueError, match="fraction"):
         sr.cap_pixels(0.0, 1000)
+
+
+# ---- step 6: bench/e5/outputs.py --------------------------------------------------------------
+
+
+def _toy_e5_source(root, name, ids_by_split, shape=(24, 30)):
+    """A prepared set like test_e3a's: box field of view, MA and EX lesions, HE and SE negative."""
+    import json
+
+    import numpy as np
+    from PIL import Image
+
+    from bench.common.io import LESION_CLASSES
+
+    rng = np.random.default_rng(len(name))
+    for ids in ids_by_split.values():
+        for image_id in ids:
+            (root / "images").mkdir(parents=True, exist_ok=True)
+            Image.fromarray(rng.integers(0, 255, shape + (3,), dtype=np.uint8)).save(root / "images" / f"{image_id}.png")
+            fov = np.zeros(shape, bool)
+            fov[2:-2, 3:-3] = True
+            (root / "fov").mkdir(parents=True, exist_ok=True)
+            Image.fromarray(fov.astype(np.uint8) * 255).save(root / "fov" / f"{image_id}.png")
+            for cls in ("MA", "EX"):
+                mask = np.zeros(shape, bool)
+                mask[5:9, 6:10] = True
+                (root / "masks" / cls).mkdir(parents=True, exist_ok=True)
+                Image.fromarray(mask.astype(np.uint8) * 255).save(root / "masks" / cls / f"{image_id}.png")
+    (root / "meta.json").write_text(json.dumps({"name": name, "classes": list(LESION_CLASSES), "granularity": "fine"}))
+    (root / "splits.json").write_text(json.dumps(ids_by_split))
+
+
+def _write_toy_maps(maps_dir, root, ids, inside=0.9, outside=0.1):
+    import numpy as np
+
+    from bench.common.io import LESION_CLASSES, read_fov, read_mask, write_prob
+
+    for image_id in ids:
+        fov = read_fov(root, image_id)
+        for cls in LESION_CLASSES:
+            mask = read_mask(root, cls, image_id, shape=fov.shape)
+            prob = np.where(mask, inside, outside).astype(np.float32)
+            prob[~fov] = 0.0
+            write_prob(maps_dir, cls, image_id, prob)
+
+
+def test_outputs_layout_pool_thresholds_and_evaluation(tmp_path, monkeypatch):
+    import hashlib
+    import json
+
+    import pytest
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.eval.evaluate import load_protocol
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    proto = load_protocol()
+    source = out.source_name("a", "SAM", "vith", "p64")
+    assert source == "a_sam_vith_p64" and out.source_name("b", "SAM 2", "point") == "b_sam2_point"
+    assert out.set_dirname("DDR") == "DDR" and out.set_dirname("TJDR_uwf", ["fov", "cap0.02"]) == "TJDR_uwf__fov__cap0.02"
+    assert out.pool_set_dirname("DDR") == "DDR-val"
+    assert out.out_dir("a", source, "TOY") == tmp_path / "runs" / "E5" / "a" / source / "TOY"
+    assert out.pred_dir(tmp_path / "d", "val").name == "prob_val" and out.pred_dir(tmp_path / "d", "test").name == "prob_test"
+    with pytest.raises(ValueError, match="tier"):
+        out.source_name("c", "SAM")
+    with pytest.raises(ValueError, match="slug"):
+        out.slug("SAMed")
+    with pytest.raises(ValueError, match="token"):
+        out.source_name("a", "SAM", "ViT-H")
+    with pytest.raises(ValueError, match="plain token"):
+        out.set_dirname("DDR", ["a__b"])
+    # the pool: two toy sets standing in for IDRiD val and DDR val; the test set is a third
+    pool_a, pool_b, test_root = (tmp_path / "prepared" / n for n in ("PA", "PB", "TOY"))
+    _toy_e5_source(pool_a, "PA", {"val": ["p0", "p1"]})
+    _toy_e5_source(pool_b, "PB", {"val": ["q0"]})
+    _toy_e5_source(test_root, "TOY", {"test": ["t0", "t1"]})
+    pool = [("PA", pool_a, "val"), ("PB", pool_b, "val")]
+    assert out.pool_thresholds("a", source, frozen, proto, pool=pool) is None
+    for name, root, split in pool:
+        directory = out.out_dir("a", source, out.pool_set_dirname(name))
+        _write_toy_maps(out.pred_dir(directory, split), root, json.loads((root / "splits.json").read_text())[split])
+        out.write_predicted(directory, {"tier": "a", "model": "SAM", "set": name, "split": split})
+    thresholds = out.pool_thresholds("a", source, frozen, proto, pool=pool)
+    assert set(thresholds) == {"MA", "HE", "EX", "SE"} and all(0.0 <= v <= 1.0 for v in thresholds.values())
+    assert 0.1 < thresholds["MA"] <= 0.9 and 0.1 < thresholds["EX"] <= 0.9  # lesions at 0.9, background at 0.1
+    # a test set evaluated with the pool thresholds
+    directory = out.out_dir("a", source, out.set_dirname("TOY"))
+    _write_toy_maps(out.pred_dir(directory, "test"), test_root, ["t0", "t1"])
+    weights = tmp_path / "w.pth"
+    weights.write_bytes(b"weights")
+    record = out.checkpoint_record(weights)
+    assert record == {"file": "w.pth", "sha256": hashlib.sha256(b"weights").hexdigest(), "bytes": 7}
+    out.write_predicted(directory, {"tier": "a", "model": "SAM", "checkpoint": record, "n_images": 2, **out.environment()})
+    assert out.read_predicted(directory)["checkpoint"]["file"] == "w.pth" and not out.is_done(directory)
+    result = out.evaluate_dir(directory, "TOY", "test", data_dir=test_root, proto=proto, val_thresholds=thresholds)
+    assert out.is_done(directory)
+    done = json.loads((directory / "done.json").read_text())
+    assert done["thresholds"] == "fixed and pool val_opt" and done["val_thresholds"] == thresholds
+    assert done["maps_dropped"] is False and done["model"] == "SAM" and "git" in done
+    assert done["summary"]["AUPR_any_lesion"] == pytest.approx(1.0) and result["summary"]["mAUPR"] == pytest.approx(1.0)
+    metrics = json.loads((directory / "metrics.json").read_text())
+    assert metrics["per_class"]["MA"]["thresholds"]["val_opt"]["threshold"] == pytest.approx(thresholds["MA"])
+    assert metrics["val_thresholds_given"]["EX"] == pytest.approx(thresholds["EX"]) and metrics["val_pred_dir"] is None
+    assert (directory / "metrics.npz").is_file() and (directory / "prob_test").is_dir()
+    # a variant directory with drop_maps loses its maps after the metrics; without thresholds it is fixed only
+    other = out.out_dir("a", source, out.set_dirname("TOY", ["cap0.02"]))
+    _write_toy_maps(out.pred_dir(other, "test"), test_root, ["t0", "t1"])
+    out.write_predicted(other, {"tier": "a", "model": "SAM"})
+    out.evaluate_dir(other, "TOY", "test", data_dir=test_root, proto=proto, drop_maps=["TOY"])
+    done2 = json.loads((other / "done.json").read_text())
+    assert done2["maps_dropped"] is True and done2["thresholds"] == "fixed only" and done2["val_thresholds"] is None
+    assert not (other / "prob_test").exists() and (other / "metrics.npz").is_file()
+    # a pool run evaluates its val split and keeps its maps even when its set is in drop_maps
+    pool_dir = out.out_dir("a", source, out.pool_set_dirname("PA"))
+    out.evaluate_dir(pool_dir, "PA", "val", data_dir=pool_a, proto=proto, drop_maps=["PA"])
+    assert out.pred_dir(pool_dir, "val").is_dir() and json.loads((pool_dir / "done.json").read_text())["maps_dropped"] is False
+    with pytest.raises(FileNotFoundError, match="predicted.json"):
+        out.evaluate_dir(tmp_path / "nowhere", "TOY", "test", data_dir=test_root, proto=proto)
+
+
+def test_evaluate_takes_given_validation_thresholds_and_needs_every_class(tmp_path):
+    import pytest
+
+    from bench.eval.evaluate import evaluate, load_protocol
+
+    root = tmp_path / "prepared" / "TOY"
+    _toy_e5_source(root, "TOY", {"test": ["t0"]})
+    _write_toy_maps(tmp_path / "pred", root, ["t0"])
+    proto = load_protocol()
+    given = {"MA": 0.4, "HE": 0.5, "EX": 0.6, "SE": 0.7}
+    result = evaluate(root, "test", tmp_path / "pred", proto, val_thresholds=given)
+    assert result["per_class"]["EX"]["thresholds"]["val_opt"]["threshold"] == pytest.approx(0.6)
+    assert "mDice_pooled_val_opt" in result["summary"] and result["val_thresholds_given"] == given
+    plain = evaluate(root, "test", tmp_path / "pred", proto)
+    assert "val_opt" not in plain["per_class"]["EX"]["thresholds"] and plain["val_thresholds_given"] is None
+    with pytest.raises(ValueError, match="val_thresholds lacks"):
+        evaluate(root, "test", tmp_path / "pred", proto, val_thresholds={"MA": 0.5})
