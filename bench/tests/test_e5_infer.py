@@ -52,3 +52,91 @@ def test_placeholder_keys_follow_the_16_scope():
     text = (REPO / "docs/paper/retiseg_paper/paper/scripts/build_placeholder.py").read_text()
     assert 'for k in (1, 5, 20, "all")' in text
     assert '("SAM", "point")' not in text
+
+
+# ---- step 1: bench/e5/frozen.py ---------------------------------------------------------------
+
+
+def _toy_frozen(tmp_path, **over):
+    """A copy of the real protocol with top-level overrides applied by a function."""
+    doc = yaml.safe_load(FROZEN.read_text())
+    for key, change in over.items():
+        change(doc) if callable(change) else doc.__setitem__(key, change)
+    path = tmp_path / "e5.yaml"
+    path.write_text(yaml.safe_dump(doc))
+    return path
+
+
+def test_frozen_loads_the_registered_grid_pool_phrases_and_k():
+    from bench.e5 import frozen as fz
+
+    frozen = fz.load_frozen()
+    assert fz.grid_pairs(frozen) == [(64, 0.005), (64, 0.02), (64, 1.0), (128, 0.005), (128, 0.02), (128, 1.0)]
+    assert [name for name, _dir, _split in fz.pool_sets(frozen)] == ["IDRiD", "DDR"]
+    assert all(split == "val" and directory.name == name for name, directory, split in fz.pool_sets(frozen))
+    assert len(fz.phrase_ids(frozen)) == 12 and fz.phrase_ids(frozen)[("MA", 0)] == "microaneurysm"
+    assert fz.k_levels(frozen) == [1, 5, 20, "all"]
+    assert fz.oracle_models(frozen) == {"SAM": ["boxes"], "SAM 2": ["points", "boxes"], "MedSAM": ["boxes"]}
+    assert fz.prompt_file("IDRiD", "test").name == "IDRiD_test.json"
+
+
+def test_validate_rejects_a_protocol_with_a_missing_key(tmp_path):
+    import pytest
+
+    from bench.e5 import frozen as fz
+
+    def drop_k(doc):
+        del doc["oracle"]["k"]
+
+    with pytest.raises(ValueError, match="oracle lacks"):
+        fz.load_frozen(_toy_frozen(tmp_path, oracle=drop_k))
+
+    def two_phrases(doc):
+        doc["zero_shot"]["sam3"]["phrases"]["SE"] = doc["zero_shot"]["sam3"]["phrases"]["SE"][:2]
+
+    with pytest.raises(ValueError, match="three phrases"):
+        fz.load_frozen(_toy_frozen(tmp_path, zero_shot=two_phrases))
+
+
+def test_assert_ready_gates_test_splits_on_the_pool_selections(tmp_path):
+    import pytest
+
+    from bench.e5 import frozen as fz
+
+    frozen = fz.load_frozen()
+    # the pool needs nothing filled; a test split needs both selections
+    fz.assert_ready(frozen, "a", "val")
+    with pytest.raises(ValueError, match="grid.selected is empty"):
+        fz.assert_ready(frozen, "a", "test")
+    with pytest.raises(ValueError, match="grid.selected is empty"):
+        fz.assert_ready(frozen, "a", "test", model="SAM 2")
+    with pytest.raises(ValueError, match="sam3.selected lacks"):
+        fz.assert_ready(frozen, "a", "test", model="SAM 3")
+    with pytest.raises(ValueError, match="zero-shot models"):
+        fz.assert_ready(frozen, "a", "test", model="MedSAM")
+
+    def fill(density, cap, phrases):
+        def apply(doc):
+            doc["zero_shot"]["grid"]["selected"] = {"points_per_side": density, "area_cap_fraction": cap}
+            doc["zero_shot"]["sam3"]["selected"] = phrases
+        return apply
+
+    good = {"MA": "red dot", "HE": "retinal hemorrhage", "EX": "hard exudate", "SE": "soft exudate"}
+    filled = fz.load_frozen(_toy_frozen(tmp_path, zero_shot=fill(128, 0.02, good)))
+    fz.assert_ready(filled, "a", "test")
+    assert fz.selected_pair(filled) == (128, 0.02) and fz.selected_phrases(filled) == good
+    off_grid = fz.load_frozen(_toy_frozen(tmp_path, zero_shot=fill(96, 0.02, good)))
+    with pytest.raises(ValueError, match="not in the registered grid"):
+        fz.assert_ready(off_grid, "a", "test", model="SAM")
+    unregistered = fz.load_frozen(_toy_frozen(tmp_path, zero_shot=fill(64, 1.0, dict(good, MA="tiny red thing"))))
+    with pytest.raises(ValueError, match="not a registered MA phrase"):
+        fz.assert_ready(unregistered, "a", "test", model="SAM 3")
+    # tier b: the prompt file of the set and split, pool included
+    with pytest.raises(ValueError, match="needs set_name"):
+        fz.assert_ready(frozen, "b", "test")
+    with pytest.raises(FileNotFoundError, match="bench.e5.prompts --set DDR --split val"):
+        fz.assert_ready(frozen, "b", "val", set_name="DDR", prompts_dir=tmp_path)
+    fz.prompt_file("DDR", "val", tmp_path).write_text("{}")
+    fz.assert_ready(frozen, "b", "val", set_name="DDR", prompts_dir=tmp_path)
+    with pytest.raises(ValueError, match="tier must be"):
+        fz.assert_ready(frozen, "c", "test")
