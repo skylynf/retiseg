@@ -1,0 +1,175 @@
+E5 推理档实现流程（a 零样本、b 理想提示）
+建立日期 2026-10-12，工作站albert。依据：docs/design/15 第四、五、六、十一节；docs/paper/16 第三节 E5a、E5b 两行；docs/ops/17 第六、九节；bench/configs/e5_frozen.yaml；现有代码 bench/e3a.py（输出布局和评测的样板）、bench/infer.py（窗口）、bench/predict.py（画布到原图）、bench/common/io.py（概率图格式）、bench/models/foundation.py（官方代码导入与权重）。
+原则：每一步只做一件事，有自己的测试、自己的提交；没有数据和权重的步骤全部在工作站albert 用玩具数据和假模型验证；需要数据的在 Luming 的工作站或服务器做；需要权重和显卡的在服务器做。每步结束跑整套 bench/tests（命令见 albert环境.txt 第四节），跳过 / 失败 / 错误三个数保持 18 / 6 / 4，通过数只增不减。
+
+零、约定
+  1. 目录 bench/e5/，评测不另写，概率图一律经 bench.common.io.write_prob，指标一律经 bench.eval.evaluate（protocol.yaml 已有 any_lesion，不再改）。
+  2. 输出布局照 E3a：runs/E5/<档>/<来源>/<测试集>[__变体]/{prob_test 或 prob_val, predicted.json, metrics.json, metrics.npz, done.json}。<来源> 例：a_sam_vith_default、a_sam_vith_more_masks、a_sam21_default、a_sam3_<措辞编号>、b_sam_vitb_box、b_sam21_box、b_sam21_point、b_medsam_box；b 档的 k 作变体后缀（__k1、__k5、__k20、__kall）；零样本的类别上界作变体 __oracle_class，面积上限作 __areacap。
+  3. e5_frozen.yaml 在第一个 E5 测试指标被读到之前仍可改（文件头的规则）；标为 "filled from validation" 的字段（sam3.selected、area_cap）只从训练集和验证集写，写完提交，再跑测试集。
+  4. 每一步的固定动作：写代码和测试 → 跑该测试文件 → 跑整套 → 只 add 本步的文件，提交信息 "E5 inference: <步骤>" → 实现进度.txt 第三节加一行 → 到里程碑（第 0、6、9、13 步）在 docs/ops/00 第三节记一段，标 工作站albert。
+  5. 不碰：bs_frozen.yaml、protocol.yaml 的已冻结项、official_code/。
+  6. 每步标题下一行列出新建 / 修改的文件及位置（2026-10-12 加）；计划中的标“计划”，做完改成实际清单，提交后补提交号。共用的 bench/tests/test_e5_infer.py 每步追加一段，段首注释 "# ---- step N"，便于只提交某一步。
+
+一、步骤 0：把 e5_frozen.yaml 对齐到 16，先定九件事（需用户决定，括号里是建议）  完成 2026-10-12，提交 e886f2a（969d1f5 经用户回撤后连同五处漏改一起重提）；用户决定 D1 按 16、D2–D9 按建议；整套测试 168 / 18 / 6 / 4
+  文件（已完成，提交 e886f2a）：改 bench/configs/e5_frozen.yaml、docs/design/15_基础模型任务.txt、docs/paper/14_论文方法与备注.txt、docs/paper/16_范围精简.txt、docs/paper/retiseg_paper/paper/scripts/build_placeholder.py、docs/ops/00_进度.txt（步骤 0 一段）；新建 bench/tests/test_e5_infer.py（步骤 0 段，2 个用例）。
+  16（2026-10-11）优先于 15；e5_frozen.yaml（2026-10-12）照的是 15 的完整设计，和 16 第三节、17 第六节有以下出入，写代码之前先定：
+  D1 a 档自动掩码的参数。e5_frozen 和 15 第三节第 8 条：只用作者两套参数，不调；16 E5a："点密度网格缩为 {64, 128}，面积上限缩为 {0.5%, 2%, 100%}"；17 第六节："先在验证池上做 e5_frozen.yaml 登记的网格选择"。（建议按 15/e5_frozen：两套作者参数都跑、都报，不选；面积上限只是对同一批掩码的后处理，训练集最大连通域、0.5%、2% 三档都报、不另推理；验证池只用于 SAM 3 措辞和 Dice 阈值。16 的 E5a 一行改措辞，00 记一笔。）
+  D2 验证池。15 第四节：DDR 验证集；17 第六节：IDRiD 验证 10 张加 DDR 验证 149 张。（建议只用 DDR 验证集，e5_frozen 的 select_on 已是 DDR val；IDRiD 的 10 张不稳，与 16 对 E2c 的理由相同。）
+  D3 b 档 SAM 的骨干。e5_frozen weights.used_by 把 sam_vit_h 给了 "SAM b"；16 和 STRUCTURE 图 5b 写 SAM ViT-B，ViT-H 进未来工作。（建议按 16：ViT-B，sam_vit_b_01ec64.pth 已在权重表；e5_frozen 的 used_by 和 oracle.models 改。）
+  D4 k 的档位。e5_frozen [1, 5, 10, 20, all]；16 {1, 5, 20, 全部}。（建议按 16 报四档；解码按"全部"做一次，k 图是前缀，10 可以零成本补，是否进论文由用户定。）
+  D5 点提示的模型。e5_frozen：SAM、SAM 2 都做点；16：点只做 SAM 2.1。（建议按 16。）
+  D6 b 档的测试集。15 第六节第 5 条：k = 全部跑 7 个测试集，曲线只画 IDRiD、DDR；论文占位数据只有 IDRiD、DDR、TJDR-std。（建议按 15：k = 全部 7 个集，k 曲线只在 IDRiD、DDR。）
+  D7 TJDR_uwf 在 G1 下的画布。e5_frozen 写"E3a 的每度像素画布"，但 E3a 的参照视野来自训练源（IDRiD 50° → 3830，DDR 45° → 4256），推理档没有训练源。（建议取 DDR 45° → 4256，与阈值和措辞的来源一致；照 E3a 另报 __fov 变体 1440。）
+  D8 零样本"任意病灶"图怎么落盘。四类目录写同一张图：评测的 AUPR_any_lesion 就是这张图的合并 AUPR；逐类 AUPR 也会算出来，只作"不分类别"的参照。（建议采用，写进 e5_frozen 的 outputs 注释。）
+  D9 文件名。15 第十一节写 oracle.py，17 第九节写 prompted.py。（建议 prompted.py，15 加一句。）
+  改动：bench/configs/e5_frozen.yaml（oracle.models、oracle.k、weights.used_by、geometry.G1 的 TJDR_uwf 参照、outputs 注释、area_cap 的三档）；docs/paper/16 E5a 行措辞；docs/ops/00 一段；docs/paper/14 M9 的"理想提示"段按 D3–D5 改；15 第十一节的文件名。
+  验证：新测试 bench/tests/test_e5_infer.py::test_frozen_scope_matches_16（读 e5_frozen.yaml，断言 oracle.models == {SAM: [boxes], SAM 2: [points, boxes], MedSAM: [boxes]}，k 列表，sam_vit_b 给 "SAM b"，sam3.phrases 每类 3 条）。
+  提交："E5 inference: align e5_frozen.yaml with the 16 scope (D1–D9)"。工作站albert。
+
+二、步骤 1：bench/e5/frozen.py，读协议并检查就绪  完成 2026-10-12，提交 7b2d482；3 个用例，整套 171 / 18 / 6 / 4
+  文件（已完成，提交 7b2d482）：新建 bench/e5/__init__.py、bench/e5/frozen.py；改 bench/tests/test_e5_infer.py（追加 "step 1" 段，3 个用例）。
+  内容：load_frozen() 读 e5_frozen.yaml；phrase_ids()（措辞编号 → 文本）；assert_ready(frozen, tier, split)：跑测试集之前要求 area_cap 已填、sam3.selected 四类齐（a 档）、提示文件存在（b 档）；跑验证集不要求。
+  验证：toy yaml 的通过和拒绝两条用例。工作站albert。
+
+三、步骤 2：bench/e5/geometry.py，画布与窗口  完成 2026-10-12，提交 bdbfbd6；3 个用例，整套 174 / 18 / 6 / 4
+  文件（已完成，提交 bdbfbd6）：新建 bench/e5/geometry.py；改 bench/tests/test_e5_infer.py（追加 "step 2" 段，3 个用例）。
+  内容：canvas_for(set_name, image_id, frozen, split)：标准视野用 load_example(..., 1440, mean=0, std=1, masks=False) 的 uint8 画布（SAM 系列自己归一化，所以这里不归一化，只取 canvas["image"]、canvas["canvas_fov"]、crop、original_hw）；TJDR_uwf 按 D7 用 e3a.target_long_side 的规则算长边。windows(canvas_hw, window, overlap)：复用 bench.infer.window_starts 得到 (top, left) 列表（G1）；G2 是整画布一张。paste(score_canvas, canvas_meta) → 原图尺寸：复用 bench.predict._resize_plane 的做法（双线性回贴到 FOV 框，视野外 0）。
+  验证：玩具画布 100×80、窗口 64、重叠 0.5 的窗口起点与 bench.infer 一致；回贴后尺寸等于原图、视野外为 0。工作站albert。
+
+四、步骤 3：bench/e5/prompts.py，b 档提示文件  完成 2026-10-12，提交 718e882；3 个用例，整套 177 / 18 / 6 / 4
+  文件（已完成，提交 718e882）：新建 bench/e5/prompts.py；改 bench/e5/frozen.py（prompt_file、assert_ready 加 variant 参数，TJDR_uwf 的 fov 变体文件名带 __fov）、bench/tests/test_e5_infer.py（追加 "step 3" 段，3 个用例）。运行时写 runs/E5_prompts/<测试集>_<划分>.json（runs/ 不进 Git）。
+  内容：对一个测试集的 split（test，另有 val 用于阈值），逐图逐类：1440 画布真值（load_example 的 canvas["masks"]）取八连通域（scipy.ndimage.label，3×3 结构）；连通域按（最小行，最小列）排序；PCG64(20261003) 用 spawn 按 (图像编号, 类别) 派生子流做一次无放回排列；每个连通域记紧框 [x0, y0, x1, y1]（画布坐标）、正点（distance_transform_edt 的最大值像素，相同距离取行主序第一个）、面积、排列后的序号。写 runs/E5_prompts/<测试集>_<split>.json：规则、k 列表、每图每类的连通域数、全部提示、真值文件的 sha256。k 不进文件，读的时候取前 k 个。
+  命令：python -m bench.e5.prompts --set IDRiD --split test。
+  验证（玩具真值）：同一真值两次生成逐字节相同；k=1 的提示是 k=5 的前缀；框和点都落在各自的连通域内；点到边界的距离是该连通域的最大值；连通域计数等于 label 的结果；真值改一个像素哈希就变。
+  数据：真实测试集的提示文件在 Luming 的工作站或服务器生成（runs/ 不进 Git，可重生成）。工作站albert 只跑玩具测试。
+
+五、步骤 4：bench/e5/score_rules.py，掩码到像素分数  完成 2026-10-12，提交 1f0bfb6；3 个用例，整套 180 / 18 / 6 / 4
+  文件（已完成，提交 1f0bfb6）：新建 bench/e5/score_rules.py；改 bench/tests/test_e5_infer.py（追加 "step 4" 段，3 个用例）。
+  内容：masks_to_score(masks, canvas_hw, key)：每个掩码带 segmentation（窗口坐标）、window 偏移、predicted_iou、stability_score；像素分数取覆盖它的全部掩码（跨窗口）的 key 最大值，没覆盖记 0。oracle_class(masks, gt_masks)：每个掩码分给重叠像素最多的真值类别，与四类都不重叠的分到全部四类；返回四张图。area_cap(masks, fraction, fov_pixels)：去掉面积超过 fraction × 画布视野像素数的掩码，fraction 取 e5_frozen 的 area_cap_fraction 三档。any_lesion 的四类同图落盘按 D8。
+  验证（玩具掩码）：两个重叠掩码取最大值；跨窗口偏移正确；oracle_class 的分配和假阳性规则；面积上限筛掉的数量。工作站albert。
+
+六、步骤 5：取消（2026-10-12；原因记在步骤 4 的提交 1f0bfb6 的说明里）。D1 之后面积上限是画布视野面积的比例 {0.5%, 2%, 不限}，推理时逐图按 canvas_fov 的像素数算，不再需要训练集最大连通域，也没有要写回 e5_frozen.yaml 的数值；比例版的 area_cap 在步骤 4 的 score_rules.py 里实现。原步骤（bench/e5/area_cap.py 读 IDRiD、DDR 训练集算最大连通域，数值单独提交）作废。
+
+七、步骤 6：bench/e5/outputs.py，运行目录、记录与评测（里程碑）  完成 2026-10-12，提交 1f1d34f；2 个用例，整套 182 / 18 / 6 / 4
+  文件（已完成，提交 1f1d34f）：新建 bench/e5/outputs.py；改 bench/eval/evaluate.py（evaluate 加可选参数 val_thresholds，默认行为不变，结果多一个 val_thresholds_given 字段）、bench/tests/test_e5_infer.py（追加 "step 6" 段，2 个用例）、docs/ops/00_进度.txt（里程碑一段）。运行时写 runs/E5/<档>/<来源>/<测试集>[__变体]/{prob_test|prob_val, predicted.json, metrics.json, metrics.npz, done.json}。
+  内容：source_name(tier, model, params/kind)；out_dir(tier, source, set, variant)；write_predicted(dir, payload)（照 e3a._write_predicted，字段：tier、model、checkpoint 文件名和 sha256、几何、参数集、n_images、excluded、predict_seconds、host/gpu/torch/git）；evaluate_dir(tier, source, set, variant, frozen, drop_maps)：照 e3a.evaluate_set，但 Dice 阈值来自同一来源在 DDR 验证集上的 prob_val（runs/E5/<档>/<来源>/DDR-val/prob_val），没有就只报固定阈值；done.json 记 maps_dropped（FGADR、Retinal-Lesions 的图照 E3a 的 --drop-maps 删）。is_done()。
+  验证：照 bench/tests/test_e3a.py 的做法，玩具 prepared 数据集 + 手写概率图，evaluate_dir 产出 metrics.json、done.json，AUPR_any_lesion 存在；drop_maps 后 prob_test 不在而 metrics.npz 在。工作站albert。
+  00 记一段（里程碑：布局定了）。
+
+八、步骤 7：bench/e5/amg.py，SAM / SAM 2.1 自动掩码（a 档）  完成 2026-10-12，提交 36a43ea；2 个用例，整套 184 / 18 / 6 / 4
+  文件（已完成，提交 36a43ea）：新建 bench/e5/amg.py；改 bench/e5/outputs.py（pool_thresholds 加 variants；evaluate_dir 加 exclude；变体 token 允许单下划线）、bench/tests/test_e5_infer.py（追加 "step 7" 段，2 个用例）。不碰 official_code/。
+  内容：build_generator(model, params, frozen, device)：SAM 用 foundation.official("segment-anything") 导入 sam_model_registry 和 SamAutomaticMaskGenerator，权重 foundation.weights("sam_vit_h_4b8939.pth")；SAM 2.1 用 foundation.official("sam2", purge=("sam2",)) 导入 build_sam2 和 SAM2AutomaticMaskGenerator，more_masks 那套按 apply_postprocessing=False 构建；参数全部来自 e5_frozen.yaml 的 generator 节，代码里不写数字。run(model, params, set_name, split, geometry, device)：逐图取画布 → G1 窗口（1024，重叠 0.5）或 G2 整图 → 每窗 generate → 掩码加窗口偏移 → score_rules 出"任意病灶"图（主）、__oracle_class 图（读真值，只作上界）、__areacap 图 → 回贴原图 → write_prob → write_predicted。记录 SAM 2 的 min_mask_region_area 后处理是否真的执行（15 第五节第 2 条的注意）。
+  命令：python -m bench.e5.amg --model SAM --params default --set DiaRetDB1 --split test --geometry G1。
+  验证：注入一个假的 generator（generate 返回手写掩码字典），断言窗口偏移、三个输出目录、predicted.json 的字段、参数确实来自 yaml；不下权重。工作站albert。
+  真实冒烟（权重 + 显卡）：服务器，或工作站albert 下载公开权重后用合成图试一张（用户决定）。
+
+九、步骤 8：bench/e5/prompted.py，点框提示（b 档）  完成 2026-10-12，提交 3e181c7；3 个用例，整套 187 / 18 / 6 / 4
+  文件（已完成，提交 3e181c7）：新建 bench/e5/prompted.py、bench/e5/same_info.py（8b）；改 bench/e5/outputs.py（needs_prediction 助手）、bench/e5/amg.py（改用该助手；BACKBONE_TOKEN 加 medsam_vit_b）、bench/tests/test_e5_infer.py（追加 "step 8" 段，3 个用例）。
+  内容：读提示文件；SAM ViT-B 和 SAM 2.1 用各自的 ImagePredictor：每个提示在"框中心离窗口边缘最远"的 G1 窗口里解码，一张图每个窗口只 set_image 一次；点：multimask_output=True 取 predicted IoU 最高的掩码；框：multimask_output=False；return_logits 后 sigmoid。MedSAM：照 MedSAM_Inference.py，窗口缩到 1024、逐图最小最大归一、框提示、256 输出 sigmoid 后双线性放大。每类对"全部"提示解码一次，按排列顺序存每个提示的概率，k 图 = 前 k 个的逐像素最大值（前缀性质，不重复解码）；没有提示覆盖的像素 0。k 按 D4 的档位各写一个变体目录。
+  验证：假的 predictor（set_image 记录被调用的窗口，predict 返回与框同形的常数概率），断言窗口选择规则、每窗一次编码、点取最高 IoU、k 图是前缀的最大值、MedSAM 的归一化路径。工作站albert。
+
+十、步骤 9：bench/e5/sam3_text.py 与 retiseg-sam3 环境（里程碑）  完成 2026-10-12，提交 c9d9eb6；2 个用例，整套 189 / 18 / 6 / 4
+  文件（已完成，提交 c9d9eb6）：新建 bench/e5/sam3_text.py；改 bench/e5/outputs.py（_pool_totals 抽出公共部分，加 pool_class_aupr）、bench/scripts/cluster_env.sh（TORCH_INDEX_SAM3、sam3_ok、install_sam3、主流程按 RETISEG_SKIP_SAM3 调用、权重清单加 sam3.pt；末尾改成按参数分派：不带参数建全部环境，sam3 / retiseg / hacdr 只建一个）、bench/scripts/server_run.sh（文件头一行；check 阶段若有 retiseg-sam3 则在其中跑 test_e5_infer.py）、bench/tests/test_e5_infer.py（追加 "step 9" 段，2 个用例）、docs/ops/00_进度.txt（里程碑一段）。SAM 3 的环境绑定写在步骤 11 的启动器里，不改 launch_b1.py 的 _BINDING。
+  内容：Sam3Processor(confidence_threshold=0)；set_image 传 PIL 图（15 第五节第 4 条）；每类每条措辞 set_text_prompt 一次；像素分数 = 各查询"分数 × 掩码概率"的最大值；G1 窗口 1008、重叠 0.5；每条措辞一个来源目录 a_sam3_<类>_<措辞编号>。select_phrases(frozen, metrics_of_ddr_val)：按 DDR 验证集每类 AUPR 选一条，打印可粘进 e5_frozen.yaml sam3.selected 的 yaml。环境：bench/scripts/cluster_env.sh 加 retiseg-sam3（Python 3.12、torch ≥2.7、CUDA ≥12.6，pip install -e official_code/sam3，自检打印版本）；server_run.sh 的 env 阶段调用；launch 的环境绑定表给 SAM 3 用 retiseg-sam3。
+  验证：假的 processor 输出测分数规则；玩具指标测措辞选择；cluster_env.sh 用 bash -n 过语法。工作站albert（torch 2.11 可以建 retiseg-sam3 做导入自检，权重可用 HF token 下，是否下由用户定）。
+  00 记一段。
+
+十一、步骤 10：验证集运行与两处回填（服务器）
+  文件（服务器）：改 bench/configs/e5_frozen.yaml（只填 zero_shot.grid.selected、zero_shot.sam3.selected）、docs/ops/00_进度.txt。运行时写 runs/E5/<档>/<来源>/IDRiD-val、DDR-val。
+  顺序：a、b 两档全部来源先跑 DDR 验证集（b 档要先生成 DDR val 的提示文件）→ 评测得每类 Dice 阈值（evaluate 的 val_pred_dir）→ SAM 3 三种措辞的 DDR val AUPR → select_phrases 写回 e5_frozen.yaml sam3.selected → area_cap 数值（步骤 5）写回 → 提交 → 00 记一段。这一步之后 e5_frozen.yaml 不再改。
+
+十二、步骤 11：bench/scripts/launch_e5_infer.py 与 server_run.sh 的 e5-infer 阶段  完成 2026-10-12，提交 b47e724；5 个用例，整套 194 / 18 / 6 / 4
+  文件（已完成，提交 b47e724）：新建 bench/scripts/launch_e5_infer.py、bench/tests/test_launch_e5_infer.py；改 bench/scripts/server_run.sh（e5-infer 阶段和文件头的用法说明）、bench/e5/amg.py、prompted.py、sam3_text.py、same_info.py（各加 planned()，run 改用它算目录；sam3_text 另加 planned_selected）。
+  内容：照 launch_e3a.py：discover() 列出 (档, 来源, 环境, argv, 测试集)；done.json 在的跳过；console.log 有活进程的跳过；SAM 3 项用 retiseg-sam3，其余 retiseg；排序：验证集项最前，然后按画布像素从多到少；--only、--sets、--drop-maps FGADR,Retinal-Lesions 透传；复用 launch_b1.run_queue。server_run.sh 加 e5-infer（RETISEG_GPUS 必填）。
+  验证：discover 在玩具 runs/ 目录上的枚举和跳过；命令行拼装。工作站albert。
+
+十三、步骤 12：论文收集 collect_runs.py 读 runs/E5  12a 与 12 完成 2026-10-12，提交 5b99ea5（12a）、1992cdf（12）；这台机器没有 pandas，paper/scripts/test_collect_runs.py 的 E5 检查要在 Luming 的工作站跑；本地只用桩 pandas 验证了 e5_rows 的解析
+  文件（已完成，提交 5b99ea5 / 1992cdf）：12a 改 docs/paper/retiseg_paper/paper/figures/fig5_foundation.py（去 SAM 点提示行；ks 四档；折线只剩 SAM 框、SAM 2 框和点、MedSAM 框）、docs/paper/retiseg_paper/paper/scripts/make_tables.py（表 6 去 SAM 点提示行，SAM 框提示骨干改 ViT-B）；12 改 docs/paper/retiseg_paper/paper/scripts/collect_runs.py（rows_from_report 对所有报告加 cls "any" 的任意病灶 AUPR 行；新增 e5_set / e5_rows / collect_e5 读 runs/E5，main 并入；文件头加一行）、scripts/test_collect_runs.py（e5_report / e5_toy / check_e5，main 末尾调用）。之后由 Luming 在有 pandas 的机器上跑 test_collect_runs.py、build_placeholder.py --force、两个 collect 和 make。
+  前置（步骤 12a，现存问题 4、8）：figures/fig5_foundation.py 的 ks 改为 [1, 5, 20, "all"]、去掉 SAM 点提示两行；scripts/make_tables.py 去掉 SAM 点提示行、SAM 的 b 档骨干改 ViT-B；然后在有 pandas 的机器上 build_placeholder.py --force 并重跑两个 collect、make 一次。工作站albert 只改代码。
+  内容：runs/E5/a/<来源>/<集>/metrics.json → experiment E5、model "SAM" | "SAM 2" | "SAM 3"、variant "zero_shot:auto_any_lesion" | "zero_shot:auto_oracle_class" | "text:<措辞>"、train_set "none"、seed -1；runs/E5/b → variant "oracle:<box|point>:<k>"（与 build_placeholder.py 第 342–386 行的键一致，占位行会被替换）；测试集名经 E3A_SET 映射。scripts/test_collect_runs.py 加用例。
+  验证：这台机器没有 pandas，测试在 Luming 的工作站或服务器跑；工作站albert 只写代码。
+
+十四、步骤 13：服务器冒烟与全量（17 第六节；里程碑）
+  文件（服务器）：不改代码。写 runs/E5/…；改 docs/ops/00_进度.txt、docs/ops/17_服务器任务单.txt（第六、九节标完成）、docs/paper/14_论文方法与备注.txt（M9 待补改为事实）、docs/paper/13_整体安排与文章结构.txt（第三节 E5 行状态）。
+  冒烟：每种用法各 2 张 DDR 验证图，核对输出尺寸等于原图、视野外为 0、显存、每张耗时；SAM 2 后处理是否执行；写进 00。
+  全量：验证集（步骤 10）→ 7 个测试集；a 档约 40 GPU 时，b 档约 12；FGADR、Retinal-Lesions 用 --drop-maps。回传 runs/E5 的 json（17 第一节）。
+  之后：collect_runs.py，make -C docs/paper/retiseg_paper/paper；14 M9 的"待补"逐条划掉；13 第三节 E5 行改状态；17 第六、九节标完成。
+
+十五、机器分工（2026-10-12 按步骤 0 之后的流程重排）
+  工作站albert（无数据、无权重、有 torch 2.11 和 5090；测试在 16GB 上限下的 CPU 跑）：
+    能做完的：步骤 1 frozen.py、2 geometry.py、3 prompts.py、4 score_rules.py、6 outputs.py、7 amg.py、8 prompted.py、8b same_info.py、9 sam3_text.py 和 cluster_env.sh 的 retiseg-sam3 段、11 launch_e5_infer.py 与 server_run.sh、12a 论文脚本改键、12 collect_runs.py 读 runs/E5。全部是代码加玩具数据或假模型的单元测试，每步跑整套 bench/tests 比对 18 / 6 / 4。
+    只能做一半的：12a 和 12 的代码能写，但 make、build_placeholder、test_collect_runs.py 要 pandas、matplotlib、TeX，这台机器没有。
+    可选（用户决定）：建 retiseg-sam3 做导入自检；下载公开权重用合成图在 5090 上试 amg.py / prompted.py 一张；若同步 IDRiD、DDR 的 prepared 数据，步骤 3 的真实提示文件和 a、b 档的冒烟也能在这里跑。
+  Luming 的工作站（有数据和 torch 2.6、pandas、matplotlib、TeX；无大显卡）：
+    必须由 Luming 做：12a 之后的 build_placeholder.py --force、两个 collect、make -C paper 一次；12 的 test_collect_runs.py；合并 albert 进 main（main 是 Luming 的）。
+    可以由 Luming 做也可以由服务器做：步骤 3 的真实提示文件（读测试集真值，CPU）；每步代码在 torch 2.6 下再跑一次整套测试（服务器的 check 阶段也会跑）。
+  服务器（数据、权重、A100）：retiseg-sam3 环境、权重与 sha256、步骤 10（验证池运行、选择写回 e5_frozen.yaml）、8b 的实际运行（概率图只在服务器上）、步骤 13（冒烟与全量）、E5 回传。
+  估计：工作站albert 的代码步各 0.5–2 小时；每步一次整套测试约 30 秒。
+
+十六、风险与备注
+  1. ViT-H 在 16GB 上限下建不出来（与 H2Former 同类），所以本地测试全部注入假模型；真实网络只在服务器冒烟。
+  2. SAM2-UNet 自带的 sam2 包和 official_code/sam2 同名，导入用 foundation.official(purge=("sam2",))，同一进程里不要先后混用两个。
+  3. SAM 2 的 min_mask_region_area 依赖 CUDA 连通域算子，失败时静默跳过；predicted.json 必须记下是否执行。
+  4. b 档读了测试真值，是上界；a 档的 __oracle_class 同理。这两类目录名带 oracle，论文表里单独成块，不进 Friedman。
+  5. 磁盘：a 档每个来源 7 个集的 16 位概率图与 E3a 同量级（1–10GB），FGADR、Retinal-Lesions 的图评完即删。
+  6. 服务器的 retiseg 是 torch 2.6、Python 3.11，SAM / SAM 2 够用；只有 SAM 3 要 retiseg-sam3。
+
+十七、步骤 0 展开（2026-10-12，工作站albert；用户要求：能按 16 的都按 16）
+每条：各方怎么说（文件:位置）→ 按 16 意味着什么 → 代价与副作用 → 建议。16 没说的（D2、D6–D9）按 15/17 和一致性定，列为建议待确认。
+
+D1 a 档自动掩码的参数与面积上限
+  各方：15 第三节第 8 条和第五节第 1、2 条、e5_frozen.yaml zero_shot.generator：只用作者两套参数（库默认 points_per_side 32；notebook 的"更多掩码"），不调，"唯一用到标签的选择是 SAM 3 的措辞"；area_cap 一档（训练集最大连通域，只作敏感性）。16 第三节 E5a 行：点密度网格缩为 {64, 128}，面积上限缩为 {0.5%, 2%, 100%}，类别神谕上界保留。17 第六节：先在验证池上做 e5_frozen 登记的网格选择，选中的写回并提交，再跑 7 个测试集。14 M9"零样本"段照 15 写。
+  按 16：登记网格 points_per_side ∈ {64, 128} × 面积上限 ∈ {0.5%, 2%, 100%}（上限按画布 FOV 面积的比例，100% = 不限），其余生成器参数取库默认（SAM pred_iou 0.88 / stability 0.95，SAM 2 0.8 / 0.95，crop_n_layers 0）。两档点密度各推理一次，三档面积上限是同一批掩码的后处理，不另推理。选择：在验证池上按 AUPR_any_lesion（a 档主指标）选一组，写进 e5_frozen 的 zero_shot.selected，提交后只用选中的一组跑 7 个测试集；验证池上 6 组的数字全部报（敏感性）。oracle_class 上界和"任意病灶"主结果不变。
+  代价（粗估，±2 倍，冒烟后重估；A100）：1440 画布切 1024 窗、重叠 0.5 是每图 2–4 窗，TJDR_uwf 在 4256 画布是 64 窗（起点 0、512、…、3072 再加贴边的 3232，每边 8 个；步骤 2 的测试核过，之前写 49 是算错）；7 个测试集约 7900 窗/模型/组，验证池 159 张约 500 窗。ViT-H 编码约 0.4 秒/窗；自动掩码 32² 点约 3–6 秒/窗，64² 约 4 倍，128² 约 16 倍。于是验证池选择：64 约 3 GPU 时、128 约 10 GPU 时/模型；测试集：64 当选约 45 GPU 时/模型，128 当选约 150 GPU 时/模型（其中 TJDR_uwf 占近一半）。16 给 a 档的总预算约 40 GPU 时，128 当选会超。
+  副作用：15 第三节第 8 条、14 M9 零样本段、e5_frozen 的注释要改成"a 档参数在验证池上从登记的网格里选，不在测试集上调"；论文方法段同改。
+  建议：按 16 的网格；事先登记一条预算规则：若 128 当选，TJDR_uwf 只跑 __fov 变体（1440 画布，2–4 窗），每度像素的主变体不跑（约省三分之一）；仍超预算时由用户在 00 决定是否接受。[需用户确认：网格按 16；预算规则]
+
+D2 验证池
+  各方：15 第四节：DDR 验证集（选 SAM 3 措辞和推理档 Dice 阈值）；e5_frozen sam3.select_on: DDR val。17 第六节：验证池 = IDRiD 验证 10 张 + DDR 验证 149 张。16 第六节排期用了"验证池"一词但没定义。
+  按 16/17：池 = 159 张；a 档网格、SAM 3 措辞、Dice 阈值都在池上选。
+  代价：阈值要把两个库的验证像素直方图合并后取 Dice 最优（bench/eval/pixel.best_dice_threshold），bench/eval/evaluate.evaluate 现在只接受一个 val_dataset_dir，要加一个可选参数传入现成阈值（默认行为不变，配测试）。像素数上 DDR 占绝大多数，IDRiD 10 张影响很小。
+  建议：按 17 的池（与 16 的用词一致）；15 第四节改一句。[待确认]
+
+D3 b 档 SAM 的骨干
+  各方：e5_frozen weights 节 sam_vit_h_4b8939 used_by [SAM a, SAM b, SAM-Adapter]；15 第六节第 1 条 SAM（ViT-H）。16 E5b 行和 STRUCTURE 图 5b：SAM ViT-B；ViT-H 进未来工作。
+  按 16：b 档用 sam_vit_b_01ec64.pth（已在权重表，SAMed 同一文件）；a 档仍是 ViT-H（16 没改 a 档的模型）。
+  代价：ViT-B 编码约为 ViT-H 的十分之一，b 档更便宜。表 6 骨干列写 "SAM ViT-B（b 档）/ ViT-H（a 档）"。
+  建议：按 16。
+
+D4 k 的档位
+  各方：e5_frozen oracle.k [1, 5, 10, 20, all]；15 第六节第 2 条同；16：{1, 5, 20, 全部}；STRUCTURE 图 5b 同 16；论文占位数据有 k=10 的行（build_placeholder.py:383）。
+  按 16：四档。提示文件仍按"全部"生成并排好序，解码只做一次，k 图是前 k 个的最大值，所以 k=10 零成本，但不写、不报。
+  副作用：build_placeholder.py 的 k 元组去掉 10 并重生成占位（否则 k=10 的占位行永远不会被实测行替换，图 5b 留一个 simulated 点）；按 paper/README 重生成后要再跑两个 collect。
+  建议：按 16。
+
+D5 点提示的模型
+  各方：e5_frozen oracle.models {SAM: [points, boxes], SAM 2: [points, boxes], MedSAM: [boxes]}；16：框为主，点只做 SAM 2.1。
+  按 16：{SAM: [boxes], SAM 2: [points, boxes], MedSAM: [boxes]}。
+  副作用：build_placeholder.py 去掉 ("SAM", "point") 的占位；14 M9 理想提示段改。
+  建议：按 16。
+
+D6 b 档的测试集与曲线
+  各方：15 第六节第 5 条：k = 全部跑 7 个测试集，曲线只在 IDRiD、DDR；15 第十七节图 5b 写 IDRiD 测试；占位数据只有 IDRiD、DDR、TJDR-std；16 不涉及。
+  建议：k = 全部 7 个集（进表 6 和图 5a 热图），k 曲线只在 IDRiD、DDR（图 5b 画 IDRiD，DDR 进扩展数据）；TJDR-std 的占位行会被 k=all 的实测替换，其余 k 的占位行删掉。[待确认]
+  另（16 E5b 行和第四节第 6 条）：同信息对照 "给监督模型同样的框"，参考线是 M2MRF、nnU-Net 加同样框。做法：把这两个模型已有的测试概率图乘以 k 个框并集的掩码再评测，CPU、不占卡，概率图在服务器上。加为步骤 8b：bench/e5/same_info.py，输出 runs/E5/b/ref_<模型>_<训练源>/<集>__k<k>/，collect 键 "oracle_ref:box:<k>"（占位里没有，图 5 脚本加参考线）。
+
+D7 TJDR_uwf 在 G1 下的画布
+  各方：e5_frozen geometry.G1 写 "E3a 的每度像素画布"；E3a 的参照取训练源视野（IDRiD 50° → 3830，DDR 45° → 4256，e3a_frozen train_field_degrees）；推理档没有训练源；16 不涉及。
+  建议：主变体按 45° → 4256（与 E3a 里 DDR 训练的模型同一画布，便于同图比较；45° 也是 DDR、EyePACS 类相机的常见视野），另报 __fov 变体 1440（与 E3a 一致）。按 D1 的预算规则，128 当选时只跑 __fov。[待确认]
+
+D8 零样本"任意病灶"图怎么落盘
+  各方：bench.eval 只认四类目录；protocol.yaml 的 any_lesion 取四类概率的逐像素最大值；16 不涉及。
+  两种做法：(a) 四类目录写同一张图，AUPR_any_lesion 即该图的合并 AUPR，逐类 AUPR 作"不分类别"参照；(b) 改 bench.eval 接受单通道输入，动了已冻结的评测工具。
+  建议：(a)，写进 e5_frozen outputs 注释。[待确认]
+
+D9 文件名
+  15 第十一节 oracle.py，17 第九节 prompted.py。建议 prompted.py，15 加一句。[待确认]
+
+按 16 之后 e5_frozen.yaml 的改动清单（步骤 0 的提交内容）
+  weights.sam_vit_h_4b8939.used_by: [SAM a, SAM-Adapter]；weights.sam_vit_b_01ec64.used_by: [SAMed, SAM b]
+  zero_shot.sam / sam2 的 generator 节改为 grid: {points_per_side: [64, 128], 其余库默认}；加 area_cap_fractions: [0.005, 0.02, 1.0]（按画布 FOV 面积）；加 select_on: validation pool (IDRiD val + DDR val), AUPR_any_lesion；加 selected: {}；加 budget_rule: "128 selected -> TJDR_uwf fov variant only"；去掉 area_cap: null 那行（训练集最大连通域不再是上限的定义，可留作记录）
+  sam3.select_on: 验证池
+  geometry.G1.TJDR_uwf: 4256（45°）主变体 + fov 1440
+  oracle.models: {SAM: [boxes], SAM 2: [points, boxes], MedSAM: [boxes]}；oracle.k: [1, 5, 20, all]；oracle.sam_checkpoint: sam_vit_b_01ec64.pth；加 same_information_reference: [M2MRF, nnU-Net]
+  outputs 注释加 D8
+  同一提交：16 E5a 行措辞（"选中的参数在验证池上定"）；15 第三节第 8 条、第四节、第十一节；14 M9 零样本、理想提示、检查点三段；build_placeholder.py 的 k 和 ("SAM","point")；00 一段；STRUCTURE 不改。
