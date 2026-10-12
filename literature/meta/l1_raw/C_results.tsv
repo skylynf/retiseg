@@ -1,0 +1,534 @@
+paper	table	dataset	method	method_norm	is_proposed	lesion	metric	value	provenance_stated	provenance_ref	notes
+Guo2024_deep_multiscale	Table 3	IDRiD	Guo et al. (Guo et al., 2019)	L-Seg	no	MA	AUPR	0.4627	cited	Guo2019	HE 0.6734 differs from L-Seg paper (0.6374); four-lesion mean
+Guo2024_deep_multiscale	Table 3	IDRiD	Guo et al. (Guo et al., 2019)	L-Seg	no	HE	AUPR	0.6734	cited	Guo2019	HE 0.6734 differs from L-Seg paper (0.6374); four-lesion mean
+Guo2024_deep_multiscale	Table 3	IDRiD	Guo et al. (Guo et al., 2019)	L-Seg	no	EX	AUPR	0.7945	cited	Guo2019	HE 0.6734 differs from L-Seg paper (0.6374); four-lesion mean
+Guo2024_deep_multiscale	Table 3	IDRiD	Guo et al. (Guo et al., 2019)	L-Seg	no	SE	AUPR	0.7113	cited	Guo2019	HE 0.6734 differs from L-Seg paper (0.6374); four-lesion mean
+Guo2024_deep_multiscale	Table 3	IDRiD	Guo et al. (Guo et al., 2019)	L-Seg	no	mean	AUPR	0.6605	cited	Guo2019	HE 0.6734 differs from L-Seg paper (0.6374); four-lesion mean
+Guo2024_deep_multiscale	Table 3	IDRiD	Yan et al. (Yan et al., 2019)	Yan2019 (local-global U-Net)	no	MA	AUPR	0.5250	cited	Yan2019	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Yan et al. (Yan et al., 2019)	Yan2019 (local-global U-Net)	no	HE	AUPR	0.7030	cited	Yan2019	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Yan et al. (Yan et al., 2019)	Yan2019 (local-global U-Net)	no	EX	AUPR	0.8890	cited	Yan2019	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Yan et al. (Yan et al., 2019)	Yan2019 (local-global U-Net)	no	SE	AUPR	0.6790	cited	Yan2019	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Yan et al. (Yan et al., 2019)	Yan2019 (local-global U-Net)	no	mean	AUPR	0.6990	cited	Yan2019	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Xie et al. (Xie et al., 2020)	Xie2020 (SESV)	no	MA	AUPR	0.5099	cited	Xie2020	MA only
+Guo2024_deep_multiscale	Table 3	IDRiD	Sarhan et al. (Sarhan et al., 2019)	Sarhan2019	no	MA	AUPR	0.4196	cited	Sarhan2019	MA only
+Guo2024_deep_multiscale	Table 3	IDRiD	Huang et al. (Huang et al., 2022)	RTNet	no	MA	AUPR	0.4897	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Huang et al. (Huang et al., 2022)	RTNet	no	HE	AUPR	0.6880	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Huang et al. (Huang et al., 2022)	RTNet	no	EX	AUPR	0.9024	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Huang et al. (Huang et al., 2022)	RTNet	no	SE	AUPR	0.7502	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Huang et al. (Huang et al., 2022)	RTNet	no	mean	AUPR	0.7076	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	MA	AUPR	0.4975	self	NA	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	HE	AUPR	0.6884	self	NA	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	EX	AUPR	0.8961	self	NA	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	SE	AUPR	0.7563	self	NA	NA
+Guo2024_deep_multiscale	Table 3	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	mean	AUPR	0.7096	self	NA	NA
+Guo2024_deep_multiscale	Table 3	DDR	Guo et al. (Guo et al., 2019)	L-Seg	no	MA	AUPR	0.1052	cited	Guo2019	NA
+Guo2024_deep_multiscale	Table 3	DDR	Guo et al. (Guo et al., 2019)	L-Seg	no	HE	AUPR	0.3586	cited	Guo2019	NA
+Guo2024_deep_multiscale	Table 3	DDR	Guo et al. (Guo et al., 2019)	L-Seg	no	EX	AUPR	0.5546	cited	Guo2019	NA
+Guo2024_deep_multiscale	Table 3	DDR	Guo et al. (Guo et al., 2019)	L-Seg	no	SE	AUPR	0.2648	cited	Guo2019	NA
+Guo2024_deep_multiscale	Table 3	DDR	Guo et al. (Guo et al., 2019)	L-Seg	no	mean	AUPR	0.3208	cited	Guo2019	NA
+Guo2024_deep_multiscale	Table 3	DDR	Huang et al. (Huang et al., 2022)	RTNet	no	MA	AUPR	0.1176	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	DDR	Huang et al. (Huang et al., 2022)	RTNet	no	HE	AUPR	0.3656	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	DDR	Huang et al. (Huang et al., 2022)	RTNet	no	EX	AUPR	0.5671	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	DDR	Huang et al. (Huang et al., 2022)	RTNet	no	SE	AUPR	0.2943	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	DDR	Huang et al. (Huang et al., 2022)	RTNet	no	mean	AUPR	0.3362	cited	Huang2022	NA
+Guo2024_deep_multiscale	Table 3	DDR	Ours	Deep-multiscale (Guo2024)	yes	MA	AUPR	0.1194	self	NA	NA
+Guo2024_deep_multiscale	Table 3	DDR	Ours	Deep-multiscale (Guo2024)	yes	HE	AUPR	0.3652	self	NA	NA
+Guo2024_deep_multiscale	Table 3	DDR	Ours	Deep-multiscale (Guo2024)	yes	EX	AUPR	0.6014	self	NA	NA
+Guo2024_deep_multiscale	Table 3	DDR	Ours	Deep-multiscale (Guo2024)	yes	SE	AUPR	0.3094	self	NA	NA
+Guo2024_deep_multiscale	Table 3	DDR	Ours	Deep-multiscale (Guo2024)	yes	mean	AUPR	0.3489	self	NA	NA
+Guo2024_deep_multiscale	Table 3	DiaRetDB1	Ours	Deep-multiscale (Guo2024)	yes	MA	AUPR	0.4677	self	NA	own re-annotation of DIARETDB1; 67/22 split
+Guo2024_deep_multiscale	Table 3	DiaRetDB1	Ours	Deep-multiscale (Guo2024)	yes	HE	AUPR	0.7630	self	NA	own re-annotation of DIARETDB1; 67/22 split
+Guo2024_deep_multiscale	Table 3	DiaRetDB1	Ours	Deep-multiscale (Guo2024)	yes	EX	AUPR	0.8115	self	NA	own re-annotation of DIARETDB1; 67/22 split
+Guo2024_deep_multiscale	Table 3	DiaRetDB1	Ours	Deep-multiscale (Guo2024)	yes	SE	AUPR	0.6343	self	NA	own re-annotation of DIARETDB1; 67/22 split
+Guo2024_deep_multiscale	Table 3	DiaRetDB1	Ours	Deep-multiscale (Guo2024)	yes	mean	AUPR	0.6691	self	NA	own re-annotation of DIARETDB1; 67/22 split
+Guo2024_deep_multiscale	Table 4	IDRiD	VRT	VRT (IDRiD challenge team)	no	MA	AUPR	0.4951	cited	idr (IDRiD grand-challenge leaderboard URL)	layout shifted in pdftotext; aligned by column header
+Guo2024_deep_multiscale	Table 4	IDRiD	VRT	VRT (IDRiD challenge team)	no	HE	AUPR	0.6804	cited	idr (IDRiD grand-challenge leaderboard URL)	layout shifted in pdftotext; aligned by column header
+Guo2024_deep_multiscale	Table 4	IDRiD	VRT	VRT (IDRiD challenge team)	no	EX	AUPR	0.7127	cited	idr (IDRiD grand-challenge leaderboard URL)	layout shifted in pdftotext; aligned by column header
+Guo2024_deep_multiscale	Table 4	IDRiD	VRT	VRT (IDRiD challenge team)	no	SE	AUPR	0.6995	cited	idr (IDRiD grand-challenge leaderboard URL)	layout shifted in pdftotext; aligned by column header
+Guo2024_deep_multiscale	Table 4	IDRiD	VRT	VRT (IDRiD challenge team)	no	mean	AUPR	0.6469	cited	idr (IDRiD grand-challenge leaderboard URL)	layout shifted in pdftotext; aligned by column header
+Guo2024_deep_multiscale	Table 4	IDRiD	PATech	PATech (IDRiD challenge team)	no	MA	AUPR	0.4740	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	PATech	PATech (IDRiD challenge team)	no	HE	AUPR	0.6490	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	PATech	PATech (IDRiD challenge team)	no	EX	AUPR	0.8850	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge team)	no	MA	AUPR	0.5017	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge team)	no	HE	AUPR	0.5588	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge team)	no	EX	AUPR	0.8741	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge team)	no	SE	AUPR	0.6588	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge team)	no	mean	AUPR	0.6484	cited	idr (IDRiD grand-challenge leaderboard URL)	NA
+Guo2024_deep_multiscale	Table 4	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	MA	AUPR	0.4975	self	NA	same numbers as Table 3
+Guo2024_deep_multiscale	Table 4	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	HE	AUPR	0.6884	self	NA	same numbers as Table 3
+Guo2024_deep_multiscale	Table 4	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	EX	AUPR	0.8961	self	NA	same numbers as Table 3
+Guo2024_deep_multiscale	Table 4	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	SE	AUPR	0.7563	self	NA	same numbers as Table 3
+Guo2024_deep_multiscale	Table 4	IDRiD	Ours	Deep-multiscale (Guo2024)	yes	mean	AUPR	0.7096	self	NA	same numbers as Table 3
+Wang2023_CLC-Net	Table 2	IDRiD	SegNet [27]	SegNet	no	MA	AUPR	0.324	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	SegNet [27]	SegNet	no	HE	AUPR	0.416	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	SegNet [27]	SegNet	no	EX	AUPR	0.655	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	SegNet [27]	SegNet	no	SE	AUPR	0.405	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	SegNet [27]	SegNet	no	mean	AUPR	0.450	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	SegNet [27]	SegNet	no	MA	AUPR	0.164	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	SegNet [27]	SegNet	no	EX	AUPR	0.454	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	SegNet [27]	SegNet	no	mean	AUPR	0.309	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	SegNet [27]	SegNet	no	MA	AUPR	0.279	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	SegNet [27]	SegNet	no	HE	AUPR	0.419	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	SegNet [27]	SegNet	no	EX	AUPR	0.565	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	SegNet [27]	SegNet	no	SE	AUPR	0.427	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	SegNet [27]	SegNet	no	mean	AUPR	0.422	rerun	NA	[27]=Badrinarayanan2017 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	Attention U-Net [42]	Attention U-Net	no	MA	AUPR	0.476	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	Attention U-Net [42]	Attention U-Net	no	HE	AUPR	0.466	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	Attention U-Net [42]	Attention U-Net	no	EX	AUPR	0.780	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	Attention U-Net [42]	Attention U-Net	no	SE	AUPR	0.475	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	Attention U-Net [42]	Attention U-Net	no	mean	AUPR	0.549	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	Attention U-Net [42]	Attention U-Net	no	MA	AUPR	0.332	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	Attention U-Net [42]	Attention U-Net	no	EX	AUPR	0.511	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	Attention U-Net [42]	Attention U-Net	no	mean	AUPR	0.422	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	Attention U-Net [42]	Attention U-Net	no	MA	AUPR	0.287	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	Attention U-Net [42]	Attention U-Net	no	HE	AUPR	0.343	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	Attention U-Net [42]	Attention U-Net	no	EX	AUPR	0.586	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	Attention U-Net [42]	Attention U-Net	no	SE	AUPR	0.342	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	Attention U-Net [42]	Attention U-Net	no	mean	AUPR	0.389	rerun	NA	[42]=Oktay2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DeepLab V3+ [28]	DeepLabv3+	no	MA	AUPR	0.479	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DeepLab V3+ [28]	DeepLabv3+	no	HE	AUPR	0.513	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DeepLab V3+ [28]	DeepLabv3+	no	EX	AUPR	0.788	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DeepLab V3+ [28]	DeepLabv3+	no	SE	AUPR	0.511	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DeepLab V3+ [28]	DeepLabv3+	no	mean	AUPR	0.573	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	DeepLab V3+ [28]	DeepLabv3+	no	MA	AUPR	0.431	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	DeepLab V3+ [28]	DeepLabv3+	no	EX	AUPR	0.461	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	DeepLab V3+ [28]	DeepLabv3+	no	mean	AUPR	0.446	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DeepLab V3+ [28]	DeepLabv3+	no	MA	AUPR	0.327	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DeepLab V3+ [28]	DeepLabv3+	no	HE	AUPR	0.224	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DeepLab V3+ [28]	DeepLabv3+	no	EX	AUPR	0.574	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DeepLab V3+ [28]	DeepLabv3+	no	SE	AUPR	0.259	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DeepLab V3+ [28]	DeepLabv3+	no	mean	AUPR	0.346	rerun	NA	[28]=Chen2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	UNet++ [43]	U-Net++	no	MA	AUPR	0.484	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	UNet++ [43]	U-Net++	no	HE	AUPR	0.478	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	UNet++ [43]	U-Net++	no	EX	AUPR	0.801	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	UNet++ [43]	U-Net++	no	SE	AUPR	0.525	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	UNet++ [43]	U-Net++	no	mean	AUPR	0.572	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	UNet++ [43]	U-Net++	no	MA	AUPR	0.258	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	UNet++ [43]	U-Net++	no	EX	AUPR	0.553	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	UNet++ [43]	U-Net++	no	mean	AUPR	0.405	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	UNet++ [43]	U-Net++	no	MA	AUPR	0.318	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	UNet++ [43]	U-Net++	no	HE	AUPR	0.385	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	UNet++ [43]	U-Net++	no	EX	AUPR	0.581	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	UNet++ [43]	U-Net++	no	SE	AUPR	0.354	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	UNet++ [43]	U-Net++	no	mean	AUPR	0.409	rerun	NA	[43]=Zhou2018 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DUpsample [44]	DUpsample	no	MA	AUPR	0.518	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DUpsample [44]	DUpsample	no	HE	AUPR	0.556	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DUpsample [44]	DUpsample	no	EX	AUPR	0.814	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DUpsample [44]	DUpsample	no	SE	AUPR	0.600	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	DUpsample [44]	DUpsample	no	mean	AUPR	0.622	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	DUpsample [44]	DUpsample	no	MA	AUPR	0.373	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	DUpsample [44]	DUpsample	no	EX	AUPR	0.580	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	DUpsample [44]	DUpsample	no	mean	AUPR	0.477	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DUpsample [44]	DUpsample	no	MA	AUPR	0.359	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DUpsample [44]	DUpsample	no	HE	AUPR	0.491	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DUpsample [44]	DUpsample	no	EX	AUPR	0.663	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DUpsample [44]	DUpsample	no	SE	AUPR	0.525	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	DUpsample [44]	DUpsample	no	mean	AUPR	0.510	rerun	NA	[44]=Tian2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CE-Net [45]	CE-Net	no	MA	AUPR	0.526	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CE-Net [45]	CE-Net	no	HE	AUPR	0.588	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CE-Net [45]	CE-Net	no	EX	AUPR	0.810	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CE-Net [45]	CE-Net	no	SE	AUPR	0.616	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CE-Net [45]	CE-Net	no	mean	AUPR	0.635	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	CE-Net [45]	CE-Net	no	MA	AUPR	0.457	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	CE-Net [45]	CE-Net	no	EX	AUPR	0.607	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	CE-Net [45]	CE-Net	no	mean	AUPR	0.532	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CE-Net [45]	CE-Net	no	MA	AUPR	0.340	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CE-Net [45]	CE-Net	no	HE	AUPR	0.507	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CE-Net [45]	CE-Net	no	EX	AUPR	0.653	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CE-Net [45]	CE-Net	no	SE	AUPR	0.514	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CE-Net [45]	CE-Net	no	mean	AUPR	0.504	rerun	NA	[45]=Gu2019 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CPFNet [46]	CPFNet	no	MA	AUPR	0.523	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CPFNet [46]	CPFNet	no	HE	AUPR	0.600	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CPFNet [46]	CPFNet	no	EX	AUPR	0.816	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CPFNet [46]	CPFNet	no	SE	AUPR	0.590	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	CPFNet [46]	CPFNet	no	mean	AUPR	0.632	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	CPFNet [46]	CPFNet	no	MA	AUPR	0.444	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	CPFNet [46]	CPFNet	no	EX	AUPR	0.652	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	e-ophtha	CPFNet [46]	CPFNet	no	mean	AUPR	0.548	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CPFNet [46]	CPFNet	no	MA	AUPR	0.373	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CPFNet [46]	CPFNet	no	HE	AUPR	0.520	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CPFNet [46]	CPFNet	no	EX	AUPR	0.677	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CPFNet [46]	CPFNet	no	SE	AUPR	0.540	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	DDR	CPFNet [46]	CPFNet	no	mean	AUPR	0.528	rerun	NA	[46]=Feng2020 architecture ref; trained by authors
+Wang2023_CLC-Net	Table 2	IDRiD	L-Seg [3]	L-Seg	no	MA	AUPR	0.463	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	IDRiD	L-Seg [3]	L-Seg	no	HE	AUPR	0.637	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	IDRiD	L-Seg [3]	L-Seg	no	EX	AUPR	0.795	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	IDRiD	L-Seg [3]	L-Seg	no	SE	AUPR	0.711	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	IDRiD	L-Seg [3]	L-Seg	no	mean	AUPR	0.652	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	e-ophtha	L-Seg [3]	L-Seg	no	MA	AUPR	0.169	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	e-ophtha	L-Seg [3]	L-Seg	no	EX	AUPR	0.417	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	e-ophtha	L-Seg [3]	L-Seg	no	mean	AUPR	0.293	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	DDR	L-Seg [3]	L-Seg	no	MA	AUPR	0.105	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	DDR	L-Seg [3]	L-Seg	no	HE	AUPR	0.359	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	DDR	L-Seg [3]	L-Seg	no	EX	AUPR	0.555	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	DDR	L-Seg [3]	L-Seg	no	SE	AUPR	0.265	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	DDR	L-Seg [3]	L-Seg	no	mean	AUPR	0.321	cited	Guo2019	'directly copied from its corresponding publication [3]'
+Wang2023_CLC-Net	Table 2	IDRiD	Ours	CLC-Net	yes	MA	AUPR	0.546	self	NA	NA
+Wang2023_CLC-Net	Table 2	IDRiD	Ours	CLC-Net	yes	HE	AUPR	0.661	self	NA	NA
+Wang2023_CLC-Net	Table 2	IDRiD	Ours	CLC-Net	yes	EX	AUPR	0.827	self	NA	NA
+Wang2023_CLC-Net	Table 2	IDRiD	Ours	CLC-Net	yes	SE	AUPR	0.672	self	NA	NA
+Wang2023_CLC-Net	Table 2	IDRiD	Ours	CLC-Net	yes	mean	AUPR	0.677	self	NA	NA
+Wang2023_CLC-Net	Table 2	e-ophtha	Ours	CLC-Net	yes	MA	AUPR	0.536	self	NA	NA
+Wang2023_CLC-Net	Table 2	e-ophtha	Ours	CLC-Net	yes	EX	AUPR	0.722	self	NA	NA
+Wang2023_CLC-Net	Table 2	e-ophtha	Ours	CLC-Net	yes	mean	AUPR	0.629	self	NA	NA
+Wang2023_CLC-Net	Table 2	DDR	Ours	CLC-Net	yes	MA	AUPR	0.386	self	NA	NA
+Wang2023_CLC-Net	Table 2	DDR	Ours	CLC-Net	yes	HE	AUPR	0.586	self	NA	NA
+Wang2023_CLC-Net	Table 2	DDR	Ours	CLC-Net	yes	EX	AUPR	0.713	self	NA	NA
+Wang2023_CLC-Net	Table 2	DDR	Ours	CLC-Net	yes	SE	AUPR	0.638	self	NA	NA
+Wang2023_CLC-Net	Table 2	DDR	Ours	CLC-Net	yes	mean	AUPR	0.581	self	NA	NA
+Wang2023_CLC-Net	Table 3	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	MA	AUPR	0.495	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	HE	AUPR	0.680	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	EX	AUPR	0.713	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	SE	AUPR	0.700	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	mean	AUPR	0.647	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	PATech (2nd)	PATech (IDRiD challenge team)	no	MA	AUPR	0.474	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	PATech (2nd)	PATech (IDRiD challenge team)	no	HE	AUPR	0.649	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	PATech (2nd)	PATech (IDRiD challenge team)	no	EX	AUPR	0.885	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	MA	AUPR	0.502	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	HE	AUPR	0.559	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	EX	AUPR	0.874	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	SE	AUPR	0.659	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	mean	AUPR	0.648	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	MA	AUPR	0.400	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	HE	AUPR	0.540	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	EX	AUPR	0.739	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	SE	AUPR	0.537	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	mean	AUPR	0.554	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SAIHST (5th)	SAIHST (IDRiD challenge team)	no	EX	AUPR	0.858	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	lzyuncc_fusion (6th)	lzyuncc_fusion (IDRiD challenge team)	no	EX	AUPR	0.820	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	lzyuncc_fusion (6th)	lzyuncc_fusion (IDRiD challenge team)	no	SE	AUPR	0.626	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	MA	AUPR	0.411	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	HE	AUPR	0.457	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	EX	AUPR	0.502	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	SE	AUPR	0.537	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	mean	AUPR	0.477	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	MA	AUPR	0.392	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	HE	AUPR	0.489	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	EX	AUPR	0.755	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	SE	AUPR	0.502	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	mean	AUPR	0.535	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	MA	AUPR	0.340	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	HE	AUPR	0.371	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	EX	AUPR	0.786	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	SE	AUPR	0.264	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	mean	AUPR	0.440	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	MA	AUPR	0.379	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	HE	AUPR	0.328	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	EX	AUPR	0.766	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	SE	AUPR	0.273	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	mean	AUPR	0.437	cited	Porwal2020 [41] (IDRiD challenge)	column order HE,MA,EX,SE,mean; 3-decimal rounding of leaderboard
+Wang2023_CLC-Net	Table 3	IDRiD	SMA [16]	SMA (Playout2019)	no	HE	AUPR	0.530	cited	Playout2019	HE and EX only
+Wang2023_CLC-Net	Table 3	IDRiD	SMA [16]	SMA (Playout2019)	no	EX	AUPR	0.821	cited	Playout2019	HE and EX only
+Wang2023_CLC-Net	Table 3	IDRiD	Ours	CLC-Net	yes	MA	AUPR	0.546	self	NA	same as Table 2
+Wang2023_CLC-Net	Table 3	IDRiD	Ours	CLC-Net	yes	HE	AUPR	0.661	self	NA	same as Table 2
+Wang2023_CLC-Net	Table 3	IDRiD	Ours	CLC-Net	yes	EX	AUPR	0.827	self	NA	same as Table 2
+Wang2023_CLC-Net	Table 3	IDRiD	Ours	CLC-Net	yes	SE	AUPR	0.672	self	NA	same as Table 2
+Wang2023_CLC-Net	Table 3	IDRiD	Ours	CLC-Net	yes	mean	AUPR	0.677	self	NA	same as Table 2
+Yin2023_DB-UNet	Table 7	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	MA	AUPR	0.4951	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	HE	AUPR	0.6804	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	EX	AUPR	0.7127	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	VRT (1st)	VRT (IDRiD challenge team)	no	SE	AUPR	0.6995	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	PATech (2nd)	PATech (IDRiD challenge team)	no	MA	AUPR	0.4740	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	PATech (2nd)	PATech (IDRiD challenge team)	no	HE	AUPR	0.6490	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	PATech (2nd)	PATech (IDRiD challenge team)	no	EX	AUPR	0.8850	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	MA	AUPR	0.5017	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	HE	AUPR	0.5588	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	EX	AUPR	0.8741	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG (IDRiD challenge team)	no	SE	AUPR	0.6588	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	MA	AUPR	0.4003	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	HE	AUPR	0.5395	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	EX	AUPR	0.7390	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SOONER (4th)	SOONER (IDRiD challenge team)	no	SE	AUPR	0.5369	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SHAIST (5th)	SHAIST (IDRiD challenge team)	no	EX	AUPR	0.8582	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	lzyuncc_fusion (6th)	lzyuncc_fusion (IDRiD challenge team)	no	EX	AUPR	0.8202	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	lzyuncc_fusion (6th)	lzyuncc_fusion (IDRiD challenge team)	no	SE	AUPR	0.6259	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	MA	AUPR	0.4111	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	HE	AUPR	0.4572	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	EX	AUPR	0.5018	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	SDNU (7th)	SDNU (IDRiD challenge team)	no	SE	AUPR	0.5374	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	MA	AUPR	0.3920	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	HE	AUPR	0.4886	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	EX	AUPR	0.7554	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	CIL (8th)	CIL (IDRiD challenge team)	no	SE	AUPR	0.5024	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	MA	AUPR	0.3397	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	HE	AUPR	0.3705	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	EX	AUPR	0.7863	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	MedLabs (9th)	MedLabs (IDRiD challenge team)	no	SE	AUPR	0.2637	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	MA	AUPR	0.3792	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	HE	AUPR	0.3283	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	EX	AUPR	0.7662	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	AIMIA (10th)	AIMIA (IDRiD challenge team)	no	SE	AUPR	0.2733	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	columns MAs, HEs, Hard exudates, Soft exudates; no mean column
+Yin2023_DB-UNet	Table 7	IDRiD	Proposed Method	DB-UNet	yes	MA	AUPR	0.5254	self	NA	NA
+Yin2023_DB-UNet	Table 7	IDRiD	Proposed Method	DB-UNet	yes	HE	AUPR	0.6609	self	NA	NA
+Yin2023_DB-UNet	Table 7	IDRiD	Proposed Method	DB-UNet	yes	EX	AUPR	0.8878	self	NA	NA
+Yin2023_DB-UNet	Table 7	IDRiD	Proposed Method	DB-UNet	yes	SE	AUPR	0.7297	self	NA	NA
+Yin2023_DB-UNet	Table 8	IDRiD	DeepLab v3+ [18]	DeepLabv3+	no	MA	AUPR	0.4544	rerun	NA	ResNet-101 backbone, COCO-pretrained, trained by authors (Sec. IV.D); [18]=Chen2018
+Yin2023_DB-UNet	Table 8	IDRiD	DeepLab v3+ [18]	DeepLabv3+	no	HE	AUPR	0.4913	rerun	NA	ResNet-101 backbone, COCO-pretrained, trained by authors (Sec. IV.D); [18]=Chen2018
+Yin2023_DB-UNet	Table 8	IDRiD	DeepLab v3+ [18]	DeepLabv3+	no	EX	AUPR	0.8442	rerun	NA	ResNet-101 backbone, COCO-pretrained, trained by authors (Sec. IV.D); [18]=Chen2018
+Yin2023_DB-UNet	Table 8	IDRiD	DeepLab v3+ [18]	DeepLabv3+	no	SE	AUPR	0.2826	rerun	NA	ResNet-101 backbone, COCO-pretrained, trained by authors (Sec. IV.D); [18]=Chen2018
+Yin2023_DB-UNet	Table 8	IDRiD	Multi-Scale Net [22]	Sarhan2019	no	MA	AUPR	0.4196	cited	Sarhan2019	MA only
+Yin2023_DB-UNet	Table 8	IDRiD	Local-Global U-Net [25]	Yan2019 (local-global U-Net)	no	MA	AUPR	0.525	cited	Yan2019	3 decimals in original
+Yin2023_DB-UNet	Table 8	IDRiD	Local-Global U-Net [25]	Yan2019 (local-global U-Net)	no	HE	AUPR	0.711	cited	Yan2019	3 decimals in original
+Yin2023_DB-UNet	Table 8	IDRiD	Local-Global U-Net [25]	Yan2019 (local-global U-Net)	no	EX	AUPR	0.889	cited	Yan2019	3 decimals in original
+Yin2023_DB-UNet	Table 8	IDRiD	Local-Global U-Net [25]	Yan2019 (local-global U-Net)	no	SE	AUPR	0.720	cited	Yan2019	3 decimals in original
+Yin2023_DB-UNet	Table 8	IDRiD	iFLYTEK-MIG* [15]	iFLYTEK-MIG (IDRiD challenge team)	no	MA	AUPR	0.5017	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	iFLYTEK-MIG* [15]	iFLYTEK-MIG (IDRiD challenge team)	no	HE	AUPR	0.5588	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	iFLYTEK-MIG* [15]	iFLYTEK-MIG (IDRiD challenge team)	no	EX	AUPR	0.8741	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	iFLYTEK-MIG* [15]	iFLYTEK-MIG (IDRiD challenge team)	no	SE	AUPR	0.6588	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	VRT* [15]	VRT (IDRiD challenge team)	no	MA	AUPR	0.4951	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	VRT* [15]	VRT (IDRiD challenge team)	no	HE	AUPR	0.6804	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	VRT* [15]	VRT (IDRiD challenge team)	no	EX	AUPR	0.7127	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	VRT* [15]	VRT (IDRiD challenge team)	no	SE	AUPR	0.6995	cited	Porwal2019 [15] (IDRiD challenge leaderboard)	'borrowed from the Leaderboard'
+Yin2023_DB-UNet	Table 8	IDRiD	L-Seg [26]	L-Seg	no	MA	AUPR	0.4627	cited	Guo2019	NA
+Yin2023_DB-UNet	Table 8	IDRiD	L-Seg [26]	L-Seg	no	HE	AUPR	0.6374	cited	Guo2019	NA
+Yin2023_DB-UNet	Table 8	IDRiD	L-Seg [26]	L-Seg	no	EX	AUPR	0.7945	cited	Guo2019	NA
+Yin2023_DB-UNet	Table 8	IDRiD	L-Seg [26]	L-Seg	no	SE	AUPR	0.7113	cited	Guo2019	NA
+Yin2023_DB-UNet	Table 8	IDRiD	EfficientNet-B0+SAA [27]	SAA	no	MA	AUPR	0.4152	cited	Wang2022	[27]=Bo Wang et al., SAA, ISBI 2022
+Yin2023_DB-UNet	Table 8	IDRiD	EfficientNet-B0+SAA [27]	SAA	no	HE	AUPR	0.6704	cited	Wang2022	[27]=Bo Wang et al., SAA, ISBI 2022
+Yin2023_DB-UNet	Table 8	IDRiD	EfficientNet-B0+SAA [27]	SAA	no	EX	AUPR	0.8812	cited	Wang2022	[27]=Bo Wang et al., SAA, ISBI 2022
+Yin2023_DB-UNet	Table 8	IDRiD	EfficientNet-B0+SAA [27]	SAA	no	SE	AUPR	0.7281	cited	Wang2022	[27]=Bo Wang et al., SAA, ISBI 2022
+Yin2023_DB-UNet	Table 8	IDRiD	Dual PSPNet+DSM [28]	Dual PSPNet+DSM (Liu2022)	no	EX	AUPR	0.7767	cited	Liu2022	EX only; [28]=Qing Liu et al., JBHI 2022
+Yin2023_DB-UNet	Table 8	IDRiD	Proposed Method	DB-UNet	yes	MA	AUPR	0.5254	self	NA	NA
+Yin2023_DB-UNet	Table 8	IDRiD	Proposed Method	DB-UNet	yes	HE	AUPR	0.6609	self	NA	NA
+Yin2023_DB-UNet	Table 8	IDRiD	Proposed Method	DB-UNet	yes	EX	AUPR	0.8878	self	NA	NA
+Yin2023_DB-UNet	Table 8	IDRiD	Proposed Method	DB-UNet	yes	SE	AUPR	0.7297	self	NA	NA
+Yin2023_DB-UNet	Table 9	e-ophtha	L-Seg [26]	L-Seg	no	MA	AUPR	0.1687	cited	Guo2019	e-ophtha MA; own 100/48 split for proposed method
+Yin2023_DB-UNet	Table 9	e-ophtha	DeepLab v3+ [18]	DeepLabv3+	no	MA	AUPR	0.3492	rerun	NA	ResNet-101; trained by authors (Sec. IV.D)
+Yin2023_DB-UNet	Table 9	e-ophtha	DeepLab v3+ [18]	DeepLabv3+	no	MA	F1	0.4204	rerun	NA	ResNet-101; trained by authors (Sec. IV.D)
+Yin2023_DB-UNet	Table 9	e-ophtha	Proposed Method	DB-UNet	yes	MA	AUPR	0.4382	self	NA	NA
+Yin2023_DB-UNet	Table 9	e-ophtha	Proposed Method	DB-UNet	yes	MA	F1	0.4626	self	NA	NA
+Yin2023_DB-UNet	Table 10	DDR	U-NET [38]	U-Net	no	MA	AUPR	0.4586	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [38]=Ronneberger2015
+Yin2023_DB-UNet	Table 10	DDR	U-NET [38]	U-Net	no	HE	AUPR	0.0970	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [38]=Ronneberger2015
+Yin2023_DB-UNet	Table 10	DDR	U-NET [38]	U-Net	no	EX	AUPR	0.0955	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [38]=Ronneberger2015
+Yin2023_DB-UNet	Table 10	DDR	U-NET [38]	U-Net	no	SE	AUPR	0.1094	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [38]=Ronneberger2015
+Yin2023_DB-UNet	Table 10	DDR	ResUNet [48]	ResUNet	no	MA	AUPR	0.4042	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [48]=Zhang2018 (road extraction); SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	ResUNet [48]	ResUNet	no	HE	AUPR	0.1532	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [48]=Zhang2018 (road extraction); SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	ResUNet [48]	ResUNet	no	EX	AUPR	0.0904	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [48]=Zhang2018 (road extraction); SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	ResUNet [48]	ResUNet	no	SE	AUPR	0.869	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [48]=Zhang2018 (road extraction); SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	DenseUNet [49]	DenseUNet	no	MA	AUPR	0.5459	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [49]=Li2018 (H-DenseUNet)
+Yin2023_DB-UNet	Table 10	DDR	DenseUNet [49]	DenseUNet	no	HE	AUPR	0.3732	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [49]=Li2018 (H-DenseUNet)
+Yin2023_DB-UNet	Table 10	DDR	DenseUNet [49]	DenseUNet	no	EX	AUPR	0.1804	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [49]=Li2018 (H-DenseUNet)
+Yin2023_DB-UNet	Table 10	DDR	DenseUNet [49]	DenseUNet	no	SE	AUPR	0.2434	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [49]=Li2018 (H-DenseUNet)
+Yin2023_DB-UNet	Table 10	DDR	UNet++ [50]	U-Net++	no	MA	AUPR	0.4527	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [50]=Zhou2018; SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	UNet++ [50]	U-Net++	no	HE	AUPR	0.1205	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [50]=Zhou2018; SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	UNet++ [50]	U-Net++	no	EX	AUPR	0.1154	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [50]=Zhou2018; SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	UNet++ [50]	U-Net++	no	SE	AUPR	0.794	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [50]=Zhou2018; SE printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	Att-UNet [51]	Attention U-Net	no	MA	AUPR	0.4626	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [51]=Oktay2018
+Yin2023_DB-UNet	Table 10	DDR	Att-UNet [51]	Attention U-Net	no	HE	AUPR	0.1130	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [51]=Oktay2018
+Yin2023_DB-UNet	Table 10	DDR	Att-UNet [51]	Attention U-Net	no	EX	AUPR	0.0894	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [51]=Oktay2018
+Yin2023_DB-UNet	Table 10	DDR	Att-UNet [51]	Attention U-Net	no	SE	AUPR	0.1273	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [51]=Oktay2018
+Yin2023_DB-UNet	Table 10	DDR	PSPNet [52]	PSPNet	no	MA	AUPR	0.3497	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [52]=Zhao2017; EX printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	PSPNet [52]	PSPNet	no	HE	AUPR	0.2118	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [52]=Zhao2017; EX printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	PSPNet [52]	PSPNet	no	EX	AUPR	0.557	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [52]=Zhao2017; EX printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	PSPNet [52]	PSPNet	no	SE	AUPR	0.0909	not stated	NA	table titled 'other published methods' but citation is to the architecture paper (no DDR results there); provenance unclear; values anomalous (see audit notes); [52]=Zhao2017; EX printed with 3 decimals
+Yin2023_DB-UNet	Table 10	DDR	L-Seg [26]	L-Seg	no	MA	AUPR	0.1052	cited	Guo2019	matches L-Seg original DDR values
+Yin2023_DB-UNet	Table 10	DDR	L-Seg [26]	L-Seg	no	HE	AUPR	0.3586	cited	Guo2019	matches L-Seg original DDR values
+Yin2023_DB-UNet	Table 10	DDR	L-Seg [26]	L-Seg	no	EX	AUPR	0.5546	cited	Guo2019	matches L-Seg original DDR values
+Yin2023_DB-UNet	Table 10	DDR	L-Seg [26]	L-Seg	no	SE	AUPR	0.2648	cited	Guo2019	matches L-Seg original DDR values
+Yin2023_DB-UNet	Table 10	DDR	DeepLab v3+ [18]	DeepLabv3+	no	MA	AUPR	0.0843	rerun	NA	ResNet-101; trained by authors (Sec. IV.D)
+Yin2023_DB-UNet	Table 10	DDR	DeepLab v3+ [18]	DeepLabv3+	no	HE	AUPR	0.3529	rerun	NA	ResNet-101; trained by authors (Sec. IV.D)
+Yin2023_DB-UNet	Table 10	DDR	DeepLab v3+ [18]	DeepLabv3+	no	EX	AUPR	0.5668	rerun	NA	ResNet-101; trained by authors (Sec. IV.D)
+Yin2023_DB-UNet	Table 10	DDR	DeepLab v3+ [18]	DeepLabv3+	no	SE	AUPR	0.2302	rerun	NA	ResNet-101; trained by authors (Sec. IV.D)
+Yin2023_DB-UNet	Table 10	DDR	EfficientNet-B0+SAA [27]	SAA	no	MA	AUPR	0.1933	cited	Wang2022	NA
+Yin2023_DB-UNet	Table 10	DDR	EfficientNet-B0+SAA [27]	SAA	no	HE	AUPR	0.4456	cited	Wang2022	NA
+Yin2023_DB-UNet	Table 10	DDR	EfficientNet-B0+SAA [27]	SAA	no	EX	AUPR	0.6269	cited	Wang2022	NA
+Yin2023_DB-UNet	Table 10	DDR	EfficientNet-B0+SAA [27]	SAA	no	SE	AUPR	0.3747	cited	Wang2022	NA
+Yin2023_DB-UNet	Table 10	DDR	Dual PSPNet+DSM [28]	Dual PSPNet+DSM (Liu2022)	no	EX	AUPR	0.5424	cited	Liu2022	EX only
+Yin2023_DB-UNet	Table 10	DDR	Proposed Method	DB-UNet	yes	MA	AUPR	0.1918	self	NA	EX 0.5825 here vs 0.5844 in ablation Table 4
+Yin2023_DB-UNet	Table 10	DDR	Proposed Method	DB-UNet	yes	HE	AUPR	0.4952	self	NA	EX 0.5825 here vs 0.5844 in ablation Table 4
+Yin2023_DB-UNet	Table 10	DDR	Proposed Method	DB-UNet	yes	EX	AUPR	0.5825	self	NA	EX 0.5825 here vs 0.5844 in ablation Table 4
+Yin2023_DB-UNet	Table 10	DDR	Proposed Method	DB-UNet	yes	SE	AUPR	0.2345	self	NA	EX 0.5825 here vs 0.5844 in ablation Table 4
+Xu2024_MSAG	Table 2	IDRiD	U-Net19	U-Net	no	MA	Dice	41.76	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	IDRiD	U-Net19	U-Net	no	HE	Dice	44.97	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	IDRiD	U-Net19	U-Net	no	EX	Dice	69.90	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	IDRiD	U-Net19	U-Net	no	SE	Dice	27.88	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	IDRiD	U-Net19	U-Net	no	mean	Dice	46.13	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	IDRiD	U-Net19	U-Net	no	mean	AUPR	34.68	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation); only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	U-Net19	U-Net	no	MA	Dice	19.83	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	DDR	U-Net19	U-Net	no	HE	Dice	38.41	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	DDR	U-Net19	U-Net	no	EX	Dice	42.12	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	DDR	U-Net19	U-Net	no	SE	Dice	32.01	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	DDR	U-Net19	U-Net	no	mean	Dice	33.09	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation)
+Xu2024_MSAG	Table 2	DDR	U-Net19	U-Net	no	mean	AUPR	29.60	not stated	NA	in %; superscript 19 = Badar2018 (mis-citation); only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	MA	Dice	44.74	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	HE	Dice	57.27	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	EX	Dice	77.92	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	SE	Dice	61.27	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	mean	Dice	60.30	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	mean	AUPR	63.19	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row; only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	DeepLabv3+	DeepLabv3+	no	MA	Dice	25.40	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	DDR	DeepLabv3+	DeepLabv3+	no	HE	Dice	41.83	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	DDR	DeepLabv3+	DeepLabv3+	no	EX	Dice	58.59	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	DDR	DeepLabv3+	DeepLabv3+	no	SE	Dice	37.97	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	DDR	DeepLabv3+	DeepLabv3+	no	mean	Dice	40.95	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row
+Xu2024_MSAG	Table 2	DDR	DeepLabv3+	DeepLabv3+	no	mean	AUPR	43.34	not stated	NA	in %; no citation; IDRiD row ~= authors' Table 1 'Single' row; only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	MA	Dice	49.51	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	IDRiD	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	HE	Dice	64.90	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	IDRiD	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	EX	Dice	71.72	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	IDRiD	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	SE	Dice	69.95	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	IDRiD	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	mean	Dice	64.02	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	IDRiD	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	mean	AUPR	64.57	not stated	NA	in %; superscript 16 = Jiawei2021; only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	MA	Dice	25.34	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	DDR	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	HE	Dice	43.32	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	DDR	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	EX	Dice	60.54	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	DDR	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	SE	Dice	45.52	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	DDR	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	mean	Dice	43.68	not stated	NA	in %; superscript 16 = Jiawei2021
+Xu2024_MSAG	Table 2	DDR	DeepLab &U-Net16	DeepLab &U-Net (Jiawei2021)	no	mean	AUPR	45.35	not stated	NA	in %; superscript 16 = Jiawei2021; only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	Attention U-Net36	Attention U-Net	no	HE	Dice	48.32	not stated	NA	in %; HE Dice only; superscript 36 = Xiao2019
+Xu2024_MSAG	Table 2	IDRiD	Swin-TV237	Swin Transformer v2	no	MA	Dice	43.90	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	IDRiD	Swin-TV237	Swin Transformer v2	no	HE	Dice	62.25	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	IDRiD	Swin-TV237	Swin Transformer v2	no	EX	Dice	80.12	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	IDRiD	Swin-TV237	Swin Transformer v2	no	SE	Dice	65.71	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	IDRiD	Swin-TV237	Swin Transformer v2	no	mean	Dice	62.99	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	IDRiD	Swin-TV237	Swin Transformer v2	no	mean	AUPR	64.86	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2); only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	Swin-TV237	Swin Transformer v2	no	MA	Dice	26.75	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	DDR	Swin-TV237	Swin Transformer v2	no	HE	Dice	49.36	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	DDR	Swin-TV237	Swin Transformer v2	no	EX	Dice	61.18	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	DDR	Swin-TV237	Swin Transformer v2	no	SE	Dice	54.14	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	DDR	Swin-TV237	Swin Transformer v2	no	mean	Dice	47.86	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2)
+Xu2024_MSAG	Table 2	DDR	Swin-TV237	Swin Transformer v2	no	mean	AUPR	48.59	not stated	NA	in %; superscript 37 = Liu2022 (Swin v2); only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	M2MRF38	M2MRF	no	MA	Dice	47.81	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	IDRiD	M2MRF38	M2MRF	no	HE	Dice	65.01	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	IDRiD	M2MRF38	M2MRF	no	EX	Dice	79.57	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	IDRiD	M2MRF38	M2MRF	no	SE	Dice	65.39	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	IDRiD	M2MRF38	M2MRF	no	mean	Dice	64.45	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	IDRiD	M2MRF38	M2MRF	no	mean	AUPR	66.00	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF); only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	M2MRF38	M2MRF	no	MA	Dice	27.51	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	DDR	M2MRF38	M2MRF	no	HE	Dice	48.58	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	DDR	M2MRF38	M2MRF	no	EX	Dice	60.20	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	DDR	M2MRF38	M2MRF	no	SE	Dice	46.81	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	DDR	M2MRF38	M2MRF	no	mean	Dice	45.78	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF)
+Xu2024_MSAG	Table 2	DDR	M2MRF38	M2MRF	no	mean	AUPR	49.42	not stated	NA	in %; superscript 38 = Liu2023 (M2MRF); only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	HED39	HED	no	MA	Dice	42.98	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	IDRiD	HED39	HED	no	HE	Dice	67.00	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	IDRiD	HED39	HED	no	EX	Dice	78.60	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	IDRiD	HED39	HED	no	SE	Dice	64.33	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	IDRiD	HED39	HED	no	mean	Dice	38.81	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	IDRiD	HED39	HED	no	mean	AUPR	63.94	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values; only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	HED39	HED	no	MA	Dice	22.43	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	DDR	HED39	HED	no	HE	Dice	45.50	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	DDR	HED39	HED	no	EX	Dice	56.63	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	DDR	HED39	HED	no	SE	Dice	42.61	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	DDR	HED39	HED	no	mean	Dice	41.79	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values
+Xu2024_MSAG	Table 2	DDR	HED39	HED	no	mean	AUPR	42.97	not stated	NA	in %; superscript 39 = Xie2015; IDRiD mDice 38.81 inconsistent with per-lesion values; only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	HRNet+OCR (backbone)	HRNet+OCR	no	MA	Dice	45.75	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	IDRiD	HRNet+OCR (backbone)	HRNet+OCR	no	HE	Dice	54.41	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	IDRiD	HRNet+OCR (backbone)	HRNet+OCR	no	EX	Dice	80.06	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	IDRiD	HRNet+OCR (backbone)	HRNet+OCR	no	SE	Dice	66.00	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	IDRiD	HRNet+OCR (backbone)	HRNet+OCR	no	mean	Dice	61.56	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	IDRiD	HRNet+OCR (backbone)	HRNet+OCR	no	mean	AUPR	64.93	not stated	NA	in %; authors' backbone; only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	HRNet+OCR (backbone)	HRNet+OCR	no	MA	Dice	26.99	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	DDR	HRNet+OCR (backbone)	HRNet+OCR	no	HE	Dice	44.86	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	DDR	HRNet+OCR (backbone)	HRNet+OCR	no	EX	Dice	58.98	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	DDR	HRNet+OCR (backbone)	HRNet+OCR	no	SE	Dice	44.96	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	DDR	HRNet+OCR (backbone)	HRNet+OCR	no	mean	Dice	43.95	not stated	NA	in %; authors' backbone
+Xu2024_MSAG	Table 2	DDR	HRNet+OCR (backbone)	HRNet+OCR	no	mean	AUPR	45.21	not stated	NA	in %; authors' backbone; only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	MA	Dice	47.75	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	IDRiD	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	HE	Dice	60.07	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	IDRiD	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	EX	Dice	80.91	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	IDRiD	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	SE	Dice	67.69	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	IDRiD	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	mean	Dice	64.11	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	IDRiD	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	mean	AUPR	66.01	not stated	NA	in %; typo 'HRNe' in original; only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	MA	Dice	27.02	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	DDR	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	HE	Dice	48.62	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	DDR	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	EX	Dice	57.23	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	DDR	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	SE	Dice	46.33	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	DDR	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	mean	Dice	44.80	not stated	NA	in %; typo 'HRNe' in original
+Xu2024_MSAG	Table 2	DDR	HRNe+OCR+MS	HRNet+OCR+MS (MS-OCRNet, Tao2020)	no	mean	AUPR	47.36	not stated	NA	in %; typo 'HRNe' in original; only mAUPR reported
+Xu2024_MSAG	Table 2	IDRiD	MSAG (ours)	MSAG	yes	MA	Dice	49.20	self	NA	in %
+Xu2024_MSAG	Table 2	IDRiD	MSAG (ours)	MSAG	yes	HE	Dice	63.34	self	NA	in %
+Xu2024_MSAG	Table 2	IDRiD	MSAG (ours)	MSAG	yes	EX	Dice	81.19	self	NA	in %
+Xu2024_MSAG	Table 2	IDRiD	MSAG (ours)	MSAG	yes	SE	Dice	69.26	self	NA	in %
+Xu2024_MSAG	Table 2	IDRiD	MSAG (ours)	MSAG	yes	mean	Dice	65.75	self	NA	in %
+Xu2024_MSAG	Table 2	IDRiD	MSAG (ours)	MSAG	yes	mean	AUPR	66.87	self	NA	in %; only mAUPR reported
+Xu2024_MSAG	Table 2	DDR	MSAG (ours)	MSAG	yes	MA	Dice	27.34	self	NA	in %
+Xu2024_MSAG	Table 2	DDR	MSAG (ours)	MSAG	yes	HE	Dice	50.96	self	NA	in %
+Xu2024_MSAG	Table 2	DDR	MSAG (ours)	MSAG	yes	EX	Dice	61.21	self	NA	in %
+Xu2024_MSAG	Table 2	DDR	MSAG (ours)	MSAG	yes	SE	Dice	55.23	self	NA	in %
+Xu2024_MSAG	Table 2	DDR	MSAG (ours)	MSAG	yes	mean	Dice	48.69	self	NA	in %
+Xu2024_MSAG	Table 2	DDR	MSAG (ours)	MSAG	yes	mean	AUPR	49.66	self	NA	in %; only mAUPR reported
+Fu2024_LFRC-Net	Table 1	IDRiD	Guo et al. [22]	Guo2019 (lightweight EX net)	no	EX	AUPR	78.26	cited	Guo2019	in %; EX only; [22]=Guo, Li, Wang, Zhang, Kang ICANN 2019 (not L-Seg)
+Fu2024_LFRC-Net	Table 1	IDRiD	Guo et al. [22]	Guo2019 (lightweight EX net)	no	EX	F1	78.15	cited	Guo2019	in %; EX only; [22]=Guo, Li, Wang, Zhang, Kang ICANN 2019 (not L-Seg)
+Fu2024_LFRC-Net	Table 1	IDRiD	Ameri et al. [25]	BCDU-Net (Ameri2022)	no	EX	AUPR	83.15	cited	Ameri2022	in %; EX only
+Fu2024_LFRC-Net	Table 1	IDRiD	Ameri et al. [25]	BCDU-Net (Ameri2022)	no	EX	F1	76.81	cited	Ameri2022	in %; EX only
+Fu2024_LFRC-Net	Table 1	IDRiD	Liu et al. [28]	Dual-branch (Liu2022)	no	EX	AUPR	77.67	cited	Liu2022	in %; EX only; ref list prints year 2021 for JBHI 26:1091
+Fu2024_LFRC-Net	Table 1	IDRiD	Van et al. [30]	Two-stage CNN (Van Do2024)	no	EX	AUPR	85.00	cited	Van Do2024	in %; EX only
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [31]	Lesion-aware KD (Wang2024)	no	EX	AUPR	77.60	cited	Wang2024	in %; no SE
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [31]	Lesion-aware KD (Wang2024)	no	EX	F1	71.10	cited	Wang2024	in %; no SE
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [31]	Lesion-aware KD (Wang2024)	no	HE	AUPR	63.60	cited	Wang2024	in %; no SE
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [31]	Lesion-aware KD (Wang2024)	no	HE	F1	59.40	cited	Wang2024	in %; no SE
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [31]	Lesion-aware KD (Wang2024)	no	MA	AUPR	53.20	cited	Wang2024	in %; no SE
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [31]	Lesion-aware KD (Wang2024)	no	MA	F1	43.80	cited	Wang2024	in %; no SE
+Fu2024_LFRC-Net	Table 1	IDRiD	Xiao et al. [27]	HEDNet+cGAN	no	EX	F1	69.08	cited	Xiao2019	in %; F1 only
+Fu2024_LFRC-Net	Table 1	IDRiD	Xiao et al. [27]	HEDNet+cGAN	no	HE	F1	45.76	cited	Xiao2019	in %; F1 only
+Fu2024_LFRC-Net	Table 1	IDRiD	Xiao et al. [27]	HEDNet+cGAN	no	MA	F1	42.98	cited	Xiao2019	in %; F1 only
+Fu2024_LFRC-Net	Table 1	IDRiD	Xiao et al. [27]	HEDNet+cGAN	no	SE	F1	43.98	cited	Xiao2019	in %; F1 only
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	EX	AUPR	84.66	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	EX	F1	74.70	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	HE	AUPR	58.09	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	HE	F1	45.36	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	MA	AUPR	38.64	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	MA	F1	30.36	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	SE	AUPR	55.79	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	FRCU-Net [14]	FRCU-Net (Azad2021)	no	SE	F1	46.98	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	EX	AUPR	84.20	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	EX	F1	73.82	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	HE	AUPR	65.52	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	HE	F1	53.80	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	MA	AUPR	42.72	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	MA	F1	36.91	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	SE	AUPR	55.60	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	DRNet [32]	DRNet (Guo2020 dense residual)	no	SE	F1	48.80	rerun	NA	in %; 'given by our own implementations'
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [29]	VTA	no	EX	AUPR	86.40	cited	Wang2023	in %; [29]=Wang, Lu, Yan, Kan, Jin Sci Rep 2023 (ViT-adapter hyperbolic)
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [29]	VTA	no	HE	AUPR	64.94	cited	Wang2023	in %; [29]=Wang, Lu, Yan, Kan, Jin Sci Rep 2023 (ViT-adapter hyperbolic)
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [29]	VTA	no	MA	AUPR	40.63	cited	Wang2023	in %; [29]=Wang, Lu, Yan, Kan, Jin Sci Rep 2023 (ViT-adapter hyperbolic)
+Fu2024_LFRC-Net	Table 1	IDRiD	Wang et al. [29]	VTA	no	SE	AUPR	59.78	cited	Wang2023	in %; [29]=Wang, Lu, Yan, Kan, Jin Sci Rep 2023 (ViT-adapter hyperbolic)
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	EX	AUPR	86.86	self	NA	in %
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	EX	F1	78.09	self	NA	in %
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	HE	AUPR	62.97	self	NA	in %
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	HE	F1	55.85	self	NA	in %
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	MA	AUPR	35.67	self	NA	in %
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	MA	F1	28.75	self	NA	in %
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	SE	AUPR	60.19	self	NA	in %
+Fu2024_LFRC-Net	Table 1	IDRiD	Ours	LFRC-Net	yes	SE	F1	47.31	self	NA	in %
+Fu2024_LFRC-Net	Table 2	DDR	Liu et al. [28]	Dual-branch (Liu2022)	no	EX	AUPR	50.68	cited	Liu2022	in %; EX only
+Fu2024_LFRC-Net	Table 2	DDR	HED [33]	HED	no	EX	AUPR	42.52	cited	Huang2022 (RTNet paper; [33]=Xie2015 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	HED [33]	HED	no	HE	AUPR	20.14	cited	Huang2022 (RTNet paper; [33]=Xie2015 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	HED [33]	HED	no	MA	AUPR	6.52	cited	Huang2022 (RTNet paper; [33]=Xie2015 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	HED [33]	HED	no	SE	AUPR	13.01	cited	Huang2022 (RTNet paper; [33]=Xie2015 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	DeepLab v3+ [34]	DeepLabv3+	no	EX	AUPR	54.05	cited	Huang2022 (RTNet paper; [34]=Chen2018 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	DeepLab v3+ [34]	DeepLabv3+	no	HE	AUPR	37.89	cited	Huang2022 (RTNet paper; [34]=Chen2018 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	DeepLab v3+ [34]	DeepLabv3+	no	MA	AUPR	3.16	cited	Huang2022 (RTNet paper; [34]=Chen2018 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	DeepLab v3+ [34]	DeepLabv3+	no	SE	AUPR	21.85	cited	Huang2022 (RTNet paper; [34]=Chen2018 architecture)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	U-Net [35]	U-Net	no	EX	AUPR	55.05	cited	Huang2022 (RTNet paper; [35]=Guan2019 mis-citation)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	U-Net [35]	U-Net	no	HE	AUPR	38.99	cited	Huang2022 (RTNet paper; [35]=Guan2019 mis-citation)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	U-Net [35]	U-Net	no	MA	AUPR	3.34	cited	Huang2022 (RTNet paper; [35]=Guan2019 mis-citation)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	U-Net [35]	U-Net	no	SE	AUPR	24.55	cited	Huang2022 (RTNet paper; [35]=Guan2019 mis-citation)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper
+Fu2024_LFRC-Net	Table 2	DDR	L-seg [36]	L-Seg	no	EX	AUPR	56.45	cited	Huang2022 (RTNet paper; [36]=Guo2019)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper; differs from L-Seg original DDR values (55.46/35.86/10.52/26.48)
+Fu2024_LFRC-Net	Table 2	DDR	L-seg [36]	L-Seg	no	HE	AUPR	35.88	cited	Huang2022 (RTNet paper; [36]=Guo2019)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper; differs from L-Seg original DDR values (55.46/35.86/10.52/26.48)
+Fu2024_LFRC-Net	Table 2	DDR	L-seg [36]	L-Seg	no	MA	AUPR	11.74	cited	Huang2022 (RTNet paper; [36]=Guo2019)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper; differs from L-Seg original DDR values (55.46/35.86/10.52/26.48)
+Fu2024_LFRC-Net	Table 2	DDR	L-seg [36]	L-Seg	no	SE	AUPR	26.54	cited	Huang2022 (RTNet paper; [36]=Guo2019)	in %; 'come from RTNet [37]' (Huang2022), i.e. values as rerun/reported in the RTNet paper; differs from L-Seg original DDR values (55.46/35.86/10.52/26.48)
+Fu2024_LFRC-Net	Table 2	DDR	RTNet [37]	RTNet	no	EX	AUPR	56.71	cited	Huang2022	in %
+Fu2024_LFRC-Net	Table 2	DDR	RTNet [37]	RTNet	no	HE	AUPR	36.56	cited	Huang2022	in %
+Fu2024_LFRC-Net	Table 2	DDR	RTNet [37]	RTNet	no	MA	AUPR	11.76	cited	Huang2022	in %
+Fu2024_LFRC-Net	Table 2	DDR	RTNet [37]	RTNet	no	SE	AUPR	29.43	cited	Huang2022	in %
+Fu2024_LFRC-Net	Table 2	DDR	Wang et al. [29]	VTA	no	EX	AUPR	56.07	cited	Wang2023	in %
+Fu2024_LFRC-Net	Table 2	DDR	Wang et al. [29]	VTA	no	HE	AUPR	37.78	cited	Wang2023	in %
+Fu2024_LFRC-Net	Table 2	DDR	Wang et al. [29]	VTA	no	MA	AUPR	10.66	cited	Wang2023	in %
+Fu2024_LFRC-Net	Table 2	DDR	Wang et al. [29]	VTA	no	SE	AUPR	26.94	cited	Wang2023	in %
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	EX	AUPR	60.14	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	EX	F1	54.06	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	HE	AUPR	35.52	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	HE	F1	33.17	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	MA	AUPR	11.94	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	MA	F1	15.22	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	SE	AUPR	32.60	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Guo et al. [39]	Deep-multiscale (Guo2024)	no	SE	F1	38.76	cited	Guo2024	in %; HE/SE differ from Guo2024 SSRN preprint (36.52/30.94)
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	EX	AUPR	60.51	self	NA	in %; F1 differs from ablation Table 6 for same model
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	EX	F1	59.24	self	NA	in %; F1 differs from ablation Table 6 for same model
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	HE	AUPR	39.83	self	NA	in %; F1 differs from ablation Table 6 for same model
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	HE	F1	30.22	self	NA	in %; F1 differs from ablation Table 6 for same model
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	MA	AUPR	14.35	self	NA	in %; F1 differs from ablation Table 6 for same model
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	MA	F1	17.64	self	NA	in %; F1 differs from ablation Table 6 for same model
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	SE	AUPR	18.99	self	NA	in %; F1 differs from ablation Table 6 for same model
+Fu2024_LFRC-Net	Table 2	DDR	Ours	LFRC-Net	yes	SE	F1	25.24	self	NA	in %; F1 differs from ablation Table 6 for same model

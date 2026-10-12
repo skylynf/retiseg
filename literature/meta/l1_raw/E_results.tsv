@@ -1,0 +1,974 @@
+paper	table	dataset	method	method_norm	is_proposed	lesion	metric	value	provenance_stated	provenance_ref	notes
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	EX	AUC	0.8927	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	EX	pixel acc	0.6160	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	MA	AUC	0.8053	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	MA	pixel acc	0.4705	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	SE	AUC	0.6548	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	SE	pixel acc	0.6993	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	HE	AUC	0.7822	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	HE	pixel acc	0.5356	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	mean	pixel acc	0.6627	not stated	NA	mAcc column; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	mean	IoU	0.5437	not stated	NA	mIoU column; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	U-Net	U-Net	no	mean	Dice	0.6766	not stated	NA	mDice column; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	EX	AUC	0.9851	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	EX	pixel acc	0.7630	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	MA	AUC	0.9376	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	MA	pixel acc	0.2329	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	SE	AUC	0.9377	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	SE	pixel acc	0.4250	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	HE	AUC	0.9183	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	HE	pixel acc	0.4037	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	mean	pixel acc	0.5640	not stated	NA	mAcc column; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	mean	IoU	0.4993	not stated	NA	mIoU column; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	DeepLabv3+	DeepLabv3+	no	mean	Dice	0.6229	not stated	NA	mDice column; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 2	IDRiD	L-Seg	L-Seg	no	EX	pixel acc	0.7370	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Guo2019 [48]
+Zhang2023_TC-Net	Table 2	IDRiD	L-Seg	L-Seg	no	MA	pixel acc	0.2942	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Guo2019 [48]
+Zhang2023_TC-Net	Table 2	IDRiD	L-Seg	L-Seg	no	SE	pixel acc	0.3497	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Guo2019 [48]
+Zhang2023_TC-Net	Table 2	IDRiD	L-Seg	L-Seg	no	HE	pixel acc	0.4657	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Guo2019 [48]
+Zhang2023_TC-Net	Table 2	IDRiD	L-Seg	L-Seg	no	mean	pixel acc	0.5684	not stated	NA	mAcc column; no citation mark in table; method ref Guo2019 [48]
+Zhang2023_TC-Net	Table 2	IDRiD	L-Seg	L-Seg	no	mean	IoU	0.5102	not stated	NA	mIoU column; no citation mark in table; method ref Guo2019 [48]
+Zhang2023_TC-Net	Table 2	IDRiD	L-Seg	L-Seg	no	mean	Dice	0.6393	not stated	NA	mDice column; no citation mark in table; method ref Guo2019 [48]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	EX	AUC	0.9829	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	EX	pixel acc	0.6318	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	MA	AUC	0.8624	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	MA	pixel acc	0.2596	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	SE	AUC	0.9699	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	SE	pixel acc	0.3996	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	HE	AUC	0.9437	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	HE	pixel acc	0.4766	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	mean	pixel acc	0.5525	not stated	NA	mAcc column; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	mean	IoU	0.4846	not stated	NA	mIoU column; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	X-Net	X-Net	no	mean	Dice	0.6129	not stated	NA	mDice column; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	EX	AUC	0.9280	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	EX	pixel acc	0.4750	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	MA	AUC	0.7593	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	MA	pixel acc	0.1747	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	SE	AUC	0.9108	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	SE	pixel acc	0.5072	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	HE	AUC	0.7701	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	HE	pixel acc	0.3343	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	mean	pixel acc	0.4970	not stated	NA	mAcc column; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	mean	IoU	0.4278	not stated	NA	mIoU column; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Y-Net	Y-Net	no	mean	Dice	0.5490	not stated	NA	mDice column; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	EX	AUC	0.9735	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	EX	pixel acc	0.4671	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	MA	AUC	0.8633	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	MA	pixel acc	0.0279	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	SE	AUC	0.9873	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	SE	pixel acc	0.5413	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	HE	AUC	0.9507	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	HE	pixel acc	0.4326	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	mean	pixel acc	0.4921	not stated	NA	mAcc column; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	mean	IoU	0.4008	not stated	NA	mIoU column; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Swin-UNet	Swin-Unet	no	mean	Dice	0.5065	not stated	NA	mDice column; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	EX	AUC	0.9447	not stated	NA	AUC-ROC; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	EX	pixel acc	0.7710	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	MA	AUC	0.8068	not stated	NA	AUC-ROC; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	MA	pixel acc	0.2879	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	SE	AUC	0.8198	not stated	NA	AUC-ROC; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	SE	pixel acc	0.3246	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	HE	AUC	0.8826	not stated	NA	AUC-ROC; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	HE	pixel acc	0.4610	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	mean	pixel acc	0.5676	not stated	NA	mAcc column; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	mean	IoU	0.4855	not stated	NA	mIoU column; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Zhu et al.	Zhu et al. (Zhu2023)	no	mean	Dice	0.6100	not stated	NA	mDice column; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	EX	AUC	0.9948	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	EX	pixel acc	0.7682	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	MA	AUC	0.9881	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	MA	pixel acc	0.3669	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	SE	AUC	0.9985	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	SE	pixel acc	0.7731	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	HE	AUC	0.9818	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	HE	pixel acc	0.5905	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	mean	pixel acc	0.6985	self	NA	mAcc column
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	mean	IoU	0.5696	self	NA	mIoU column
+Zhang2023_TC-Net	Table 2	IDRiD	Ours	TC-Net	yes	mean	Dice	0.6968	self	NA	mDice column
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	EX	AUC	0.6426	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	EX	pixel acc	0.4023	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	MA	AUC	0.6122	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	MA	pixel acc	0.3580	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	SE	AUC	0.8014	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	SE	pixel acc	0.4453	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	HE	AUC	0.6926	not stated	NA	AUC-ROC; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	HE	pixel acc	0.2683	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	mean	pixel acc	0.4944	not stated	NA	mAcc column; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	mean	IoU	0.3849	not stated	NA	mIoU column; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	U-Net	U-Net	no	mean	Dice	0.4981	not stated	NA	mDice column; no citation mark in table; method ref Ronneberger2015 [8]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	EX	AUC	0.9325	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	EX	pixel acc	0.3675	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	MA	AUC	0.9003	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	MA	pixel acc	0.1427	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	SE	AUC	0.8827	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	SE	pixel acc	0.2586	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	HE	AUC	0.7473	not stated	NA	AUC-ROC; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	HE	pixel acc	0.2340	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	mean	pixel acc	0.4004	not stated	NA	mAcc column; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	mean	IoU	0.3693	not stated	NA	mIoU column; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	DeepLabv3+	DeepLabv3+	no	mean	Dice	0.4757	not stated	NA	mDice column; no citation mark in table; method ref Chen2018 [47]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	EX	AUC	0.9753	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	EX	pixel acc	0.4087	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	MA	AUC	0.8491	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	MA	pixel acc	0.1801	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	SE	AUC	0.9651	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	SE	pixel acc	0.5101	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	HE	AUC	0.9627	not stated	NA	AUC-ROC; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	HE	pixel acc	0.3372	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	mean	pixel acc	0.4869	not stated	NA	mAcc column; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	mean	IoU	0.3945	not stated	NA	mIoU column; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	X-Net	X-Net	no	mean	Dice	0.5079	not stated	NA	mDice column; no citation mark in table; method ref Li2021 [34]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	EX	AUC	0.7677	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	EX	pixel acc	0.3126	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	MA	AUC	0.7053	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	MA	pixel acc	0.2192	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	SE	AUC	0.8045	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	SE	pixel acc	0.4710	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	HE	AUC	0.6711	not stated	NA	AUC-ROC; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	HE	pixel acc	0.1766	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	mean	pixel acc	0.4356	not stated	NA	mAcc column; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	mean	IoU	0.3369	not stated	NA	mIoU column; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Y-Net	Y-Net	no	mean	Dice	0.4329	not stated	NA	mDice column; no citation mark in table; method ref Farshad2022 [49]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	EX	AUC	0.9854	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	EX	pixel acc	0.4135	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	MA	AUC	0.8725	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	MA	pixel acc	0.0590	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	SE	AUC	0.9869	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	SE	pixel acc	0.4071	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	HE	AUC	0.9652	not stated	NA	AUC-ROC; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	HE	pixel acc	0.3237	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	mean	pixel acc	0.4410	not stated	NA	mAcc column; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	mean	IoU	0.3814	not stated	NA	mIoU column; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Swin-UNet	Swin-Unet	no	mean	Dice	0.4849	not stated	NA	mDice column; no citation mark in table; method ref Cao2021 [12]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	EX	AUC	0.9205	not stated	NA	AUC-ROC; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	EX	pixel acc	0.3759	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	SE	AUC	0.9445	not stated	NA	AUC-ROC; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	SE	pixel acc	0.4379	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	HE	AUC	0.8824	not stated	NA	AUC-ROC; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	HE	pixel acc	0.2586	not stated	NA	per-class pixel accuracy (nii/ti); no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	mean	pixel acc	0.4146	not stated	NA	mAcc column; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	mean	IoU	0.3537	not stated	NA	mIoU column; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Zhu et al.	Zhu et al. (Zhu2023)	no	mean	Dice	0.4447	not stated	NA	mDice column; no citation mark in table; method ref Zhu2023 [36]
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	EX	AUC	0.9942	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	EX	pixel acc	0.5129	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	MA	AUC	0.9758	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	MA	pixel acc	0.2261	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	SE	AUC	0.9928	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	SE	pixel acc	0.4675	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	HE	AUC	0.9810	self	NA	AUC-ROC
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	HE	pixel acc	0.3817	self	NA	per-class pixel accuracy (nii/ti)
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	mean	pixel acc	0.5171	self	NA	mAcc column
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	mean	IoU	0.3969	self	NA	mIoU column
+Zhang2023_TC-Net	Table 3	DDR	Ours	TC-Net	yes	mean	Dice	0.5092	self	NA	mDice column
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	MA	AUPR	0.357	self	NA	UDA IDRiD->FGADR, 0% FGADR labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	HE	AUPR	0.502	self	NA	UDA IDRiD->FGADR, 0% FGADR labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	EX	AUPR	0.538	self	NA	UDA IDRiD->FGADR, 0% FGADR labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	SE	AUPR	0.522	self	NA	UDA IDRiD->FGADR, 0% FGADR labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	MA	AUPR	0.462	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% FGADR labels
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	HE	AUPR	0.676	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% FGADR labels
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	EX	AUPR	0.739	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% FGADR labels
+Hasan2022_DRG-Net	Table IV	FGADR	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	SE	AUPR	0.693	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% FGADR labels
+Hasan2022_DRG-Net	Table IV	FGADR	FCN-8s Zhou et al. (2020)	FCN	no	MA	AUPR	0.363	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'; FGADR benchmark split 1500/343
+Hasan2022_DRG-Net	Table IV	FGADR	FCN-8s Zhou et al. (2020)	FCN	no	HE	AUPR	0.606	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'; FGADR benchmark split 1500/343
+Hasan2022_DRG-Net	Table IV	FGADR	FCN-8s Zhou et al. (2020)	FCN	no	EX	AUPR	0.686	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'; FGADR benchmark split 1500/343
+Hasan2022_DRG-Net	Table IV	FGADR	FCN-8s Zhou et al. (2020)	FCN	no	SE	AUPR	0.642	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'; FGADR benchmark split 1500/343
+Hasan2022_DRG-Net	Table IV	FGADR	U-Net Zhou et al. (2020)	U-Net	no	MA	AUPR	0.382	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	U-Net Zhou et al. (2020)	U-Net	no	HE	AUPR	0.643	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	U-Net Zhou et al. (2020)	U-Net	no	EX	AUPR	0.726	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	U-Net Zhou et al. (2020)	U-Net	no	SE	AUPR	0.683	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	DL-V3+ Zhou et al. (2020)	DeepLabv3+	no	MA	AUPR	0.364	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	DL-V3+ Zhou et al. (2020)	DeepLabv3+	no	HE	AUPR	0.619	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	DL-V3+ Zhou et al. (2020)	DeepLabv3+	no	EX	AUPR	0.708	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	DL-V3+ Zhou et al. (2020)	DeepLabv3+	no	SE	AUPR	0.659	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	Attention U-Net Zhou et al. (2020)	Attention U-Net	no	MA	AUPR	0.435	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	Attention U-Net Zhou et al. (2020)	Attention U-Net	no	HE	AUPR	0.678	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	Attention U-Net Zhou et al. (2020)	Attention U-Net	no	EX	AUPR	0.731	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table IV	FGADR	Attention U-Net Zhou et al. (2020)	Attention U-Net	no	SE	AUPR	0.685	cited	Zhou2020	'using the results reported in Zhou et al. (2020)'
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	MA	AUPR	0.436	self	NA	UDA FGADR->IDRiD, 0% IDRiD labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	HE	AUPR	0.462	self	NA	UDA FGADR->IDRiD, 0% IDRiD labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	EX	AUPR	0.772	self	NA	UDA FGADR->IDRiD, 0% IDRiD labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (0% target labels)	DRG-Net	yes	SE	AUPR	0.476	self	NA	UDA FGADR->IDRiD, 0% IDRiD labels (proposed S-Net+AD-Net+W-Net)
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	MA	AUPR	0.511	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% IDRiD labels
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	HE	AUPR	0.700	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% IDRiD labels
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	EX	AUPR	0.851	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% IDRiD labels
+Hasan2022_DRG-Net	Table V	IDRiD	S-Net+AD-Net+W-Net (100% target labels)	DRG-Net	yes	SE	AUPR	0.714	self	NA	proposed S-Net+AD-Net+W-Net trained with 100% IDRiD labels
+Hasan2022_DRG-Net	Table V	IDRiD	Adv. HEDNet Xiao et al. (2019)	HEDNet+cGAN	no	MA	AUPR	0.439	cited	Xiao2019	citation in table; ROC '-' (Xiao2019 reports AUPR only); not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	Adv. HEDNet Xiao et al. (2019)	HEDNet+cGAN	no	HE	AUPR	0.483	cited	Xiao2019	citation in table; ROC '-' (Xiao2019 reports AUPR only); not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	Adv. HEDNet Xiao et al. (2019)	HEDNet+cGAN	no	EX	AUPR	0.840	cited	Xiao2019	citation in table; ROC '-' (Xiao2019 reports AUPR only); not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	Adv. HEDNet Xiao et al. (2019)	HEDNet+cGAN	no	SE	AUPR	0.481	cited	Xiao2019	citation in table; ROC '-' (Xiao2019 reports AUPR only); not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	AdvSeg Hung et al. (2018)	AdvSeg	no	MA	AUPR	0.470	cited	Hung2018	citation in table; not explicitly stated as copied (values as reported in Zhou2019 CoLL paper)
+Hasan2022_DRG-Net	Table V	IDRiD	AdvSeg Hung et al. (2018)	AdvSeg	no	HE	AUPR	0.592	cited	Hung2018	citation in table; not explicitly stated as copied (values as reported in Zhou2019 CoLL paper)
+Hasan2022_DRG-Net	Table V	IDRiD	AdvSeg Hung et al. (2018)	AdvSeg	no	EX	AUPR	0.79	cited	Hung2018	citation in table; not explicitly stated as copied (values as reported in Zhou2019 CoLL paper)
+Hasan2022_DRG-Net	Table V	IDRiD	AdvSeg Hung et al. (2018)	AdvSeg	no	SE	AUPR	0.675	cited	Hung2018	citation in table; not explicitly stated as copied (values as reported in Zhou2019 CoLL paper)
+Hasan2022_DRG-Net	Table V	IDRiD	ASDNet Zhou et al. (2019)	ASDNet	no	MA	AUPR	0.478	cited	Zhou2019	citation in table; not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	ASDNet Zhou et al. (2019)	ASDNet	no	HE	AUPR	0.628	cited	Zhou2019	citation in table; not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	ASDNet Zhou et al. (2019)	ASDNet	no	EX	AUPR	0.809	cited	Zhou2019	citation in table; not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	ASDNet Zhou et al. (2019)	ASDNet	no	SE	AUPR	0.692	cited	Zhou2019	citation in table; not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	CoLL Zhou et al. (2019)	Collaborative semi-supervised (Zhou2019)	no	MA	AUPR	0.473	cited	Zhou2019	citation in table; not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	CoLL Zhou et al. (2019)	Collaborative semi-supervised (Zhou2019)	no	HE	AUPR	0.657	cited	Zhou2019	citation in table; not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	CoLL Zhou et al. (2019)	Collaborative semi-supervised (Zhou2019)	no	EX	AUPR	0.845	cited	Zhou2019	citation in table; not explicitly stated as copied
+Hasan2022_DRG-Net	Table V	IDRiD	CoLL Zhou et al. (2019)	Collaborative semi-supervised (Zhou2019)	no	SE	AUPR	0.716	cited	Zhou2019	citation in table; not explicitly stated as copied
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	mean	AUPR	0.2881	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	EX	AUPR	0.4518	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	HE	AUPR	0.409	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	MA	AUPR	0.0821	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	SE	AUPR	0.2096	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	mean	IoU	0.2185	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	EX	IoU	0.3178	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	HE	IoU	0.2657	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	MA	IoU	0.0859	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	SE	IoU	0.2045	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	mean	F1	0.3500	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	EX	F1	0.4823	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	HE	F1	0.4199	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	MA	F1	0.1582	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	UNet	U-Net	no	SE	F1	0.3396	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	mean	AUPR	0.2927	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	EX	AUPR	0.4073	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	HE	AUPR	0.401	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	MA	AUPR	0.0552	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	SE	AUPR	0.3075	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	mean	IoU	0.2151	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	EX	IoU	0.2953	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	HE	IoU	0.2619	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	MA	IoU	0.0697	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	SE	IoU	0.2335	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	mean	F1	0.345	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	EX	F1	0.4559	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	HE	F1	0.415	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	MA	F1	0.1304	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	DeepLab V3+	DeepLabv3+	no	SE	F1	0.3787	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	mean	AUPR	0.3057	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	EX	AUPR	0.4976	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	HE	AUPR	0.3616	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	MA	AUPR	0.0697	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	SE	AUPR	0.294	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	mean	IoU	0.2172	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	EX	IoU	0.3258	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	HE	IoU	0.2258	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	MA	IoU	0.0858	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	SE	IoU	0.2317	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	mean	F1	0.3485	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	EX	F1	0.4915	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	HE	F1	0.3683	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	MA	F1	0.158	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	UNet++	U-Net++	no	SE	F1	0.3762	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	mean	AUPR	0.3092	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	EX	AUPR	0.4591	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	HE	AUPR	0.4146	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	MA	AUPR	0.0734	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	SE	AUPR	0.2896	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	mean	IoU	0.2366	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	EX	IoU	0.3539	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	HE	IoU	0.2686	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	MA	IoU	0.0817	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	SE	IoU	0.2422	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	mean	F1	0.3718	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	EX	F1	0.5228	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	HE	F1	0.4234	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	MA	F1	0.1511	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	CE-Net	CE-Net	no	SE	F1	0.3900	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	mean	AUPR	0.3221	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	EX	AUPR	0.4463	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	HE	AUPR	0.425	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	MA	AUPR	0.0647	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	SE	AUPR	0.3524	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	mean	IoU	0.2412	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	EX	IoU	0.3244	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	HE	IoU	0.2901	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	MA	IoU	0.0751	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	SE	IoU	0.2753	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	mean	F1	0.3777	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	EX	F1	0.4898	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	HE	F1	0.4497	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	MA	F1	0.1398	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	PSPNet	PSPNet	no	SE	F1	0.4317	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	DDR	L-Seg	L-Seg	no	mean	AUPR	0.3208	rerun	NA	mAUPR/mIoU/mF1 column; paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	L-Seg	L-Seg	no	EX	AUPR	0.5546	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	L-Seg	L-Seg	no	HE	AUPR	0.3586	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	L-Seg	L-Seg	no	MA	AUPR	0.1052	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	L-Seg	L-Seg	no	SE	AUPR	0.2648	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	RTNet	RTNet	no	mean	AUPR	0.3362	rerun	NA	mAUPR/mIoU/mF1 column; paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Huang2022 [6] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	RTNet	RTNet	no	EX	AUPR	0.5671	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Huang2022 [6] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	RTNet	RTNet	no	HE	AUPR	0.3656	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Huang2022 [6] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	RTNet	RTNet	no	MA	AUPR	0.1176	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Huang2022 [6] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	RTNet	RTNet	no	SE	AUPR	0.2943	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Huang2022 [6] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	PMCNet	PMCNet	no	mean	AUPR	0.3644	rerun	NA	mAUPR/mIoU/mF1 column; paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in He2022 [23] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	PMCNet	PMCNet	no	EX	AUPR	0.5430	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in He2022 [23] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	PMCNet	PMCNet	no	HE	AUPR	0.3987	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in He2022 [23] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	PMCNet	PMCNet	no	MA	AUPR	0.1994	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in He2022 [23] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	PMCNet	PMCNet	no	SE	AUPR	0.3164	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in He2022 [23] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	mean	AUPR	0.3902	self	NA	mAUPR/mIoU/mF1 column
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	EX	AUPR	0.5724	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	HE	AUPR	0.4256	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	MA	AUPR	0.202	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	SE	AUPR	0.3608	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	mean	IoU	0.2834	self	NA	mAUPR/mIoU/mF1 column
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	EX	IoU	0.4229	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	HE	IoU	0.3029	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	MA	IoU	0.1557	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	SE	IoU	0.252	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	mean	F1	0.4328	self	NA	mAUPR/mIoU/mF1 column
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	EX	F1	0.5944	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	HE	F1	0.4649	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	MA	F1	0.2694	self	NA	NA
+Xu2024_PGAFT	Table 1	DDR	Ours	PGAFT	yes	SE	F1	0.4026	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	mean	AUPR	0.4058	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	EX	AUPR	0.6827	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	HE	AUPR	0.4291	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	MA	AUPR	0.0782	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	SE	AUPR	0.4332	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	mean	IoU	0.3391	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	EX	IoU	0.5316	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	HE	IoU	0.3491	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	MA	IoU	0.0849	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	SE	IoU	0.3907	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	mean	F1	0.4825	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	EX	F1	0.6942	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	HE	F1	0.5176	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	MA	F1	0.1565	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	UNet	U-Net	no	SE	F1	0.5619	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Ronneberger2015 [36]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	mean	AUPR	0.4702	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	EX	AUPR	0.6394	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	HE	AUPR	0.5581	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	MA	AUPR	0.1188	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	SE	AUPR	0.5646	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	mean	IoU	0.3824	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	EX	IoU	0.5303	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	HE	IoU	0.427	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	MA	IoU	0.1156	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	SE	IoU	0.4567	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	mean	F1	0.531	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	EX	F1	0.6931	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	HE	F1	0.5985	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	MA	F1	0.2073	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	CE-Net	CE-Net	no	SE	F1	0.6271	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Gu2019 [39]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	mean	AUPR	0.4867	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	EX	AUPR	0.6389	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	HE	AUPR	0.5554	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	MA	AUPR	0.1464	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	SE	AUPR	0.6062	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	mean	IoU	0.3712	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	EX	IoU	0.4545	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	HE	IoU	0.445	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	MA	IoU	0.0961	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	SE	IoU	0.4891	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	mean	F1	0.5183	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	EX	F1	0.625	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	HE	F1	0.6159	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	MA	F1	0.1753	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	PSPNet	PSPNet	no	SE	F1	0.6569	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhao2017 [40]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	mean	AUPR	0.4886	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	EX	AUPR	0.6584	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	HE	AUPR	0.5694	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	MA	AUPR	0.1612	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	SE	AUPR	0.5653	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	mean	IoU	0.3939	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	EX	IoU	0.5249	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	HE	IoU	0.4203	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	MA	IoU	0.1582	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	SE	IoU	0.4723	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	mean	F1	0.5488	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	EX	F1	0.6885	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	HE	F1	0.5918	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	MA	F1	0.2732	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	UNet++	U-Net++	no	SE	F1	0.6416	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref Zhou2018 [37]
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	mean	AUPR	0.5234	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	EX	AUPR	0.7134	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	HE	AUPR	0.5700	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	MA	AUPR	0.1810	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	SE	AUPR	0.6293	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	mean	IoU	0.3208	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	EX	IoU	0.4825	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	HE	IoU	0.3386	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	MA	IoU	0.0633	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	SE	IoU	0.3988	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	mean	F1	0.4615	rerun	NA	mAUPR/mIoU/mF1 column; stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	EX	F1	0.6509	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	HE	F1	0.5059	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	MA	F1	0.119	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	DeepLab V3+	DeepLabv3+	no	SE	F1	0.5702	rerun	NA	stated 'same experimental setup ... for a fair comparison' for all compared models; method ref [38] (mis-citation: Chen2018 'hydraulic fracturing' paper)
+Xu2024_PGAFT	Table 1	IDRiD	EAD-Net	EAD-Net	no	mean	AUPR	0.5489	rerun	NA	mAUPR/mIoU/mF1 column; paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Wan2021 [41] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	EAD-Net	EAD-Net	no	EX	AUPR	0.7818	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Wan2021 [41] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	EAD-Net	EAD-Net	no	HE	AUPR	0.5649	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Wan2021 [41] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	EAD-Net	EAD-Net	no	MA	AUPR	0.2408	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Wan2021 [41] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	EAD-Net	EAD-Net	no	SE	AUPR	0.6083	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Wan2021 [41] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	L-Seg	L-Seg	no	mean	AUPR	0.6515	rerun	NA	mAUPR/mIoU/mF1 column; paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	L-Seg	L-Seg	no	EX	AUPR	0.7945	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	L-Seg	L-Seg	no	HE	AUPR	0.6374	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	L-Seg	L-Seg	no	MA	AUPR	0.4627	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	L-Seg	L-Seg	no	SE	AUPR	0.7113	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Guo2019 [11] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	RILBP-YNet	RILBP-YNet	no	mean	AUPR	0.6586	rerun	NA	mAUPR/mIoU/mF1 column; paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Pavani2023 [42] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	RILBP-YNet	RILBP-YNet	no	EX	AUPR	0.7858	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Pavani2023 [42] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	RILBP-YNet	RILBP-YNet	no	HE	AUPR	0.6914	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Pavani2023 [42] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	RILBP-YNet	RILBP-YNet	no	MA	AUPR	0.3804	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Pavani2023 [42] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	RILBP-YNet	RILBP-YNet	no	SE	AUPR	0.7267	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Pavani2023 [42] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	SAA	SAA	no	mean	AUPR	0.6738	rerun	NA	mAUPR/mIoU/mF1 column; paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Bo2022 [43] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	SAA	SAA	no	EX	AUPR	0.8812	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Bo2022 [43] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	SAA	SAA	no	HE	AUPR	0.6704	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Bo2022 [43] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	SAA	SAA	no	MA	AUPR	0.4152	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Bo2022 [43] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	SAA	SAA	no	SE	AUPR	0.7281	rerun	NA	paper claims same setup for all models, but IoU/F1 are '-' and AUPR values equal those reported in Bo2022 [43] -> effectively copied (not stated)
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	mean	AUPR	0.6755	self	NA	mAUPR/mIoU/mF1 column
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	EX	AUPR	0.8593	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	HE	AUPR	0.6948	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	MA	AUPR	0.3983	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	SE	AUPR	0.7495	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	mean	IoU	0.4817	self	NA	mAUPR/mIoU/mF1 column
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	EX	IoU	0.5147	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	HE	IoU	0.4736	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	MA	IoU	0.1986	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	SE	IoU	0.5397	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	mean	F1	0.626	self	NA	mAUPR/mIoU/mF1 column
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	EX	F1	0.6796	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	HE	F1	0.6428	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	MA	F1	0.3314	self	NA	NA
+Xu2024_PGAFT	Table 1	IDRiD	Ours	PGAFT	yes	SE	F1	0.6604	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	MTUnet [10]	MTUnet (Foo2020)	no	EX	Dice	0.8427	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MTUnet [10]	MTUnet (Foo2020)	no	SE	Dice	0.8423	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MTUnet [10]	MTUnet (Foo2020)	no	HE	Dice	0.7515	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MTUnet [10]	MTUnet (Foo2020)	no	MA	Dice	0.6737	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	Dice	0.8568	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	AUPR	0.8872	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	SE	Dice	0.8143	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	SE	AUPR	0.7407	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	HE	Dice	0.7312	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	HE	AUPR	0.6936	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	MA	Dice	0.7069	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	MA	AUPR	0.4960	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	Dice	0.8423	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	AUPR	0.8861	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	SE	Dice	0.8019	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	SE	AUPR	0.7051	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	HE	Dice	0.8983	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	HE	AUPR	0.9012	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	Dice	0.7126	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	AUPR	0.6790	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	EX	Dice	0.9521	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	EX	AUPR	0.8987	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	SE	Dice	0.9542	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	SE	AUPR	0.8739	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	HE	Dice	0.9183	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	HE	AUPR	0.7929	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	MA	Dice	0.9165	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CARNet [13]	CARNet	no	MA	AUPR	0.8371	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	EX	Dice	0.9513	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	EX	AUPR	0.8724	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	SE	Dice	0.9215	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	SE	AUPR	0.6705	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	HE	Dice	0.8973	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	HE	AUPR	0.7111	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	MA	Dice	0.8413	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	PMCNet [14]	PMCNet	no	MA	AUPR	0.4694	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	EX	Dice	0.9417	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	EX	AUPR	0.9024	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	SE	Dice	0.9017	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	SE	AUPR	0.6880	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	HE	Dice	0.8479	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	HE	AUPR	0.4897	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	MA	Dice	0.8217	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RTNet [15]	RTNet	no	MA	AUPR	0.6502	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	EX	Dice	0.9152	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	EX	AUPR	0.8272	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	SE	Dice	0.9153	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	SE	AUPR	0.6611	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	HE	Dice	0.7983	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	HE	AUPR	0.6722	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	MA	Dice	0.8051	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	CLC-Net [16]	CLC-Net	no	MA	AUPR	0.5461	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	EX	Dice	0.9478	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	EX	AUPR	0.7945	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	SE	Dice	0.9089	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	SE	AUPR	0.7113	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	HE	Dice	0.7986	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	HE	AUPR	0.6371	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	MA	Dice	0.8793	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	L-Seg [18]	L-Seg	no	MA	AUPR	0.4627	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals L-Seg paper (0.7945/0.7113/0.6371(0.6374 in orig)/0.4627)
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	EX	Dice	0.9047	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	EX	AUPR	0.8644	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	SE	Dice	0.9128	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	SE	AUPR	0.7597	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	HE	Dice	0.9012	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	HE	AUPR	0.6411	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	MA	Dice	0.9013	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	RILBP-YNet [21]	RILBP-YNet	no	MA	AUPR	0.4393	cited	Pavani2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMS [22]	DMS (Xue2019)	no	EX	Dice	0.7790	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMS [22]	DMS (Xue2019)	no	EX	AUPR	0.8970	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMS [22]	DMS (Xue2019)	no	MA	Dice	0.7640	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMS [22]	DMS (Xue2019)	no	MA	AUPR	0.4692	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	EX	Dice	0.9327	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	EX	AUPR	0.7127	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	SE	Dice	0.9398	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	SE	AUPR	0.6995	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	HE	Dice	0.9206	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	HE	AUPR	0.6804	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	MA	Dice	0.8971	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	VRT	VRT (IDRiD challenge)	no	MA	AUPR	0.4951	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	EX	Dice	0.9302	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	EX	AUPR	0.8850	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	SE	Dice	0.9235	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	SE	AUPR	0.7051	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	HE	Dice	0.9012	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	HE	AUPR	0.6490	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	MA	Dice	0.8639	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	PATech	PATech (IDRiD challenge)	no	MA	AUPR	0.4740	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	EX	Dice	0.9069	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	EX	AUPR	0.8741	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	SE	Dice	0.9217	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	SE	AUPR	0.6588	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	HE	Dice	0.8798	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	HE	AUPR	0.5588	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	MA	Dice	0.8591	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG (IDRiD challenge)	no	MA	AUPR	0.5017	cited	IDRiD challenge leaderboard (Porwal2018 [19])	citation marker in table; no explicit rerun/copy statement for this dataset; equals IDRiD challenge leaderboard AUPR
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	EX	Dice	0.7112	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	EX	AUPR	0.7660	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	SE	Dice	0.8012	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	SE	AUPR	0.7985	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	HE	Dice	0.5940	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	HE	AUPR	0.6360	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	MA	Dice	0.4380	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	LKD [37]	LKD (Wang2024)	no	MA	AUPR	0.5320	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	EX	Dice	0.7850	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	EX	AUPR	0.8690	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	SE	Dice	0.7196	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	SE	AUPR	0.7673	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	HE	Dice	0.6427	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	HE	AUPR	0.6850	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	MA	Dice	0.4412	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	HACDR-Net [38]	HACDR-Net	no	MA	AUPR	0.4302	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	EX	Dice	0.5562	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	EX	AUPR	0.6120	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	SE	Dice	0.5566	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	SE	AUPR	0.6053	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	HE	Dice	0.5561	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	HE	AUPR	0.6051	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	MA	Dice	0.3473	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	MA	AUPR	0.5734	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	EX	Dice	0.7997	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	EX	AUPR	0.8229	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	SE	Dice	0.6792	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	SE	AUPR	0.6900	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	HE	Dice	0.6642	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	HE	AUPR	0.6869	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	MA	Dice	0.4863	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	M2MRF [40]	M2MRF	no	MA	AUPR	0.4880	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper IDRiD (82.29/69.00/68.69/48.80)
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	EX	Dice	0.8952	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	EX	AUPR	0.8961	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	SE	Dice	0.9230	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	SE	AUPR	0.9028	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	HE	Dice	0.6985	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	HE	AUPR	0.6884	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	MA	Dice	0.8290	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	DMSF [24]	Deep-multiscale (Guo2024)	no	MA	AUPR	0.4975	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	EX	Dice	0.9525	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	EX	AUPR	0.9017	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	SE	Dice	0.9575	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	SE	AUPR	0.8262	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	HE	Dice	0.9239	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	HE	AUPR	0.8219	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	MA	Dice	0.9171	self	NA	NA
+Guo2026_TVFNet	Table 2	IDRiD	Proposed	TVFNet	yes	MA	AUPR	0.6982	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	MTUnet [10]	MTUnet (Foo2020)	no	EX	Dice	0.8397	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MTUnet [10]	MTUnet (Foo2020)	no	SE	Dice	0.7983	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MTUnet [10]	MTUnet (Foo2020)	no	HE	Dice	0.8027	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MTUnet [10]	MTUnet (Foo2020)	no	MA	Dice	0.6923	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	Dice	0.7412	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	AUPR	0.7981	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	SE	Dice	0.6859	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	SE	AUPR	0.7438	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	HE	Dice	0.7519	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	MA	Dice	0.6738	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	Dice	0.8459	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	AUPR	0.8625	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	SE	Dice	0.8537	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	SE	AUPR	0.7983	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	HE	Dice	0.7984	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	HE	AUPR	0.4396	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	Dice	0.7967	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	AUPR	0.3849	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	EX	Dice	0.9687	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	EX	AUPR	0.8373	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	SE	Dice	0.9465	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	SE	AUPR	0.7239	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	HE	Dice	0.9468	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	HE	AUPR	0.4032	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	MA	Dice	0.9307	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CARNet [13]	CARNet	no	MA	AUPR	0.3725	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	EX	Dice	0.9508	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	EX	AUPR	0.5430	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	SE	Dice	0.8324	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	SE	AUPR	0.3987	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	HE	Dice	0.8013	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	HE	AUPR	0.3164	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	MA	Dice	0.8034	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	PMCNet [14]	PMCNet	no	MA	AUPR	0.1994	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals PMCNet DDR numbers but SE/HE appear swapped vs original (orig HE 0.3987, SE 0.3164)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	EX	Dice	0.9247	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	EX	AUPR	0.5671	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	SE	Dice	0.8352	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	SE	AUPR	0.2943	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	HE	Dice	0.9341	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	HE	AUPR	0.3656	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	MA	Dice	0.8167	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	RTNet [15]	RTNet	no	MA	AUPR	0.1176	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals RTNet paper DDR (0.5671/0.2943/0.3656/0.1176)
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	EX	Dice	0.8479	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	EX	AUPR	0.7130	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	SE	Dice	0.7985	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	SE	AUPR	0.6380	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	HE	Dice	0.8697	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	HE	AUPR	0.5860	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	MA	Dice	0.8916	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	CLC-Net [16]	CLC-Net	no	MA	AUPR	0.3860	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	EX	Dice	0.9183	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	EX	AUPR	0.5546	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	SE	Dice	0.8897	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	SE	AUPR	0.2648	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	HE	Dice	0.8697	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	HE	AUPR	0.3586	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	MA	Dice	0.8874	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	L-Seg [18]	L-Seg	no	MA	AUPR	0.1052	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals values reported for L-Seg on DDR in M2MRF/PGAFT (0.5546/0.2648/0.3586/0.1052)
+Guo2026_TVFNet	Table 3	DDR	LKD [37]	LKD (Wang2024)	no	EX	Dice	0.5900	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	LKD [37]	LKD (Wang2024)	no	EX	AUPR	0.6450	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	LKD [37]	LKD (Wang2024)	no	HE	Dice	0.6150	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	LKD [37]	LKD (Wang2024)	no	HE	AUPR	0.6440	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	LKD [37]	LKD (Wang2024)	no	MA	Dice	0.5550	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	LKD [37]	LKD (Wang2024)	no	MA	AUPR	0.6050	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	EX	Dice	0.6124	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	EX	AUPR	0.6515	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	SE	Dice	0.5564	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	SE	AUPR	0.5675	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	HE	Dice	0.5396	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	HE	AUPR	0.5502	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	MA	Dice	0.2334	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	HACDR-Net [38]	HACDR-Net	no	MA	AUPR	0.2450	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	EX	Dice	0.7285	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	EX	AUPR	0.6918	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	SE	Dice	0.3177	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	SE	AUPR	0.3914	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	HE	Dice	0.5378	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	HE	AUPR	0.3980	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	MA	Dice	0.3845	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	MA	AUPR	0.5647	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	EX	Dice	0.6115	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	EX	AUPR	0.6417	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	SE	Dice	0.5210	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	SE	AUPR	0.5319	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	HE	Dice	0.4681	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	HE	AUPR	0.5547	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	MA	Dice	0.2804	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	M2MRF [40]	M2MRF	no	MA	AUPR	0.2846	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; AUPR equals M2MRF paper DDR (64.17/53.19/55.47/28.46)
+Guo2026_TVFNet	Table 3	DDR	DMSF [24]	Deep-multiscale (Guo2024)	no	EX	AUPR	0.6014	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DMSF [24]	Deep-multiscale (Guo2024)	no	SE	AUPR	0.7752	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DMSF [24]	Deep-multiscale (Guo2024)	no	HE	AUPR	0.3652	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	DMSF [24]	Deep-multiscale (Guo2024)	no	MA	AUPR	0.1194	cited	Guo2023 (ref [24], Guo T.)	citation marker in table; no explicit rerun/copy statement for this dataset
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	EX	Dice	0.9712	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	EX	AUPR	0.8417	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	SE	Dice	0.9514	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	SE	AUPR	0.7819	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	HE	Dice	0.9416	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	HE	AUPR	0.6907	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	MA	Dice	0.9217	self	NA	NA
+Guo2026_TVFNet	Table 3	DDR	Proposed	TVFNet	yes	MA	AUPR	0.4697	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	EX	Dice	0.8689	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	EX	AUPR	0.8206	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	SE	Dice	0.9315	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	SE	AUPR	0.8963	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	HE	Dice	0.8515	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	HE	AUPR	0.9135	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	MA	Dice	0.9128	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MTUnet [10]	MTUnet (Foo2020)	no	MA	AUPR	0.8977	not stated	NA	citation in table (Foo2020); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	Dice	0.8768	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	AUPR	0.8632	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	SE	Dice	0.9143	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	SE	AUPR	0.8862	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	HE	Dice	0.7429	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	HE	AUPR	0.9012	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	MA	Dice	0.7537	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	MA	AUPR	0.8892	not stated	NA	citation in table (Zhou2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	Dice	0.9087	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	AUPR	0.7205	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	SE	Dice	0.9013	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	SE	AUPR	0.7495	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	HE	Dice	0.8719	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	HE	AUPR	0.7988	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	Dice	0.8226	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	AUPR	0.8098	not stated	NA	citation in table (Wang2021); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	EX	Dice	0.9523	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	EX	AUPR	0.7985	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	SE	Dice	0.9351	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	SE	AUPR	0.9212	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	HE	Dice	0.9079	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	HE	AUPR	0.8988	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	MA	Dice	0.9107	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CARNet [13]	CARNet	no	MA	AUPR	0.9217	not stated	NA	citation in table (Guo2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	EX	Dice	0.9369	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	EX	AUPR	0.8023	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	SE	Dice	0.9152	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	SE	AUPR	0.7923	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	HE	Dice	0.8879	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	HE	AUPR	0.8297	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	MA	Dice	0.8712	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	PMCNet [14]	PMCNet	no	MA	AUPR	0.8952	not stated	NA	citation in table (He2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	EX	Dice	0.9352	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	EX	AUPR	0.8039	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	SE	Dice	0.8963	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	SE	AUPR	0.8896	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	HE	Dice	0.8471	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	HE	AUPR	0.7852	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	MA	Dice	0.9021	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	RTNet [15]	RTNet	no	MA	AUPR	0.9023	not stated	NA	citation in table (Huang2022); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	EX	Dice	0.9282	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	EX	AUPR	0.8269	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	SE	Dice	0.9063	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	SE	AUPR	0.8696	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	HE	Dice	0.8761	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	HE	AUPR	0.8895	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	MA	Dice	0.9061	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	CLC-Net [16]	CLC-Net	no	MA	AUPR	0.9058	not stated	NA	citation in table (Wang2023); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	EX	Dice	0.9478	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	EX	AUPR	0.9205	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	SE	Dice	0.9389	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	SE	AUPR	0.8963	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	HE	Dice	0.8937	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	HE	AUPR	0.9015	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	MA	Dice	0.8867	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	L-Seg [18]	L-Seg	no	MA	AUPR	0.9215	not stated	NA	citation in table (Guo2019); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	EX	Dice	0.5271	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	EX	AUPR	0.8659	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	SE	Dice	0.6120	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	SE	AUPR	0.8762	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	HE	Dice	0.5145	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	HE	AUPR	0.8256	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	MA	Dice	0.7059	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	LKD [37]	LKD (Wang2024)	no	MA	AUPR	0.8852	not stated	NA	citation in table (Wang2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	EX	Dice	0.6025	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	EX	AUPR	0.8869	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	SE	Dice	0.6147	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	SE	AUPR	0.6689	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	HE	Dice	0.5334	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	HE	AUPR	0.8659	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	MA	Dice	0.5450	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	HACDR-Net [38]	HACDR-Net	no	MA	AUPR	0.6985	not stated	NA	citation in table (Xu2024 (listed as 'QiHao X' [38])); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	EX	Dice	0.7285	not stated	NA	citation in table (Li2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	SE	Dice	0.5378	not stated	NA	citation in table (Li2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	HE	Dice	0.3845	not stated	NA	citation in table (Li2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	MA	Dice	0.5098	not stated	NA	citation in table (Li2024); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	M2MRF [40]	M2MRF	no	EX	Dice	0.6058	not stated	NA	citation in table (Liu2021 (arXiv version of M2MRF)); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	M2MRF [40]	M2MRF	no	SE	Dice	0.4381	not stated	NA	citation in table (Liu2021 (arXiv version of M2MRF)); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	M2MRF [40]	M2MRF	no	HE	Dice	0.2804	not stated	NA	citation in table (Liu2021 (arXiv version of M2MRF)); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	M2MRF [40]	M2MRF	no	MA	Dice	0.4895	not stated	NA	citation in table (Liu2021 (arXiv version of M2MRF)); paper says 'we replicated the code of five existing network models' on FGADR without naming them
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	EX	Dice	0.9521	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	EX	AUPR	0.9657	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	SE	Dice	0.9182	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	SE	AUPR	0.9217	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	HE	Dice	0.9125	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	HE	AUPR	0.8918	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	MA	Dice	0.8792	self	NA	NA
+Guo2026_TVFNet	Table 4	FGADR	Proposed	TVFNet	yes	MA	AUPR	0.9233	self	NA	NA
+Guo2026_TVFNet	Table 5	e-ophtha	MTUnet [10]	MTUnet (Foo2020)	no	EX	Dice	0.8439	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MTUnet [10]	MTUnet (Foo2020)	no	EX	AUPR	0.4197	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MTUnet [10]	MTUnet (Foo2020)	no	MA	Dice	0.8793	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MTUnet [10]	MTUnet (Foo2020)	no	MA	AUPR	0.3987	cited	Foo2020	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	Dice	0.8824	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	EX	AUPR	0.5031	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	MA	Dice	0.9021	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLSS [11]	Collaborative semi-supervised (Zhou2019)	no	MA	AUPR	0.4062	cited	Zhou2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	Dice	0.8952	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	EX	AUPR	0.4493	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	Dice	0.5039	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DeepMT-DR [12]	DeepMT-DR (Wang2021)	no	MA	AUPR	0.5069	cited	Wang2021	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CARNet [13]	CARNet	no	EX	Dice	0.9198	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CARNet [13]	CARNet	no	MA	Dice	0.8953	cited	Guo2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	PMCNet [14]	PMCNet	no	EX	Dice	0.9268	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	PMCNet [14]	PMCNet	no	EX	AUPR	0.5120	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	PMCNet [14]	PMCNet	no	MA	Dice	0.9187	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	PMCNet [14]	PMCNet	no	MA	AUPR	0.3060	cited	He2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	RTNet [15]	RTNet	no	EX	Dice	0.9283	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	RTNet [15]	RTNet	no	EX	AUPR	0.5146	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	RTNet [15]	RTNet	no	MA	Dice	0.9127	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	RTNet [15]	RTNet	no	MA	AUPR	0.1925	cited	Huang2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLC-Net [16]	CLC-Net	no	EX	Dice	0.9027	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLC-Net [16]	CLC-Net	no	EX	AUPR	0.7220	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLC-Net [16]	CLC-Net	no	MA	Dice	0.8697	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	CLC-Net [16]	CLC-Net	no	MA	AUPR	0.5360	cited	Wang2023	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	L-Seg [18]	L-Seg	no	EX	Dice	0.9209	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	L-Seg [18]	L-Seg	no	EX	AUPR	0.4171	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	L-Seg [18]	L-Seg	no	MA	Dice	0.8713	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	L-Seg [18]	L-Seg	no	MA	AUPR	0.1687	cited	Guo2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DMS [22]	DMS (Xue2019)	no	EX	Dice	0.8319	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DMS [22]	DMS (Xue2019)	no	EX	AUPR	0.8001	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DMS [22]	DMS (Xue2019)	no	MA	Dice	0.9782	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	DMS [22]	DMS (Xue2019)	no	MA	AUPR	0.2179	cited	Xue2019	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MLSF-Net [41]	MLSF-Net (Yan2022)	no	EX	Dice	0.7963	cited	Yan2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MLSF-Net [41]	MLSF-Net (Yan2022)	no	EX	AUPR	0.6943	cited	Yan2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MLSF-Net [41]	MLSF-Net (Yan2022)	no	MA	Dice	0.8725	cited	Yan2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MLSF-Net [41]	MLSF-Net (Yan2022)	no	MA	AUPR	0.5945	cited	Yan2022	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	LKD [37]	LKD (Wang2024)	no	EX	Dice	0.5560	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	LKD [37]	LKD (Wang2024)	no	EX	AUPR	0.6369	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	LKD [37]	LKD (Wang2024)	no	MA	Dice	0.5550	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	LKD [37]	LKD (Wang2024)	no	MA	AUPR	0.6020	cited	Wang2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	HACDR-Net [38]	HACDR-Net	no	EX	Dice	0.6025	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	HACDR-Net [38]	HACDR-Net	no	EX	AUPR	0.6147	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	HACDR-Net [38]	HACDR-Net	no	MA	Dice	0.2334	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	HACDR-Net [38]	HACDR-Net	no	MA	AUPR	0.2450	cited	Xu2024 (listed as 'QiHao X' [38])	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	EX	Dice	0.7285	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	EX	AUPR	0.6918	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	MA	Dice	0.3845	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	MSGDA-Net [39]	MSGDA-Net (Li2024)	no	MA	AUPR	0.5647	cited	Li2024	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	M2MRF [40]	M2MRF	no	EX	Dice	0.6058	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	M2MRF [40]	M2MRF	no	EX	AUPR	0.7417	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	M2MRF [40]	M2MRF	no	MA	Dice	0.2804	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	M2MRF [40]	M2MRF	no	MA	AUPR	0.2846	cited	Liu2021 (arXiv version of M2MRF)	citation marker in table; no explicit rerun/copy statement for this dataset; E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	Proposed	TVFNet	yes	EX	Dice	0.9278	self	NA	E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	Proposed	TVFNet	yes	EX	AUPR	0.7997	self	NA	E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	Proposed	TVFNet	yes	MA	Dice	0.9131	self	NA	E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Guo2026_TVFNet	Table 5	e-ophtha	Proposed	TVFNet	yes	MA	AUPR	0.6295	self	NA	E-ophtha_EX / E-ophtha_MA subsets, own 7:3 split
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	MA	Dice	0.468	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	MA	AUPR	0.363	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	HE	Dice	0.509	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	HE	AUPR	0.606	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	EX	Dice	0.586	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	EX	AUPR	0.686	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	SE	Dice	0.637	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	FCN-8s54	FCN	no	SE	AUPR	0.642	cited	Long2015 [54]	citation superscript; values identical to Zhou2020 FGADR benchmark table (1500/343 split), copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	MA	Dice	0.482	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	MA	AUPR	0.364	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	HE	Dice	0.55	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	HE	AUPR	0.619	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	EX	Dice	0.602	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	EX	AUPR	0.702	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	SE	Dice	0.648	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	DL_V3+ (s = 8)55	DeepLabv3+	no	SE	AUPR	0.659	cited	Chen2018 [55]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	UNet-CL56 (semi-supervised)	UNet-CL (Gu2021)	no	MA	Dice	0.166	cited	Gu2021 [56]	citation superscript; Dice only
+Ullah2023_SSMD-UNet	Table 1	FGADR	UNet-CL56 (semi-supervised)	UNet-CL (Gu2021)	no	HE	Dice	0.365	cited	Gu2021 [56]	citation superscript; Dice only
+Ullah2023_SSMD-UNet	Table 1	FGADR	UNet-CL56 (semi-supervised)	UNet-CL (Gu2021)	no	EX	Dice	0.382	cited	Gu2021 [56]	citation superscript; Dice only
+Ullah2023_SSMD-UNet	Table 1	FGADR	UNet-CL56 (semi-supervised)	UNet-CL (Gu2021)	no	SE	Dice	0.475	cited	Gu2021 [56]	citation superscript; Dice only
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	MA	Dice	0.521	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	MA	AUPR	0.382	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	HE	Dice	0.57	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	HE	AUPR	0.643	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	EX	Dice	0.607	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	EX	AUPR	0.726	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	SE	Dice	0.655	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net51	U-Net	no	SE	AUPR	0.683	cited	Ronneberger2015 [51]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	MA	Dice	0.515	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	MA	AUPR	0.389	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	HE	Dice	0.547	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	HE	AUPR	0.647	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	EX	Dice	0.618	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	EX	AUPR	0.731	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	SE	Dice	0.649	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	Multi-class U-Net	U-Net	no	SE	AUPR	0.685	not stated	NA	no citation; multi-class variant of U-Net (values match Zhou2020 FGADR table)
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	MA	Dice	0.536	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	MA	AUPR	0.435	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	HE	Dice	0.576	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	HE	AUPR	0.678	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	EX	Dice	0.637	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	EX	AUPR	0.762	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	SE	Dice	0.689	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	AttentionU-Net57	Attention U-Net	no	SE	AUPR	0.712	cited	Oktay2018 [57]	citation superscript; values identical to Zhou2020 FGADR benchmark table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	MA	Dice	0.529	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	MA	AUPR	0.441	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	HE	Dice	0.58	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	HE	AUPR	0.682	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	EX	Dice	0.638	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	EX	AUPR	0.764	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	SE	Dice	0.685	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Gated U-Net58	Gated U-Net (Schlemper2019)	no	SE	AUPR	0.716	cited	Schlemper2019 [58]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	MA	Dice	0.559	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	MA	AUPR	0.469	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	HE	Dice	0.617	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	HE	AUPR	0.697	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	EX	Dice	0.649	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	EX	AUPR	0.775	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	SE	Dice	0.723	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	Dense U-Net59	Dense U-Net (Li2018)	no	SE	AUPR	0.726	cited	Li2018 [59]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	MA	Dice	0.533	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	MA	AUPR	0.453	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	HE	Dice	0.597	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	HE	AUPR	0.689	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	EX	Dice	0.644	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	EX	AUPR	0.771	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	SE	Dice	0.719	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	U-Net++34	U-Net++	no	SE	AUPR	0.722	cited	Zhou2018 [34]	citation superscript; values match Zhou2020 FGADR table, copy not stated
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	MA	Dice	0.548	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	MA	AUPR	0.524	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	HE	Dice	0.611	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	HE	AUPR	0.724	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	EX	Dice	0.635	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	EX	AUPR	0.691	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	SE	Dice	0.724	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	MD-UNet	SSMD-UNet	yes	SE	AUPR	0.756	self	NA	own fully-supervised variant (no SSL); own 70/5/25 FGADR split
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	MA	Dice	0.579	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	MA	AUPR	0.646	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	HE	Dice	0.653	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	HE	AUPR	0.824	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	EX	Dice	0.662	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	EX	AUPR	0.790	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	SE	Dice	0.751	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 1	FGADR	SSMD-UNet (Ours)	SSMD-UNet	yes	SE	AUPR	0.867	self	NA	own 70/5/25 FGADR split (1290/92/460)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	MA	Dice	0.225	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	MA	AUPR	0.265	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	HE	Dice	0.251	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	HE	AUPR	0.324	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	EX	Dice	0.297	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	EX	AUPR	0.364	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	SE	Dice	0.342	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	UNet	U-Net	no	SE	AUPR	0.349	rerun	NA	'UNet, DeepLabV3+, and FCN are trained using only the limited samples, specifically 54 samples'; anomalously low values (AUC-ROC 0.43-0.49)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	MA	Dice	0.366	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	MA	AUPR	0.354	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	HE	Dice	0.386	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	HE	AUPR	0.459	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	EX	Dice	0.401	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	EX	AUPR	0.388	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	SE	Dice	0.413	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	DeepLabV3+	DeepLabv3+	no	SE	AUPR	0.432	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	MA	Dice	0.447	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	MA	AUPR	0.493	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	HE	Dice	0.453	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	HE	AUPR	0.499	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	EX	Dice	0.459	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	EX	AUPR	0.452	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	SE	Dice	0.461	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	FCN	FCN	no	SE	AUPR	0.476	rerun	NA	trained on 54 IDRiD images by the authors; anomalously low values
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	MA	Dice	0.735	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	MA	AUPR	0.584	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	HE	Dice	0.873	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	HE	AUPR	0.781	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	EX	Dice	0.917	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	EX	AUPR	0.899	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	SE	Dice	0.884	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 3	IDRiD	SSMD-UNet	SSMD-UNet	yes	SE	AUPR	0.752	self	NA	training data for this row not explicitly stated (SSL with EyePACS; baselines use 54 IDRiD train images)
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Yan et al.60	Yan2019	no	HE	AUPR	70.3	cited	Yan2019 [60]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 66% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Guo et al.27	L-Seg	no	HE	AUC	63.74	cited	Guo2019 [27]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; placed in 'AUC/%' column but equals L-Seg's published AUC-PR for HE
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Xu et al.61	FFU-Net (Xu2021)	no	HE	Dice	84.50	cited	Xu2021 [61]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 66% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	HE	AUPR	71.2	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	HE	Dice	74.21	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	HE	AUPR	74.8	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	HE	Dice	79.10	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	HE	AUPR	78.14	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 20% IDRiD added to training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	HE	Dice	87.35	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 20% IDRiD added to training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Yan et al.60	Yan2019	no	MA	AUPR	52.5	cited	Yan2019 [60]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 67% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Guo et al.27	L-Seg	no	MA	AUC	46.27	cited	Guo2019 [27]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; placed in 'AUC/%' column but equals L-Seg's published AUC-PR for MA
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Sarhan et al.62	Sarhan2019	no	MA	AUPR	41.96	cited	Sarhan2019 [62]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 67% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Xu et al.61	FFU-Net (Xu2021)	no	MA	Dice	71.88	cited	Xu2021 [61]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 67% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	MA	AUPR	50.91	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	MA	Dice	67.23	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	MA	AUPR	54.35	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	MA	Dice	70.54	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	MA	AUPR	58.42	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 20% IDRiD added to training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	MA	Dice	73.52	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 20% IDRiD added to training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Yan et al.60	Yan2019	no	SE	AUPR	67.9	cited	Yan2019 [60]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 65% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Guo et al.27	L-Seg	no	SE	AUC	71.13	cited	Guo2019 [27]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; placed in 'AUC/%' column but equals L-Seg's published AUC-PR for SE
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Xu et al.61	FFU-Net (Xu2021)	no	SE	Dice	88.12	cited	Xu2021 [61]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 65% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	SE	AUPR	69.88	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	SE	Dice	81.75	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	SE	AUPR	72.14	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	SE	Dice	84.68	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	SE	AUPR	75.21	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 20% IDRiD added to training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	SE	Dice	88.45	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 20% IDRiD added to training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Yan et al.60	Yan2019	no	EX	AUPR	88.9	cited	Yan2019 [60]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 67% of IDRiD used for training by cited work
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Guo et al.27	L-Seg	no	EX	AUC	79.45	cited	Guo2019 [27]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; placed in 'AUC/%' column but equals L-Seg's published AUC-PR for EX
+Ullah2023_SSMD-UNet	Table 4	IDRiD	Xue et al.61	FFU-Net (Xu2021)	no	EX	Dice	91.38	cited	Xu2021 [61]	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; written 'Xue et al.61' in table; ref 61 is Xu2021 FFU-Net
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	EX	AUPR	76.81	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	MD-UNet (0% IDRiD)	SSMD-UNet	yes	EX	Dice	83.47	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; own supervised variant, 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	EX	AUPR	80.14	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (0% IDRiD)	SSMD-UNet	yes	EX	Dice	86.29	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; 0% IDRiD in training
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	EX	AUPR	89.94	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; table says '2%' of IDRiD (likely typo for 20%)
+Ullah2023_SSMD-UNet	Table 4	IDRiD	SSMD-UNet (20% IDRiD)	SSMD-UNet	yes	EX	Dice	91.75	self	NA	cross-dataset eval (train FGADR+EyePACS, test IDRiD); values in %; table says '2%' of IDRiD (likely typo for 20%)

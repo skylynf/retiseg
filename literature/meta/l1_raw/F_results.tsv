@@ -1,0 +1,131 @@
+paper	table	dataset	method	method_norm	is_proposed	lesion	metric	value	provenance_stated	provenance_ref	notes
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	CE2+Semi+Adv	Collaborative semi-supervised (Zhou2019)	yes	MA	AUPR	0.4960	self	NA	final proposed model (Xception U-shape + semi-supervised + adversarial); AUPR decimal
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	CE2+Semi+Adv	Collaborative semi-supervised (Zhou2019)	yes	HE	AUPR	0.6936	self	NA	final proposed model (Xception U-shape + semi-supervised + adversarial); AUPR decimal
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	CE2+Semi+Adv	Collaborative semi-supervised (Zhou2019)	yes	EX	AUPR	0.8872	self	NA	final proposed model (Xception U-shape + semi-supervised + adversarial); AUPR decimal
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	CE2+Semi+Adv	Collaborative semi-supervised (Zhou2019)	yes	SE	AUPR	0.7407	self	NA	final proposed model (Xception U-shape + semi-supervised + adversarial); AUPR decimal
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	VRT	VRT	no	MA	AUPR	0.4951	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry; leaderboard rank in parentheses in table
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	VRT	VRT	no	HE	AUPR	0.6804	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry; leaderboard rank in parentheses in table
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	VRT	VRT	no	EX	AUPR	0.7127	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry; leaderboard rank in parentheses in table
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	VRT	VRT	no	SE	AUPR	0.6995	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry; leaderboard rank in parentheses in table
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	PATech	PATech	no	MA	AUPR	0.474	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry; SE not reported ('-')
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	PATech	PATech	no	HE	AUPR	0.649	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry; SE not reported ('-')
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	PATech	PATech	no	EX	AUPR	0.885	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry; SE not reported ('-')
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	MA	AUPR	0.5017	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	HE	AUPR	0.5588	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	EX	AUPR	0.8741	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	SE	AUPR	0.6588	cited	[1] IDRiD challenge leaderboard (idrid.grand-challenge.org)	IDRiD challenge entry
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	AdvSeg [22]	AdvSeg	no	MA	AUPR	0.4706	not stated	NA	[22]=Hung2018 (semi-supervised seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	AdvSeg [22]	AdvSeg	no	HE	AUPR	0.5923	not stated	NA	[22]=Hung2018 (semi-supervised seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	AdvSeg [22]	AdvSeg	no	EX	AUPR	0.8032	not stated	NA	[22]=Hung2018 (semi-supervised seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	AdvSeg [22]	AdvSeg	no	SE	AUPR	0.6756	not stated	NA	[22]=Hung2018 (semi-supervised seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	ASDNet [30]	ASDNet	no	MA	AUPR	0.4782	not stated	NA	[30]=Nie2018 (semi-supervised medical seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	ASDNet [30]	ASDNet	no	HE	AUPR	0.6285	not stated	NA	[30]=Nie2018 (semi-supervised medical seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	ASDNet [30]	ASDNet	no	EX	AUPR	0.8095	not stated	NA	[30]=Nie2018 (semi-supervised medical seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Zhou2019_collaborative_semi_supervised	Table 3	IDRiD	ASDNet [30]	ASDNet	no	SE	AUPR	0.6924	not stated	NA	[30]=Nie2018 (semi-supervised medical seg, 'transferred from other vision tasks'); AUC ROC also reported so implied rerun by authors
+Li2024_TP-DRSeg	Table 1	IDRiD	U-Net [18]	U-Net	no	mean	Dice	36.66	not stated	NA	mDice in %, mean over 4 lesions; [18]=Ronneberger2015
+Li2024_TP-DRSeg	Table 1	IDRiD	U-Net [18]	U-Net	no	mean	AUPR	34.68	not stated	NA	AUC-PR in %, mean over 4 lesions; [18]=Ronneberger2015
+Li2024_TP-DRSeg	Table 1	DDR	U-Net [18]	U-Net	no	mean	Dice	24.59	not stated	NA	mDice in %, mean over 4 lesions; [18]=Ronneberger2015
+Li2024_TP-DRSeg	Table 1	DDR	U-Net [18]	U-Net	no	mean	AUPR	26.78	not stated	NA	AUC-PR in %, mean over 4 lesions; [18]=Ronneberger2015
+Li2024_TP-DRSeg	Table 1	IDRiD	FCT [20]	FCT	no	mean	Dice	42.96	not stated	NA	mDice in %, mean over 4 lesions; [20]=Tragakis2023 (Fully Convolutional Transformer)
+Li2024_TP-DRSeg	Table 1	IDRiD	FCT [20]	FCT	no	mean	AUPR	43.09	not stated	NA	AUC-PR in %, mean over 4 lesions; [20]=Tragakis2023 (Fully Convolutional Transformer)
+Li2024_TP-DRSeg	Table 1	DDR	FCT [20]	FCT	no	mean	Dice	23.33	not stated	NA	mDice in %, mean over 4 lesions; [20]=Tragakis2023 (Fully Convolutional Transformer)
+Li2024_TP-DRSeg	Table 1	DDR	FCT [20]	FCT	no	mean	AUPR	25.01	not stated	NA	AUC-PR in %, mean over 4 lesions; [20]=Tragakis2023 (Fully Convolutional Transformer)
+Li2024_TP-DRSeg	Table 1	IDRiD	Vanilla SAM [11]	SAM	no	mean	Dice	1.35	not stated	NA	mDice in %, mean over 4 lesions; [11]=Kirillov2023; zero-shot
+Li2024_TP-DRSeg	Table 1	IDRiD	Vanilla SAM [11]	SAM	no	mean	AUPR	0.61	not stated	NA	AUC-PR in %, mean over 4 lesions; [11]=Kirillov2023; zero-shot
+Li2024_TP-DRSeg	Table 1	DDR	Vanilla SAM [11]	SAM	no	mean	Dice	0.51	not stated	NA	mDice in %, mean over 4 lesions; [11]=Kirillov2023; zero-shot
+Li2024_TP-DRSeg	Table 1	DDR	Vanilla SAM [11]	SAM	no	mean	AUPR	0.28	not stated	NA	AUC-PR in %, mean over 4 lesions; [11]=Kirillov2023; zero-shot
+Li2024_TP-DRSeg	Table 1	IDRiD	PerSAM [32]	PerSAM	no	mean	Dice	1.65	not stated	NA	mDice in %, mean over 4 lesions; [32]=Zhang2024 (one-shot)
+Li2024_TP-DRSeg	Table 1	IDRiD	PerSAM [32]	PerSAM	no	mean	AUPR	0.94	not stated	NA	AUC-PR in %, mean over 4 lesions; [32]=Zhang2024 (one-shot)
+Li2024_TP-DRSeg	Table 1	DDR	PerSAM [32]	PerSAM	no	mean	Dice	0.76	not stated	NA	mDice in %, mean over 4 lesions; [32]=Zhang2024 (one-shot)
+Li2024_TP-DRSeg	Table 1	DDR	PerSAM [32]	PerSAM	no	mean	AUPR	0.59	not stated	NA	AUC-PR in %, mean over 4 lesions; [32]=Zhang2024 (one-shot)
+Li2024_TP-DRSeg	Table 1	IDRiD	PerSAM-F [32]	PerSAM-F	no	mean	Dice	1.64	not stated	NA	mDice in %, mean over 4 lesions; [32]=Zhang2024 (one-shot, fine-tuned variant)
+Li2024_TP-DRSeg	Table 1	IDRiD	PerSAM-F [32]	PerSAM-F	no	mean	AUPR	0.73	not stated	NA	AUC-PR in %, mean over 4 lesions; [32]=Zhang2024 (one-shot, fine-tuned variant)
+Li2024_TP-DRSeg	Table 1	DDR	PerSAM-F [32]	PerSAM-F	no	mean	Dice	0.72	not stated	NA	mDice in %, mean over 4 lesions; [32]=Zhang2024 (one-shot, fine-tuned variant)
+Li2024_TP-DRSeg	Table 1	DDR	PerSAM-F [32]	PerSAM-F	no	mean	AUPR	0.57	not stated	NA	AUC-PR in %, mean over 4 lesions; [32]=Zhang2024 (one-shot, fine-tuned variant)
+Li2024_TP-DRSeg	Table 1	IDRiD	MedSAM [13]	MedSAM	no	mean	Dice	25.06	not stated	NA	mDice in %, mean over 4 lesions; [13]=Ma2024
+Li2024_TP-DRSeg	Table 1	IDRiD	MedSAM [13]	MedSAM	no	mean	AUPR	26.57	not stated	NA	AUC-PR in %, mean over 4 lesions; [13]=Ma2024
+Li2024_TP-DRSeg	Table 1	DDR	MedSAM [13]	MedSAM	no	mean	Dice	17.97	not stated	NA	mDice in %, mean over 4 lesions; [13]=Ma2024
+Li2024_TP-DRSeg	Table 1	DDR	MedSAM [13]	MedSAM	no	mean	AUPR	19.30	not stated	NA	AUC-PR in %, mean over 4 lesions; [13]=Ma2024
+Li2024_TP-DRSeg	Table 1	IDRiD	SAMed [31]	SAMed	no	mean	Dice	35.18	not stated	NA	mDice in %, mean over 4 lesions; [31]=Zhang2023
+Li2024_TP-DRSeg	Table 1	IDRiD	SAMed [31]	SAMed	no	mean	AUPR	35.37	not stated	NA	AUC-PR in %, mean over 4 lesions; [31]=Zhang2023
+Li2024_TP-DRSeg	Table 1	DDR	SAMed [31]	SAMed	no	mean	Dice	28.32	not stated	NA	mDice in %, mean over 4 lesions; [31]=Zhang2023
+Li2024_TP-DRSeg	Table 1	DDR	SAMed [31]	SAMed	no	mean	AUPR	30.03	not stated	NA	AUC-PR in %, mean over 4 lesions; [31]=Zhang2023
+Li2024_TP-DRSeg	Table 1	IDRiD	SAM-Adapter [1]	SAM-Adapter	no	mean	Dice	34.42	not stated	NA	mDice in %, mean over 4 lesions; [1]=Chen2023
+Li2024_TP-DRSeg	Table 1	IDRiD	SAM-Adapter [1]	SAM-Adapter	no	mean	AUPR	34.59	not stated	NA	AUC-PR in %, mean over 4 lesions; [1]=Chen2023
+Li2024_TP-DRSeg	Table 1	DDR	SAM-Adapter [1]	SAM-Adapter	no	mean	Dice	29.11	not stated	NA	mDice in %, mean over 4 lesions; [1]=Chen2023
+Li2024_TP-DRSeg	Table 1	DDR	SAM-Adapter [1]	SAM-Adapter	no	mean	AUPR	29.90	not stated	NA	AUC-PR in %, mean over 4 lesions; [1]=Chen2023
+Li2024_TP-DRSeg	Table 1	IDRiD	Ours	TP-DRSeg	yes	mean	Dice	49.72	self	NA	mDice in %, mean over 4 lesions; proposed
+Li2024_TP-DRSeg	Table 1	IDRiD	Ours	TP-DRSeg	yes	mean	AUPR	50.55	self	NA	AUC-PR in %, mean over 4 lesions; proposed
+Li2024_TP-DRSeg	Table 1	DDR	Ours	TP-DRSeg	yes	mean	Dice	38.78	self	NA	mDice in %, mean over 4 lesions; proposed
+Li2024_TP-DRSeg	Table 1	DDR	Ours	TP-DRSeg	yes	mean	AUPR	39.15	self	NA	AUC-PR in %, mean over 4 lesions; proposed
+Chen2025_SAM2_DR	Table 1	IDRiD	U-Net [12]	U-Net	no	mean	Dice	36.66	not stated	NA	mDice in %, mean over 4 lesions; [12]=Ronneberger2015; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	U-Net [12]	U-Net	no	mean	AUPR	34.68	not stated	NA	AUC-PR in %, mean over 4 lesions; [12]=Ronneberger2015; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	U-Net [12]	U-Net	no	mean	Dice	24.59	not stated	NA	mDice in %, mean over 4 lesions; [12]=Ronneberger2015; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	U-Net [12]	U-Net	no	mean	AUPR	26.78	not stated	NA	AUC-PR in %, mean over 4 lesions; [12]=Ronneberger2015; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	FCT [14]	FCT	no	mean	Dice	42.96	not stated	NA	mDice in %, mean over 4 lesions; [14]=Tragakis2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	FCT [14]	FCT	no	mean	AUPR	43.09	not stated	NA	AUC-PR in %, mean over 4 lesions; [14]=Tragakis2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	FCT [14]	FCT	no	mean	Dice	23.33	not stated	NA	mDice in %, mean over 4 lesions; [14]=Tragakis2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	FCT [14]	FCT	no	mean	AUPR	25.01	not stated	NA	AUC-PR in %, mean over 4 lesions; [14]=Tragakis2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	Vanilla SAM [5]	SAM	no	mean	Dice	1.35	not stated	NA	mDice in %, mean over 4 lesions; [5]=Kirillov2023; zero-shot; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	Vanilla SAM [5]	SAM	no	mean	AUPR	0.61	not stated	NA	AUC-PR in %, mean over 4 lesions; [5]=Kirillov2023; zero-shot; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	Vanilla SAM [5]	SAM	no	mean	Dice	0.51	not stated	NA	mDice in %, mean over 4 lesions; [5]=Kirillov2023; zero-shot; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	Vanilla SAM [5]	SAM	no	mean	AUPR	0.28	not stated	NA	AUC-PR in %, mean over 4 lesions; [5]=Kirillov2023; zero-shot; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	MedSAM [9]	MedSAM	no	mean	Dice	25.06	not stated	NA	mDice in %, mean over 4 lesions; [9]=Ma2024; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	MedSAM [9]	MedSAM	no	mean	AUPR	26.57	not stated	NA	AUC-PR in %, mean over 4 lesions; [9]=Ma2024; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	MedSAM [9]	MedSAM	no	mean	Dice	17.97	not stated	NA	mDice in %, mean over 4 lesions; [9]=Ma2024; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	MedSAM [9]	MedSAM	no	mean	AUPR	19.30	not stated	NA	AUC-PR in %, mean over 4 lesions; [9]=Ma2024; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	SAMed [19]	SAMed	no	mean	Dice	35.18	not stated	NA	mDice in %, mean over 4 lesions; [19]=Zhang2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	SAMed [19]	SAMed	no	mean	AUPR	35.37	not stated	NA	AUC-PR in %, mean over 4 lesions; [19]=Zhang2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	SAMed [19]	SAMed	no	mean	Dice	28.32	not stated	NA	mDice in %, mean over 4 lesions; [19]=Zhang2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	SAMed [19]	SAMed	no	mean	AUPR	30.03	not stated	NA	AUC-PR in %, mean over 4 lesions; [19]=Zhang2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	SAM-Adapter [1]	SAM-Adapter	no	mean	Dice	34.42	not stated	NA	mDice in %, mean over 4 lesions; [1]=Chen2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	SAM-Adapter [1]	SAM-Adapter	no	mean	AUPR	34.59	not stated	NA	AUC-PR in %, mean over 4 lesions; [1]=Chen2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	SAM-Adapter [1]	SAM-Adapter	no	mean	Dice	29.11	not stated	NA	mDice in %, mean over 4 lesions; [1]=Chen2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	DDR	SAM-Adapter [1]	SAM-Adapter	no	mean	AUPR	29.90	not stated	NA	AUC-PR in %, mean over 4 lesions; [1]=Chen2023; value identical to Li2024_TP-DRSeg Table 1 (copied without statement)
+Chen2025_SAM2_DR	Table 1	IDRiD	Ours	SAM2-DR	yes	mean	Dice	51.39	self	NA	mDice in %, mean over 4 lesions; proposed
+Chen2025_SAM2_DR	Table 1	IDRiD	Ours	SAM2-DR	yes	mean	AUPR	51.62	self	NA	AUC-PR in %, mean over 4 lesions; proposed
+Chen2025_SAM2_DR	Table 1	DDR	Ours	SAM2-DR	yes	mean	Dice	39.42	self	NA	mDice in %, mean over 4 lesions; proposed
+Chen2025_SAM2_DR	Table 1	DDR	Ours	SAM2-DR	yes	mean	AUPR	39.76	self	NA	AUC-PR in %, mean over 4 lesions; proposed
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM	SAM	no	MA	Dice	0.14	not stated	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; zero-shot vanilla SAM, presumably run by authors
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM	SAM	no	HE	Dice	2.75	not stated	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; zero-shot vanilla SAM, presumably run by authors
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM	SAM	no	EX	Dice	3.71	not stated	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; zero-shot vanilla SAM, presumably run by authors
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM	SAM	no	SE	Dice	1.42	not stated	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; zero-shot vanilla SAM, presumably run by authors
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM(Ours)	Ophthalmology-SAM	yes	MA	Dice	0.00	self	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; one-shot fine-tuned learnable prompt layer
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM(Ours)	Ophthalmology-SAM	yes	HE	Dice	39.54	self	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; one-shot fine-tuned learnable prompt layer
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM(Ours)	Ophthalmology-SAM	yes	EX	Dice	62.96	self	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; one-shot fine-tuned learnable prompt layer
+Qiu2023_Learnable_Ophthalmology_SAM	Table 1	IDRiD	SAM(Ours)	Ophthalmology-SAM	yes	SE	Dice	0.00	self	NA	in %; metric not labelled in IDRiD block, assumed Dice; one-shot setting; one-shot fine-tuned learnable prompt layer
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	L-Seg [7]	L-Seg	no	EX	AUPR	0.795	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	L-Seg [7]	L-Seg	no	HE	AUPR	0.637	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	L-Seg [7]	L-Seg	no	MA	AUPR	0.463	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	L-Seg [7]	L-Seg	no	SE	AUPR	0.711	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	L-Seg [7]	L-Seg	no	mean	AUPR	0.652	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Deep-Bayesian [19]	Deep-Bayesian	no	EX	AUPR	0.842	cited	Garifullin2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Deep-Bayesian [19]	Deep-Bayesian	no	HE	AUPR	0.593	cited	Garifullin2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Deep-Bayesian [19]	Deep-Bayesian	no	MA	AUPR	0.484	cited	Garifullin2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Deep-Bayesian [19]	Deep-Bayesian	no	SE	AUPR	0.641	cited	Garifullin2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Deep-Bayesian [19]	Deep-Bayesian	no	mean	AUPR	0.640	cited	Garifullin2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Ours	U-Net	yes	EX	AUPR	0.825	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder (ImageNet pretrained), Optuna-tuned; trained on IDRiD official train, tested on official test
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Ours	U-Net	yes	HE	AUPR	0.620	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder (ImageNet pretrained), Optuna-tuned; trained on IDRiD official train, tested on official test
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Ours	U-Net	yes	MA	AUPR	0.451	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder (ImageNet pretrained), Optuna-tuned; trained on IDRiD official train, tested on official test
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Ours	U-Net	yes	SE	AUPR	0.713	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder (ImageNet pretrained), Optuna-tuned; trained on IDRiD official train, tested on official test
+Playout2024_cross_dataset_generalization	Table 2	IDRiD	Ours	U-Net	yes	mean	AUPR	0.652	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder (ImageNet pretrained), Optuna-tuned; trained on IDRiD official train, tested on official test
+Playout2024_cross_dataset_generalization	Table 2	DDR	L-Seg [7]	L-Seg	no	EX	AUPR	0.555	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	DDR	L-Seg [7]	L-Seg	no	HE	AUPR	0.359	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	DDR	L-Seg [7]	L-Seg	no	MA	AUPR	0.105	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	DDR	L-Seg [7]	L-Seg	no	SE	AUPR	0.265	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	DDR	L-Seg [7]	L-Seg	no	mean	AUPR	0.321	cited	Guo2019	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	DDR	Ours	U-Net	yes	EX	AUPR	0.592	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder; DDR official split
+Playout2024_cross_dataset_generalization	Table 2	DDR	Ours	U-Net	yes	HE	AUPR	0.408	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder; DDR official split
+Playout2024_cross_dataset_generalization	Table 2	DDR	Ours	U-Net	yes	MA	AUPR	0.281	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder; DDR official split
+Playout2024_cross_dataset_generalization	Table 2	DDR	Ours	U-Net	yes	SE	AUPR	0.434	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder; DDR official split
+Playout2024_cross_dataset_generalization	Table 2	DDR	Ours	U-Net	yes	mean	AUPR	0.429	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline: U-Net, ResNet-101 + SE encoder; DDR official split
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Lesion-Net-8s [6]	Lesion-Net-8s	no	EX	AUPR	0.740	cited	Wei2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Lesion-Net-8s [6]	Lesion-Net-8s	no	HE	AUPR	0.617	cited	Wei2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Lesion-Net-8s [6]	Lesion-Net-8s	no	MA	AUPR	0.377	cited	Wei2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Lesion-Net-8s [6]	Lesion-Net-8s	no	SE	AUPR	0.575	cited	Wei2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Lesion-Net-8s [6]	Lesion-Net-8s	no	mean	AUPR	0.577	cited	Wei2021	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; from published paper
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Ours	U-Net	yes	EX	AUPR	0.724	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline; 30% of Retinal Lesions held out for test; printed mean 0.571 but four values average to 0.576
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Ours	U-Net	yes	HE	AUPR	0.589	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline; 30% of Retinal Lesions held out for test; printed mean 0.571 but four values average to 0.576
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Ours	U-Net	yes	MA	AUPR	0.451	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline; 30% of Retinal Lesions held out for test; printed mean 0.571 but four values average to 0.576
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Ours	U-Net	yes	SE	AUPR	0.540	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline; 30% of Retinal Lesions held out for test; printed mean 0.571 but four values average to 0.576
+Playout2024_cross_dataset_generalization	Table 2	Retinal-Lesions	Ours	U-Net	yes	mean	AUPR	0.571	rerun	NA	AUPR decimal, 11-threshold binned PR curve (IDRiD challenge protocol); CWS column = SE; authors' own baseline; 30% of Retinal Lesions held out for test; printed mean 0.571 but four values average to 0.576

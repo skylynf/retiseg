@@ -1,0 +1,44 @@
+\begin{table*}[t]
+\centering\tablefont
+\caption{\textbf{One factor at a time.} One or two representative models are retrained with a single factor changed and everything else fixed to the unified protocol (seed 0). Each cell is the value followed by the change against the reference row of its block; -- marks a model the block does not use. The last column averages the models of the block; its shading follows the change. Differences smaller than twice the median seed standard deviation of the main table are not interpreted.}
+\label{tab:factors}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{@{}l ccc c@{}}
+\toprule
+\colh{Setting} & \famchip{general}\; U-Net & \famchip{fundus}\; M2MRF & \famchip{foundation}\; RETFound+UPer. & \colh{Mean} \\
+\midrule
+\grouprow{5}{Annotation granularity of the training set (E4) --- mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}
+\quad DDR \tier{fine} {\scriptsize\color{inkmuted}(ref.)} & \ph{.34} & \ph{.55} & -- & \ph{.44} \\
+\quad DDR + FGADR, 383 images \tier{fine}\tier{mixed} & \ph{.35} \up{\ph{.01}} & \ph{.57} \up{\ph{.02}} & -- & \cellcolor[HTML]{EAECEC}\ph{.46} {\scriptsize \ph{+.01}} \\
+\quad DDR + FGADR \tier{fine}\tier{mixed} & \ph{.37} \up{\ph{.03}} & \ph{.56} \up{\ph{.01}} & -- & \cellcolor[HTML]{E7EAEC}\ph{.47} {\scriptsize \ph{+.02}} \\
+\quad DDR + Retinal-Lesions \tier{fine}\tier{coarse} & \ph{.32} \down{\ph{.02}} & \ph{.51} \down{\ph{.04}} & -- & \cellcolor[HTML]{EFE4E1}\ph{.41} {\scriptsize \ph{$$-$$.03}} \\
+\quad FGADR \tier{mixed} & \ph{.28} \down{\ph{.06}} & \ph{.42} \down{\ph{.13}} & -- & \cellcolor[HTML]{EDCCC6}\ph{.35} {\scriptsize \ph{$$-$$.10}} \\
+\quad Retinal-Lesions \tier{coarse} & \ph{.21} \down{\ph{.13}} & \ph{.34} \down{\ph{.21}} & -- & \cellcolor[HTML]{EBAEA7}\ph{.28} {\scriptsize \ph{$$-$$.17}} \\
+\grouprow{5}{Input resolution, long side in pixels (E7) --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}
+\quad 512 & -- & \ph{.23} \down{\ph{.16}} & \ph{.23} \down{\ph{.11}} & \cellcolor[HTML]{ECBBB5}\ph{.23} {\scriptsize \ph{$$-$$.14}} \\
+\quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.39} & \ph{.34} & \ph{.37} \\
+\quad native-resolution patches & -- & \ph{.40} \up{\ph{.01}} & \ph{.34} \same{\ph{.00}} & \cellcolor[HTML]{EFEFEC}\ph{.37} {\scriptsize \ph{+.00}} \\
+\grouprow{5}{Input resolution (E7) --- lesion-level recall of small lesions on DDR test}
+\quad 512 & -- & \ph{.05} \down{\ph{.29}} & \ph{.10} \down{\ph{.17}} & \cellcolor[HTML]{E9978E}\ph{.07} {\scriptsize \ph{$$-$$.23}} \\
+\quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.34} & \ph{.27} & \ph{.30} \\
+\quad native-resolution patches & -- & \ph{.38} \up{\ph{.05}} & \ph{.30} \up{\ph{.03}} & \cellcolor[HTML]{E2E7EC}\ph{.34} {\scriptsize \ph{+.04}} \\
+\grouprow{5}{Training amount (E8) --- mAUPR on DDR test; U-Net and M2MRF}
+\quad DDR, 10\% (38 images) & \ph{.17} \down{\ph{.18}} & \ph{.21} \down{\ph{.20}} & -- & \cellcolor[HTML]{EBA7A0}\ph{.19} {\scriptsize \ph{$$-$$.19}} \\
+\quad DDR, 50\% (192) & \ph{.29} \down{\ph{.06}} & \ph{.35} \down{\ph{.06}} & -- & \cellcolor[HTML]{EED9D4}\ph{.32} {\scriptsize \ph{$$-$$.06}} \\
+\quad DDR, 100\% (383) {\scriptsize\color{inkmuted}(ref.)} & \ph{.35} & \ph{.41} & -- & \ph{.38} \\
+\quad + IDRiD + TJDR standard field (599) & \ph{.38} \up{\ph{.04}} & \ph{.45} \up{\ph{.04}} & -- & \cellcolor[HTML]{E0E7EC}\ph{.42} {\scriptsize \ph{+.04}} \\
+\grouprow{5}{Loss, architecture fixed (E9) --- mAUPR on DDR test; U-Net}
+\quad cross-entropy {\scriptsize\color{inkmuted}(ref.)} & \ph{.29} & -- & -- & \ph{.29} \\
+\quad batch Dice & \ph{.32} \up{\ph{.03}} & -- & -- & \cellcolor[HTML]{E5E9EC}\ph{.32} {\scriptsize \ph{+.03}} \\
+\quad cross-entropy + batch Dice (unified protocol) & \ph{.36} \up{\ph{.07}} & -- & -- & \cellcolor[HTML]{D5E0ED}\ph{.36} {\scriptsize \ph{+.07}} \\
+\quad cross-entropy + per-image Dice (registered recipe) & \ph{.15} \down{\ph{.14}} & -- & -- & \cellcolor[HTML]{ECB9B3}\ph{.15} {\scriptsize \ph{$$-$$.14}} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\scriptsize
+\item Granularity of the labels used for training: \tier{fine} fine \quad \tier{mixed} mixed \quad \tier{coarse} coarse. In the training-amount block the number of image passes is the same in every row. The FGADR row of the granularity block is the FGADR-trained model of the cross-source experiment.
+\phnote
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table*}

@@ -3,11 +3,11 @@
 本文暂定题名：Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images。总纲是 paper/13。
 
 一、目录
-paper/    论文写作。13 总纲：三个问题、研究设计、实验清单与状态、排期、对照模板的文章结构和图表。14 方法素材与备注：M1–M14 可直接改写成正文的方法、补充材料来源、局限和审稿回复要交代的备注。retiseg_paper_draft.pdf：论文草稿的排版预览（2026-10-09 构建；图表数字多为模拟值，带 simulated 标记，不是结果）。
+paper/    论文写作。16 范围精简（2026-10-11：各实验保留的范围、算力账、未来工作、排期，优先于 13 第三、四节）；retiseg_paper/paper/ 论文源文件（LaTeX、图表脚本、data/results.csv）。13 总纲：三个问题、研究设计、实验清单与状态、排期、对照模板的文章结构和图表。14 方法素材与备注：M1–M14 可直接改写成正文的方法、补充材料来源、局限和审稿回复要交代的备注。retiseg_paper_draft.pdf：论文草稿的排版预览（2026-10-09 构建；图表数字多为模拟值，带 simulated 标记，不是结果）。
 design/   研究设计。03 模型归类（五族）；05 实验计划（每个实验怎么做）；09 第一批任务（B1 来源配方的逐模型配方和偏差）；12 数据集（全部库的角色，独立测试来源的划分、标签映射和指标）；15 基础模型任务（E5 四档用法的逐模型配方、公平性原则、代价和待定事项）。
 ops/      执行记录。00 进度（只记已经发生的事和数字）；07 本地数据（磁盘上有什么）；11 服务器执行（命令顺序和记录规则）。
 literature/（仓库根目录下）文献。04 代码审计、06 检索、08 全文筛选、LEDGER.tsv、papers/、meta/，流程见 literature/README.txt。
-文件编号沿用建立时的顺序，跨目录不重复，文中“见 05”“12 第三节”之类的引用按编号找。新文件从 16 起编（15 为 2026-10-09 新建的基础模型任务）。
+文件编号沿用建立时的顺序，跨目录不重复，文中“见 05”“12 第三节”之类的引用按编号找。新文件从 17 起编（15 基础模型任务 2026-10-09，16 范围精简 2026-10-11）。
 2026-10-07 整理时删除：01 研究设计（并入 13 第二节）、02 数据集归类（并入 12 第零节）、10 实验规划审查（已采纳，并入 05）。经过记在 00 文末。
 
 二、模板路径与本文的对应
@@ -21,7 +21,7 @@ literature/（仓库根目录下）文献。04 代码审计、06 检索、08 全
 结果 1  数据收集与研究设计（模板 Fig. 1，Data collection and study design）
   本文：R1，图 1。数据集总表与粒度档、模型收集与复现等级、四种评价、内部与独立测试
   设计：13 第二节；12 第零、二节；03；bench/configs/models.yaml
-  文献：literature/LEDGER.tsv；literature/06、08（检索与筛选计数）；literature/04（代码审计）
+  文献：literature/LEDGER.tsv；literature/06、08（检索与筛选计数）；literature/04（代码审计）；literature/meta/paper_audit.tsv、reported_results.tsv（L1 原文数字抽取，2026-10-11）
   写法：14 的 M1（数据集）、M2（预处理）、M3（划分）、M4（模型收集与复现等级）；备注 2、11、19
 
 结果 2  原始模型（模板 Fig. 2，Building test sets to evaluate the original models；Performance of original models）

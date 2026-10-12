@@ -1,0 +1,485 @@
+paper	table	dataset	method	method_norm	is_proposed	lesion	metric	value	provenance_stated	provenance_ref	notes
+Guo2019_L-Seg	Table 6	IDRiD	HED [18]	HED	no	EX	AUPR	0.7723	rerun	NA	[18] Xie2015 = architecture citation; trained by the authors (Table 2, official caffe code)
+Guo2019_L-Seg	Table 6	IDRiD	HED [18]	HED	no	HE	AUPR	0.5084	rerun	NA	[18] Xie2015 = architecture citation; trained by the authors (Table 2, official caffe code)
+Guo2019_L-Seg	Table 6	IDRiD	HED [18]	HED	no	MA	AUPR	0.4271	rerun	NA	[18] Xie2015 = architecture citation; trained by the authors (Table 2, official caffe code)
+Guo2019_L-Seg	Table 6	IDRiD	HED [18]	HED	no	SE	AUPR	0.6673	rerun	NA	[18] Xie2015 = architecture citation; trained by the authors (Table 2, official caffe code)
+Guo2019_L-Seg	Table 6	IDRiD	HED [18]	HED	no	mean	AUPR	0.5938	rerun	NA	[18] Xie2015 = architecture citation; trained by the authors (Table 2, official caffe code)
+Guo2019_L-Seg	Table 6	IDRiD	FCRN [6]	FCRN	no	EX	AUPR	0.5472	rerun	NA	[6] Mo2018 = architecture citation; re-implemented by the authors ('FCRN was implemented by us')
+Guo2019_L-Seg	Table 6	IDRiD	FCRN [6]	FCRN	no	HE	AUPR	0.4200	rerun	NA	[6] Mo2018 = architecture citation; re-implemented by the authors ('FCRN was implemented by us')
+Guo2019_L-Seg	Table 6	IDRiD	FCRN [6]	FCRN	no	MA	AUPR	0.3383	rerun	NA	[6] Mo2018 = architecture citation; re-implemented by the authors ('FCRN was implemented by us')
+Guo2019_L-Seg	Table 6	IDRiD	FCRN [6]	FCRN	no	SE	AUPR	0.5154	rerun	NA	[6] Mo2018 = architecture citation; re-implemented by the authors ('FCRN was implemented by us')
+Guo2019_L-Seg	Table 6	IDRiD	FCRN [6]	FCRN	no	mean	AUPR	0.4552	rerun	NA	[6] Mo2018 = architecture citation; re-implemented by the authors ('FCRN was implemented by us')
+Guo2019_L-Seg	Table 6	IDRiD	CASENet ([26])	CASENet	no	EX	AUPR	0.7564	rerun	NA	[26] Yu2017 = architecture citation; trained by the authors with official code
+Guo2019_L-Seg	Table 6	IDRiD	CASENet ([26])	CASENet	no	HE	AUPR	0.4462	rerun	NA	[26] Yu2017 = architecture citation; trained by the authors with official code
+Guo2019_L-Seg	Table 6	IDRiD	CASENet ([26])	CASENet	no	MA	AUPR	0.3992	rerun	NA	[26] Yu2017 = architecture citation; trained by the authors with official code
+Guo2019_L-Seg	Table 6	IDRiD	CASENet ([26])	CASENet	no	SE	AUPR	0.3275	rerun	NA	[26] Yu2017 = architecture citation; trained by the authors with official code
+Guo2019_L-Seg	Table 6	IDRiD	CASENet ([26])	CASENet	no	mean	AUPR	0.4823	rerun	NA	[26] Yu2017 = architecture citation; trained by the authors with official code
+Guo2019_L-Seg	Table 6	IDRiD	DeepLab v3+ ([19])	DeepLabv3+	no	EX	AUPR	0.7118	rerun	NA	[19] Chen2018 = architecture citation; trained by the authors with official TensorFlow code, Pascal VOC pretrained
+Guo2019_L-Seg	Table 6	IDRiD	DeepLab v3+ ([19])	DeepLabv3+	no	HE	AUPR	0.4772	rerun	NA	[19] Chen2018 = architecture citation; trained by the authors with official TensorFlow code, Pascal VOC pretrained
+Guo2019_L-Seg	Table 6	IDRiD	DeepLab v3+ ([19])	DeepLabv3+	no	MA	AUPR	0.1514	rerun	NA	[19] Chen2018 = architecture citation; trained by the authors with official TensorFlow code, Pascal VOC pretrained
+Guo2019_L-Seg	Table 6	IDRiD	DeepLab v3+ ([19])	DeepLabv3+	no	SE	AUPR	0.5912	rerun	NA	[19] Chen2018 = architecture citation; trained by the authors with official TensorFlow code, Pascal VOC pretrained
+Guo2019_L-Seg	Table 6	IDRiD	DeepLab v3+ ([19])	DeepLabv3+	no	mean	AUPR	0.4829	rerun	NA	[19] Chen2018 = architecture citation; trained by the authors with official TensorFlow code, Pascal VOC pretrained
+Guo2019_L-Seg	Table 6	IDRiD	L-Seg	L-Seg	yes	EX	AUPR	0.7945	self	NA	weighted fusion + MCB loss; AUC via 11 thresholds on IDRiD
+Guo2019_L-Seg	Table 6	IDRiD	L-Seg	L-Seg	yes	HE	AUPR	0.6374	self	NA	weighted fusion + MCB loss; AUC via 11 thresholds on IDRiD
+Guo2019_L-Seg	Table 6	IDRiD	L-Seg	L-Seg	yes	MA	AUPR	0.4627	self	NA	weighted fusion + MCB loss; AUC via 11 thresholds on IDRiD
+Guo2019_L-Seg	Table 6	IDRiD	L-Seg	L-Seg	yes	SE	AUPR	0.7113	self	NA	weighted fusion + MCB loss; AUC via 11 thresholds on IDRiD
+Guo2019_L-Seg	Table 6	IDRiD	L-Seg	L-Seg	yes	mean	AUPR	0.6515	self	NA	weighted fusion + MCB loss; AUC via 11 thresholds on IDRiD
+Guo2019_L-Seg	Table 6	DDR	HED [18]	HED	no	EX	AUPR	0.4241	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	HED [18]	HED	no	HE	AUPR	0.1919	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	HED [18]	HED	no	MA	AUPR	0.0496	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	HED [18]	HED	no	SE	AUPR	0.0972	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	HED [18]	HED	no	mean	AUPR	0.1907	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	FCRN [6]	FCRN	no	EX	AUPR	0.1996	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	FCRN [6]	FCRN	no	HE	AUPR	0.1255	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	FCRN [6]	FCRN	no	MA	AUPR	0.0134	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	FCRN [6]	FCRN	no	SE	AUPR	0.0454	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	FCRN [6]	FCRN	no	mean	AUPR	0.0960	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	CASENet ([26])	CASENet	no	EX	AUPR	0.2777	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	CASENet ([26])	CASENet	no	HE	AUPR	0.2625	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	CASENet ([26])	CASENet	no	MA	AUPR	0.1005	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	CASENet ([26])	CASENet	no	SE	AUPR	0.1304	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	CASENet ([26])	CASENet	no	mean	AUPR	0.1928	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	DeepLab v3+ ([19])	DeepLabv3+	no	EX	AUPR	0.5349	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	DeepLab v3+ ([19])	DeepLabv3+	no	HE	AUPR	0.3894	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	DeepLab v3+ ([19])	DeepLabv3+	no	MA	AUPR	0.0223	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	DeepLab v3+ ([19])	DeepLabv3+	no	SE	AUPR	0.2120	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	DeepLab v3+ ([19])	DeepLabv3+	no	mean	AUPR	0.2897	rerun	NA	architecture citation only; trained by the authors (Table 2); DDR AUC via 256 thresholds
+Guo2019_L-Seg	Table 6	DDR	L-Seg	L-Seg	yes	EX	AUPR	0.5546	self	NA	DDR private at the time; train+val used for training
+Guo2019_L-Seg	Table 6	DDR	L-Seg	L-Seg	yes	HE	AUPR	0.3586	self	NA	DDR private at the time; train+val used for training
+Guo2019_L-Seg	Table 6	DDR	L-Seg	L-Seg	yes	MA	AUPR	0.1052	self	NA	DDR private at the time; train+val used for training
+Guo2019_L-Seg	Table 6	DDR	L-Seg	L-Seg	yes	SE	AUPR	0.2648	self	NA	DDR private at the time; train+val used for training
+Guo2019_L-Seg	Table 6	DDR	L-Seg	L-Seg	yes	mean	AUPR	0.3208	self	NA	DDR private at the time; train+val used for training
+Guo2019_L-Seg	Table 7	e-ophtha	HED [18]	HED	no	EX	AUPR	0.1345	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	HED [18]	HED	no	MA	AUPR	0.0639	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	HED [18]	HED	no	mean	AUPR	0.0992	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	FCRN [6]	FCRN	no	EX	AUPR	0.1675	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	FCRN [6]	FCRN	no	MA	AUPR	0.0269	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	FCRN [6]	FCRN	no	mean	AUPR	0.0972	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	CASENet ([26])	CASENet	no	EX	AUPR	0.1715	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	CASENet ([26])	CASENet	no	MA	AUPR	0.1565	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	CASENet ([26])	CASENet	no	mean	AUPR	0.1640	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	DeepLab v3+ ([19])	DeepLabv3+	no	EX	AUPR	0.5512	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	DeepLab v3+ ([19])	DeepLabv3+	no	MA	AUPR	0.0045	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	DeepLab v3+ ([19])	DeepLabv3+	no	mean	AUPR	0.2778	rerun	NA	21-image e-ophtha subset, 11 train / 10 test; 256 thresholds
+Guo2019_L-Seg	Table 7	e-ophtha	L-Seg	L-Seg	yes	EX	AUPR	0.4171	self	NA	21-image e-ophtha subset, 11 train / 10 test
+Guo2019_L-Seg	Table 7	e-ophtha	L-Seg	L-Seg	yes	MA	AUPR	0.1687	self	NA	21-image e-ophtha subset, 11 train / 10 test
+Guo2019_L-Seg	Table 7	e-ophtha	L-Seg	L-Seg	yes	mean	AUPR	0.2929	self	NA	21-image e-ophtha subset, 11 train / 10 test
+Guo2019_L-Seg	Table 8	IDRiD	VRT (1st)	VRT	no	EX	AUPR	0.7127	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	VRT (1st)	VRT	no	HE	AUPR	0.6804	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	VRT (1st)	VRT	no	MA	AUPR	0.4951	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	VRT (1st)	VRT	no	SE	AUPR	0.6995	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	VRT (1st)	VRT	no	mean	AUPR	0.6469	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	PATech (2nd)	PATech	no	EX	AUPR	0.8850	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	PATech (2nd)	PATech	no	HE	AUPR	0.6490	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	PATech (2nd)	PATech	no	MA	AUPR	0.474	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG	no	EX	AUPR	0.8741	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG	no	HE	AUPR	0.5588	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG	no	MA	AUPR	0.5017	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG	no	SE	AUPR	0.6588	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	iFLYTEK-MIG (3rd)	iFLYTEK-MIG	no	mean	AUPR	0.6484	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SOONER (4th)	SOONER	no	EX	AUPR	0.7390	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SOONER (4th)	SOONER	no	HE	AUPR	0.5395	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SOONER (4th)	SOONER	no	MA	AUPR	0.4003	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SOONER (4th)	SOONER	no	SE	AUPR	0.5369	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SOONER (4th)	SOONER	no	mean	AUPR	0.5539	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SAIHST (5th)	SAIHST	no	EX	AUPR	0.8582	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	lzyuncc_fusion (6th)	lzyuncc_fusion	no	EX	AUPR	0.8202	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	lzyuncc_fusion (6th)	lzyuncc_fusion	no	SE	AUPR	0.6259	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SDNU (7th)	SDNU	no	EX	AUPR	0.5018	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SDNU (7th)	SDNU	no	HE	AUPR	0.4572	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SDNU (7th)	SDNU	no	MA	AUPR	0.4111	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SDNU (7th)	SDNU	no	SE	AUPR	0.5374	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	SDNU (7th)	SDNU	no	mean	AUPR	0.4769	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	CIL (8th)	CIL	no	EX	AUPR	0.7554	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	CIL (8th)	CIL	no	HE	AUPR	0.4886	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	CIL (8th)	CIL	no	MA	AUPR	0.3920	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	CIL (8th)	CIL	no	SE	AUPR	0.5024	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	CIL (8th)	CIL	no	mean	AUPR	0.5346	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	MedLabs (9th)	MedLabs	no	EX	AUPR	0.7863	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	MedLabs (9th)	MedLabs	no	HE	AUPR	0.3705	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	MedLabs (9th)	MedLabs	no	MA	AUPR	0.3397	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	MedLabs (9th)	MedLabs	no	SE	AUPR	0.2637	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	MedLabs (9th)	MedLabs	no	mean	AUPR	0.4401	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	AIMIA (10th)	AIMIA	no	EX	AUPR	0.7662	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	AIMIA (10th)	AIMIA	no	HE	AUPR	0.3283	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	AIMIA (10th)	AIMIA	no	MA	AUPR	0.3792	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	AIMIA (10th)	AIMIA	no	SE	AUPR	0.2733	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	AIMIA (10th)	AIMIA	no	mean	AUPR	0.4367	cited	IDRiD challenge leaderboard (Porwal2018 [8])	IDRiD 2018 challenge team; leaderboard AUPR (11 thresholds); mAUC computed by Guo2019 where all four lesions available
+Guo2019_L-Seg	Table 8	IDRiD	L-Seg	L-Seg	yes	EX	AUPR	0.7945	self	NA	same numbers as Table 6
+Guo2019_L-Seg	Table 8	IDRiD	L-Seg	L-Seg	yes	HE	AUPR	0.6374	self	NA	same numbers as Table 6
+Guo2019_L-Seg	Table 8	IDRiD	L-Seg	L-Seg	yes	MA	AUPR	0.4627	self	NA	same numbers as Table 6
+Guo2019_L-Seg	Table 8	IDRiD	L-Seg	L-Seg	yes	SE	AUPR	0.7113	self	NA	same numbers as Table 6
+Guo2019_L-Seg	Table 8	IDRiD	L-Seg	L-Seg	yes	mean	AUPR	0.6515	self	NA	same numbers as Table 6
+Bo2022_SAA	Table 4	IDRiD	VRT (1st)[9]	VRT	no	EX	AUPR	0.7127	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	VRT (1st)[9]	VRT	no	HE	AUPR	0.6804	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	VRT (1st)[9]	VRT	no	SE	AUPR	0.6995	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	VRT (1st)[9]	VRT	no	MA	AUPR	0.4951	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	VRT (1st)[9]	VRT	no	mean	AUPR	0.6469	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	PATech (2nd)[9]	PATech	no	EX	AUPR	0.8850	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	PATech (2nd)[9]	PATech	no	HE	AUPR	0.6490	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	PATech (2nd)[9]	PATech	no	MA	AUPR	0.474	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	iFLYTEK-MIG (3rd)[9]	iFLYTEK-MIG	no	EX	AUPR	0.8741	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	iFLYTEK-MIG (3rd)[9]	iFLYTEK-MIG	no	HE	AUPR	0.5588	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	iFLYTEK-MIG (3rd)[9]	iFLYTEK-MIG	no	SE	AUPR	0.6588	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	iFLYTEK-MIG (3rd)[9]	iFLYTEK-MIG	no	MA	AUPR	0.5017	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	iFLYTEK-MIG (3rd)[9]	iFLYTEK-MIG	no	mean	AUPR	0.6484	cited	Porwal2020 [9]	IDRiD challenge team (leaderboard)
+Bo2022_SAA	Table 4	IDRiD	L-seg[11]	L-Seg	no	EX	AUPR	0.7945	cited	Guo2019 [11]	identical to Guo2019 Table 6 (11-threshold AUC)
+Bo2022_SAA	Table 4	IDRiD	L-seg[11]	L-Seg	no	HE	AUPR	0.6374	cited	Guo2019 [11]	identical to Guo2019 Table 6 (11-threshold AUC)
+Bo2022_SAA	Table 4	IDRiD	L-seg[11]	L-Seg	no	SE	AUPR	0.7113	cited	Guo2019 [11]	identical to Guo2019 Table 6 (11-threshold AUC)
+Bo2022_SAA	Table 4	IDRiD	L-seg[11]	L-Seg	no	MA	AUPR	0.4627	cited	Guo2019 [11]	identical to Guo2019 Table 6 (11-threshold AUC)
+Bo2022_SAA	Table 4	IDRiD	L-seg[11]	L-Seg	no	mean	AUPR	0.6515	cited	Guo2019 [11]	identical to Guo2019 Table 6 (11-threshold AUC)
+Bo2022_SAA	Table 4	IDRiD	MobileNetV3-L+SAA	SAA	yes	EX	AUPR	0.8766	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	IDRiD	MobileNetV3-L+SAA	SAA	yes	HE	AUPR	0.6388	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	IDRiD	MobileNetV3-L+SAA	SAA	yes	SE	AUPR	0.6901	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	IDRiD	MobileNetV3-L+SAA	SAA	yes	MA	AUPR	0.3979	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	IDRiD	MobileNetV3-L+SAA	SAA	yes	mean	AUPR	0.6509	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	IDRiD	MixNet-M+SAA	SAA	yes	EX	AUPR	0.8765	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	IDRiD	MixNet-M+SAA	SAA	yes	HE	AUPR	0.6353	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	IDRiD	MixNet-M+SAA	SAA	yes	SE	AUPR	0.7010	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	IDRiD	MixNet-M+SAA	SAA	yes	MA	AUPR	0.3773	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	IDRiD	MixNet-M+SAA	SAA	yes	mean	AUPR	0.6475	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	IDRiD	EfficientNet-B0+SAA	SAA	yes	EX	AUPR	0.8812	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	IDRiD	EfficientNet-B0+SAA	SAA	yes	HE	AUPR	0.6704	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	IDRiD	EfficientNet-B0+SAA	SAA	yes	SE	AUPR	0.7281	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	IDRiD	EfficientNet-B0+SAA	SAA	yes	MA	AUPR	0.4152	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	IDRiD	EfficientNet-B0+SAA	SAA	yes	mean	AUPR	0.6738	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	DDR	U-Net[6]	U-Net	no	EX	AUPR	0.5639	not stated	NA	citation [6] Ronneberger2015 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net[6]	U-Net	no	HE	AUPR	0.3331	not stated	NA	citation [6] Ronneberger2015 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net[6]	U-Net	no	SE	AUPR	0.0966	not stated	NA	citation [6] Ronneberger2015 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net[6]	U-Net	no	MA	AUPR	0.1064	not stated	NA	citation [6] Ronneberger2015 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net[6]	U-Net	no	mean	AUPR	0.2750	not stated	NA	citation [6] Ronneberger2015 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net++[15]	U-Net++	no	EX	AUPR	0.5087	not stated	NA	citation [15] Zhou2018 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net++[15]	U-Net++	no	HE	AUPR	0.2439	not stated	NA	citation [15] Zhou2018 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net++[15]	U-Net++	no	SE	AUPR	0.0973	not stated	NA	citation [15] Zhou2018 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net++[15]	U-Net++	no	MA	AUPR	0.1370	not stated	NA	citation [15] Zhou2018 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	U-Net++[15]	U-Net++	no	mean	AUPR	0.2467	not stated	NA	citation [15] Zhou2018 is the architecture paper; source of these DDR numbers not stated
+Bo2022_SAA	Table 4	DDR	L-seg[11]	L-Seg	no	EX	AUPR	0.5546	cited	Guo2019 [11]	identical to Guo2019 Table 6 DDR (256-threshold AUC)
+Bo2022_SAA	Table 4	DDR	L-seg[11]	L-Seg	no	HE	AUPR	0.3586	cited	Guo2019 [11]	identical to Guo2019 Table 6 DDR (256-threshold AUC)
+Bo2022_SAA	Table 4	DDR	L-seg[11]	L-Seg	no	SE	AUPR	0.2648	cited	Guo2019 [11]	identical to Guo2019 Table 6 DDR (256-threshold AUC)
+Bo2022_SAA	Table 4	DDR	L-seg[11]	L-Seg	no	MA	AUPR	0.1052	cited	Guo2019 [11]	identical to Guo2019 Table 6 DDR (256-threshold AUC)
+Bo2022_SAA	Table 4	DDR	L-seg[11]	L-Seg	no	mean	AUPR	0.3208	cited	Guo2019 [11]	identical to Guo2019 Table 6 DDR (256-threshold AUC)
+Bo2022_SAA	Table 4	DDR	MobileNetV3-L+SAA	SAA	yes	EX	AUPR	0.6221	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	DDR	MobileNetV3-L+SAA	SAA	yes	HE	AUPR	0.3706	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	DDR	MobileNetV3-L+SAA	SAA	yes	SE	AUPR	0.2854	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	DDR	MobileNetV3-L+SAA	SAA	yes	MA	AUPR	0.1852	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	DDR	MobileNetV3-L+SAA	SAA	yes	mean	AUPR	0.3658	self	NA	backbone MobileNetV3-L
+Bo2022_SAA	Table 4	DDR	MixNet-M+SAA	SAA	yes	EX	AUPR	0.6422	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	DDR	MixNet-M+SAA	SAA	yes	HE	AUPR	0.4114	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	DDR	MixNet-M+SAA	SAA	yes	SE	AUPR	0.2887	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	DDR	MixNet-M+SAA	SAA	yes	MA	AUPR	0.1910	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	DDR	MixNet-M+SAA	SAA	yes	mean	AUPR	0.3833	self	NA	backbone MixNet-M
+Bo2022_SAA	Table 4	DDR	EfficientNet-B0+SAA	SAA	yes	EX	AUPR	0.6269	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	DDR	EfficientNet-B0+SAA	SAA	yes	HE	AUPR	0.4456	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	DDR	EfficientNet-B0+SAA	SAA	yes	SE	AUPR	0.3747	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	DDR	EfficientNet-B0+SAA	SAA	yes	MA	AUPR	0.1933	self	NA	backbone EfficientNet-B0
+Bo2022_SAA	Table 4	DDR	EfficientNet-B0+SAA	SAA	yes	mean	AUPR	0.4102	self	NA	backbone EfficientNet-B0
+Guo2022_CARNet	Table 2	IDRiD	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	EX	Dice	0.9563	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 2	IDRiD	Foo et al. [13]	MTUnet (Foo2020)	no	EX	Dice	0.8893	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 2	IDRiD	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	EX	Dice	0.9681	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 2	IDRiD	Guo et al. [16]	L-Seg	no	EX	Dice	0.8971	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 2	IDRiD	Mo et al. [17]	FCRN	no	EX	Dice	0.9517	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 2	IDRiD	Xue et al. [27]	Deep membrane systems (Xue2019)	no	EX	Dice	0.9652	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 2	IDRiD	Tan et al. [28]	Tan2017 10-layer CNN	no	EX	Dice	0.8539	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 2	IDRiD	Proposed	CARNet	yes	EX	Dice	0.9782	self	NA	rotated table parsed by column position; verified against in-text Dice 0.9782/0.9642/0.9183/0.9478 (EX/SE/MA/HE)
+Guo2022_CARNet	Table 2	IDRiD	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	HE	Dice	0.7593	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 2	IDRiD	Foo et al. [13]	MTUnet (Foo2020)	no	HE	Dice	0.7592	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 2	IDRiD	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	HE	Dice	0.8171	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 2	IDRiD	Guo et al. [16]	L-Seg	no	HE	Dice	0.5987	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 2	IDRiD	Mo et al. [17]	FCRN	no	HE	Dice	0.9156	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 2	IDRiD	Xue et al. [27]	Deep membrane systems (Xue2019)	no	HE	Dice	0.9231	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 2	IDRiD	Tan et al. [28]	Tan2017 10-layer CNN	no	HE	Dice	0.9137	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 2	IDRiD	Proposed	CARNet	yes	HE	Dice	0.9478	self	NA	rotated table parsed by column position; verified against in-text Dice 0.9782/0.9642/0.9183/0.9478 (EX/SE/MA/HE)
+Guo2022_CARNet	Table 2	IDRiD	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	MA	Dice	0.7508	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 2	IDRiD	Foo et al. [13]	MTUnet (Foo2020)	no	MA	Dice	0.7515	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 2	IDRiD	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	MA	Dice	0.8728	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 2	IDRiD	Guo et al. [16]	L-Seg	no	MA	Dice	0.4657	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 2	IDRiD	Mo et al. [17]	FCRN	no	MA	Dice	0.9042	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 2	IDRiD	Xue et al. [27]	Deep membrane systems (Xue2019)	no	MA	Dice	0.8096	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 2	IDRiD	Tan et al. [28]	Tan2017 10-layer CNN	no	MA	Dice	0.7697	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 2	IDRiD	Proposed	CARNet	yes	MA	Dice	0.9183	self	NA	rotated table parsed by column position; verified against in-text Dice 0.9782/0.9642/0.9183/0.9478 (EX/SE/MA/HE)
+Guo2022_CARNet	Table 2	IDRiD	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	SE	Dice	0.9413	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 2	IDRiD	Foo et al. [13]	MTUnet (Foo2020)	no	SE	Dice	0.8427	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 2	IDRiD	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	SE	Dice	0.9546	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 2	IDRiD	Guo et al. [16]	L-Seg	no	SE	Dice	0.8793	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 2	IDRiD	Mo et al. [17]	FCRN	no	SE	Dice	0.9267	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 2	IDRiD	Xue et al. [27]	Deep membrane systems (Xue2019)	no	SE	Dice	0.9534	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 2	IDRiD	Tan et al. [28]	Tan2017 10-layer CNN	no	SE	Dice	0.9246	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 2	IDRiD	Proposed	CARNet	yes	SE	Dice	0.9642	self	NA	rotated table parsed by column position; verified against in-text Dice 0.9782/0.9642/0.9183/0.9478 (EX/SE/MA/HE)
+Guo2022_CARNet	Table 3	IDRiD	VRT (1st)	VRT	no	EX	AUPR	0.7127	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	VRT (1st)	VRT	no	SE	AUPR	0.6995	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	VRT (1st)	VRT	no	MA	AUPR	0.4951	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	VRT (1st)	VRT	no	HE	AUPR	0.6804	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	PATech (2nd)	PATech	no	EX	AUPR	0.8850	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	PATech (2nd)	PATech	no	MA	AUPR	0.4740	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	PATech (2nd)	PATech	no	HE	AUPR	0.6490	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	IFLYTEK-MIG (3rd)	IFLYTEK-MIG	no	EX	AUPR	0.8741	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	IFLYTEK-MIG (3rd)	IFLYTEK-MIG	no	SE	AUPR	0.6588	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	IFLYTEK-MIG (3rd)	IFLYTEK-MIG	no	MA	AUPR	0.5017	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	IFLYTEK-MIG (3rd)	IFLYTEK-MIG	no	HE	AUPR	0.5588	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	SOONER (4th)	SOONER	no	EX	AUPR	0.7390	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table; SE printed as 0.5395 (leaderboard/L-Seg Table 8 gives 0.5369)
+Guo2022_CARNet	Table 3	IDRiD	SOONER (4th)	SOONER	no	SE	AUPR	0.5395	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table; SE printed as 0.5395 (leaderboard/L-Seg Table 8 gives 0.5369)
+Guo2022_CARNet	Table 3	IDRiD	SOONER (4th)	SOONER	no	MA	AUPR	0.4003	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table; SE printed as 0.5395 (leaderboard/L-Seg Table 8 gives 0.5369)
+Guo2022_CARNet	Table 3	IDRiD	SOONER (4th)	SOONER	no	HE	AUPR	0.5395	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table; SE printed as 0.5395 (leaderboard/L-Seg Table 8 gives 0.5369)
+Guo2022_CARNet	Table 3	IDRiD	SAIHST (5th)	SAIHST	no	EX	AUPR	0.8582	cited	IDRiD challenge leaderboard (Porwal2018 [18])	IDRiD challenge team (leaderboard AP, 11 thresholds); no citation in table
+Guo2022_CARNet	Table 3	IDRiD	CARNet	CARNet	yes	EX	AUPR	0.8675	self	NA	AP = area under PR curve; implementation not stated
+Guo2022_CARNet	Table 3	IDRiD	CARNet	CARNet	yes	SE	AUPR	0.7125	self	NA	AP = area under PR curve; implementation not stated
+Guo2022_CARNet	Table 3	IDRiD	CARNet	CARNet	yes	MA	AUPR	0.5148	self	NA	AP = area under PR curve; implementation not stated
+Guo2022_CARNet	Table 3	IDRiD	CARNet	CARNet	yes	HE	AUPR	0.6389	self	NA	AP = area under PR curve; implementation not stated
+Guo2022_CARNet	Table 4	e-ophtha	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	EX	Dice	0.9481	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Zhou2019 [26]
+Guo2022_CARNet	Table 4	e-ophtha	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	MA	Dice	0.9025	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Zhou2019 [26]
+Guo2022_CARNet	Table 4	e-ophtha	Foo et al. [13]	MTUnet (Foo2020)	no	EX	Dice	0.8893	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Foo2020 [13]
+Guo2022_CARNet	Table 4	e-ophtha	Foo et al. [13]	MTUnet (Foo2020)	no	MA	Dice	0.7593	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Foo2020 [13]
+Guo2022_CARNet	Table 4	e-ophtha	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	EX	Dice	0.9739	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 4	e-ophtha	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	MA	Dice	0.9295	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 4	e-ophtha	Guo et al. [16]	L-Seg	no	EX	Dice	0.7159	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Guo2019 [16]
+Guo2022_CARNet	Table 4	e-ophtha	Guo et al. [16]	L-Seg	no	MA	Dice	0.6547	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Guo2019 [16]
+Guo2022_CARNet	Table 4	e-ophtha	Mo et al. [17]	FCRN	no	EX	Dice	0.9247	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Mo2018 [17]
+Guo2022_CARNet	Table 4	e-ophtha	Mo et al. [17]	FCRN	no	MA	Dice	0.8628	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Mo2018 [17]
+Guo2022_CARNet	Table 4	e-ophtha	Xue et al. [27]	Deep membrane systems (Xue2019)	no	EX	Dice	0.9564	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Xue2019 [27]
+Guo2022_CARNet	Table 4	e-ophtha	Xue et al. [27]	Deep membrane systems (Xue2019)	no	MA	Dice	0.9426	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Xue2019 [27]
+Guo2022_CARNet	Table 4	e-ophtha	Tan et al. [28]	Tan2017 10-layer CNN	no	EX	Dice	0.8497	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Tan2017 [28]
+Guo2022_CARNet	Table 4	e-ophtha	Tan et al. [28]	Tan2017 10-layer CNN	no	MA	Dice	0.9148	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Tan2017 [28]
+Guo2022_CARNet	Table 4	e-ophtha	Xu et al. [12]	FFU-Net (Xu2021)	no	EX	Dice	0.9138	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Xu2021 [12]
+Guo2022_CARNet	Table 4	e-ophtha	Xu et al. [12]	FFU-Net (Xu2021)	no	MA	Dice	0.7189	rerun	NA	e-ophtha split not stated; rerun inferred from computation-time statement; method citation Xu2021 [12]
+Guo2022_CARNet	Table 4	e-ophtha	Proposed	CARNet	yes	EX	Dice	0.9761	self	NA	e-ophtha split not stated
+Guo2022_CARNet	Table 4	e-ophtha	Proposed	CARNet	yes	MA	Dice	0.9513	self	NA	e-ophtha split not stated
+Guo2022_CARNet	Table 5	DDR	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	EX	Dice	0.9461	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 5	DDR	Foo et al. [13]	MTUnet (Foo2020)	no	EX	Dice	0.8457	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 5	DDR	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	EX	Dice	0.9652	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 5	DDR	Guo et al. [16]	L-Seg	no	EX	Dice	0.8749	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 5	DDR	Mo et al. [17]	FCRN	no	EX	Dice	0.9421	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 5	DDR	Xue et al. [27]	Deep membrane systems (Xue2019)	no	EX	Dice	0.9664	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 5	DDR	Tan et al. [28]	Tan2017 10-layer CNN	no	EX	Dice	0.8493	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 5	DDR	Xu et al. [12]	FFU-Net (Xu2021)	no	EX	Dice	0.8927	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xu2021 [12]
+Guo2022_CARNet	Table 5	DDR	Proposed	CARNet	yes	EX	Dice	0.9687	self	NA	rotated table parsed by column position; Sen/Spe cross-checked with in-text numbers
+Guo2022_CARNet	Table 5	DDR	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	HE	Dice	0.9205	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 5	DDR	Foo et al. [13]	MTUnet (Foo2020)	no	HE	Dice	0.8269	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 5	DDR	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	HE	Dice	0.9288	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 5	DDR	Guo et al. [16]	L-Seg	no	HE	Dice	0.7587	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 5	DDR	Mo et al. [17]	FCRN	no	HE	Dice	0.8637	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 5	DDR	Xue et al. [27]	Deep membrane systems (Xue2019)	no	HE	Dice	0.9266	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 5	DDR	Tan et al. [28]	Tan2017 10-layer CNN	no	HE	Dice	0.9156	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 5	DDR	Xu et al. [12]	FFU-Net (Xu2021)	no	HE	Dice	0.8451	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xu2021 [12]
+Guo2022_CARNet	Table 5	DDR	Proposed	CARNet	yes	HE	Dice	0.9468	self	NA	rotated table parsed by column position; Sen/Spe cross-checked with in-text numbers
+Guo2022_CARNet	Table 5	DDR	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	MA	Dice	0.9248	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 5	DDR	Foo et al. [13]	MTUnet (Foo2020)	no	MA	Dice	0.7923	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 5	DDR	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	MA	Dice	0.9284	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 5	DDR	Guo et al. [16]	L-Seg	no	MA	Dice	0.6787	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 5	DDR	Mo et al. [17]	FCRN	no	MA	Dice	0.8523	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 5	DDR	Xue et al. [27]	Deep membrane systems (Xue2019)	no	MA	Dice	0.9247	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 5	DDR	Tan et al. [28]	Tan2017 10-layer CNN	no	MA	Dice	0.9126	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 5	DDR	Xu et al. [12]	FFU-Net (Xu2021)	no	MA	Dice	0.7188	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xu2021 [12]
+Guo2022_CARNet	Table 5	DDR	Proposed	CARNet	yes	MA	Dice	0.9413	self	NA	rotated table parsed by column position; Sen/Spe cross-checked with in-text numbers
+Guo2022_CARNet	Table 5	DDR	Zhou et al. [26]	Collaborative semi-supervised (Zhou2019)	no	SE	Dice	0.9137	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Zhou2019 [26]
+Guo2022_CARNet	Table 5	DDR	Foo et al. [13]	MTUnet (Foo2020)	no	SE	Dice	0.8354	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Foo2020 [13]
+Guo2022_CARNet	Table 5	DDR	Sambyal et al. [15]	Modified U-Net (Sambyal2020)	no	SE	Dice	0.9257	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Sambyal2020 [15]
+Guo2022_CARNet	Table 5	DDR	Guo et al. [16]	L-Seg	no	SE	Dice	0.8756	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Guo2019 [16]
+Guo2022_CARNet	Table 5	DDR	Mo et al. [17]	FCRN	no	SE	Dice	0.8537	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Mo2018 [17]
+Guo2022_CARNet	Table 5	DDR	Xue et al. [27]	Deep membrane systems (Xue2019)	no	SE	Dice	0.9438	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xue2019 [27]
+Guo2022_CARNet	Table 5	DDR	Tan et al. [28]	Tan2017 10-layer CNN	no	SE	Dice	0.9147	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Tan2017 [28]
+Guo2022_CARNet	Table 5	DDR	Xu et al. [12]	FFU-Net (Xu2021)	no	SE	Dice	0.8812	rerun	NA	rotated table parsed by column position; rerun inferred from 'we applied the same strategies ... to train all competing models' (computation-time section); method citation Xu2021 [12]
+Guo2022_CARNet	Table 5	DDR	Proposed	CARNet	yes	SE	Dice	0.9465	self	NA	rotated table parsed by column position; Sen/Spe cross-checked with in-text numbers
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	UNET	U-Net	no	MA	AUPR	41.84	rerun	NA	in %; trained by the authors (implicit); citation [8] Ronneberger2015 = architecture; metric = scikit-learn AP
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet	HED	no	MA	AUPR	44.03	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	MA	AUPR	43.92	self	NA	in %
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	UNET	U-Net	no	SE	AUPR	42.22	rerun	NA	in %; trained by the authors (implicit); citation [8] Ronneberger2015 = architecture; metric = scikit-learn AP
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet	HED	no	SE	AUPR	43.07	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	SE	AUPR	48.39	self	NA	in %
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	UNET	U-Net	no	EX	AUPR	79.05	rerun	NA	in %; trained by the authors (implicit); citation [8] Ronneberger2015 = architecture; metric = scikit-learn AP
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet	HED	no	EX	AUPR	83.98	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	EX	AUPR	84.05	self	NA	in %
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	UNET	U-Net	no	HE	AUPR	41.93	rerun	NA	in %; trained by the authors (implicit); citation [8] Ronneberger2015 = architecture; metric = scikit-learn AP
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet	HED	no	HE	AUPR	45.69	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 2	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	HE	AUPR	48.12	self	NA	in %
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	UNET	U-Net	no	MA	F1	41.76	rerun	NA	in %; trained by the authors (implicit); F1 threshold not stated
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet	HED	no	MA	F1	39.81	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	MA	F1	42.98	self	NA	in %
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	UNET	U-Net	no	SE	F1	27.88	rerun	NA	in %; trained by the authors (implicit); F1 threshold not stated
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet	HED	no	SE	F1	40.12	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	SE	F1	43.98	self	NA	in %
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	UNET	U-Net	no	EX	F1	69.90	rerun	NA	in %; trained by the authors (implicit); F1 threshold not stated
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet	HED	no	EX	F1	68.94	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	EX	F1	69.08	self	NA	in %
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	UNET	U-Net	no	HE	F1	44.97	rerun	NA	in %; trained by the authors (implicit); F1 threshold not stated
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet	HED	no	HE	F1	45.00	rerun	NA	in %; authors' own HEDNet baseline (generator without adversarial loss)
+Xiao2020_HEDNet_cGAN	Table 3	IDRiD	HEDNet + cGAN	HEDNet+cGAN	yes	HE	F1	45.76	self	NA	in %
+He2022_PMCNet	Table 4	IDRiD	UNet [33]	U-Net	no	EX	AUPR	65.94	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet [33]	U-Net	no	HE	AUPR	14.08	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet [33]	U-Net	no	MA	AUPR	28.01	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet [33]	U-Net	no	SE	AUPR	56.32	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet [33]	U-Net	no	mean	AUPR	41.09	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet [33]	U-Net	no	mean	Dice	41.72	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 4	IDRiD	ResUNet [46]	ResUNet	no	EX	AUPR	62.82	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	ResUNet [46]	ResUNet	no	HE	AUPR	25.68	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	ResUNet [46]	ResUNet	no	MA	AUPR	25.65	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	ResUNet [46]	ResUNet	no	SE	AUPR	33.67	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	ResUNet [46]	ResUNet	no	mean	AUPR	36.96	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	ResUNet [46]	ResUNet	no	mean	Dice	33.14	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DenseUNet [25]	DenseUNet	no	EX	AUPR	80.54	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DenseUNet [25]	DenseUNet	no	HE	AUPR	41.53	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DenseUNet [25]	DenseUNet	no	MA	AUPR	38.64	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DenseUNet [25]	DenseUNet	no	SE	AUPR	64.68	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DenseUNet [25]	DenseUNet	no	mean	AUPR	56.35	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DenseUNet [25]	DenseUNet	no	mean	Dice	49.82	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet++ [48]	U-Net++	no	EX	AUPR	78.18	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet++ [48]	U-Net++	no	HE	AUPR	12.88	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet++ [48]	U-Net++	no	MA	AUPR	21.74	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet++ [48]	U-Net++	no	SE	AUPR	43.76	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet++ [48]	U-Net++	no	mean	AUPR	39.14	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	UNet++ [48]	U-Net++	no	mean	Dice	34.93	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	Att-UNet [29]	Attention U-Net	no	EX	AUPR	65.29	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	Att-UNet [29]	Attention U-Net	no	HE	AUPR	17.40	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	Att-UNet [29]	Attention U-Net	no	MA	AUPR	28.32	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	Att-UNet [29]	Attention U-Net	no	SE	AUPR	56.02	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	Att-UNet [29]	Attention U-Net	no	mean	AUPR	41.75	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	Att-UNet [29]	Attention U-Net	no	mean	Dice	42.39	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DeepLabv3+ [3]	DeepLabv3+	no	EX	AUPR	77.62	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DeepLabv3+ [3]	DeepLabv3+	no	HE	AUPR	61.57	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DeepLabv3+ [3]	DeepLabv3+	no	MA	AUPR	22.92	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DeepLabv3+ [3]	DeepLabv3+	no	SE	AUPR	64.03	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DeepLabv3+ [3]	DeepLabv3+	no	mean	AUPR	56.53	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	DeepLabv3+ [3]	DeepLabv3+	no	mean	Dice	48.47	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 4	IDRiD	PSPNet [47]	PSPNet	no	EX	AUPR	51.31	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 4	IDRiD	PSPNet [47]	PSPNet	no	HE	AUPR	21.89	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 4	IDRiD	PSPNet [47]	PSPNet	no	MA	AUPR	17.99	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 4	IDRiD	PSPNet [47]	PSPNet	no	SE	AUPR	43.53	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 4	IDRiD	PSPNet [47]	PSPNet	no	mean	AUPR	33.69	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 4	IDRiD	PSPNet [47]	PSPNet	no	mean	Dice	27.19	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 4	IDRiD	HED [43]	HED	no	EX	AUPR	77.23	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	HED [43]	HED	no	HE	AUPR	50.84	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	HED [43]	HED	no	MA	AUPR	42.71	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	HED [43]	HED	no	SE	AUPR	66.73	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	HED [43]	HED	no	mean	AUPR	59.38	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	FCRN [28]	FCRN	no	EX	AUPR	54.72	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	FCRN [28]	FCRN	no	HE	AUPR	42.00	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	FCRN [28]	FCRN	no	MA	AUPR	33.83	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	FCRN [28]	FCRN	no	SE	AUPR	51.54	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	FCRN [28]	FCRN	no	mean	AUPR	45.52	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	CASENet [45]	CASENet	no	EX	AUPR	75.64	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	CASENet [45]	CASENet	no	HE	AUPR	44.62	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	CASENet [45]	CASENet	no	MA	AUPR	39.92	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	CASENet [45]	CASENet	no	SE	AUPR	32.75	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	CASENet [45]	CASENet	no	mean	AUPR	48.23	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	L-Seg [13]	L-Seg	no	EX	AUPR	79.45	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	L-Seg [13]	L-Seg	no	HE	AUPR	63.74	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	L-Seg [13]	L-Seg	no	MA	AUPR	46.27	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	L-Seg [13]	L-Seg	no	SE	AUPR	71.13	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	L-Seg [13]	L-Seg	no	mean	AUPR	65.15	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 4	IDRiD	PMCNet(Ours)	PMCNet	yes	EX	AUPR	87.24	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 4	IDRiD	PMCNet(Ours)	PMCNet	yes	HE	AUPR	67.05	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 4	IDRiD	PMCNet(Ours)	PMCNet	yes	MA	AUPR	46.94	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 4	IDRiD	PMCNet(Ours)	PMCNet	yes	SE	AUPR	71.11	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 4	IDRiD	PMCNet(Ours)	PMCNet	yes	mean	AUPR	68.08	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 4	IDRiD	PMCNet(Ours)	PMCNet	yes	mean	Dice	56.02	self	NA	in %; single Dice column (presumably mean over lesion classes, not stated); IoU also reported
+He2022_PMCNet	Table 5	DDR	UNet [33]	U-Net	no	EX	AUPR	45.86	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 5	DDR	UNet [33]	U-Net	no	HE	AUPR	9.70	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 5	DDR	UNet [33]	U-Net	no	MA	AUPR	9.55	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 5	DDR	UNet [33]	U-Net	no	SE	AUPR	10.94	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 5	DDR	UNet [33]	U-Net	no	mean	AUPR	19.01	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 5	DDR	UNet [33]	U-Net	no	mean	Dice	28.23	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 5	DDR	ResUNet [46]	ResUNet	no	EX	AUPR	40.42	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 5	DDR	ResUNet [46]	ResUNet	no	HE	AUPR	15.32	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 5	DDR	ResUNet [46]	ResUNet	no	MA	AUPR	9.04	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 5	DDR	ResUNet [46]	ResUNet	no	SE	AUPR	8.69	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 5	DDR	ResUNet [46]	ResUNet	no	mean	AUPR	18.37	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 5	DDR	ResUNet [46]	ResUNet	no	mean	Dice	27.55	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 5	DDR	DenseUNet [25]	DenseUNet	no	EX	AUPR	54.59	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 5	DDR	DenseUNet [25]	DenseUNet	no	HE	AUPR	37.32	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 5	DDR	DenseUNet [25]	DenseUNet	no	MA	AUPR	18.04	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 5	DDR	DenseUNet [25]	DenseUNet	no	SE	AUPR	24.34	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 5	DDR	DenseUNet [25]	DenseUNet	no	mean	AUPR	33.58	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 5	DDR	DenseUNet [25]	DenseUNet	no	mean	Dice	37.29	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 5	DDR	UNet++ [48]	U-Net++	no	EX	AUPR	45.27	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 5	DDR	UNet++ [48]	U-Net++	no	HE	AUPR	12.05	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 5	DDR	UNet++ [48]	U-Net++	no	MA	AUPR	11.54	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 5	DDR	UNet++ [48]	U-Net++	no	SE	AUPR	7.94	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 5	DDR	UNet++ [48]	U-Net++	no	mean	AUPR	19.20	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 5	DDR	UNet++ [48]	U-Net++	no	mean	Dice	31.47	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 5	DDR	Att-UNet [29]	Attention U-Net	no	EX	AUPR	46.26	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 5	DDR	Att-UNet [29]	Attention U-Net	no	HE	AUPR	11.30	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 5	DDR	Att-UNet [29]	Attention U-Net	no	MA	AUPR	8.94	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 5	DDR	Att-UNet [29]	Attention U-Net	no	SE	AUPR	12.73	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 5	DDR	Att-UNet [29]	Attention U-Net	no	mean	AUPR	19.80	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 5	DDR	Att-UNet [29]	Attention U-Net	no	mean	Dice	31.96	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 5	DDR	DeepLabv3+ [3]	DeepLabv3+	no	EX	AUPR	54.63	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 5	DDR	DeepLabv3+ [3]	DeepLabv3+	no	HE	AUPR	34.20	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 5	DDR	DeepLabv3+ [3]	DeepLabv3+	no	MA	AUPR	3.04	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 5	DDR	DeepLabv3+ [3]	DeepLabv3+	no	SE	AUPR	29.10	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 5	DDR	DeepLabv3+ [3]	DeepLabv3+	no	mean	AUPR	30.24	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 5	DDR	DeepLabv3+ [3]	DeepLabv3+	no	mean	Dice	36.42	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 5	DDR	PSPNet [47]	PSPNet	no	EX	AUPR	34.97	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 5	DDR	PSPNet [47]	PSPNet	no	HE	AUPR	21.18	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 5	DDR	PSPNet [47]	PSPNet	no	MA	AUPR	5.57	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 5	DDR	PSPNet [47]	PSPNet	no	SE	AUPR	9.09	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 5	DDR	PSPNet [47]	PSPNet	no	mean	AUPR	17.71	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 5	DDR	PSPNet [47]	PSPNet	no	mean	Dice	26.83	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 5	DDR	HED [43]	HED	no	EX	AUPR	42.41	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	HED [43]	HED	no	HE	AUPR	19.19	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	HED [43]	HED	no	MA	AUPR	4.96	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	HED [43]	HED	no	SE	AUPR	9.72	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	HED [43]	HED	no	mean	AUPR	19.07	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	FCRN [28]	FCRN	no	EX	AUPR	19.96	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	FCRN [28]	FCRN	no	HE	AUPR	12.55	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	FCRN [28]	FCRN	no	MA	AUPR	1.34	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	FCRN [28]	FCRN	no	SE	AUPR	4.54	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	FCRN [28]	FCRN	no	mean	AUPR	9.60	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	CASENet [45]	CASENet	no	EX	AUPR	27.77	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	CASENet [45]	CASENet	no	HE	AUPR	26.25	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	CASENet [45]	CASENet	no	MA	AUPR	10.05	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	CASENet [45]	CASENet	no	SE	AUPR	13.04	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	CASENet [45]	CASENet	no	mean	AUPR	19.28	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	L-Seg [13]	L-Seg	no	EX	AUPR	55.46	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	L-Seg [13]	L-Seg	no	HE	AUPR	35.86	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	L-Seg [13]	L-Seg	no	MA	AUPR	10.52	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	L-Seg [13]	L-Seg	no	SE	AUPR	26.48	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	L-Seg [13]	L-Seg	no	mean	AUPR	32.08	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 5	DDR	PMCNet(Ours)	PMCNet	yes	EX	AUPR	54.30	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 5	DDR	PMCNet(Ours)	PMCNet	yes	HE	AUPR	39.87	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 5	DDR	PMCNet(Ours)	PMCNet	yes	MA	AUPR	19.94	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 5	DDR	PMCNet(Ours)	PMCNet	yes	SE	AUPR	31.64	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 5	DDR	PMCNet(Ours)	PMCNet	yes	mean	AUPR	36.44	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 5	DDR	PMCNet(Ours)	PMCNet	yes	mean	Dice	39.31	self	NA	in %; single Dice column (presumably mean over lesion classes, not stated); IoU also reported
+He2022_PMCNet	Table 6	e-ophtha	UNet [33]	U-Net	no	EX	AUPR	28.54	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 6	e-ophtha	UNet [33]	U-Net	no	MA	AUPR	14.85	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 6	e-ophtha	UNet [33]	U-Net	no	mean	AUPR	21.69	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 6	e-ophtha	UNet [33]	U-Net	no	mean	Dice	15.65	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [33] Ronneberger2015 = architecture
+He2022_PMCNet	Table 6	e-ophtha	ResUNet [46]	ResUNet	no	EX	AUPR	35.48	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	ResUNet [46]	ResUNet	no	MA	AUPR	12.50	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	ResUNet [46]	ResUNet	no	mean	AUPR	23.99	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	ResUNet [46]	ResUNet	no	mean	Dice	16.53	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [46] Zhang2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DenseUNet [25]	DenseUNet	no	EX	AUPR	38.62	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DenseUNet [25]	DenseUNet	no	MA	AUPR	18.27	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DenseUNet [25]	DenseUNet	no	mean	AUPR	28.44	rerun	NA	in %; re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DenseUNet [25]	DenseUNet	no	mean	Dice	31.56	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with DenseNet backbone; [25] Li2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	UNet++ [48]	U-Net++	no	EX	AUPR	34.38	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	UNet++ [48]	U-Net++	no	MA	AUPR	16.42	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	UNet++ [48]	U-Net++	no	mean	AUPR	25.39	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	UNet++ [48]	U-Net++	no	mean	Dice	17.41	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [48] Zhou2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	Att-UNet [29]	Attention U-Net	no	EX	AUPR	28.94	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	Att-UNet [29]	Attention U-Net	no	MA	AUPR	15.16	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	Att-UNet [29]	Attention U-Net	no	mean	AUPR	22.05	rerun	NA	in %; trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	Att-UNet [29]	Attention U-Net	no	mean	Dice	16.16	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); trained by the authors with EfficientNet-B0 backbone (listed in backbone statement, omitted from the 'implemented by us' list); [29] Oktay2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DeepLabv3+ [3]	DeepLabv3+	no	EX	AUPR	53.24	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DeepLabv3+ [3]	DeepLabv3+	no	MA	AUPR	4.65	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DeepLabv3+ [3]	DeepLabv3+	no	mean	AUPR	28.95	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	DeepLabv3+ [3]	DeepLabv3+	no	mean	Dice	29.32	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [3] Chen2018 = architecture
+He2022_PMCNet	Table 6	e-ophtha	PSPNet [47]	PSPNet	no	EX	AUPR	29.03	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 6	e-ophtha	PSPNet [47]	PSPNet	no	MA	AUPR	10.21	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 6	e-ophtha	PSPNet [47]	PSPNet	no	mean	AUPR	19.62	rerun	NA	in %; re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 6	e-ophtha	PSPNet [47]	PSPNet	no	mean	Dice	14.83	rerun	NA	in %; single Dice column (presumably mean over lesion classes, not stated); re-implemented by the authors with EfficientNet-B0 backbone; [47] Zhao2017 = architecture
+He2022_PMCNet	Table 6	e-ophtha	HED [43]	HED	no	EX	AUPR	13.45	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	HED [43]	HED	no	MA	AUPR	6.39	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	HED [43]	HED	no	mean	AUPR	9.92	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [43] Xie2015 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	FCRN [28]	FCRN	no	EX	AUPR	16.75	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	FCRN [28]	FCRN	no	MA	AUPR	2.69	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	FCRN [28]	FCRN	no	mean	AUPR	9.72	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [28] Mo2018 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	CASENet [45]	CASENet	no	EX	AUPR	17.15	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	CASENet [45]	CASENet	no	MA	AUPR	15.65	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	CASENet [45]	CASENet	no	mean	AUPR	16.40	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; [45] Yu2017 = architecture; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	L-Seg [13]	L-Seg	no	EX	AUPR	41.71	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	L-Seg [13]	L-Seg	no	MA	AUPR	16.87	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	L-Seg [13]	L-Seg	no	mean	AUPR	29.29	cited	Guo2019 [13]	in %; 'directly taken from paper [13]'; value matches Guo2019
+He2022_PMCNet	Table 6	e-ophtha	PMCNet(Ours)	PMCNet	yes	EX	AUPR	51.20	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 6	e-ophtha	PMCNet(Ours)	PMCNet	yes	MA	AUPR	30.60	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 6	e-ophtha	PMCNet(Ours)	PMCNet	yes	mean	AUPR	40.90	self	NA	in %; EfficientNet-B0 backbone
+He2022_PMCNet	Table 6	e-ophtha	PMCNet(Ours)	PMCNet	yes	mean	Dice	45.43	self	NA	in %; single Dice column (presumably mean over lesion classes, not stated); IoU also reported

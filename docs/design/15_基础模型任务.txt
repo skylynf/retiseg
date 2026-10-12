@@ -1,4 +1,5 @@
 基础模型任务（E5）
+2026-10-11 范围精简：实际执行的范围以 docs/paper/16 第三节为准（a 档网格缩小；b 档三个模型、框为主、k 四档、1 套抽样；c、d 档先种子 0，SAM2-UNet 和 RETFound 的种子 1、2 第二优先；编码器对照只做 MAE-IN1k、RETFound-DINOv2、DINOv2 三个、DDR、一档学习率；c′、冻结版、augreg、PerSAM、SAM 3 示例框进未来工作）。本文件其余内容是完整设计，任务量和排期按 16 第三、六节改。
 写给导师汇报。总纲在 13，实验做法在 05（E5 一条的细节以本文件为准），已经跑完的数字在 00，论文写法在 14 的 M9。体例同 09。
 日期 2026-10-09。本文件写成时没有启动任何 E5 任务，也没有读任何测试集。2026-10-11 按 00 里 10-11、10-12 的记录（种子 1、2 暂缓，U-Net 整批 Dice 诊断，B-std 种子 0 出数）改了第一、二、九、十三、十六、十七节，E5 的设计本身没有变。各模型的配方取自 official_code/ 下已固定的子模块：segment-anything dca509f、sam2 2b90b9f、sam3 2345a4a、MedSAM d71e8a1、SAMed e351840、SAM-Adapter 041277f、SAM2-UNet 01598e5、RETFound ae9a9ec、PerSAM a7e8724。文中“文件:行”都指这些提交，路径相对于 official_code/<仓库>/。
 任务表和共享设定还没有写：训练的两档并进 bench/configs/bs_jobs.yaml（由 make_bs_jobs.py 生成，与 B-std 同一张表）；推理的两档、全部提示、措辞和几何写进新文件 bench/configs/e5_frozen.yaml，在第一次 E5 推理或训练之前提交。

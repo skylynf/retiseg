@@ -1,0 +1,916 @@
+paper	table	dataset	method	method_norm	is_proposed	lesion	metric	value	provenance_stated	provenance_ref	notes
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	EX	AUPR	61.40	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	HE	AUPR	43.19	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	SE	AUPR	46.68	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	MA	AUPR	20.61	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	mean	AUPR	42.97	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	EX	F1	56.63	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	HE	F1	42.61	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	SE	F1	45.50	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	MA	F1	22.43	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HED(Xie and Tu 2015)	HED	no	mean	F1	41.79	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	EX	AUPR	56.05	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	HE	AUPR	47.81	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	SE	AUPR	42.01	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	MA	AUPR	14.71	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	mean	AUPR	40.14	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	EX	F1	53.36	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	HE	F1	42.71	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	SE	F1	40.40	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	MA	F1	15.60	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	DNL(Yin et al. 2020)	DNL	no	mean	F1	38.02	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	EX	AUPR	62.32	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	HE	AUPR	40.79	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	SE	AUPR	41.83	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	MA	AUPR	24.39	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	mean	AUPR	42.34	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	EX	F1	58.59	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	HE	F1	37.97	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	SE	F1	41.83	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	MA	F1	25.40	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	mean	F1	40.95	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	EX	AUPR	57.04	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	HE	AUPR	42.71	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	SE	AUPR	42.32	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	MA	AUPR	14.85	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	mean	AUPR	39.23	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	EX	F1	54.35	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	HE	F1	39.37	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	SE	F1	42.08	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	MA	F1	16.09	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	PSPNet(Zhao et al. 2017)	PSPNet	no	mean	F1	37.97	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	EX	AUPR	44.10	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	HE	AUPR	38.22	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	SE	AUPR	32.93	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	MA	AUPR	12.37	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	mean	AUPR	31.91	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	EX	F1	38.78	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	HE	F1	24.13	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	SE	F1	34.00	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	MA	F1	13.74	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	SPNet(Hou et al. 2020)	SPNet	no	mean	F1	27.66	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	L-seg (Guo et al. 2019)	L-Seg	no	EX	AUPR	55.46	cited	Guo2019	in %; averaged over three repetitions; only AUPR given (F/IoU '-'); values equal Guo2019's DDR results, text nevertheless says all non-Swin rows were fine-tuned by the authors
+Liu2023_M2MRF	Table 4	DDR	L-seg (Guo et al. 2019)	L-Seg	no	HE	AUPR	35.86	cited	Guo2019	in %; averaged over three repetitions; only AUPR given (F/IoU '-'); values equal Guo2019's DDR results, text nevertheless says all non-Swin rows were fine-tuned by the authors
+Liu2023_M2MRF	Table 4	DDR	L-seg (Guo et al. 2019)	L-Seg	no	SE	AUPR	26.48	cited	Guo2019	in %; averaged over three repetitions; only AUPR given (F/IoU '-'); values equal Guo2019's DDR results, text nevertheless says all non-Swin rows were fine-tuned by the authors
+Liu2023_M2MRF	Table 4	DDR	L-seg (Guo et al. 2019)	L-Seg	no	MA	AUPR	10.52	cited	Guo2019	in %; averaged over three repetitions; only AUPR given (F/IoU '-'); values equal Guo2019's DDR results, text nevertheless says all non-Swin rows were fine-tuned by the authors
+Liu2023_M2MRF	Table 4	DDR	L-seg (Guo et al. 2019)	L-Seg	no	mean	AUPR	32.08	cited	Guo2019	in %; averaged over three repetitions; only AUPR given (F/IoU '-'); values equal Guo2019's DDR results, text nevertheless says all non-Swin rows were fine-tuned by the authors
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	EX	AUPR	61.55	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	HE	AUPR	45.68	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	SE	AUPR	46.91	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	MA	AUPR	26.70	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	mean	AUPR	45.21	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	EX	F1	58.98	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	HE	F1	44.96	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	SE	F1	44.86	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	MA	F1	26.99	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	HRNetV2(Wang et al. 2020)	HRNet	no	mean	F1	43.95	rerun	NA	in %; averaged over three repetitions; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	EX	AUPR	62.95	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	HE	AUPR	53.46	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	SE	AUPR	50.56	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	MA	AUPR	23.46	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	mean	AUPR	47.61	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	EX	F1	60.12	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	HE	F1	51.10	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	SE	F1	50.85	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	MA	F1	23.38	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Swin-base(Liu et al. 2021b)	Swin-base	no	mean	F1	46.36	rerun	NA	in %; averaged over three repetitions; ImageNet-22K pre-trained, fine-tuned on DDR by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	AUPR	59.71	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	AUPR	49.96	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	AUPR	52.72	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	AUPR	22.03	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	AUPR	46.11	rerun	NA	in %; averaged over three repetitions
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	F1	56.83	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	F1	45.04	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	F1	53.19	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	F1	21.54	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	F1	44.15	rerun	NA	in %; averaged over three repetitions; paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	EX	AUPR	64.17	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	HE	AUPR	54.20	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	SE	AUPR	53.19	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	MA	AUPR	28.21	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	mean	AUPR	49.94	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	EX	F1	60.47	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	HE	F1	46.18	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	SE	F1	52.10	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	MA	F1	27.67	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-A	M2MRF	yes	mean	F1	46.60	self	NA	in %; averaged over three repetitions; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	EX	AUPR	63.88	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	HE	AUPR	55.47	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	SE	AUPR	50.01	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	MA	AUPR	28.33	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	mean	AUPR	49.42	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	EX	F1	60.20	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	HE	F1	46.81	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	SE	F1	48.58	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	MA	F1	27.51	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-B	M2MRF	yes	mean	F1	45.77	self	NA	in %; averaged over three repetitions; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	EX	AUPR	63.59	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	HE	AUPR	54.43	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	SE	AUPR	49.35	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	MA	AUPR	28.38	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	mean	AUPR	48.94	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	EX	F1	60.62	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	HE	F1	45.16	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	SE	F1	47.78	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	MA	F1	28.04	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-C	M2MRF	yes	mean	F1	45.40	self	NA	in %; averaged over three repetitions; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	EX	AUPR	64.17	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	HE	AUPR	54.72	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	SE	AUPR	49.64	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	MA	AUPR	28.46	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	mean	AUPR	49.25	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	EX	F1	61.15	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	HE	F1	45.29	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	SE	F1	48.02	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	MA	F1	27.81	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 4	DDR	M2MRF-D	M2MRF	yes	mean	F1	45.57	self	NA	in %; averaged over three repetitions; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	VRT(1st)(Porwal et al. 2020)	VRT	no	EX	AUPR	71.27	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	VRT(1st)(Porwal et al. 2020)	VRT	no	HE	AUPR	68.04	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	VRT(1st)(Porwal et al. 2020)	VRT	no	SE	AUPR	69.95	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	VRT(1st)(Porwal et al. 2020)	VRT	no	MA	AUPR	49.51	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	VRT(1st)(Porwal et al. 2020)	VRT	no	mean	AUPR	64.69	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	PATech(2nd)(Porwal et al. 2020)	PATech	no	EX	AUPR	88.50	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020); SE and mAUPR '-'; MA printed 47.70 (LezioSeg prints 47.40 for the same entry)
+Liu2023_M2MRF	Table 6	IDRiD	PATech(2nd)(Porwal et al. 2020)	PATech	no	HE	AUPR	64.90	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020); SE and mAUPR '-'; MA printed 47.70 (LezioSeg prints 47.40 for the same entry)
+Liu2023_M2MRF	Table 6	IDRiD	PATech(2nd)(Porwal et al. 2020)	PATech	no	MA	AUPR	47.70	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020); SE and mAUPR '-'; MA printed 47.70 (LezioSeg prints 47.40 for the same entry)
+Liu2023_M2MRF	Table 6	IDRiD	iFLYTEK(3rd)(Porwal et al. 2020)	iFLYTEK	no	EX	AUPR	87.41	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	iFLYTEK(3rd)(Porwal et al. 2020)	iFLYTEK	no	HE	AUPR	55.88	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	iFLYTEK(3rd)(Porwal et al. 2020)	iFLYTEK	no	SE	AUPR	65.88	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	iFLYTEK(3rd)(Porwal et al. 2020)	iFLYTEK	no	MA	AUPR	50.17	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	iFLYTEK(3rd)(Porwal et al. 2020)	iFLYTEK	no	mean	AUPR	64.84	cited	Porwal2020	in %; IDRiD 2018 challenge top-3 entry, 'borrowed from the 2018 ISBI grand challenge' (Porwal et al. 2020)
+Liu2023_M2MRF	Table 6	IDRiD	L-seg(Guo et al. 2019)	L-Seg	no	EX	AUPR	79.45	cited	Guo2019	in %; 'directly borrowed from original paper'; only AUPR given
+Liu2023_M2MRF	Table 6	IDRiD	L-seg(Guo et al. 2019)	L-Seg	no	HE	AUPR	63.74	cited	Guo2019	in %; 'directly borrowed from original paper'; only AUPR given
+Liu2023_M2MRF	Table 6	IDRiD	L-seg(Guo et al. 2019)	L-Seg	no	SE	AUPR	71.13	cited	Guo2019	in %; 'directly borrowed from original paper'; only AUPR given
+Liu2023_M2MRF	Table 6	IDRiD	L-seg(Guo et al. 2019)	L-Seg	no	MA	AUPR	46.27	cited	Guo2019	in %; 'directly borrowed from original paper'; only AUPR given
+Liu2023_M2MRF	Table 6	IDRiD	L-seg(Guo et al. 2019)	L-Seg	no	mean	AUPR	65.15	cited	Guo2019	in %; 'directly borrowed from original paper'; only AUPR given
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	EX	AUPR	80.81	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	HE	AUPR	66.41	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	SE	AUPR	68.09	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	MA	AUPR	40.45	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	mean	AUPR	63.94	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	EX	F1	78.60	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	HE	F1	64.33	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	SE	F1	67.00	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	MA	F1	38.81	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HED(Xie and Tu 2015)	HED	no	mean	F1	62.18	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	EX	AUPR	75.12	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	HE	AUPR	64.04	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	SE	AUPR	64.73	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	MA	AUPR	32.48	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	mean	AUPR	59.09	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	EX	F1	73.15	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	HE	F1	61.87	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	SE	F1	63.96	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	MA	F1	32.78	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	DNL(Yin et al. 2020)	DNL	no	mean	F1	57.94	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	EX	AUPR	81.93	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	HE	AUPR	64.66	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	SE	AUPR	63.04	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	MA	AUPR	43.14	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	mean	AUPR	63.19	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	EX	F1	79.60	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	HE	F1	61.96	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	SE	F1	61.48	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	MA	F1	40.57	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Deeplabv3+(Chen et al. 2018)	DeepLabv3+	no	mean	F1	60.90	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	EX	AUPR	75.21	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	HE	AUPR	63.36	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	SE	AUPR	63.65	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	MA	AUPR	32.71	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	mean	AUPR	58.73	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	EX	F1	73.24	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	HE	F1	60.81	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	SE	F1	62.83	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	MA	F1	32.63	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	PSPNet(Zhao et al. 2017)	PSPNet	no	mean	F1	57.38	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	EX	AUPR	64.61	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	HE	AUPR	54.11	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	SE	AUPR	52.14	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	MA	AUPR	30.14	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	mean	AUPR	50.25	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	EX	F1	61.45	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	HE	F1	44.33	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	SE	F1	49.59	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	MA	F1	25.66	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	SPNet(Hou et al. 2020)	SPNet	no	mean	F1	45.26	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	EX	AUPR	82.09	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	HE	AUPR	65.50	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	SE	AUPR	68.68	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	MA	AUPR	43.76	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	mean	AUPR	65.01	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	EX	F1	79.93	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	HE	F1	62.58	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	SE	F1	67.53	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	MA	F1	42.49	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	HRNetV2(Wang et al. 2020)	HRNet	no	mean	F1	63.14	rerun	NA	in %; vanilla HRNetV2 = baseline of M2MRF; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	EX	AUPR	81.30	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	HE	AUPR	67.70	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	SE	AUPR	66.46	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	MA	AUPR	44.19	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	mean	AUPR	64.91	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	EX	F1	79.64	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	HE	F1	66.42	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	SE	F1	66.00	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	MA	F1	44.09	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Swin-base(Liu et al. 2021b)	Swin-base	no	mean	F1	64.04	rerun	NA	in %; ImageNet-22K pre-trained, fine-tuned on IDRiD by the authors; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	AUPR	80.09	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	AUPR	63.12	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	AUPR	68.86	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	AUPR	43.27	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	AUPR	63.84	rerun	NA	in %
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	F1	78.56	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	F1	61.98	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	F1	68.19	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	F1	42.42	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	F1	62.79	rerun	NA	in %; paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	EX	AUPR	82.04	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	HE	AUPR	67.80	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	SE	AUPR	68.23	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	MA	AUPR	47.86	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	mean	AUPR	66.48	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	EX	F1	79.64	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	HE	F1	65.66	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	SE	F1	66.68	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	MA	F1	47.59	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-A	M2MRF	yes	mean	F1	64.89	self	NA	in %; variant M2MRF-A (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	EX	AUPR	81.98	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	HE	AUPR	67.41	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	SE	AUPR	66.68	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	MA	AUPR	47.91	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	mean	AUPR	66.00	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	EX	F1	79.57	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	HE	F1	65.39	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	SE	F1	65.01	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	MA	F1	47.81	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-B	M2MRF	yes	mean	F1	64.45	self	NA	in %; variant M2MRF-B (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	EX	AUPR	82.16	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	HE	AUPR	68.69	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	SE	AUPR	69.32	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	MA	AUPR	48.80	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	mean	AUPR	67.24	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	EX	F1	79.85	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	HE	F1	66.42	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	SE	F1	67.92	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	MA	F1	48.63	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-C	M2MRF	yes	mean	F1	65.71	self	NA	in %; variant M2MRF-C (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	EX	AUPR	82.29	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	HE	AUPR	66.94	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	SE	AUPR	69.00	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	MA	AUPR	48.43	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	mean	AUPR	66.66	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF)
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	EX	F1	79.97	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	HE	F1	64.88	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	SE	F1	67.50	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	MA	F1	48.26	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Liu2023_M2MRF	Table 6	IDRiD	M2MRF-D	M2MRF	yes	mean	F1	65.15	self	NA	in %; variant M2MRF-D (HRNetV2 + M2MRF); paper calls it F / mF
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	mean	AUPR	63.94	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	EX	AUPR	80.81	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	SE	AUPR	66.41	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	HE	AUPR	68.09	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	MA	AUPR	40.45	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	mean	Dice	62.18	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	EX	Dice	78.60	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	SE	Dice	64.33	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	HE	Dice	67.00	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HED (Xie and Tu 2015)	HED	no	MA	Dice	38.81	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	mean	AUPR	58.73	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	EX	AUPR	75.21	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	SE	AUPR	63.36	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	HE	AUPR	63.65	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	MA	AUPR	32.71	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	mean	Dice	57.38	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	EX	Dice	73.24	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	SE	Dice	60.81	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	HE	Dice	62.83	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	PSPNet (Zhao et al. 2017)	PSPNet	no	MA	Dice	32.63	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	mean	AUPR	65.06	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	EX	AUPR	81.01	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	SE	AUPR	66.10	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	HE	AUPR	67.10	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	MA	AUPR	46.01	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	mean	Dice	62.56	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	EX	Dice	79.89	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	SE	Dice	62.61	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	HE	Dice	62.89	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DenseUNet (Li et al. 2018)	DenseUNet	no	MA	Dice	44.83	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	mean	AUPR	63.19	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	EX	AUPR	81.93	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	SE	AUPR	64.66	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	HE	AUPR	63.04	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	MA	AUPR	43.14	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	mean	Dice	60.90	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	EX	Dice	79.60	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	SE	Dice	61.96	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	HE	Dice	61.48	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	MA	Dice	40.57	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	L-seg (Guo et al. 2019)	L-Seg	no	mean	AUPR	65.15	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); only AUPR given
+Xu2024_HACDR-Net	Table 1	IDRiD	L-seg (Guo et al. 2019)	L-Seg	no	EX	AUPR	79.45	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); only AUPR given
+Xu2024_HACDR-Net	Table 1	IDRiD	L-seg (Guo et al. 2019)	L-Seg	no	SE	AUPR	63.74	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); only AUPR given; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	L-seg (Guo et al. 2019)	L-Seg	no	HE	AUPR	71.13	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); only AUPR given; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	L-seg (Guo et al. 2019)	L-Seg	no	MA	AUPR	46.27	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); only AUPR given
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	mean	AUPR	59.09	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	EX	AUPR	75.12	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	SE	AUPR	64.04	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	HE	AUPR	64.73	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	MA	AUPR	32.48	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	mean	Dice	57.94	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	EX	Dice	73.15	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	SE	Dice	61.87	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	HE	Dice	63.96	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	DNL (Yin et al. 2020)	DNL	no	MA	Dice	32.78	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	mean	AUPR	64.93	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68)
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	EX	AUPR	82.09	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68)
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	SE	AUPR	65.50	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	HE	AUPR	68.38	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	MA	AUPR	43.76	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68)
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	mean	Dice	63.14	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68)
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	EX	Dice	79.93	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68)
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	SE	Dice	62.58	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	HE	Dice	67.53	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HRNetV2 (Wang et al. 2020)	HRNet	no	MA	Dice	42.49	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023) except mAUPR 64.93 (M2MRF: 65.01) and 'HE' 68.38 (M2MRF SE: 68.68)
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	AUPR	63.84	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	AUPR	80.09	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	AUPR	63.12	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	AUPR	68.86	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	AUPR	43.27	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	Dice	62.79	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	Dice	78.56	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	Dice	61.98	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	Dice	68.19	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	Dice	42.42	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023)
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	mean	AUPR	63.23	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	EX	AUPR	80.01	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	SE	AUPR	66.91	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	HE	AUPR	62.85	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	MA	AUPR	43.10	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	mean	Dice	62.74	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	EX	Dice	79.89	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	SE	Dice	62.47	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	HE	Dice	64.02	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	TransUnet (Chen et al. 2021)	TransUNet	no	MA	Dice	44.57	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	mean	AUPR	64.48	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	EX	AUPR	81.34	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	SE	AUPR	66.57	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	HE	AUPR	64.91	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	MA	AUPR	45.10	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	mean	Dice	63.53	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	EX	Dice	79.71	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	SE	Dice	65.19	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	HE	Dice	64.43	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	MA	Dice	44.79	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	mean	AUPR	64.86	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	EX	AUPR	83.11	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	SE	AUPR	68.20	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	HE	AUPR	65.12	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	MA	AUPR	43.02	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	mean	Dice	62.99	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	EX	Dice	80.12	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	SE	Dice	65.71	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	HE	Dice	62.25	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	MA	Dice	43.90	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 1	IDRiD	PMCNet (He et al. 2022)	PMCNet	no	mean	AUPR	68.08	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; mIoU/mDice mean only
+Xu2024_HACDR-Net	Table 1	IDRiD	PMCNet (He et al. 2022)	PMCNet	no	EX	AUPR	87.24	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; mIoU/mDice mean only
+Xu2024_HACDR-Net	Table 1	IDRiD	PMCNet (He et al. 2022)	PMCNet	no	SE	AUPR	71.11	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; mIoU/mDice mean only; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	PMCNet (He et al. 2022)	PMCNet	no	HE	AUPR	67.05	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; mIoU/mDice mean only; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	PMCNet (He et al. 2022)	PMCNet	no	MA	AUPR	46.94	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; mIoU/mDice mean only
+Xu2024_HACDR-Net	Table 1	IDRiD	PMCNet (He et al. 2022)	PMCNet	no	mean	Dice	56.02	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; mIoU/mDice mean only
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	mean	AUPR	66.00	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	EX	AUPR	81.98	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	SE	AUPR	67.41	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	HE	AUPR	66.68	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	MA	AUPR	47.91	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	mean	Dice	64.45	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	EX	Dice	79.57	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	SE	Dice	65.39	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	HE	Dice	65.01	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	M2MRF (Liu et al. 2023c)	M2MRF	no	MA	Dice	47.81	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 6 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	mean	AUPR	68.79	self	NA	Unit %
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	EX	AUPR	86.90	self	NA	Unit %
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	SE	AUPR	76.73	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	HE	AUPR	68.50	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	MA	AUPR	43.02	self	NA	Unit %
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	mean	Dice	64.71	self	NA	Unit %
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	EX	Dice	78.50	self	NA	Unit %
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	SE	Dice	71.96	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	HE	Dice	64.27	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 1	IDRiD	HACDR-Net (Ours)	HACDR-Net	yes	MA	Dice	44.12	self	NA	Unit %
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	mean	AUPR	42.97	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	EX	AUPR	61.40	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	SE	AUPR	43.19	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	HE	AUPR	46.68	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	MA	AUPR	20.61	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	mean	Dice	41.79	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	EX	Dice	56.63	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	SE	Dice	42.61	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	HE	Dice	45.50	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HED (Xie and Tu 2015)	HED	no	MA	Dice	22.43	cited	Xie2015	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	mean	AUPR	39.23	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	EX	AUPR	57.04	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	SE	AUPR	42.71	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	HE	AUPR	42.32	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	MA	AUPR	14.85	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	mean	Dice	37.97	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	EX	Dice	54.35	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	SE	Dice	39.37	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	HE	Dice	42.08	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	PSPNet (Zhao et al. 2017)	PSPNet	no	MA	Dice	16.09	cited	Zhao2017	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	mean	AUPR	48.29	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	EX	AUPR	62.00	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	SE	AUPR	55.01	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	HE	AUPR	51.11	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	MA	AUPR	25.05	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	mean	Dice	47.02	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	EX	Dice	58.41	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	SE	Dice	54.63	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	HE	Dice	49.32	cited	Li2018	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DenseUNet (Li et al. 2018)	DenseUNet	no	MA	Dice	25.73	cited	Li2018	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	mean	AUPR	42.34	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	EX	AUPR	62.32	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	SE	AUPR	40.79	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	HE	AUPR	41.83	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	MA	AUPR	24.39	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	mean	Dice	40.95	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	EX	Dice	58.59	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	SE	Dice	37.97	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	HE	Dice	41.83	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Deeplabv3+ (Chen et al. 2018)	DeepLabv3+	no	MA	Dice	25.40	cited	Chen2018	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	L-seg (Guo et al. 2019)	L-Seg	no	mean	AUPR	32.08	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); only AUPR given
+Xu2024_HACDR-Net	Table 2	DDR	L-seg (Guo et al. 2019)	L-Seg	no	EX	AUPR	55.46	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); only AUPR given
+Xu2024_HACDR-Net	Table 2	DDR	L-seg (Guo et al. 2019)	L-Seg	no	SE	AUPR	35.86	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); only AUPR given; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	L-seg (Guo et al. 2019)	L-Seg	no	HE	AUPR	26.48	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); only AUPR given; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	L-seg (Guo et al. 2019)	L-Seg	no	MA	AUPR	10.52	cited	Guo2019	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); only AUPR given
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	mean	AUPR	40.14	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	EX	AUPR	56.05	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	SE	AUPR	47.81	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	HE	AUPR	42.01	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	MA	AUPR	14.71	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	mean	Dice	38.02	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	EX	Dice	53.36	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	SE	Dice	42.71	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	HE	Dice	40.40	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	DNL (Yin et al. 2020)	DNL	no	MA	Dice	15.60	cited	Yin2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	mean	AUPR	45.21	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	EX	AUPR	61.55	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	SE	AUPR	45.68	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	HE	AUPR	46.91	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	MA	AUPR	26.70	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	mean	Dice	43.95	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	EX	Dice	58.98	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	SE	Dice	44.96	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	HE	Dice	44.86	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HRNetV2 (Wang et al. 2020)	HRNet	no	MA	Dice	26.99	cited	Wang2020	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023)
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	AUPR	46.11	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03)
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	AUPR	59.71	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03)
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	AUPR	49.96	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	AUPR	52.72	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	AUPR	21.54	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03)
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	mean	Dice	44.15	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03)
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	EX	Dice	56.83	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03)
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	SE	Dice	45.04	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	HE	Dice	53.19	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Twins-SVT-B (Chu et al. 2021)	Twins-SVT-B	no	MA	Dice	21.54	cited	Chu2021	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); AUPR MA 21.54 equals M2MRF's Dice MA (M2MRF AUPR MA = 22.03)
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	mean	AUPR	44.03	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	EX	AUPR	60.57	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	SE	AUPR	55.46	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	HE	AUPR	41.49	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	MA	AUPR	18.58	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	mean	Dice	42.15	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	EX	Dice	56.89	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	SE	Dice	54.47	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	HE	Dice	36.68	cited	Chen2021	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	TransUnet (Chen et al. 2021)	TransUNet	no	MA	Dice	20.57	cited	Chen2021	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	mean	AUPR	46.72	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	EX	AUPR	62.71	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	SE	AUPR	54.39	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	HE	AUPR	46.12	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	MA	AUPR	23.67	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	mean	Dice	45.10	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	EX	Dice	59.79	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	SE	Dice	50.53	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	HE	Dice	46.77	cited	Cao2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Unet (Cao et al. 2022)	Swin-Unet	no	MA	Dice	23.31	cited	Cao2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	mean	AUPR	48.59	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	EX	AUPR	63.05	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	SE	AUPR	55.01	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	HE	AUPR	50.11	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	MA	AUPR	26.20	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	mean	Dice	47.86	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	EX	Dice	61.18	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	SE	Dice	54.14	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	HE	Dice	49.36	cited	Liu2022	Unit %; no provenance sentence in paper; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	Swin-Tv2 (Liu et al. 2022)	Swin-Tv2	no	MA	Dice	26.75	cited	Liu2022	Unit %; no provenance sentence in paper
+Xu2024_HACDR-Net	Table 2	DDR	PMCNet (He et al. 2022)	PMCNet	no	mean	AUPR	36.44	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; 31.64 printed twice (SE and HE)
+Xu2024_HACDR-Net	Table 2	DDR	PMCNet (He et al. 2022)	PMCNet	no	EX	AUPR	54.30	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; 31.64 printed twice (SE and HE)
+Xu2024_HACDR-Net	Table 2	DDR	PMCNet (He et al. 2022)	PMCNet	no	SE	AUPR	31.64	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; 31.64 printed twice (SE and HE); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	PMCNet (He et al. 2022)	PMCNet	no	HE	AUPR	31.64	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; 31.64 printed twice (SE and HE); label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	PMCNet (He et al. 2022)	PMCNet	no	MA	AUPR	19.94	cited	He2022	Unit %; no provenance sentence in paper; only AUPR per class; 31.64 printed twice (SE and HE)
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	mean	AUPR	49.42	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	EX	AUPR	63.88	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	SE	AUPR	55.47	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	HE	AUPR	50.01	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	MA	AUPR	28.33	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	mean	Dice	45.77	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	EX	Dice	60.20	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	SE	Dice	46.81	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	HE	Dice	48.58	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	M2MRF (Liu et al. 2023c)	M2MRF	no	MA	Dice	27.51	cited	Liu2023	Unit %; no provenance sentence in paper; values identical to M2MRF Table 4 (Liu2023); corresponds to M2MRF-B variant
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	mean	AUPR	50.36	self	NA	Unit %
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	EX	AUPR	65.15	self	NA	Unit %
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	SE	AUPR	56.75	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	HE	AUPR	55.02	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	MA	AUPR	24.50	self	NA	Unit %
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	mean	Dice	49.30	self	NA	Unit %
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	EX	Dice	61.24	self	NA	Unit %
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	SE	Dice	55.64	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	HE	Dice	53.96	self	NA	Unit %; label per printed header (EX SE HE MA); see audit notes - HE/SE columns may be swapped
+Xu2024_HACDR-Net	Table 2	DDR	HACDR-Net (Ours)	HACDR-Net	yes	MA	Dice	26.34	self	NA	Unit %
+Li2024_WSRFNet	Table 1	IDRiD	L-seg	L-Seg	no	mean	AUPR	65.15	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	L-seg	L-Seg	no	EX	AUPR	79.45	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	L-seg	L-Seg	no	HE	AUPR	63.74	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	L-seg	L-Seg	no	SE	AUPR	71.13	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	L-seg	L-Seg	no	MA	AUPR	46.27	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	RTNet	RTNet	no	mean	AUPR	70.76	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 1	IDRiD	RTNet	RTNet	no	EX	AUPR	90.24	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 1	IDRiD	RTNet	RTNet	no	HE	AUPR	68.80	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 1	IDRiD	RTNet	RTNet	no	SE	AUPR	75.02	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 1	IDRiD	RTNet	RTNet	no	MA	AUPR	48.97	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 1	IDRiD	SAA	SAA	no	mean	AUPR	67.38	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 1	IDRiD	SAA	SAA	no	EX	AUPR	88.12	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 1	IDRiD	SAA	SAA	no	HE	AUPR	67.04	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 1	IDRiD	SAA	SAA	no	SE	AUPR	72.81	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 1	IDRiD	SAA	SAA	no	MA	AUPR	41.52	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	mean	AUPR	70.96	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	EX	AUPR	89.61	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	HE	AUPR	68.84	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	SE	AUPR	75.63	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	MA	AUPR	49.75	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	mean	Dice	67.02	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	EX	Dice	79.47	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	HE	Dice	63.59	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	SE	Dice	72.33	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	Guo et al.	Deep-multiscale (Guo2024)	no	MA	Dice	52.68	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	mean	AUPR	67.24	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	EX	AUPR	82.16	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	HE	AUPR	68.69	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	SE	AUPR	69.32	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	MA	AUPR	48.80	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	mean	Dice	65.71	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	EX	Dice	79.85	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	HE	Dice	66.42	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	SE	Dice	67.92	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	M2MRF-C	M2MRF	no	MA	Dice	48.63	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	mean	AUPR	66.63	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	EX	AUPR	84.95	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	HE	AUPR	68.29	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	SE	AUPR	65.64	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	MA	AUPR	47.65	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	mean	Dice	63.07	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	EX	Dice	78.21	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	HE	Dice	64.29	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	SE	Dice	62.53	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	Deeplabv3+	DeepLabv3+	no	MA	Dice	47.23	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	mean	AUPR	68.90	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	EX	AUPR	85.65	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	HE	AUPR	72.09	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	SE	AUPR	72.31	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	MA	AUPR	45.56	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	mean	Dice	65.17	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	EX	Dice	79.28	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	HE	Dice	66.49	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	SE	Dice	68.42	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	HRNet48	HRNet	no	MA	Dice	46.48	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	mean	AUPR	69.03	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	EX	AUPR	85.29	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	HE	AUPR	72.60	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	SE	AUPR	72.25	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	MA	AUPR	45.97	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	mean	Dice	65.61	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	EX	Dice	79.00	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	HE	Dice	67.92	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	SE	Dice	68.42	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Swin-base	Swin-base	no	MA	Dice	47.11	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	mean	AUPR	71.05	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	EX	AUPR	87.15	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	HE	AUPR	69.65	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	SE	AUPR	79.43	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	MA	AUPR	47.98	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	mean	Dice	67.53	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	EX	Dice	81.03	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	HE	Dice	65.09	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	SE	Dice	75.40	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 1	IDRiD	Ours	WSRFNet	yes	MA	Dice	48.62	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	L-seg	L-Seg	no	mean	AUPR	32.08	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	L-seg	L-Seg	no	EX	AUPR	55.46	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	L-seg	L-Seg	no	HE	AUPR	35.86	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	L-seg	L-Seg	no	SE	AUPR	26.48	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	L-seg	L-Seg	no	MA	AUPR	10.52	cited	Guo2019	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	RTNet	RTNet	no	mean	AUPR	33.62	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 2	DDR	RTNet	RTNet	no	EX	AUPR	56.71	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 2	DDR	RTNet	RTNet	no	HE	AUPR	36.56	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 2	DDR	RTNet	RTNet	no	SE	AUPR	29.43	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 2	DDR	RTNet	RTNet	no	MA	AUPR	11.76	cited	Huang2022	in %; 'directly taken from original papers'; paper notes RTNet uses auxiliary DRIVE/STARE vessel labels
+Li2024_WSRFNet	Table 2	DDR	SAA	SAA	no	mean	AUPR	41.02	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 2	DDR	SAA	SAA	no	EX	AUPR	62.69	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 2	DDR	SAA	SAA	no	HE	AUPR	44.56	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 2	DDR	SAA	SAA	no	SE	AUPR	37.47	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 2	DDR	SAA	SAA	no	MA	AUPR	19.33	cited	Bo2022	in %; 'directly taken from original papers'; paper notes SAA backbone pretrained on DDR training set
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	mean	AUPR	35.30	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	EX	AUPR	60.14	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	HE	AUPR	36.52	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	SE	AUPR	32.60	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	MA	AUPR	11.94	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	mean	Dice	34.80	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	EX	Dice	54.06	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	HE	Dice	33.17	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	SE	Dice	38.76	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	Guo et al.	Deep-multiscale (Guo2024)	no	MA	Dice	15.22	cited	Guo2024	in %; 'directly taken from original papers'
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	mean	AUPR	48.94	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	EX	AUPR	63.59	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	HE	AUPR	54.43	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	SE	AUPR	49.35	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	MA	AUPR	28.38	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	mean	Dice	45.40	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	EX	Dice	60.62	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	HE	Dice	45.16	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	SE	Dice	47.78	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	M2MRF-C	M2MRF	no	MA	Dice	28.04	cited	Liu2023	in %; 'directly taken from original papers'; M2MRF-C variant
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	mean	AUPR	45.20	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	EX	AUPR	61.46	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	HE	AUPR	52.13	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	SE	AUPR	38.89	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	MA	AUPR	28.33	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	mean	Dice	40.66	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	EX	Dice	57.26	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	HE	Dice	39.82	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	SE	Dice	39.33	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	Deeplabv3+	DeepLabv3+	no	MA	Dice	26.25	rerun	NA	in %; backbone ResNet-50; trained by WSRFNet authors with their setting
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	mean	AUPR	48.27	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	EX	AUPR	61.89	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	HE	AUPR	53.81	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	SE	AUPR	48.93	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	MA	AUPR	28.45	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	mean	Dice	45.21	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	EX	Dice	59.07	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	HE	Dice	48.29	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	SE	Dice	47.46	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	HRNet48	HRNet	no	MA	Dice	26.03	rerun	NA	in %; HRNet48 + FCN decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	mean	AUPR	47.98	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	EX	AUPR	63.10	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	HE	AUPR	51.35	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	SE	AUPR	52.99	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	MA	AUPR	24.46	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	mean	Dice	45.48	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	EX	Dice	58.33	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	HE	Dice	47.08	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	SE	Dice	52.74	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Swin-base	Swin-base	no	MA	Dice	23.76	rerun	NA	in %; Swin-base + UPerNet decoder; trained by WSRFNet authors
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	mean	AUPR	50.07	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	EX	AUPR	62.54	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	HE	AUPR	57.54	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	SE	AUPR	53.79	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	MA	AUPR	26.42	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	mean	Dice	47.66	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	EX	Dice	58.59	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	HE	Dice	51.81	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	SE	Dice	53.56	self	NA	in %; EfficientNet-B1 backbone
+Li2024_WSRFNet	Table 2	DDR	Ours	WSRFNet	yes	MA	Dice	26.68	self	NA	in %; EfficientNet-B1 backbone
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	MA	AUPR	28.21	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	SE	AUPR	53.19	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	HE	AUPR	54.20	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	EX	AUPR	64.17	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	mean	AUPR	49.94	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	MA	Dice	27.81	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	SE	Dice	48.02	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	HE	Dice	45.29	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	EX	Dice	61.15	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	M2MRF [22]	M2MRF	no	mean	Dice	45.57	cited	Liu2023	in %; columns MA SE HE EX; AUPR values = M2MRF-A, Dice values = M2MRF-D (M2MRF Table 4)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	MA	AUPR	10.52	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	SE	AUPR	26.48	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	HE	AUPR	35.86	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	EX	AUPR	55.46	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	mean	AUPR	32.08	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	MA	Dice	23.01	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	SE	Dice	40.13	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	HE	Dice	41.53	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	EX	Dice	54.44	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	L-Seg [37]	L-Seg	no	mean	Dice	39.78	cited	Guo2019	in %; columns MA SE HE EX; Dice values not in Guo2019 (source not stated)
+Bian2024_MLNet	Table 1	DDR	RTNet [9]	RTNet	no	MA	AUPR	11.76	cited	Huang2022	in %; columns MA SE HE EX
+Bian2024_MLNet	Table 1	DDR	RTNet [9]	RTNet	no	SE	AUPR	29.43	cited	Huang2022	in %; columns MA SE HE EX
+Bian2024_MLNet	Table 1	DDR	RTNet [9]	RTNet	no	HE	AUPR	36.56	cited	Huang2022	in %; columns MA SE HE EX
+Bian2024_MLNet	Table 1	DDR	RTNet [9]	RTNet	no	EX	AUPR	56.71	cited	Huang2022	in %; columns MA SE HE EX
+Bian2024_MLNet	Table 1	DDR	RTNet [9]	RTNet	no	mean	AUPR	33.62	cited	Huang2022	in %; columns MA SE HE EX
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	MA	AUPR	20.61	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	SE	AUPR	46.68	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	HE	AUPR	43.19	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	EX	AUPR	61.40	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	mean	AUPR	42.97	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	MA	Dice	22.43	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	SE	Dice	45.50	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	HE	Dice	42.61	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	EX	Dice	56.63	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	HEDNet [38]	HED	no	mean	Dice	41.79	cited	Xie2017	in %; columns MA SE HE EX; 'HEDNet' = HED (Xie & Tu), ref [38] is the IJCV 2017 version; values = M2MRF Table 4 HED row
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	MA	AUPR	23.67	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	SE	AUPR	46.21	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	HE	AUPR	54.39	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	EX	AUPR	62.71	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	mean	AUPR	46.75	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	MA	Dice	23.31	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	SE	Dice	46.77	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	HE	Dice	50.53	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	EX	Dice	59.79	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	Swin-T [39]	Swin-T	no	mean	Dice	45.10	cited	Liu2021	in %; columns MA SE HE EX; ref [39] Swin Transformer (Liu 2021); values match HACDR-Net Swin-Unet DDR row with HE/SE swapped (AUPR SE 46.21 vs 46.12, mAUPR 46.75 vs 46.72 differ)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	MA	AUPR	10.66	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	SE	AUPR	26.94	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	HE	AUPR	37.78	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	EX	AUPR	56.07	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	mean	AUPR	32.86	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	MA	Dice	23.30	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	SE	Dice	41.08	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	HE	Dice	42.77	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	EX	Dice	55.57	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	VTA * [20]	VTA	no	mean	Dice	40.68	rerun	NA	in %; columns MA SE HE EX; '*' = reproduced by MLNet authors; ref [20] Wang2023 (Sci. Rep.)
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	MA	AUPR	11.94	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	SE	AUPR	32.60	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	HE	AUPR	36.52	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	EX	AUPR	60.14	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	mean	AUPR	35.30	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	MA	Dice	15.22	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	SE	Dice	38.76	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	HE	Dice	33.17	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	EX	Dice	54.06	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	Guo et al. [11]	Deep-multiscale (Guo2024)	no	mean	Dice	34.80	cited	Guo2024	in %; columns MA SE HE EX; ref [11] Guo, Yang, Yu 2024 BSPC
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	MA	AUPR	34.28	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	SE	AUPR	48.41	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	HE	AUPR	57.39	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	EX	AUPR	67.16	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	mean	AUPR	51.81	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	MA	Dice	31.25	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	SE	Dice	49.71	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	HE	Dice	55.23	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	EX	Dice	63.21	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 1	DDR	MLNet	MLNet	yes	mean	Dice	49.85	self	NA	in %; columns MA SE HE EX; VGG16 backbone, 512x512 input
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	MA	AUPR	41.72	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	SE	AUPR	55.53	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	HE	AUPR	67.11	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	EX	AUPR	76.47	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	mean	AUPR	60.21	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	MA	Dice	44.53	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	SE	Dice	52.26	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	HE	Dice	58.01	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	EX	Dice	69.18	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	U-Net [15]	U-Net	no	mean	Dice	56.99	cited	Ronneberger2015	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	MA	AUPR	37.88	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	SE	AUPR	53.57	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	HE	AUPR	65.81	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	EX	AUPR	74.26	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	mean	AUPR	57.88	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	MA	Dice	42.97	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	SE	Dice	55.69	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	HE	Dice	58.47	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	EX	Dice	67.82	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Swin-UNet [40]	Swin-Unet	no	mean	Dice	56.24	cited	Cao2022	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'; cited paper did not evaluate DIARETDB1 lesions - numbers presumably from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	MA	AUPR	46.77	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	SE	AUPR	63.43	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	HE	AUPR	76.30	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	EX	AUPR	81.15	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	mean	AUPR	66.91	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	MA	Dice	49.96	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	SE	Dice	62.23	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	HE	Dice	69.31	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	EX	Dice	76.12	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	Guo et al. [11]	Deep-multiscale (Guo2024)	no	mean	Dice	64.41	cited	Guo2024	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]; 'the data results of these algorithms are from the relevant paper'
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	MA	AUPR	53.01	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	SE	AUPR	65.19	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	HE	AUPR	73.81	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	EX	AUPR	76.66	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	mean	AUPR	67.16	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	MA	Dice	51.72	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	SE	Dice	64.48	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	HE	Dice	61.10	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	EX	Dice	69.97	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 2	DiaRetDB1	MLNet	MLNet	yes	mean	Dice	61.82	self	NA	in %; columns MA SE HE EX; DIARETDB1 with relabelled masks and 67/22 split from Guo2024 [11]
+Bian2024_MLNet	Table 3	IDRiD	M2MRF [22]	M2MRF	no	MA	AUPR	44.09	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [22] (Liu2023) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	M2MRF [22]	M2MRF	no	SE	AUPR	55.20	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [22] (Liu2023) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	M2MRF [22]	M2MRF	no	HE	AUPR	59.97	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [22] (Liu2023) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	M2MRF [22]	M2MRF	no	EX	AUPR	74.04	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [22] (Liu2023) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	M2MRF [22]	M2MRF	no	mean	AUPR	58.33	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [22] (Liu2023) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	L-Seg [37]	L-Seg	no	MA	AUPR	19.86	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [37] (Guo2019) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	L-Seg [37]	L-Seg	no	SE	AUPR	30.59	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [37] (Guo2019) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	L-Seg [37]	L-Seg	no	HE	AUPR	44.05	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [37] (Guo2019) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	L-Seg [37]	L-Seg	no	EX	AUPR	65.01	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [37] (Guo2019) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	L-Seg [37]	L-Seg	no	mean	AUPR	39.88	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [37] (Guo2019) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	RTNet [9]	RTNet	no	MA	AUPR	21.14	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [9] (Huang2022) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	RTNet [9]	RTNet	no	SE	AUPR	34.01	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [9] (Huang2022) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	RTNet [9]	RTNet	no	HE	AUPR	45.04	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [9] (Huang2022) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	RTNet [9]	RTNet	no	EX	AUPR	67.99	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [9] (Huang2022) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	RTNet [9]	RTNet	no	mean	AUPR	42.05	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [9] (Huang2022) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	HEDNet [38]	HED	no	MA	AUPR	17.16	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [38] (Xie2017) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	HEDNet [38]	HED	no	SE	AUPR	31.78	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [38] (Xie2017) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	HEDNet [38]	HED	no	HE	AUPR	39.68	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [38] (Xie2017) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	HEDNet [38]	HED	no	EX	AUPR	57.66	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [38] (Xie2017) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	HEDNet [38]	HED	no	mean	AUPR	36.57	not stated	NA	in %; columns MA SE HE EX; cross-dataset generalization: trained on DDR train+val, tested on IDRiD test set; row carries method citation [38] (Xie2017) but these DDR->IDRiD numbers are not reported in that paper; source not stated
+Bian2024_MLNet	Table 3	IDRiD	MLNet	MLNet	yes	MA	AUPR	49.56	self	NA	in %; columns MA SE HE EX; trained on DDR train+val, tested on IDRiD test; text says mAUPR 59.44
+Bian2024_MLNet	Table 3	IDRiD	MLNet	MLNet	yes	SE	AUPR	61.08	self	NA	in %; columns MA SE HE EX; trained on DDR train+val, tested on IDRiD test; text says mAUPR 59.44
+Bian2024_MLNet	Table 3	IDRiD	MLNet	MLNet	yes	HE	AUPR	60.91	self	NA	in %; columns MA SE HE EX; trained on DDR train+val, tested on IDRiD test; text says mAUPR 59.44
+Bian2024_MLNet	Table 3	IDRiD	MLNet	MLNet	yes	EX	AUPR	66.60	self	NA	in %; columns MA SE HE EX; trained on DDR train+val, tested on IDRiD test; text says mAUPR 59.44
+Bian2024_MLNet	Table 3	IDRiD	MLNet	MLNet	yes	mean	AUPR	59.54	self	NA	in %; columns MA SE HE EX; trained on DDR train+val, tested on IDRiD test; text says mAUPR 59.44
+Ali2023_LezioSeg	Table 6	IDRiD	VRT (1st) [43]	VRT	no	EX	AUPR	71.27	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	VRT (1st) [43]	VRT	no	HE	AUPR	68.04	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	VRT (1st) [43]	VRT	no	SE	AUPR	69.95	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	VRT (1st) [43]	VRT	no	MA	AUPR	49.51	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	VRT (1st) [43]	VRT	no	mean	AUPR	64.69	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	PATech (2nd) [43]	PATech	no	EX	AUPR	88.50	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; SE and mAUPR '-'; MA printed 47.40 (M2MRF prints 47.70); IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	PATech (2nd) [43]	PATech	no	HE	AUPR	64.90	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; SE and mAUPR '-'; MA printed 47.40 (M2MRF prints 47.70); IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	PATech (2nd) [43]	PATech	no	MA	AUPR	47.40	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; SE and mAUPR '-'; MA printed 47.40 (M2MRF prints 47.70); IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	iFLYTEK-MIG (3rd) [43]	iFLYTEK	no	EX	AUPR	87.41	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	iFLYTEK-MIG (3rd) [43]	iFLYTEK	no	HE	AUPR	55.88	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	iFLYTEK-MIG (3rd) [43]	iFLYTEK	no	SE	AUPR	65.88	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	iFLYTEK-MIG (3rd) [43]	iFLYTEK	no	MA	AUPR	50.17	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	iFLYTEK-MIG (3rd) [43]	iFLYTEK	no	mean	AUPR	64.84	cited	Porwal2020	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; IDRiD 2018 challenge top-3 team
+Ali2023_LezioSeg	Table 6	IDRiD	L-Seg [12]	L-Seg	no	EX	AUPR	79.45	cited	Guo2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	L-Seg [12]	L-Seg	no	HE	AUPR	63.74	cited	Guo2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	L-Seg [12]	L-Seg	no	SE	AUPR	71.13	cited	Guo2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	L-Seg [12]	L-Seg	no	MA	AUPR	46.27	cited	Guo2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	L-Seg [12]	L-Seg	no	mean	AUPR	65.15	cited	Guo2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	CASENet [14]	CASENet	no	EX	AUPR	75.64	cited	Yu2017	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	CASENet [14]	CASENet	no	HE	AUPR	44.62	cited	Yu2017	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	CASENet [14]	CASENet	no	SE	AUPR	39.92	cited	Yu2017	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	CASENet [14]	CASENet	no	MA	AUPR	32.75	cited	Yu2017	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	CASENet [14]	CASENet	no	mean	AUPR	48.23	cited	Yu2017	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	DeepLabV3+ [13]	DeepLabv3+	no	EX	AUPR	71.18	cited	Chen2018	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	DeepLabV3+ [13]	DeepLabv3+	no	HE	AUPR	47.72	cited	Chen2018	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	DeepLabV3+ [13]	DeepLabv3+	no	SE	AUPR	59.12	cited	Chen2018	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	DeepLabV3+ [13]	DeepLabv3+	no	MA	AUPR	15.14	cited	Chen2018	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	DeepLabV3+ [13]	DeepLabv3+	no	mean	AUPR	48.29	cited	Chen2018	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'; cited paper is the generic method, numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 6	IDRiD	HEDNet + cGAN [10]	HEDNet+cGAN	no	EX	AUPR	84.05	cited	Xiao2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	HEDNet + cGAN [10]	HEDNet+cGAN	no	HE	AUPR	48.12	cited	Xiao2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	HEDNet + cGAN [10]	HEDNet+cGAN	no	SE	AUPR	48.39	cited	Xiao2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	HEDNet + cGAN [10]	HEDNet+cGAN	no	MA	AUPR	43.92	cited	Xiao2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	HEDNet + cGAN [10]	HEDNet+cGAN	no	mean	AUPR	56.12	cited	Xiao2019	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	CARNet [17]	CARNet	no	EX	AUPR	86.75	cited	Guo2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	CARNet [17]	CARNet	no	HE	AUPR	63.89	cited	Guo2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	CARNet [17]	CARNet	no	SE	AUPR	71.25	cited	Guo2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	CARNet [17]	CARNet	no	MA	AUPR	51.48	cited	Guo2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	CARNet [17]	CARNet	no	mean	AUPR	68.34	cited	Guo2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	EAD-Net [3]	EAD-Net	no	EX	AUPR	78.18	cited	Wan2021	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	EAD-Net [3]	EAD-Net	no	HE	AUPR	56.49	cited	Wan2021	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	EAD-Net [3]	EAD-Net	no	SE	AUPR	60.83	cited	Wan2021	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	EAD-Net [3]	EAD-Net	no	MA	AUPR	24.08	cited	Wan2021	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	EAD-Net [3]	EAD-Net	no	mean	AUPR	54.90	cited	Wan2021	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PMCNet [44]	PMCNet	no	EX	AUPR	87.24	cited	He2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PMCNet [44]	PMCNet	no	HE	AUPR	67.05	cited	He2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PMCNet [44]	PMCNet	no	SE	AUPR	71.11	cited	He2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PMCNet [44]	PMCNet	no	MA	AUPR	46.94	cited	He2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PMCNet [44]	PMCNet	no	mean	AUPR	68.08	cited	He2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PBDA [33]	PBDA	no	EX	AUPR	86.43	cited	Wang2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PBDA [33]	PBDA	no	HE	AUPR	71.53	cited	Wang2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PBDA [33]	PBDA	no	SE	AUPR	73.07	cited	Wang2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PBDA [33]	PBDA	no	MA	AUPR	53.41	cited	Wang2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	PBDA [33]	PBDA	no	mean	AUPR	71.11	cited	Wang2022	in %; columns EX HE SE MA; no provenance sentence, '(-) stands for not reported'
+Ali2023_LezioSeg	Table 6	IDRiD	LezioSeg + Affine	LezioSeg	yes	EX	AUPR	86.03	self	NA	in %; LezioSeg with affine augmentation; MobileNet backbone; one binary model per lesion
+Ali2023_LezioSeg	Table 6	IDRiD	LezioSeg + Affine	LezioSeg	yes	HE	AUPR	69.11	self	NA	in %; LezioSeg with affine augmentation; MobileNet backbone; one binary model per lesion
+Ali2023_LezioSeg	Table 6	IDRiD	LezioSeg + Affine	LezioSeg	yes	SE	AUPR	81.05	self	NA	in %; LezioSeg with affine augmentation; MobileNet backbone; one binary model per lesion
+Ali2023_LezioSeg	Table 6	IDRiD	LezioSeg + Affine	LezioSeg	yes	MA	AUPR	40.04	self	NA	in %; LezioSeg with affine augmentation; MobileNet backbone; one binary model per lesion
+Ali2023_LezioSeg	Table 6	IDRiD	LezioSeg + Affine	LezioSeg	yes	mean	AUPR	69.06	self	NA	in %; LezioSeg with affine augmentation; MobileNet backbone; one binary model per lesion
+Ali2023_LezioSeg	Table 7	e-ophtha	CASENet [14]	CASENet	no	EX	AUPR	17.15	cited	Yu2017	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors; numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 7	e-ophtha	CASENet [14]	CASENet	no	MA	AUPR	15.65	cited	Yu2017	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors; numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 7	e-ophtha	CASENet [14]	CASENet	no	mean	AUPR	16.40	cited	Yu2017	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors; numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 7	e-ophtha	DeepLabV3+ [13]	DeepLabv3+	no	EX	AUPR	55.12	cited	Chen2018	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors; numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 7	e-ophtha	DeepLabV3+ [13]	DeepLabv3+	no	MA	AUPR	0.45	cited	Chen2018	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors; numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 7	e-ophtha	DeepLabV3+ [13]	DeepLabv3+	no	mean	AUPR	27.78	cited	Chen2018	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors; numbers likely from PBDA (Wang2022) re-implementation
+Ali2023_LezioSeg	Table 7	e-ophtha	L-Seg [12]	L-Seg	no	EX	AUPR	41.71	cited	Guo2019	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	L-Seg [12]	L-Seg	no	MA	AUPR	16.87	cited	Guo2019	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	L-Seg [12]	L-Seg	no	mean	AUPR	29.29	cited	Guo2019	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	PMCNet [44]	PMCNet	no	EX	AUPR	51.20	cited	He2022	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	PMCNet [44]	PMCNet	no	MA	AUPR	30.60	cited	He2022	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	PMCNet [44]	PMCNet	no	mean	AUPR	40.90	cited	He2022	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	PBDA [33]	PBDA	no	EX	AUPR	62.32	cited	Wang2022	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	PBDA [33]	PBDA	no	MA	AUPR	35.68	cited	Wang2022	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	PBDA [33]	PBDA	no	mean	AUPR	49.01	cited	Wang2022	in %; e-ophtha has EX and MA only; mean over 2 classes; e-ophtha split 80/20 random by LezioSeg authors
+Ali2023_LezioSeg	Table 7	e-ophtha	LezioSeg + Affine	LezioSeg	yes	EX	AUPR	63.04	self	NA	in %; e-ophtha EX and MA only; mean over 2 classes; 80/20 random split
+Ali2023_LezioSeg	Table 7	e-ophtha	LezioSeg + Affine	LezioSeg	yes	MA	AUPR	37.50	self	NA	in %; e-ophtha EX and MA only; mean over 2 classes; 80/20 random split
+Ali2023_LezioSeg	Table 7	e-ophtha	LezioSeg + Affine	LezioSeg	yes	mean	AUPR	50.27	self	NA	in %; e-ophtha EX and MA only; mean over 2 classes; 80/20 random split
+Ali2023_LezioSeg	Table 8	DDR	DeepLabV3+ [13]	DeepLabv3+	no	EX	AUPR	53.49	cited	Chen2018	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	DeepLabV3+ [13]	DeepLabv3+	no	HE	AUPR	38.94	cited	Chen2018	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	DeepLabV3+ [13]	DeepLabv3+	no	MA	AUPR	2.23	cited	Chen2018	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	DeepLabV3+ [13]	DeepLabv3+	no	SE	AUPR	21.20	cited	Chen2018	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	DeepLabV3+ [13]	DeepLabv3+	no	mean	AUPR	28.97	cited	Chen2018	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	CASENet [14]	CASENet	no	EX	AUPR	27.77	cited	Yu2017	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	CASENet [14]	CASENet	no	HE	AUPR	26.25	cited	Yu2017	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	CASENet [14]	CASENet	no	MA	AUPR	10.05	cited	Yu2017	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	CASENet [14]	CASENet	no	SE	AUPR	13.04	cited	Yu2017	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	CASENet [14]	CASENet	no	mean	AUPR	19.28	cited	Yu2017	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; numbers likely from PBDA (Wang2022)
+Ali2023_LezioSeg	Table 8	DDR	L-Seg [12]	L-Seg	no	EX	AUPR	55.46	cited	Guo2019	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; equals Guo2019 DDR values
+Ali2023_LezioSeg	Table 8	DDR	L-Seg [12]	L-Seg	no	HE	AUPR	35.86	cited	Guo2019	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; equals Guo2019 DDR values
+Ali2023_LezioSeg	Table 8	DDR	L-Seg [12]	L-Seg	no	MA	AUPR	10.52	cited	Guo2019	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; equals Guo2019 DDR values
+Ali2023_LezioSeg	Table 8	DDR	L-Seg [12]	L-Seg	no	SE	AUPR	26.48	cited	Guo2019	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; equals Guo2019 DDR values
+Ali2023_LezioSeg	Table 8	DDR	L-Seg [12]	L-Seg	no	mean	AUPR	32.08	cited	Guo2019	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied; equals Guo2019 DDR values
+Ali2023_LezioSeg	Table 8	DDR	PMCNet [44]	PMCNet	no	EX	AUPR	54.30	cited	He2022	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied
+Ali2023_LezioSeg	Table 8	DDR	PMCNet [44]	PMCNet	no	HE	AUPR	39.87	cited	He2022	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied
+Ali2023_LezioSeg	Table 8	DDR	PMCNet [44]	PMCNet	no	MA	AUPR	19.94	cited	He2022	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied
+Ali2023_LezioSeg	Table 8	DDR	PMCNet [44]	PMCNet	no	SE	AUPR	31.64	cited	He2022	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied
+Ali2023_LezioSeg	Table 8	DDR	PMCNet [44]	PMCNet	no	mean	AUPR	36.44	cited	He2022	in %; columns EX HE MA SE; generalization table: LezioSeg trained on IDRiD, tested on DDR test set; compared values are the methods' DDR results (trained on DDR) as copied
+Ali2023_LezioSeg	Table 8	DDR	LezioSeg + Affine	LezioSeg	yes	EX	AUPR	56.12	self	NA	in %; columns EX HE MA SE; trained on IDRiD only, tested on DDR test set (no DDR training)
+Ali2023_LezioSeg	Table 8	DDR	LezioSeg + Affine	LezioSeg	yes	HE	AUPR	33.81	self	NA	in %; columns EX HE MA SE; trained on IDRiD only, tested on DDR test set (no DDR training)
+Ali2023_LezioSeg	Table 8	DDR	LezioSeg + Affine	LezioSeg	yes	MA	AUPR	22.21	self	NA	in %; columns EX HE MA SE; trained on IDRiD only, tested on DDR test set (no DDR training)
+Ali2023_LezioSeg	Table 8	DDR	LezioSeg + Affine	LezioSeg	yes	SE	AUPR	28.62	self	NA	in %; columns EX HE MA SE; trained on IDRiD only, tested on DDR test set (no DDR training)
+Ali2023_LezioSeg	Table 8	DDR	LezioSeg + Affine	LezioSeg	yes	mean	AUPR	35.19	self	NA	in %; columns EX HE MA SE; trained on IDRiD only, tested on DDR test set (no DDR training)

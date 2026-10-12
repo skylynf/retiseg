@@ -1,0 +1,99 @@
+% Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images
+% Layout follows the Nature Methods "Analysis" format of the template paper
+% (Lu et al., Nat. Methods 23, 248-259): Results, Discussion, Methods, Extended Data.
+%
+% Build:  make            (figures, tables, numbers, bibliography, PDF)
+%         make final      (same, with every number printed as measured)
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[scaled=0.9]{helvet}
+\usepackage{courier}
+\usepackage[a4paper,margin=20mm,top=22mm,bottom=24mm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{booktabs,colortbl,multirow,makecell,array}
+\usepackage{threeparttable}
+\usepackage{adjustbox}
+\usepackage{pifont}
+\usepackage[font={small,sf},labelfont=bf,labelsep=space,justification=justified,singlelinecheck=false]{caption}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage[switch]{lineno}
+\usepackage{placeins}
+\usepackage[numbers,super,sort&compress]{natbib}
+\usepackage[colorlinks=true,allcolors=linkblue]{hyperref}
+
+\definecolor{linkblue}{HTML}{1C5CAB}
+\input{tex/retiseg-tables}
+\ifdefined\retisegfinal\retifinaltrue\fi   % "make final" sets this; or write \retifinaltrue here
+
+% --- numbers quoted in the text: \rn{key}, defined in generated/numbers.tex
+\makeatletter
+\newcommand{\rn}[1]{\@ifundefined{rn@#1}{\textbf{??#1??}}{\@nameuse{rn@#1}}}
+\makeatother
+\input{generated/numbers}
+
+% --- text whose wording depends on simulated numbers
+\ifretifinal
+  \newenvironment{simtext}{}{}
+\else
+  \newtcolorbox{simtextbox}{enhanced,breakable,frame hidden,colback=white,boxrule=0pt,borderline west={1.2pt}{0pt}{phcolor},
+    left=6pt,right=0pt,top=0pt,bottom=0pt,boxsep=0pt,before skip=4pt,after skip=4pt,
+    before upper={\setlength{\parindent}{1.2em}\noindent}}
+  \newenvironment{simtext}{\begin{simtextbox}}{\end{simtextbox}}
+\fi
+
+% --- headings in the template's style
+\titleformat{\section}{\sffamily\bfseries\Large}{}{0pt}{}
+\titleformat{\subsection}{\sffamily\bfseries\normalsize}{}{0pt}{}
+\titleformat{\subsubsection}[runin]{\sffamily\bfseries\small}{}{0pt}{}[.]
+\titlespacing*{\section}{0pt}{14pt}{4pt}
+\titlespacing*{\subsection}{0pt}{10pt}{2pt}
+\titlespacing*{\subsubsection}{0pt}{6pt}{4pt}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1.2em}
+\renewcommand{\figurename}{Fig.}
+\captionsetup[table]{name=Table}
+
+\newcommand{\figfile}[1]{figures/out/#1}
+\newcommand{\widefig}[1]{\includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{\figfile{#1}}}
+\newcommand{\mAUPR}{mAUPR}
+\newcommand{\Bstd}{B-std}
+
+\begin{document}
+\linenumbers
+
+\begin{flushleft}
+{\sffamily\small\color{inkmuted} Analysis}\\[6pt]
+{\sffamily\bfseries\LARGE Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images\par}
+\vspace{8pt}
+{\sffamily\normalsize Author One$^{1}$, Author Two$^{1}$, \ldots, Corresponding Author$^{1,\ast}$\par}
+\vspace{3pt}
+{\sffamily\footnotesize $^{1}$Affiliation. $^{\ast}$e-mail: corresponding@author\par}
+\end{flushleft}
+
+\ifretifinal\else
+\begin{tcolorbox}[colback=headgray,colframe=rulegray,boxrule=0.4pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,fontupper=\sffamily\footnotesize]
+\textbf{Draft with simulated numbers.} Numbers printed in {\color{phcolor}this colour} are produced by \texttt{scripts/build\_placeholder.py} and are not results; text beside a vertical bar in the same colour was written against them and must be reread once the runs finish. Numbers in black are already measured or are frozen properties of the data and the protocol. Figure panels built on simulated rows carry a ``simulated'' tag. Set \texttt{\textbackslash retifinaltrue} to remove all three markers.
+\end{tcolorbox}
+\fi
+
+\input{sections/abstract_intro}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/methods}
+
+{\small
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+}
+
+\input{sections/extended}
+
+\end{document}

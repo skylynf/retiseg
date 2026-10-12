@@ -1,0 +1,26 @@
+\begin{table*}[t]
+\centering\tablefont
+\caption{\textbf{What each model keeps under the unified protocol.} Data, splits, the 1,440-pixel canvas, augmentation, the training amount in pixels, checkpoint selection and evaluation are shared (Methods). Loss, optimizer, learning rate, weight decay, schedule shape and effective batch are taken from each model's source recipe; the schedule is stretched over the shared number of steps. Models with a fixed input size train on patches of that size and predict with half-overlapping windows; all others train on $960\times960$ patches and predict on the whole canvas.}
+\label{tab:recipes}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{@{}l l l l l c c l c c l r@{}}
+\toprule
+\colh{Model} & \colh{Initialization} & \colh{Head} & \colh{Loss} & \colh{Optim.} & \colh{LR} & \colh{WD} & \colh{Schedule} & \colh{Batch} & \colh{Patch} & \colh{Inference} & \colh{Steps} \\
+\midrule
+\famchip{general}\; U-Net & none & 4 sigmoid & BCE + Dice$^a$ & Adam & 1e-4 & 0 & constant & 4 & 960 & whole canvas & 21,000 \\
+\famchip{general}\; DeepLabv3 & ImageNet, ResNet-101 & 4 sigmoid & BCE & SGD & 7e-3 & 1e-4 & poly 0.9 & 16 & 960 & whole canvas & 6,000 \\
+\famchip{general}\; HRNet-W48 & ImageNet & 4 sigmoid & BCE & SGD & 1e-2 & 5e-4 & poly & 12 & 960 & whole canvas & 7,000 \\
+\famchip{general}\; Swin-Unet & ImageNet, Swin-T & 5 softmax & 0.4 CE + 0.6 Dice & SGD & 1e-2 & 1e-4 & poly 0.9 & 24 & 224 & sliding window & \tbd \\
+\famchip{general}\; FCT & none & 4 sigmoid & BCE & Adam & 1e-3 & 0 & constant & 4 & 384 & sliding window & 129,000 \\
+\famchip{fundus}\; M2MRF & ImageNet, HRNet-W48 & 4 sigmoid & binary Dice & SGD & 1e-2 & 5e-4 & poly 0.9 & 4 & 960 & whole canvas & 21,000 \\
+\famchip{fundus}\; HACDR-Net & none & 5 softmax & weighted CE$^b$ & AdamW & 6e-5 & 1e-2 & poly 1.0, warm-up & 1 & 960 & whole canvas & 83,000 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\scriptsize
+\item Batch is the effective batch (gradient accumulation where one card cannot hold it). Steps is for IDRiD at 1,000 equivalent epochs; one equivalent epoch draws as many patch pixels as the training canvases contain, so steps = $\lceil\lceil$canvas pixels\,/\,patch pixels$\rceil$\,/\,batch$\rceil$ per epoch. DDR uses 400 equivalent epochs (83,600 steps at batch 4).
+\item $^a$Per-image, per-class sigmoid Dice with smoothing 1; the other Dice losses use $10^{-5}$. $^b$IDRiD: class-weighted cross-entropy; DDR: the same plus the authors' NALoss with weight 0.2.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table*}

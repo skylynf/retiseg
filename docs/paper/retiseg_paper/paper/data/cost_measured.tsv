@@ -1,0 +1,24 @@
+# E10 numbers that exist outside runs/*/environment.json. Source column is a note, not read.
+# model	train_set	metric	value	source
+model	train_set	metric	value	note
+U-Net		params_m	7.8	bench reference implementation (14 M7)
+M2MRF		params_m	70.30	author checkpoint, 14 M5 (70.2979M)
+SAM2-UNet		params_m	216.5	wrapper test 2026-10-12 (00)
+SAM2-UNet		params_trainable_m	4.38	wrapper test 2026-10-12 (00)
+SAM-Adapter		params_m	641.3	wrapper test 2026-10-12 (00)
+SAM-Adapter		params_trainable_m	4.25	wrapper test 2026-10-12 (00)
+MedSAM (full FT)		params_m	93.74	wrapper test 2026-10-12 (00)
+MedSAM (full FT)		params_trainable_m	93.74	wrapper test 2026-10-12 (00)
+RETFound + UPerNet		params_m	352.6	wrapper test 2026-10-12 (00)
+RETFound + UPerNet		params_trainable_m	352.6	wrapper test 2026-10-12 (00)
+U-Net	IDRiD	train_gpu_h	1.4	00, B-std seed 0 (registered recipe)
+M2MRF	IDRiD	train_gpu_h	3.5	00, B-std seed 0
+HRNet-W48	IDRiD	train_gpu_h	2.6	00, B-std seed 0
+DeepLabv3	IDRiD	train_gpu_h	4.0	00, B-std seed 0
+HACDR-Net	IDRiD	train_gpu_h	6.0	00, B-std seed 0
+FCT	IDRiD	train_gpu_h	24.0	00, B-std seed 0
+FCT	DDR	train_gpu_h	72.0	00, 10-08 12:26 to 10-11 12:27
+nnU-Net	IDRiD	train_gpu_h	7.2	00, 26 s per epoch x 1000
+nnU-Net	DDR	train_gpu_h	7.2	00, 26 s per epoch x 1000
+nnU-Net ResEnc-M	IDRiD	train_gpu_h	12.8	00, 46 s per epoch x 1000
+nnU-Net ResEnc-M	DDR	train_gpu_h	11.4	00, 41 s per epoch x 1000

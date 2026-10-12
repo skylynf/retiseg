@@ -1,0 +1,43 @@
+\begin{table*}[t]
+\centering\tablefont
+\caption{\textbf{Original models: three numbers per released checkpoint, and retraining with the authors' recipe.} \textbf{a}, Each checkpoint is scored on the official test set of its training source with the number printed in the paper, the authors' evaluation function (11 thresholds, whole image, overwritten labels) on the float output, the same function on the stored 16-bit maps, and this study's protocol (exact pooled AUPR inside the field of view, overlapping labels). \textbf{b}, The authors' pipeline rerun from scratch; mean $\pm$ s.d. over seeds, last iteration, no checkpoint selection.}
+\label{tab:original}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{@{}l l c c c c c c c c c c@{}}
+\toprule
+\multicolumn{12}{@{}l}{\textbf{a}\quad Author weights (E1)}\\
+\addlinespace[2pt]
+ & & \multicolumn{3}{c}{\colh{mAUPR, author metric}} & \multicolumn{5}{c}{\colh{AUPR, this protocol}} & & \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-10}
+\colh{Model} & \colh{Source} & Paper & Function & Stored & \colh{mAUPR} & MA & HE & EX & SE & \colh{$\Delta$ metric} & \colh{Indep.\ fine} \\
+\midrule
+M2MRF & IDRiD & .672 & .676 & .645 & .639 & \cellcolor[HTML]{C0E4D8}.408 & \cellcolor[HTML]{88CEC9}.653 & \cellcolor[HTML]{5BB9C0}.832 & \cellcolor[HTML]{85CDC8}.664 & \down{.036} & \ph{.231} \\
+M2MRF & DDR & .489 & .492 & .426 & .401 & \cellcolor[HTML]{E2F1E6}\ph{.215} & \cellcolor[HTML]{B8E1D4}\ph{.455} & \cellcolor[HTML]{A1D8CE}\ph{.555} & \cellcolor[HTML]{C5E6DA}\ph{.377} & \down{.091} & \ph{.263} \\
+\addlinespace[2pt]
+WSRFNet & IDRiD & \ph{.690} & \ph{.681} & \ph{.659} & \ph{.639} & \cellcolor[HTML]{BEE3D7}\ph{.418} & \cellcolor[HTML]{88CEC9}\ph{.654} & \cellcolor[HTML]{5DBAC0}\ph{.824} & \cellcolor[HTML]{87CDC8}\ph{.660} & \down{\ph{.042}} & \ph{.292} \\
+WSRFNet & DDR & \ph{.500} & \ph{.483} & \ph{.432} & \ph{.412} & \cellcolor[HTML]{E0F0E5}\ph{.232} & \cellcolor[HTML]{B5E0D3}\ph{.471} & \cellcolor[HTML]{9CD6CC}\ph{.578} & \cellcolor[HTML]{C8E7DB}\ph{.366} & \down{\ph{.071}} & \ph{.341} \\
+\bottomrule
+\end{tabular}
+
+\vspace{6pt}
+\begin{tabular}{@{}l l c c c c c@{}}
+\toprule
+\multicolumn{7}{@{}l}{\textbf{b}\quad Author recipe, retrained (E1r)}\\
+\addlinespace[2pt]
+\colh{Model} & \colh{Source} & \colh{Paper} & \colh{Retrained, author metric} & \colh{Seeds} & \colh{$\Delta$ to paper} & \colh{Retrained, this protocol} \\
+\midrule
+M2MRF & IDRiD & .672 & \ph{.626}\sd{\ph{.007}} & \ph{3} & \down{\ph{.046}} & \ph{.589}\sd{\ph{.018}} \\
+\quad first run, batch 1 & IDRiD & .672 & .576 & 1 & \down{.096} & .493 \\
+M2MRF & DDR & .489 & \ph{.455}\sd{\ph{.008}} & \ph{3} & \down{\ph{.035}} & \ph{.420}\sd{\ph{.019}} \\
+HACDR-Net & IDRiD & \ph{.700} & \ph{.593}\sd{\ph{.008}} & \ph{3} & \down{\ph{.107}} & \ph{.552}\sd{\ph{.010}} \\
+HACDR-Net & DDR & \ph{.520} & \ph{.429}\sd{\ph{.006}} & \ph{3} & \down{\ph{.091}} & \ph{.390}\sd{\ph{.011}} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\scriptsize
+\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on TJDR standard-field and ultra-widefield test sets. The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
+\phnote
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table*}

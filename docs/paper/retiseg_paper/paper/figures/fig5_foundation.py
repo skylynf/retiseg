@@ -1,0 +1,234 @@
+"""Fig. 5 | Foundation models under four kinds of use (E5).
+
+a  per-class AUPR by kind of use, on the IDRiD and DDR test sets
+b  oracle prompts: performance against the number of prompts per image and class
+c  SAM 3 text prompts: sensitivity to wording
+d  encoder pretraining under one UPerNet head: internal against independent
+e  best of each kind of use against the specialist and self-configuring references
+"""
+
+import numpy as np
+from matplotlib.lines import Line2D
+
+from retifig import data as D
+from retifig import panels as P
+from retifig import style as S
+
+MODE_COLOR = {"Zero-shot": "#c8c4ee", "Oracle prompt": "#9085e9", "PEFT": "#6a5bc9", "Encoder + decoder": "#4a3aa7"}
+PROMPT_COLOR = {"SAM": "#2a78d6", "SAM 2": "#eb6834", "MedSAM": "#1baf7a"}
+ROW = 3.05
+
+
+def e5(model, variant, test, train=None):
+    kw = dict(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr")
+    if train:
+        kw["train_set"] = train
+    r = D.sel(**kw)
+    return r.groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
+
+
+def sam3_best(test):
+    r = D.sel(experiment="E5", model="SAM 3", test_set=test, metric="aupr")
+    return r.groupby("cls")["value"].max().reindex(D.CLASSES).to_numpy()
+
+
+def rows_for(test):
+    out = [
+        ("Zero-shot", "SAM · auto masks, oracle class", e5("SAM", "zero_shot:auto_oracle_class", test)),
+        ("Zero-shot", "SAM 2 · auto masks, oracle class", e5("SAM 2", "zero_shot:auto_oracle_class", test)),
+        ("Zero-shot", "SAM 3 · text, best wording", sam3_best(test)),
+        ("Oracle prompt", "SAM · all points", e5("SAM", "oracle:point:all", test)),
+        ("Oracle prompt", "SAM · all boxes", e5("SAM", "oracle:box:all", test)),
+        ("Oracle prompt", "SAM 2 · all points", e5("SAM 2", "oracle:point:all", test)),
+        ("Oracle prompt", "SAM 2 · all boxes", e5("SAM 2", "oracle:box:all", test)),
+        ("Oracle prompt", "MedSAM · all boxes", e5("MedSAM", "oracle:box:all", test)),
+        ("PEFT", "SAMed (LoRA)", e5("SAMed", "peft", test, test)),
+        ("PEFT", "SAM-Adapter", e5("SAM-Adapter", "peft", test, test)),
+        ("PEFT", "SAM2-UNet", e5("SAM2-UNet", "peft", test, test)),
+        ("Encoder + decoder", "MedSAM · full fine-tuning", e5("MedSAM (full FT)", "encoder_decoder", test, test)),
+        ("Encoder + decoder", "RETFound + UPerNet", e5("RETFound + UPerNet", "encoder_decoder", test, test)),
+    ]
+    return out
+
+
+def panel_a(fig, top):
+    x = 58.0
+    for k, test in enumerate(("IDRiD", "DDR")):
+        rows = rows_for(test)
+        M = np.array([r[2] for r in rows])
+        ax = S.axes_mm(fig, x, top, 22, ROW * len(rows))
+        P.heat(ax, M, rows=[r[1] for r in rows] if k == 0 else None, cols=D.CLASSES, vmin=0, vmax=0.9, fs=5.0)
+        ax.xaxis.tick_top()
+        ax.tick_params(axis="x", pad=1)
+        S.text_mm(fig, f"{test} test", x, top - 7.6, fontsize=6.4, fontweight="bold")
+        axb = S.axes_mm(fig, x + 23.2, top, 15, ROW * len(rows))
+        P.score_bars(axb, M.mean(axis=1), [MODE_COLOR[r[0]] for r in rows], xmax=0.9, fs=5.0)
+        axb.set_xticks([0, 0.4, 0.8])
+        axb.xaxis.tick_top()
+        axb.spines["bottom"].set_visible(False)
+        axb.spines["top"].set_visible(True)
+        axb.tick_params(axis="x", pad=1)
+        S.text_mm(fig, "mAUPR", x + 23.2, top - 7.2, fontsize=5.4, color=S.INK2)
+        if k == 0:
+            # group brackets on the far left
+            trans = ax.get_yaxis_transform()
+            start = 0
+            modes = [r[0] for r in rows]
+            for mode in dict.fromkeys(modes):
+                n = modes.count(mode)
+                ax.plot([-1.84, -1.84], [start + 0.12, start + n - 0.12], transform=trans, color=MODE_COLOR[mode], lw=2.2, clip_on=False, solid_capstyle="butt")
+                ax.text(-1.9, start + n / 2, mode.replace(" + ", " +\n").replace("Oracle prompt", "Oracle\nprompt"), transform=trans, ha="right", va="center", fontsize=5.4, linespacing=1.1)
+                if start:
+                    ax.plot([-1.86, 4.0], [start, start], transform=trans, color=S.PAPER, lw=1.6, clip_on=False)
+                start += n
+        else:
+            S.tag_simulated(axb, loc="tr", dy=0.1)
+        x += 43
+    P.colorbar(fig, S.rect_mm(fig, 146, top + 2, 2.2, 14), S.CMAP_SEQ, 0, 0.9, "AUPR", ticks=[0, 0.3, 0.6, 0.9], orientation="vertical")
+    S.text_mm(fig, "Zero-shot and oracle rows use no\ntraining image. PEFT and encoder +\ndecoder rows are trained on the\nsource of the test set (internal test).\nOracle prompts come from ground-\ntruth components: an upper bound,\nnot a usable setting.", 146, top + 21, fontsize=4.9, color=S.INK2, linespacing=1.25)
+
+
+def panel_b(fig, top):
+    ks = [1, 5, 10, 20, "all"]
+    panels = [("mean", "mAUPR"), ("MA", "MA · microaneurysm"), ("SE", "SE · soft exudate")]
+    ref = D.score_matrix("IDRiD", models=["nnU-Net"])["IDRiD"].iloc[0]
+    refs = D.internal().xs("IDRiD", level="train_set").loc["nnU-Net"]
+    for j, (cls, title) in enumerate(panels):
+        ax = S.axes_mm(fig, 13 + j * 31.5, top, 26, 27)
+        for model, kind in (("SAM", "box"), ("SAM", "point"), ("SAM 2", "box"), ("SAM 2", "point"), ("MedSAM", "box")):
+            y = []
+            for k in ks:
+                v = e5(model, f"oracle:{kind}:{k}", "IDRiD")
+                y.append(v.mean() if cls == "mean" else v[D.CLASSES.index(cls)])
+            ax.plot(range(len(ks)), y, color=PROMPT_COLOR[model], ls="-" if kind == "box" else (0, (2.5, 1.5)), lw=1.0,
+                    marker="s" if kind == "box" else "o", ms=3.0, mec=S.PAPER, mew=0.4, zorder=3)
+        r = ref if cls == "mean" else refs[cls]
+        ax.axhline(r, color=S.INK, lw=0.6, ls=(0, (1, 1.5)), zorder=2)
+        if j == 0:
+            ax.text(0.0, r + 0.02, "nnU-Net, trained", fontsize=4.8, color=S.INK2, va="bottom")
+        ax.set_xticks(range(len(ks)))
+        ax.set_xticklabels([str(k) for k in ks])
+        ax.set_ylim(0, 0.9)
+        ax.set_yticks([0, 0.3, 0.6, 0.9])
+        if j:
+            ax.set_yticklabels([])
+        else:
+            ax.set_ylabel("AUPR on IDRiD test")
+        ax.set_title(title, fontsize=6.0, loc="left")
+        S.light_grid(ax)
+        if j == 1:
+            ax.set_xlabel("Oracle prompts per image and class")
+    S.tag_simulated(ax, loc="br")
+    h = [Line2D([], [], color=PROMPT_COLOR[m], lw=1.2, label=m) for m in PROMPT_COLOR]
+    h += [Line2D([], [], color=S.INK2, lw=1.0, marker="s", ms=3, label="box"), Line2D([], [], color=S.INK2, lw=1.0, ls=(0, (2.5, 1.5)), marker="o", ms=3, label="point")]
+    fig.legend(handles=h, loc="upper left", bbox_to_anchor=S.rect_mm(fig, 40, top - 9.5, 1, 1)[:2], ncol=5, fontsize=5.5, columnspacing=1.2, handlelength=2.2)
+
+
+def panel_c(fig, top):
+    r = D.sel(experiment="E5", model="SAM 3", test_set="IDRiD", metric="aupr")
+    ax = S.axes_mm(fig, 135, top, 40, 27)
+    y, labels = 0, []
+    for cls in D.CLASSES:
+        sub = r[r.cls == cls]
+        vals = sub["value"].to_numpy()
+        ax.plot([vals.min(), vals.max()], [y + 1, y + 1], color=S.AXIS, lw=0)
+        for _, row in sub.iterrows():
+            ax.scatter([row["value"]], [y], s=13, color=S.LESION[cls], edgecolors=S.PAPER, linewidths=0.4, zorder=3)
+            ax.plot([0, row["value"]], [y, y], color=S.LESION[cls], lw=0.7, alpha=0.5, zorder=2)
+            labels.append((y, row["variant"].split(":", 1)[1]))
+            y += 1
+        y += 0.6
+    ax.set_yticks([p for p, _ in labels])
+    ax.set_yticklabels([f"“{t}”" for _, t in labels], fontsize=4.9)
+    ax.set_ylim(y - 0.3, -0.7)
+    ax.set_xlim(0, 0.4)
+    ax.set_xticks([0, 0.1, 0.2, 0.3, 0.4])
+    ax.set_xlabel("AUPR on IDRiD test, zero-shot")
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+    S.light_grid(ax, "x")
+    S.tag_simulated(ax, loc="br")
+
+
+def panel_d(fig, top):
+    encs = ["RETFound-DINOv2", "RETFound-MAE", "DINOv2 ViT-L", "ImageNet-sup. ViT-L"]
+    note = ["ophthalmic, self-sup.", "ophthalmic, self-sup.", "natural images, self-sup.", "natural images, supervised"]
+    r = D.sel(experiment="E5", variant="encoder_control", metric="aupr", train_set="DDR")
+    g = r.groupby(["model", "test_set"])["value"].mean().unstack("test_set")
+    internal = g.loc[encs, "DDR"].to_numpy()
+    indep = g.loc[encs, D.FINE_INDEPENDENT].mean(axis=1).to_numpy()
+    ax = S.axes_mm(fig, 36, top, 44, 20)
+    P.dumbbell(ax, encs, [internal, indep], ["#3d3d3a", "#9085e9"], ["internal (DDR test)", "independent, fine (TJDR)"], markers=["o", "D"], xlim=(0.1, 0.64), size=18, fs=5.6)
+    for i, t in enumerate(note):
+        ax.text(0.635, i, t, fontsize=4.7, color=S.MUTED, ha="right", va="center")
+    ax.set_xlabel("mAUPR, same UPerNet head, trained on DDR")
+    ax.legend(loc="lower left", bbox_to_anchor=(-0.02, 1.0), ncol=2, columnspacing=1.2, handletextpad=0.2, fontsize=5.4)
+    ax.set_xticks([0.1, 0.2, 0.3, 0.4])
+    S.tag_simulated(ax, loc="tr", dx=0.3, dy=-0.02)
+
+
+def panel_e(fig, top):
+    def best(rows_fn_test, mode):
+        rows = [r for r in rows_for(rows_fn_test) if r[0] == mode]
+        i = int(np.argmax([r[2].mean() for r in rows]))
+        return rows[i][1].split(" · ")[0].replace(" (LoRA)", ""), rows[i][2].mean()
+    cats, internal, indep, colors = [], [], [], []
+    sm = D.score_matrix("DDR")
+    for mode in MODE_COLOR:
+        name, v = best("DDR", mode)
+        cats.append(mode.replace(" + ", " +\n") + "\n" + name.replace(" + UPerNet", ""))
+        internal.append(v)
+        if mode in ("PEFT", "Encoder + decoder"):
+            key = {"SAMed": "SAMed", "SAM-Adapter": "SAM-Adapter", "SAM2-UNet": "SAM2-UNet", "MedSAM": "MedSAM (full FT)", "RETFound + UPerNet": "RETFound + UPerNet"}[name]
+            indep.append(sm.loc[key, "TJDR-std"])
+        else:
+            rows = [r for r in rows_for("TJDR-std") if r[0] == mode and r[1].startswith(name)]
+            indep.append(max(r[2].mean() for r in rows))
+        colors.append(MODE_COLOR[mode])
+    for ref in ("M2MRF", "nnU-Net"):
+        cats.append(f"Reference\n{ref}")
+        internal.append(sm.loc[ref, "DDR"])
+        indep.append(sm.loc[ref, "TJDR-std"])
+        colors.append(S.FAMILY[D.FAMILY_OF[ref]])
+    ax = S.axes_mm(fig, 100, top, 76, 20)
+    x = np.arange(len(cats))
+    ax.bar(x - 0.19, internal, 0.34, color=colors, lw=0, zorder=2)
+    ax.bar(x + 0.19, indep, 0.34, color=colors, lw=0, alpha=0.45, zorder=2)
+    for xi, a, b in zip(x, internal, indep):
+        ax.text(xi - 0.19, a + 0.012, f"{a:.2f}", ha="center", va="bottom", fontsize=5.0)
+        ax.text(xi + 0.19, b + 0.012, f"{b:.2f}", ha="center", va="bottom", fontsize=5.0, color=S.INK2)
+    ax.set_xticks(x)
+    ax.set_xticklabels(cats, fontsize=4.9, linespacing=1.15)
+    ax.set_ylim(0, 0.6)
+    ax.set_yticks([0, 0.2, 0.4, 0.6])
+    ax.set_ylabel("mAUPR")
+    ax.axvline(3.5, color=S.INK2, lw=0.5, ls=(0, (2, 2)))
+    S.light_grid(ax)
+    from matplotlib.patches import Patch
+    ax.legend(handles=[Patch(fc=S.INK2, label="DDR test (internal for trained models)"), Patch(fc=S.INK2, alpha=0.45, label="TJDR-std test (independent)")],
+              loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=2, fontsize=5.4, columnspacing=1.2, handlelength=1.0)
+    S.tag_simulated(ax, loc="tr")
+
+
+def main():
+    fig = S.figure(148)
+    S.label_mm(fig, "a", 2, 2)
+    S.text_mm(fig, "Four kinds of use, reported separately", 8, 2.6, fontsize=6.8, fontweight="bold")
+    panel_a(fig, 16)
+    S.label_mm(fig, "b", 2, 60)
+    S.text_mm(fig, "Oracle prompts", 8, 60.6, fontsize=6.8, fontweight="bold")
+    panel_b(fig, 74)
+    S.label_mm(fig, "c", 106, 60)
+    S.text_mm(fig, "Text prompt wording (SAM 3)", 112, 60.6, fontsize=6.8, fontweight="bold")
+    panel_c(fig, 69)
+    S.label_mm(fig, "d", 2, 108)
+    S.text_mm(fig, "Does ophthalmic pretraining help?", 8, 108.6, fontsize=6.8, fontweight="bold")
+    panel_d(fig, 117)
+    S.label_mm(fig, "e", 86, 108)
+    S.text_mm(fig, "Best of each kind of use against the references", 92, 108.6, fontsize=6.8, fontweight="bold")
+    panel_e(fig, 117)
+    S.save(fig, "fig5_foundation")
+
+
+if __name__ == "__main__":
+    main()

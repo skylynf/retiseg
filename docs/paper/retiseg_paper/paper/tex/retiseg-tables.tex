@@ -1,0 +1,54 @@
+% Shared table macros. \input this after loading:
+%   booktabs, colortbl, xcolor (with the "table" option), multirow, makecell,
+%   threeparttable, adjustbox, pifont, amssymb, array.
+%
+% Draft and final. In draft, every number that is still simulated is typeset
+% in \phcolor so it cannot be mistaken for a result. \retifinaltrue prints
+% all numbers in black.
+\newif\ifretifinal
+\retifinalfalse
+
+\definecolor{phcolor}{HTML}{5B7FA6}
+\definecolor{sdgray}{HTML}{8A8A86}
+\definecolor{rulegray}{HTML}{C9C8C0}
+\definecolor{headgray}{HTML}{F4F3EF}
+\definecolor{inkmuted}{HTML}{6B6B66}
+\definecolor{famgeneral}{HTML}{2A78D6}
+\definecolor{famauto}{HTML}{1BAF7A}
+\definecolor{famfundus}{HTML}{EB6834}
+\definecolor{famfoundation}{HTML}{4A3AA7}
+\definecolor{tierfine}{HTML}{1D3F5E}
+\definecolor{tiermixed}{HTML}{3F6F9C}
+\definecolor{tiercoarse}{HTML}{7AA3C7}
+\definecolor{tierregion}{HTML}{AABFD3}
+\definecolor{deltaup}{HTML}{0B7A3E}
+\definecolor{deltadown}{HTML}{B3261E}
+\definecolor{barfill}{HTML}{8FB0CC}
+
+% --- numbers
+\newcommand{\ph}[1]{\ifretifinal#1\else{\color{phcolor}#1}\fi}          % simulated value
+\newcommand{\best}[1]{\textbf{#1}}                                      % best in column
+\newcommand{\second}[1]{\underline{#1}}                                 % second best
+\newcommand{\sd}[1]{{\scriptsize\color{sdgray}\,$\pm$\,#1}}             % seed s.d.
+\newcommand{\up}[1]{{\scriptsize\color{deltaup}$\blacktriangle$\,#1}}   % gain
+\newcommand{\down}[1]{{\scriptsize\color{deltadown}$\blacktriangledown$\,#1}} % loss
+\newcommand{\same}[1]{{\scriptsize\color{sdgray}#1}}
+\newcommand{\na}{{\color{rulegray}--}}
+\newcommand{\tbd}{{\color{deltadown}\scriptsize tbd}}
+
+% --- marks
+\newcommand{\yes}{{\color{deltaup}\ding{51}}}
+\newcommand{\no}{{\color{rulegray}\ding{55}}}
+\newcommand{\famchip}[1]{{\color{fam#1}\rule[0.05ex]{0.62em}{0.62em}}}       % family chip
+\newcommand{\tier}[1]{{\color{tier#1}\rule[0.05ex]{0.62em}{0.62em}}}     % granularity chip
+\newcommand{\tierbadge}[2]{{\setlength{\fboxsep}{1.6pt}\colorbox{tier#1}{\color{white}\scriptsize\sffamily\strut #2}}}
+\newcommand{\rlevel}[1]{% reproducibility meter, #1 = 0..4
+  \ifcase#1 $\circ\circ\circ\circ$\or $\bullet\circ\circ\circ$\or $\bullet\bullet\circ\circ$\or
+  $\bullet\bullet\bullet\circ$\or $\bullet\bullet\bullet\bullet$\fi}
+\newcommand{\inlinebar}[1]{{\color{barfill}\rule[0.1ex]{#1em}{0.55em}}}  % #1 = length in em
+
+% --- structure
+\newcommand{\grouprow}[2]{\rowcolor{headgray}\multicolumn{#1}{l}{\textbf{#2}}\\}
+\newcommand{\colh}[1]{\textbf{#1}}
+\newcommand{\tablefont}{\footnotesize\setlength{\tabcolsep}{4.2pt}\renewcommand{\arraystretch}{1.12}}
+\newcommand{\phnote}{\ifretifinal\else\item[] {\color{phcolor}Values in this colour are simulated placeholders, not results.}\fi}

@@ -1,0 +1,11 @@
+# LaTeX build files; main.pdf is kept.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+main_final.*
+__pycache__/

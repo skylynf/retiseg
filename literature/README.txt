@@ -35,7 +35,13 @@ meta/<类别>/             每篇一份识别记录 txt，与 PDF 同名、同�
   batch3 26 条   2026-10-03 固定检索的优先名单，纳入方法 24 篇、数据集 2 个
 阶段二  检索和筛选（06、08）。检索冻结日 2026-09-30。三个库识别 1389 条，过布尔门槛 948 条，去重 764 篇，进入全文队列 112 篇；优先名单 27 条 DOI 加 TJDR 线索，纳入 26、排除 3。滚雪球语料里检索没回到来的论文留在账本，不因此移出。
 阶段三  代码审计和复现等级（04）。只记作者自己的代码，仓库作为子模块放在 official_code/。复现等级 R0–R4、评价轨 A/B/C 和分层登记在 bench/configs/models.yaml，作者联系的回复写进对应 meta。
-阶段四  原文数字抽取（L1，未开始）。逐篇抽对比表写进 meta/reported_results.tsv，做法见 docs/design/05 第四节。
+阶段四  原文数字抽取（L1，2026-10-11 完成）。30 篇（29 篇方法论文加 Playout 2024）逐篇抽设定和对比表：
+  meta/l1_raw/<组>_audit.tsv、<组>_results.tsv  逐篇手工抽取的原始表，字段定义在 meta/l1_raw/SCHEMA.md（A–F 六组，每组五篇）
+  l1_build.py                                   合并、归一化方法名和数值尺度、按数值匹配推导每个基线数字的来源（self / rerun / copied-1 / copied-2 / unverified）
+  meta/paper_audit.tsv                          每篇一行：划分、分辨率、指标实现、是否只算视野内、对基线数字来源的说明
+  meta/reported_results.tsv                     每个“论文 × 方法 × 数据集 × 类别 × 指标”一行，含 value_norm（0–1 尺度）、provenance_derived、copy_source
+  改动原始表后重跑 python literature/l1_build.py，再在论文目录跑 scripts/collect_literature.py 把 L1 行写进 data/results.csv。
+  已知的抽取局限：TEDR-YNet 的对比表是图片，只抽到正文里引用的数字；HACDR-Net 表里从 M2MRF 复制的行 HE/SE 列与表头不一致，按表头记录并在 notes 标出。
 
 三、记录规则
 阅读新文献时，复制任意一份 meta txt 的字段，不要另起格式。账本以 LEDGER.tsv 和 meta 下的 txt 为准，两者同步改。

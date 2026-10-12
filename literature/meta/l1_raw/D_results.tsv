@@ -1,0 +1,410 @@
+paper	table	dataset	method	method_norm	is_proposed	lesion	metric	value	provenance_stated	provenance_ref	notes
+Qi2026_TEDR-YNet	Table 2	IDRiD	TEDR-YNet	TEDR-YNet	yes	MA	AUPR	56.37	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 2	IDRiD	TEDR-YNet	TEDR-YNet	yes	EX	Dice	81.91	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 2	IDRiD	TEDR-YNet	TEDR-YNet	yes	SE	Dice	75.13	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 2	IDRiD	TEDR-YNet	TEDR-YNet	yes	mean	Dice	68.61	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %; mean Dice from abstract
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	MA	AUPR	50.78	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	HE	AUPR	55.56	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	EX	AUPR	67.85	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	SE	AUPR	67.09	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	MA	Dice	47.54	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	HE	Dice	65.55	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	EX	Dice	65.85	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 3	DDR	TEDR-YNet	TEDR-YNet	yes	mean	Dice	58.51	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %; mean Dice from abstract
+Qi2026_TEDR-YNet	Table 3	DDR	EANet	EANet	no	MA	AUPR	32.41	not stated	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %; quoted as second-best model EANet [29] (Wang2022); source of EANet numbers not stated
+Qi2026_TEDR-YNet	Table 3	DDR	EANet	EANet	no	HE	AUPR	37.01	not stated	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %; quoted as second-best model EANet [29] (Wang2022); source of EANet numbers not stated
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	MA	AUPR	50.61	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	HE	AUPR	60.68	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	EX	AUPR	72.60	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	SE	AUPR	54.33	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	MA	Dice	49.67	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	HE	Dice	57.30	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	EX	Dice	71.93	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	SE	Dice	53.64	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %
+Qi2026_TEDR-YNet	Table 4	TJDR	TEDR-YNet	TEDR-YNet	yes	mean	Dice	58.14	self	NA	value quoted from running text; Table is an image not extracted by pdftotext; in %; mean Dice from abstract
+Wang2026_CSIF	Table 3	DDR	L-seg Ref. [31]	L-Seg	no	EX	AUPR	55.46	cited	Guo2019	in %
+Wang2026_CSIF	Table 3	DDR	L-seg Ref. [31]	L-Seg	no	HE	AUPR	35.86	cited	Guo2019	in %
+Wang2026_CSIF	Table 3	DDR	L-seg Ref. [31]	L-Seg	no	SE	AUPR	26.48	cited	Guo2019	in %
+Wang2026_CSIF	Table 3	DDR	L-seg Ref. [31]	L-Seg	no	MA	AUPR	10.52	cited	Guo2019	in %
+Wang2026_CSIF	Table 3	DDR	L-seg Ref. [31]	L-Seg	no	mean	AUPR	32.08	cited	Guo2019	in %
+Wang2026_CSIF	Table 3	DDR	Dual-PSPNet Ref. [39]	Dual-PSPNet	no	EX	AUPR	54.24	cited	Liu2022	in %; EX-only method
+Wang2026_CSIF	Table 3	DDR	Dual-PSPNet Ref. [39]	Dual-PSPNet	no	EX	Dice	56.99	cited	Liu2022	in %; EX-only method
+Wang2026_CSIF	Table 3	DDR	DeepLabV3+ Ref. [29]	DeepLabv3+	no	mean	AUPR	35.60	cited	Qiu2023	in %; [29] = Qiu et al. 2023 TPAMI (dual-stream SR), only mean reported
+Wang2026_CSIF	Table 3	DDR	DeepLabV3+ Ref. [29]	DeepLabv3+	no	mean	Dice	39.69	cited	Qiu2023	in %; [29] = Qiu et al. 2023 TPAMI (dual-stream SR), only mean reported
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	EX	AUPR	58.44	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	HE	AUPR	49.52	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	SE	AUPR	23.45	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	MA	AUPR	19.18	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	mean	AUPR	37.64	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	EX	Dice	56.47	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	HE	Dice	49.91	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	SE	Dice	21.22	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	MA	Dice	28.28	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Dual-Branch Ref. [26]	Dual-Branch U-Net (Yin2023)	no	mean	Dice	38.97	cited	Yin2023	in %
+Wang2026_CSIF	Table 3	DDR	Trans2U-Net Ref. [27]	Trans2U-Net	no	EX	AUPR	59.79	cited	Zhang2023	in %
+Wang2026_CSIF	Table 3	DDR	Trans2U-Net Ref. [27]	Trans2U-Net	no	HE	AUPR	48.07	cited	Zhang2023	in %
+Wang2026_CSIF	Table 3	DDR	Trans2U-Net Ref. [27]	Trans2U-Net	no	SE	AUPR	42.43	cited	Zhang2023	in %
+Wang2026_CSIF	Table 3	DDR	Trans2U-Net Ref. [27]	Trans2U-Net	no	MA	AUPR	18.23	cited	Zhang2023	in %
+Wang2026_CSIF	Table 3	DDR	Trans2U-Net Ref. [27]	Trans2U-Net	no	mean	AUPR	42.13	cited	Zhang2023	in %
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	EX	AUPR	63.59	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	HE	AUPR	54.43	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	SE	AUPR	49.35	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	MA	AUPR	28.38	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	mean	AUPR	48.94	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	EX	Dice	60.62	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	HE	Dice	45.16	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	SE	Dice	47.78	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	M2MRF-C Ref. [32]	M2MRF	no	MA	Dice	28.04	cited	Liu2023	in %; mean Dice truncated to '45.' in text -> NA
+Wang2026_CSIF	Table 3	DDR	VTA+HBE Ref. [40]	VTA	no	EX	AUPR	56.07	cited	Wang2023	in %; mean cell blank
+Wang2026_CSIF	Table 3	DDR	VTA+HBE Ref. [40]	VTA	no	HE	AUPR	37.78	cited	Wang2023	in %; mean cell blank
+Wang2026_CSIF	Table 3	DDR	VTA+HBE Ref. [40]	VTA	no	SE	AUPR	26.94	cited	Wang2023	in %; mean cell blank
+Wang2026_CSIF	Table 3	DDR	VTA+HBE Ref. [40]	VTA	no	MA	AUPR	10.66	cited	Wang2023	in %; mean cell blank
+Wang2026_CSIF	Table 3	DDR	Cosed-Net Ref. [41]	Cosed-Net	no	EX	Dice	57.01	cited	Yi2024	in %; no AUPR; mean Dice blank
+Wang2026_CSIF	Table 3	DDR	Cosed-Net Ref. [41]	Cosed-Net	no	HE	Dice	38.84	cited	Yi2024	in %; no AUPR; mean Dice blank
+Wang2026_CSIF	Table 3	DDR	Cosed-Net Ref. [41]	Cosed-Net	no	SE	Dice	34.54	cited	Yi2024	in %; no AUPR; mean Dice blank
+Wang2026_CSIF	Table 3	DDR	Cosed-Net Ref. [41]	Cosed-Net	no	MA	Dice	18.74	cited	Yi2024	in %; no AUPR; mean Dice blank
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	EX	AUPR	62.72	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	HE	AUPR	50.70	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	SE	AUPR	49.32	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	MA	AUPR	26.32	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	mean	AUPR	47.26	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	EX	Dice	59.20	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	HE	Dice	42.92	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	SE	Dice	45.30	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	MA	Dice	26.22	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	HRNetV2* Ref. [42]	HRNet	no	mean	Dice	43.41	rerun	NA	in %; * = our implementation (MMSegmentation); identical to Table 1 ablation baseline
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	EX	AUPR	55.65	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	HE	AUPR	32.29	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	SE	AUPR	37.07	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	MA	AUPR	5.48	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	mean	AUPR	32.62	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	EX	Dice	31.75	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	HE	Dice	17.63	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	SE	Dice	39.24	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	MA	Dice	13.07	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	CCnet* Ref. [13]	CCNet	no	mean	Dice	25.42	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	EX	AUPR	65.30	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	HE	AUPR	46.31	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	SE	AUPR	3.72	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	MA	AUPR	15.78	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	mean	AUPR	42.78	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	EX	Dice	52.69	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	HE	Dice	44.40	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	SE	Dice	44.36	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	MA	Dice	16.03	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	SEBNet Ref. [46]	SEBNet	no	mean	Dice	39.37	cited	Guo2025	in %; SE AUPR printed as 3.72 (likely typo for 53.72)
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	EX	AUPR	64.00	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	HE	AUPR	55.55	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	SE	AUPR	56.45	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	MA	AUPR	27.82	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	mean	AUPR	50.96	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	EX	Dice	58.69	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	HE	Dice	44.64	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	SE	Dice	55.85	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	MA	Dice	27.74	self	NA	in %
+Wang2026_CSIF	Table 3	DDR	OUR	CSIF	yes	mean	Dice	46.73	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	VRT(1st) Ref. [43]	VRT	no	EX	AUPR	71.27	cited	Porwal2020	in %
+Wang2026_CSIF	Table 4	IDRiD	VRT(1st) Ref. [43]	VRT	no	HE	AUPR	68.04	cited	Porwal2020	in %
+Wang2026_CSIF	Table 4	IDRiD	VRT(1st) Ref. [43]	VRT	no	SE	AUPR	69.95	cited	Porwal2020	in %
+Wang2026_CSIF	Table 4	IDRiD	VRT(1st) Ref. [43]	VRT	no	MA	AUPR	49.51	cited	Porwal2020	in %
+Wang2026_CSIF	Table 4	IDRiD	VRT(1st) Ref. [43]	VRT	no	mean	AUPR	64.69	cited	Porwal2020	in %
+Wang2026_CSIF	Table 4	IDRiD	L-seg Ref. [31]	L-Seg	no	EX	AUPR	79.45	cited	Guo2019	in %
+Wang2026_CSIF	Table 4	IDRiD	L-seg Ref. [31]	L-Seg	no	HE	AUPR	63.74	cited	Guo2019	in %
+Wang2026_CSIF	Table 4	IDRiD	L-seg Ref. [31]	L-Seg	no	SE	AUPR	71.13	cited	Guo2019	in %
+Wang2026_CSIF	Table 4	IDRiD	L-seg Ref. [31]	L-Seg	no	MA	AUPR	46.27	cited	Guo2019	in %
+Wang2026_CSIF	Table 4	IDRiD	L-seg Ref. [31]	L-Seg	no	mean	AUPR	65.15	cited	Guo2019	in %
+Wang2026_CSIF	Table 4	IDRiD	Dual-PSPNet Ref. [39]	Dual-PSPNet	no	EX	AUPR	77.48	cited	Liu2022	in %; EX-only method
+Wang2026_CSIF	Table 4	IDRiD	Dual-PSPNet Ref. [39]	Dual-PSPNet	no	EX	Dice	75.74	cited	Liu2022	in %; EX-only method
+Wang2026_CSIF	Table 4	IDRiD	DeepLabV3+ Ref. [29]	DeepLabv3+	no	mean	AUPR	59.08	cited	Qiu2023	in %; [29] = Qiu et al. 2023 TPAMI, only mean reported
+Wang2026_CSIF	Table 4	IDRiD	DeepLabV3+ Ref. [29]	DeepLabv3+	no	mean	Dice	54.13	cited	Qiu2023	in %; [29] = Qiu et al. 2023 TPAMI, only mean reported
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	EX	AUPR	79.58	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	HE	AUPR	69.14	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	SE	AUPR	72.67	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	MA	AUPR	38.04	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	mean	AUPR	65.86	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	EX	Dice	76.32	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	HE	Dice	66.54	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	SE	Dice	49.88	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	MA	Dice	36.02	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Simultaneous Ref. [28]	RILBP-YNet	no	mean	Dice	57.19	cited	Pavani2023	in %; 'Dice' values are the F1@0.5 reported by RILBP-YNet; EX AUPR 79.58 vs 78.58 in source paper
+Wang2026_CSIF	Table 4	IDRiD	Trans2U-Net Ref. [27]	Trans2U-Net	no	EX	AUPR	89.25	cited	Zhang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	Trans2U-Net Ref. [27]	Trans2U-Net	no	HE	AUPR	68.91	cited	Zhang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	Trans2U-Net Ref. [27]	Trans2U-Net	no	SE	AUPR	62.31	cited	Zhang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	Trans2U-Net Ref. [27]	Trans2U-Net	no	MA	AUPR	49.29	cited	Zhang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	Trans2U-Net Ref. [27]	Trans2U-Net	no	mean	AUPR	67.44	cited	Zhang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	VTA+HBE Ref. [40]	VTA	no	EX	AUPR	86.40	cited	Wang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	VTA+HBE Ref. [40]	VTA	no	HE	AUPR	64.94	cited	Wang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	VTA+HBE Ref. [40]	VTA	no	SE	AUPR	59.78	cited	Wang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	VTA+HBE Ref. [40]	VTA	no	MA	AUPR	40.63	cited	Wang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	VTA+HBE Ref. [40]	VTA	no	mean	AUPR	62.94	cited	Wang2023	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	EX	AUPR	83.61	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	HE	AUPR	62.62	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	SE	AUPR	73.81	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	MA	AUPR	51.77	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	mean	AUPR	67.95	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	EX	Dice	75.15	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	HE	Dice	60.37	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	SE	Dice	69.81	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	MA	Dice	52.62	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	nmODE-Unet Ref. [44]	nmODE-Unet	no	mean	Dice	64.49	cited	Wang2024	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	EX	AUPR	82.16	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	HE	AUPR	68.69	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	SE	AUPR	69.32	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	MA	AUPR	48.80	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	mean	AUPR	67.24	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	EX	Dice	79.85	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	HE	Dice	66.42	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	SE	Dice	67.92	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	MA	Dice	48.63	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	M2MRF-C Ref. [32]	M2MRF	no	mean	Dice	65.71	cited	Liu2023	in %
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	EX	AUPR	82.66	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	HE	AUPR	64.13	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	SE	AUPR	69.25	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	MA	AUPR	44.94	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	mean	AUPR	65.24	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	EX	Dice	79.25	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	HE	Dice	59.94	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	SE	Dice	66.59	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	MA	Dice	44.15	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	HRNetV2* Ref. [32]	HRNet	no	mean	Dice	62.48	rerun	NA	in %; * = our implementation, yet cited to Ref. [32] (Liu2023 M2MRF); identical to Table 2 ablation baseline
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	EX	AUPR	62.52	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	HE	AUPR	47.31	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	SE	AUPR	67.86	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	MA	AUPR	20.69	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	mean	AUPR	49.59	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	EX	Dice	7.26	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	HE	Dice	3.29	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	SE	Dice	37.97	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	MA	Dice	3.15	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	Ddrnet* Ref. [45]	DDRNet	no	mean	Dice	12.91	rerun	NA	in %; * = our implementation; [45] = Pan2022
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	EX	AUPR	67.31	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	HE	AUPR	62.89	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	SE	AUPR	68.26	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	MA	AUPR	36.66	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	mean	AUPR	58.78	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	EX	Dice	30.30	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	HE	Dice	34.42	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	SE	Dice	51.96	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	MA	Dice	10.81	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	CCnet* Ref. [13]	CCNet	no	mean	Dice	31.87	rerun	NA	in %; * = our implementation
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	EX	AUPR	88.36	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	HE	AUPR	69.71	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	SE	AUPR	76.69	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	MA	AUPR	49.26	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	mean	AUPR	71.01	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	EX	Dice	79.84	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	HE	Dice	61.87	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	SE	Dice	71.89	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	MA	Dice	35.92	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	SEBNet Ref. [46]	SEBNet	no	mean	Dice	62.38	cited	Guo2025	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	EX	AUPR	83.52	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	HE	AUPR	68.37	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	SE	AUPR	74.33	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	MA	AUPR	49.75	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	mean	AUPR	68.99	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	EX	Dice	80.04	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	HE	Dice	65.70	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	SE	Dice	72.56	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	MA	Dice	49.86	self	NA	in %
+Wang2026_CSIF	Table 4	IDRiD	OUR	CSIF	yes	mean	Dice	67.04	self	NA	in %
+Geetha2023_RILBP-YNet	Table 3	IDRiD	VRT	VRT	no	MA	AUPR	0.4951	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	VRT	VRT	no	HE	AUPR	0.6804	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	VRT	VRT	no	EX	AUPR	0.7127	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	VRT	VRT	no	SE	AUPR	0.6995	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	VRT	VRT	no	mean	AUPR	0.6469	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	PATech	PATech	no	MA	AUPR	0.474	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	PATech	PATech	no	HE	AUPR	0.6490	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	PATech	PATech	no	EX	AUPR	0.8850	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	MA	AUPR	0.5017	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	HE	AUPR	0.5588	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	EX	AUPR	0.8741	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	SE	AUPR	0.6588	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	iFLYTEK-MIG	iFLYTEK-MIG	no	mean	AUPR	0.6484	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SOONER	SOONER	no	MA	AUPR	0.4003	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SOONER	SOONER	no	HE	AUPR	0.5395	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SOONER	SOONER	no	EX	AUPR	0.7390	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SOONER	SOONER	no	SE	AUPR	0.5369	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SOONER	SOONER	no	mean	AUPR	0.5539	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SAIHST	SAIHST	no	EX	AUPR	0.8582	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'; row split across two lines in pdftotext, EX-only
+Geetha2023_RILBP-YNet	Table 3	IDRiD	lzyuncc_fusion	lzyuncc_fusion	no	EX	AUPR	0.8202	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	lzyuncc_fusion	lzyuncc_fusion	no	SE	AUPR	0.6259	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SDNU	SDNU	no	MA	AUPR	0.4111	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SDNU	SDNU	no	HE	AUPR	0.4572	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SDNU	SDNU	no	EX	AUPR	0.5018	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SDNU	SDNU	no	SE	AUPR	0.5374	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	SDNU	SDNU	no	mean	AUPR	0.4769	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	CIL	CIL	no	MA	AUPR	0.3920	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	CIL	CIL	no	HE	AUPR	0.4886	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	CIL	CIL	no	EX	AUPR	0.7554	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	CIL	CIL	no	SE	AUPR	0.5024	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	CIL	CIL	no	mean	AUPR	0.5346	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	MedLabs	MedLabs	no	MA	AUPR	0.3397	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	MedLabs	MedLabs	no	HE	AUPR	0.3705	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	MedLabs	MedLabs	no	EX	AUPR	0.7863	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	MedLabs	MedLabs	no	SE	AUPR	0.2637	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	MedLabs	MedLabs	no	mean	AUPR	0.4401	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	AIMIA	AIMIA	no	MA	AUPR	0.3792	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	AIMIA	AIMIA	no	HE	AUPR	0.3283	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	AIMIA	AIMIA	no	EX	AUPR	0.7662	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	AIMIA	AIMIA	no	SE	AUPR	0.2733	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	AIMIA	AIMIA	no	mean	AUPR	0.4367	cited	Porwal2020	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; IDRiD challenge team, 'as per [9]'
+Geetha2023_RILBP-YNet	Table 3	IDRiD	L-Seg	L-Seg	no	MA	AUPR	0.4627	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; no citation mark in this table; same numbers as Table 4 'as per [2]' (Guo2019)
+Geetha2023_RILBP-YNet	Table 3	IDRiD	L-Seg	L-Seg	no	HE	AUPR	0.6374	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; no citation mark in this table; same numbers as Table 4 'as per [2]' (Guo2019)
+Geetha2023_RILBP-YNet	Table 3	IDRiD	L-Seg	L-Seg	no	EX	AUPR	0.7945	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; no citation mark in this table; same numbers as Table 4 'as per [2]' (Guo2019)
+Geetha2023_RILBP-YNet	Table 3	IDRiD	L-Seg	L-Seg	no	SE	AUPR	0.7113	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; no citation mark in this table; same numbers as Table 4 'as per [2]' (Guo2019)
+Geetha2023_RILBP-YNet	Table 3	IDRiD	L-Seg	L-Seg	no	mean	AUPR	0.6515	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; no citation mark in this table; same numbers as Table 4 'as per [2]' (Guo2019)
+Geetha2023_RILBP-YNet	Table 3	IDRiD	RILBP-YNet	RILBP-YNet	yes	MA	AUPR	0.3804	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve
+Geetha2023_RILBP-YNet	Table 3	IDRiD	RILBP-YNet	RILBP-YNet	yes	HE	AUPR	0.6914	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve
+Geetha2023_RILBP-YNet	Table 3	IDRiD	RILBP-YNet	RILBP-YNet	yes	EX	AUPR	0.7858	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve
+Geetha2023_RILBP-YNet	Table 3	IDRiD	RILBP-YNet	RILBP-YNet	yes	SE	AUPR	0.7267	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve
+Geetha2023_RILBP-YNet	Table 3	IDRiD	RILBP-YNet	RILBP-YNet	yes	mean	AUPR	0.6586	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve
+Geetha2023_RILBP-YNet	Table 4	IDRiD	L-seg [2]	L-Seg	no	MA	AUPR	0.4627	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019)
+Geetha2023_RILBP-YNet	Table 4	IDRiD	L-seg [2]	L-Seg	no	HE	AUPR	0.6374	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019)
+Geetha2023_RILBP-YNet	Table 4	IDRiD	L-seg [2]	L-Seg	no	EX	AUPR	0.7945	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019)
+Geetha2023_RILBP-YNet	Table 4	IDRiD	L-seg [2]	L-Seg	no	SE	AUPR	0.7113	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019)
+Geetha2023_RILBP-YNet	Table 4	IDRiD	L-seg [2]	L-Seg	no	mean	AUPR	0.6515	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019)
+Geetha2023_RILBP-YNet	Table 4	IDRiD	HED [51]	HED	no	MA	AUPR	0.4271	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [51] = Xie2015 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	HED [51]	HED	no	HE	AUPR	0.5084	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [51] = Xie2015 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	HED [51]	HED	no	EX	AUPR	0.7723	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [51] = Xie2015 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	HED [51]	HED	no	SE	AUPR	0.6673	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [51] = Xie2015 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	HED [51]	HED	no	mean	AUPR	0.5938	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [51] = Xie2015 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	FCRN [50]	FCRN	no	MA	AUPR	0.3383	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [50] = Mo2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	FCRN [50]	FCRN	no	HE	AUPR	0.4200	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [50] = Mo2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	FCRN [50]	FCRN	no	EX	AUPR	0.5472	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [50] = Mo2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	FCRN [50]	FCRN	no	SE	AUPR	0.5154	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [50] = Mo2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	FCRN [50]	FCRN	no	mean	AUPR	0.4552	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [50] = Mo2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	CASENet [52]	CASENet	no	MA	AUPR	0.3992	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [52] = Yu2017 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	CASENet [52]	CASENet	no	HE	AUPR	0.4462	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [52] = Yu2017 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	CASENet [52]	CASENet	no	EX	AUPR	0.7564	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [52] = Yu2017 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	CASENet [52]	CASENet	no	SE	AUPR	0.3275	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [52] = Yu2017 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	CASENet [52]	CASENet	no	mean	AUPR	0.4823	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [52] = Yu2017 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	DeepLab v3+ [53]	DeepLabv3+	no	MA	AUPR	0.1514	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [53] = Chen2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	DeepLab v3+ [53]	DeepLabv3+	no	HE	AUPR	0.4772	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [53] = Chen2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	DeepLab v3+ [53]	DeepLabv3+	no	EX	AUPR	0.7118	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [53] = Chen2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	DeepLab v3+ [53]	DeepLabv3+	no	SE	AUPR	0.5912	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [53] = Chen2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	DeepLab v3+ [53]	DeepLabv3+	no	mean	AUPR	0.4829	cited	Guo2019	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; Table 4 'with Baseline Models as per [2]' (numbers taken from L-Seg paper, Guo2019); [53] = Chen2018 (method), values as per [2]
+Geetha2023_RILBP-YNet	Table 4	IDRiD	RILBP-YNet	RILBP-YNet	yes	MA	AUPR	0.3804	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; EX 0.7958 here vs 0.7858 in Tables 2/3/5
+Geetha2023_RILBP-YNet	Table 4	IDRiD	RILBP-YNet	RILBP-YNet	yes	HE	AUPR	0.6914	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; EX 0.7958 here vs 0.7858 in Tables 2/3/5
+Geetha2023_RILBP-YNet	Table 4	IDRiD	RILBP-YNet	RILBP-YNet	yes	EX	AUPR	0.7958	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; EX 0.7958 here vs 0.7858 in Tables 2/3/5
+Geetha2023_RILBP-YNet	Table 4	IDRiD	RILBP-YNet	RILBP-YNet	yes	SE	AUPR	0.7267	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; EX 0.7958 here vs 0.7858 in Tables 2/3/5
+Geetha2023_RILBP-YNet	Table 4	IDRiD	RILBP-YNet	RILBP-YNet	yes	mean	AUPR	0.6586	self	NA	decimal; table column labelled AUC/mAUC, paper defines AUC as Area Under the Precision-Recall curve; EX 0.7958 here vs 0.7858 in Tables 2/3/5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Sarhan et al. [54]	Sarhan et al. (triplet-loss MA)	no	MA	AUPR	41.96	cited	Sarhan2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Sarhan et al. [54]	Sarhan et al. (triplet-loss MA)	no	MA	F1	38.4877	cited	Sarhan2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Guo et al.[2]	L-Seg	no	MA	AUPR	46.27	cited	Guo2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Guo et al.[2]	L-Seg	no	HE	AUPR	67.34	cited	Guo2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5; HE 67.34 here vs 63.74 for L-Seg in Tables 3/4 (likely transposition)
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Guo et al.[2]	L-Seg	no	EX	AUPR	79.45	cited	Guo2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Guo et al.[2]	L-Seg	no	SE	AUPR	71.13	cited	Guo2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Yan et al.[55]	Yan et al. (Local-Global U-Nets)	no	MA	AUPR	52.5	cited	Yan2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Yan et al.[55]	Yan et al. (Local-Global U-Nets)	no	HE	AUPR	70.3	cited	Yan2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Yan et al.[55]	Yan et al. (Local-Global U-Nets)	no	EX	AUPR	88.9	cited	Yan2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Yan et al.[55]	Yan et al. (Local-Global U-Nets)	no	SE	AUPR	67.9	cited	Yan2019	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	MA	AUPR	38.04	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	MA	F1	36.02	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	HE	AUPR	69.14	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	HE	F1	66.54	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	EX	AUPR	78.58	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	EX	F1	76.32	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	SE	AUPR	72.67	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 5	IDRiD	Proposed	RILBP-YNet	yes	SE	F1	49.88	self	NA	in %; Table 5 is organised per lesion with one row per method; F1 at threshold 0.5
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	HED [51]	HED	no	EX	AUPR	0.1345	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	HED [51]	HED	no	MA	AUPR	0.0639	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	HED [51]	HED	no	mean	AUPR	0.0992	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	FCRN [50]	FCRN	no	EX	AUPR	0.1675	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	FCRN [50]	FCRN	no	MA	AUPR	0.0269	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	FCRN [50]	FCRN	no	mean	AUPR	0.0972	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	CASENet[52]	CASENet	no	EX	AUPR	0.1715	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	CASENet[52]	CASENet	no	MA	AUPR	0.1565	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	CASENet[52]	CASENet	no	mean	AUPR	0.1640	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	DeepLab v3þ [57]	DeepLabv3+	no	EX	AUPR	0.5512	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]'); cited to [57] (Libiao2021 DeepLabV3+ variant) rather than Chen2018
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	DeepLab v3þ [57]	DeepLabv3+	no	MA	AUPR	0.0045	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]'); cited to [57] (Libiao2021 DeepLabV3+ variant) rather than Chen2018
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	DeepLab v3þ [57]	DeepLabv3+	no	mean	AUPR	0.2778	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]'); cited to [57] (Libiao2021 DeepLabV3+ variant) rather than Chen2018
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	L-Seg [2]	L-Seg	no	EX	AUPR	0.4171	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	L-Seg [2]	L-Seg	no	MA	AUPR	0.1687	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	L-Seg [2]	L-Seg	no	mean	AUPR	0.2929	not stated	NA	decimal; table labelled 'AUC values'; e-ophtha has EX and MA only; source of baseline numbers not stated (same baseline set as Table 4 which is 'as per [2]')
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	RILBP-YNet	RILBP-YNet	yes	EX	AUPR	0.5147	self	NA	decimal; e-ophtha EX and MA only
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	RILBP-YNet	RILBP-YNet	yes	MA	AUPR	0.2092	self	NA	decimal; e-ophtha EX and MA only
+Geetha2023_RILBP-YNet	Table 6	e-ophtha	RILBP-YNet	RILBP-YNet	yes	mean	AUPR	0.3399	self	NA	decimal; e-ophtha EX and MA only
+Huang2022_RTNet	Table I	IDRiD	VRT(1st)	VRT	no	EX	AUPR	0.7127	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	VRT(1st)	VRT	no	HE	AUPR	0.6804	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	VRT(1st)	VRT	no	MA	AUPR	0.4951	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	VRT(1st)	VRT	no	SE	AUPR	0.6995	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	PATech(2nd)	PATech	no	EX	AUPR	0.8850	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	PATech(2nd)	PATech	no	HE	AUPR	0.6490	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	PATech(2nd)	PATech	no	MA	AUPR	0.4740	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	iFLYTEK-MIG(3rd)	iFLYTEK-MIG	no	EX	AUPR	0.8741	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	iFLYTEK-MIG(3rd)	iFLYTEK-MIG	no	HE	AUPR	0.5588	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	iFLYTEK-MIG(3rd)	iFLYTEK-MIG	no	MA	AUPR	0.5017	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	iFLYTEK-MIG(3rd)	iFLYTEK-MIG	no	SE	AUPR	0.6588	cited	Porwal2020	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'; IDRiD challenge team (no citation mark in table; challenge report is [32] Porwal2020); segments lesions with separate models
+Huang2022_RTNet	Table I	IDRiD	SESV [24]	SESV	no	MA	AUPR	0.5099	cited	Xie2020	decimal; AUC PR column (AUC ROC not extracted); MA-only method; cited [24] in table / [35] in text
+Huang2022_RTNet	Table I	IDRiD	L-Seg [6]	L-Seg	no	EX	AUPR	0.7945	cited	Guo2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	L-Seg [6]	L-Seg	no	HE	AUPR	0.6374	cited	Guo2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	L-Seg [6]	L-Seg	no	MA	AUPR	0.4627	cited	Guo2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	L-Seg [6]	L-Seg	no	SE	AUPR	0.7113	cited	Guo2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	SSCL [8]	Collaborative semi-supervised (Zhou2019)	no	EX	AUPR	0.8872	cited	Zhou2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	SSCL [8]	Collaborative semi-supervised (Zhou2019)	no	HE	AUPR	0.6936	cited	Zhou2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	SSCL [8]	Collaborative semi-supervised (Zhou2019)	no	MA	AUPR	0.4960	cited	Zhou2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	SSCL [8]	Collaborative semi-supervised (Zhou2019)	no	SE	AUPR	0.7407	cited	Zhou2019	decimal; AUC PR column (AUC ROC not extracted); 'previous works reported on the IDRiD dataset'
+Huang2022_RTNet	Table I	IDRiD	RTN(Ours)	RTNet	yes	EX	AUPR	0.9024	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Huang2022_RTNet	Table I	IDRiD	RTN(Ours)	RTNet	yes	HE	AUPR	0.6880	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Huang2022_RTNet	Table I	IDRiD	RTN(Ours)	RTNet	yes	MA	AUPR	0.4897	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Huang2022_RTNet	Table I	IDRiD	RTN(Ours)	RTNet	yes	SE	AUPR	0.7502	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Huang2022_RTNet	Table II	DDR	HED [35]	HED	no	EX	AUPR	0.4252	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	HED [35]	HED	no	HE	AUPR	0.2014	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	HED [35]	HED	no	MA	AUPR	0.0652	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	HED [35]	HED	no	SE	AUPR	0.1301	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	DeepLab v3+ [36]	DeepLabv3+	no	EX	AUPR	0.5405	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	DeepLab v3+ [36]	DeepLabv3+	no	HE	AUPR	0.3789	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	DeepLab v3+ [36]	DeepLabv3+	no	MA	AUPR	0.0316	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	DeepLab v3+ [36]	DeepLabv3+	no	SE	AUPR	0.2185	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'
+Huang2022_RTNet	Table II	DDR	UNet [37], [38]	U-Net	no	EX	AUPR	0.5505	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'; cited to segmentation_models.pytorch repo, so presumably run by authors
+Huang2022_RTNet	Table II	DDR	UNet [37], [38]	U-Net	no	HE	AUPR	0.3899	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'; cited to segmentation_models.pytorch repo, so presumably run by authors
+Huang2022_RTNet	Table II	DDR	UNet [37], [38]	U-Net	no	MA	AUPR	0.0334	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'; cited to segmentation_models.pytorch repo, so presumably run by authors
+Huang2022_RTNet	Table II	DDR	UNet [37], [38]	U-Net	no	SE	AUPR	0.2455	not stated	NA	decimal; AUC PR column (AUC ROC not extracted); no * mark (* = reproduced by ourselves); text: 'we apply some state-of-the-art segmentation methods on the DDR dataset to make comparisons'; cited to segmentation_models.pytorch repo, so presumably run by authors
+Huang2022_RTNet	Table II	DDR	L-seg* [6]	L-Seg	no	EX	AUPR	0.5645	rerun	NA	decimal; AUC PR column (AUC ROC not extracted); * = reproduced by ourselves (original L-Seg DDR values differ)
+Huang2022_RTNet	Table II	DDR	L-seg* [6]	L-Seg	no	HE	AUPR	0.3588	rerun	NA	decimal; AUC PR column (AUC ROC not extracted); * = reproduced by ourselves (original L-Seg DDR values differ)
+Huang2022_RTNet	Table II	DDR	L-seg* [6]	L-Seg	no	MA	AUPR	0.1174	rerun	NA	decimal; AUC PR column (AUC ROC not extracted); * = reproduced by ourselves (original L-Seg DDR values differ)
+Huang2022_RTNet	Table II	DDR	L-seg* [6]	L-Seg	no	SE	AUPR	0.2654	rerun	NA	decimal; AUC PR column (AUC ROC not extracted); * = reproduced by ourselves (original L-Seg DDR values differ)
+Huang2022_RTNet	Table II	DDR	RTN(Ours)	RTNet	yes	EX	AUPR	0.5671	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Huang2022_RTNet	Table II	DDR	RTN(Ours)	RTNet	yes	HE	AUPR	0.3656	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Huang2022_RTNet	Table II	DDR	RTN(Ours)	RTNet	yes	MA	AUPR	0.1176	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Huang2022_RTNet	Table II	DDR	RTN(Ours)	RTNet	yes	SE	AUPR	0.2943	self	NA	decimal; AUC PR column (AUC ROC not extracted)
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	DeepLab v3+	DeepLabv3+	no	EX	AUPR	0.8293	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	DeepLab v3+	DeepLabv3+	no	HE	AUPR	0.6389	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	DeepLab v3+	DeepLabv3+	no	MA	AUPR	0.4024	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	DeepLab v3+	DeepLabv3+	no	SE	AUPR	0.5968	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet	U-Net	no	EX	AUPR	0.8038	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet	U-Net	no	HE	AUPR	0.6034	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet	U-Net	no	MA	AUPR	0.4029	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet	U-Net	no	SE	AUPR	0.5734	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet++	U-Net++	no	EX	AUPR	0.8351	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet++	U-Net++	no	HE	AUPR	0.6489	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet++	U-Net++	no	MA	AUPR	0.4043	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	UNet++	U-Net++	no	SE	AUPR	0.5908	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	Seg-B/16	Segmenter (Seg-B/16)	no	EX	AUPR	0.8601	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	Seg-B/16	Segmenter (Seg-B/16)	no	HE	AUPR	0.6504	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	Seg-B/16	Segmenter (Seg-B/16)	no	MA	AUPR	0.4068	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	Seg-B/16	Segmenter (Seg-B/16)	no	SE	AUPR	0.5849	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	VTA+HBE (Ours)	VTA	yes	EX	AUPR	0.8640	self	NA	decimal; AUC_PR column
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	VTA+HBE (Ours)	VTA	yes	HE	AUPR	0.6494	self	NA	decimal; AUC_PR column
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	VTA+HBE (Ours)	VTA	yes	MA	AUPR	0.4063	self	NA	decimal; AUC_PR column
+Wang2023_VTA_hyperbolic	Table 1	IDRiD	VTA+HBE (Ours)	VTA	yes	SE	AUPR	0.5978	self	NA	decimal; AUC_PR column
+Wang2023_VTA_hyperbolic	Table 2	DDR	DeepLab v3+	DeepLabv3+	no	EX	AUPR	0.5532	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	DeepLab v3+	DeepLabv3+	no	HE	AUPR	0.3782	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	DeepLab v3+	DeepLabv3+	no	MA	AUPR	0.0334	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	DeepLab v3+	DeepLabv3+	no	SE	AUPR	0.2190	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet	U-Net	no	EX	AUPR	0.5512	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet	U-Net	no	HE	AUPR	0.3727	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet	U-Net	no	MA	AUPR	0.0365	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet	U-Net	no	SE	AUPR	0.2434	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet++	U-Net++	no	EX	AUPR	0.5579	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet++	U-Net++	no	HE	AUPR	0.3880	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet++	U-Net++	no	MA	AUPR	0.0443	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	UNet++	U-Net++	no	SE	AUPR	0.2453	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	Seg-B/16	Segmenter (Seg-B/16)	no	EX	AUPR	0.5435	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	Seg-B/16	Segmenter (Seg-B/16)	no	HE	AUPR	0.3930	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	Seg-B/16	Segmenter (Seg-B/16)	no	MA	AUPR	0.0923	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	Seg-B/16	Segmenter (Seg-B/16)	no	SE	AUPR	0.2687	rerun	NA	decimal; AUC_PR column (AUC_ROC not extracted); baselines trained by the authors ('We trained DeepLab v3+, UNet, UNet++ and Seg-B/16 models on the IDRiD and DDR datasets')
+Wang2023_VTA_hyperbolic	Table 2	DDR	VTA+HBE (Ours)	VTA	yes	EX	AUPR	0.5607	self	NA	decimal; AUC_PR column
+Wang2023_VTA_hyperbolic	Table 2	DDR	VTA+HBE (Ours)	VTA	yes	HE	AUPR	0.3778	self	NA	decimal; AUC_PR column
+Wang2023_VTA_hyperbolic	Table 2	DDR	VTA+HBE (Ours)	VTA	yes	MA	AUPR	0.1066	self	NA	decimal; AUC_PR column
+Wang2023_VTA_hyperbolic	Table 2	DDR	VTA+HBE (Ours)	VTA	yes	SE	AUPR	0.2694	self	NA	decimal; AUC_PR column

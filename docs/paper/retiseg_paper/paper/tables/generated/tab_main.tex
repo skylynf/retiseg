@@ -1,0 +1,39 @@
+\begin{table*}[t]
+\centering\tablefont
+\caption{\textbf{Unified retraining (B-std): internal tests.} Every model is trained on one source under the shared protocol and scored on that source's official test set. Per-class values are exact pooled AUPR inside the field of view, mean of three seeds; mAUPR is the mean of the four classes $\pm$ s.d.\ over seeds; Dice is pooled, at the per-class threshold chosen on the validation set. Cell shading follows AUPR. \best{Bold}, best in column; \second{underlined}, second.}
+\label{tab:main}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{@{}l r cccc c c @{\hspace{10pt}} cccc c c@{}}
+\toprule
+ & & \multicolumn{6}{c}{\colh{Trained and tested on IDRiD} {\scriptsize(44 / 10 / 27)}} & \multicolumn{6}{c}{\colh{Trained and tested on DDR} {\scriptsize(383 / 149 / 225)}} \\
+\cmidrule(lr){3-8}\cmidrule(l){9-14}
+\colh{Model} & \colh{Params} & MA & HE & EX & SE & \colh{mAUPR} & \colh{Dice} & MA & HE & EX & SE & \colh{mAUPR} & \colh{Dice} \\
+\midrule
+\grouprow{14}{\famchip{general}\; General segmentation}
+U-Net & 7.8 & \cellcolor[HTML]{CAE8DC}\ph{.351} & \cellcolor[HTML]{99D5CC}\ph{.588} & \cellcolor[HTML]{66C1C2}\ph{.779} & \cellcolor[HTML]{E1F1E6}\ph{.222} & \ph{.485}\sd{\ph{.013}} & \ph{.478} & \cellcolor[HTML]{EEF5ED}\ph{.080} & \cellcolor[HTML]{E1F1E6}\ph{.225} & \cellcolor[HTML]{AFDDD1}\ph{.501} & \cellcolor[HTML]{EEF5ED}\ph{.080} & \ph{.222}\sd{\ph{.009}} & \ph{.271} \\
+DeepLabv3 & \ph{60.9} & \cellcolor[HTML]{DEEFE4}\ph{.244} & \cellcolor[HTML]{A5D9CE}\ph{.539} & \cellcolor[HTML]{6FC4C4}\ph{.748} & \cellcolor[HTML]{A1D8CE}\ph{.556} & \ph{.522}\sd{\ph{.023}} & \ph{.506} & \cellcolor[HTML]{ECF4EB}\ph{.107} & \cellcolor[HTML]{CAE8DC}\ph{.356} & \cellcolor[HTML]{B8E1D4}\ph{.458} & \cellcolor[HTML]{D9EDE2}\ph{.270} & \ph{.298}\sd{\ph{.001}} & \ph{.328} \\
+HRNet-W48 & \ph{65.8} & \cellcolor[HTML]{BBE2D6}\ph{.436} & \cellcolor[HTML]{88CEC9}\ph{.652} & \cellcolor[HTML]{5BB9C0}\ph{.833} & \cellcolor[HTML]{85CDC8}\ph{.663} & \ph{.646}\sd{\ph{.011}} & \ph{.603} & \cellcolor[HTML]{E2F1E6}\ph{.219} & \cellcolor[HTML]{B5E0D3}\ph{.469} & \cellcolor[HTML]{9CD6CC}\ph{.574} & \cellcolor[HTML]{C6E6DA}\ph{.373} & \ph{.409}\sd{\ph{.013}} & \ph{.416} \\
+Swin-Unet & \ph{27.2} & \cellcolor[HTML]{DEEFE4}\ph{.242} & \cellcolor[HTML]{ACDCD0}\ph{.517} & \cellcolor[HTML]{71C5C4}\ph{.739} & \cellcolor[HTML]{A5D9CE}\ph{.543} & \ph{.511}\sd{\ph{.019}} & \ph{.500} & \cellcolor[HTML]{ECF5EC}\ph{.102} & \cellcolor[HTML]{D0EADE}\ph{.321} & \cellcolor[HTML]{C0E4D8}\ph{.407} & \cellcolor[HTML]{DCEFE4}\ph{.250} & \ph{.270}\sd{\ph{.006}} & \ph{.308} \\
+FCT & \ph{51.4} & \cellcolor[HTML]{DCEFE4}\ph{.251} & \cellcolor[HTML]{AEDDD0}\ph{.508} & \cellcolor[HTML]{77C7C5}\ph{.721} & \cellcolor[HTML]{ACDCD0}\ph{.516} & \ph{.499}\sd{\ph{.012}} & \ph{.485} & \cellcolor[HTML]{ECF5EC}\ph{.105} & \cellcolor[HTML]{D3EBE0}\ph{.307} & \cellcolor[HTML]{C2E5D8}\ph{.400} & \cellcolor[HTML]{E0F0E5}\ph{.232} & \ph{.261}\sd{\ph{.015}} & \ph{.303} \\
+\grouprow{14}{\famchip{auto}\; Self-configuring}
+nnU-Net & \ph{33.4} & \cellcolor[HTML]{B3DFD2}\ph{\best{.479}} & \cellcolor[HTML]{81CBC7}\ph{\second{.679}} & \cellcolor[HTML]{58B6BF}\ph{\best{.856}} & \cellcolor[HTML]{7CC9C6}\ph{\best{.698}} & \ph{\best{.678}}\sd{\ph{.020}} & \ph{\second{.629}} & \cellcolor[HTML]{DEEFE4}\ph{\second{.248}} & \cellcolor[HTML]{B4DFD3}\ph{\second{.477}} & \cellcolor[HTML]{9CD6CC}\ph{\second{.579}} & \cellcolor[HTML]{C3E5D9}\ph{\second{.397}} & \ph{\second{.425}}\sd{\ph{.015}} & \ph{\second{.430}} \\
+nnU-Net ResEnc-M & \ph{57.5} & \cellcolor[HTML]{B4DFD3}\ph{\second{.473}} & \cellcolor[HTML]{80CBC7}\ph{\best{.688}} & \cellcolor[HTML]{58B6BF}\ph{\second{.854}} & \cellcolor[HTML]{7ECAC6}\ph{\second{.692}} & \ph{\second{.677}}\sd{\ph{.006}} & \ph{\best{.629}} & \cellcolor[HTML]{DBEEE3}\ph{\best{.256}} & \cellcolor[HTML]{B0DED1}\ph{\best{.497}} & \cellcolor[HTML]{97D4CB}\ph{\best{.597}} & \cellcolor[HTML]{C2E5D8}\ph{\best{.402}} & \ph{\best{.438}}\sd{\ph{.022}} & \ph{\best{.448}} \\
+\grouprow{14}{\famchip{fundus}\; Fundus-specific}
+M2MRF & 70.3 & \cellcolor[HTML]{BDE3D6}\ph{.427} & \cellcolor[HTML]{8ED0CA}\ph{.628} & \cellcolor[HTML]{5DBAC0}\ph{.823} & \cellcolor[HTML]{88CEC9}\ph{.649} & \ph{.632}\sd{\ph{.007}} & \ph{.594} & \cellcolor[HTML]{E0F0E5}\ph{.234} & \cellcolor[HTML]{B5E0D3}\ph{.470} & \cellcolor[HTML]{9ED7CD}\ph{.568} & \cellcolor[HTML]{C5E6DA}\ph{.380} & \ph{.413}\sd{\ph{.022}} & \ph{.420} \\
+HACDR-Net & \ph{49.6} & \cellcolor[HTML]{CFEADE}\ph{.323} & \cellcolor[HTML]{9CD6CC}\ph{.577} & \cellcolor[HTML]{65C0C2}\ph{.783} & \cellcolor[HTML]{99D5CC}\ph{.591} & \ph{.569}\sd{\ph{.019}} & \ph{.543} & \cellcolor[HTML]{E6F3E8}\ph{.169} & \cellcolor[HTML]{C0E4D8}\ph{.407} & \cellcolor[HTML]{AEDDD0}\ph{.511} & \cellcolor[HTML]{D0EADE}\ph{.320} & \ph{.352}\sd{\ph{.017}} & \ph{.377} \\
+\grouprow{14}{\famchip{foundation}\; Foundation models, adapted}
+SAMed & \ph{91.2} & \cellcolor[HTML]{DEEFE4}\ph{.243} & \cellcolor[HTML]{A5D9CE}\ph{.544} & \cellcolor[HTML]{6AC2C3}\ph{.766} & \cellcolor[HTML]{A0D7CD}\ph{.565} & \ph{.530}\sd{\ph{.009}} & \ph{.512} & \cellcolor[HTML]{EDF5EC}\ph{.096} & \cellcolor[HTML]{CDE9DD}\ph{.340} & \cellcolor[HTML]{BAE2D5}\ph{.445} & \cellcolor[HTML]{DAEEE3}\ph{.267} & \ph{.287}\sd{\ph{.004}} & \ph{.327} \\
+SAM-Adapter & 641.3 & \cellcolor[HTML]{E2F1E6}\ph{.216} & \cellcolor[HTML]{AADCCF}\ph{.523} & \cellcolor[HTML]{75C6C5}\ph{.724} & \cellcolor[HTML]{A7DACF}\ph{.533} & \ph{.499}\sd{\ph{.019}} & \ph{.491} & \cellcolor[HTML]{EEF5ED}\ph{.085} & \cellcolor[HTML]{D0EADE}\ph{.322} & \cellcolor[HTML]{C2E5D8}\ph{.401} & \cellcolor[HTML]{DFF0E5}\ph{.239} & \ph{.262}\sd{\ph{.009}} & \ph{.306} \\
+SAM2-UNet & 216.5 & \cellcolor[HTML]{C9E7DB}\ph{.361} & \cellcolor[HTML]{8ED0CA}\ph{.632} & \cellcolor[HTML]{5EBBC0}\ph{.817} & \cellcolor[HTML]{8CD0C9}\ph{.640} & \ph{.613}\sd{\ph{.026}} & \ph{.578} & \cellcolor[HTML]{E5F2E7}\ph{.194} & \cellcolor[HTML]{BAE2D5}\ph{.442} & \cellcolor[HTML]{A3D9CE}\ph{.551} & \cellcolor[HTML]{C8E7DB}\ph{.366} & \ph{.388}\sd{\ph{.010}} & \ph{.403} \\
+MedSAM (full FT) & 93.7 & \cellcolor[HTML]{E3F1E6}\ph{.211} & \cellcolor[HTML]{A7DACF}\ph{.535} & \cellcolor[HTML]{6CC3C3}\ph{.757} & \cellcolor[HTML]{A5D9CE}\ph{.540} & \ph{.511}\sd{\ph{.022}} & \ph{.493} & \cellcolor[HTML]{EDF5EC}\ph{.089} & \cellcolor[HTML]{CEE9DD}\ph{.330} & \cellcolor[HTML]{BDE3D6}\ph{.428} & \cellcolor[HTML]{DBEEE3}\ph{.257} & \ph{.276}\sd{\ph{.001}} & \ph{.311} \\
+RETFound + UPerNet & 352.6 & \cellcolor[HTML]{D4ECE0}\ph{.302} & \cellcolor[HTML]{95D3CB}\ph{.604} & \cellcolor[HTML]{63BFC1}\ph{.795} & \cellcolor[HTML]{91D2CA}\ph{.616} & \ph{.579}\sd{\ph{.013}} & \ph{.555} & \cellcolor[HTML]{E9F4EA}\ph{.134} & \cellcolor[HTML]{C3E5D9}\ph{.394} & \cellcolor[HTML]{AFDDD1}\ph{.499} & \cellcolor[HTML]{D1EBDF}\ph{.311} & \ph{.334}\sd{\ph{.024}} & \ph{.358} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\scriptsize
+\item Params in millions. nnU-Net uses its own preprocessing and planning with the same splits, test images and evaluation. H2Former is registered in tier~1 but deferred: at its 960-pixel input one training step exceeds the 40\,GB of the cards used here.
+\phnote
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table*}
