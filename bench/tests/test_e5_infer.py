@@ -140,3 +140,116 @@ def test_assert_ready_gates_test_splits_on_the_pool_selections(tmp_path):
     fz.assert_ready(frozen, "b", "val", set_name="DDR", prompts_dir=tmp_path)
     with pytest.raises(ValueError, match="tier must be"):
         fz.assert_ready(frozen, "c", "test")
+
+
+# ---- step 2: bench/e5/geometry.py -------------------------------------------------------------
+
+
+def _toy_set(root, image_id="img_01", hw=(120, 90), radius=40):
+    """One prepared image: a disc field of view, two lesion masks, PNG files, splits.json."""
+    import json
+
+    import numpy as np
+    from PIL import Image
+
+    from bench.common.io import LESION_CLASSES
+
+    rng = np.random.default_rng(3)
+    height, width = hw
+    yy, xx = np.mgrid[:height, :width]
+    fov = (yy - height // 2) ** 2 + (xx - width // 2) ** 2 <= radius**2
+    for sub in ("images", "fov", *[f"masks/{cls}" for cls in LESION_CLASSES]):
+        (root / sub).mkdir(parents=True, exist_ok=True)
+    Image.fromarray(rng.integers(0, 256, (height, width, 3), dtype=np.uint8)).save(root / "images" / f"{image_id}.png")
+    Image.fromarray(fov.astype(np.uint8) * 255).save(root / "fov" / f"{image_id}.png")
+    for cls in ("MA", "EX"):
+        mask = np.zeros(hw, bool)
+        mask[height // 2 - 3 : height // 2 + 3, width // 2 - 3 : width // 2 + 3] = True
+        Image.fromarray(mask.astype(np.uint8) * 255).save(root / "masks" / cls / f"{image_id}.png")
+    (root / "splits.json").write_text(json.dumps({"train": [], "val": [], "test": [image_id]}))
+    return fov
+
+
+def test_windows_follow_bench_infer_and_pad_small_canvases():
+    import numpy as np
+
+    from bench.e5 import geometry as geo
+    from bench.infer import window_starts
+
+    expected = [(t, l) for t in window_starts(100, 64, 32) for l in window_starts(80, 64, 32)]
+    assert geo.windows((100, 80), 64, 0.5) == expected and len(expected) == 6
+    assert geo.windows((50, 40), 64, 0.5) == [(0, 0)]
+    image = np.arange(100 * 80 * 3, dtype=np.uint8).reshape(100, 80, 3)
+    piece, valid = geo.crop_window(image, 36, 16, 64)
+    assert piece.shape == (64, 64, 3) and valid == (64, 64) and np.array_equal(piece, image[36:100, 16:80])
+    small = np.ones((50, 40, 3), np.uint8)
+    piece, valid = geo.crop_window(small, 0, 0, 64)
+    assert piece.shape == (64, 64, 3) and valid == (50, 40)
+    assert piece[:50, :40].all() and not piece[50:, :].any() and not piece[:, 40:].any()
+    import pytest
+
+    with pytest.raises(ValueError, match="outside"):
+        geo.crop_window(small, 50, 0, 64)
+    with pytest.raises(ValueError, match="overlap"):
+        geo.windows((100, 80), 64, 1.0)
+
+
+def test_long_side_and_windows_follow_e3a_and_the_d7_entry():
+    import pytest
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import geometry as geo
+
+    frozen = fz.load_frozen()
+    assert geo.test_sets()[:2] == ["IDRiD", "DDR"] and len(geo.test_sets()) == 7
+    assert geo.long_side_for("IDRiD", "main", frozen) == 1440
+    assert geo.long_side_for("TJDR_uwf", "main", frozen) == 4256
+    assert geo.long_side_for("TJDR_uwf", "fov", frozen) == 1440
+    assert geo.variants_for("TJDR_uwf", frozen) == ["main", "fov"] and geo.variants_for("FGADR", frozen) == ["main"]
+    with pytest.raises(ValueError, match="no variant"):
+        geo.long_side_for("IDRiD", "fov", frozen)
+    with pytest.raises(ValueError, match="unknown test set"):
+        geo.long_side_for("Kaggle", "main", frozen)
+    assert geo.window_size(frozen, "SAM") == 1024 and geo.window_size(frozen, "SAM 3") == 1008
+    with pytest.raises(ValueError, match="no G1 window"):
+        geo.window_size(frozen, "SAMed")
+    assert geo.overlap(frozen) == 0.5
+    assert geo.plan(frozen, "G2", "SAM", (300, 200)) == (None, [(0, 0)])
+    window, boxes = geo.plan(frozen, "G1", "SAM 2", (4256, 4256))
+    # window_starts(4256, 1024, 512): 0, 512, ..., 3072 then 3232 flush with the edge -> 8 x 8 windows
+    assert window == 1024 and len(boxes) == 64 and boxes[-1] == (3232, 3232)
+    assert len(geo.plan(frozen, "G1", "SAM", (1440, 956))[1]) == 2
+    with pytest.raises(ValueError, match="geometry"):
+        geo.plan(frozen, "G3", "SAM", (10, 10))
+
+
+def test_canvas_and_paste_round_trip(tmp_path):
+    import numpy as np
+    import pytest
+
+    from bench.data.fov import crop_box
+    from bench.e5 import geometry as geo
+
+    fov = _toy_set(tmp_path)
+    y0, y1, x0, x1 = crop_box(fov)
+    cv = geo.canvas(tmp_path, "img_01", 60, masks=True)
+    assert cv.image.dtype == np.uint8 and max(cv.hw) == 60 and cv.fov.shape == cv.hw
+    assert cv.crop == (y0, y1, x0, x1) and cv.original_hw == (120, 90) and cv.long_side == 60
+    assert len(cv.masks) == 4 and cv.masks[0].any() and cv.masks[2].any() and not cv.masks[1].any()
+    assert cv.masks[0].shape == cv.hw and cv.masks[0].dtype == bool
+    native = geo.canvas(tmp_path, "img_01", geo.NATIVE)
+    assert native.hw == (y1 - y0, x1 - x0) and native.masks is None
+    # a constant map comes back as 1 inside the field of view and 0 outside, at the original size
+    ones = geo.paste(np.ones(cv.hw, np.float32), cv)
+    assert ones.shape == (120, 90) and ones.dtype == np.float32
+    assert ones[fov].min() == pytest.approx(1.0) and not ones[~fov].any()
+    # a hot pixel lands where the canvas pixel came from
+    hot = np.zeros(cv.hw, np.float32)
+    cy, cx = cv.hw[0] // 3, cv.hw[1] // 2
+    hot[cy, cx] = 1.0
+    placed = geo.paste(hot, cv)
+    py, px = np.unravel_index(np.argmax(placed), placed.shape)
+    scale_y, scale_x = (y1 - y0) / cv.hw[0], (x1 - x0) / cv.hw[1]
+    assert abs(py - (y0 + cy * scale_y)) <= 2 and abs(px - (x0 + cx * scale_x)) <= 2
+    with pytest.raises(ValueError, match="canvas size"):
+        geo.paste(np.zeros((5, 5), np.float32), cv)
