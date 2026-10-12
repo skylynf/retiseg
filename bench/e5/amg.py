@@ -55,6 +55,7 @@ BACKBONE_TOKEN = {
     "sam_vit_b_01ec64.pth": "vitb",
     "sam2.1_hiera_large.pt": "hieral21",
     "sam2_hiera_large.pt": "hieral20",
+    "medsam_vit_b.pth": "vitb",
 }
 SAM_MODEL_TYPE = {"sam_vit_h_4b8939.pth": "vit_h", "sam_vit_b_01ec64.pth": "vit_b"}
 SAM2_CONFIG = {"sam2.1_hiera_large.pt": "configs/sam2.1/sam2.1_hiera_l.yaml", "sam2_hiera_large.pt": "configs/sam2/sam2_hiera_l.yaml"}
@@ -204,13 +205,7 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
     targets = targets_for(frozen, split, canvas_variants, selected_cap)
     directories = {out.set_dirname(base, tokens): (tokens, cap, kind) for tokens, cap, kind in targets}
     dirs = {name: out.out_dir(TIER, source, name) for name in directories}
-
-    def _needs_prediction(path):
-        if not (path / "predicted.json").is_file():
-            return True
-        return limit is None and out.read_predicted(path).get("limit") is not None  # a smoke run is redone in full
-
-    pending = [name for name, path in dirs.items() if _needs_prediction(path)]
+    pending = [name for name, path in dirs.items() if out.needs_prediction(path, limit)]
     data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
     if long_side is None:
         long_side = geo.NATIVE if geometry == geo.G2 else geo.long_side_for(set_name, variant, frozen)

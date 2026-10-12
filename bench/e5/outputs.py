@@ -85,6 +85,14 @@ def is_done(directory):
     return (Path(directory) / "done.json").is_file()
 
 
+def needs_prediction(directory, limit=None):
+    """True without predicted.json, or when a smoke run (limit set) is to be redone by a full run."""
+    directory = Path(directory)
+    if not (directory / "predicted.json").is_file():
+        return True
+    return limit is None and read_predicted(directory).get("limit") is not None
+
+
 def environment():
     """host, gpu, torch, git of this process (bench.e3a.environment)."""
     return e3a.environment()

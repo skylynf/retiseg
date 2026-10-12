@@ -723,3 +723,178 @@ def test_amg_test_run_needs_the_selection_uses_pool_thresholds_and_obeys_the_bud
     assert not (tmp_path / "runs2" / "E5" / "a" / "a_sam_vith_p128").exists()
     with pytest.raises(ValueError, match="geometry"):
         amg.run("SAM", 64, "DDR", "val", geometry="G3", generator=_FakeGenerator(), frozen=frozen, data_dir=root)
+
+
+# ---- step 8: bench/e5/prompted.py and bench/e5/same_info.py -----------------------------------
+
+
+class _FakeDecoder:
+    """A box fills its rectangle with 0.7; a point lights a 3 x 3 block with 0.5; every call is recorded."""
+
+    def __init__(self):
+        self.images, self.boxes, self.points = [], [], []
+
+    def set_image(self, image):
+        self.hw = tuple(image.shape[:2])
+        self.images.append(self.hw)
+
+    def box(self, box):
+        import numpy as np
+
+        self.boxes.append(tuple(int(v) for v in box))
+        x0, y0, x1, y1 = (int(v) for v in box)
+        prob = np.zeros(self.hw, np.float32)
+        prob[max(y0, 0) : y1, max(x0, 0) : x1] = 0.7
+        return prob
+
+    def point(self, xy):
+        import numpy as np
+
+        self.points.append(tuple(int(v) for v in xy))
+        x, y = (int(v) for v in xy)
+        prob = np.zeros(self.hw, np.float32)
+        prob[max(y - 1, 0) : y + 2, max(x - 1, 0) : x + 2] = 0.5
+        return prob
+
+
+def _two_component_set(root, ids_by_split):
+    """_toy_e5_source plus a second MA component in every image."""
+    import numpy as np
+    from PIL import Image
+
+    _toy_e5_source(root, root.name, ids_by_split)
+    for ids in ids_by_split.values():
+        for image_id in ids:
+            path = root / "masks" / "MA" / f"{image_id}.png"
+            mask = np.asarray(Image.open(path)) > 0
+            mask[12:16, 19:24] = True
+            Image.fromarray(mask.astype(np.uint8) * 255).save(path)
+
+
+def test_choose_window_takes_the_window_whose_edges_are_farthest_from_the_centre():
+    from bench.e5 import geometry as geo
+    from bench.e5 import prompted
+
+    boxes = geo.windows((17, 20), 8, 0.5)
+    assert boxes[prompted.choose_window(boxes, 8, (5.0, 5.0))] == (0, 0)  # margin 2 beats the neighbours' 1
+    assert boxes[prompted.choose_window(boxes, 8, (6.0, 6.0))] == (4, 4)
+    assert boxes[prompted.choose_window(boxes, 8, (19.0, 16.0))] == (9, 12)
+    assert prompted.choose_window([(0, 0)], 8, (30.0, 30.0)) == 0  # outside every window: the nearest
+    assert prompted.box_center([2, 4, 6, 8]) == (3.5, 5.5)
+
+
+def test_prompted_pool_run_decodes_once_per_window_and_fills_prefix_maxima(tmp_path, monkeypatch):
+    import json
+
+    import numpy as np
+    import pytest
+
+    from bench.common.io import read_prob_quantized
+    from bench.e5 import frozen as fz
+    from bench.e5 import geometry as geo
+    from bench.e5 import outputs as out
+    from bench.e5 import prompted, prompts
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _two_component_set(root, {"val": ["v0", "v1"]})
+    pdir = tmp_path / "prompts"
+    with pytest.raises(FileNotFoundError, match="bench.e5.prompts"):
+        prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    prompts.build("DDR", "val", frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    with pytest.raises(ValueError, match="runs \\['boxes'\\]"):
+        prompted.run("MedSAM", "points", "DDR", "val", decoder=_FakeDecoder(), frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    with pytest.raises(ValueError, match="regenerate"):
+        prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), frozen=frozen, data_dir=root, long_side=24, window=8, prompts_dir=pdir)
+    assert prompted.source_name(frozen, "SAM", "boxes") == "b_sam_vitb_box"
+    assert prompted.source_name(frozen, "SAM 2", "points") == "b_sam2_hieral21_point" and prompted.source_name(frozen, "MedSAM", "boxes") == "b_medsam_vitb_box"
+    fake = _FakeDecoder()
+    summary = prompted.run("SAM", "boxes", "DDR", "val", decoder=fake, frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    names = sorted(Path(p).name for p in summary["directories"])
+    assert names == ["DDR-val__k1", "DDR-val__k20", "DDR-val__k5", "DDR-val__kall"]
+    source = tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box"
+    predicted = json.loads((source / "DDR-val__kall" / "predicted.json").read_text())
+    assert predicted["kind"] == "boxes" and predicted["k"] == "all" and predicted["n_prompts"] == 2 * 3  # MA 2 + EX 1 per image
+    assert predicted["n_windows_encoded"] == len(fake.images) and all(hw == (8, 8) for hw in fake.images)
+    assert predicted["n_windows_encoded"] <= predicted["n_windows"] and predicted["decoder"] == "_FakeDecoder"
+    assert predicted["prompt_file_sha256"] and predicted["prompt_rule"]["box"].startswith("tight") and "git" in predicted
+    doc = prompts.load(fz.prompt_file("DDR", "val", pdir))
+    distinct = set()
+    cv = geo.canvas(root, "v0", 20)
+    boxes = geo.windows(cv.hw, 8, 0.5)
+    for cls in ("MA", "EX"):
+        for prompt in doc["images"]["v0"]["classes"][cls]["prompts"]:
+            distinct.add(prompted.choose_window(boxes, 8, prompted.box_center(prompt["box"])))
+    assert len(fake.images) == 2 * len(distinct) or len(fake.images) >= len(distinct)  # one encode per window with prompts, per image
+    # k maps are prefix maxima: k1 has the first-ranked MA box only, kall both; EX has one component so k1 == kall
+    k1 = read_prob_quantized(source / "DDR-val__k1" / "prob_val", "MA", "v0")
+    kall = read_prob_quantized(source / "DDR-val__kall" / "prob_val", "MA", "v0")
+    assert (k1 <= kall).all() and (kall > 0).sum() > (k1 > 0).sum() and abs(int(kall.max()) - round(0.7 * 65535)) <= 1
+    assert np.array_equal(read_prob_quantized(source / "DDR-val__k1" / "prob_val", "EX", "v0"), read_prob_quantized(source / "DDR-val__kall" / "prob_val", "EX", "v0"))
+    assert read_prob_quantized(source / "DDR-val__kall" / "prob_val", "HE", "v0").max() == 0
+    # the lesion itself is covered by its own box prompt
+    from bench.common.io import read_mask
+
+    ma = read_mask(root, "MA", "v0")
+    assert (kall[ma] > 0).mean() > 0.9
+    assert json.loads((source / "DDR-val__k5" / "done.json").read_text())["thresholds"] == "fixed only"
+    # points for SAM 2: the fake lights a 3 x 3 block at the component's farthest-from-boundary pixel
+    point_fake = _FakeDecoder()
+    prompted.run("SAM 2", "points", "DDR", "val", decoder=point_fake, frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    assert len(point_fake.points) == 2 * 3 and not point_fake.boxes
+    pk = read_prob_quantized(tmp_path / "runs" / "E5" / "b" / "b_sam2_hieral21_point" / "DDR-val__kall" / "prob_val", "MA", "v0")
+    assert 0 < (pk > 0).sum() < (kall > 0).sum() and abs(int(pk.max()) - round(0.5 * 65535)) <= 1
+    # a second call leaves the finished directories alone
+    stamp = (source / "DDR-val__kall" / "predicted.json").stat().st_mtime_ns
+    prompted.run("SAM", "boxes", "DDR", "val", decoder=fake, frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    assert (source / "DDR-val__kall" / "predicted.json").stat().st_mtime_ns == stamp
+    with pytest.raises(ValueError, match="box prompts only"):
+        prompted.MedSamDecoder(None, "cpu").point([1, 1])
+
+
+def test_prompted_test_run_uses_pool_thresholds_and_same_info_restricts_reference_maps(tmp_path, monkeypatch):
+    import json
+
+    import numpy as np
+    import pytest
+
+    from bench.common.io import read_mask, read_prob_quantized
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.e5 import prompted, prompts, same_info
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _two_component_set(root, {"val": ["v0"], "test": ["t0", "t1"]})
+    pdir = tmp_path / "prompts"
+    prompts.build("DDR", "val", frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    prompts.build("DDR", "test", frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    pool = [("DDR", root, "val")]
+    prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    summary = prompted.run("SAM", "boxes", "DDR", "test", decoder=_FakeDecoder(), frozen=frozen, data_dir=root, long_side=20, window=8,
+                           prompts_dir=pdir, pool=pool, limit=1)
+    assert sorted(Path(p).name for p in summary["directories"]) == ["DDR__k1", "DDR__k20", "DDR__k5", "DDR__kall"]
+    done = json.loads((tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box" / "DDR__k5" / "done.json").read_text())
+    assert done["thresholds"] == "fixed and pool val_opt" and done["excluded"] == ["t1"] and done["n_images"] == 1
+    # same-information reference: a supervised model's maps (0.9 on lesions, 0.1 elsewhere) restricted to the k boxes
+    reference = tmp_path / "ref" / "prob_test"
+    _write_toy_maps(reference, root, ["t0", "t1"])
+    result = same_info.run("M2MRF", ["ddr", "seed0"], reference, "DDR", "test", frozen=frozen, data_dir=root, prompts_dir=pdir)
+    assert result["source"] == "b_m2mrf_ref_ddr_seed0"
+    ref_dir = tmp_path / "runs" / "E5" / "b" / "b_m2mrf_ref_ddr_seed0"
+    assert sorted(p.name for p in ref_dir.iterdir()) == ["DDR__k1", "DDR__k20", "DDR__k5", "DDR__kall"]
+    k1 = read_prob_quantized(ref_dir / "DDR__k1" / "prob_test", "MA", "t0")
+    kall = read_prob_quantized(ref_dir / "DDR__kall" / "prob_test", "MA", "t0")
+    ma = read_mask(root, "MA", "t0")
+    assert (k1 <= kall).all() and (kall > 0).sum() > (k1 > 0).sum()
+    assert abs(int(kall[ma].min()) - round(0.9 * 65535)) <= 1  # the lesion pixels keep the model's own value
+    outside = ~ma
+    assert (kall[outside] == 0).mean() > 0.9  # almost everything outside the boxes is 0 (the 0.1 background is masked)
+    done = json.loads((ref_dir / "DDR__kall" / "done.json").read_text())
+    assert done["kind"] == "same_information_reference" and done["thresholds"] == "fixed only" and done["thresholds_note"].startswith("reference")
+    assert same_info.canvas_box_to_original([0, 0, 2, 2], (10, 10), (2, 22, 3, 23)) == [3, 2, 7, 6]
+    with pytest.raises(FileNotFoundError, match="prediction directory"):
+        same_info.run("M2MRF", ["x"], tmp_path / "nope", "DDR", "test", frozen=frozen, data_dir=root, prompts_dir=pdir)
+    np.testing.assert_array_equal(same_info.box_union_mask([], "all", (10, 10), (0, 10, 0, 10), (10, 10)), np.zeros((10, 10), bool))
