@@ -224,6 +224,20 @@ def pool_class_aupr(tier, source, frozen, proto, pool=None, variants=()):
     return {cls: float(pixel.average_precision(pos, neg)) for cls, (pos, neg) in totals.items()}
 
 
+def drop_maps_of(directory, split):
+    """Remove the maps of an evaluated directory and say so in its done.json (maps_dropped)."""
+    directory = Path(directory)
+    maps = pred_dir(directory, split)
+    if maps.is_dir():
+        shutil.rmtree(maps)
+    path = directory / "done.json"
+    if path.is_file():
+        done = json.loads(path.read_text())
+        if not done.get("maps_dropped"):
+            done["maps_dropped"] = True
+            path.write_text(json.dumps(done, indent=1) + "\n")
+
+
 def evaluate_dir(directory, set_name, split="test", data_dir=None, proto=None, val_thresholds=None, drop_maps=(), record=None, exclude=()):
     """bench.eval on one finished prediction directory; writes metrics.json, metrics.npz and done.json.
 
@@ -254,7 +268,7 @@ def evaluate_dir(directory, set_name, split="test", data_dir=None, proto=None, v
     )
     (directory / "done.json").write_text(json.dumps(done, indent=1) + "\n")
     if drop:
-        shutil.rmtree(maps)
+        drop_maps_of(directory, split)
     any_aupr = result["summary"].get("AUPR_any_lesion")
     print(f"{directory.parent.name} {directory.name} mAUPR {result['summary']['mAUPR']:.4f} any {any_aupr if any_aupr is None else round(any_aupr, 4)}", flush=True)
     return result

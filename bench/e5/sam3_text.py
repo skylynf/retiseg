@@ -10,7 +10,13 @@ sam3_image_processor.py) -> canvas by max -> paste -> write_prob. The
 confidence threshold is 0 so every query stays; the default 0.5 would cut the
 PR curve. Sources a_sam3_ph<index>; the main result a_sam3_selected is
 assembled from the per-class phrases chosen on the validation pool
-(zero_shot.sam3.selected), copying maps, no new inference.
+(zero_shot.sam3.selected), copying maps, no new inference. The assembly is the
+only writer of a_sam3_selected and the last reader of the phrase runs' maps: a
+phrase run never removes its maps (whatever --drop-maps says), the assembly
+removes the maps of the three phrase runs and its own once it is evaluated
+(review fix 4, A2). The queue runs the phrase indices with --no-assemble and
+assembles in an item of its own; a phrase run on the command line assembles
+itself when it is the last of the three.
 
 Phrase selection (D2): select_phrases pools the pixel histograms of the pool
 runs of every phrase index and takes, per class, the phrase with the highest
@@ -19,9 +25,9 @@ AUPR; it prints the yaml to paste into e5_frozen.yaml.
 Environment: retiseg-sam3 (Python 3.12, torch >= 2.7, CUDA >= 12.6;
 bench/scripts/cluster_env.sh install_sam3). SAM 3 is under the SAM License.
 
-    python -m bench.e5.sam3_text --phrase 0 --set DDR --split val
+    python -m bench.e5.sam3_text --phrase 0 --set DDR --split val [--no-assemble]
     python -m bench.e5.sam3_text --select                      # after the pool runs of the three indices
-    python -m bench.e5.sam3_text --assemble --set IDRiD --split test
+    python -m bench.e5.sam3_text --assemble --set IDRiD --split test [--drop-maps IDRiD]
 """
 
 import argparse
@@ -205,19 +211,17 @@ def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, 
                 **record, **out.environment(),
             },
         )
-    assembled = None
-    if assemble and _selection_filled(frozen):
-        assembled = assemble_selected(set_name, split, variant, frozen, data_dir, evaluate=False, limit=limit)
-    if evaluate:
+    if evaluate and not out.is_done(directory, limit):
         from bench.eval.evaluate import load_protocol
 
         proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
-        for path, src in [(directory, source)] + ([(assembled, selected_source())] if assembled is not None else []):
-            if out.is_done(path, limit):
-                continue
-            predicted_limit, excluded_eval = out.evaluation_scope(path, ids + excluded)
-            thresholds = None if pool_run else out.thresholds_for_test(TIER, src, frozen, proto, pool=pool, limit=predicted_limit)
-            out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded_eval)
+        predicted_limit, excluded_eval = out.evaluation_scope(directory, ids + excluded)
+        thresholds = None if pool_run else out.thresholds_for_test(TIER, source, frozen, proto, pool=pool, limit=predicted_limit)
+        # the maps stay whatever drop_maps says: a_sam3_selected copies them per class, and the assembly removes them once it is evaluated
+        out.evaluate_dir(directory, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, exclude=excluded_eval)
+    assembled = None
+    if assemble and _selection_filled(frozen):
+        assembled = assemble_selected(set_name, split, variant, frozen, data_dir, evaluate=evaluate, drop_maps=drop_maps, pool=pool, limit=limit, missing_ok=True)
     return {"source": source, "directory": str(directory), "assembled": None if assembled is None else str(assembled), "n_images": len(ids)}
 
 
@@ -235,29 +239,78 @@ def selected_indices(frozen):
     return {cls: spec(frozen)["phrases"][cls].index(chosen[cls]) for cls in LESION_CLASSES}
 
 
-def assemble_selected(set_name, split, variant=geo.MAIN, frozen=None, data_dir=None, evaluate=True, drop_maps=(), pool=None, limit=None):
-    """Copy, per class, the maps of the selected phrase's run into a_sam3_selected; None while an index is missing."""
+def ensure_pool_selected(frozen, pool=None):
+    """Assemble and evaluate a_sam3_selected on every pool set where it is missing: its pooled histograms are the test split's thresholds."""
+    for name, data_dir, split in (fz.pool_sets(frozen) if pool is None else pool):
+        if not out.is_done(planned_selected(name, split)):
+            assemble_selected(name, split, frozen=frozen, data_dir=data_dir, pool=pool)
+
+
+def assemble_selected(set_name, split, variant=geo.MAIN, frozen=None, data_dir=None, evaluate=True, drop_maps=(), pool=None, limit=None,
+                      missing_ok=False):
+    """Copy, per class, the maps of the selected phrase's run into a_sam3_selected and evaluate it.
+
+    The assembly is the only writer of a_sam3_selected and the last reader of the
+    phrase runs' maps: with the set in ``drop_maps`` (a test split) it removes the
+    maps of the three phrase runs and of itself once it is evaluated. It raises
+    while a phrase run of the set is missing, or has lost its maps before the
+    assembly was made; ``missing_ok`` returns None instead (a phrase run that is
+    not the last of the three). ``limit`` is the request's: the phrase runs decide
+    the assembly's own limit, and a full request refuses smoke phrase runs.
+    """
     frozen = frozen or fz.load_frozen()
     indices = selected_indices(frozen)
     pool_run = fz.is_pool_split(split)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     set_dir = out.set_dirname(out.pool_set_dirname(set_name) if pool_run else set_name, canvas_variants)
-    sources = {cls: out.out_dir(TIER, source_name(indices[cls]), set_dir) for cls in LESION_CLASSES}
-    for path in sources.values():
-        if not (path / "predicted.json").is_file() or not out.pred_dir(path, split).is_dir():
-            return None  # that phrase index has not run (or its maps are gone) for this set
+    phrase_dirs = {index: out.out_dir(TIER, source_name(index), set_dir) for index in PHRASE_INDICES}
+    sources = {cls: phrase_dirs[indices[cls]] for cls in LESION_CLASSES}
+    target = planned_selected(set_name, split, variant)
+    unfinished = [path for path in phrase_dirs.values() if not (path / "predicted.json").is_file()]
+    if unfinished:
+        if missing_ok:
+            return None  # another phrase index is still to run for this set
+        raise FileNotFoundError(f"a_sam3_selected {set_dir}: no finished prediction in {[str(p) for p in unfinished]}; run the phrase indices first")
     records = {cls: out.read_predicted(path) for cls, path in sources.items()}
     limits = {records[cls].get("limit") for cls in LESION_CLASSES}
     if len(limits) != 1:
         raise ValueError(f"the phrase runs of {set_dir} were made with different --limit values {limits}; redo them alike")
     run_limit = limits.pop()
-    target = planned_selected(set_name, split, variant)
-    if not out.needs_prediction(target, run_limit):
-        return target
+    if limit is None and run_limit is not None:
+        raise ValueError(f"a_sam3_selected {set_dir}: the phrase runs are smoke runs (--limit {run_limit}); predict them in full first, "
+                         f"or pass --limit {run_limit} to assemble the smoke")
+    lost = sorted({path for path in sources.values() if not out.pred_dir(path, split).is_dir()})
+    if lost and not (target / "predicted.json").is_file():
+        raise FileNotFoundError(f"a_sam3_selected {set_dir}: the maps of {[str(p) for p in lost]} are gone; predict those phrase runs again")
+    if out.needs_prediction(target, run_limit):
+        _copy_selected(sources, records, target, set_name, split, variant, canvas_variants, indices, run_limit, frozen)
+    if evaluate and not out.is_done(target, run_limit):
+        from bench.eval.evaluate import load_protocol
+
+        proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
+        data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
+        _ids_done, excluded = _ids(data_dir, split, run_limit)
+        thresholds = None
+        if not pool_run:
+            ensure_pool_selected(frozen, pool)  # the launcher gates the test assembly on the pool assembly; this covers a run by hand
+            thresholds = out.thresholds_for_test(TIER, selected_source(), frozen, proto, pool=pool, limit=run_limit)
+        out.evaluate_dir(target, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)
+    if not pool_run and set_name in set(drop_maps or ()) and out.is_done(target, run_limit):
+        for path in phrase_dirs.values():  # every reader of these maps is finished
+            if out.is_done(path, run_limit):
+                out.drop_maps_of(path, split)
+    return target
+
+
+def _copy_selected(sources, records, target, set_name, split, variant, canvas_variants, indices, run_limit, frozen):
+    """The copy itself: built beside the target and renamed, so a half-copied directory is never read as finished."""
     maps_dir = out.pred_dir(target, split)
+    staging = maps_dir.with_name(maps_dir.name + ".partial")
+    shutil.rmtree(staging, ignore_errors=True)
     for cls in LESION_CLASSES:
-        source_maps = out.pred_dir(sources[cls], split) / cls
-        shutil.copytree(source_maps, maps_dir / cls, dirs_exist_ok=True)
+        shutil.copytree(out.pred_dir(sources[cls], split) / cls, staging / cls)
+    shutil.rmtree(maps_dir, ignore_errors=True)
+    staging.rename(maps_dir)
     first = records["MA"]
     out.write_predicted(
         target,
@@ -271,15 +324,6 @@ def assemble_selected(set_name, split, variant=geo.MAIN, frozen=None, data_dir=N
             "confidence_threshold": first.get("confidence_threshold"), "pixel_score": first.get("pixel_score"), **out.environment(),
         },
     )
-    if evaluate:
-        from bench.eval.evaluate import load_protocol
-
-        proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
-        data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
-        _ids_done, excluded = _ids(data_dir, split, run_limit)
-        thresholds = None if pool_run else out.thresholds_for_test(TIER, selected_source(), frozen, proto, pool=pool, limit=run_limit)
-        out.evaluate_dir(target, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)
-    return target
 
 
 def select_phrases(frozen=None, proto=None, pool=None):
@@ -320,6 +364,7 @@ def main(argv=None):
     parser.add_argument("--phrase", type=int, choices=PHRASE_INDICES, help="phrase index of every class")
     parser.add_argument("--select", action="store_true", help="choose the phrases on the validation pool and print the yaml")
     parser.add_argument("--assemble", action="store_true", help="assemble a_sam3_selected for --set / --split from the phrase runs")
+    parser.add_argument("--no-assemble", action="store_true", help="a phrase run only; the queue assembles in an item of its own")
     parser.add_argument("--set")
     parser.add_argument("--split", default="test")
     parser.add_argument("--variant", default=geo.MAIN)
@@ -341,7 +386,8 @@ def main(argv=None):
         return
     if args.phrase is None:
         parser.error("--phrase is required for a run")
-    print(run(args.phrase, args.set, args.split, args.variant, args.geometry, args.device, evaluate=not args.predict_only, drop_maps=drop, limit=args.limit))
+    print(run(args.phrase, args.set, args.split, args.variant, args.geometry, args.device, evaluate=not args.predict_only, drop_maps=drop,
+              limit=args.limit, assemble=not args.no_assemble))
 
 
 if __name__ == "__main__":

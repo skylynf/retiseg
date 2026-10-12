@@ -6,7 +6,9 @@ Items, in order:
      feed the two selections in e5_frozen.yaml and the Dice thresholds;
   2. test runs on the seven sets (TJDR_uwf main and fov): SAM / SAM 2 only once
      zero_shot.grid.selected is filled, SAM 3 only once zero_shot.sam3.selected is filled
-     (then a gated assembly of a_sam3_selected per set), the oracle tier and the
+     (then a gated assembly of a_sam3_selected per set: the phrase runs take
+     --no-assemble and keep their maps, the assembly copies them and, on a --drop-maps
+     set, removes them once it is evaluated), the oracle tier and the
      same-information references always; larger canvases first. A test item waits
      (gate) for the pool directories of its own source, which give its Dice thresholds;
      a gate closes ("never") when nothing in the queue will write them.
@@ -71,6 +73,7 @@ class Item:
     variant: str = geo.MAIN
     needs_prompts: bool = False                    # the oracle tier and the references read the prompt file of (set, split, variant)
     prerequisite: bool = False                     # a pool-phase item the test runs need (the pool assembly of a_sam3_selected): kept by --test-only
+    owns_drop: bool = True                         # False: another item reads this item's maps and removes them (a SAM 3 phrase run; the assembly drops)
 
     def done(self, limit=None):
         """All directories evaluated for this request; a smoke run's done.json does not answer a full request (outputs.is_done)."""
@@ -147,10 +150,11 @@ def discover(frozen):
             phrase_dirs = []
             for index in sam3_text.PHRASE_INDICES:
                 source, directory = sam3_text.planned(frozen, index, set_name, split, variant)
-                argv = ["-m", "bench.e5.sam3_text", "--phrase", str(index), "--set", set_name, "--split", split, "--variant", variant]
+                # one writer per directory: the phrase run leaves the assembly, and the removal of its maps, to the gated item
+                argv = ["-m", "bench.e5.sam3_text", "--phrase", str(index), "--set", set_name, "--split", split, "--variant", variant, "--no-assemble"]
                 gates = [] if pool_run else [sam3_text.planned(frozen, index, name, sp)[1] for name, sp in pool_sets]
                 items.append(Item(f"{source}:{tag}", phase, cost(COST_A["SAM 3"], set_name, split, variant, frozen), ENV["SAM 3"], argv, directory, [directory], set_name,
-                                  gate_dirs=gates, split=split, variant=variant))
+                                  gate_dirs=gates, split=split, variant=variant, owns_drop=False))
                 phrase_dirs.append(directory)
             if sam3_selected:
                 selected = sam3_text.planned_selected(set_name, split, variant)
@@ -208,7 +212,7 @@ def write_prompt_files(frozen, missing):
 def command(item, py_argv=None, drop_maps=(), limit=None):
     """Shell body of one queue item. ``py_argv`` None resolves the conda env (only when submitting)."""
     argv = list(item.argv)
-    if item.phase == TEST and item.set_name in set(drop_maps):
+    if item.phase == TEST and item.owns_drop and item.set_name in set(drop_maps):
         argv += ["--drop-maps", item.set_name]
     if limit is not None:
         argv += ["--limit", str(int(limit))]

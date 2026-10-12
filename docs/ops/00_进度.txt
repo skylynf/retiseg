@@ -70,8 +70,13 @@ E5 推理档评审修复 2：冒烟目录不算完成，启动器只查计划用
 3. 顺带（现存问题 26）：launch_e5_infer.py --submit 原来要求七个 prepared 库都在，--pool-only 也不例外，只有 IDRiD、DDR 的工作站albert 做池冒烟会直接退出。改成 absent_sets(items) 只查本次计划用到的集，missing_prompt_files(frozen, items) 只生成计划里要读提示文件的项（b 档和同信息对照；Item 新增 split、variant、needs_prompts）。测试阶段的保护不变，因为测试项会把七个库都列进计划。server_run.sh 的 e5-infer 阶段仍查七个库（服务器用，Luming 的脚本不改）。
 4. 测试：test_e5_infer 加 1 个（冒烟→全量→再冒烟三次 run：全量重评、冒烟池不给阈值、第三次什么都不做），test_launch_e5_infer 加 2 个（冒烟 done.json 对全量队列不算完成；只有两个库时 --pool-only 计划的 absent_sets 为空、提示文件只要池的两份）。整套 bench/tests 预期 197 / 18 / 6 / 4。17 第六节 b 步、18 第三、五节同步。
 
-E5 推理档评审修复 3：测试划分不再静默退成 fixed only，测试项等本来源的池（2026-10-12，工作站albert；待提交）
+E5 推理档评审修复 3：测试划分不再静默退成 fixed only，测试项等本来源的池（2026-10-12，工作站albert；提交 bead155）
 1. A3：按 17 第六节 pool-only → 选择 → --test-only 的流程，池上的 a_sam3_selected 拼装项属 POOL 阶段被 --test-only 过滤掉，测试集的 a_sam3_selected 拿不到池阈值，退成 "fixed only" 并写 done.json；更一般地，任何早于同来源池运行的测试运行（--only、--test-only、池项失败）都静默退化，且 done.json 写下后不再重评。顺带发现：评测的排除集和阈值例外跟随本次请求的 --limit 而不是目录里的预测，冒烟请求落在一个全量预测目录上会只评前 N 张却写出看似全量的 done.json。
 2. 改动：outputs.thresholds_for_test 在测试划分拿不到池阈值时抛 RuntimeError（预测已落盘，池跑完后重跑同一命令只做评测），预测本身为冒烟时例外；outputs.evaluation_scope 从 predicted.json 取 limit 和排除集，amg、prompted、same_info、sam3_text 的评测都改用它。启动器：测试项以本来源池目录为闸门（amg 九个目录、prompted 各 k、SAM 3 措辞各自序号；测试拼装项另加两个池拼装项），同信息对照无闸门；池拼装项标 prerequisite，--test-only 保留它；gate_for(item, producers, limit) 在队列里没有谁会写该目录、或写它的项自队列启动后已完成一轮却没写出 done.json 时返回 never（run_queue 记为 not started），producers_of 在排队前记下每个生产者日志里已完成的轮数，所以上一轮的失败不会误关闸门（补丁原方案读日志最后一个退出码，被重新排队的失败项在启动前会被误判，这里改掉）。
 3. 测试：test_e5_infer 加 1 个（测试划分无池直接报错、冒烟请求不把全量目录当冒烟评、冒烟池不算池、冒烟预测例外标 fixed only、池到位后同一命令只评测且阈值为 pool val_opt）；test_launch_e5_infer 改 1 个、加 1 个（--test-only 保留池拼装项并排在最前；各档闸门目录；producers 缺席 → never、运行中 → wait、完成未写出 → never、旧失败 → wait、冒烟 done 只开冒烟队列）。整套 bench/tests 预期 199 / 18 / 6 / 4。17 第六节 e 步、18 第三、五节同步。
+
+E5 推理档评审修复 4：SAM 3 拼装项是唯一写者，图在拼装评测后才删（2026-10-12，工作站albert；待提交）
+1. A2：17 第六节 e 步带 --drop-maps FGADR,Retinal-Lesions 时，每个措辞运行评测完立即删自己的图，assemble_selected 要三个来源的图都在，返回 None 且 --assemble 退出码 0，a_sam3_selected/FGADR 不会存在；三个措辞进程并发时还有 copytree 撞 rmtree 的竞态。
+2. 改动：sam3_text.run 先评自己的目录且不删图（--drop-maps 对措辞运行无效），再在选择已填时拼装（队列里的措辞项带 --no-assemble，不拼装）；assemble_selected 成为 a_sam3_selected 的唯一写者：缺措辞运行抛 FileNotFoundError（run 里 missing_ok 返回 None），图已丢且目标未拼装抛错，全量请求遇到冒烟的措辞运行抛 ValueError，复制经 prob_*.partial 暂存后 rename，评测前 ensure_pool_selected 补拼池上的 a_sam3_selected（启动器已用闸门保证，这里兜手动运行），评测完且集合在 drop_maps 里才用 outputs.drop_maps_of 删三个措辞目录和自己的图（done.json 记 maps_dropped）。--assemble 缺来源时非零退出。启动器：措辞项 argv 带 --no-assemble、owns_drop 为 False 不接 --drop-maps，拼装项接。
+3. 测试：test_e5_infer 加 1 个（FGADR 做 drop-maps 集：措辞测试运行保留图，拼装在没人预先拼池的情况下补拼池、评出 pool val_opt、删三个措辞目录和自己的图、幂等；冒烟措辞运行拒绝全量拼装、接受冒烟拼装），test_launch_e5_infer 加 1 个（措辞项 --no-assemble 不接 --drop-maps，拼装项接）。原有的 SAM 3 用例不改照过。整套 bench/tests 预期 201 / 18 / 6 / 4。17 第六节 e 步、18 第三、五节同步。
 

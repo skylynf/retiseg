@@ -1105,3 +1105,56 @@ def test_a_test_split_is_not_evaluated_without_the_pool_thresholds(tmp_path, mon
     done = json.loads((directory / "done.json").read_text())
     assert done["thresholds"] == "fixed and pool val_opt" and done["limit"] is None and done["excluded"] == []
     assert out.is_done(directory) and json.loads((directory / "metrics.json").read_text())["n_images"] == 2
+
+
+# ---- review fix 4 (A2): the assembly is the only writer of a_sam3_selected and the last reader of the phrase maps
+
+
+def test_sam3_assembly_on_a_drop_maps_set_and_without_a_prepared_pool_assembly(tmp_path, monkeypatch):
+    """The selected source exists on a --drop-maps set and has pool thresholds; the phrase maps go only after it is evaluated."""
+    import json
+
+    import pytest
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.e5 import sam3_text
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "FGADR"
+    _toy_e5_source(root, "FGADR", {"val": ["v0"], "test": ["t0", "t1"]})
+    pool = [("FGADR", root, "val")]
+    fake = _FakeScorer(fz.phrase_ids(frozen))
+    kwargs = dict(scorer=fake, data_dir=root, long_side=20, window=8)
+    for index in (0, 1, 2):
+        sam3_text.run(index, "FGADR", "val", frozen=frozen, **kwargs)
+    filled = fz.load_frozen(_filled_frozen(tmp_path, 64, 1.0))  # MA and SE from index 1, HE and EX from index 0
+    source = tmp_path / "runs" / "E5" / "a"
+    with pytest.raises(FileNotFoundError, match="no finished prediction"):
+        sam3_text.assemble_selected("FGADR", "test", frozen=filled, data_dir=root, pool=pool)
+    # the queue's phrase items: --no-assemble, and --drop-maps is not passed to them; a drop-maps flag would be ignored anyway
+    for index in (0, 1, 2):
+        summary = sam3_text.run(index, "FGADR", "test", frozen=filled, pool=pool, assemble=False, drop_maps=("FGADR",), **kwargs)
+        assert summary["assembled"] is None and (source / f"a_sam3_ph{index}" / "FGADR" / "prob_test").is_dir()
+        assert json.loads((source / f"a_sam3_ph{index}" / "FGADR" / "done.json").read_text())["maps_dropped"] is False
+    assert not (source / "a_sam3_selected" / "FGADR-val").exists()  # nobody assembled the pool beforehand
+    target = sam3_text.assemble_selected("FGADR", "test", frozen=filled, data_dir=root, pool=pool, drop_maps=("FGADR",))
+    done = json.loads((target / "done.json").read_text())
+    assert done["thresholds"] == "fixed and pool val_opt" and done["maps_dropped"] is True and not (target / "prob_test").exists()
+    assert not (target / "prob_test.partial").exists()
+    assert out.is_done(source / "a_sam3_selected" / "FGADR-val")  # assembled on demand: its thresholds were needed
+    for index in (0, 1, 2):
+        phrase = source / f"a_sam3_ph{index}" / "FGADR"
+        assert not (phrase / "prob_test").exists() and json.loads((phrase / "done.json").read_text())["maps_dropped"] is True
+    assert (source / "a_sam3_ph0" / "FGADR-val" / "prob_val").is_dir()  # a pool run keeps its maps
+    assert sam3_text.assemble_selected("FGADR", "test", frozen=filled, data_dir=root, pool=pool, drop_maps=("FGADR",)) == target  # idempotent
+    # a full request refuses smoke phrase runs; a smoke request assembles the smoke
+    smoke_root = tmp_path / "prepared" / "DiaRetDB1"
+    _toy_e5_source(smoke_root, "DiaRetDB1", {"val": ["w0"], "test": ["s0", "s1"]})
+    for index in (0, 1, 2):
+        sam3_text.run(index, "DiaRetDB1", "test", frozen=filled, pool=pool, assemble=False, limit=1, scorer=fake, data_dir=smoke_root, long_side=20, window=8)
+    with pytest.raises(ValueError, match="smoke runs"):
+        sam3_text.assemble_selected("DiaRetDB1", "test", frozen=filled, data_dir=smoke_root, pool=pool)
+    smoke = sam3_text.assemble_selected("DiaRetDB1", "test", frozen=filled, data_dir=smoke_root, pool=pool, limit=1)
+    assert json.loads((smoke / "done.json").read_text())["limit"] == 1 and not out.is_done(smoke) and out.is_done(smoke, limit=1)
