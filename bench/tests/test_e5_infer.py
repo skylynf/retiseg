@@ -1158,3 +1158,28 @@ def test_sam3_assembly_on_a_drop_maps_set_and_without_a_prepared_pool_assembly(t
         sam3_text.assemble_selected("DiaRetDB1", "test", frozen=filled, data_dir=smoke_root, pool=pool)
     smoke = sam3_text.assemble_selected("DiaRetDB1", "test", frozen=filled, data_dir=smoke_root, pool=pool, limit=1)
     assert json.loads((smoke / "done.json").read_text())["limit"] == 1 and not out.is_done(smoke) and out.is_done(smoke, limit=1)
+
+
+# ---- review fix 5 (A4): the SAM 3 builder gets the device type as a string --------------------------
+
+
+def test_sam3_device_is_passed_as_the_string_the_official_builder_compares_with():
+    import pytest
+    import torch
+
+    from bench.e5 import sam3_text
+
+    # the premise: sam3's _setup_device_and_mode tests `device == "cuda"`, which a torch.device never satisfies
+    assert not (torch.device("cuda") == "cuda")
+    assert sam3_text.sam3_device("cpu") == (torch.device("cpu"), "cpu")
+    assert sam3_text.sam3_device(torch.device("cuda")) == (torch.device("cuda"), "cuda")
+    assert sam3_text.sam3_device("cuda:0") == (torch.device("cuda:0"), "cuda")
+    with pytest.raises(ValueError, match="CUDA_VISIBLE_DEVICES"):
+        sam3_text.sam3_device("cuda:1")
+    default_device, builder_device = sam3_text.sam3_device(None)
+    assert builder_device == default_device.type and builder_device in ("cuda", "cpu")
+    # the placement check: a model left on the CPU by the builder is refused before the first window
+    model = torch.nn.Linear(2, 2)
+    sam3_text.check_placed(model, "cpu")
+    with pytest.raises(RuntimeError, match="built on \\['cpu'\\], not on cuda"):
+        sam3_text.check_placed(model, "cuda")

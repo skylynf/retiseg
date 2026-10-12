@@ -75,8 +75,13 @@ E5 推理档评审修复 3：测试划分不再静默退成 fixed only，测试�
 2. 改动：outputs.thresholds_for_test 在测试划分拿不到池阈值时抛 RuntimeError（预测已落盘，池跑完后重跑同一命令只做评测），预测本身为冒烟时例外；outputs.evaluation_scope 从 predicted.json 取 limit 和排除集，amg、prompted、same_info、sam3_text 的评测都改用它。启动器：测试项以本来源池目录为闸门（amg 九个目录、prompted 各 k、SAM 3 措辞各自序号；测试拼装项另加两个池拼装项），同信息对照无闸门；池拼装项标 prerequisite，--test-only 保留它；gate_for(item, producers, limit) 在队列里没有谁会写该目录、或写它的项自队列启动后已完成一轮却没写出 done.json 时返回 never（run_queue 记为 not started），producers_of 在排队前记下每个生产者日志里已完成的轮数，所以上一轮的失败不会误关闸门（补丁原方案读日志最后一个退出码，被重新排队的失败项在启动前会被误判，这里改掉）。
 3. 测试：test_e5_infer 加 1 个（测试划分无池直接报错、冒烟请求不把全量目录当冒烟评、冒烟池不算池、冒烟预测例外标 fixed only、池到位后同一命令只评测且阈值为 pool val_opt）；test_launch_e5_infer 改 1 个、加 1 个（--test-only 保留池拼装项并排在最前；各档闸门目录；producers 缺席 → never、运行中 → wait、完成未写出 → never、旧失败 → wait、冒烟 done 只开冒烟队列）。整套 bench/tests 预期 199 / 18 / 6 / 4。17 第六节 e 步、18 第三、五节同步。
 
-E5 推理档评审修复 4：SAM 3 拼装项是唯一写者，图在拼装评测后才删（2026-10-12，工作站albert；待提交）
+E5 推理档评审修复 4：SAM 3 拼装项是唯一写者，图在拼装评测后才删（2026-10-12，工作站albert；提交 4a02de6）
 1. A2：17 第六节 e 步带 --drop-maps FGADR,Retinal-Lesions 时，每个措辞运行评测完立即删自己的图，assemble_selected 要三个来源的图都在，返回 None 且 --assemble 退出码 0，a_sam3_selected/FGADR 不会存在；三个措辞进程并发时还有 copytree 撞 rmtree 的竞态。
 2. 改动：sam3_text.run 先评自己的目录且不删图（--drop-maps 对措辞运行无效），再在选择已填时拼装（队列里的措辞项带 --no-assemble，不拼装）；assemble_selected 成为 a_sam3_selected 的唯一写者：缺措辞运行抛 FileNotFoundError（run 里 missing_ok 返回 None），图已丢且目标未拼装抛错，全量请求遇到冒烟的措辞运行抛 ValueError，复制经 prob_*.partial 暂存后 rename，评测前 ensure_pool_selected 补拼池上的 a_sam3_selected（启动器已用闸门保证，这里兜手动运行），评测完且集合在 drop_maps 里才用 outputs.drop_maps_of 删三个措辞目录和自己的图（done.json 记 maps_dropped）。--assemble 缺来源时非零退出。启动器：措辞项 argv 带 --no-assemble、owns_drop 为 False 不接 --drop-maps，拼装项接。
 3. 测试：test_e5_infer 加 1 个（FGADR 做 drop-maps 集：措辞测试运行保留图，拼装在没人预先拼池的情况下补拼池、评出 pool val_opt、删三个措辞目录和自己的图、幂等；冒烟措辞运行拒绝全量拼装、接受冒烟拼装），test_launch_e5_infer 加 1 个（措辞项 --no-assemble 不接 --drop-maps，拼装项接）。原有的 SAM 3 用例不改照过。整套 bench/tests 预期 201 / 18 / 6 / 4。17 第六节 e 步、18 第三、五节同步。
+
+E5 推理档评审修复 5：SAM 3 构建传设备类型字串，构建后核对（2026-10-12，工作站albert；待提交）
+1. A4：sam3_text.build_scorer 把 torch.device 对象传给 build_sam3_image_model，sam3 2345a4a 的 _setup_device_and_mode 只在 device == "cuda"（字串比较）时 model.cuda()；工作站albert 在 torch 2.11 实测 torch.device("cuda") == "cuda" 为 False，模型会留在 CPU、输入在 GPU，冒烟第一窗报设备不一致。sam3 的 decoder.py:301 和 io_utils.py 多处还硬编码默认 CUDA 设备，所以 cuda:N（N>0）本就跑不了。
+2. 改动：新增 sam3_device(device) 返回 (torch.device, 给 builder 的类型字串)，cuda 且 index 非 0 时抛 ValueError 提示用 CUDA_VISIBLE_DEVICES 选卡（队列本就这样分卡）；builder 和 Sam3Processor 都收字串；新增 check_placed 构建后核对全部参数所在设备，不符抛 RuntimeError；predicted.json 多记 builder_device。不加 torch.cuda.set_device（用户 2026-10-12 决定）。
+3. 测试：test_e5_infer 加 1 个（断言前提 torch.device("cuda") != "cuda"；cpu / cuda / cuda:0 的返回；cuda:1 拒绝；check_placed 对 CPU 上的小模型放行 cpu、拒绝 cuda）。真实权重的构建仍要服务器冒烟（18 第八节）。整套 bench/tests 预期 202 / 18 / 6 / 4。18 第三、八节同步。
 

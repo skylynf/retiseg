@@ -24,6 +24,8 @@ AUPR; it prints the yaml to paste into e5_frozen.yaml.
 
 Environment: retiseg-sam3 (Python 3.12, torch >= 2.7, CUDA >= 12.6;
 bench/scripts/cluster_env.sh install_sam3). SAM 3 is under the SAM License.
+The card is chosen with CUDA_VISIBLE_DEVICES (the queue does that); --device
+cuda:N with N > 0 is refused, see sam3_device.
 
     python -m bench.e5.sam3_text --phrase 0 --set DDR --split val [--no-assemble]
     python -m bench.e5.sam3_text --select                      # after the pool runs of the three indices
@@ -97,11 +99,34 @@ class Sam3Scorer:
         return np.clip(prob.float().cpu().numpy(), 0.0, 1.0)
 
 
-def build_scorer(frozen, device=None, window=None):
-    """The official model and processor at the registered confidence threshold; returns (scorer, record)."""
+def sam3_device(device=None):
+    """(torch.device, the string the official builder needs) for SAM 3; review fix 5 (A4).
+
+    sam3 at 2345a4a moves the model only when its ``device`` argument equals the
+    string "cuda" (model_builder._setup_device_and_mode compares with ==, and a
+    torch.device never equals a string), and builds parts on the default CUDA
+    device anyway (model/decoder.py:301, model/io_utils.py). So the builder and
+    Sam3Processor get the device type as a string, the card is chosen with
+    CUDA_VISIBLE_DEVICES as the queue does, and another index is refused.
+    """
     import torch
 
     device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
+    if device.type == "cuda" and device.index not in (None, 0):
+        raise ValueError(f"SAM 3 runs on the default CUDA device; select the card with CUDA_VISIBLE_DEVICES, not --device {device}")
+    return device, device.type
+
+
+def check_placed(model, device_type):
+    """Raise unless every parameter of ``model`` is on ``device_type`` (the builder's silent CPU fall-back would surface at the first window)."""
+    placed = sorted({parameter.device.type for parameter in model.parameters()})
+    if placed != [device_type]:
+        raise RuntimeError(f"SAM 3 was built on {placed}, not on {device_type}; the official builder moves the model only for device == 'cuda'")
+
+
+def build_scorer(frozen, device=None, window=None):
+    """The official model and processor at the registered confidence threshold; returns (scorer, record)."""
+    device, builder_device = sam3_device(device)
     sam3 = spec(frozen)
     checkpoint = foundation.weights(sam3["checkpoint"])
     resolution = int(window if window is not None else geo.window_size(frozen, MODEL))
@@ -109,11 +134,13 @@ def build_scorer(frozen, device=None, window=None):
         from sam3.model.sam3_image_processor import Sam3Processor
         from sam3.model_builder import build_sam3_image_model
 
-        model = build_sam3_image_model(checkpoint_path=str(checkpoint), load_from_HF=False, device=device)
-        processor = Sam3Processor(model, resolution=resolution, device=device, confidence_threshold=float(sam3["confidence_threshold"]))
+        model = build_sam3_image_model(checkpoint_path=str(checkpoint), load_from_HF=False, device=builder_device)
+        check_placed(model, builder_device)
+        processor = Sam3Processor(model, resolution=resolution, device=builder_device, confidence_threshold=float(sam3["confidence_threshold"]))
     record = {
         "checkpoint": out.checkpoint_record(checkpoint),
         "device": str(device),
+        "builder_device": builder_device,
         "resolution": resolution,
         "confidence_threshold": float(sam3["confidence_threshold"]),
         "pixel_score": sam3["pixel_score"],
