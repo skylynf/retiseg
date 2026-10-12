@@ -106,25 +106,28 @@ def test_assert_ready_gates_test_splits_on_the_pool_selections(tmp_path):
     frozen = fz.load_frozen()
     # the pool needs nothing filled; a test split needs both selections
     fz.assert_ready(frozen, "a", "val")
-    with pytest.raises(ValueError, match="grid.selected is empty"):
+    with pytest.raises(ValueError, match="grid.selected is empty for SAM"):
         fz.assert_ready(frozen, "a", "test")
-    with pytest.raises(ValueError, match="grid.selected is empty"):
+    with pytest.raises(ValueError, match="grid.selected is empty for SAM 2"):
         fz.assert_ready(frozen, "a", "test", model="SAM 2")
     with pytest.raises(ValueError, match="sam3.selected lacks"):
         fz.assert_ready(frozen, "a", "test", model="SAM 3")
     with pytest.raises(ValueError, match="zero-shot models"):
         fz.assert_ready(frozen, "a", "test", model="MedSAM")
 
-    def fill(density, cap, phrases):
+    def fill(density, cap, phrases, models=("SAM", "SAM 2")):
         def apply(doc):
-            doc["zero_shot"]["grid"]["selected"] = {"points_per_side": density, "area_cap_fraction": cap}
+            doc["zero_shot"]["grid"]["selected"] = {model: {"points_per_side": density, "area_cap_fraction": cap} for model in models}
             doc["zero_shot"]["sam3"]["selected"] = phrases
         return apply
 
     good = {"MA": "red dot", "HE": "retinal hemorrhage", "EX": "hard exudate", "SE": "soft exudate"}
     filled = fz.load_frozen(_toy_frozen(tmp_path, zero_shot=fill(128, 0.02, good)))
     fz.assert_ready(filled, "a", "test")
-    assert fz.selected_pair(filled) == (128, 0.02) and fz.selected_phrases(filled) == good
+    assert fz.selected_pair(filled, "SAM") == (128, 0.02) and fz.selected_pairs(filled) == {"SAM": (128, 0.02), "SAM 2": (128, 0.02)}
+    assert fz.selected_phrases(filled) == good
+    with pytest.raises(ValueError, match="not 'SAM 3'"):
+        fz.selected_pair(filled, "SAM 3")
     off_grid = fz.load_frozen(_toy_frozen(tmp_path, zero_shot=fill(96, 0.02, good)))
     with pytest.raises(ValueError, match="not in the registered grid"):
         fz.assert_ready(off_grid, "a", "test", model="SAM")
@@ -597,9 +600,9 @@ class _FakeGenerator:
 
 
 def _filled_frozen(tmp_path, density, cap, name="filled.yaml"):
-    """The real protocol with the pool selections filled in."""
+    """The real protocol with the pool selections filled in (the same pair for SAM and SAM 2)."""
     doc = yaml.safe_load(FROZEN.read_text())
-    doc["zero_shot"]["grid"]["selected"] = {"points_per_side": density, "area_cap_fraction": cap}
+    doc["zero_shot"]["grid"]["selected"] = {model: {"points_per_side": density, "area_cap_fraction": cap} for model in ("SAM", "SAM 2")}
     doc["zero_shot"]["sam3"]["selected"] = {"MA": "red dot", "HE": "retinal hemorrhage", "EX": "hard exudate", "SE": "soft exudate"}
     path = tmp_path / name
     path.write_text(yaml.safe_dump(doc))
@@ -986,7 +989,7 @@ def test_sam3_phrase_runs_selection_and_assembly(tmp_path, monkeypatch):
         sam3_text.run(0, "DDR", "test", scorer=fake, frozen=frozen, data_dir=root, long_side=20, window=8, pool=pool)
     doc = yaml.safe_load(FROZEN.read_text())
     doc["zero_shot"]["sam3"]["selected"] = {cls: chosen[cls]["phrase"] for cls in chosen}
-    doc["zero_shot"]["grid"]["selected"] = {"points_per_side": 64, "area_cap_fraction": 1.0}
+    doc["zero_shot"]["grid"]["selected"] = {model: {"points_per_side": 64, "area_cap_fraction": 1.0} for model in ("SAM", "SAM 2")}
     filled_path = tmp_path / "filled.yaml"
     filled_path.write_text(yaml.safe_dump(doc))
     filled = fz.load_frozen(filled_path)
@@ -1200,3 +1203,56 @@ def test_decoder_box_turns_the_exclusive_file_box_into_inclusive_pixel_indices()
     assert prompted.decoder_box([6, 5, 10, 9], 4, 4) == [2, 1, 5, 4]  # a 4 x 4 component in the window at (4, 4)
     assert prompted.decoder_box([20, 1, 21, 2], 0, 0) == [20, 1, 20, 1]  # a single pixel: zero width, not two pixels
     assert prompted.box_center([6, 5, 10, 9]) == (7.5, 6.5)  # the centre of the same pixels
+
+
+# ---- review fix 7 (B1): the grid is selected per model on the pooled any-lesion AUPR -------------------
+
+
+def test_select_grid_picks_per_model_on_the_pooled_any_lesion_aupr(tmp_path, monkeypatch):
+    import json
+
+    import pytest
+
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.eval.evaluate import load_protocol
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    proto = load_protocol(REPO / "bench/eval/protocol.yaml")
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0", "v1"]})
+    pool = [("DDR", root, "val")]
+    # a partly filled selection gates only the model it names
+    partly = fz.load_frozen(_toy_frozen(tmp_path, zero_shot=lambda doc: doc["zero_shot"]["grid"].__setitem__("selected", {"SAM": {"points_per_side": 64, "area_cap_fraction": 1.0}})))
+    fz.assert_ready(partly, "a", "test", model="SAM")
+    with pytest.raises(ValueError, match="grid.selected is empty for SAM 2"):
+        fz.assert_ready(partly, "a", "test")
+    with pytest.raises(ValueError, match="mapping of model"):
+        fz.load_frozen(_toy_frozen(tmp_path, zero_shot=lambda doc: doc["zero_shot"]["grid"].__setitem__("selected", {"points_per_side": 64, "area_cap_fraction": 1.0})))
+    # selection refuses until every (model, density) pool run exists
+    with pytest.raises(FileNotFoundError, match="every grid pair"):
+        amg.select_grid(frozen, proto, pool=pool)
+    for model in ("SAM", "SAM 2"):
+        for density in (64, 128):
+            amg.run(model, density, "DDR", "val", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8)
+    chosen, table = amg.select_grid(frozen, proto, pool=pool)
+    assert set(chosen) == {"SAM", "SAM 2"} and all(set(table[m]) == set(fz.grid_pairs(frozen)) for m in chosen)
+    for model, pick in chosen.items():
+        pair = (pick["points_per_side"], pick["area_cap_fraction"])
+        assert pair in fz.grid_pairs(frozen) and pick["aupr"] == max(table[model].values())
+        assert pick["points_per_side"] == 64  # the fake masks do not depend on the density: the tie goes to the lower one
+        # on a single pool set the pooled statistic is that run's own any-lesion AUPR
+        name = "DDR-val" + (f"__{amg.cap_token(pair[1])}" if amg.cap_token(pair[1]) else "")
+        done = json.loads((tmp_path / "runs" / "E5" / "a" / amg.source_name(frozen, model, 64) / name / "done.json").read_text())
+        assert abs(done["summary"]["AUPR_any_lesion"] - pick["aupr"]) < 1e-9
+    assert table["SAM"][(64, 0.005)] < table["SAM"][(64, 1.0)]  # the 1-pixel cap removes every fake mask
+    # the printed yaml fills zero_shot.grid.selected for both models
+    snippet = amg.format_selected_yaml(chosen, table)
+    doc = yaml.safe_load(FROZEN.read_text())
+    doc["zero_shot"]["grid"].update(yaml.safe_load(snippet))
+    (tmp_path / "selected.yaml").write_text(yaml.safe_dump(doc))
+    filled = fz.load_frozen(tmp_path / "selected.yaml")
+    assert fz.selected_pairs(filled) == {m: (chosen[m]["points_per_side"], chosen[m]["area_cap_fraction"]) for m in chosen}
+    assert "SAM 2:" in snippet and "pool AUPR_any_lesion" in snippet

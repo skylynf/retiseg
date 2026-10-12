@@ -126,7 +126,7 @@ def discover(frozen):
     """
     items = []
     pool_sets = [(name, split) for name, _dir, split in fz.pool_sets(frozen)]
-    grid_selected = _filled(fz.selected_pair, frozen)
+    grid_selected = _filled(fz.selected_pairs, frozen)  # every automatic-mask model has its pair
     sam3_selected = _filled(fz.selected_phrases, frozen)
     densities = [int(d) for d in frozen["zero_shot"]["grid"]["points_per_side"]]
     for set_name, split, variant in targets(frozen):
@@ -136,7 +136,7 @@ def discover(frozen):
         # a: automatic masks
         if pool_run or grid_selected:
             for model in amg.MODELS:
-                for density in densities if pool_run else [fz.selected_pair(frozen)[0]]:
+                for density in densities if pool_run else [fz.selected_pair(frozen, model)[0]]:
                     if amg.budget_rule_skips(frozen, split, density, set_name, variant):
                         continue
                     source, _directories, dirs = amg.planned(frozen, model, density, set_name, split, variant)

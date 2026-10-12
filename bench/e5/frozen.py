@@ -2,7 +2,8 @@
 
 The file holds the inference tiers' own settings (docs/design/15 sections 4-6 under the
 docs/paper/16 scope, aligned 2026-10-12). Two fields are "filled from validation":
-``zero_shot.grid.selected`` (the automatic-mask density and area cap) and
+``zero_shot.grid.selected`` (the automatic-mask density and area cap, one pair per
+model: SAM and SAM 2 are selected separately, review fix 7 / B1) and
 ``zero_shot.sam3.selected`` (one phrase per class). Both are written once from the
 validation pool and must be present before any test split is read; a run on the pool
 itself needs neither. The oracle tier reads one prompt file per (test set, split)
@@ -19,6 +20,7 @@ PROMPTS_DIR = REPO / "runs" / "E5_prompts"
 CLASSES = ("MA", "HE", "EX", "SE")
 TIERS = ("a", "b")
 ZERO_SHOT_MODELS = ("SAM", "SAM 2", "SAM 3")
+GRID_MODELS = ("SAM", "SAM 2")  # the automatic-mask models: each gets its own pair of zero_shot.grid.selected
 POOL_SPLIT = "val"
 
 _REQUIRED = {
@@ -28,7 +30,7 @@ _REQUIRED = {
     "oracle": ("models", "checkpoints", "k", "curve_sets", "order", "box", "point", "decode", "medsam",
                "same_information_reference"),
 }
-_GRID_KEYS = ("points_per_side", "area_cap_fraction", "select_on", "select_by", "selected")
+_GRID_KEYS = ("points_per_side", "area_cap_fraction", "select_on", "select_by", "select_rule", "selected")
 
 
 def load_frozen(path=None):
@@ -52,6 +54,9 @@ def validate(frozen):
         raise ValueError(f"e5_frozen.yaml zero_shot.grid lacks {missing}")
     if not grid["points_per_side"] or not grid["area_cap_fraction"]:
         raise ValueError("e5_frozen.yaml zero_shot.grid lists at least one density and one area cap")
+    selected = grid.get("selected") or {}
+    if not isinstance(selected, dict) or any(model not in GRID_MODELS for model in selected):
+        raise ValueError(f"e5_frozen.yaml zero_shot.grid.selected is a mapping of model -> pair for {GRID_MODELS}, got {selected}")
     sam3 = frozen["zero_shot"]["sam3"]
     phrases = sam3.get("phrases") or {}
     if set(phrases) != set(CLASSES) or any(len(items) != 3 for items in phrases.values()):
@@ -84,19 +89,27 @@ def grid_pairs(frozen):
     return [(int(density), float(cap)) for density in grid["points_per_side"] for cap in grid["area_cap_fraction"]]
 
 
-def selected_pair(frozen):
-    """The pair chosen on the pool; ValueError while it is unfilled or outside the grid."""
+def selected_pair(frozen, model):
+    """The (density, cap) chosen for ``model`` on the pool; ValueError while it is unfilled or outside the grid."""
+    if model not in GRID_MODELS:
+        raise ValueError(f"the grid is selected for {GRID_MODELS}, not {model!r}")
     grid = frozen["zero_shot"]["grid"]
-    chosen = grid.get("selected") or {}
+    chosen = (grid.get("selected") or {}).get(model) or {}
     if not chosen:
-        raise ValueError("zero_shot.grid.selected is empty: choose the density and area cap on the validation pool first")
+        raise ValueError(f"zero_shot.grid.selected is empty for {model}: choose the density and area cap on the validation pool first "
+                         "(python -m bench.e5.amg --select)")
     try:
         pair = (int(chosen["points_per_side"]), float(chosen["area_cap_fraction"]))
     except (KeyError, TypeError, ValueError) as error:
-        raise ValueError(f"zero_shot.grid.selected needs points_per_side and area_cap_fraction, got {chosen}") from error
+        raise ValueError(f"zero_shot.grid.selected.{model} needs points_per_side and area_cap_fraction, got {chosen}") from error
     if pair not in grid_pairs(frozen):
-        raise ValueError(f"zero_shot.grid.selected {pair} is not in the registered grid {grid_pairs(frozen)}")
+        raise ValueError(f"zero_shot.grid.selected.{model} {pair} is not in the registered grid {grid_pairs(frozen)}")
     return pair
+
+
+def selected_pairs(frozen):
+    """{model: (density, cap)} for every automatic-mask model; ValueError while one is unfilled."""
+    return {model: selected_pair(frozen, model) for model in GRID_MODELS}
 
 
 def phrase_ids(frozen):
@@ -145,8 +158,9 @@ def prompt_file(set_name, split, prompts_dir=None, variant=MAIN_VARIANT):
 def assert_ready(frozen, tier, split, model=None, set_name=None, prompts_dir=None, variant=MAIN_VARIANT):
     """Raise before a run that would read a test split with an unfilled selection, or has no prompt file.
 
-    Tier "a" on a test split needs zero_shot.grid.selected (SAM, SAM 2) and
-    zero_shot.sam3.selected (SAM 3); ``model`` None checks both. A pool run
+    Tier "a" on a test split needs zero_shot.grid.selected for the model (SAM,
+    SAM 2; each has its own pair) and zero_shot.sam3.selected (SAM 3); ``model``
+    None checks every selection. A pool run
     (split "val") needs neither. Tier "b" needs the prompt file of
     (set_name, split), for the pool as well.
     """
@@ -157,8 +171,10 @@ def assert_ready(frozen, tier, split, model=None, set_name=None, prompts_dir=Non
             raise ValueError(f"zero-shot models are {ZERO_SHOT_MODELS}, got {model!r}")
         if is_pool_split(split):
             return
-        if model in (None, "SAM", "SAM 2"):
-            selected_pair(frozen)
+        if model is None:
+            selected_pairs(frozen)
+        elif model in GRID_MODELS:
+            selected_pair(frozen, model)
         if model in (None, "SAM 3"):
             selected_phrases(frozen)
         return

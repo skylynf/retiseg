@@ -32,7 +32,7 @@ from bench import e3a
 from bench.e5 import frozen as fz
 from bench.e5 import geometry as geo
 from bench.eval import pixel
-from bench.eval.evaluate import evaluate, load_protocol, pooled_histograms
+from bench.eval.evaluate import evaluate, load_protocol, pooled_any_lesion_histogram, pooled_histograms
 
 REPO = fz.REPO
 OUT_ROOT = REPO / "runs" / "E5"
@@ -145,14 +145,14 @@ def read_predicted(directory):
     return json.loads(path.read_text())
 
 
-def _pool_totals(tier, source, frozen, proto, pool=None, variants=()):
-    """{cls: [pos, neg]} pixel histograms pooled over the source's pool runs, or None until all exist.
+def _pool_maps(tier, source, frozen, pool=None, variants=()):
+    """[(prepared dir, split, maps dir)] of the source's finished full pool runs, or None until all exist.
 
     A pool run made with --limit does not count as existing: a selection or a
     threshold never comes from the first N pool images.
     """
     pool = fz.pool_sets(frozen) if pool is None else list(pool)
-    totals = None
+    found = []
     for name, data_dir, split in pool:
         directory = out_dir(tier, source, set_dirname(pool_set_dirname(name), variants))
         maps = pred_dir(directory, split)
@@ -160,6 +160,17 @@ def _pool_totals(tier, source, frozen, proto, pool=None, variants=()):
             return None
         if read_predicted(directory).get("limit") is not None:
             return None
+        found.append((data_dir, split, maps))
+    return found
+
+
+def _pool_totals(tier, source, frozen, proto, pool=None, variants=()):
+    """{cls: [pos, neg]} pixel histograms pooled over the source's pool runs, or None until all exist."""
+    found = _pool_maps(tier, source, frozen, pool, variants)
+    if found is None:
+        return None
+    totals = None
+    for data_dir, split, maps in found:
         hist = pooled_histograms(data_dir, split, maps, proto)
         if totals is None:
             totals = {cls: [pos.copy(), neg.copy()] for cls, (pos, neg) in hist.items()}
@@ -214,6 +225,23 @@ def evaluation_scope(directory, all_ids):
     limit = read_predicted(directory).get("limit")
     ids = list(all_ids) if limit is None else list(all_ids)[: int(limit)]
     return limit, list(all_ids)[len(ids):]
+
+
+def pool_any_lesion_aupr(tier, source, frozen, proto, pool=None, variants=()):
+    """The any-lesion AUPR on the pixel histograms pooled over the source's pool runs, or None until all exist.
+
+    The selection statistic of the automatic-mask grid (e5_frozen.yaml zero_shot.grid.select_by,
+    select_rule): on a single pool set it equals that run's summary["AUPR_any_lesion"].
+    """
+    found = _pool_maps(tier, source, frozen, pool, variants)
+    if found is None:
+        return None
+    pos_total = neg_total = None
+    for data_dir, split, maps in found:
+        pos, neg = pooled_any_lesion_histogram(data_dir, split, maps, proto)
+        pos_total = pos.copy() if pos_total is None else pos_total + pos
+        neg_total = neg.copy() if neg_total is None else neg_total + neg
+    return float(pixel.average_precision(pos_total, neg_total))
 
 
 def pool_class_aupr(tier, source, frozen, proto, pool=None, variants=()):

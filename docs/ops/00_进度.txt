@@ -85,8 +85,14 @@ E5 推理档评审修复 5：SAM 3 构建传设备类型字串，构建后核对
 2. 改动：新增 sam3_device(device) 返回 (torch.device, 给 builder 的类型字串)，cuda 且 index 非 0 时抛 ValueError 提示用 CUDA_VISIBLE_DEVICES 选卡（队列本就这样分卡）；builder 和 Sam3Processor 都收字串；新增 check_placed 构建后核对全部参数所在设备，不符抛 RuntimeError；predicted.json 多记 builder_device。不加 torch.cuda.set_device（用户 2026-10-12 决定）。
 3. 测试：test_e5_infer 加 1 个（断言前提 torch.device("cuda") != "cuda"；cpu / cuda / cuda:0 的返回；cuda:1 拒绝；check_placed 对 CPU 上的小模型放行 cpu、拒绝 cuda）。真实权重的构建仍要服务器冒烟（18 第八节）。整套 bench/tests 预期 202 / 18 / 6 / 4。18 第三、八节同步。
 
-E5 推理档评审修复 6：送解码器的框改为含端点像素下标（2026-10-12，工作站albert；待提交）
+E5 推理档评审修复 6：送解码器的框改为含端点像素下标（2026-10-12，工作站albert；提交 df2c28d）
 1. B5：提示文件的紧框是 [x0, y0, x1, y1]、右下不含（x1 = 最大列 + 1），prompted.py 原样送解码器。SAM 系 prompt encoder 把坐标当像素下标并加 0.5 取像素中心，SAM 自己的 batched_mask_to_box 返回含端点的最大下标，MedSAM 训练用 np.max(x_indices) 也含端点，所以送进去的框右、下各大一像素；对几像素宽的 MA 偏差占比不小，实际影响估计很小（位置编码在 1/16 尺度），但属登记事项，必须早于第一次 b 档运行定下。
 2. 决定（用户 2026-10-12 采纳）：不改提示文件（same_info.py 的切片并集用不含端点是对的），在送解码器处转换。改动：prompted.decoder_box 返回 [x0−left, y0−top, x1−1−left, y1−1−top]，decode_image 改用；e5_frozen.yaml oracle.box 写明两套约定（读到首个 E5 测试指标前的登记，尚无任何 b 档运行）；15 第六节第 2 条、14 M9 理想提示段加一句；测试的假解码器改成和真解码器一样按含端点读框。
 3. 测试：test_e5_infer 加 1 个（decoder_box 的两例，单像素连通域得零宽框），原 prompted 用例加断言（送给假解码器的每个框等于 decoder_box 的结果）。整套 bench/tests 预期 203 / 18 / 6 / 4。
+
+E5 推理档评审修复 7：a 档网格每模型各选一组，amg --select（2026-10-12，工作站albert；待提交）
+1. B1：a 档网格的选择没有脚本（SAM 3 有 --select，网格没有）；grid.selected 只有一组，SAM 与 SAM 2 共用；pool_class_aupr 算的是逐类 AUPR，登记的任意病灶 AUPR 在合并直方图上没有实现；两模型在池上的最优组不同时按什么合并没有登记。这是预登记的选择点，必须在第一次池运行前写死。
+2. 决定（用户 2026-10-12 采纳工作站albert 建议）：每模型各选一组。理由：两个生成器的默认阈值不同（SAM pred_iou 0.88、SAM 2.1 0.8），同一密度和上限对两者的最优点未必一致，共用一组会让其中一个吃亏；统计量为两个池集合并像素直方图的任意病灶 AUPR（与阈值的合并方式一致），并列取低密度、再取大上限。e5_frozen.yaml 新增 zero_shot.grid.select_rule，selected 改为 {SAM: {...}, SAM 2: {...}}，budget_rule 改为按模型生效；16 E5a 行、15 第三节第 8 条、14 M9 零样本段加带日期的一句。读到首个 E5 测试指标前的登记，尚无任何池运行。
+3. 改动：frozen.selected_pair(frozen, model)、selected_pairs、validate 校验映射与 select_rule；evaluate.pooled_any_lesion_histogram（与 evaluate() 的 any_pooled 同一累加）；outputs._pool_maps 抽出池目录检查，pool_any_lesion_aupr 新增；amg.select_grid、format_selected_yaml、CLI --select（--model/--density/--set 改为运行时必填）；amg.planned / run 按模型取组；启动器按模型取密度，全部模型都选好才列测试项。17 第六节 d 步改为跑 --select。
+4. 测试：test_e5_infer 加 1 个（部分填写只放行所点名的模型、扁平写法拒绝、缺池运行拒绝、两模型四个池运行后选出的组在网格内且等于表中最大、密度并列取 64、单池集时统计量等于该目录 done.json 的 AUPR_any_lesion、1 像素上限最差、打印的 yaml 粘回后 selected_pairs 可读）；现有填 selected 的用例改为按模型嵌套，启动器预算规则用例改为 SAM 128、SAM 2 64 各自生效。整套 bench/tests 预期 204 / 18 / 6 / 4。
 

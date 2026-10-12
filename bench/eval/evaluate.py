@@ -73,6 +73,27 @@ def pooled_histograms(dataset_dir, split, pred_dir, proto):
     return pooled
 
 
+def pooled_any_lesion_histogram(dataset_dir, split, pred_dir, proto):
+    """(pos, neg) pixel histograms of the class-agnostic score against the union ground truth, pooled over ``split``.
+
+    The same accumulation evaluate() does for summary["AUPR_any_lesion"] (protocol
+    any_lesion); bench/e5 pools it further over the validation pool to select the
+    automatic-mask grid (bench/e5/amg.py --select).
+    """
+    if proto.get("any_lesion") is None:
+        raise ValueError("the protocol has no any_lesion entry")
+    classes = _classes(dataset_dir, proto)
+    L = proto["prob_levels"]
+    pos_total, neg_total = np.zeros(L + 1, np.int64), np.zeros(L + 1, np.int64)
+    for image_id in io.load_split(dataset_dir, split):
+        _, valid, masks, probs = _load_image(dataset_dir, pred_dir, image_id, classes, proto)
+        truth, region, score = any_lesion(valid, masks, probs, classes)
+        pos, neg = pixel.histograms(score, truth, region, L)
+        pos_total += pos
+        neg_total += neg
+    return pos_total, neg_total
+
+
 def any_lesion(valid, masks, probs, classes):
     """Union ground truth, pixelwise max score, and the region it is scored on.
 

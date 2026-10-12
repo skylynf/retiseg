@@ -17,12 +17,19 @@ a pool run, plus the canvas variant):
         with the selected cap applied; the cap is recorded in predicted.json, not in the name, so the
         main result of a set is always the plain <base> directory.
 
+Selection (D1, D2; review fix 7 / B1): each model gets its own pair. select_grid pools
+the any-lesion pixel histograms of a model's pool runs over both pool sets for every
+(density, cap) of the grid, takes the pair with the highest any-lesion AUPR (ties to the
+lower density, then the larger cap) and prints the yaml to paste into
+e5_frozen.yaml zero_shot.grid.selected: python -m bench.e5.amg --select.
+
 The any-lesion map is stored under all four class names (D8). The registered
 budget rule (zero_shot.grid.budget_rule) skips the per-degree main variant of
 TJDR_uwf when the selected density is the largest of the grid. Seconds per
 window are recorded in predicted.json so the server smoke yields the real cost.
 
     python -m bench.e5.amg --model SAM --density 64 --set DDR --split val
+    python -m bench.e5.amg --select                                   # after the pool runs of every grid pair
     python -m bench.e5.amg --model "SAM 2" --density 64 --set DiaRetDB1 --split test --geometry G1 [--variant fov]
         [--device cuda:0] [--predict-only] [--drop-maps FGADR,Retinal-Lesions] [--limit 2]
 """
@@ -180,7 +187,7 @@ def targets_for(frozen, split, canvas_variants, selected_cap=None):
 def planned(frozen, model, density, set_name, split, variant=geo.MAIN):
     """(source, {dirname: (tokens, cap, kind)}, {dirname: path}) of one run; a test split needs grid.selected."""
     pool_run = fz.is_pool_split(split)
-    selected_cap = None if pool_run else fz.selected_pair(frozen)[1]
+    selected_cap = None if pool_run else fz.selected_pair(frozen, model)[1]
     source = source_name(frozen, model, density)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if pool_run else set_name
@@ -204,9 +211,9 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
     pool_run = fz.is_pool_split(split)
     selected_cap = None
     if not pool_run:
-        chosen_density, selected_cap = fz.selected_pair(frozen)
+        chosen_density, selected_cap = fz.selected_pair(frozen, model)
         if density != chosen_density:
-            raise ValueError(f"a test split runs the selected density {chosen_density}, not {density}")
+            raise ValueError(f"a test split runs the selected density {chosen_density} of {model}, not {density}")
     source = source_name(frozen, model, density)
     if budget_rule_skips(frozen, split, density, set_name, variant):
         print(f"{source} {set_name}: skipped by the registered budget rule (largest density, per-degree main variant)", flush=True)
@@ -283,11 +290,49 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
     return {"source": source, "skipped": None, "directories": [str(path) for path in dirs.values()], "n_images": len(ids)}
 
 
+def select_grid(frozen=None, proto=None, pool=None):
+    """Per model, the (density, cap) with the highest any-lesion AUPR pooled over the pool runs; returns (chosen, table).
+
+    chosen: {model: {"points_per_side", "area_cap_fraction", "aupr"}}; table: {model: {(density, cap): aupr}}
+    (None where a pool run is missing). Every pool run of the grid must exist first.
+    Ties go to the lower density, then to the larger cap (e5_frozen.yaml select_rule).
+    """
+    from bench.eval.evaluate import load_protocol
+
+    frozen = frozen or fz.load_frozen()
+    proto = proto if proto is not None else load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
+    table = {model: {} for model in MODELS}
+    for model in MODELS:
+        for density, cap in fz.grid_pairs(frozen):
+            source = source_name(frozen, model, density)
+            table[model][(density, cap)] = out.pool_any_lesion_aupr(TIER, source, frozen, proto, pool=pool, variants=variant_tokens([], cap, ANY))
+    chosen = {}
+    for model in MODELS:
+        values = table[model]
+        missing = [pair for pair, value in values.items() if value is None]
+        if missing:
+            raise FileNotFoundError(f"the pool runs of every grid pair are needed before selecting; {model} lacks {missing}")
+        density, cap = max(values, key=lambda pair: (values[pair], -pair[0], pair[1]))
+        chosen[model] = {"points_per_side": int(density), "area_cap_fraction": float(cap), "aupr": float(values[(density, cap)])}
+    return chosen, table
+
+
+def format_selected_yaml(chosen, table):
+    """The lines to paste under zero_shot.grid in e5_frozen.yaml (selected: {...}) with the pool AUPRs as comments."""
+    lines = ["    selected:  # per model, chosen on the validation pool by pooled any-lesion AUPR (bench/e5/amg.py --select)"]
+    for model, pick in chosen.items():
+        grid = ", ".join(f"p{density} {cap_token(cap) or 'nocap'} {value:.4f}" for (density, cap), value in sorted(table[model].items()))
+        lines.append(f"      {model}: {{points_per_side: {pick['points_per_side']}, area_cap_fraction: {pick['area_cap_fraction']:g}}}"
+                     f"   # pool AUPR_any_lesion {pick['aupr']:.4f}; grid: {grid}")
+    return "\n".join(lines)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="bench.e5.amg", description="SAM / SAM 2.1 automatic masks on one set and split.")
-    parser.add_argument("--model", required=True, choices=MODELS)
-    parser.add_argument("--density", required=True, type=int, help="points_per_side from the registered grid")
-    parser.add_argument("--set", required=True, help="a test set of bench/configs/e3a_frozen.yaml")
+    parser.add_argument("--model", choices=MODELS)
+    parser.add_argument("--density", type=int, help="points_per_side from the registered grid")
+    parser.add_argument("--set", help="a test set of bench/configs/e3a_frozen.yaml")
+    parser.add_argument("--select", action="store_true", help="choose each model's (density, cap) on the validation pool and print the yaml")
     parser.add_argument("--split", default="test", help="test, or val for a pool run")
     parser.add_argument("--geometry", default=geo.G1, choices=geo.GEOMETRIES)
     parser.add_argument("--variant", default=geo.MAIN, help="main, or a comparison variant such as fov for TJDR_uwf")
@@ -296,6 +341,12 @@ def main(argv=None):
     parser.add_argument("--drop-maps", help="comma-separated test sets whose maps are removed after evaluation")
     parser.add_argument("--limit", type=int, help="first N images only (smoke); the directory is predicted again by a later run without --limit")
     args = parser.parse_args(argv)
+    if args.select:
+        chosen, table = select_grid()
+        print(format_selected_yaml(chosen, table))
+        return
+    if args.model is None or args.density is None or args.set is None:
+        parser.error("--model, --density and --set are required for a run (or pass --select)")
     drop = [item.strip() for item in (args.drop_maps or "").split(",") if item.strip()]
     summary = run(args.model, args.density, args.set, args.split, args.geometry, args.variant, args.device,
                   evaluate=not args.predict_only, drop_maps=drop, limit=args.limit)

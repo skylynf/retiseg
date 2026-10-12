@@ -16,7 +16,7 @@ FROZEN = REPO / "bench/configs/e5_frozen.yaml"
 
 def _filled(tmp_path):
     doc = yaml.safe_load(FROZEN.read_text())
-    doc["zero_shot"]["grid"]["selected"] = {"points_per_side": 64, "area_cap_fraction": 0.02}
+    doc["zero_shot"]["grid"]["selected"] = {model: {"points_per_side": 64, "area_cap_fraction": 0.02} for model in ("SAM", "SAM 2")}
     doc["zero_shot"]["sam3"]["selected"] = {"MA": "red dot", "HE": "retinal hemorrhage", "EX": "hard exudate", "SE": "soft exudate"}
     path = tmp_path / "filled.yaml"
     path.write_text(yaml.safe_dump(doc))
@@ -71,13 +71,14 @@ def test_plan_after_the_selections_adds_the_zero_shot_tests_and_the_gated_assemb
     assert gate() == "open"
     # every test item that takes thresholds from the pool is gated on the pool directories of its own source
     assert len(amg_items[0].gate_dirs) == 2 * 9 and all(p.name.split("__")[0].endswith("-val") and p.parent.name == "a_sam_vith_p64" for p in amg_items[0].gate_dirs)
-    # the registered budget rule: at the largest density the TJDR_uwf main variant is left out
+    # the registered budget rule, per model: SAM at the largest density leaves out its TJDR_uwf main variant, SAM 2 at 64 keeps it
     doc = yaml.safe_load((tmp_path / "filled.yaml").read_text())
-    doc["zero_shot"]["grid"]["selected"]["points_per_side"] = 128
+    doc["zero_shot"]["grid"]["selected"]["SAM"]["points_per_side"] = 128
     (tmp_path / "largest.yaml").write_text(yaml.safe_dump(doc))
     largest = fz.load_frozen(tmp_path / "largest.yaml")
     labels = {it.label for it in launch.discover(largest)}
     assert "a_sam_vith_p128:TJDR_uwf:test:fov" in labels and "a_sam_vith_p128:TJDR_uwf:test:main" not in labels
+    assert "a_sam2_hieral21_p64:TJDR_uwf:test:main" in labels and not any(l.startswith("a_sam2_hieral21_p128:") and ":test:" in l for l in labels)
 
 
 def test_done_running_filters_commands_and_only(tmp_path, monkeypatch):
