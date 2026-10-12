@@ -368,7 +368,6 @@ def foundation(sim):
     # Oracle prompts: performance against prompts per image and class.
     ceiling = {
         ("SAM", "box"): {"MA": 0.30, "HE": 0.62, "EX": 0.66, "SE": 0.72},
-        ("SAM", "point"): {"MA": 0.18, "HE": 0.45, "EX": 0.48, "SE": 0.60},
         ("SAM 2", "box"): {"MA": 0.33, "HE": 0.66, "EX": 0.69, "SE": 0.75},
         ("SAM 2", "point"): {"MA": 0.20, "HE": 0.50, "EX": 0.52, "SE": 0.63},
         ("MedSAM", "box"): {"MA": 0.22, "HE": 0.58, "EX": 0.57, "SE": 0.70},
@@ -379,7 +378,7 @@ def foundation(sim):
     for (model, kind), ceil in ceiling.items():
         for test in ("IDRiD", "DDR", "TJDR-std"):
             scale = {"IDRiD": 1.0, "DDR": 0.88, "TJDR-std": 0.92}[test]
-            for k in (1, 5, 10, 20, "all"):
+            for k in (1, 5, 20, "all"):  # docs/paper/16 E5b (2026-10-12): four levels
                 for cls in CLASSES:
                     frac = 1.0 if k == "all" else k / (k + half[cls])
                     v = np.clip(ceil[cls] * scale * frac + r.normal(0, 0.008), 0.001, 0.95)

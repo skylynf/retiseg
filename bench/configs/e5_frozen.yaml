@@ -3,6 +3,10 @@
 # every B-std model and are rows of bench/configs/bs_jobs.yaml; this file holds what is E5's own.
 # Nothing here changes after the first E5 test metric has been read; the fields marked "filled
 # from validation" are written once, from training and validation data only, before any test run.
+# 2026-10-12 (step 0, workstation albert): the inference tiers (a, b) were aligned with docs/paper/16 rows E5a-E5b
+# before any E5 inference (decisions D1-D9, docs/ops/00 same day): a registered grid chosen on a validation pool
+# instead of the authors' two parameter sets, SAM ViT-B for the oracle tier, k on four levels, points for SAM 2.1
+# only, the TJDR_uwf canvas of the inference tiers, and how the class-agnostic map is stored.
 experiment: E5
 
 # design/15 section 16; the user delegated all five to the recommendations on 2026-10-12.
@@ -13,11 +17,12 @@ decisions:
   code_over_paper: true              # SAM-Adapter batch 2 and unloaded prompt tensors; SAM2-UNet mean BCE
   collapse_rule: same_as_unet        # a class stuck at its prevalence in seed-0 validation -> batch Dice/IoU
   encoder_comparison: full           # five encoders, three learning rates on DDR seed 0, three seeds; cut augreg first
+  inference_scope: docs/paper/16 E5a-E5b   # 2026-10-12, D1-D9: grid on the validation pool, SAM ViT-B for b, k four levels, points SAM 2.1 only
 
 # pretrained/<file>. A missing file stops the job before its first step (bench/models/foundation.py).
 weights:
-  sam_vit_h_4b8939.pth: {source: "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth", used_by: [SAM a, SAM b, SAM-Adapter]}
-  sam_vit_b_01ec64.pth: {source: "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth", used_by: [SAMed]}
+  sam_vit_h_4b8939.pth: {source: "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth", used_by: [SAM a, SAM-Adapter]}
+  sam_vit_b_01ec64.pth: {source: "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth", used_by: [SAMed, SAM b]}
   sam2.1_hiera_large.pt: {source: "https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large.pt", used_by: [SAM 2 a, SAM 2 b]}
   sam2_hiera_large.pt: {source: "https://dl.fbaipublicfiles.com/segment_anything_2/072824/sam2_hiera_large.pt", used_by: [SAM2-UNet]}
   medsam_vit_b.pth: {source: "MedSAM README, Google Drive folder 1ETWmi4AiniJeWOt6HAsYgTjYv_fkgzoN", used_by: [MedSAM b, MedSAM d]}
@@ -45,31 +50,48 @@ encoder_comparison:
   seeds: 3
   lr_choice: {}                      # filled from validation after the seed-0 sweep
 
-# a, zero-shot. Inference only; all seven test sets and the DDR validation split.
+# D2 (2026-10-12, docs/ops/17 section 6): every label-based choice of the inference tiers (the generator grid,
+# the SAM 3 phrase, the Dice thresholds) is made on this pool and nowhere else; no test split is read for it.
+validation_pool:
+  IDRiD: {data: dataset/prepared/IDRiD, split: val}    # 10 images
+  DDR: {data: dataset/prepared/DDR, split: val}        # 149 images
+  thresholds: "per class, the Dice-optimal threshold of the pooled pixel histograms of both splits (bench/eval/pixel.best_dice_threshold); fixed 0.5 is reported as well"
+
+# a, zero-shot. Inference only; all seven test sets and the validation pool.
 geometry:
   G1: {name: canvas windows, window: {SAM: 1024, SAM 2: 1024, MedSAM: 1024, SAM 3: 1008}, overlap: 0.5,
-       TJDR_uwf: "the E3a pixels-per-degree canvas, same windows"}
+       TJDR_uwf: {long_side: 4256, reference: "1440 x 133 / 45: the DDR field of e3a_frozen.yaml train_field_degrees; the inference tiers have no training source, so 45 degrees is fixed here (D7, 2026-10-12), the same canvas as the DDR-trained models in E3a",
+                  comparison_variant: {fov: 1440}}}
   G2: {name: whole field-of-view crop, resize: model default}
   main: G1
 zero_shot:
+  # D1 (docs/paper/16 row E5a, 2026-10-12): a registered grid replaces the authors' two parameter sets.
+  # points_per_side is the only generator parameter that varies; everything else is the library default
+  # of the fixed commit. Each density is one inference pass; the area caps are post-processing of the
+  # same masks. The pair (points_per_side, area_cap_fraction) is chosen on the validation pool by
+  # AUPR_any_lesion and written to `selected`; the seven test sets see the selected pair only, the
+  # pool reports all six pairs (sensitivity). Nothing is tuned on a test split.
+  grid:
+    points_per_side: [64, 128]
+    area_cap_fraction: [0.005, 0.02, 1.0]     # of the canvas field-of-view area; 1.0 = no cap
+    select_on: validation_pool
+    select_by: AUPR_any_lesion
+    selected: {}                              # {points_per_side, area_cap_fraction} filled from the pool before any test run
+    budget_rule: "if 128 is selected, TJDR_uwf runs its fov variant (1440 canvas) only and the per-degree main variant is skipped (registered 2026-10-12; the user may overrule it in 00 once the pool result is in)"
   sam:
     checkpoint: sam_vit_h_4b8939.pth
-    generator:
-      default: {points_per_side: 32, pred_iou_thresh: 0.88, stability_score_thresh: 0.95, box_nms_thresh: 0.7,
-                crop_n_layers: 0, min_mask_region_area: 0}
-      more_masks: {points_per_side: 32, pred_iou_thresh: 0.86, stability_score_thresh: 0.92, crop_n_layers: 1,
-                   crop_n_points_downscale_factor: 2, min_mask_region_area: 100}
+    generator_defaults: {pred_iou_thresh: 0.88, stability_score_thresh: 0.95, box_nms_thresh: 0.7,
+                         crop_n_layers: 0, min_mask_region_area: 0}   # segment_anything/automatic_mask_generator.py:39-50
   sam2:
     checkpoint: sam2.1_hiera_large.pt
-    generator:
-      default: {points_per_side: 32, pred_iou_thresh: 0.8, stability_score_thresh: 0.95, mask_threshold: 0.0,
-                box_nms_thresh: 0.7, use_m2m: false, multimask_output: true}
-      more_masks: {points_per_side: 64, points_per_batch: 128, pred_iou_thresh: 0.7, stability_score_thresh: 0.92,
-                   stability_score_offset: 0.7, crop_n_layers: 1, crop_n_points_downscale_factor: 2,
-                   min_mask_region_area: 25, use_m2m: true, apply_postprocessing: false}
+    generator_defaults: {pred_iou_thresh: 0.8, stability_score_thresh: 0.95, mask_threshold: 0.0,
+                         box_nms_thresh: 0.7, use_m2m: false, multimask_output: true}   # sam2/automatic_mask_generator.py:40-55
   pixel_score: predicted_iou          # stability_score reported as well
-  outputs: {main: any_lesion, upper_bound: oracle_class}
-  area_cap: null                      # largest lesion component on the IDRiD and DDR training canvases, set before inference
+  # D8: the class-agnostic map is written to all four class directories, so bench.eval's AUPR_any_lesion
+  # (max of the four) is that map's pooled AUPR; the per-class AUPRs of that directory are the
+  # "no class assignment" reference, not a result. oracle_class writes four different maps (reads the
+  # test labels: upper bound only). area_cap is the same masks after the cap.
+  outputs: {main: any_lesion, upper_bound: oracle_class, sensitivity: area_cap}
   sam3:
     checkpoint: sam3.pt
     confidence_threshold: 0.0         # keep all 200 queries; the processor default 0.5 cuts the PR curve
@@ -79,16 +101,24 @@ zero_shot:
       HE: [retinal hemorrhage, blot hemorrhage, dark red patch]
       EX: [hard exudate, yellow deposit, bright lesion]
       SE: [cotton wool spot, soft exudate, white fluffy patch]
-    select_on: DDR val, AUPR per class
-    selected: {}                      # filled from DDR validation before any test run
+    select_on: validation_pool (D2), AUPR per class
+    selected: {}                      # filled from the validation pool before any test run
 
 # b, oracle prompts from the test labels: an upper bound, never ranked with the trained rows.
+# D3-D6 (docs/paper/16 row E5b, 2026-10-12): SAM ViT-B boxes only, SAM 2.1 points and boxes, MedSAM boxes;
+# k on four levels; one sampling; k = all on all seven test sets, the k curves on IDRiD and DDR only.
+# SAM ViT-H, box jitter, prompts by area and SAM 3 exemplar boxes are future work.
 oracle:
-  models: {SAM: [points, boxes], SAM 2: [points, boxes], MedSAM: [boxes]}
+  models: {SAM: [boxes], SAM 2: [points, boxes], MedSAM: [boxes]}
+  checkpoints: {SAM: sam_vit_b_01ec64.pth, SAM 2: sam2.1_hiera_large.pt, MedSAM: medsam_vit_b.pth}
   components: 8-connected, on the 1440 canvas ground truth
-  k: [1, 5, 10, 20, all]
+  k: [1, 5, 20, all]
+  curve_sets: [IDRiD, DDR]            # every k; the other five sets get k = all only
   order: "sort by (row, col), then one permutation from PCG64(20261003) spawned per (image, class); smaller k is a prefix"
   box: tight bounding box, no jitter
-  point: the component pixel farthest from its boundary, one positive point
-  decode: "one prompt per call; a point keeps the mask with the highest predicted IoU (multimask), a box one mask"
+  point: the component pixel farthest from its boundary (distance transform; ties to the first in row-major order), one positive point
+  decode: "one prompt per call; a point keeps the mask with the highest predicted IoU (multimask), a box one mask; all prompts are decoded once and the k maps are prefix maxima"
   medsam: "1024 resize with per-image min-max to [0, 1], box only, sigmoid of the 256 output then bilinear"
+  # the same-information reference of 16: the supervised models' own test maps multiplied by the union
+  # of the same k boxes, then evaluated; CPU only (bench/e5/same_info.py)
+  same_information_reference: [M2MRF, nnU-Net]
