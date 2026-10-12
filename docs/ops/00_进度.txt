@@ -46,3 +46,9 @@ E5 推理档步骤 1–6：协议读取、画布与窗口、提示文件、分�
 2. 评测：bench/eval/evaluate.py 的 evaluate 加一个可选参数 val_thresholds，推理档把两个池运行合并直方图的每类 Dice 最优阈值直接传入，指标名与其他模型相同（dice_valopt 等）；不传时行为不变，test_evaluate 全部照旧通过；结果多记一个 val_thresholds_given 字段。
 3. 测试：bench/tests/test_e5_infer.py 共 16 个用例，全部玩具数据和假模型，不读 dataset/、不下权重；整套 182 / 18 / 6 / 4（比基线多的都是新用例，跳过 / 失败 / 错误三个数未变）。
 4. 顺带：TJDR_uwf 的 4256 画布切 1024 窗、重叠 0.5 是每边 8 个起点共 64 窗（E5推理档流程.txt 原估 49 算错，a 档算力估算随之改）。接下来是步骤 7 amg.py、8 prompted.py / same_info.py、9 sam3_text.py，仍只用假模型做单元测试；真实权重与数据的冒烟在服务器（17 第六节）。
+
+E5 推理档步骤 7–9：自动掩码、点框提示、SAM 3 文本（2026-10-12，工作站albert；步骤 7、8 提交 36a43ea、3e181c7，步骤 9 待提交）
+1. bench/e5/amg.py：SAM、SAM 2.1 自动掩码。参数只有网格里的点密度加 yaml 登记的库默认值；池运行对每档面积上限写任意病灶、oracle_class、stability 三种图共九个目录，测试运行只跑选中的一组三个目录，上限只记在 predicted.json；登记的预算规则（最大密度不跑 TJDR_uwf 的每度像素主变体）在代码里实现；每窗耗时写进 predicted.json，供服务器冒烟重估现存问题 7 的算力。
+2. bench/e5/prompted.py：b 档点框提示。每个提示在框中心离窗口边缘最远的窗口里解码，每窗只编码一次；k 图按提示 rank 一遍填成前缀最大值，不存逐提示的图；SAM / SAM 2 共用一个解码器适配（点取 IoU 最高、框取单掩码、logits 过 sigmoid），MedSAM 照 MedSAM_Inference.py；提示文件的集、划分、变体、画布尺寸不符就拒绝。bench/e5/same_info.py：16 的同信息对照，监督模型的原分辨率概率图乘以前 k 个框的并集，只用固定阈值评测。
+3. bench/e5/sam3_text.py：一个运行是一个措辞序号覆盖四类（a_sam3_ph0/1/2），置信阈值 0，像素分数取查询分数乘掩码概率的最大值，窗口 1008；措辞选择按池运行合并像素直方图的每类 AUPR，打印可粘进 e5_frozen.yaml 的 selected；主结果 a_sam3_selected 由选中措辞的图逐类复制拼成，不另推理。环境：bench/scripts/cluster_env.sh 新增 retiseg-sam3（Python 3.12、torch ≥ 2.7、CUDA ≥ 12.6、pip install -e official_code/sam3；RETISEG_SKIP_SAM3=1 跳过），server_run.sh 的 check 阶段在该环境里跑 test_e5_infer.py。
+4. 测试：全部用注入的假生成器 / 假解码器 / 假打分器，不下权重、不读 dataset/；整套 189 / 18 / 6 / 4。真实权重与数据的冒烟仍在服务器（17 第六节）。还没写的：步骤 11 启动器 launch_e5_infer.py 与 server_run.sh 的 e5-infer 阶段、步骤 12a 论文脚本改键、步骤 12 collect_runs.py 读 runs/E5。

@@ -898,3 +898,122 @@ def test_prompted_test_run_uses_pool_thresholds_and_same_info_restricts_referenc
     with pytest.raises(FileNotFoundError, match="prediction directory"):
         same_info.run("M2MRF", ["x"], tmp_path / "nope", "DDR", "test", frozen=frozen, data_dir=root, prompts_dir=pdir)
     np.testing.assert_array_equal(same_info.box_union_mask([], "all", (10, 10), (0, 10, 0, 10), (10, 10)), np.zeros((10, 10), bool))
+
+
+# ---- step 9: bench/e5/sam3_text.py and the retiseg-sam3 environment ---------------------------
+
+
+class _FakeScorer:
+    """Scores depend on the phrase's registered index: 0.1 x (index + 1) over the window, 0.5 + 0.1 x index at its top-left 2 x 2."""
+
+    def __init__(self, phrase_ids):
+        self.by_phrase = {phrase: key for key, phrase in phrase_ids.items()}
+        self.images, self.phrases = [], []
+
+    def set_image(self, image):
+        from PIL import Image
+
+        assert isinstance(image, Image.Image)
+        self.hw = (image.size[1], image.size[0])
+        self.images.append(self.hw)
+
+    def score(self, phrase):
+        import numpy as np
+
+        _cls, index = self.by_phrase[phrase]
+        self.phrases.append(phrase)
+        prob = np.full(self.hw, 0.1 * (index + 1), np.float32)
+        prob[:2, :2] = 0.5 + 0.1 * index
+        return prob
+
+
+def test_sam3_phrase_runs_selection_and_assembly(tmp_path, monkeypatch):
+    import json
+
+    import numpy as np
+    import pytest
+
+    from bench.common.io import read_fov, read_prob_quantized
+    from bench.e5 import frozen as fz
+    from bench.e5 import geometry as geo
+    from bench.e5 import outputs as out
+    from bench.e5 import sam3_text
+    from bench.eval.evaluate import load_protocol
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    proto = load_protocol()
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0", "v1"], "test": ["t0", "t1"]})
+    pool = [("DDR", root, "val")]
+    fake = _FakeScorer(fz.phrase_ids(frozen))
+    assert sam3_text.phrases_for(frozen, 1) == {"MA": "red dot", "HE": "blot hemorrhage", "EX": "yellow deposit", "SE": "soft exudate"}
+    with pytest.raises(ValueError, match="phrase index"):
+        sam3_text.phrases_for(frozen, 3)
+    assert sam3_text.source_name(2) == "a_sam3_ph2" and sam3_text.selected_source() == "a_sam3_selected"
+    # selection needs every index: before any pool run it refuses
+    with pytest.raises(FileNotFoundError, match="every phrase index"):
+        sam3_text.select_phrases(frozen, proto, pool=pool)
+    for index in (0, 1, 2):
+        summary = sam3_text.run(index, "DDR", "val", scorer=fake, frozen=frozen, data_dir=root, long_side=20, window=8)
+        assert summary["assembled"] is None  # nothing selected yet
+    source = tmp_path / "runs" / "E5" / "a"
+    predicted = json.loads((source / "a_sam3_ph1" / "DDR-val" / "predicted.json").read_text())
+    cv = geo.canvas(root, "v0", 20)
+    per_image = len(geo.windows(cv.hw, 8, 0.5))
+    assert predicted["kind"] == "text" and predicted["phrase_index"] == 1 and predicted["phrases"]["EX"] == "yellow deposit"
+    assert predicted["n_windows"] == 2 * per_image and predicted["confidence_threshold"] == 0.0 and predicted["scorer"] == "_FakeScorer"
+    assert predicted["window"] == 8 and all(hw == (8, 8) for hw in fake.images) and len(fake.phrases) == 4 * 3 * 2 * per_image
+    fov = read_fov(root, "v0")
+    q = read_prob_quantized(source / "a_sam3_ph1" / "DDR-val" / "prob_val", "MA", "v0")
+    assert (q[~fov] == 0).all() and q[fov].min() >= round(0.2 * 65535) - 1 and abs(int(q.max()) - round(0.6 * 65535)) <= 1
+    assert json.loads((source / "a_sam3_ph0" / "DDR-val" / "done.json").read_text())["thresholds"] == "fixed only"
+    # selection: per class the index with the highest pooled AUPR, consistent with the table
+    chosen, table = sam3_text.select_phrases(frozen, proto, pool=pool)
+    assert set(chosen) == {"MA", "HE", "EX", "SE"} and all(len(table[cls]) == 3 for cls in table)
+    for cls in chosen:
+        assert chosen[cls]["index"] == int(np.argmax(table[cls])) and chosen[cls]["phrase"] == frozen["zero_shot"]["sam3"]["phrases"][cls][chosen[cls]["index"]]
+    snippet = sam3_text.format_selected_yaml(chosen, table)
+    assert snippet.startswith("    selected:") and all(chosen[cls]["phrase"] in snippet for cls in chosen)
+    # with the selection written, the test split runs; the third index assembles a_sam3_selected and evaluates it with pool thresholds
+    with pytest.raises(ValueError, match="sam3.selected lacks"):
+        sam3_text.run(0, "DDR", "test", scorer=fake, frozen=frozen, data_dir=root, long_side=20, window=8, pool=pool)
+    doc = yaml.safe_load(FROZEN.read_text())
+    doc["zero_shot"]["sam3"]["selected"] = {cls: chosen[cls]["phrase"] for cls in chosen}
+    doc["zero_shot"]["grid"]["selected"] = {"points_per_side": 64, "area_cap_fraction": 1.0}
+    filled_path = tmp_path / "filled.yaml"
+    filled_path.write_text(yaml.safe_dump(doc))
+    filled = fz.load_frozen(filled_path)
+    assert sam3_text.selected_indices(filled) == {cls: chosen[cls]["index"] for cls in chosen}
+    # the pool's selected source first (its thresholds feed the test split)
+    pooled = sam3_text.assemble_selected("DDR", "val", frozen=filled, data_dir=root, pool=pool)
+    assert pooled == source / "a_sam3_selected" / "DDR-val" and out.is_done(pooled)
+    for index in (0, 1, 2):
+        summary = sam3_text.run(index, "DDR", "test", scorer=fake, frozen=filled, data_dir=root, long_side=20, window=8, pool=pool)
+    assert summary["assembled"] == str(source / "a_sam3_selected" / "DDR")
+    selected = json.loads((source / "a_sam3_selected" / "DDR" / "done.json").read_text())
+    assert selected["kind"] == "text_selected" and selected["phrase_index"] == {cls: chosen[cls]["index"] for cls in chosen}
+    assert selected["thresholds"] == "fixed and pool val_opt" and selected["n_images"] == 2
+    for cls in ("MA", "HE", "EX", "SE"):
+        copied = read_prob_quantized(source / "a_sam3_selected" / "DDR" / "prob_test", cls, "t0")
+        original = read_prob_quantized(source / f"a_sam3_ph{chosen[cls]['index']}" / "DDR" / "prob_test", cls, "t0")
+        assert np.array_equal(copied, original)
+    done = json.loads((source / "a_sam3_ph2" / "DDR" / "done.json").read_text())
+    assert done["thresholds"] == "fixed and pool val_opt"
+    # a second assembly leaves the finished directory alone; a run with a scorer rejects numpy windows
+    stamp = (source / "a_sam3_selected" / "DDR" / "predicted.json").stat().st_mtime_ns
+    sam3_text.assemble_selected("DDR", "test", frozen=filled, data_dir=root, pool=pool)
+    assert (source / "a_sam3_selected" / "DDR" / "predicted.json").stat().st_mtime_ns == stamp
+    with pytest.raises(TypeError, match="PIL image"):
+        sam3_text.Sam3Scorer(None).set_image(np.zeros((8, 8, 3), np.uint8))
+
+
+def test_sam3_environment_scripts_parse_and_name_the_env():
+    import subprocess
+
+    for script in ("bench/scripts/cluster_env.sh", "bench/scripts/server_run.sh"):
+        subprocess.run(["bash", "-n", str(REPO / script)], check=True)
+    text = (REPO / "bench/scripts/cluster_env.sh").read_text()
+    assert "install_sam3" in text and "ensure_env retiseg-sam3 3.12" in text and "RETISEG_SKIP_SAM3" in text
+    assert "official_code/sam3" in text and "(2, 7)" in text and "(12, 6)" in text
+    assert "retiseg-sam3" in (REPO / "bench/scripts/server_run.sh").read_text()

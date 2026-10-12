@@ -9,6 +9,9 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 # CUDA 12.4 wheels satisfy the PyTorch 2.x + CUDA 12.x requirement.
 # Override the index with RETISEG_TORCH_INDEX if the cluster mirror differs.
 TORCH_INDEX="${RETISEG_TORCH_INDEX:-https://download.pytorch.org/whl/cu124}"
+# SAM 3 (E5 zero-shot text prompts) needs Python >= 3.12, torch >= 2.7 and CUDA >= 12.6
+# (official_code/sam3/README.md installs torch 2.10 from the cu128 index); it gets its own env.
+TORCH_INDEX_SAM3="${RETISEG_TORCH_INDEX_SAM3:-https://download.pytorch.org/whl/cu128}"
 
 pick_tool() {
   local tool
@@ -178,6 +181,39 @@ install_hacdr() {
   hacdr_ok
 }
 
+# retiseg-sam3: SAM 3 text prompts (bench/e5/sam3_text.py, design/15 section 5.4). The
+# other E5 models run in retiseg. RETISEG_SKIP_SAM3=1 leaves this env out.
+sam3_ok() {
+  run_python retiseg-sam3 -c 'import torch, sam3, bench
+major, minor = (int(v) for v in torch.__version__.split("+")[0].split(".")[:2])
+if (major, minor) < (2, 7):
+    raise SystemExit("torch %s is below 2.7" % torch.__version__)
+cuda = torch.version.cuda or "0.0"
+if tuple(int(v) for v in cuda.split(".")[:2]) < (12, 6):
+    raise SystemExit("torch cuda %s is below 12.6" % cuda)
+print("retiseg-sam3", torch.__version__, "cuda", cuda, "sam3 at", sam3.__file__)'
+}
+
+install_sam3() {
+  ensure_env retiseg-sam3 3.12
+  write_repo_pth retiseg-sam3
+  if sam3_ok; then
+    echo "retiseg-sam3 already imports torch >= 2.7, sam3 and bench"
+    return 0
+  fi
+  run_python retiseg-sam3 -m pip install --upgrade pip
+  run_python retiseg-sam3 -m pip install torch torchvision --index-url "$TORCH_INDEX_SAM3"
+  # the fixed submodule commit, editable, as its README does (pip install -e .)
+  run_python retiseg-sam3 -m pip install -e "$ROOT/official_code/sam3"
+  # import-time needs of sam3 at commit 2345a4a that its pyproject does not declare
+  # (sam3/sam/rope.py einops; sam3/__init__ pycocotools and psutil); einops pinned as in requirements-train.txt
+  run_python retiseg-sam3 -m pip install "einops==0.8.2" pycocotools psutil
+  # bench.eval and bench.e5 need the evaluation requirements only
+  run_python retiseg-sam3 -m pip install -r "$ROOT/bench/requirements-eval.txt"
+  write_repo_pth retiseg-sam3
+  sam3_ok
+}
+
 print_weights() {
   cat <<'EOF'
 weights are not downloaded by this script.
@@ -208,16 +244,32 @@ M2MRF backbone key, not a local file: open-mmlab://msra/hrnetv2_w48
   Google Drive links for the released checkpoints are in official_code/M2MRF/README.md. Not fetched here.
 
 HACDR-Net: pretrained=None and load_from=None. No weight filename is declared.
+
+SAM 3 (retiseg-sam3): filename sam3.pt in pretrained/, Hugging Face facebook/sam3 (gated). Not fetched here.
 EOF
 }
 
 echo "M2MRF runs in retiseg through bench/compat/mmcv."
 echo "HACDR-Net pins mmcv-full==1.6.2 and mmsegmentation 0.30.0 and gets retiseg-hacdr."
 
-install_retiseg
-m2mrf_retiseg_ok
-if [ "${RETISEG_M2MRF_LEGACY:-0}" = "1" ]; then
-  install_m2mrf
-fi
-install_hacdr
-print_weights
+# bash bench/scripts/cluster_env.sh          every env (what server_run.sh env runs)
+# bash bench/scripts/cluster_env.sh sam3     retiseg-sam3 only (a workstation import check)
+# bash bench/scripts/cluster_env.sh retiseg  retiseg only
+case "${1:-all}" in
+  all)
+    install_retiseg
+    m2mrf_retiseg_ok
+    if [ "${RETISEG_M2MRF_LEGACY:-0}" = "1" ]; then
+      install_m2mrf
+    fi
+    install_hacdr
+    if [ "${RETISEG_SKIP_SAM3:-0}" != 1 ]; then
+      install_sam3
+    fi
+    print_weights
+    ;;
+  sam3) install_sam3 ;;
+  retiseg) install_retiseg ;;
+  hacdr) install_hacdr ;;
+  *) echo "usage: cluster_env.sh [all|sam3|retiseg|hacdr]" >&2; exit 2 ;;
+esac

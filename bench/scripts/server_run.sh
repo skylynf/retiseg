@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Stages of the first server batch, in order. Run from anywhere:
 #
-#   bash bench/scripts/server_run.sh env        conda envs (cluster_env.sh)
+#   bash bench/scripts/server_run.sh env        conda envs (cluster_env.sh; also retiseg-sam3 for the E5 text prompts,
+#                                               RETISEG_SKIP_SAM3=1 leaves it out)
 #   bash bench/scripts/server_run.sh check      data, weights, GPUs, test suite
 #   bash bench/scripts/server_run.sh cache      1440 canvas caches
 #   bash bench/scripts/server_run.sh smoke      B1 and B-std smoke, 20 steps each
@@ -140,6 +141,9 @@ resnet101(weights=ResNet101_Weights.IMAGENET1K_V1); resnet34(weights=ResNet34_We
 print("torchvision ImageNet weights cached")'
   py retiseg -m pytest bench/tests -q -p no:cacheprovider
   py retiseg-hacdr -m pytest bench/tests/test_hacdr_recipe.py -q -p no:cacheprovider
+  if "$(pick_tool)" env list | awk 'NF && $1 !~ /^#/ {print $1}' | grep -qx retiseg-sam3; then
+    py retiseg-sam3 -m pytest bench/tests/test_e5_infer.py -q -p no:cacheprovider
+  fi
 }
 
 stage_cache() {

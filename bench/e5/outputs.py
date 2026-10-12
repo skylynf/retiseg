@@ -129,13 +129,8 @@ def read_predicted(directory):
     return json.loads(path.read_text())
 
 
-def pool_thresholds(tier, source, frozen, proto, pool=None, variants=()):
-    """{class: Dice-optimal threshold} on the pooled histograms of the source's pool runs, or None until all exist.
-
-    ``variants`` selects the pool directories that match the test directory
-    (e.g. ("cap0.02",) or ("oracle_class",)); ``pool`` overrides
-    fz.pool_sets(frozen) as [(name, prepared dir, split)] (tests).
-    """
+def _pool_totals(tier, source, frozen, proto, pool=None, variants=()):
+    """{cls: [pos, neg]} pixel histograms pooled over the source's pool runs, or None until all exist."""
     pool = fz.pool_sets(frozen) if pool is None else list(pool)
     totals = None
     for name, data_dir, split in pool:
@@ -150,9 +145,28 @@ def pool_thresholds(tier, source, frozen, proto, pool=None, variants=()):
             for cls, (pos, neg) in hist.items():
                 totals[cls][0] += pos
                 totals[cls][1] += neg
+    return totals
+
+
+def pool_thresholds(tier, source, frozen, proto, pool=None, variants=()):
+    """{class: Dice-optimal threshold} on the pooled histograms of the source's pool runs, or None until all exist.
+
+    ``variants`` selects the pool directories that match the test directory
+    (e.g. ("cap0.02",) or ("oracle_class",)); ``pool`` overrides
+    fz.pool_sets(frozen) as [(name, prepared dir, split)] (tests).
+    """
+    totals = _pool_totals(tier, source, frozen, proto, pool, variants)
     if totals is None:
         return None
     return {cls: float(pixel.best_dice_threshold(pos, neg, proto["prob_levels"])) for cls, (pos, neg) in totals.items()}
+
+
+def pool_class_aupr(tier, source, frozen, proto, pool=None, variants=()):
+    """{class: exact AUPR} on the pooled pixel histograms of the source's pool runs, or None until all exist."""
+    totals = _pool_totals(tier, source, frozen, proto, pool, variants)
+    if totals is None:
+        return None
+    return {cls: float(pixel.average_precision(pos, neg)) for cls, (pos, neg) in totals.items()}
 
 
 def evaluate_dir(directory, set_name, split="test", data_dir=None, proto=None, val_thresholds=None, drop_maps=(), record=None, exclude=()):
