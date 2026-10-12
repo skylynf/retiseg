@@ -117,7 +117,7 @@ M9 基础模型（E5）
   已定（2026-10-12，步骤 0，工作站albert）：推理档按 16 对齐（D1–D9，00 同日记录）：a 档网格 {64, 128} × {0.5%, 2%, 不限} 在验证池上选、b 档 SAM 用 ViT-B 只做框、点只做 SAM 2.1、k 四档、TJDR_uwf 取 45° 画布 4256、任意病灶图四类目录同图落盘、文件名 prompted.py；e5_frozen.yaml 同次提交。
   已定（2026-10-12，用户授权按建议）：训练档矩阵乘开 TF32（另以 SAM2-UNet 的 IDRiD 种子 0 开、关各一次核对）；RETFound 主表用 natureCFP；作者代码与论文不一致时按代码；SAM2-UNet、MedSAM 的塌缩处理与 U-Net 同一规则；编码器对照全做。
   实现（2026-10-12）：bench/models/{sam2_unet,vit_upernet,samed,sam_adapter,medsam,foundation}.py，网络都由官方代码构建；参数量核对：SAM2-UNet 2.165 亿/可训练 438 万，SAM-Adapter 6.413 亿/425 万，MedSAM 9374 万（全可训），RETFound 加 UPerNet 3.526 亿；e5_frozen.yaml 已写（含零样本和理想提示设定）。
-  待补：bench/e5 推理档代码；SAM 3 与两份 RETFound 权重的申请；服务器冒烟的显存、每步耗时和实际步数；a 档网格和 SAM 3 措辞在验证池上的选择结果；全部结果。SAM2-UNet 的 reduce='none' 已在本机 PyTorch 2.6 上核对为平均 BCE（test_e5_models），服务器 check 阶段再核一次。
+  待补：（bench/e5 推理档代码 2026-10-12 已写成，提交 e886f2a…1992cdf，见 design/18；collect_runs.py 已认 runs/E5）SAM 3 与两份 RETFound 权重的申请；服务器冒烟的显存、每步耗时和实际步数；a 档网格和 SAM 3 措辞在验证池上的选择结果；全部结果。SAM2-UNet 的 reduce='none' 已在本机 PyTorch 2.6 上核对为平均 BCE（test_e5_models），服务器 check 阶段再核一次。
 
 M9b 影响因素实验（E3b、E4、E7、E8、E9；范围按 16 第三节，接线 2026-10-12，bench/factor.py）
   每个实验在统一重训协议下只改一个因素，其余与主表相同：数据增强、块几何、20 次验证、按验证 mAUPR 选检查点、推理几何、评测。训练量取 DDR 主表的像素预算（400 个等效 epoch × DDR 训练集在 1440 画布上的像素数），配方取该模型的 DDR 配方（含 U-Net 的整批 Dice 修订），所以每一行看到的块像素与它对比的主表 DDR 运行相同；一个种子（0）；差异小于主表种子标准差中位数两倍的只报数不解释。
