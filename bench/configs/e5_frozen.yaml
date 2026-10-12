@@ -115,7 +115,7 @@ oracle:
   k: [1, 5, 20, all]
   curve_sets: [IDRiD, DDR]            # every k; the other five sets get k = all only
   order: "sort by (row, col), then one permutation from PCG64(20261003) spawned per (image, class); smaller k is a prefix"
-  box: tight bounding box, no jitter
+  box: "tight bounding box, no jitter; the prompt file stores [x0, y0, x1, y1] with x1, y1 exclusive, the decoders receive x1 - 1, y1 - 1 (inclusive pixel indices, the convention of SAM's batched_mask_to_box and of MedSAM's training boxes; registered 2026-10-12 before any oracle run, review fix 6)"
   point: the component pixel farthest from its boundary (distance transform; ties to the first in row-major order), one positive point
   decode: "one prompt per call; a point keeps the mask with the highest predicted IoU (multimask), a box one mask; all prompts are decoded once and the k maps are prefix maxima"
   medsam: "1024 resize with per-image min-max to [0, 1], box only, sigmoid of the 256 output then bilinear"

@@ -729,7 +729,7 @@ def test_amg_test_run_needs_the_selection_uses_pool_thresholds_and_obeys_the_bud
 
 
 class _FakeDecoder:
-    """A box fills its rectangle with 0.7; a point lights a 3 x 3 block with 0.5; every call is recorded."""
+    """A box fills its rectangle (inclusive pixel indices, as SAM and MedSAM read them) with 0.7; a point lights a 3 x 3 block with 0.5; every call is recorded."""
 
     def __init__(self):
         self.images, self.boxes, self.points = [], [], []
@@ -744,7 +744,7 @@ class _FakeDecoder:
         self.boxes.append(tuple(int(v) for v in box))
         x0, y0, x1, y1 = (int(v) for v in box)
         prob = np.zeros(self.hw, np.float32)
-        prob[max(y0, 0) : y1, max(x0, 0) : x1] = 0.7
+        prob[max(y0, 0) : y1 + 1, max(x0, 0) : x1 + 1] = 0.7
         return prob
 
     def point(self, xy):
@@ -833,11 +833,17 @@ def test_prompted_pool_run_decodes_once_per_window_and_fills_prefix_maxima(tmp_p
     assert (k1 <= kall).all() and (kall > 0).sum() > (k1 > 0).sum() and abs(int(kall.max()) - round(0.7 * 65535)) <= 1
     assert np.array_equal(read_prob_quantized(source / "DDR-val__k1" / "prob_val", "EX", "v0"), read_prob_quantized(source / "DDR-val__kall" / "prob_val", "EX", "v0"))
     assert read_prob_quantized(source / "DDR-val__kall" / "prob_val", "HE", "v0").max() == 0
-    # the lesion itself is covered by its own box prompt
+    # the lesion itself is covered by its own box prompt, and the box reaches the decoder with inclusive right and bottom
     from bench.common.io import read_mask
 
     ma = read_mask(root, "MA", "v0")
     assert (kall[ma] > 0).mean() > 0.9
+    handed = set(fake.boxes)
+    for cls in ("MA", "EX"):
+        for prompt in doc["images"]["v0"]["classes"][cls]["prompts"]:
+            top, left = boxes[prompted.choose_window(boxes, 8, prompted.box_center(prompt["box"]))]
+            x0, y0, x1, y1 = prompt["box"]
+            assert tuple(prompted.decoder_box(prompt["box"], top, left)) == (x0 - left, y0 - top, x1 - 1 - left, y1 - 1 - top) in handed
     assert json.loads((source / "DDR-val__k5" / "done.json").read_text())["thresholds"] == "fixed only"
     # points for SAM 2: the fake lights a 3 x 3 block at the component's farthest-from-boundary pixel
     point_fake = _FakeDecoder()
@@ -1183,3 +1189,14 @@ def test_sam3_device_is_passed_as_the_string_the_official_builder_compares_with(
     sam3_text.check_placed(model, "cpu")
     with pytest.raises(RuntimeError, match="built on \\['cpu'\\], not on cuda"):
         sam3_text.check_placed(model, "cuda")
+
+
+# ---- review fix 6 (B5): the decoders receive inclusive pixel indices ---------------------------------
+
+
+def test_decoder_box_turns_the_exclusive_file_box_into_inclusive_pixel_indices():
+    from bench.e5 import prompted
+
+    assert prompted.decoder_box([6, 5, 10, 9], 4, 4) == [2, 1, 5, 4]  # a 4 x 4 component in the window at (4, 4)
+    assert prompted.decoder_box([20, 1, 21, 2], 0, 0) == [20, 1, 20, 1]  # a single pixel: zero width, not two pixels
+    assert prompted.box_center([6, 5, 10, 9]) == (7.5, 6.5)  # the centre of the same pixels

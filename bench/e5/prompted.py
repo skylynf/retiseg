@@ -14,7 +14,10 @@ and SAM 2 logits go through a sigmoid; MedSAM follows MedSAM_Inference.py
 (input 1024 with per-image min-max to [0, 1], box only, sigmoid of the 256
 output then bilinear). The map of a class at prompt count k is the pixelwise
 maximum over the prompts of rank < k ("all": every prompt), so the k levels
-are prefix maxima filled in one pass; a pixel no prompt covers scores 0.
+are prefix maxima filled in one pass; a pixel no prompt covers scores 0. A box
+reaches the decoder with its right and bottom as inclusive pixel indices
+(decoder_box): the prompt file stores them exclusive, the SAM family and MedSAM
+read inclusive ones (review fix 6, B5; e5_frozen.yaml oracle.box).
 
 Directories (bench/e5/outputs.py): <base>[__<canvas variant>]__k<k> for every
 k of the grid, <base> = <set> or <set>-val for a pool run; sources
@@ -83,6 +86,21 @@ def k_token(k):
 def box_center(box):
     x0, y0, x1, y1 = box
     return (x0 + x1 - 1) / 2.0, (y0 + y1 - 1) / 2.0
+
+
+def decoder_box(box, top, left):
+    """The box as the decoders take it: window coordinates, right and bottom as inclusive pixel indices.
+
+    The prompt file stores [x0, y0, x1, y1] with x1 and y1 exclusive (prompts.py,
+    the numpy slice convention same_info.py relies on). SAM's prompt encoder reads
+    box corners as pixel indices (+0.5 to the pixel centre), its own
+    batched_mask_to_box returns the inclusive maximum index, and MedSAM was trained
+    on np.max of the component's indices, so the decoders get x1 - 1 and y1 - 1: a
+    one-pixel component becomes a box of zero width at that pixel, not one spanning
+    two pixels. Registered in e5_frozen.yaml oracle.box (2026-10-12, review fix 6).
+    """
+    x0, y0, x1, y1 = box
+    return [x0 - left, y0 - top, x1 - 1 - left, y1 - 1 - top]
 
 
 def choose_window(boxes, window, center):
@@ -219,8 +237,7 @@ def decode_image(decoder, cv, window, boxes, prompts_by_class, kind, k_levels):
         for cls, prompt in per_window[index]:
             started = time.perf_counter()
             if kind == BOXES:
-                x0, y0, x1, y1 = prompt["box"]
-                prob = decoder.box([x0 - left, y0 - top, x1 - left, y1 - top])
+                prob = decoder.box(decoder_box(prompt["box"], top, left))
             else:
                 px, py = prompt["point"]
                 prob = decoder.point([px - left, py - top])

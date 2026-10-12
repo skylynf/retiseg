@@ -92,7 +92,7 @@ Dice 阈值：训练档照 B-std，用训练来源的验证集选。推理档没
 1. 模型（2026-10-12 按 16 改）：SAM（ViT-B，sam_vit_b_01ec64.pth）只做框；SAM 2（2.1 Hiera-L）点和框；MedSAM（medsam_vit_b.pth）只有框。SAM ViT-H 的点框进未来工作。SAM 3 也有 SAM 1 式的点框接口（enable_inst_interactivity，sam3/model/sam3_image.py:628），列为可选。
 2. 提示怎么生成（规则写进 e5_frozen.yaml；生成的提示文件每个测试集一份，所有模型读同一份）：
    在 1440 画布的真值上按类取八连通域。每张图每一类的提示数 k 取 1、5、20、全部（2026-10-12 按 16 去掉 10；解码只对“全部”做一次，k 图是前 k 个的最大值）。连通域多于 k 时，先按（行，列）排序，再用 PCG64(20261003) 按（图像编号，类别）派生的子流做一次无放回的随机排列，取前 k 个；所以较小 k 的提示是较大 k 的前缀，曲线上的点可以直接比较。
-   框：连通域的紧包围框，不加抖动。点：连通域内离边界最远的像素，一个正点。
+   框：连通域的紧包围框，不加抖动。点：连通域内离边界最远的像素，一个正点。（2026-10-12 评审修复 6 登记：提示文件存 [x0, y0, x1, y1]、右下不含；送解码器时传 x1−1、y1−1，即 SAM 的 batched_mask_to_box 和 MedSAM 训练框的含端点像素下标约定；e5_frozen.yaml oracle.box。）
    用法照各模型作者的建议：单个点用 multimask_output=True，取 predicted IoU 最高的那个掩码；框用 multimask_output=False（segment_anything/predictor.py:115-120，notebooks/predictor_example.ipynb:343、607；SAM 2 的 notebook 相同）。MedSAM 照 MedSAM_Inference.py：框，multimask_output=False，先对 256 的低分辨率输出取 sigmoid 再双线性放大（:59-71）。每个提示单独解码一次。
 3. 窗口：G1 下每个提示在“包围框中心离窗口边缘最远”的那个窗口里解码，编码器每个窗口只算一次。G2 下整图编码一次。
 4. 概率图：每一类取该类全部提示所得掩码概率的逐像素最大值，没有提示覆盖的像素记 0。SAM、SAM 2 用 return_logits 取连续值后做 sigmoid。
