@@ -106,7 +106,8 @@ def check_e5(runs):
     assert expected <= got, expected - got
     assert ("E5", "SAM 3", "text:red dot", "none", -1, "IDRiD") in got and ("E5", "SAM 3", "text:yellow deposit", "none", -1, "IDRiD") in got
     assert not any("fov" in k[5] or k[5] == "FGADR" for k in got)
-    any_rows = new[(new.cls == "any") & (new.metric == "aupr")]
+    assert set(new[new.metric == "aupr"]["cls"]) <= set(CLASSES)
+    any_rows = new[(new.cls == "any") & (new.metric == collect_runs.ANY_LESION_METRIC)]
     assert len(any_rows) == 7 and abs(any_rows[any_rows.model == "SAM 2"]["value"].max() - 0.8) < 1e-12  # no any-lesion row for a phrase run
     extra = new[(new.model == "SAM") & (new.test_set == "DDR") & (new.cls == "")]
     assert set(extra.metric) == {"points_per_side", "area_cap_fraction"} and extra[extra.metric == "points_per_side"]["value"].iloc[0] == 64
@@ -132,7 +133,12 @@ def main():
         (tmp / "runs" / "BSprobe_unet_ddr_seed0").mkdir()  # must be ignored
         new, seen = collect_runs.collect(tmp / "runs")
         assert len(seen) == 1 and seen[0][0] == "BS_unet_ddr_seed0", seen
-        assert set(new["cls"]) == set(CLASSES)
+        assert set(new["cls"]) == set(CLASSES) | {"any"}
+        # metric "aupr" is the four classes and nothing else: their mean is the evaluator's mAUPR (the main-table number)
+        aupr = new[new.metric == "aupr"]
+        assert set(aupr["cls"]) == set(CLASSES) and abs(aupr["value"].mean() - report["summary"]["mAUPR"]) < 1e-12
+        any_row = new[new.metric == collect_runs.ANY_LESION_METRIC]
+        assert list(any_row["cls"]) == ["any"] and abs(any_row["value"].iloc[0] - report["summary"]["AUPR_any_lesion"]) < 1e-12
         assert (new[["experiment", "model", "variant", "train_set", "seed", "test_set"]].drop_duplicates().values.tolist()
                 == [["E2", "U-Net", "bstd", "DDR", 0, "DDR"]])
         got = new[(new.cls == "MA") & (new.metric == "aupr")]["value"].iloc[0]
@@ -145,7 +151,7 @@ def main():
         table = table[(table.experiment != "E2") | (table.source != "measured")]
         merged, replaced, added, stale = collect_runs.merge(table, new)
         key = (merged.experiment == "E2") & (merged.model == "U-Net") & (merged.train_set == "DDR") & (merged.seed == 0) & (merged.test_set == "DDR")
-        cell = merged[key & merged.metric.isin(needed)]
+        cell = merged[key & merged.metric.isin(needed | {collect_runs.ANY_LESION_METRIC})]
         assert (cell["source"] == "measured").all() and len(cell) == len(new), (len(cell), len(new))
         assert replaced + added == len(new), (replaced, added)
         # placeholder seeds of the measured (U-Net, DDR, DDR) group are dropped; other models keep theirs

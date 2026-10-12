@@ -49,6 +49,7 @@ def _find_repo(start):
 
 REPO = _find_repo(PAPER)
 CSV = PAPER / "data" / "results.csv"
+ANY_LESION_METRIC = "aupr_any_lesion"
 KEY = ["experiment", "model", "variant", "train_set", "seed", "test_set", "cls", "metric"]
 
 SLUG = {  # bench/scripts/launch_b1.py::_SLUG -> names used in the paper
@@ -137,9 +138,10 @@ def rows_from_report(report, experiment, variant, model, train, seed, test):
             for size, part in (lesion.get("by_size") or {}).items():
                 add(cls, f"lesion_recall_{size}", part.get("recall"))
     # the class-agnostic "any lesion" AUPR (protocol.yaml any_lesion): the main zero-shot metric and a
-    # reference line for every model; cls "any" has no placeholder row and is added as a new row
+    # reference line for every model. It has a metric name of its own: every reader of metric "aupr"
+    # takes those rows as the four classes (retifig.data.seed_table averages them into mAUPR).
     if report.get("any_lesion"):
-        add("any", "aupr", report["any_lesion"].get("aupr"))
+        add("any", ANY_LESION_METRIC, report["any_lesion"].get("aupr"))
     return out
 
 

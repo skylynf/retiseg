@@ -1,6 +1,7 @@
 E5 推理档实现记录（a 零样本、b 理想提示）
 建立日期 2026-10-12（工作站albert，Albert 的机器；提交 e886f2a 到 1992cdf，分支 albert，共 12 个提交）。
 写给接手的人和 agent：服务器 agent 按 17 第六节执行时看第五、六节；Luming 做论文收尾时看第七节；改代码的人先看第二、三、八节。本文件只记已经实现的东西和它依赖什么；设计在 15，范围在 16，决定在 00 的同日记录。
+2026-10-12 修订（工作站albert，评审修复 1）：第七、九节 any 行的指标名改为 aupr_any_lesion；评审与修复顺序见 00「E5 推理档评审修复 1」。
 
 一、范围与决定
   实现的是 15 第四、五、六节在 16 第三节 E5a、E5b 两行范围下的推理档：
@@ -56,7 +57,7 @@ E5 推理档实现记录（a 零样本、b 理想提示）
   bench 内部：bench.infer.window_starts、bench.data.b1_input.crop_resize / read_image、bench.common.io（write_prob、read_prob_quantized、load_split、read_fov、read_mask）、bench.e3a（load_frozen、test_data_dir、environment、MAIN）、bench.eval.evaluate（evaluate、load_protocol、pooled_histograms）、bench.eval.pixel（best_dice_threshold、average_precision）、bench.scripts.launch_b1（run_queue、python_argv、in_progress、_DIST_VARS）。protocol.yaml 的 any_lesion 项（2026-10-12 之前已加）是任意病灶 AUPR 的来源。
 
 七、论文收集（docs/paper/retiseg_paper/paper）
-  collect_runs.py 的 e5_rows / collect_e5 读 runs/E5：a 档 → model SAM / SAM 2、variant zero_shot:auto_<any_lesion|oracle_class|stability>（池运行再带 :p<密度>:<cap..|nocap>，test_set <集>-val），测试运行另记 points_per_side、area_cap_fraction 两行；a_sam3_ph<i> → 逐类 text:<该类措辞>，a_sam3_selected → text:selected；b 档 → oracle:<box|point>:<k>；同信息对照 → oracle_ref:box:<k>、train_set 取 tokens、seed 0；__fov 目录和没 done.json 的跳过。rows_from_report 对所有报告加 cls "any" 的任意病灶 AUPR 行（所有模型的参照线；占位里没有这行，merge 作新行加入）。
+  collect_runs.py 的 e5_rows / collect_e5 读 runs/E5：a 档 → model SAM / SAM 2、variant zero_shot:auto_<any_lesion|oracle_class|stability>（池运行再带 :p<密度>:<cap..|nocap>，test_set <集>-val），测试运行另记 points_per_side、area_cap_fraction 两行；a_sam3_ph<i> → 逐类 text:<该类措辞>，a_sam3_selected → text:selected；b 档 → oracle:<box|point>:<k>；同信息对照 → oracle_ref:box:<k>、train_set 取 tokens、seed 0；__fov 目录和没 done.json 的跳过。rows_from_report 对所有报告加 cls "any" 的任意病灶 AUPR 行，指标名 aupr_any_lesion 而不是 aupr（2026-10-12 评审修复 1：同名会被 retifig/data.py 的 seed_table 当成第五个类平均进主表 mAUPR；seed_table 现在也只对四类取均值）；所有模型的参照线；占位里没有这行，merge 作新行加入。
   fig5_foundation.py、make_tables.py 已按 16 改键（去 SAM 点提示、k 四档、b 档 SAM 骨干 ViT-B）；build_placeholder.py 已去 k=10 和 SAM 点提示（步骤 0）。
   还要在有 pandas 的机器上做：python docs/paper/retiseg_paper/paper/scripts/test_collect_runs.py（含 E5 玩具树检查）；build_placeholder.py --force；collect_runs.py、collect_literature.py；make -C paper。
 
@@ -65,7 +66,7 @@ E5 推理档实现记录（a 零样本、b 理想提示）
   没有测过的（要服务器冒烟）：三处真实模型构建（amg.build_generator、prompted.build_decoder、sam3_text.build_scorer）和它们的输出格式；SAM 2 的 min_mask_region_area 后处理是否执行（predicted.json 记了算子能否导入）；显存和耗时。
 
 九、与 15 原文的差异和已知限制（都已写进相应文件头或 00）
-  文件名 prompted.py（15 原写 oracle.py）；面积上限按比例而非训练集最大连通域（D1）；验证池而非 DDR 验证集（D2）；画布比窗口小时右下补零（与 bench.infer 一致，每窗点密度相同）；测试划分的主结果目录不带上限 token（选中的组记在 predicted.json）；MedSAM 在 G2 整图时用 torch 双三次 + antialias 缩放代替 MedSAM_Inference 的 skimage（G1 窗口已是 1024 不缩放）；oracle_class 并列按 MA、HE、EX、SE；k 图是前缀最大值，解码只做一次；--limit 只做冒烟、只评预测过的图、之后被重做；any-lesion 行对所有报告都写；TJDR_uwf 的 fov 变体目录不进 collect（以后进补充表）。
+  文件名 prompted.py（15 原写 oracle.py）；面积上限按比例而非训练集最大连通域（D1）；验证池而非 DDR 验证集（D2）；画布比窗口小时右下补零（与 bench.infer 一致，每窗点密度相同）；测试划分的主结果目录不带上限 token（选中的组记在 predicted.json）；MedSAM 在 G2 整图时用 torch 双三次 + antialias 缩放代替 MedSAM_Inference 的 skimage（G1 窗口已是 1024 不缩放）；oracle_class 并列按 MA、HE、EX、SE；k 图是前缀最大值，解码只做一次；--limit 只做冒烟、只评预测过的图、之后被重做；any-lesion 行对所有报告都写（指标名 aupr_any_lesion）；TJDR_uwf 的 fov 变体目录不进 collect（以后进补充表）。
   现存问题（docs/notes(albert)/现存问题.txt，未跟踪）：7 128 当选超预算的风险；8 论文脚本改键后占位数据待重生成；9 HACDR-Net 可编辑安装改动子模块工作树。
 
 十、提交清单（分支 albert，未推送）

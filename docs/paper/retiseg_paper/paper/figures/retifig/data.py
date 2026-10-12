@@ -89,6 +89,7 @@ def seed_table(metric="aupr", cls="mean"):
     """One value per (model, train, seed, test). cls='mean' averages the four classes."""
     df = main_runs(metric)
     if cls == "mean":
+        df = df[df["cls"].isin(CLASSES)]  # the class mean is over the four lesion classes, whatever other rows share the metric
         out = df.groupby(["model", "train_set", "seed", "test_set"], sort=False)["value"].mean()
     else:
         out = df[df["cls"] == cls].set_index(["model", "train_set", "seed", "test_set"])["value"]
