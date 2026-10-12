@@ -86,7 +86,8 @@ def predict(config_path, checkpoint, pred_dir, split):
         raise RuntimeError("lesion order must stay MA, HE, EX, SE")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = M2MRF().to(device)
-    bind_normalization(model, Path(config["dataset"]).name)
+    # BF cells (bench/factor.py) evaluate on any source; their normalization is the reference source's.
+    bind_normalization(model, config.get("budget_reference") or Path(config["dataset"]).name)
     root = Path(config["dataset"])
     diameter = int(config["fov_diameter"])
     inference = inference_for(config, model.card)

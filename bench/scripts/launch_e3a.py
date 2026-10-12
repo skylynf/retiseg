@@ -38,6 +38,9 @@ NNUNET_PLANS = ("default", "resencm")
 _SKIP_EXACT = {"B1_unet_idrid_seed0"}
 # Formal B-std and B1 run names; a directory renamed aside (e.g. ..._registered) is not a source.
 RUN_NAME = re.compile(r"(BS|B1)_[a-z0-9_]+_(idrid|ddr)_seed\d+(_runner)?")
+# Factor runs that get independent tests: E3b (other training sources), E4 (merged labels), E8 (amount).
+# E7 changes the canvas and E9 is read on DDR only (docs/paper/16).
+FACTOR_RUN_NAME = re.compile(r"BF_e(3b|4|8)_[a-z0-9_]+_seed\d+")
 
 
 def _scored_run(run):
@@ -63,6 +66,15 @@ def discover(seed0_only=False):
             env = _BINDING[config["model"]][0]
             argv = ["-m", "bench.e3a", "run", "--run", f"runs/{run.name}"]
             found.append((tier, run.name, env, argv, [e3a.train_source_of(config)]))
+    for run in sorted(runs.glob("BF_*")):
+        if not FACTOR_RUN_NAME.fullmatch(run.name) or not run.is_dir() or not _scored_run(run):
+            continue
+        config = yaml.safe_load((run / "config.yaml").read_text())
+        if int(config["fov_diameter"]) != int(frozen["canvas_reference"]):
+            continue
+        env = _BINDING[config["model"]][0]
+        argv = ["-m", "bench.e3a", "run", "--run", f"runs/{run.name}"]
+        found.append((2, run.name, env, argv, e3a.train_sources_of(config)))
     for train in ("IDRiD", "DDR"):
         for plan in NNUNET_PLANS:
             name = f"NN_{plan}_{train.lower()}_fold0"
@@ -83,11 +95,16 @@ def discover(seed0_only=False):
 
 
 def pending_sets(source, trained_on, author=False):
+    """Sets a source still has to run. A BF source whose training field of view is not frozen
+    (TJDR_std, FGADR, Retinal-Lesions) skips the per-degree variant of the ultra-widefield set, as bench.e3a does."""
     frozen = e3a.load_frozen()
+    no_degrees = source.startswith("BF_") and e3a.scale_source_of(yaml.safe_load((_ROOT / "runs" / source / "config.yaml").read_text())) is None
     return [
         (test, variant)
         for test, variant in e3a.targets(trained_on, frozen)
-        if not (author and variant != e3a.MAIN) and not e3a.is_done(source, test, variant)
+        if not (author and variant != e3a.MAIN)
+        and not (no_degrees and test in frozen.get("per_degree_sets", ()) and variant == e3a.MAIN)
+        and not e3a.is_done(source, test, variant)
     ]
 
 

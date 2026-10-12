@@ -70,7 +70,11 @@ def geometry(card, frozen):
 
 
 def inference_for(config, card, frozen=None):
-    """None for B1. For BS, the dict predict_image uses: window and overlap."""
+    """None for B1. For BS (and BF, the factor cells), the dict predict_image uses: window and overlap."""
+    if config.get("experiment") == "BF":
+        from bench.factor import inference_for as factor_inference
+
+        return factor_inference(config, card, frozen)
     if not is_bstd(config):
         return None
     frozen = frozen or load_frozen()

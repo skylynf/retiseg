@@ -436,6 +436,10 @@ def train(config_path, run_dir=None, diagnostic=False, score_only=False, resume=
     config = yaml.safe_load(config_path.read_text())
     if "seed" not in config:
         raise ValueError("the cell config must set seed")
+    if config.get("experiment") == "BF":
+        from bench.factor import train_cell
+
+        return train_cell(config_path, config, run_dir, predict, diagnostic=diagnostic, score_only=score_only, resume=resume)
     name = dataset_name(config["dataset"])
     assert_b1_frozen(config, name)
     if tuple(LESION_CLASSES) != ("MA", "HE", "EX", "SE"):

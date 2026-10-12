@@ -11,6 +11,7 @@ Reads the files that bench.eval.cli evaluate writes (bench/eval/evaluate.py):
     runs/E1r_<slug>_<dataset>_seed<k>_bs4*/metrics_test.json       author recipe (E1r), plus author_*_test.json for the authors' metric
     runs/E2c_<slug>_<dataset>_seed0_<lr1o3|lr3>/history.jsonl       learning-rate check (best validation mAUPR; needs timing.json)
     runs/E3a/<source>/<set>/metrics.json + done.json               independent tests (bench/e3a.py), main variant only
+    runs/BF_<cell>/metrics_test.json                               factor cells (bench/factor.py); the row key is the cell's paper block
     data/cost_measured.tsv                                      E10 numbers recorded by hand (docs/ops/00)
     data/cost_audit.tsv                                         E10 numbers from bench/scripts/cost_audit.py
 
@@ -85,6 +86,24 @@ E2C = re.compile(r"^E2c_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed0_(?P<l
 E2C_LEVEL = {"lr1o3": "1/3", "lr3": "3"}
 E3A_SET = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "Retinal-Lesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1"}
 E1_AUTHOR = re.compile(r"^E1_(?P<slug>[a-z0-9]+)_(?P<dataset>idrid|ddr)$")
+PREPARED = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "RetinalLesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1"}
+MODEL_NAME = {"RETFound": "RETFound + UPerNet", "HRNet": "HRNet-W48", "MedSAM": "MedSAM (full FT)"}  # cell model name -> paper name
+
+
+def factor_key(run):
+    """(experiment, model, variant, train_set, seed, internal test set) of a BF run from its cell (bench/factor.py)."""
+    cfg = run / "config.yaml"
+    if not cfg.exists():
+        return None
+    import yaml
+
+    config = yaml.safe_load(cfg.read_text())
+    if config.get("experiment") != "BF" or "paper" not in config:
+        return None
+    paper = config["paper"]
+    model = MODEL_NAME.get(config["model"], config["model"])
+    test = PREPARED[Path(config["dataset"]).name]
+    return paper["experiment"], model, paper["variant"], paper["train_set"], int(config["seed"]), test
 
 
 def rows_from_report(report, experiment, variant, model, train, seed, test):
@@ -213,6 +232,16 @@ def collect(runs_dir):
                     if cls in ("MA", "HE", "EX", "SE"):
                         rows.append(dict(experiment="E1r", model=model, variant="author_recipe", train_set=train, seed=seed, test_set=train, cls=cls, metric="aupr_author_impl", value=float(entry["aupr"]), source="measured"))
             continue
+        if run.name.startswith("BF_"):
+            key = factor_key(run)
+            path = run / "metrics_test.json"
+            if key is None or not path.exists():
+                continue
+            experiment, model, variant, train, seed, test = key
+            report = json.loads(path.read_text())
+            rows += rows_from_report(report, experiment, variant, model, train, seed, test)
+            seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
+            continue
         m = E2C.match(run.name)
         if m and m["slug"] in SLUG:
             if not (run / "timing.json").exists():
@@ -248,6 +277,8 @@ def collect_e3a(runs_dir):
             experiment, variant, model, train, seed = "E2", "bstd", NN_MODEL[nn["cfg"]], DATASET[nn["dataset"]], int(nn["rep"] or 0)
         elif au and au["slug"] in SLUG:
             experiment, variant, model, train, seed = "E1", "author_weights", SLUG[au["slug"]], DATASET[au["dataset"]], 0
+        elif src.name.startswith("BF_") and factor_key(Path(runs_dir) / src.name) is not None:
+            experiment, model, variant, train, seed, _test = factor_key(Path(runs_dir) / src.name)
         else:
             continue
         for setdir in sorted(src.iterdir()):

@@ -1,0 +1,18 @@
+experiment: BF
+factor: E8
+model: U-Net
+dataset: dataset/prepared/DDR
+split_val: val
+split_test: test
+fov_diameter: 1440
+train:
+- dataset: dataset/prepared/DDR
+  split: train
+  subset: bench/data/splits/subsets/DDR_train_10pct.json
+budget_reference: DDR
+seed: 0
+num_workers: 4
+paper:
+  experiment: E8
+  variant: size:DDR 10%
+  train_set: DDR

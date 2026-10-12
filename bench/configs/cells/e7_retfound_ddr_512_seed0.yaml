@@ -1,0 +1,17 @@
+experiment: BF
+factor: E7
+model: RETFound
+dataset: dataset/prepared/DDR
+split_val: val
+split_test: test
+fov_diameter: 512
+train:
+- dataset: dataset/prepared/DDR
+  split: train
+budget_reference: DDR
+seed: 0
+num_workers: 4
+paper:
+  experiment: E7
+  variant: res:512
+  train_set: DDR

@@ -1,0 +1,17 @@
+experiment: BF
+factor: E3b
+model: M2MRF
+dataset: dataset/prepared/TJDR_std
+split_val: val
+split_test: test
+fov_diameter: 1440
+train:
+- dataset: dataset/prepared/TJDR_std
+  split: train
+budget_reference: DDR
+seed: 0
+num_workers: 4
+paper:
+  experiment: E3b
+  variant: bstd
+  train_set: TJDR-std

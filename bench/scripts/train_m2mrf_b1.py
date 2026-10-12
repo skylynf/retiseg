@@ -52,14 +52,45 @@ def _record_versions(path, model):
     Path(path).write_text(json.dumps(payload, indent=2) + "\n")
 
 
+def _train_factor(config_path, config, run_dir, diagnostic, score_only, resume):
+    """BF cell (bench/factor.py): recipe and normalization from budget_reference, data from the cell."""
+    from bench import factor
+    from bench.train import score_run
+
+    ref = config["budget_reference"]
+    run_dir = Path(run_dir) if run_dir is not None else run_directory(config)
+    refuse_author_runs(run_dir)
+    model = M2MRF()
+    bind_normalization(model, ref)
+    declared = model.author_recipe(ref)
+    if score_only:
+        score_run(config_path, run_dir, declared, predict)
+        return 0.0
+    set_seed(config["seed"])
+    if model.network is None:
+        raise RuntimeError(model.import_error or "M2MRF network was not imported")
+
+    def _pretrained():
+        weight_path = config.get("pretrained") or hrnet_w48()
+        copied = model.load_imagenet(weight_path)
+        print(f"pretrained tensors copied into backbone: {copied} from {weight_path}", flush=True)
+
+    return factor.run_cell(
+        config_path, config, model, declared, run_dir, predict, diagnostic, resume, before_training=_pretrained,
+        extra_deviations=["learning rate stays at the author value; it is not multiplied by the GPU count"],
+    )
+
+
 def train(config_path, run_dir=None, diagnostic=False, score_only=False, resume=False):
     refuse_distributed()
     config_path = Path(config_path)
     config = yaml.safe_load(config_path.read_text())
-    if config.get("experiment") not in ("B1", "BS") or config.get("model") != "M2MRF":
-        raise ValueError("this script trains B1 or BS M2MRF; the author retrain stays in bench/train_m2mrf.py")
+    if config.get("experiment") not in ("B1", "BS", "BF") or config.get("model") != "M2MRF":
+        raise ValueError("this script trains B1, BS or BF M2MRF; the author retrain stays in bench/train_m2mrf.py")
     if "seed" not in config:
         raise ValueError("the cell config must set seed")
+    if config.get("experiment") == "BF":
+        return _train_factor(config_path, config, run_dir, diagnostic, score_only, resume)
     name = dataset_name(config["dataset"])
     assert_b1_frozen(config, name)
     if tuple(LESION_CLASSES) != ("MA", "HE", "EX", "SE"):

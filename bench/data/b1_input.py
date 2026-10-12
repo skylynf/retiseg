@@ -37,6 +37,9 @@ def dataset_name(dataset_dir):
 
 
 def _scaled_hw(height, width, diameter):
+    """Canvas size for a crop. ``diameter`` 0 is the native resolution: no resizing (E7)."""
+    if int(diameter) == 0:
+        return int(height), int(width)
     scale = float(diameter) / max(int(height), int(width))
     return max(1, round(height * scale)), max(1, round(width * scale))
 

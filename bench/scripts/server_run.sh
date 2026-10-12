@@ -19,6 +19,7 @@
 #                                               cards still busy join when they free up
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh b1-queue
 #                                               B1 seed 0 and its test maps only; waits for busy cards
+#   RETISEG_GPUS="4 5" bash bench/scripts/server_run.sh factor [E3b|E4|E7|E8|E9]   factor cells (bench/factor.py), train + internal test
 #   NNUNET_GPU=4 bash bench/scripts/server_run.sh nnunet IDRiD default|resencm
 #                                               one nnU-Net job (bench/scripts/nnunet_run.sh)
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh bs-revise U-Net
@@ -225,6 +226,13 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
     require_clean
     [ -n "${RETISEG_GPUS:-}" ] && [ -n "${2:-}" ] || { echo "usage: RETISEG_GPUS=\"2 3\" server_run.sh extra E2c" >&2; exit 1; }
     background "extra_$2" "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_extra.py --submit --experiment "$2" ;;
+  factor)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "factor needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"4 5\" server_run.sh factor E4" >&2; exit 1; }
+    for f in DDR_train_10pct DDR_train_50pct FGADR_train_383; do
+      [ -f "bench/data/splits/subsets/$f.json" ] || { echo "bench/data/splits/subsets/$f.json missing; run python bench/scripts/make_subsets.py and commit" >&2; exit 1; }
+    done
+    background "factor_${2:-all}" "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_factor.py --submit ${2:+--experiment "$2"} ;;
   e3a)
     require_clean
     [ -n "${RETISEG_GPUS:-}" ] || { echo "e3a needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"2 3\"" >&2; exit 1; }

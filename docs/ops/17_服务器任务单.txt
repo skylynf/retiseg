@@ -20,6 +20,7 @@
 
 三、E3a 独立测试（七个库都在 dataset/prepared，可以开；只推理，插空卡）
   命令：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e3a --drop-maps FGADR,Retinal-Lesions
+  2026-10-12 已按 --seed0-only 排在 GPU 3（HACDR 打分之后）。E2c 四项结束后把空出的卡加进来（再起一个 e3a 启动器，已完成的集合会被跳过），并去掉 --seed0-only 把种子 1、2 和 HACDR 新打分的来源补上。
   对象：全部已打分的检查点（B-std 7 个模型的全部种子、nnU-Net 两种配置、M2MRF 作者权重、U-Net 新配方）。launch_e3a.py 自动发现，--seed0-only 可先只跑种子 0。
   尺度规则、阈值来源、FGADR 去重名单都在 e3a_frozen.yaml 和 14 备注 33、35、36，不改。
   粗估 30 GPU 时。回传 runs/E3a/ 下的 metrics.json 和 done.json。本机 collect_runs.py 已能读 runs/E3a/<来源>/<测试集>/metrics.json（主变体；__fov 等敏感性变体以后进补充表），bench/scripts/summarize.py 出七区组的 Friedman。
@@ -55,7 +56,7 @@
 
 九、本机（本机 agent）接下来写的代码，写好后服务器才有任务可排
   1. E5 推理档 bench/e5/（15 第四、五节）：prompts.py、amg.py、score_rules.py、sam3_text.py、prompted.py，配单元测试；retiseg-sam3 环境写进 cluster_env.sh。
-  2. 影响因素实验的接线（16 第三节的缩减版）：
+  2. 影响因素实验的接线（16 第三节的缩减版）——2026-10-12 本机已写：bench/factor.py、bench/data/factor_input.py、bench/scripts/make_subsets.py、make_factor_jobs.py、launch_factor.py，server_run.sh 的 factor 阶段，e3a 认 BF 运行，collect_runs.py 认 runs/BF_*。服务器步骤见第十一节。原计划：
      E3b：代表模型在 TJDR_std、FGADR 上训练，像素预算与 DDR 相同（不是新库自己的等效 epoch），bs_frozen.yaml 加这两个库的预算条目；FGADR 训练时评测按 leak_exclusions.json 去重。
      E4：训练集合并（DDR+FGADR 抽 383、DDR+FGADR、DDR+Retinal-Lesions）和 Retinal-Lesions 单独；多来源的数据读取、忽略区（Retinal-Lesions 的 127）在训练损失里的处理。
      E7：画布长边 512 和原分辨率块训练的 cell（M2MRF、RETFound）。
@@ -65,8 +66,16 @@
   3. summarize.py 的七区组 Friedman 接进图 4e（collect_runs.py 读 E3a 已做，2026-10-12）。
   4. bench/scripts/cost_audit.py 在服务器上跑一次（权重到位后；没有权重的模型会被跳过）：python bench/scripts/cost_audit.py --repeat 5，输出 docs/paper/retiseg_paper/paper/data/cost_audit.tsv，回传。
 
+十一、影响因素实验（E3b、E4、E7、E8、E9；28 个任务，约 330 GPU 时；不需要 E5 权重的部分可以在等权重时先跑）
+  1. 本机没有 torch，bench/tests/test_factor.py 在本机没跑：先在 retiseg 环境跑 python -m pytest bench/tests/test_factor.py -q，再跑整套 bench/tests。失败的先修再排任务。
+  2. 子集名单：python bench/scripts/make_subsets.py（读 dataset/prepared/DDR、FGADR 的 splits.json，写 bench/data/splits/subsets/ 三个 json），提交。
+  3. 冒烟：挑 e9_unet_ddr_ce_seed0（最便宜）和 e4_m2mrf_ddr_fgadr383_seed0 各跑到第一次验证，看 recipe.json 的 factor 节、iterations 是否等于该模型 DDR 主表运行的 iterations、显存。E7 native 的 M2MRF 整画布推理（DDR 原分辨率约 1934×1956）核一次显存。
+  4. 排队：RETISEG_GPUS="..." bash bench/scripts/server_run.sh factor E9；然后 E4、E8、E3b（U-Net、M2MRF 先；SAM2-UNet、RETFound 行等权重）、E7。launch_factor.py 按 est_hours 从长到短排，metrics_test.json 存在的跳过。
+  5. 训完后 e3a 会自动发现 BF_e3b_*、BF_e4_*、BF_e8_*（E7、E9 不进独立测试）；以 FGADR 训练的运行其内部测试按 14 备注 33 重算一次（evaluate --exclude 去掉 106 张）。
+  6. 回传：runs/BF_*/ 的小文件和 runs/E3a/BF_*/。
+
 十、顺序和卡的分配（6 张卡，GPU 2–7）
   今天：二.1 HACDR 打分；三 E3a 种子 0（2 张卡插空）；四 下载公开权重、用户申请 gated 权重；E2c、U-Net DDR 继续。
   权重到位后：五.1 冒烟 → 五.2 种子 0（4 张卡）→ 五.3、五.4；E3a 对新检查点续跑。
-  之后：八 nnU-Net 补跑；七 E1r 剩余；九.2 的 cell 到位后 E3b、E4、E7、E8、E9 种子 0（16 第六节的 10-20 到 10-27）。
+  之后：十一 的影响因素实验（U-Net、M2MRF 行不等权重，可以先于 E5 用空卡）；八 nnU-Net 补跑；七 E1r 剩余。
   不砍：主表、E3a、E5 c/d 种子 0、E3b。

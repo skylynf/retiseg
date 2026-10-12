@@ -45,12 +45,33 @@ def load_frozen(path=FROZEN_PATH):
     return yaml.safe_load(Path(path).read_text())
 
 
+PREPARED_TO_SET = {"RetinalLesions": "Retinal-Lesions"}  # prepared directory name -> test-set name
+
+
 def train_source_of(config):
-    """IDRiD or DDR, from a cell config's dataset path."""
+    """IDRiD or DDR, from a cell config's dataset path (B-std and B1 runs)."""
     name = Path(config["dataset"]).name
     if name not in ("IDRiD", "DDR"):
         raise ValueError(f"E3a source runs are trained on IDRiD or DDR, got {name}")
     return name
+
+
+def train_sources_of(config):
+    """Every source a run was trained on, as test-set names: one for BS/B1, the cell's train list for BF."""
+    if config.get("experiment") == "BF":
+        names = [Path(item["dataset"]).name for item in config["train"]]
+        return [PREPARED_TO_SET.get(name, name) for name in names]
+    return [train_source_of(config)]
+
+
+def scale_source_of(config):
+    """The training source whose field of view sets the per-degree scale; None when it is not known (BF on TJDR_std, FGADR)."""
+    if config.get("experiment") != "BF":
+        return train_source_of(config)
+    frozen = load_frozen()
+    names = train_sources_of(config)
+    known = [name for name in names if name in frozen["train_field_degrees"]]
+    return known[0] if len(known) == len(names) and len(set(frozen["train_field_degrees"][n] for n in known)) == 1 else None
 
 
 def targets(train_names, frozen, sets=None):
@@ -241,7 +262,7 @@ def load_run_model(config, checkpoint, device):
         from bench.models.m2mrf import M2MRF, bind_normalization
 
         model = M2MRF()
-        bind_normalization(model, train_source_of(config))
+        bind_normalization(model, config.get("budget_reference") or train_source_of(config))
         if model.network is None:
             raise RuntimeError(model.import_error or "M2MRF network was not imported")
     else:
@@ -274,13 +295,16 @@ def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()
     frozen = load_frozen()
     run_dir = Path(run_dir)
     config = yaml.safe_load((run_dir / "config.yaml").read_text())
-    if config.get("experiment") not in ("BS", "B1"):
-        raise ValueError(f"{run_dir} is not a B-std or B1 run")
+    if config.get("experiment") not in ("BS", "B1", "BF"):
+        raise ValueError(f"{run_dir} is not a B-std, B1 or BF run")
     if int(config["fov_diameter"]) != int(frozen["canvas_reference"]):
-        raise ValueError(f"{run_dir} canvas {config['fov_diameter']} != {frozen['canvas_reference']}")
-    train_name = train_source_of(config)
+        raise ValueError(f"{run_dir} canvas {config['fov_diameter']} != {frozen['canvas_reference']} (E7 runs have no independent test)")
+    train_names = train_sources_of(config)
+    train_name = scale_source_of(config)  # None: per-degree sets are skipped, only their fov variant runs
     source = run_dir.name
-    pending = [(t, v) for t, v in targets([train_name], frozen, sets) if not is_done(source, t, v)]
+    pending = [(t, v) for t, v in targets(train_names, frozen, sets) if not is_done(source, t, v)]
+    if train_name is None:
+        pending = [(t, v) for t, v in pending if not (t in frozen.get("per_degree_sets", ()) and v == MAIN)]
     if not pending:
         print(f"{source}: every E3a set is done", flush=True)
         return
@@ -295,7 +319,7 @@ def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()
                 model = load_run_model(config, checkpoint, device)
             long_side = target_long_side(test_name, variant, train_name, frozen["canvas_reference"], frozen)
             inference = inference_geometry(config, model.card, long_side, frozen)
-            ids, excluded = test_ids(test_name, frozen, [train_name])
+            ids, excluded = test_ids(test_name, frozen, train_names)
             data_dir = test_data_dir(test_name, frozen)
             started = time.perf_counter()
             with torch.no_grad():
@@ -310,7 +334,8 @@ def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()
                     "kind": config["experiment"],
                     "model": config["model"],
                     "seed": int(config["seed"]),
-                    "train_source": train_name,
+                    "train_source": train_name if config.get("experiment") != "BF" else "+".join(train_names),
+                    "train_sources": train_names,
                     "checkpoint": str(checkpoint.relative_to(REPO) if checkpoint.is_absolute() else checkpoint),
                     "test_set": test_name,
                     "variant": variant,

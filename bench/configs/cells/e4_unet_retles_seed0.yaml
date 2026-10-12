@@ -1,0 +1,17 @@
+experiment: BF
+factor: E4
+model: U-Net
+dataset: dataset/prepared/RetinalLesions
+split_val: val
+split_test: test
+fov_diameter: 1440
+train:
+- dataset: dataset/prepared/RetinalLesions
+  split: train
+budget_reference: DDR
+seed: 0
+num_workers: 4
+paper:
+  experiment: E4
+  variant: Retinal-Lesions
+  train_set: Retinal-Lesions

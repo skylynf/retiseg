@@ -118,6 +118,16 @@ M9 基础模型（E5）
   实现（2026-10-12）：bench/models/{sam2_unet,vit_upernet,samed,sam_adapter,medsam,foundation}.py，网络都由官方代码构建；参数量核对：SAM2-UNet 2.165 亿/可训练 438 万，SAM-Adapter 6.413 亿/425 万，MedSAM 9374 万（全可训），RETFound 加 UPerNet 3.526 亿；e5_frozen.yaml 已写（含零样本和理想提示设定）。
   待补：bench/e5 推理档代码；SAM 3 与两份 RETFound 权重的申请；服务器冒烟的显存、每步耗时和实际步数；SAM 3 措辞在 DDR 验证集上的选择结果；全部结果。SAM2-UNet 的 reduce='none' 已在本机 PyTorch 2.6 上核对为平均 BCE（test_e5_models），服务器 check 阶段再核一次。
 
+M9b 影响因素实验（E3b、E4、E7、E8、E9；范围按 16 第三节，接线 2026-10-12，bench/factor.py）
+  每个实验在统一重训协议下只改一个因素，其余与主表相同：数据增强、块几何、20 次验证、按验证 mAUPR 选检查点、推理几何、评测。训练量取 DDR 主表的像素预算（400 个等效 epoch × DDR 训练集在 1440 画布上的像素数），配方取该模型的 DDR 配方（含 U-Net 的整批 Dice 修订），所以每一行看到的块像素与它对比的主表 DDR 运行相同；一个种子（0）；差异小于主表种子标准差中位数两倍的只报数不解释。
+  E3b 训练来源：U-Net、M2MRF、SAM2-UNet、RETFound 加 UPerNet 在 TJDR 常规视野和 FGADR 的训练划分上训练，验证和内部测试用同一来源；nnU-Net 走自己的桥接（待接）。与主表合成“训练来源 × 测试集”矩阵。
+  E4 标注粒度：U-Net、M2MRF 在 DDR + FGADR（抽 383 张）、DDR + FGADR、DDR + Retinal-Lesions、Retinal-Lesions 单独上训练；验证和内部测试在 DDR（Retinal-Lesions 单独一行在它自己的划分上），细标注测试集经独立测试得到。FGADR 的 383 张子集名单冻结在 bench/data/splits/subsets/FGADR_train_383.json。
+  E7 分辨率：M2MRF、RETFound 加 UPerNet 在 DDR 上以长边 512 的画布和原分辨率（不缩放）训练和推理；512 时全卷积模型的块缩到 512；像素预算不变。1440 行是主表。E7 的检查点不做独立测试。
+  E8 训练量：U-Net、M2MRF 在 DDR 训练集的 10%（38 张）、50%（192 张）和细粒度合并（IDRiD + DDR + TJDR 常规）上训练，像素预算不变，所以每张图被看到的次数反比于图数；子集名单冻结（PCG64 种子 20261012，10% 嵌套在 50% 里）。
+  E9 损失：U-Net 在 DDR 上换损失项，结构不变：交叉熵；整批 Dice；交叉熵加整批 Dice（主表）；交叉熵加逐图 Dice（原配方的 registered 运行）。
+  多来源训练集按图像顺序拼接后由同一个块采样器采样；忽略区（Retinal-Lesions 的不确定标注）在训练目标里是背景，评测照旧去掉（备注 38）。每个运行的 recipe.json 记录来源、子集、预算参照和偏差。独立测试：E3b、E4、E8 的检查点进 E3a（去重按训练来源的 leak_exclusions.json），训练源视野度数未知时（TJDR 常规、FGADR、Retinal-Lesions）超广角只报按视野大小对齐的一档。
+  待补：全部结果；nnU-Net 的 E3b；服务器上 bench/tests/test_factor.py 的通过记录；以 FGADR 训练的内部测试重算（去掉同眼的 106 张，evaluate --exclude）。
+
 M10 测试场景与泄漏审计
   内部测试：训练库自己的官方测试集。独立测试：从未参与训练的来源，整库排除在训练和内部测试之外，结论以独立测试为主（与 Lu 2026 用 IMMREP23、McPAS-TCR、VDJdb 作独立测试并用 CD-HIT 去相似序列的做法对应）。
   主表的每个检查点都在另一个训练源的测试集（交叉）和 TJDR_std、TJDR_uwf、FGADR、Retinal-Lesions、DiaRetDB1 的测试划分上推理，不做任何适配（协议 bench/configs/e3a_frozen.yaml，2026-10-12 在任何独立测试之前冻结）。
@@ -211,4 +221,5 @@ M14 数据和代码可用性
   34. TJDR 超广角有重复的图：训练集内 5 对、测试集内 1 对，跨官方训练、测试划分 2 对（TJDR_train_092 与 TJDR_test_021、TJDR_train_101 与 TJDR_test_023 是同一张图）。常规视野没有。主表只在 TJDR 上测试，不受影响；以超广角训练的补充实验要去掉这两张测试图。数据描述里写明官方划分有重复。
   35. 超广角的尺度规则在任何独立测试之前改过一次：原定“1440×133/45 ≈ 4256 超过原图，用原分辨率 3912”，改为对所有模型都按每度像素数对齐（统一重训 3830、4256，nnU-Net 约 9078、4900），因为 nnU-Net 在原分辨率上训练，原分辨率下超广角病灶比它训练时小 2.3 倍；对统一重训的模型两种做法只差 2%–9%。按视野大小对齐的版本照旧作对照。
   36. 独立测试的阈值和尺度都只取自训练源：Dice 阈值来自训练源验证集，nnU-Net 的尺度参照来自其训练集视野框的中位数。审稿人若问为什么不在测试源上调阈值，答复是独立测试不使用测试源的任何标签，与模板论文的做法一致。
+  38. 影响因素实验里以 Retinal-Lesions 训练时，它的“不确定”标注（ignore 区）在训练目标里按背景处理，评测时照旧不计；这与多数把 127 当背景的做法相同，但会把少量真实病灶当成负样本，E4 和 E8 的相关行加脚注。训练损失带忽略区权重是未来工作。
   37. WER 的工作点：DiaRetDB1 原文只说“从 ROC 上最近的真实点计算、不插值”，没说取哪个点，作者的工具包本机没有。本项目取每个 R 下 WER 最低的真实点（包括全判阴、全判阳两个端点），并报该点的 FPR、FNR 和阈值；EER 取 |FPR−FNR| 最小的真实点。论文方法里写明这一读法。

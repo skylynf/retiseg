@@ -1,0 +1,20 @@
+experiment: BF
+factor: E4
+model: U-Net
+dataset: dataset/prepared/DDR
+split_val: val
+split_test: test
+fov_diameter: 1440
+train:
+- dataset: dataset/prepared/DDR
+  split: train
+- dataset: dataset/prepared/FGADR
+  split: train
+  subset: bench/data/splits/subsets/FGADR_train_383.json
+budget_reference: DDR
+seed: 0
+num_workers: 4
+paper:
+  experiment: E4
+  variant: DDR + FGADR (383)
+  train_set: DDR + FGADR (383)

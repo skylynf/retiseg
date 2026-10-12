@@ -1,0 +1,22 @@
+experiment: BF
+factor: E9
+model: U-Net
+dataset: dataset/prepared/DDR
+split_val: val
+split_test: test
+fov_diameter: 1440
+train:
+- dataset: dataset/prepared/DDR
+  split: train
+budget_reference: DDR
+seed: 0
+num_workers: 4
+paper:
+  experiment: E9
+  variant: loss:Dice
+  train_set: DDR
+loss_override:
+  loss: dice
+  loss_params:
+    batch_dice: true
+    smooth: 1.0e-05
