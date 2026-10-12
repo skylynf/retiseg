@@ -571,3 +571,155 @@ def test_evaluate_takes_given_validation_thresholds_and_needs_every_class(tmp_pa
     assert "val_opt" not in plain["per_class"]["EX"]["thresholds"] and plain["val_thresholds_given"] is None
     with pytest.raises(ValueError, match="val_thresholds lacks"):
         evaluate(root, "test", tmp_path / "pred", proto, val_thresholds={"MA": 0.5})
+
+
+# ---- step 7: bench/e5/amg.py ------------------------------------------------------------------
+
+
+class _FakeGenerator:
+    """Two masks per window: a 2 x 2 block at the window's top-left (IoU 0.9, stability 0.8) and the whole window (0.3, 0.6)."""
+
+    def __init__(self):
+        self.calls = []
+
+    def generate(self, image):
+        import numpy as np
+
+        height, width = image.shape[:2]
+        self.calls.append((height, width))
+        small = np.zeros((height, width), bool)
+        small[:2, :2] = True
+        return [
+            {"segmentation": small, "area": 4, "bbox": [0, 0, 2, 2], "predicted_iou": 0.9, "stability_score": 0.8},
+            {"segmentation": np.ones((height, width), bool), "area": height * width, "bbox": [0, 0, width, height],
+             "predicted_iou": 0.3, "stability_score": 0.6},
+        ]
+
+
+def _filled_frozen(tmp_path, density, cap, name="filled.yaml"):
+    """The real protocol with the pool selections filled in."""
+    doc = yaml.safe_load(FROZEN.read_text())
+    doc["zero_shot"]["grid"]["selected"] = {"points_per_side": density, "area_cap_fraction": cap}
+    doc["zero_shot"]["sam3"]["selected"] = {"MA": "red dot", "HE": "retinal hemorrhage", "EX": "hard exudate", "SE": "soft exudate"}
+    path = tmp_path / name
+    path.write_text(yaml.safe_dump(doc))
+    return path
+
+
+def test_amg_pool_run_writes_every_cap_and_kind_from_fake_masks(tmp_path, monkeypatch):
+    import json
+
+    import numpy as np
+    import pytest
+
+    from bench.common.io import read_fov, read_prob_quantized
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import geometry as geo
+    from bench.e5 import outputs as out
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0", "v1"]})
+    assert amg.generator_params(frozen, "SAM", 64)["pred_iou_thresh"] == 0.88 and amg.generator_params(frozen, "SAM 2", 128)["use_m2m"] is False
+    with pytest.raises(ValueError, match="registered grid"):
+        amg.generator_params(frozen, "SAM", 32)
+    with pytest.raises(ValueError, match="automatic masks run for"):
+        amg.spec(frozen, "MedSAM")
+    assert amg.source_name(frozen, "SAM", 64) == "a_sam_vith_p64" and amg.source_name(frozen, "SAM 2", 128) == "a_sam2_hieral21_p128"
+    assert amg.cap_token(1.0) == "" and amg.cap_token(0.02) == "cap0.02" and amg.cap_token(0.005) == "cap0.005"
+    fake = _FakeGenerator()
+    summary = amg.run("SAM", 64, "DDR", "val", generator=fake, frozen=frozen, data_dir=root, long_side=20, window=8)
+    names = sorted(Path(p).name for p in summary["directories"])
+    assert names == sorted([
+        "DDR-val", "DDR-val__oracle_class", "DDR-val__stability",
+        "DDR-val__cap0.005", "DDR-val__cap0.005__oracle_class", "DDR-val__cap0.005__stability",
+        "DDR-val__cap0.02", "DDR-val__cap0.02__oracle_class", "DDR-val__cap0.02__stability",
+    ])
+    source = tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64"
+    main = source / "DDR-val"
+    predicted = json.loads((main / "predicted.json").read_text())
+    cv = geo.canvas(root, "v0", 20, masks=True)
+    per_image = len(geo.windows(cv.hw, 8, 0.5))
+    assert predicted["density"] == 64 and predicted["params"]["points_per_side"] == 64 and predicted["params"]["pred_iou_thresh"] == 0.88
+    assert predicted["geometry"] == "G1" and predicted["window"] == 8 and predicted["overlap"] == 0.5 and predicted["canvas_long_side"] == 20
+    assert predicted["n_images"] == 2 and predicted["n_windows"] == 2 * per_image and predicted["n_masks"] == 4 * per_image
+    assert predicted["kind"] == "any_lesion" and predicted["area_cap_fraction"] == 1.0 and predicted["checkpoint"] is None
+    assert predicted["generator"] == "_FakeGenerator" and predicted["seconds_per_window_mean"] is not None and "git" in predicted
+    assert all(call == (8, 8) for call in fake.calls) and len(fake.calls) == 2 * per_image  # windows are padded to 8 x 8
+    # the any-lesion map: 0.3 wherever a window covers, 0.9 at window origins, 0 outside the field of view
+    fov = read_fov(root, "v0")
+    q = read_prob_quantized(main / "prob_val", "MA", "v0")
+    assert q.shape == fov.shape and (q[~fov] == 0).all() and q[fov].min() >= round(0.3 * 65535) - 1
+    assert abs(int(q.max()) - round(0.9 * 65535)) <= 1
+    assert np.array_equal(q, read_prob_quantized(main / "prob_val", "SE", "v0"))  # stored under all four names
+    capped = read_prob_quantized(source / "DDR-val__cap0.02" / "prob_val", "MA", "v0")
+    assert abs(int(capped.max()) - round(0.9 * 65535)) <= 1 and (capped == 0).sum() > (q == 0).sum()  # the whole-window masks are gone
+    assert read_prob_quantized(source / "DDR-val__cap0.005" / "prob_val", "MA", "v0").max() == 0  # 1-pixel cap drops everything
+    stability = read_prob_quantized(source / "DDR-val__stability" / "prob_val", "MA", "v0")
+    assert abs(int(stability.max()) - round(0.8 * 65535)) <= 1 and stability[fov].min() >= round(0.6 * 65535) - 1
+    oracle = {cls: read_prob_quantized(source / "DDR-val__oracle_class" / "prob_val", cls, "v0") for cls in ("MA", "HE", "EX", "SE")}
+    assert np.array_equal(oracle["HE"], oracle["SE"]) and (oracle["MA"] >= oracle["HE"]).all()
+    assert (oracle["MA"] > 0).sum() > (oracle["HE"] > 0).sum()  # ties MA / EX go to MA; no-overlap masks go to all four
+    # evaluated with fixed thresholds only; the pool keeps its maps; a second call touches nothing
+    for name in names:
+        done = json.loads((source / name / "done.json").read_text())
+        assert done["thresholds"] == "fixed only" and done["maps_dropped"] is False and "AUPR_any_lesion" in done["summary"]
+    stamp = (main / "predicted.json").stat().st_mtime_ns
+    amg.run("SAM", 64, "DDR", "val", generator=fake, frozen=frozen, data_dir=root, long_side=20, window=8)
+    assert (main / "predicted.json").stat().st_mtime_ns == stamp and len(fake.calls) == 2 * per_image
+
+
+def test_amg_test_run_needs_the_selection_uses_pool_thresholds_and_obeys_the_budget_rule(tmp_path, monkeypatch):
+    import json
+
+    import pytest
+
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0"], "test": ["t0", "t1"]})
+    unfilled = fz.load_frozen()
+    with pytest.raises(ValueError, match="grid.selected is empty"):
+        amg.run("SAM", 64, "DDR", "test", generator=_FakeGenerator(), frozen=unfilled, data_dir=root, long_side=20, window=8)
+    frozen = fz.load_frozen(_filled_frozen(tmp_path, 64, 0.02))
+    with pytest.raises(ValueError, match="selected density 64"):
+        amg.run("SAM", 128, "DDR", "test", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8)
+    # the pool run first (one toy pool set stands in for both), then the test split with its thresholds
+    pool = [("DDR", root, "val")]
+    amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8)
+    summary = amg.run("SAM", 64, "DDR", "test", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8, pool=pool)
+    names = sorted(Path(p).name for p in summary["directories"])
+    assert names == ["DDR", "DDR__oracle_class", "DDR__stability"]
+    source = tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64"
+    done = json.loads((source / "DDR" / "done.json").read_text())
+    assert done["area_cap_fraction"] == 0.02 and done["thresholds"] == "fixed and pool val_opt" and set(done["val_thresholds"]) == {"MA", "HE", "EX", "SE"}
+    assert (source / "DDR" / "prob_test").is_dir() and done["n_images"] == 2
+    oracle = json.loads((source / "DDR__oracle_class" / "done.json").read_text())
+    assert oracle["kind"] == "oracle_class" and oracle["thresholds"] == "fixed and pool val_opt"
+    # drop_maps and limit
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs2" / "E5")
+    amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8)
+    amg.run("SAM", 64, "DDR", "test", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8, pool=pool, drop_maps=["DDR"], limit=1)
+    dropped = tmp_path / "runs2" / "E5" / "a" / "a_sam_vith_p64" / "DDR"
+    done = json.loads((dropped / "done.json").read_text())
+    assert done["maps_dropped"] is True and not (dropped / "prob_test").exists() and done["n_images"] == 1 and done["limit"] == 1
+    assert done["excluded"] == ["t1"] and json.loads((dropped / "metrics.json").read_text())["n_images"] == 1
+    # a later run without --limit predicts the smoke directory again, in full
+    amg.run("SAM", 64, "DDR", "test", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8, pool=pool, evaluate=False)
+    assert json.loads((dropped / "predicted.json").read_text())["limit"] is None and json.loads((dropped / "predicted.json").read_text())["n_images"] == 2
+    # the registered budget rule: the largest density skips the per-degree main variant of TJDR_uwf
+    largest = fz.load_frozen(_filled_frozen(tmp_path, 128, 1.0, "largest.yaml"))
+    assert amg.budget_rule_skips(largest, "test", 128, "TJDR_uwf", "main") is True
+    assert amg.budget_rule_skips(largest, "test", 128, "TJDR_uwf", "fov") is False
+    assert amg.budget_rule_skips(largest, "test", 128, "DDR", "main") is False
+    assert amg.budget_rule_skips(largest, "val", 128, "TJDR_uwf", "main") is False
+    skipped = amg.run("SAM", 128, "TJDR_uwf", "test", generator=_FakeGenerator(), frozen=largest, data_dir=root, long_side=20, window=8)
+    assert skipped["skipped"] == "budget_rule" and skipped["directories"] == []
+    assert not (tmp_path / "runs2" / "E5" / "a" / "a_sam_vith_p128").exists()
+    with pytest.raises(ValueError, match="geometry"):
+        amg.run("SAM", 64, "DDR", "val", geometry="G3", generator=_FakeGenerator(), frozen=frozen, data_dir=root)
