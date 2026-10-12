@@ -2,6 +2,7 @@ E5 推理档实现记录（a 零样本、b 理想提示）
 建立日期 2026-10-12（工作站albert，Albert 的机器；提交 e886f2a 到 1992cdf，分支 albert，共 12 个提交）。
 写给接手的人和 agent：服务器 agent 按 17 第六节执行时看第五、六节；Luming 做论文收尾时看第七节；改代码的人先看第二、三、八节。本文件只记已经实现的东西和它依赖什么；设计在 15，范围在 16，决定在 00 的同日记录。
 2026-10-12 修订（工作站albert，评审修复 1）：第七、九节 any 行的指标名改为 aupr_any_lesion；评审与修复顺序见 00「E5 推理档评审修复 1」。
+2026-10-12 修订（工作站albert，评审修复 2）：第三节 outputs.py 的 is_done 冒烟语义，第五节启动器只查计划用到的库；见 00「E5 推理档评审修复 2」。
 
 一、范围与决定
   实现的是 15 第四、五、六节在 16 第三节 E5a、E5b 两行范围下的推理档：
@@ -31,7 +32,7 @@ E5 推理档实现记录（a 零样本、b 理想提示）
   geometry.py    七个测试集的名字和目录（读 e3a_frozen.yaml）；long_side_for（标准视野 1440，TJDR_uwf 4256 / fov 1440）；window_size、windows（复用 bench.infer.window_starts，最后一窗贴边）；crop_window（画布比窗口小时右下补零，每窗同尺寸同点密度）；plan（G1 窗口 / G2 整图）；canvas（走 bench.data.b1_input.crop_resize，保持 uint8，可带四类画布真值）；paste（双线性回贴视野框，视野外 0）。
   prompts.py     b 档提示文件 runs/E5_prompts/<集>_<划分>[__变体].json：八连通域；按首像素行主序排序后用 SeedSequence(20261003, spawn_key=sha256(图/类)) 派生的 PCG64 做一次置换并记 rank；紧框 [x0, y0, x1, y1]（右下不含）；点取 EDT 最远像素、并列取行主序第一个；记每图画布尺寸、每类掩码文件 sha256、每图每类连通域数。所有模型读同一份。
   score_rules.py Mask 记录（窗口坐标掩码 + 偏移 + predicted_iou + stability_score，from_record 直接吃 SAM / SAM 2 生成器的字典）；combine_max 跨窗口按偏移取逐像素最大并裁掉越出画布的部分；masks_to_score（IoU 最大值，裁到 [0, 1]）；as_four（D8）；oracle_class（分给重叠最多的类，并列按 MA、HE、EX、SE 第一个，无重叠计入四类）；area_cap（比例 × 画布视野像素，面积只数画布内）。
-  outputs.py     runs/E5/<档>/<来源>/<集>[__变体]/{prob_test|prob_val, predicted.json, metrics.json, metrics.npz, done.json}；来源名 <档>_<模型 slug>_<token>...（a_sam_vith_p64、a_sam2_hieral21_p128、a_sam3_ph0、a_sam3_selected、b_sam_vitb_box、b_sam2_hieral21_point、b_medsam_vitb_box、b_m2mrf_ref_ddr_seed0）；变体 token 允许单下划线、双下划线分隔；池运行在 <集>-val 下用 prob_val；checkpoint_record 记权重 sha256；pool_thresholds / pool_class_aupr 合并两个池运行的像素直方图；evaluate_dir 调 bench.eval.evaluate 写三份结果，drop_maps 只删测试划分的图；needs_prediction 让 --limit 冒烟目录在之后被重做。
+  outputs.py     runs/E5/<档>/<来源>/<集>[__变体]/{prob_test|prob_val, predicted.json, metrics.json, metrics.npz, done.json}；来源名 <档>_<模型 slug>_<token>...（a_sam_vith_p64、a_sam2_hieral21_p128、a_sam3_ph0、a_sam3_selected、b_sam_vitb_box、b_sam2_hieral21_point、b_medsam_vitb_box、b_m2mrf_ref_ddr_seed0）；变体 token 允许单下划线、双下划线分隔；池运行在 <集>-val 下用 prob_val；checkpoint_record 记权重 sha256；pool_thresholds / pool_class_aupr 合并两个池运行的像素直方图；evaluate_dir 调 bench.eval.evaluate 写三份结果，drop_maps 只删测试划分的图；needs_prediction 让 --limit 冒烟目录在之后被重做；is_done(目录, limit) 带冒烟语义：全量请求不认 --limit 写的 done.json，write_predicted 重写预测时删旧的 done / metrics，池直方图忽略 limit 运行（2026-10-12 评审修复 2）。
   amg.py         SAM / SAM 2.1 自动掩码。generator_params 只有密度加库默认；build_generator 走 bench.models.foundation.official 导入；池运行每档面积上限 × {任意病灶, oracle_class, stability} 九个目录，测试运行只跑选中的一组三个目录（上限记在 predicted.json，不进目录名）；预算规则 budget_rule_skips；每窗耗时写进 predicted.json；测试运行的阈值取池里同上限同种类的目录。
   prompted.py    b 档点框提示。每个提示在"框中心离窗口边缘最远"的窗口里解码，每窗一次 set_image；k 图按 rank < k 一遍填成前缀最大值（不存逐提示的图）；SamDecoder 同时适配 segment_anything 和 sam2 的 ImagePredictor（点取 IoU 最高、框取单掩码、logits 过 sigmoid）；MedSamDecoder 照 MedSAM_Inference.py（1024 输入逐图最小最大归一、框、256 输出 sigmoid 后双线性，只接受框）；拒绝集 / 划分 / 变体 / 画布尺寸不符的提示文件。
   same_info.py   同信息对照：监督模型的原分辨率概率图乘以前 k 个框并集（框从画布外扩取整映射回原图），来源 b_<模型>_ref_<tokens>，只用固定阈值评测。
@@ -44,7 +45,7 @@ E5 推理档实现记录（a 零样本、b 理想提示）
   metrics.json / metrics.npz 由 bench.eval.evaluate 写；evaluate 加了可选参数 val_thresholds（直接给 val_opt 阈值，指标名不变，结果多记 val_thresholds_given），默认行为不变。
 
 五、运行方式（服务器；命令详见 17 第六节）
-  启动器 bench/scripts/launch_e5_infer.py：按协议枚举；池运行 22 项在前；测试运行只在相应 selected 填好后列出（SAM / SAM 2 只跑选中密度并遵守预算规则；SAM 3 三个序号加一个以三个序号目录 done.json 为闸门的拼装项）；b 档始终；同信息对照在 runs/BS_m2mrf_<库>_seed0/prob_test、runs/NN_default_<库>_fold0/prob_test 存在时加入；done.json 齐的和 console.log 显示仍在跑的跳过；排序先池后测试、画布大的先；--submit 时先在本进程生成缺的提示文件；每项一条 shell（== start / == exit 行，日志在该项主目录），SAM 3 用 retiseg-sam3，其余 retiseg；复用 launch_b1.run_queue。
+  启动器 bench/scripts/launch_e5_infer.py：按协议枚举；池运行 22 项在前；测试运行只在相应 selected 填好后列出（SAM / SAM 2 只跑选中密度并遵守预算规则；SAM 3 三个序号加一个以三个序号目录 done.json 为闸门的拼装项）；b 档始终；同信息对照在 runs/BS_m2mrf_<库>_seed0/prob_test、runs/NN_default_<库>_fold0/prob_test 存在时加入；done.json 齐的和 console.log 显示仍在跑的跳过；排序先池后测试、画布大的先；--submit 时先在本进程生成缺的提示文件；每项一条 shell（== start / == exit 行，日志在该项主目录），SAM 3 用 retiseg-sam3，其余 retiseg；复用 launch_b1.run_queue；plan 带 limit，冒烟目录对全量队列不算完成；--submit 只检查并生成本次计划用到的 prepared 库和提示文件（Item 记 split、variant、needs_prompts；absent_sets、missing_prompt_files(frozen, items)），只有 IDRiD、DDR 的机器也能做 --pool-only 冒烟（2026-10-12 评审修复 2）。
   server_run.sh 阶段：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer [--pool-only|--test-only] [--only ...] [--drop-maps FGADR,Retinal-Lesions] [--limit N]。
   单项命令：python -m bench.e5.amg --model SAM --density 64 --set DDR --split val；python -m bench.e5.prompted --model "SAM 2" --kind boxes --set IDRiD --split test；python -m bench.e5.sam3_text --phrase 0 --set DDR --split val / --select / --assemble；python -m bench.e5.prompts --set IDRiD --split test；python -m bench.e5.same_info --model M2MRF --tokens ddr seed0 --pred-dir runs/BS_m2mrf_ddr_seed0/prob_test --set DDR。
   顺序：环境与权重 → 冒烟 --pool-only --limit 2 → 池运行 → 两处选择写回 e5_frozen.yaml 并提交 → 测试集 → 回传 runs/E5 的 json。

@@ -11,9 +11,11 @@ Items, in order:
 Each item is one process on one card running python -m bench.e5.<module>; SAM 3 runs in
 retiseg-sam3 (RETISEG_SAM3_ENV overrides), everything else in retiseg. The oracle prompt
 files of every (set, split, variant) are written first, in this process (CPU). An item
-whose directories all have done.json is skipped, and so is one whose console.log shows a
-live process (bench/scripts/launch_b1.py in_progress). Items write their log to the
-first of their directories.
+whose directories all have done.json is skipped (a smoke run's done.json, written with
+--limit, does not count for a full queue), and so is one whose console.log shows a live
+process (bench/scripts/launch_b1.py in_progress). Items write their log to the first of
+their directories. Only the prepared sets and prompt files of the planned items are
+required, so a --pool-only smoke runs on a machine that holds IDRiD and DDR alone.
 
     python bench/scripts/launch_e5_infer.py                                   # print the plan
     RETISEG_GPUS="2 3" python bench/scripts/launch_e5_infer.py --submit \\
@@ -63,9 +65,13 @@ class Item:
     dirs: list
     set_name: str
     gate_dirs: list = field(default_factory=list)  # an item waits until these have done.json
+    split: str = "test"
+    variant: str = geo.MAIN
+    needs_prompts: bool = False                    # the oracle tier and the references read the prompt file of (set, split, variant)
 
-    def done(self):
-        return bool(self.dirs) and all(out.is_done(path) for path in self.dirs)
+    def done(self, limit=None):
+        """All directories evaluated for this request; a smoke run's done.json does not answer a full request (outputs.is_done)."""
+        return bool(self.dirs) and all(out.is_done(path, limit) for path in self.dirs)
 
     def running(self):
         return in_progress(self.log_dir)  # bench.scripts.launch_b1.in_progress keeps an absolute path as is
@@ -123,26 +129,30 @@ def discover(frozen):
                     source, _directories, dirs = amg.planned(frozen, model, density, set_name, split, variant)
                     argv = ["-m", "bench.e5.amg", "--model", model, "--density", str(density), "--set", set_name, "--split", split, "--variant", variant]
                     paths = list(dirs.values())
-                    items.append(Item(f"{source}:{tag}", phase, cost(COST_A[model], set_name, split, variant, frozen), ENV[model], argv, _log_dir(paths), paths, set_name))
+                    items.append(Item(f"{source}:{tag}", phase, cost(COST_A[model], set_name, split, variant, frozen), ENV[model], argv, _log_dir(paths), paths, set_name,
+                                      split=split, variant=variant))
         # a: SAM 3 phrases, then the gated assembly of the selected phrases
         if pool_run or sam3_selected:
             phrase_dirs = []
             for index in sam3_text.PHRASE_INDICES:
                 source, directory = sam3_text.planned(frozen, index, set_name, split, variant)
                 argv = ["-m", "bench.e5.sam3_text", "--phrase", str(index), "--set", set_name, "--split", split, "--variant", variant]
-                items.append(Item(f"{source}:{tag}", phase, cost(COST_A["SAM 3"], set_name, split, variant, frozen), ENV["SAM 3"], argv, directory, [directory], set_name))
+                items.append(Item(f"{source}:{tag}", phase, cost(COST_A["SAM 3"], set_name, split, variant, frozen), ENV["SAM 3"], argv, directory, [directory], set_name,
+                                  split=split, variant=variant))
                 phrase_dirs.append(directory)
             if sam3_selected:
                 selected = sam3_text.planned_selected(set_name, split, variant)
                 argv = ["-m", "bench.e5.sam3_text", "--assemble", "--set", set_name, "--split", split, "--variant", variant]
-                items.append(Item(f"{sam3_text.selected_source()}:{tag}", phase, 0.0, ENV["ref"], argv, selected, [selected], set_name, gate_dirs=phrase_dirs))
+                items.append(Item(f"{sam3_text.selected_source()}:{tag}", phase, 0.0, ENV["ref"], argv, selected, [selected], set_name, gate_dirs=phrase_dirs,
+                                  split=split, variant=variant))
         # b: oracle prompts
         for model, kinds in fz.oracle_models(frozen).items():
             for kind in kinds:
                 source, dirs = prompted.planned(frozen, model, kind, set_name, split, variant)
                 argv = ["-m", "bench.e5.prompted", "--model", model, "--kind", kind, "--set", set_name, "--split", split, "--variant", variant]
                 paths = list(dirs.values())
-                items.append(Item(f"{source}:{tag}", phase, cost(COST_B[model], set_name, split, variant, frozen), ENV[model], argv, _log_dir(paths), paths, set_name))
+                items.append(Item(f"{source}:{tag}", phase, cost(COST_B[model], set_name, split, variant, frozen), ENV[model], argv, _log_dir(paths), paths, set_name,
+                                  split=split, variant=variant, needs_prompts=True))
         # b: same-information references, internal test sets only, where the reference maps exist
         if not pool_run and set_name in ("IDRiD", "DDR"):
             src = set_name.lower()
@@ -154,13 +164,24 @@ def discover(frozen):
                 source, dirs = same_info.planned(frozen, model, tokens, set_name, split, variant)
                 argv = ["-m", "bench.e5.same_info", "--model", model, "--tokens", *tokens, "--pred-dir", pred.format(src=src), "--set", set_name, "--split", split, "--variant", variant]
                 paths = list(dirs.values())
-                items.append(Item(f"{source}:{tag}", phase, cost(COST_REF, set_name, split, variant, frozen), ENV["ref"], argv, _log_dir(paths), paths, set_name))
+                items.append(Item(f"{source}:{tag}", phase, cost(COST_REF, set_name, split, variant, frozen), ENV["ref"], argv, _log_dir(paths), paths, set_name,
+                                  split=split, variant=variant, needs_prompts=True))
     return items
 
 
-def missing_prompt_files(frozen):
-    """(set, split, variant) whose oracle prompt file does not exist yet."""
-    return [(name, split, variant) for name, split, variant in targets(frozen) if not fz.prompt_file(name, split, variant=variant).is_file()]
+def missing_prompt_files(frozen, items=None):
+    """(set, split, variant) whose oracle prompt file does not exist yet: of every target, or only of the
+    planned ``items`` that read one (the oracle tier and the references), so a plan limited by --only,
+    --pool-only or the selections asks for nothing beyond its own runs."""
+    wanted = targets(frozen) if items is None else sorted({(it.set_name, it.split, it.variant) for it in items if it.needs_prompts})
+    return [(name, split, variant) for name, split, variant in wanted if not fz.prompt_file(name, split, variant=variant).is_file()]
+
+
+def absent_sets(items):
+    """Planned sets whose prepared directory is missing on this machine (review fix 2: a --pool-only smoke on a
+    machine holding IDRiD and DDR only must not be stopped by the five sets it does not run)."""
+    needed = {it.set_name for it in items}
+    return [name for name in geo.test_sets() if name in needed and not geo.data_dir(name).is_dir()]
 
 
 def write_prompt_files(frozen, missing):
@@ -198,8 +219,11 @@ def gate_for(item):
     return gate
 
 
-def plan(frozen, only=(), pool_only=False, test_only=False):
-    """The items to run, in queue order, with done and running ones left out."""
+def plan(frozen, only=(), pool_only=False, test_only=False, limit=None):
+    """The items to run, in queue order, with done and running ones left out.
+
+    Without ``limit`` an item whose directories hold a smoke run only is not done (outputs.is_done).
+    """
     chosen = []
     for item in discover(frozen):
         source = item.label.split(":", 1)[0]
@@ -207,7 +231,7 @@ def plan(frozen, only=(), pool_only=False, test_only=False):
             continue
         if (pool_only and item.phase != POOL) or (test_only and item.phase != TEST):
             continue
-        if item.done():
+        if item.done(limit):
             print(f"skip {item.label}: done", flush=True)
             continue
         running = item.running()
@@ -231,11 +255,11 @@ def main(argv=None):
     drop = tuple(item.strip() for item in args.drop_maps.split(",") if item.strip())
     only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
     frozen = fz.load_frozen()
-    items = plan(frozen, only, args.pool_only, args.test_only)
+    items = plan(frozen, only, args.pool_only, args.test_only, args.limit)
     for item in items:
         print(f"phase {item.phase} {item.label} env {item.env} cost {item.cost:.0f}" + (" gated" if item.gate_dirs else ""), flush=True)
     print(f"E5 inference queue: {len(items)} items", flush=True)
-    missing = missing_prompt_files(frozen)
+    missing = missing_prompt_files(frozen, items)
     if missing:
         print("prompt files to write first: " + ", ".join(f"{n}/{s}/{v}" for n, s, v in missing), flush=True)
     if not args.submit:
@@ -246,9 +270,9 @@ def main(argv=None):
     gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
     if not gpus:
         raise SystemExit("--submit needs RETISEG_GPUS, the cards this queue may use")
-    absent = [name for name in geo.test_sets() if not geo.data_dir(name).is_dir()]
+    absent = absent_sets(items)
     if absent:
-        raise SystemExit("prepared test sets missing on this machine: " + ", ".join(absent))
+        raise SystemExit("prepared sets this plan needs are missing on this machine: " + ", ".join(absent))
     write_prompt_files(frozen, missing)
     queue = []
     for item in items:

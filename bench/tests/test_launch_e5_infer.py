@@ -114,3 +114,44 @@ def test_server_run_has_the_e5_infer_stage():
     subprocess.run(["bash", "-n", str(REPO / "bench/scripts/server_run.sh")], check=True)
     text = (REPO / "bench/scripts/server_run.sh").read_text()
     assert "e5-infer)" in text and "launch_e5_infer.py --submit" in text and "RetinalLesions" in text
+
+
+# ---- review fix 2 (A5): smoke runs, and a plan that asks only for what its items need ---------------
+
+
+def test_a_smoke_run_does_not_count_as_done_for_the_full_queue(tmp_path, monkeypatch):
+    """17 section 6 runs --limit 2 first; the full queue must still list those items."""
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    item = next(it for it in launch.discover(frozen) if it.label == "b_sam_vitb_box:DDR:val:main")
+    for path in item.dirs:
+        path.mkdir(parents=True)
+        (path / "done.json").write_text(json.dumps({"limit": 2}))
+    assert item.done(limit=2) and not item.done()
+    assert item.label in {it.label for it in launch.plan(frozen)} and item.label not in {it.label for it in launch.plan(frozen, limit=2)}
+
+
+def test_a_plan_asks_only_for_the_sets_and_prompt_files_of_its_items(tmp_path, monkeypatch):
+    """A --pool-only smoke on a machine holding IDRiD and DDR alone is not stopped by the five sets it does not run."""
+    from bench.e5 import geometry as geo
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    monkeypatch.setattr(fz, "PROMPTS_DIR", tmp_path / "prompts")
+    prepared = tmp_path / "prepared"
+    for name in ("IDRiD", "DDR"):
+        (prepared / name).mkdir(parents=True)
+    monkeypatch.setattr(launch.geo, "data_dir", lambda name: prepared / name)
+    frozen = fz.load_frozen()
+    pool = launch.plan(frozen, pool_only=True)
+    assert pool and launch.absent_sets(pool) == []
+    full = launch.plan(frozen)
+    assert set(launch.absent_sets(full)) == set(geo.test_sets()) - {"IDRiD", "DDR"}
+    # prompt files: the oracle tier and the references read them, the automatic masks and SAM 3 do not
+    assert all(it.split == "val" and it.variant == "main" for it in pool)
+    assert sorted(launch.missing_prompt_files(frozen, pool)) == [("DDR", "val", "main"), ("IDRiD", "val", "main")]
+    assert {it.needs_prompts for it in pool if it.label.startswith("b_")} == {True} and {it.needs_prompts for it in pool if it.label.startswith("a_")} == {False}
+    amg_only = launch.plan(frozen, only={"a_sam_vith_p64"}, pool_only=True)
+    assert amg_only and launch.missing_prompt_files(frozen, amg_only) == []
+    assert len(launch.missing_prompt_files(frozen)) == 2 + 8  # every target, as before
+    uwf = next(it for it in full if it.label == "b_sam2_hieral21_point:TJDR_uwf:test:fov")
+    assert (uwf.set_name, uwf.split, uwf.variant) == ("TJDR_uwf", "test", "fov")

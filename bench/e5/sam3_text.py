@@ -213,7 +213,7 @@ def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, 
 
         proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
         for path, src in [(directory, source)] + ([(assembled, selected_source())] if assembled is not None else []):
-            if out.is_done(path):
+            if out.is_done(path, limit):
                 continue
             thresholds = None if pool_run else out.pool_thresholds(TIER, src, frozen, proto, pool=pool)
             out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)

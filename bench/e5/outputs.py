@@ -81,8 +81,18 @@ def pred_dir(directory, split):
     return Path(directory) / ("prob_val" if fz.is_pool_split(split) else "prob_test")
 
 
-def is_done(directory):
-    return (Path(directory) / "done.json").is_file()
+def is_done(directory, limit=None):
+    """True when the directory holds a finished evaluation that answers this request.
+
+    A full request (``limit`` None) is answered only by a full run: the done.json
+    of a smoke run (--limit) does not count, so the launcher queues the item again
+    and the run evaluates it again (review fix 2, A5). A smoke request is answered
+    by any finished evaluation.
+    """
+    path = Path(directory) / "done.json"
+    if not path.is_file():
+        return False
+    return limit is not None or json.loads(path.read_text()).get("limit") is None
 
 
 def needs_prediction(directory, limit=None):
@@ -116,9 +126,15 @@ def checkpoint_record(path):
     return {"file": path.name, "sha256": _sha256(str(path.resolve()), stat.st_size, stat.st_mtime_ns), "bytes": int(stat.st_size)}
 
 
+EVALUATION_FILES = ("done.json", "metrics.json", "metrics.npz")
+
+
 def write_predicted(directory, payload):
+    """Record a finished prediction; an evaluation of earlier maps in the directory goes with it."""
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
+    for name in EVALUATION_FILES:  # new maps make the old metrics stale (a smoke run redone in full)
+        (directory / name).unlink(missing_ok=True)
     (directory / "predicted.json").write_text(json.dumps(payload, indent=1) + "\n")
 
 
@@ -130,13 +146,19 @@ def read_predicted(directory):
 
 
 def _pool_totals(tier, source, frozen, proto, pool=None, variants=()):
-    """{cls: [pos, neg]} pixel histograms pooled over the source's pool runs, or None until all exist."""
+    """{cls: [pos, neg]} pixel histograms pooled over the source's pool runs, or None until all exist.
+
+    A pool run made with --limit does not count as existing: a selection or a
+    threshold never comes from the first N pool images.
+    """
     pool = fz.pool_sets(frozen) if pool is None else list(pool)
     totals = None
     for name, data_dir, split in pool:
         directory = out_dir(tier, source, set_dirname(pool_set_dirname(name), variants))
         maps = pred_dir(directory, split)
         if not (directory / "predicted.json").is_file() or not maps.is_dir():
+            return None
+        if read_predicted(directory).get("limit") is not None:
             return None
         hist = pooled_histograms(data_dir, split, maps, proto)
         if totals is None:

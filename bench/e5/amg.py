@@ -272,7 +272,7 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
 
         proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
         for name, path in dirs.items():
-            if out.is_done(path):
+            if out.is_done(path, limit):
                 continue
             thresholds = None
             if not pool_run:

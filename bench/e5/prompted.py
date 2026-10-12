@@ -318,7 +318,7 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
 
         proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
         for k, path in dirs.items():
-            if out.is_done(path):
+            if out.is_done(path, limit):
                 continue
             thresholds = None if pool_run else out.pool_thresholds(TIER, source, frozen, proto, pool=pool, variants=[k_token(k)])
             out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)

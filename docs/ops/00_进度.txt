@@ -58,8 +58,14 @@ E5 推理档步骤 11–12：启动器与论文收集，工作站albert 的代�
 2. 论文脚本按 16 改键（fig5 去 SAM 点提示、k 四档；表 6 的 SAM 框提示骨干 ViT-B），collect_runs.py 读 runs/E5（a 档 zero_shot:auto_*、SAM 3 逐类 text:<措辞>、b 档 oracle:<kind>:<k>、同信息对照 oracle_ref:box:<k>），并对所有报告写 cls "any" 的任意病灶 AUPR 行。test_collect_runs.py 加了 E5 玩具树；它和占位数据的重生成（build_placeholder.py 已去 k=10 和 SAM 点提示）要在有 pandas 的机器上做。
 3. 至此 17 第九节第 1 条的本机代码全部到位（提交 e886f2a 到 1992cdf，12 个提交）；bench/tests 194 通过、18 跳过、6 失败、4 错误（失败和错误仍是缺数据和 H2Former 上限两类）。未做的：步骤 10（服务器验证池运行、两处选择写回）、步骤 13（服务器冒烟与全量）、12 的收尾（Luming：test_collect_runs、重生成占位、make）。服务器步骤写在 17 第六节，实现记录、依赖和与 15 的差异写在 design/18（同日新建）。
 
-E5 推理档评审修复 1：any 行独立指标名（2026-10-12，工作站albert；待提交）
+E5 推理档评审修复 1：any 行独立指标名（2026-10-12，工作站albert；提交 3b03b93）
 1. 背景：albert 分支（main 3c505bb 对 71e803b）收到一份 peer review（docs/notes(albert)/albert-branch-review-2026-10-12.md，未跟踪；云端沙箱做的，附补丁 reviewFixes.patch），合并前必修 A1–A4，补丁另发现 A5（冒烟目录的 done.json 被当成完成）；协议与科学层面 B1–B6；工程四项。工作站albert 逐条对照代码、子模块和文档核实，全部成立；分级与处理决定登在 docs/notes(albert)/现存问题.txt 第 10–26 条。用户 2026-10-12 决定全部采纳工作站albert 的处理建议（原则：不与 Luming 原有安排冲突），一步一个关注点修，每步用户核验后提交；顺序 A1、A5、A3、A2、A4，再 B5、B1、B4、B3、B6、B2 和工程项。
 2. A1：collect_runs.rows_from_report 给每份报告加的 cls "any" 行原用 metric "aupr"；retifig/data.py 的 seed_table 对 metric=aupr 的全部行取均值，E2 主表 mAUPR、score_matrix、Friedman 区组都会变成五个数的平均（工作站albert 复现：四类 0.1/0.2/0.3/0.4 加 any 0.5，评测器 mAUPR 0.25，汇总 0.30；真实评测器下 test_collect_runs.py 第 135 行断言失败）。results.csv 尚未重生成，错数还没进仓库，合并后下一次 collect 就会触发。
 3. 改动：collect_runs.py 的 any 行改用独立指标名 aupr_any_lesion（常量 ANY_LESION_METRIC）；data.py 的 seed_table 在 cls=mean 时只对四类取均值（双保险）；test_collect_runs.py 断言 metric=aupr 的 cls 恰为四类、其均值等于评测器 mAUPR、any 行等于 AUPR_any_lesion。18 第七、九节同步。bench/ 未改。
 4. 验证：工作站albert 在 retiseg 之外建了带 pandas 的临时 venv（现存问题 3 的做法，不装进 retiseg），test_collect_runs.py 修前在 135 行失败、修后两行 ok（一份报告 45 行替换 44 个占位；E5 玩具树 8 个目录 299 行）。Luming 侧 collect 时注意 any 行的新指标名；图 5、表 6 之后读 aupr_any_lesion（评审 B2，待办）。
+
+E5 推理档评审修复 2：冒烟目录不算完成，启动器只查计划用到的库（2026-10-12，工作站albert；待提交）
+1. A5（补丁新发现，工作站albert 按原代码核实）：outputs.is_done 只看 done.json 是否存在。17 第六节 b 步 --limit 2 冒烟之后，c 步不带 limit 的 --pool-only 会把 22 项全部 "skip: done"；手动重跑时预测会重做（needs_prediction 认 limit）但评测被 is_done 跳过，留下 2 张图的指标配全量的图；冒烟的池运行还能喂给 --select 和池阈值。
+2. 改动：is_done(目录, limit)：全量请求（limit 为 None）只认 done.json 里 limit 为 None 的评测，冒烟请求认任何评测；write_predicted 重写预测时删旧的 done.json、metrics.json、metrics.npz；_pool_totals 对 limit 不为 None 的池运行返回 None（选择和阈值不来自前 N 张）。amg、prompted、same_info、sam3_text 的评测循环传 limit；启动器 Item.done(limit)、plan(..., limit)。
+3. 顺带（现存问题 26）：launch_e5_infer.py --submit 原来要求七个 prepared 库都在，--pool-only 也不例外，只有 IDRiD、DDR 的工作站albert 做池冒烟会直接退出。改成 absent_sets(items) 只查本次计划用到的集，missing_prompt_files(frozen, items) 只生成计划里要读提示文件的项（b 档和同信息对照；Item 新增 split、variant、needs_prompts）。测试阶段的保护不变，因为测试项会把七个库都列进计划。server_run.sh 的 e5-infer 阶段仍查七个库（服务器用，Luming 的脚本不改）。
+4. 测试：test_e5_infer 加 1 个（冒烟→全量→再冒烟三次 run：全量重评、冒烟池不给阈值、第三次什么都不做），test_launch_e5_infer 加 2 个（冒烟 done.json 对全量队列不算完成；只有两个库时 --pool-only 计划的 absent_sets 为空、提示文件只要池的两份）。整套 bench/tests 预期 197 / 18 / 6 / 4。17 第六节 b 步、18 第三、五节同步。

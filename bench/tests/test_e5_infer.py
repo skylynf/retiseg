@@ -1017,3 +1017,39 @@ def test_sam3_environment_scripts_parse_and_name_the_env():
     assert "install_sam3" in text and "ensure_env retiseg-sam3 3.12" in text and "RETISEG_SKIP_SAM3" in text
     assert "official_code/sam3" in text and "(2, 7)" in text and "(12, 6)" in text
     assert "retiseg-sam3" in (REPO / "bench/scripts/server_run.sh").read_text()
+
+
+# ---- review fix 2 (A5): a smoke run's done.json does not answer a full request ---------------------
+
+
+def test_a_full_run_replaces_the_evaluation_of_a_smoke_run(tmp_path, monkeypatch):
+    """A directory predicted again in full is evaluated again, and a smoke pool run feeds no selection or threshold."""
+    import json
+
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.eval.evaluate import load_protocol
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0", "v1", "v2"], "test": ["t0"]})
+    directory = tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64" / "DDR-val"
+    amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8, limit=1)
+    smoke = json.loads((directory / "done.json").read_text())
+    assert smoke["n_images"] == 1 and smoke["limit"] == 1 and smoke["excluded"] == ["v1", "v2"]
+    assert out.is_done(directory, limit=1) and not out.is_done(directory)
+    proto = load_protocol(REPO / "bench/eval/protocol.yaml")
+    pool = [("DDR", root, "val")]
+    assert out.pool_class_aupr("a", "a_sam_vith_p64", frozen, proto, pool=pool) is None
+    assert out.pool_thresholds("a", "a_sam_vith_p64", frozen, proto, pool=pool) is None
+    amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8)
+    full = json.loads((directory / "done.json").read_text())
+    assert full["n_images"] == 3 and full["limit"] is None and full["excluded"] == [] and out.is_done(directory)
+    assert json.loads((directory / "metrics.json").read_text())["n_images"] == 3
+    assert out.pool_thresholds("a", "a_sam_vith_p64", frozen, proto, pool=pool) is not None
+    # a later smoke request is answered by the full run: nothing is predicted or evaluated again
+    again = _FakeGenerator()
+    amg.run("SAM", 64, "DDR", "val", generator=again, frozen=frozen, data_dir=root, long_side=20, window=8, limit=1)
+    assert again.calls == [] and json.loads((directory / "done.json").read_text())["n_images"] == 3

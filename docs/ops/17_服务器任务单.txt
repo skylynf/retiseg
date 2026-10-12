@@ -46,7 +46,7 @@
 六、E5 推理档（a 零样本、b 理想提示）
   代码已到位（工作站albert 2026-10-12，提交 e886f2a 到 1992cdf；bench/e5/ 的 frozen、geometry、prompts、score_rules、outputs、amg、prompted、same_info、sam3_text，启动器 bench/scripts/launch_e5_infer.py，server_run.sh 的 e5-infer 阶段，cluster_env.sh 的 retiseg-sam3；全部只用假模型做了单元测试，没碰过权重和数据）。服务器步骤：
     a. bash bench/scripts/cluster_env.sh sam3（或 env 阶段）建 retiseg-sam3；权重 sam_vit_h、sam_vit_b、sam2.1_hiera_large、medsam_vit_b、sam3.pt 放 pretrained/。
-    b. 冒烟：RETISEG_GPUS="2" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2，看 runs/E5/a|b/<来源>/<集>-val/predicted.json 的每窗 / 每提示耗时和显存；之后不带 --limit 重跑会把冒烟目录重做。
+    b. 冒烟：RETISEG_GPUS="2" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2，看 runs/E5/a|b/<来源>/<集>-val/predicted.json 的每窗 / 每提示耗时和显存；之后不带 --limit 重跑会把冒烟目录重做（2026-10-12 评审修复 2 起：冒烟写的 done.json 不算完成，启动器会把这些项重新排队，重做预测并重评；冒烟的池运行也不会喂给选择和阈值。启动器只检查并生成本次计划用到的 prepared 库和提示文件，所以只有 IDRiD、DDR 的工作站albert 也能做 --pool-only 冒烟）。
     c. 池运行：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer --pool-only（22 项：a 档两模型 × 两密度、SAM 3 三个序号、b 档四个模型种类，各在 IDRiD 验证 10 张和 DDR 验证 149 张上）。
     d. 选择并写回 e5_frozen.yaml：a 档按验证池六组的 AUPR_any_lesion 选一组填 zero_shot.grid.selected（池目录 <集>-val[__cap..] 的 done.json 里有 summary）；SAM 3 跑 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select，把打印的 selected 粘进 zero_shot.sam3.selected。提交，00 记一笔（选中的组、各组数字）。若 128 当选，预算规则会让 TJDR_uwf 的主变体不跑（现存问题 7，用户可否决）。
     e. 测试集：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer --test-only --drop-maps FGADR,Retinal-Lesions。SAM 3 的 a_sam3_selected 由启动器的闸门项自动拼装。同信息对照在 runs/BS_m2mrf_<库>_seed0/prob_test 和 runs/NN_default_<库>_fold0/prob_test 存在时自动加入。
