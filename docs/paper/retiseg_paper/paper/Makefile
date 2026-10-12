@@ -27,7 +27,7 @@ pdf: figures tables numbers refs.bib
 	latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
 collect:
-	$(PY) scripts/collect_runs.py --runs ../runs
+	$(PY) scripts/collect_runs.py
 	$(MAKE) pdf
 
 final:
