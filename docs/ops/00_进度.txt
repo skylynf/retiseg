@@ -64,8 +64,14 @@ E5 推理档评审修复 1：any 行独立指标名（2026-10-12，工作站albe
 3. 改动：collect_runs.py 的 any 行改用独立指标名 aupr_any_lesion（常量 ANY_LESION_METRIC）；data.py 的 seed_table 在 cls=mean 时只对四类取均值（双保险）；test_collect_runs.py 断言 metric=aupr 的 cls 恰为四类、其均值等于评测器 mAUPR、any 行等于 AUPR_any_lesion。18 第七、九节同步。bench/ 未改。
 4. 验证：工作站albert 在 retiseg 之外建了带 pandas 的临时 venv（现存问题 3 的做法，不装进 retiseg），test_collect_runs.py 修前在 135 行失败、修后两行 ok（一份报告 45 行替换 44 个占位；E5 玩具树 8 个目录 299 行）。Luming 侧 collect 时注意 any 行的新指标名；图 5、表 6 之后读 aupr_any_lesion（评审 B2，待办）。
 
-E5 推理档评审修复 2：冒烟目录不算完成，启动器只查计划用到的库（2026-10-12，工作站albert；待提交）
+E5 推理档评审修复 2：冒烟目录不算完成，启动器只查计划用到的库（2026-10-12，工作站albert；提交 4493d68）
 1. A5（补丁新发现，工作站albert 按原代码核实）：outputs.is_done 只看 done.json 是否存在。17 第六节 b 步 --limit 2 冒烟之后，c 步不带 limit 的 --pool-only 会把 22 项全部 "skip: done"；手动重跑时预测会重做（needs_prediction 认 limit）但评测被 is_done 跳过，留下 2 张图的指标配全量的图；冒烟的池运行还能喂给 --select 和池阈值。
 2. 改动：is_done(目录, limit)：全量请求（limit 为 None）只认 done.json 里 limit 为 None 的评测，冒烟请求认任何评测；write_predicted 重写预测时删旧的 done.json、metrics.json、metrics.npz；_pool_totals 对 limit 不为 None 的池运行返回 None（选择和阈值不来自前 N 张）。amg、prompted、same_info、sam3_text 的评测循环传 limit；启动器 Item.done(limit)、plan(..., limit)。
 3. 顺带（现存问题 26）：launch_e5_infer.py --submit 原来要求七个 prepared 库都在，--pool-only 也不例外，只有 IDRiD、DDR 的工作站albert 做池冒烟会直接退出。改成 absent_sets(items) 只查本次计划用到的集，missing_prompt_files(frozen, items) 只生成计划里要读提示文件的项（b 档和同信息对照；Item 新增 split、variant、needs_prompts）。测试阶段的保护不变，因为测试项会把七个库都列进计划。server_run.sh 的 e5-infer 阶段仍查七个库（服务器用，Luming 的脚本不改）。
 4. 测试：test_e5_infer 加 1 个（冒烟→全量→再冒烟三次 run：全量重评、冒烟池不给阈值、第三次什么都不做），test_launch_e5_infer 加 2 个（冒烟 done.json 对全量队列不算完成；只有两个库时 --pool-only 计划的 absent_sets 为空、提示文件只要池的两份）。整套 bench/tests 预期 197 / 18 / 6 / 4。17 第六节 b 步、18 第三、五节同步。
+
+E5 推理档评审修复 3：测试划分不再静默退成 fixed only，测试项等本来源的池（2026-10-12，工作站albert；待提交）
+1. A3：按 17 第六节 pool-only → 选择 → --test-only 的流程，池上的 a_sam3_selected 拼装项属 POOL 阶段被 --test-only 过滤掉，测试集的 a_sam3_selected 拿不到池阈值，退成 "fixed only" 并写 done.json；更一般地，任何早于同来源池运行的测试运行（--only、--test-only、池项失败）都静默退化，且 done.json 写下后不再重评。顺带发现：评测的排除集和阈值例外跟随本次请求的 --limit 而不是目录里的预测，冒烟请求落在一个全量预测目录上会只评前 N 张却写出看似全量的 done.json。
+2. 改动：outputs.thresholds_for_test 在测试划分拿不到池阈值时抛 RuntimeError（预测已落盘，池跑完后重跑同一命令只做评测），预测本身为冒烟时例外；outputs.evaluation_scope 从 predicted.json 取 limit 和排除集，amg、prompted、same_info、sam3_text 的评测都改用它。启动器：测试项以本来源池目录为闸门（amg 九个目录、prompted 各 k、SAM 3 措辞各自序号；测试拼装项另加两个池拼装项），同信息对照无闸门；池拼装项标 prerequisite，--test-only 保留它；gate_for(item, producers, limit) 在队列里没有谁会写该目录、或写它的项自队列启动后已完成一轮却没写出 done.json 时返回 never（run_queue 记为 not started），producers_of 在排队前记下每个生产者日志里已完成的轮数，所以上一轮的失败不会误关闸门（补丁原方案读日志最后一个退出码，被重新排队的失败项在启动前会被误判，这里改掉）。
+3. 测试：test_e5_infer 加 1 个（测试划分无池直接报错、冒烟请求不把全量目录当冒烟评、冒烟池不算池、冒烟预测例外标 fixed only、池到位后同一命令只评测且阈值为 pool val_opt）；test_launch_e5_infer 改 1 个、加 1 个（--test-only 保留池拼装项并排在最前；各档闸门目录；producers 缺席 → never、运行中 → wait、完成未写出 → never、旧失败 → wait、冒烟 done 只开冒烟队列）。整套 bench/tests 预期 199 / 18 / 6 / 4。17 第六节 e 步、18 第三、五节同步。
+

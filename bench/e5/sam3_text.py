@@ -215,8 +215,9 @@ def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, 
         for path, src in [(directory, source)] + ([(assembled, selected_source())] if assembled is not None else []):
             if out.is_done(path, limit):
                 continue
-            thresholds = None if pool_run else out.pool_thresholds(TIER, src, frozen, proto, pool=pool)
-            out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)
+            predicted_limit, excluded_eval = out.evaluation_scope(path, ids + excluded)
+            thresholds = None if pool_run else out.thresholds_for_test(TIER, src, frozen, proto, pool=pool, limit=predicted_limit)
+            out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded_eval)
     return {"source": source, "directory": str(directory), "assembled": None if assembled is None else str(assembled), "n_images": len(ids)}
 
 
@@ -276,7 +277,7 @@ def assemble_selected(set_name, split, variant=geo.MAIN, frozen=None, data_dir=N
         proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
         data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
         _ids_done, excluded = _ids(data_dir, split, run_limit)
-        thresholds = None if pool_run else out.pool_thresholds(TIER, selected_source(), frozen, proto, pool=pool)
+        thresholds = None if pool_run else out.thresholds_for_test(TIER, selected_source(), frozen, proto, pool=pool, limit=run_limit)
         out.evaluate_dir(target, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)
     return target
 

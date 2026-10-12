@@ -1053,3 +1053,55 @@ def test_a_full_run_replaces_the_evaluation_of_a_smoke_run(tmp_path, monkeypatch
     again = _FakeGenerator()
     amg.run("SAM", 64, "DDR", "val", generator=again, frozen=frozen, data_dir=root, long_side=20, window=8, limit=1)
     assert again.calls == [] and json.loads((directory / "done.json").read_text())["n_images"] == 3
+
+
+# ---- review fix 3 (A3): a test split is not evaluated without the pool thresholds -------------------
+
+
+def test_a_test_split_is_not_evaluated_without_the_pool_thresholds(tmp_path, monkeypatch):
+    """No silent fall-back to the fixed threshold: the prediction stays and the next call evaluates it."""
+    import json
+
+    import pytest
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.e5 import prompted, prompts
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _two_component_set(root, {"val": ["v0"], "test": ["t0", "t1"]})
+    pdir = tmp_path / "prompts"
+    for split in ("val", "test"):
+        prompts.build("DDR", split, frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    pool = [("DDR", root, "val")]
+    kwargs = dict(frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    with pytest.raises(RuntimeError, match="run the pool first"):
+        prompted.run("SAM", "boxes", "DDR", "test", decoder=_FakeDecoder(), pool=pool, **kwargs)
+    directory = tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box" / "DDR__kall"
+    assert (directory / "predicted.json").is_file() and not (directory / "done.json").exists()
+    # a smoke request on that full prediction does not evaluate it as a smoke either: the scope is the prediction's
+    with pytest.raises(RuntimeError, match="run the pool first"):
+        prompted.run("SAM", "boxes", "DDR", "test", decoder=_FakeDecoder(), pool=pool, limit=1, **kwargs)
+    assert not (directory / "done.json").exists()
+    # a smoke pool run is not a pool run; a smoke test prediction is the exception and says so
+    prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), limit=1, **kwargs)
+    with pytest.raises(RuntimeError, match="run the pool first"):
+        prompted.run("SAM", "boxes", "DDR", "test", decoder=_FakeDecoder(), pool=pool, **kwargs)
+    smoke_root = tmp_path / "prepared" / "IDRiD"
+    _two_component_set(smoke_root, {"val": ["w0"], "test": ["s0", "s1"]})
+    for split in ("val", "test"):
+        prompts.build("IDRiD", split, frozen=frozen, out_dir=pdir, data_dir=smoke_root, long_side=20)
+    prompted.run("SAM", "boxes", "IDRiD", "test", decoder=_FakeDecoder(), pool=[("IDRiD", smoke_root, "val")], limit=1,
+                 frozen=frozen, data_dir=smoke_root, long_side=20, window=8, prompts_dir=pdir)
+    smoke = json.loads((tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box" / "IDRiD__kall" / "done.json").read_text())
+    assert smoke["thresholds"] == "fixed only" and smoke["limit"] == 1 and smoke["excluded"] == ["s1"]
+    # the full pool run arrives: the same command evaluates only, with the pool thresholds
+    prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), **kwargs)
+    again = _FakeDecoder()
+    prompted.run("SAM", "boxes", "DDR", "test", decoder=again, pool=pool, **kwargs)
+    assert again.images == []
+    done = json.loads((directory / "done.json").read_text())
+    assert done["thresholds"] == "fixed and pool val_opt" and done["limit"] is None and done["excluded"] == []
+    assert out.is_done(directory) and json.loads((directory / "metrics.json").read_text())["n_images"] == 2

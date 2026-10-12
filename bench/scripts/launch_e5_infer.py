@@ -7,7 +7,9 @@ Items, in order:
   2. test runs on the seven sets (TJDR_uwf main and fov): SAM / SAM 2 only once
      zero_shot.grid.selected is filled, SAM 3 only once zero_shot.sam3.selected is filled
      (then a gated assembly of a_sam3_selected per set), the oracle tier and the
-     same-information references always; larger canvases first.
+     same-information references always; larger canvases first. A test item waits
+     (gate) for the pool directories of its own source, which give its Dice thresholds;
+     a gate closes ("never") when nothing in the queue will write them.
 Each item is one process on one card running python -m bench.e5.<module>; SAM 3 runs in
 retiseg-sam3 (RETISEG_SAM3_ENV overrides), everything else in retiseg. The oracle prompt
 files of every (set, split, variant) are written first, in this process (CPU). An item
@@ -68,6 +70,7 @@ class Item:
     split: str = "test"
     variant: str = geo.MAIN
     needs_prompts: bool = False                    # the oracle tier and the references read the prompt file of (set, split, variant)
+    prerequisite: bool = False                     # a pool-phase item the test runs need (the pool assembly of a_sam3_selected): kept by --test-only
 
     def done(self, limit=None):
         """All directories evaluated for this request; a smoke run's done.json does not answer a full request (outputs.is_done)."""
@@ -111,8 +114,15 @@ def targets(frozen):
 
 
 def discover(frozen):
-    """Every item the current protocol allows; done and running items are filtered by the caller."""
+    """Every item the current protocol allows; done and running items are filtered by the caller.
+
+    A test item whose evaluation takes its Dice thresholds from the pool (D2) is
+    gated on the pool directories of its own source, so it waits for them instead of
+    being evaluated without (review fix 3, A3). The same-information references use
+    the fixed threshold only and have no gate.
+    """
     items = []
+    pool_sets = [(name, split) for name, _dir, split in fz.pool_sets(frozen)]
     grid_selected = _filled(fz.selected_pair, frozen)
     sam3_selected = _filled(fz.selected_phrases, frozen)
     densities = [int(d) for d in frozen["zero_shot"]["grid"]["points_per_side"]]
@@ -129,30 +139,35 @@ def discover(frozen):
                     source, _directories, dirs = amg.planned(frozen, model, density, set_name, split, variant)
                     argv = ["-m", "bench.e5.amg", "--model", model, "--density", str(density), "--set", set_name, "--split", split, "--variant", variant]
                     paths = list(dirs.values())
+                    gates = [] if pool_run else [path for name, sp in pool_sets for path in amg.planned(frozen, model, density, name, sp)[2].values()]
                     items.append(Item(f"{source}:{tag}", phase, cost(COST_A[model], set_name, split, variant, frozen), ENV[model], argv, _log_dir(paths), paths, set_name,
-                                      split=split, variant=variant))
+                                      gate_dirs=gates, split=split, variant=variant))
         # a: SAM 3 phrases, then the gated assembly of the selected phrases
         if pool_run or sam3_selected:
             phrase_dirs = []
             for index in sam3_text.PHRASE_INDICES:
                 source, directory = sam3_text.planned(frozen, index, set_name, split, variant)
                 argv = ["-m", "bench.e5.sam3_text", "--phrase", str(index), "--set", set_name, "--split", split, "--variant", variant]
+                gates = [] if pool_run else [sam3_text.planned(frozen, index, name, sp)[1] for name, sp in pool_sets]
                 items.append(Item(f"{source}:{tag}", phase, cost(COST_A["SAM 3"], set_name, split, variant, frozen), ENV["SAM 3"], argv, directory, [directory], set_name,
-                                  split=split, variant=variant))
+                                  gate_dirs=gates, split=split, variant=variant))
                 phrase_dirs.append(directory)
             if sam3_selected:
                 selected = sam3_text.planned_selected(set_name, split, variant)
                 argv = ["-m", "bench.e5.sam3_text", "--assemble", "--set", set_name, "--split", split, "--variant", variant]
-                items.append(Item(f"{sam3_text.selected_source()}:{tag}", phase, 0.0, ENV["ref"], argv, selected, [selected], set_name, gate_dirs=phrase_dirs,
-                                  split=split, variant=variant))
+                # a test assembly also waits for the pool assembly, which gives its thresholds; the pool assembly is a prerequisite of the test phase
+                gates = phrase_dirs + ([] if pool_run else [sam3_text.planned_selected(name, sp) for name, sp in pool_sets])
+                items.append(Item(f"{sam3_text.selected_source()}:{tag}", phase, 0.0, ENV["ref"], argv, selected, [selected], set_name, gate_dirs=gates,
+                                  split=split, variant=variant, prerequisite=pool_run))
         # b: oracle prompts
         for model, kinds in fz.oracle_models(frozen).items():
             for kind in kinds:
                 source, dirs = prompted.planned(frozen, model, kind, set_name, split, variant)
                 argv = ["-m", "bench.e5.prompted", "--model", model, "--kind", kind, "--set", set_name, "--split", split, "--variant", variant]
                 paths = list(dirs.values())
+                gates = [] if pool_run else [path for name, sp in pool_sets for path in prompted.planned(frozen, model, kind, name, sp)[1].values()]
                 items.append(Item(f"{source}:{tag}", phase, cost(COST_B[model], set_name, split, variant, frozen), ENV[model], argv, _log_dir(paths), paths, set_name,
-                                  split=split, variant=variant, needs_prompts=True))
+                                  gate_dirs=gates, split=split, variant=variant, needs_prompts=True))
         # b: same-information references, internal test sets only, where the reference maps exist
         if not pool_run and set_name in ("IDRiD", "DDR"):
             src = set_name.lower()
@@ -208,13 +223,49 @@ def command(item, py_argv=None, drop_maps=(), limit=None):
     )
 
 
-def gate_for(item):
-    """A run_queue gate: open once every gate directory has done.json, otherwise wait."""
+def completed_runs(log_dir):
+    """How many runs an item's console.log has finished ("== exit" lines); 0 without a log."""
+    log = Path(log_dir) / "console.log"
+    if not log.is_file():
+        return 0
+    return sum(1 for line in log.read_text(errors="replace").splitlines() if line.startswith("== exit "))
+
+
+def producers_of(items):
+    """{directory: (log directory, runs completed so far)} of the items that write each directory.
+
+    Taken once, before the queue starts: a gate then knows that a producer has run
+    since (its completed count grew) and did not write the directory, whatever an
+    older failure in the same log says.
+    """
+    return {path: (it.log_dir, completed_runs(it.log_dir)) for it in items for path in it.dirs}
+
+
+def gate_for(item, producers=None, limit=None):
+    """A run_queue gate over the item's gate directories.
+
+    "open" once every one has done.json for this request (outputs.is_done); "never"
+    when one cannot arrive any more: no item of this queue (nor one still running
+    from another launcher) writes it, or the item that writes it has finished a run
+    since the queue started without producing it; otherwise "wait". ``producers`` is
+    producers_of(...) over the queued and the running items; None means every
+    missing directory is still expected (a plan that is only printed).
+    """
     if not item.gate_dirs:
         return None
 
     def gate():
-        return "open" if all(out.is_done(path) for path in item.gate_dirs) else "wait"
+        missing = [path for path in item.gate_dirs if not out.is_done(path, limit)]
+        if not missing:
+            return "open"
+        if producers is not None:
+            for path in missing:
+                if path not in producers:
+                    return "never"
+                log_dir, before = producers[path]
+                if completed_runs(log_dir) > before:
+                    return "never"  # the producer has run and left no done.json; run_queue records its own failure
+        return "wait"
 
     return gate
 
@@ -223,13 +274,16 @@ def plan(frozen, only=(), pool_only=False, test_only=False, limit=None):
     """The items to run, in queue order, with done and running ones left out.
 
     Without ``limit`` an item whose directories hold a smoke run only is not done (outputs.is_done).
+    --test-only keeps the pool-phase prerequisites of the test runs (the pool assembly of
+    a_sam3_selected, listed once the phrases are selected): the documented order is
+    pool runs -> selections -> --test-only, and the test assembly needs its thresholds.
     """
     chosen = []
     for item in discover(frozen):
         source = item.label.split(":", 1)[0]
         if only and source not in only:
             continue
-        if (pool_only and item.phase != POOL) or (test_only and item.phase != TEST):
+        if (pool_only and item.phase != POOL) or (test_only and item.phase != TEST and not item.prerequisite):
             continue
         if item.done(limit):
             print(f"skip {item.label}: done", flush=True)
@@ -274,10 +328,13 @@ def main(argv=None):
     if absent:
         raise SystemExit("prepared sets this plan needs are missing on this machine: " + ", ".join(absent))
     write_prompt_files(frozen, missing)
+    # who writes each gate directory: the items of this queue and the items another launcher is still running
+    running = [it for it in discover(frozen) if it.running() is not None]
+    producers = producers_of(running + items)
     queue = []
     for item in items:
         entry = (item.label, command(item, drop_maps=drop, limit=args.limit))
-        gate = gate_for(item)
+        gate = gate_for(item, producers, args.limit)
         queue.append(entry + ((gate,) if gate is not None else ()))
     errors = run_queue(queue, gpus, wait_free=True)
     if errors:

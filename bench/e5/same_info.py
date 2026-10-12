@@ -123,6 +123,7 @@ def run(model, tokens, pred_dir, set_name, split, variant=geo.MAIN, frozen=None,
         proto = load_protocol(fz.REPO / "bench" / "eval" / "protocol.yaml")
         for k, path in dirs.items():
             if not out.is_done(path, limit):
+                _predicted_limit, excluded = out.evaluation_scope(path, all_ids)
                 out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, drop_maps=drop_maps, exclude=excluded,
                                  record={"thresholds_note": "reference line: fixed threshold only"})
     return {"source": source, "directories": [str(path) for path in dirs.values()], "n_images": len(ids)}

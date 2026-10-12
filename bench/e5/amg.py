@@ -274,10 +274,11 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
         for name, path in dirs.items():
             if out.is_done(path, limit):
                 continue
+            predicted_limit, excluded = out.evaluation_scope(path, all_ids)
             thresholds = None
             if not pool_run:
                 tokens, cap, kind = directories[name]
-                thresholds = out.pool_thresholds(TIER, source, frozen, proto, pool=pool, variants=variant_tokens([], cap, kind))
+                thresholds = out.thresholds_for_test(TIER, source, frozen, proto, pool=pool, variants=variant_tokens([], cap, kind), limit=predicted_limit)
             out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)
     return {"source": source, "skipped": None, "directories": [str(path) for path in dirs.values()], "n_images": len(ids)}
 

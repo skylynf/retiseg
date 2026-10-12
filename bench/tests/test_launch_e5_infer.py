@@ -60,13 +60,17 @@ def test_plan_after_the_selections_adds_the_zero_shot_tests_and_the_gated_assemb
     assembled = [it for it in test if it.label.startswith("a_sam3_selected")]
     assert len(sam3_items) == 3 * 8 and len(assembled) == 8
     ddr = next(it for it in assembled if it.set_name == "DDR")
-    assert len(ddr.gate_dirs) == 3 and ddr.env == "retiseg" and ddr.argv[:3] == ["-m", "bench.e5.sam3_text", "--assemble"]
+    # the test assembly waits for its three phrase runs and for the pool assembly of both pool sets (its thresholds)
+    assert len(ddr.gate_dirs) == 3 + 2 and ddr.env == "retiseg" and ddr.argv[:3] == ["-m", "bench.e5.sam3_text", "--assemble"]
+    assert sorted(p.name for p in ddr.gate_dirs[3:]) == ["DDR-val", "IDRiD-val"] and all(p.parent.name == "a_sam3_selected" for p in ddr.gate_dirs[3:])
     gate = launch.gate_for(ddr)
     assert gate() == "wait"
     for path in ddr.gate_dirs:
         path.mkdir(parents=True)
         (path / "done.json").write_text("{}")
-    assert gate() == "open" and launch.gate_for(amg_items[0]) is None
+    assert gate() == "open"
+    # every test item that takes thresholds from the pool is gated on the pool directories of its own source
+    assert len(amg_items[0].gate_dirs) == 2 * 9 and all(p.name.split("__")[0].endswith("-val") and p.parent.name == "a_sam_vith_p64" for p in amg_items[0].gate_dirs)
     # the registered budget rule: at the largest density the TJDR_uwf main variant is left out
     doc = yaml.safe_load((tmp_path / "filled.yaml").read_text())
     doc["zero_shot"]["grid"]["selected"]["points_per_side"] = 128
@@ -155,3 +159,43 @@ def test_a_plan_asks_only_for_the_sets_and_prompt_files_of_its_items(tmp_path, m
     assert len(launch.missing_prompt_files(frozen)) == 2 + 8  # every target, as before
     uwf = next(it for it in full if it.label == "b_sam2_hieral21_point:TJDR_uwf:test:fov")
     assert (uwf.set_name, uwf.split, uwf.variant) == ("TJDR_uwf", "test", "fov")
+
+
+# ---- review fix 3 (A3): test items wait for their source's pool; --test-only keeps the pool assembly ---
+
+
+def test_test_only_keeps_the_pool_assembly_and_gates_close_when_nothing_will_produce(tmp_path, monkeypatch):
+    """The documented order is pool -> selections -> --test-only; a gate never waits for what nothing will write."""
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = _filled(tmp_path)
+    items = launch.plan(frozen, test_only=True)
+    pool_assembly = [it for it in items if it.phase == launch.POOL]
+    assert sorted(it.label for it in pool_assembly) == ["a_sam3_selected:DDR:val:main", "a_sam3_selected:IDRiD:val:main"]
+    assert all(it.prerequisite for it in pool_assembly) and items[0].phase == launch.POOL  # they run first
+    assert all(it.phase == launch.POOL for it in launch.plan(frozen, pool_only=True))
+    # gates by source: the oracle tier on its k directories, a SAM 3 phrase on its own index, the references on nothing
+    box = next(it for it in items if it.label == "b_sam_vitb_box:DDR:test:main")
+    assert len(box.gate_dirs) == 2 * 4 and all(p.name.startswith(("IDRiD-val__k", "DDR-val__k")) and p.parent.name == "b_sam_vitb_box" for p in box.gate_dirs)
+    ph0 = next(it for it in items if it.label == "a_sam3_ph0:FGADR:test:main")
+    assert sorted(p.name for p in ph0.gate_dirs) == ["DDR-val", "IDRiD-val"] and all(p.parent.name == "a_sam3_ph0" for p in ph0.gate_dirs)
+    assert all(not it.gate_dirs for it in items if "_ref_" in it.label)
+    # a gate waits while its producer is queued or running, and closes when nothing writes the directory
+    assert launch.gate_for(box, producers={})() == "never"
+    producers = launch.producers_of([launch.Item("p", launch.POOL, 0.0, "retiseg", [], path, [path], "DDR") for path in box.gate_dirs])
+    assert launch.gate_for(box, producers)() == "wait"
+    log_dir = box.gate_dirs[0]
+    log_dir.mkdir(parents=True)
+    (log_dir / "console.log").write_text("== start e5 x gpu 0 host h pid 1\n")
+    assert launch.completed_runs(log_dir) == 0 and launch.gate_for(box, producers)() == "wait"  # running
+    (log_dir / "console.log").write_text("== start e5 x gpu 0 host h pid 1\n== exit 1 x\n")
+    assert launch.completed_runs(log_dir) == 1 and launch.gate_for(box, producers)() == "never"  # finished without done.json
+    # a failure from before this queue started does not close the gate: that producer is queued again
+    producers = launch.producers_of([launch.Item("p", launch.POOL, 0.0, "retiseg", [], path, [path], "DDR") for path in box.gate_dirs])
+    assert producers[log_dir][1] == 1 and launch.gate_for(box, producers)() == "wait"
+    for path in box.gate_dirs:
+        path.mkdir(parents=True, exist_ok=True)
+        (path / "done.json").write_text(json.dumps({"limit": 2}))
+    assert launch.gate_for(box, producers, limit=2)() == "open" and launch.gate_for(box, producers)() == "wait"  # a smoke pool opens a smoke queue only
+    for path in box.gate_dirs:
+        (path / "done.json").write_text("{}")
+    assert launch.gate_for(box, producers)() == "open"

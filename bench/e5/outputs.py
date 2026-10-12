@@ -183,6 +183,39 @@ def pool_thresholds(tier, source, frozen, proto, pool=None, variants=()):
     return {cls: float(pixel.best_dice_threshold(pos, neg, proto["prob_levels"])) for cls, (pos, neg) in totals.items()}
 
 
+def thresholds_for_test(tier, source, frozen, proto, pool=None, variants=(), limit=None):
+    """The pool thresholds a test-split evaluation must have; raises instead of falling back to fixed 0.5 only.
+
+    ``limit`` is the prediction's own limit (predicted.json). A full prediction on a
+    test split is never evaluated without the pool: the maps are already on disk
+    when this raises, so the same command, repeated once the source's pool runs are
+    finished, evaluates only. A smoke prediction (limit set) is the exception: it is
+    redone in full later, so it takes what exists and done.json says "fixed only".
+    (review fix 3, A3)
+    """
+    thresholds = pool_thresholds(tier, source, frozen, proto, pool, variants)
+    if thresholds is None and limit is None:
+        where = set_dirname("<set>" + POOL_SUFFIX, variants)
+        raise RuntimeError(
+            f"{source}: no finished full pool run under {out_dir(tier, source, where)}; a test split is evaluated with the "
+            "pool's Dice thresholds (e5_frozen.yaml validation_pool), so run the pool first (launch_e5_infer.py --pool-only) "
+            "and repeat this command, which then evaluates only"
+        )
+    return thresholds
+
+
+def evaluation_scope(directory, all_ids):
+    """(limit, excluded ids) of the prediction in ``directory``: the evaluation covers what was predicted.
+
+    The scope comes from predicted.json, not from the request, so a smoke request
+    on a fully predicted directory evaluates every image, and a full request on a
+    smoke directory does not happen (needs_prediction redoes the prediction first).
+    """
+    limit = read_predicted(directory).get("limit")
+    ids = list(all_ids) if limit is None else list(all_ids)[: int(limit)]
+    return limit, list(all_ids)[len(ids):]
+
+
 def pool_class_aupr(tier, source, frozen, proto, pool=None, variants=()):
     """{class: exact AUPR} on the pooled pixel histograms of the source's pool runs, or None until all exist."""
     totals = _pool_totals(tier, source, frozen, proto, pool, variants)

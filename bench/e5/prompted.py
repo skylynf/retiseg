@@ -320,7 +320,8 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
         for k, path in dirs.items():
             if out.is_done(path, limit):
                 continue
-            thresholds = None if pool_run else out.pool_thresholds(TIER, source, frozen, proto, pool=pool, variants=[k_token(k)])
+            predicted_limit, excluded = out.evaluation_scope(path, all_ids)
+            thresholds = None if pool_run else out.thresholds_for_test(TIER, source, frozen, proto, pool=pool, variants=[k_token(k)], limit=predicted_limit)
             out.evaluate_dir(path, set_name, split, data_dir=data_dir, proto=proto, val_thresholds=thresholds, drop_maps=drop_maps, exclude=excluded)
     return {"source": source, "directories": [str(path) for path in dirs.values()], "n_images": len(ids)}
 
