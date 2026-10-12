@@ -16,7 +16,7 @@
   1. HACDR-Net 种子 1、2 补打分（两库各两个，只推理，约 1 小时）：用 10-11 补打种子 0 时的同一条打分命令（launch_b1.py 的 score 项，runs/BS_hacdr_{idrid,ddr}_seed{1,2}）。打完后主表 HACDR-Net 也有三个种子。
   2. U-Net DDR 种子 0 训完后由启动器自动打分，核对 runs/BS_unet_ddr_seed0/metrics_test.json 出现；然后按 16 补 U-Net 两库的种子 1、2（launch_b1.py --jobs bench/configs/bs_jobs.yaml --rest --only U-Net，约 15 GPU 时）。
   3. E2c 四项训完后不用打分（只看验证）；timing.json 出现即可回传。
-  4. B1 不再续跑（16）。runs/B1_* 保留原样。
+  4. B1 不再续跑（16）。runs/B1_* 保留原样。完成 2026-10-12（09:08 已停，本次不续）。
 
 三、E3a 独立测试（七个库都在 dataset/prepared，可以开；只推理，插空卡）
   命令：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e3a --drop-maps FGADR,Retinal-Lesions

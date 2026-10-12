@@ -316,3 +316,16 @@ Attention-DeepLab：official_code/Attention-DeepLab，236d049，有 train.py。�
 3. 论文：R3 的 E1r 段、R4 内部测试段、R2 的实现对照句、讨论 Q1/Q2 按实数改写（E5 行和独立测试仍是占位，带 simulated 标记）；图 4a、表 4、图 2d/e、图 7c 的对应行为实数；ED10 的训练时为实测。main.pdf 重建。
 4. 代码：collect_runs.py 认 NN_*（含 _repN 重复运行）、E1r_*、E2c_*（要 timing.json）、*_registered、runs/E3a/<来源>/<测试集>/metrics.json；nnunet_run.sh 加 RETISEG_NN_REP 做重复运行；test_collect_runs 通过。
 5. 新建 docs/ops/17_服务器任务单.txt：给服务器 agent 的任务和顺序（HACDR 打分、E3a、权重下载与申请、E5 冒烟和种子 0、编码器对照三个、E1r 剩余、nnU-Net 补跑、cost_audit）和回传格式；本机下一步是 E5 推理档代码和 E3b/E4/E7/E8/E9 的 cell 接线（17 第九节）。13 第三节状态、README 索引同步。
+
+
+执行（2026-10-12 09:08，服务器时间，提交 9b00b6e；本段当时未提交，pull 之后补回）
+按 16 第六节停掉 B1 补位。启动器进程组 2083946 结束，六项训练停在上次验证：DeepLabv3 DDR 15000/30000、IDRiD 17001/30000，M2MRF DDR 35040/60000、IDRiD 17006/40000，HRNet DDR 6880/15488，HACDR-Net DDR 2298/40000。resume.pt 还在，未完成的进未来工作。
+E1r 种子 0 在停队列之前打分结束（exit 0，09:06）。第 40000 步权重，不挑检查点。作者函数：mIoU 41.78，mAUPR 61.19，mF 57.23；已发布权重是 50.17、67.55、65.94。本项目精确 mAUPR 0.549（MA 0.268、HE 0.489、EX 0.810、SE 0.629），已发布权重是 0.639，本机批大小 1 的那次是 0.493。目录 runs/E1r_m2mrf_idrid_seed0_bs4_a100。
+U-Net 整批 Dice：bs-revise 把六个旧运行改名为 *_registered，GPU 2 开 DDR、GPU 3 开 IDRiD，种子 0，训完再打分。日志 runs/logs/20261012_090836_bs_revise_U-Net.log，进程 2446521。
+E2c 只排 DDR 四项，没有提交任务表里的 IDRiD：GPU 4 M2MRF ×3，GPU 5 HRNet ×1/3，GPU 6 HRNet ×3，GPU 7 M2MRF ×1/3。日志 runs/logs/20261012_090836_extra_E2c_ddr.log，进程 2446528。09:08 六张卡都已占上，没有报错。
+当时五个独立库还不在 dataset/prepared。随后 prepared.zip 已解压进 dataset/prepared（IDRiD、DDR 未覆盖），压缩包在 dataset/prepared.zip。
+
+按 17 执行（2026-10-12，pull 到 b73b99d）
+已读 16 和 17。正在跑的不打断：GPU 2 是 U-Net DDR 种子 0（整批 Dice，训完由原启动器打分），GPU 4–7 是 E2c 的四项 DDR。GPU 0、1 仍是别人的 vLLM。B1 不续（17 第二节第 4 条）。
+HACDR-Net 种子 1、2 两库的训练已到预算，退出码 1 是之后用 torch 1.10 不认识的 weights_only 去续跑造成的；best.pt 还在。用与种子 0 相同的打分命令（train_hacdr_b1.py --score-only，再 evaluate）在空着的 GPU 3 上排队：IDRiD 种子 1、2，然后 DDR 种子 1、2。打完后同一脚本启动 E3a 种子 0：RETISEG_GPUS=3 server_run.sh e3a --seed0-only --drop-maps FGADR,Retinal-Lesions。GPU 2 留给 U-Net 启动器打分，不和它抢卡；E3a 因此先用 1 张卡，HACDR 新打分的来源要等这次 E3a 启动时才会被发现。
+公开权重开始下到 pretrained/（SAM ViT-H、ViT-B，SAM 2.0 和 2.1 的 hiera large，MAE ViT-L）。augreg 按 16 不下。SAM 3、两份 RETFound、MedSAM 需要申请或网盘，没有下。sha256 在权重文件写完后记，E5 冒烟等权重和空卡，这次不开。
