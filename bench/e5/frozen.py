@@ -133,11 +133,16 @@ def oracle_models(frozen):
     return {name: list(kinds) for name, kinds in frozen["oracle"]["models"].items()}
 
 
-def prompt_file(set_name, split, prompts_dir=None):
-    return Path(prompts_dir or PROMPTS_DIR) / f"{set_name}_{split}.json"
+MAIN_VARIANT = "main"
 
 
-def assert_ready(frozen, tier, split, model=None, set_name=None, prompts_dir=None):
+def prompt_file(set_name, split, prompts_dir=None, variant=MAIN_VARIANT):
+    """runs/E5_prompts/<set>_<split>.json; a comparison variant (TJDR_uwf "fov") adds __<variant>."""
+    suffix = "" if variant == MAIN_VARIANT else f"__{variant}"
+    return Path(prompts_dir or PROMPTS_DIR) / f"{set_name}_{split}{suffix}.json"
+
+
+def assert_ready(frozen, tier, split, model=None, set_name=None, prompts_dir=None, variant=MAIN_VARIANT):
     """Raise before a run that would read a test split with an unfilled selection, or has no prompt file.
 
     Tier "a" on a test split needs zero_shot.grid.selected (SAM, SAM 2) and
@@ -159,6 +164,7 @@ def assert_ready(frozen, tier, split, model=None, set_name=None, prompts_dir=Non
         return
     if set_name is None:
         raise ValueError("tier b needs set_name")
-    path = prompt_file(set_name, split, prompts_dir)
+    path = prompt_file(set_name, split, prompts_dir, variant)
     if not path.is_file():
-        raise FileNotFoundError(f"{path} is missing; write it with: python -m bench.e5.prompts --set {set_name} --split {split}")
+        flag = "" if variant == MAIN_VARIANT else f" --variant {variant}"
+        raise FileNotFoundError(f"{path} is missing; write it with: python -m bench.e5.prompts --set {set_name} --split {split}{flag}")

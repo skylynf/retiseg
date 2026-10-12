@@ -253,3 +253,95 @@ def test_canvas_and_paste_round_trip(tmp_path):
     assert abs(py - (y0 + cy * scale_y)) <= 2 and abs(px - (x0 + cx * scale_x)) <= 2
     with pytest.raises(ValueError, match="canvas size"):
         geo.paste(np.zeros((5, 5), np.float32), cv)
+
+
+# ---- step 3: bench/e5/prompts.py --------------------------------------------------------------
+
+
+def test_components_are_8_connected_sorted_with_tight_boxes_and_inner_points():
+    import numpy as np
+
+    from bench.e5 import prompts
+
+    mask = np.zeros((20, 30), bool)
+    mask[2:5, 3:8] = True  # a 3 x 5 block
+    mask[10, 10] = True
+    mask[11, 11] = True  # a diagonal pair: one component under 8-connectivity
+    mask[1, 20] = True  # a single pixel, first in row-major order
+    comps = prompts.components(mask)
+    assert [c["first"] for c in comps] == [[1, 20], [2, 3], [10, 10]]
+    assert comps[0] == {"box": [20, 1, 21, 2], "point": [20, 1], "area": 1, "first": [1, 20]}
+    assert comps[1]["box"] == [3, 2, 8, 5] and comps[1]["area"] == 15
+    assert comps[1]["point"] == [4, 3]  # the middle row; three pixels tie at distance 2, the first wins
+    assert comps[2]["box"] == [10, 10, 12, 12] and comps[2]["area"] == 2
+    for c in comps:
+        x, y = c["point"]
+        assert mask[y, x] and c["box"][0] <= x < c["box"][2] and c["box"][1] <= y < c["box"][3]
+    assert prompts.components(np.zeros((5, 5), bool)) == []
+
+
+def test_prompt_order_is_a_seeded_permutation_and_k_is_a_prefix():
+    from bench.e5 import prompts
+
+    comps = [{"box": [0, i, 1, i + 1], "point": [0, i], "area": 1, "first": [i, 0]} for i in range(7)]
+    once = prompts.ordered(comps, "img_01", "MA")
+    again = prompts.ordered(comps, "img_01", "MA")
+    assert once == again
+    assert sorted(c["first"][0] for c in once) == list(range(7)) and [c["rank"] for c in once] == list(range(7))
+    assert prompts.take(once, 1) == once[:1] and prompts.take(once, 5) == once[:5]
+    assert prompts.take(once, 20) == once and prompts.take(once, "all") == once
+    other_class = prompts.ordered(comps, "img_01", "HE")
+    other_image = prompts.ordered(comps, "img_02", "MA")
+    assert other_class != once or other_image != once  # separate streams per (image, class)
+    assert prompts.ordered([], "img_01", "MA") == []
+
+
+def test_build_writes_a_deterministic_prompt_file_with_hashes_and_counts(tmp_path):
+    import numpy as np
+    import pytest
+    from PIL import Image
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import geometry as geo
+    from bench.e5 import prompts
+
+    root = tmp_path / "prepared" / "IDRiD"
+    _toy_set(root)
+    ma_path = root / "masks" / "MA" / "img_01.png"
+    ma = np.asarray(Image.open(ma_path)) > 0
+    ma[30:35, 30:35] = True  # a second MA component inside the field of view
+    Image.fromarray(ma.astype(np.uint8) * 255).save(ma_path)
+    frozen = fz.load_frozen()
+    out = tmp_path / "prompts"
+    first = prompts.build("IDRiD", "test", frozen=frozen, out_dir=out, data_dir=root, long_side=60)
+    text = first.read_text()
+    assert prompts.build("IDRiD", "test", frozen=frozen, out_dir=out, data_dir=root, long_side=60).read_text() == text
+    doc = prompts.load(first)
+    assert first.name == "IDRiD_test.json" and doc["long_side"] == 60 and doc["k"] == [1, 5, 20, "all"]
+    assert doc["seed"] == 20261003 and doc["connectivity"] == 8 and doc["rule"]["box"].startswith("tight")
+    image = doc["images"]["img_01"]
+    cv = geo.canvas(root, "img_01", 60, masks=True)
+    assert image["canvas_hw"] == list(cv.hw)
+    assert image["classes"]["MA"]["n"] == 2 and image["classes"]["EX"]["n"] == 1 and image["classes"]["HE"]["n"] == 0
+    assert image["mask_sha256"]["HE"] is None and len(image["mask_sha256"]["MA"]) == 64
+    assert doc["components_per_image"] == {"MA": 2.0, "HE": 0.0, "EX": 1.0, "SE": 0.0}
+    for prompt in image["classes"]["MA"]["prompts"]:
+        x0, y0, x1, y1 = prompt["box"]
+        assert 0 <= x0 < x1 <= cv.hw[1] and 0 <= y0 < y1 <= cv.hw[0]
+        px, py = prompt["point"]
+        assert x0 <= px < x1 and y0 <= py < y1 and cv.masks[0][py, px]
+    assert [p["rank"] for p in image["classes"]["MA"]["prompts"]] == [0, 1]
+    # a changed label changes the hash and the count, so a stale file is visible (a block, so the
+    # nearest-neighbour resize to the canvas keeps it)
+    ma[78:82, 58:62] = True
+    Image.fromarray(ma.astype(np.uint8) * 255).save(ma_path)
+    doc2 = prompts.load(prompts.build("IDRiD", "test", frozen=frozen, out_dir=out, data_dir=root, long_side=60))
+    assert doc2["images"]["img_01"]["mask_sha256"]["MA"] != image["mask_sha256"]["MA"]
+    assert doc2["images"]["img_01"]["classes"]["MA"]["n"] == 3
+    # variants: the file name carries the comparison variant and assert_ready looks for it
+    assert fz.prompt_file("TJDR_uwf", "test", out, "fov").name == "TJDR_uwf_test__fov.json"
+    fz.assert_ready(frozen, "b", "test", set_name="IDRiD", prompts_dir=out)
+    with pytest.raises(FileNotFoundError, match="--variant fov"):
+        fz.assert_ready(frozen, "b", "test", set_name="TJDR_uwf", prompts_dir=out, variant="fov")
+    with pytest.raises(ValueError, match="no variant"):
+        prompts.build("IDRiD", "test", variant="fov", frozen=frozen, out_dir=out, data_dir=root, long_side=60)
