@@ -12,6 +12,7 @@ Reads the files that bench.eval.cli evaluate writes (bench/eval/evaluate.py):
     runs/E2c_<slug>_<dataset>_seed0_<lr1o3|lr3>/history.jsonl       learning-rate check (best validation mAUPR; needs timing.json)
     runs/E3a/<source>/<set>/metrics.json + done.json               independent tests (bench/e3a.py), main variant only
     runs/BF_<cell>/metrics_test.json                               factor cells (bench/factor.py); the row key is the cell's paper block
+    runs/E5/<tier>/<source>/<set>[__variant]/metrics.json + done.json   E5 inference tiers (bench/e5), main canvas variant only
     data/cost_measured.tsv                                      E10 numbers recorded by hand (docs/ops/00)
     data/cost_audit.tsv                                         E10 numbers from bench/scripts/cost_audit.py
 
@@ -135,6 +136,10 @@ def rows_from_report(report, experiment, variant, model, train, seed, test):
             add(cls, "lesion_precision", lesion.get("precision"))
             for size, part in (lesion.get("by_size") or {}).items():
                 add(cls, f"lesion_recall_{size}", part.get("recall"))
+    # the class-agnostic "any lesion" AUPR (protocol.yaml any_lesion): the main zero-shot metric and a
+    # reference line for every model; cls "any" has no placeholder row and is added as a new row
+    if report.get("any_lesion"):
+        add("any", "aupr", report["any_lesion"].get("aupr"))
     return out
 
 
@@ -293,6 +298,89 @@ def collect_e3a(runs_dir):
     return pd.DataFrame(rows), seen
 
 
+# ---- E5 inference tiers (bench/e5): runs/E5/<a|b>/<source>/<set>[-val][__token]... ----------------
+E5_SOURCE = re.compile(r"^(?P<tier>[ab])_(?P<slug>sam3|sam2|sam|medsam|m2mrf|nnunet)_(?P<rest>.+)$")
+E5_MODEL = {"sam": "SAM", "sam2": "SAM 2", "sam3": "SAM 3", "medsam": "MedSAM", "m2mrf": "M2MRF", "nnunet": "nnU-Net"}
+
+
+def e5_set(dirname):
+    """(test set, pool run, variant tokens) of a directory name <set>[-val][__token]..."""
+    base, *tokens = dirname.split("__")
+    pool = base.endswith("-val")
+    return (base[:-4] if pool else base), pool, tokens
+
+
+def e5_rows(runs_dir):
+    """Rows of the E5 inference tiers, main canvas variant only (TJDR_uwf __fov goes to the supplement later).
+
+    a_<sam|sam2>_<backbone>_p<density>/<set>[__cap<f>][__oracle_class|__stability]
+        model SAM / SAM 2, variant zero_shot:auto_<any_lesion|oracle_class|stability>, plus
+        :p<density>:<cap<f>|nocap> for a pool run (test set <set>-val); a test run also carries
+        its selected density and cap as rows (metric points_per_side, area_cap_fraction)
+    a_sam3_ph<i>/<set>      model SAM 3, per class the variant text:<that class's phrase> (figure 5c)
+    a_sam3_selected/<set>   model SAM 3, variant text:selected
+    b_<sam|sam2|medsam>_<backbone>_<box|point>/<set>__k<k>   variant oracle:<box|point>:<k>
+    b_<m2mrf|nnunet>_ref_<tokens>/<set>__k<k>                the same-information reference,
+        variant oracle_ref:box:<k>, train_set from the tokens, seed 0
+    Inference-tier rows have train_set "none" and seed -1, as the placeholder rows do.
+    """
+    rows, seen = [], []
+    root = Path(runs_dir) / "E5"
+    if not root.is_dir():
+        return rows, seen
+    for tier_dir in sorted(p for p in root.iterdir() if p.is_dir()):
+        for src in sorted(p for p in tier_dir.iterdir() if p.is_dir()):
+            m = E5_SOURCE.match(src.name)
+            if not m or m["tier"] != tier_dir.name:
+                continue
+            tier, slug, rest = m["tier"], m["slug"], m["rest"]
+            for setdir in sorted(p for p in src.iterdir() if p.is_dir()):
+                if not (setdir / "done.json").exists() or not (setdir / "metrics.json").exists():
+                    continue
+                set_name, pool, tokens = e5_set(setdir.name)
+                if set_name not in E3A_SET or "fov" in tokens:
+                    continue
+                test = E3A_SET[set_name] + ("-val" if pool else "")
+                report = json.loads((setdir / "metrics.json").read_text())
+                done = json.loads((setdir / "done.json").read_text())
+                k = next((t[1:] for t in tokens if re.fullmatch(r"k(\d+|all)", t)), None)
+                if tier == "a" and slug in ("sam", "sam2"):
+                    density = int(rest.rsplit("_p", 1)[1])
+                    kind = next((t for t in tokens if t in ("oracle_class", "stability")), "any_lesion")
+                    cap = next((t for t in tokens if t.startswith("cap")), "nocap")
+                    variant = f"zero_shot:auto_{kind}" + (f":p{density}:{cap}" if pool else "")
+                    new = rows_from_report(report, "E5", variant, E5_MODEL[slug], "none", -1, test)
+                    if not pool:
+                        for metric, value in (("points_per_side", density), ("area_cap_fraction", done.get("area_cap_fraction"))):
+                            if value is not None:
+                                new.append(dict(experiment="E5", model=E5_MODEL[slug], variant=variant, train_set="none", seed=-1,
+                                                test_set=test, cls="", metric=metric, value=float(value), source="measured"))
+                elif tier == "a" and slug == "sam3":
+                    phrases = done.get("phrases") or {}
+                    new = rows_from_report(report, "E5", "text:selected", "SAM 3", "none", -1, test)
+                    if rest != "selected":  # a phrase run: per class its own phrase; the class-agnostic row means nothing here
+                        new = [row for row in new if row["cls"] in phrases]
+                        for row in new:
+                            row["variant"] = f"text:{phrases[row['cls']]}"
+                elif tier == "b" and "_ref_" in src.name and k is not None:
+                    ref_tokens = rest.split("_")[1:]
+                    train = next((DATASET[t] for t in ref_tokens if t in DATASET), "")
+                    new = rows_from_report(report, "E5", f"oracle_ref:box:{k}", E5_MODEL[slug], train, 0, test)
+                elif tier == "b" and slug in ("sam", "sam2", "medsam") and k is not None:
+                    kind = rest.rsplit("_", 1)[1]
+                    new = rows_from_report(report, "E5", f"oracle:{kind}:{k}", E5_MODEL[slug], "none", -1, test)
+                else:
+                    continue
+                rows += new
+                seen.append((f"E5/{tier}/{src.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
+    return rows, seen
+
+
+def collect_e5(runs_dir):
+    rows, seen = e5_rows(runs_dir)
+    return pd.DataFrame(rows), seen
+
+
 def merge(table, new):
     """Replace placeholder rows by key; then drop the remaining placeholder rows of every
     (experiment, model, variant, train_set, test_set) group that has at least one measured row,
@@ -325,6 +413,10 @@ def main():
     if len(e3a):
         new = pd.concat([new, e3a], ignore_index=True)
         seen += seen_e3a
+    e5, seen_e5 = collect_e5(args.runs)
+    if len(e5):
+        new = pd.concat([new, e5], ignore_index=True)
+        seen += seen_e5
     sheets = [collect_sheet(PAPER / "data" / f) for f in ("cost_measured.tsv", "cost_audit.tsv")]
     sheet = pd.concat([x for x in sheets if len(x)], ignore_index=True) if any(len(x) for x in sheets) else pd.DataFrame()
     new = pd.concat([sheet, new], ignore_index=True) if len(new) else sheet
