@@ -37,7 +37,6 @@ def rows_for(test):
         ("Zero-shot", "SAM · auto masks, oracle class", e5("SAM", "zero_shot:auto_oracle_class", test)),
         ("Zero-shot", "SAM 2 · auto masks, oracle class", e5("SAM 2", "zero_shot:auto_oracle_class", test)),
         ("Zero-shot", "SAM 3 · text, best wording", sam3_best(test)),
-        ("Oracle prompt", "SAM · all points", e5("SAM", "oracle:point:all", test)),
         ("Oracle prompt", "SAM · all boxes", e5("SAM", "oracle:box:all", test)),
         ("Oracle prompt", "SAM 2 · all points", e5("SAM 2", "oracle:point:all", test)),
         ("Oracle prompt", "SAM 2 · all boxes", e5("SAM 2", "oracle:box:all", test)),
@@ -89,13 +88,13 @@ def panel_a(fig, top):
 
 
 def panel_b(fig, top):
-    ks = [1, 5, 10, 20, "all"]
+    ks = [1, 5, 20, "all"]  # docs/paper/16 row E5b (2026-10-12): four levels
     panels = [("mean", "mAUPR"), ("MA", "MA · microaneurysm"), ("SE", "SE · soft exudate")]
     ref = D.score_matrix("IDRiD", models=["nnU-Net"])["IDRiD"].iloc[0]
     refs = D.internal().xs("IDRiD", level="train_set").loc["nnU-Net"]
     for j, (cls, title) in enumerate(panels):
         ax = S.axes_mm(fig, 13 + j * 31.5, top, 26, 27)
-        for model, kind in (("SAM", "box"), ("SAM", "point"), ("SAM 2", "box"), ("SAM 2", "point"), ("MedSAM", "box")):
+        for model, kind in (("SAM", "box"), ("SAM 2", "box"), ("SAM 2", "point"), ("MedSAM", "box")):  # SAM ViT-B boxes only; points for SAM 2.1 only (16)
             y = []
             for k in ks:
                 v = e5(model, f"oracle:{kind}:{k}", "IDRiD")

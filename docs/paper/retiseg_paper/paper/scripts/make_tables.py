@@ -493,8 +493,7 @@ def table_foundation():
             ("SAM 3", "text, best of three wordings", "--", sam3),
         ]),
         ("Oracle prompt from every ground-truth component (upper bound)", [
-            ("SAM", "points", "ViT-H", lambda t: e5("SAM", "oracle:point:all", t)),
-            ("SAM", "boxes", "ViT-H", lambda t: e5("SAM", "oracle:box:all", t)),
+            ("SAM", "boxes", "ViT-B", lambda t: e5("SAM", "oracle:box:all", t)),  # the oracle tier uses ViT-B (16, D3)
             ("SAM 2", "points", "Hiera-L", lambda t: e5("SAM 2", "oracle:point:all", t)),
             ("SAM 2", "boxes", "Hiera-L", lambda t: e5("SAM 2", "oracle:box:all", t)),
             ("MedSAM", "boxes", "ViT-B", lambda t: e5("MedSAM", "oracle:box:all", t)),
