@@ -190,8 +190,11 @@ def planned_selected(set_name, split, variant=geo.MAIN):
 
 
 def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, scorer=None, frozen=None, data_dir=None,
-        long_side=None, window=None, evaluate=True, drop_maps=(), limit=None, pool=None, assemble=True):
-    """Predict (and evaluate) one phrase index; assembles the selected source when the selection is filled and the three indices exist."""
+        long_side=None, window=None, evaluate=True, drop_maps=(), limit=None, pool=None, assemble=True, resume=True):
+    """Predict (and evaluate) one phrase index; assembles the selected source when the selection is filled and the three indices exist.
+
+    ``resume`` skips the images whose maps the directory already holds (review fix 12).
+    """
     frozen = frozen or fz.load_frozen()
     if geometry not in geo.GEOMETRIES:
         raise ValueError(f"geometry must be one of {geo.GEOMETRIES}, got {geometry!r}")
@@ -214,9 +217,12 @@ def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, 
         else:
             record = {"checkpoint": None, "device": str(device), "scorer": type(scorer).__name__,
                       "confidence_threshold": float(spec(frozen)["confidence_threshold"]), "pixel_score": spec(frozen)["pixel_score"]}
-        n_windows, seconds = 0, []
+        n_windows, seconds, resumed = 0, [], 0
         started = time.perf_counter()
         for position, image_id in enumerate(ids):
+            if resume and out.maps_written(out.pred_dir(directory, split), image_id):
+                resumed += 1
+                continue
             cv = geo.canvas(data_dir, image_id, long_side, masks=False)
             boxes = [(0, 0)] if window_size is None else geo.windows(cv.hw, window_size, geo.overlap(frozen))
             maps, window_seconds = window_scores(scorer, cv, window_size, boxes, phrases)
@@ -232,7 +238,7 @@ def run(index, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, 
                 "variants": canvas_variants, "geometry": geometry, "phrase_index": int(index), "phrases": phrases,
                 "canvas_long_side": "native" if long_side == geo.NATIVE else int(long_side),
                 "window": window_size, "overlap": None if window_size is None else geo.overlap(frozen),
-                "n_images": len(ids), "limit": limit, "n_windows": n_windows,
+                "n_images": len(ids), "limit": limit, "resumed_images": resumed, "n_windows": n_windows,
                 "predict_seconds": round(time.perf_counter() - started, 1),
                 "seconds_per_window_mean": round(float(np.mean(seconds)), 3) if seconds else None,
                 **record, **out.environment(),
@@ -395,7 +401,6 @@ def main(argv=None):
     parser.add_argument("--set")
     parser.add_argument("--split", default="test")
     parser.add_argument("--variant", default=geo.MAIN)
-    parser.add_argument("--geometry", default=geo.G1, choices=geo.GEOMETRIES)
     parser.add_argument("--device")
     parser.add_argument("--predict-only", action="store_true")
     parser.add_argument("--drop-maps")
@@ -413,7 +418,7 @@ def main(argv=None):
         return
     if args.phrase is None:
         parser.error("--phrase is required for a run")
-    print(run(args.phrase, args.set, args.split, args.variant, args.geometry, args.device, evaluate=not args.predict_only, drop_maps=drop,
+    print(run(args.phrase, args.set, args.split, args.variant, geo.G1, args.device, evaluate=not args.predict_only, drop_maps=drop,
               limit=args.limit, assemble=not args.no_assemble))
 
 

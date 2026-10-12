@@ -141,6 +141,21 @@ def k_levels(frozen):
     return [k if k == "all" else int(k) for k in frozen["oracle"]["k"]]
 
 
+def curve_sets(frozen):
+    """The test sets that get every k (the k curves of figure 5b); the other sets get k = all only (D6)."""
+    return [str(name) for name in frozen["oracle"]["curve_sets"]]
+
+
+def k_levels_for(frozen, set_name, split):
+    """The k levels a run writes: every k on a pool split and on a curve set, 'all' alone elsewhere (D6, review fix 9 / B3).
+
+    The pool keeps every k because the curve sets take their per-k thresholds from it.
+    """
+    if is_pool_split(split) or set_name in curve_sets(frozen):
+        return k_levels(frozen)
+    return ["all"]
+
+
 def oracle_models(frozen):
     """{model: [prompt kinds]} of the oracle tier."""
     return {name: list(kinds) for name, kinds in frozen["oracle"]["models"].items()}

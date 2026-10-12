@@ -483,14 +483,22 @@ def table_foundation():
             kw["train_set"] = train
         return D.sel(**kw).groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
 
-    def sam3(test):
-        return D.sel(experiment="E5", model="SAM 3", test_set=test, metric="aupr").groupby("cls")["value"].max().reindex(D.CLASSES).to_numpy()
+    def any_lesion(model, variant, test):
+        # the registered zero-shot result of the automatic masks is class-agnostic (e5_frozen.yaml zero_shot.outputs.main):
+        # collect_runs metric aupr_any_lesion; the mean of the per-class rows while only the placeholder table exists
+        r = D.sel(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr_any_lesion")
+        return float(r["value"].mean()) if len(r) else float(np.nanmean(e5(model, variant, test)))
 
+    # (model, use, backbone, per-class values, optional summary for the mAUPR column); review fix 11 (B2): the zero-shot
+    # rows show the class-by-overlap upper bound per class and the any-lesion AUPR as their summary, SAM 3 shows the
+    # wording chosen on the validation pool; nothing is picked on a test set
     spec = [
-        ("Zero-shot (no training image, no prompt from labels)", [
-            ("SAM", "automatic masks, class by overlap$^\\dagger$", "ViT-H", lambda t: e5("SAM", "zero_shot:auto_oracle_class", t)),
-            ("SAM 2", "automatic masks, class by overlap$^\\dagger$", "Hiera-L", lambda t: e5("SAM 2", "zero_shot:auto_oracle_class", t)),
-            ("SAM 3", "text, best of three wordings", "--", sam3),
+        ("Zero-shot (no training image; density, area cap and wording chosen on the validation pool)", [
+            ("SAM", "automatic masks, class by overlap$^\\dagger$; any-lesion$^\\ddagger$", "ViT-H", lambda t: e5("SAM", "zero_shot:auto_oracle_class", t),
+             lambda t: any_lesion("SAM", "zero_shot:auto_any_lesion", t)),
+            ("SAM 2", "automatic masks, class by overlap$^\\dagger$; any-lesion$^\\ddagger$", "Hiera-L", lambda t: e5("SAM 2", "zero_shot:auto_oracle_class", t),
+             lambda t: any_lesion("SAM 2", "zero_shot:auto_any_lesion", t)),
+            ("SAM 3", "text, wording chosen on validation", "--", lambda t: e5("SAM 3", "text:selected", t)),
         ]),
         ("Oracle prompt from every ground-truth component (upper bound)", [
             ("SAM", "boxes", "ViT-B", lambda t: e5("SAM", "oracle:box:all", t)),  # the oracle tier uses ViT-B (16, D3)
@@ -509,16 +517,17 @@ def table_foundation():
         ]),
     ]
     flat = [(g, *r) for g, rs in spec for r in rs]
-    vals = {k: np.array([fn(k) for *_, fn in flat]) for k in ("IDRiD", "DDR")}
+    vals = {k: np.array([row[4](k) for row in flat]) for k in ("IDRiD", "DDR")}
+    summ = {k: np.array([row[5](k) if len(row) > 5 else float(np.nanmean(vals[k][i])) for i, row in enumerate(flat)]) for k in ("IDRiD", "DDR")}
     marks = {}
     for k in vals:
         for j in range(4):
             marks[(k, j)] = rank_marks(vals[k][:, j])
-        marks[(k, "m")] = rank_marks(vals[k].mean(axis=1))
+        marks[(k, "m")] = rank_marks(summ[k])
     rows, i = [], 0
     for title, rs in spec:
         rows.append(f"\\grouprow{{13}}{{{title}}}")
-        for name, how, backbone, fn in rs:
+        for name, how, backbone, *_fns in rs:
             cells = [f"\\famchip{{foundation}}\\; {name}", how, backbone]
             for k in ("IDRiD", "DDR"):
                 for j in range(4):
@@ -526,7 +535,7 @@ def table_foundation():
                     b, s2 = marks[(k, j)]
                     cells.append(tint(v, 0, 0.9) + num(v, "{:.2f}", True, "best" if i == b else "second" if i == s2 else None))
                 b, s2 = marks[(k, "m")]
-                cells.append(num(vals[k][i].mean(), "{:.2f}", True, "best" if i == b else "second" if i == s2 else None))
+                cells.append(num(summ[k][i], "{:.2f}", True, "best" if i == b else "second" if i == s2 else None))
             rows.append(" & ".join(cells) + " \\\\")
             i += 1
     ref = D.internal()
@@ -541,7 +550,7 @@ def table_foundation():
         "tab_foundation",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Foundation models under four kinds of use.}} The four kinds are reported separately and are not ranked against each other: zero-shot use sees no label, oracle prompts are derived from the test labels, and the two trained settings follow the unified protocol. AUPR on the IDRiD and DDR test sets. \best{{Bold}} and \second{{underlined}} mark the best and second-best foundation-model rows of each column.}}
+\caption{{\textbf{{Foundation models under four kinds of use.}} The four kinds are reported separately and are not ranked against each other: zero-shot use sees no test label (its density, area cap and wording are chosen on the validation pool), oracle prompts are derived from the test labels, and the two trained settings follow the unified protocol. AUPR on the IDRiD and DDR test sets. \best{{Bold}} and \second{{underlined}} mark the best and second-best foundation-model rows of each column.}}
 \label{{tab:foundation}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l l l cccc c @{{\hspace{{10pt}}}} cccc c@{{}}}}
@@ -554,7 +563,8 @@ def table_foundation():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item $^\dagger$Automatic masks carry no class; each mask is assigned the class it overlaps most in the ground truth, which makes these rows an upper bound for class-agnostic proposals. Scores of automatic masks use the predicted IoU. Backbones are those planned for E5 and are to be confirmed when the runs are configured.
+\item $^\dagger$Automatic masks carry no class; each mask is assigned the class it overlaps most in the ground truth, which makes the per-class cells an upper bound for class-agnostic proposals. Scores of automatic masks use the predicted IoU.
+\item $^\ddagger$The registered zero-shot result is class-agnostic: the mAUPR column of these rows is the any-lesion AUPR of the class-agnostic map (union of the four classes against the pixelwise maximum), not the mean of the four upper-bound cells.
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}

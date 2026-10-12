@@ -1256,3 +1256,161 @@ def test_select_grid_picks_per_model_on_the_pooled_any_lesion_aupr(tmp_path, mon
     filled = fz.load_frozen(tmp_path / "selected.yaml")
     assert fz.selected_pairs(filled) == {m: (chosen[m]["points_per_side"], chosen[m]["area_cap_fraction"]) for m in chosen}
     assert "SAM 2:" in snippet and "pool AUPR_any_lesion" in snippet
+
+
+# ---- review fix 9 (B3): D6, the k curves on IDRiD and DDR only --------------------------------------
+
+
+def test_only_the_curve_sets_and_the_pool_get_every_k(tmp_path, monkeypatch):
+    import json
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.e5 import prompted, prompts, same_info
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    assert fz.curve_sets(frozen) == ["IDRiD", "DDR"]
+    assert fz.k_levels_for(frozen, "IDRiD", "test") == [1, 5, 20, "all"] and fz.k_levels_for(frozen, "DDR", "val") == [1, 5, 20, "all"]
+    assert fz.k_levels_for(frozen, "FGADR", "test") == ["all"] and fz.k_levels_for(frozen, "TJDR_uwf", "test") == ["all"]
+    assert list(prompted.planned(frozen, "SAM", "boxes", "FGADR", "test")[1]) == ["all"] and len(prompted.planned(frozen, "SAM", "boxes", "IDRiD", "test")[1]) == 4
+    assert list(same_info.planned(frozen, "M2MRF", ["ddr", "seed0"], "TJDR_std", "test")[1]) == ["all"]
+    # a run on a non-curve set writes the k = all directory alone, with every prompt decoded as before
+    root = tmp_path / "prepared" / "FGADR"
+    _two_component_set(root, {"val": ["v0"], "test": ["t0"]})
+    pdir = tmp_path / "prompts"
+    for split in ("val", "test"):
+        prompts.build("FGADR", split, frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    fake = _FakeDecoder()
+    kwargs = dict(frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    prompted.run("SAM", "boxes", "FGADR", "val", decoder=_FakeDecoder(), **kwargs)  # a pool split of a non-curve set still writes every k
+    assert sorted(p.name for p in (tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box").iterdir()) == ["FGADR-val__k1", "FGADR-val__k20", "FGADR-val__k5", "FGADR-val__kall"]
+    summary = prompted.run("SAM", "boxes", "FGADR", "test", decoder=fake, pool=[("FGADR", root, "val")], **kwargs)
+    assert [Path(p).name for p in summary["directories"]] == ["FGADR__kall"]
+    predicted = json.loads((tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box" / "FGADR__kall" / "predicted.json").read_text())
+    assert predicted["k"] == "all" and predicted["n_prompts"] == 3 and len(fake.boxes) == 3  # MA 2 + EX 1
+
+
+# ---- review fix 12 (engineering): streaming windows, resume, mask hashes, no --geometry on the command line
+
+
+def test_amg_streams_windows_and_resumes_from_written_maps(tmp_path, monkeypatch):
+    import json
+
+    import numpy as np
+
+    from bench.common.io import read_prob_quantized
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import geometry as geo
+    from bench.e5 import outputs as out
+    from bench.e5 import score_rules as sr
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0", "v1", "v2"]})
+    kwargs = dict(frozen=frozen, data_dir=root, long_side=20, window=8)
+    # a smoke run leaves v0's maps; the full run resumes after it and predicts v1, v2 only
+    amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), limit=1, **kwargs)
+    fake = _FakeGenerator()
+    amg.run("SAM", 64, "DDR", "val", generator=fake, **kwargs)
+    directory = tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64" / "DDR-val"
+    predicted = json.loads((directory / "predicted.json").read_text())
+    per_image = len(geo.windows(geo.canvas(root, "v0", 20).hw, 8, 0.5))
+    assert predicted["resumed_images"] == 1 and predicted["n_images"] == 3 and predicted["limit"] is None
+    assert predicted["n_windows"] == 2 * per_image and len(fake.calls) == 2 * per_image and predicted["n_masks"] == 2 * 2 * per_image
+    assert json.loads((directory / "done.json").read_text())["n_images"] == 3
+    # the maps are what a fresh prediction gives, for the resumed image and the others alike
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "fresh" / "E5")
+    amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), resume=False, **kwargs)
+    fresh = tmp_path / "fresh" / "E5" / "a" / "a_sam_vith_p64"
+    for name in ("DDR-val", "DDR-val__cap0.02__oracle_class", "DDR-val__stability"):
+        for image_id in ("v0", "v1", "v2"):
+            for cls in ("MA", "HE"):
+                assert np.array_equal(read_prob_quantized(directory.parent / name / "prob_val", cls, image_id), read_prob_quantized(fresh / name / "prob_val", cls, image_id))
+    # a run that stopped before predicted.json (two directories pending here) resumes: an image with a class file
+    # missing in one pending directory is predicted again, the complete ones are kept
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    stability = directory.parent / "DDR-val__stability"
+    (directory / "predicted.json").unlink()
+    (stability / "predicted.json").unlink()
+    (stability / "prob_val" / "SE" / "v1.png").unlink()
+    again = _FakeGenerator()
+    amg.run("SAM", 64, "DDR", "val", generator=again, **kwargs)
+    assert json.loads((directory / "predicted.json").read_text())["resumed_images"] == 2 and len(again.calls) == per_image
+    assert (stability / "prob_val" / "SE" / "v1.png").is_file() and json.loads((stability / "predicted.json").read_text())["resumed_images"] == 2
+    # the streaming accumulators give the same maps as the one-shot functions
+    masks = [sr.Mask(np.ones((3, 3), bool), 1, 1, 0.8, 0.5), sr.Mask(np.ones((2, 2), bool), 4, 4, 0.4, 0.9)]
+    running = sr.masks_to_score([], (8, 8))
+    sr.masks_to_score(masks[:1], (8, 8), out=running)
+    sr.masks_to_score(masks[1:], (8, 8), out=running)
+    assert np.array_equal(running, sr.masks_to_score(masks, (8, 8)))
+    gt = [np.zeros((8, 8), bool) for _ in range(4)]
+    gt[1][1:4, 1:4] = True
+    streamed = sr.oracle_class([], gt, (8, 8))
+    sr.oracle_class(masks[:1], gt, (8, 8), out=streamed)
+    sr.oracle_class(masks[1:], gt, (8, 8), out=streamed)
+    whole = sr.oracle_class(masks, gt, (8, 8))
+    assert all(np.array_equal(streamed[cls], whole[cls]) for cls in whole)
+
+
+def test_prompted_checks_the_mask_hashes_and_resumes(tmp_path, monkeypatch):
+    import json
+
+    import numpy as np
+    import pytest
+    from PIL import Image
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.e5 import prompted, prompts, same_info
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _two_component_set(root, {"val": ["v0", "v1"]})
+    pdir = tmp_path / "prompts"
+    prompts.build("DDR", "val", frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    kwargs = dict(frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    # a mask changed after the prompt file was written: refused when that image comes up
+    path = root / "masks" / "EX" / "v1.png"
+    mask = np.asarray(Image.open(path)) > 0
+    mask[20, 20] = not mask[20, 20]
+    Image.fromarray(mask.astype(np.uint8) * 255).save(path)
+    with pytest.raises(ValueError, match="v1 EX: the mask file differs"):
+        prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), **kwargs)
+    doc = prompts.load(fz.prompt_file("DDR", "val", pdir))
+    with pytest.raises(ValueError, match="v1 EX"):
+        prompts.verify_masks(doc, root, "v1")
+    prompts.verify_masks(doc, root, "v0")
+    # regenerated, the file matches again; the run that stopped after v0 resumes with v1 alone
+    prompts.build("DDR", "val", frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    again = _FakeDecoder()
+    prompted.run("SAM", "boxes", "DDR", "val", decoder=again, **kwargs)
+    directory = tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box"
+    predicted = json.loads((directory / "DDR-val__kall" / "predicted.json").read_text())
+    # v1 alone: MA 2 + EX 2 (the flipped pixel is a new one-pixel EX component in the regenerated file); v0 was resumed
+    assert predicted["resumed_images"] == 1 and predicted["n_images"] == 2 and predicted["n_prompts"] == 4
+    assert len(again.boxes) == 4
+    # the same-information reference checks the hashes too
+    mask[20, 20] = not mask[20, 20]
+    Image.fromarray(mask.astype(np.uint8) * 255).save(path)
+    with pytest.raises(ValueError, match="v1 EX: the mask file differs"):
+        same_info.run("M2MRF", ["ddr", "seed0"], directory / "DDR-val__kall" / "prob_val", "DDR", "val", frozen=frozen, data_dir=root, prompts_dir=pdir)
+
+
+def test_the_command_lines_no_longer_take_a_geometry():
+    import pytest
+
+    from bench.e5 import amg, prompted, sam3_text
+    from bench.e5 import geometry as geo
+
+    for module, argv in (
+        (amg, ["--model", "SAM", "--density", "64", "--set", "DDR", "--geometry", "G2"]),
+        (prompted, ["--model", "SAM", "--kind", "boxes", "--set", "DDR", "--geometry", "G2"]),
+        (sam3_text, ["--phrase", "0", "--set", "DDR", "--geometry", "G2"]),
+    ):
+        with pytest.raises(SystemExit):
+            module.main(argv)
+    assert geo.GEOMETRIES == ("G1", "G2")  # the geometry stays a run() argument for tests

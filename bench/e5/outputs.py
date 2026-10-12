@@ -95,6 +95,12 @@ def is_done(directory, limit=None):
     return limit is not None or json.loads(path.read_text()).get("limit") is None
 
 
+def maps_written(maps_dir, image_id):
+    """True when every class map of the image is in ``maps_dir`` (bench.common.io.write_prob layout): a run that
+    stopped before predicted.json resumes after such images (review fix 12)."""
+    return all((Path(maps_dir) / cls / f"{image_id}.png").is_file() for cls in fz.CLASSES)
+
+
 def needs_prediction(directory, limit=None):
     """True without predicted.json, or when a smoke run (limit set) is to be redone by a full run."""
     directory = Path(directory)

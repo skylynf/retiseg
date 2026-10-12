@@ -27,27 +27,44 @@ def e5(model, variant, test, train=None):
     return r.groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
 
 
-def sam3_best(test):
-    r = D.sel(experiment="E5", model="SAM 3", test_set=test, metric="aupr")
-    return r.groupby("cls")["value"].max().reindex(D.CLASSES).to_numpy()
+def any_lesion(model, variant, test):
+    """The class-agnostic any-lesion AUPR (collect_runs metric aupr_any_lesion), the registered zero-shot
+    result of the automatic masks (e5_frozen.yaml zero_shot.outputs.main); the mean of the per-class rows
+    of the same directory while only the placeholder table exists."""
+    r = D.sel(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr_any_lesion")
+    if len(r):
+        return float(r["value"].mean())
+    return float(np.nanmean(e5(model, variant, test)))
 
 
 def rows_for(test):
+    """(kind of use, label, per-class AUPR, summary) per row; summary None means the mean of the four classes.
+
+    Zero-shot SAM and SAM 2 (docs/paper/16 E5a, review fix 11 / B2): the per-class cells are the
+    class-by-overlap upper bound, the summary is the any-lesion AUPR of the class-agnostic map;
+    SAM 3 shows the wording chosen on the validation pool (text:selected), the three wordings are
+    panel c. Nothing here is chosen on a test set.
+    """
     out = [
-        ("Zero-shot", "SAM · auto masks, oracle class", e5("SAM", "zero_shot:auto_oracle_class", test)),
-        ("Zero-shot", "SAM 2 · auto masks, oracle class", e5("SAM 2", "zero_shot:auto_oracle_class", test)),
-        ("Zero-shot", "SAM 3 · text, best wording", sam3_best(test)),
-        ("Oracle prompt", "SAM · all boxes", e5("SAM", "oracle:box:all", test)),
-        ("Oracle prompt", "SAM 2 · all points", e5("SAM 2", "oracle:point:all", test)),
-        ("Oracle prompt", "SAM 2 · all boxes", e5("SAM 2", "oracle:box:all", test)),
-        ("Oracle prompt", "MedSAM · all boxes", e5("MedSAM", "oracle:box:all", test)),
-        ("PEFT", "SAMed (LoRA)", e5("SAMed", "peft", test, test)),
-        ("PEFT", "SAM-Adapter", e5("SAM-Adapter", "peft", test, test)),
-        ("PEFT", "SAM2-UNet", e5("SAM2-UNet", "peft", test, test)),
-        ("Encoder + decoder", "MedSAM · full fine-tuning", e5("MedSAM (full FT)", "encoder_decoder", test, test)),
-        ("Encoder + decoder", "RETFound + UPerNet", e5("RETFound + UPerNet", "encoder_decoder", test, test)),
+        ("Zero-shot", "SAM · auto masks, class by overlap†", e5("SAM", "zero_shot:auto_oracle_class", test), any_lesion("SAM", "zero_shot:auto_any_lesion", test)),
+        ("Zero-shot", "SAM 2 · auto masks, class by overlap†", e5("SAM 2", "zero_shot:auto_oracle_class", test), any_lesion("SAM 2", "zero_shot:auto_any_lesion", test)),
+        ("Zero-shot", "SAM 3 · text, wording chosen on val", e5("SAM 3", "text:selected", test), None),
+        ("Oracle prompt", "SAM · all boxes", e5("SAM", "oracle:box:all", test), None),
+        ("Oracle prompt", "SAM 2 · all points", e5("SAM 2", "oracle:point:all", test), None),
+        ("Oracle prompt", "SAM 2 · all boxes", e5("SAM 2", "oracle:box:all", test), None),
+        ("Oracle prompt", "MedSAM · all boxes", e5("MedSAM", "oracle:box:all", test), None),
+        ("PEFT", "SAMed (LoRA)", e5("SAMed", "peft", test, test), None),
+        ("PEFT", "SAM-Adapter", e5("SAM-Adapter", "peft", test, test), None),
+        ("PEFT", "SAM2-UNet", e5("SAM2-UNet", "peft", test, test), None),
+        ("Encoder + decoder", "MedSAM · full fine-tuning", e5("MedSAM (full FT)", "encoder_decoder", test, test), None),
+        ("Encoder + decoder", "RETFound + UPerNet", e5("RETFound + UPerNet", "encoder_decoder", test, test), None),
     ]
     return out
+
+
+def summary_of(row):
+    """The row's single number: its registered summary, otherwise the mean of its four classes."""
+    return row[3] if row[3] is not None else float(np.nanmean(row[2]))
 
 
 def panel_a(fig, top):
@@ -61,7 +78,7 @@ def panel_a(fig, top):
         ax.tick_params(axis="x", pad=1)
         S.text_mm(fig, f"{test} test", x, top - 7.6, fontsize=6.4, fontweight="bold")
         axb = S.axes_mm(fig, x + 23.2, top, 15, ROW * len(rows))
-        P.score_bars(axb, M.mean(axis=1), [MODE_COLOR[r[0]] for r in rows], xmax=0.9, fs=5.0)
+        P.score_bars(axb, np.array([summary_of(r) for r in rows]), [MODE_COLOR[r[0]] for r in rows], xmax=0.9, fs=5.0)
         axb.set_xticks([0, 0.4, 0.8])
         axb.xaxis.tick_top()
         axb.spines["bottom"].set_visible(False)
@@ -84,7 +101,7 @@ def panel_a(fig, top):
             S.tag_simulated(axb, loc="tr", dy=0.1)
         x += 43
     P.colorbar(fig, S.rect_mm(fig, 146, top + 2, 2.2, 14), S.CMAP_SEQ, 0, 0.9, "AUPR", ticks=[0, 0.3, 0.6, 0.9], orientation="vertical")
-    S.text_mm(fig, "Zero-shot and oracle rows use no\ntraining image. PEFT and encoder +\ndecoder rows are trained on the\nsource of the test set (internal test).\nOracle prompts come from ground-\ntruth components: an upper bound,\nnot a usable setting.", 146, top + 21, fontsize=4.9, color=S.INK2, linespacing=1.25)
+    S.text_mm(fig, "Zero-shot and oracle rows use no\ntraining image. PEFT and encoder +\ndecoder rows are trained on the\nsource of the test set (internal test).\nOracle prompts come from ground-\ntruth components: an upper bound,\nnot a usable setting.\n† per-class cells assign each auto-\nmatic mask the class it overlaps most\n(upper bound); the bar is the any-\nlesion AUPR of the class-agnostic\nmap. Density, area cap and SAM 3\nwording were chosen on the\nvalidation pool.", 146, top + 21, fontsize=4.9, color=S.INK2, linespacing=1.25)
 
 
 def panel_b(fig, top):
@@ -125,6 +142,7 @@ def panel_b(fig, top):
 
 def panel_c(fig, top):
     r = D.sel(experiment="E5", model="SAM 3", test_set="IDRiD", metric="aupr")
+    r = r[r["variant"] != "text:selected"]  # the three registered wordings; the chosen one is panel a's row
     ax = S.axes_mm(fig, 135, top, 40, 27)
     y, labels = 0, []
     for cls in D.CLASSES:
@@ -169,8 +187,8 @@ def panel_d(fig, top):
 def panel_e(fig, top):
     def best(rows_fn_test, mode):
         rows = [r for r in rows_for(rows_fn_test) if r[0] == mode]
-        i = int(np.argmax([r[2].mean() for r in rows]))
-        return rows[i][1].split(" · ")[0].replace(" (LoRA)", ""), rows[i][2].mean()
+        i = int(np.argmax([summary_of(r) for r in rows]))
+        return rows[i][1].split(" · ")[0].replace(" (LoRA)", ""), summary_of(rows[i])
     cats, internal, indep, colors = [], [], [], []
     sm = D.score_matrix("DDR")
     for mode in MODE_COLOR:
@@ -182,7 +200,7 @@ def panel_e(fig, top):
             indep.append(sm.loc[key, "TJDR-std"])
         else:
             rows = [r for r in rows_for("TJDR-std") if r[0] == mode and r[1].startswith(name)]
-            indep.append(max(r[2].mean() for r in rows))
+            indep.append(max(summary_of(r) for r in rows))
         colors.append(MODE_COLOR[mode])
     for ref in ("M2MRF", "nnU-Net"):
         cats.append(f"Reference\n{ref}")

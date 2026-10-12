@@ -20,11 +20,13 @@ reaches the decoder with its right and bottom as inclusive pixel indices
 read inclusive ones (review fix 6, B5; e5_frozen.yaml oracle.box).
 
 Directories (bench/e5/outputs.py): <base>[__<canvas variant>]__k<k> for every
-k of the grid, <base> = <set> or <set>-val for a pool run; sources
-b_sam_vitb_box, b_sam2_hieral21_point, b_medsam_vitb_box.
+k of the grid on a pool run and on the curve sets (e5_frozen.yaml oracle.curve_sets:
+IDRiD, DDR), for k = all alone on the other five sets (D6; review fix 9 / B3);
+<base> = <set> or <set>-val for a pool run; sources b_sam_vitb_box,
+b_sam2_hieral21_point, b_medsam_vitb_box.
 
     python -m bench.e5.prompted --model "SAM 2" --kind boxes --set IDRiD --split test
-        [--variant fov] [--geometry G1] [--device cuda:0] [--predict-only] [--drop-maps ...] [--limit 2]
+        [--variant fov] [--device cuda:0] [--predict-only] [--drop-maps ...] [--limit 2]
 """
 
 import argparse
@@ -259,12 +261,17 @@ def planned(frozen, model, kind, set_name, split, variant=geo.MAIN):
     source = source_name(frozen, model, kind)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
-    return source, {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in fz.k_levels(frozen)}
+    return source, {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in fz.k_levels_for(frozen, set_name, split)}
 
 
 def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=None, decoder=None, frozen=None,
-        data_dir=None, long_side=None, window=None, prompts_dir=None, evaluate=True, drop_maps=(), limit=None, pool=None):
-    """Predict (and evaluate) one run; directories that already have predicted.json are left alone."""
+        data_dir=None, long_side=None, window=None, prompts_dir=None, evaluate=True, drop_maps=(), limit=None, pool=None, resume=True):
+    """Predict (and evaluate) one run; directories that already have predicted.json are left alone.
+
+    Every image's mask files are checked against the sha256 the prompt file recorded
+    (prompts.verify_masks). ``resume`` skips the images whose maps every pending k
+    directory already holds (review fix 12).
+    """
     frozen = frozen or fz.load_frozen()
     check_kind(frozen, model, kind)
     if geometry not in geo.GEOMETRIES:
@@ -279,7 +286,7 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
     if int(doc["long_side"]) != int(long_side):
         raise ValueError(f"{prompt_path} was generated on a {doc['long_side']} canvas, this run uses {long_side}; regenerate it")
     pool_run = fz.is_pool_split(split)
-    k_levels = fz.k_levels(frozen)
+    k_levels = fz.k_levels_for(frozen, set_name, split)
     source, dirs = planned(frozen, model, kind, set_name, split, variant)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if pool_run else set_name
@@ -295,11 +302,18 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
         else:
             record = {"checkpoint": None, "device": str(device), "decoder": type(decoder).__name__}
         totals = {"n_prompts": 0, "n_windows_encoded": 0, "encode_seconds": 0.0, "decode_seconds": 0.0, "n_windows": 0}
+        resumed = 0
         started = time.perf_counter()
         for index, image_id in enumerate(ids):
-            cv = geo.canvas(data_dir, image_id, long_side, masks=False)
             entry = doc["images"].get(image_id)
-            if entry is None or tuple(entry["canvas_hw"]) != cv.hw:
+            if entry is None:
+                raise ValueError(f"{prompt_path} has no entry for {image_id}; regenerate it")
+            pr.verify_masks(doc, data_dir, image_id)
+            if resume and all(out.maps_written(out.pred_dir(dirs[k], split), image_id) for k in pending):
+                resumed += 1
+                continue
+            cv = geo.canvas(data_dir, image_id, long_side, masks=False)
+            if tuple(entry["canvas_hw"]) != cv.hw:
                 raise ValueError(f"{prompt_path} has no entry for {image_id} on a {cv.hw} canvas; regenerate it")
             boxes = [(0, 0)] if window_size is None else geo.windows(cv.hw, window_size, geo.overlap(frozen))
             by_class = {cls: entry["classes"][cls]["prompts"] for cls in LESION_CLASSES}
@@ -322,7 +336,7 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
                     "canvas_long_side": "native" if long_side == geo.NATIVE else int(long_side),
                     "window": window_size, "overlap": None if window_size is None else geo.overlap(frozen),
                     "prompt_file": str(prompt_path), "prompt_file_sha256": _file_sha256(prompt_path), "prompt_rule": doc["rule"],
-                    "n_images": len(ids), "limit": limit, "n_windows": totals["n_windows"],
+                    "n_images": len(ids), "limit": limit, "resumed_images": resumed, "n_windows": totals["n_windows"],
                     "n_windows_encoded": totals["n_windows_encoded"], "n_prompts": totals["n_prompts"],
                     "predict_seconds": round(elapsed, 1), "encode_seconds_total": round(totals["encode_seconds"], 1),
                     "decode_seconds_total": round(totals["decode_seconds"], 1),
@@ -350,14 +364,13 @@ def main(argv=None):
     parser.add_argument("--set", required=True)
     parser.add_argument("--split", default="test", help="test, or val for a pool run")
     parser.add_argument("--variant", default=geo.MAIN)
-    parser.add_argument("--geometry", default=geo.G1, choices=geo.GEOMETRIES)
     parser.add_argument("--device")
     parser.add_argument("--predict-only", action="store_true")
     parser.add_argument("--drop-maps")
     parser.add_argument("--limit", type=int, help="first N images only (smoke); redone in full by a later run without --limit")
     args = parser.parse_args(argv)
     drop = [item.strip() for item in (args.drop_maps or "").split(",") if item.strip()]
-    print(run(args.model, args.kind, args.set, args.split, args.variant, args.geometry, args.device,
+    print(run(args.model, args.kind, args.set, args.split, args.variant, geo.G1, args.device,
               evaluate=not args.predict_only, drop_maps=drop, limit=args.limit))
 
 

@@ -1,10 +1,16 @@
 """SAM and SAM 2.1 automatic masks: the E5 zero-shot tier a (design/15 section 5; e5_frozen.yaml zero_shot).
 
 One run is one model, one point density of the registered grid, one set and
-split, one geometry (G1 windows, G2 whole crop) and one canvas variant. Per
-image: canvas (geometry.canvas) -> windows (geometry.windows, padded crops) ->
-generator.generate on each window -> Mask records at the window offsets
-(score_rules) -> maps -> paste onto the original image -> write_prob.
+split, one geometry (G1 windows; G2, the whole crop, is kept for tests and is not
+on the command line since docs/paper/16 cut it) and one canvas variant. Per image:
+canvas (geometry.canvas) -> windows (geometry.windows, padded crops) ->
+generator.generate on one window -> Mask records at the window offsets
+(score_rules) folded into the running canvas maps of every output -> the next
+window (the masks of a window are dropped once folded, review fix 12) -> paste
+onto the original image -> write_prob. An image whose maps every pending
+directory already holds is skipped (resume after a stopped run; predicted.json
+counts them as resumed_images and its statistics cover the images this process
+predicted).
 
 Directories of one run (bench/e5/outputs.py; <base> is <set>, or <set>-val for
 a pool run, plus the canvas variant):
@@ -30,7 +36,7 @@ window are recorded in predicted.json so the server smoke yields the real cost.
 
     python -m bench.e5.amg --model SAM --density 64 --set DDR --split val
     python -m bench.e5.amg --select                                   # after the pool runs of every grid pair
-    python -m bench.e5.amg --model "SAM 2" --density 64 --set DiaRetDB1 --split test --geometry G1 [--variant fov]
+    python -m bench.e5.amg --model "SAM 2" --density 64 --set DiaRetDB1 --split test [--variant fov]
         [--device cuda:0] [--predict-only] [--drop-maps FGADR,Retinal-Lesions] [--limit 2]
 """
 
@@ -149,16 +155,17 @@ def build_generator(model, density, frozen, device=None):
     return SAM2AutomaticMaskGenerator(network, **params), record
 
 
-def window_masks(generator, cv, window, boxes):
-    """Masks of every window of a canvas, at their offsets; returns (masks, seconds per window)."""
-    masks, seconds = [], []
-    for top, left in boxes:
-        piece = cv.image if window is None else geo.crop_window(cv.image, top, left, window)[0]
-        started = time.perf_counter()
-        records = generator.generate(np.ascontiguousarray(piece))
-        seconds.append(time.perf_counter() - started)
-        masks.extend(sr.Mask.from_record(record, top, left) for record in records)
-    return masks, seconds
+def accumulate(maps, kind, masks, cv):
+    """Fold one window's masks into the running canvas maps of one output kind (maps_of(kind, [], cv) starts them)."""
+    if kind == ANY:
+        sr.masks_to_score(masks, cv.hw, out=maps[LESION_CLASSES[0]])  # as_four: one array under the four names
+    elif kind == STABILITY:
+        sr.masks_to_score(masks, cv.hw, key=sr.STABILITY, out=maps[LESION_CLASSES[0]])
+    elif kind == ORACLE:
+        sr.oracle_class(masks, cv.masks, cv.hw, out=maps)
+    else:
+        raise ValueError(f"kind must be one of {KINDS}, got {kind!r}")
+    return maps
 
 
 def maps_of(kind, masks, cv):
@@ -196,11 +203,12 @@ def planned(frozen, model, density, set_name, split, variant=geo.MAIN):
 
 
 def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, device=None, generator=None, frozen=None,
-        data_dir=None, long_side=None, window=None, evaluate=True, drop_maps=(), limit=None, pool=None):
+        data_dir=None, long_side=None, window=None, evaluate=True, drop_maps=(), limit=None, pool=None, resume=True):
     """Predict (and evaluate) one run; directories that already have predicted.json are left alone.
 
     ``generator``, ``data_dir``, ``long_side``, ``window`` and ``pool`` override
-    the registered model, data and geometry (tests and smoke).
+    the registered model, data and geometry (tests and smoke). ``resume`` skips the
+    images whose maps every pending directory already holds.
     """
     frozen = frozen or fz.load_frozen()
     if geometry not in geo.GEOMETRIES:
@@ -236,24 +244,37 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
             generator, record = build_generator(model, density, frozen, device)
         else:
             record = {"checkpoint": None, "params": params, "device": str(device), "sam2_postprocessing": None, "generator": type(generator).__name__}
-        n_windows, n_masks, seconds = 0, 0, []
+        n_windows, n_masks, seconds, resumed = 0, 0, [], 0
         started = time.perf_counter()
         for index, image_id in enumerate(ids):
+            if resume and all(out.maps_written(out.pred_dir(dirs[name], split), image_id) for name in pending):
+                resumed += 1
+                continue
             cv = geo.canvas(data_dir, image_id, long_side, masks=True)
             boxes = [(0, 0)] if window_size is None else geo.windows(cv.hw, window_size, geo.overlap(frozen))
-            masks, window_seconds = window_masks(generator, cv, window_size, boxes)
-            n_windows += len(boxes)
-            n_masks += len(masks)
-            seconds.extend(window_seconds)
             fov_pixels = int(np.count_nonzero(cv.fov))
-            kept = {}
+            running = {name: maps_of(directories[name][2], [], cv) for name in pending}
+            image_masks = 0
+            for top, left in boxes:
+                piece = cv.image if window_size is None else geo.crop_window(cv.image, top, left, window_size)[0]
+                started_window = time.perf_counter()
+                records = generator.generate(np.ascontiguousarray(piece))
+                seconds.append(time.perf_counter() - started_window)
+                masks = [sr.Mask.from_record(record, top, left) for record in records]
+                image_masks += len(masks)
+                kept = {}
+                for name in pending:
+                    _tokens, cap, kind = directories[name]
+                    if cap not in kept:
+                        kept[cap] = sr.area_cap(masks, cap, fov_pixels, cv.hw)
+                    accumulate(running[name], kind, kept[cap], cv)
+                del records, masks, kept  # one window's masks at a time
+            n_windows += len(boxes)
+            n_masks += image_masks
             for name in pending:
-                _tokens, cap, kind = directories[name]
-                if cap not in kept:
-                    kept[cap] = sr.area_cap(masks, cap, fov_pixels, cv.hw)
-                write_maps(out.pred_dir(dirs[name], split), image_id, cv, maps_of(kind, kept[cap], cv))
+                write_maps(out.pred_dir(dirs[name], split), image_id, cv, running[name])
             if index % 20 == 0:
-                print(f"{source} {base} {index + 1}/{len(ids)} windows {len(boxes)} masks {len(masks)}", flush=True)
+                print(f"{source} {base} {index + 1}/{len(ids)} windows {len(boxes)} masks {image_masks}", flush=True)
         elapsed = time.perf_counter() - started
         environment = out.environment()
         for name in pending:
@@ -267,7 +288,7 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
                     "window": window_size, "overlap": None if window_size is None else geo.overlap(frozen),
                     "density": density, "area_cap_fraction": cap, "kind": kind,
                     "pixel_score": sr.STABILITY if kind == STABILITY else frozen["zero_shot"]["pixel_score"],
-                    "n_images": len(ids), "limit": limit, "n_windows": n_windows, "n_masks": n_masks,
+                    "n_images": len(ids), "limit": limit, "resumed_images": resumed, "n_windows": n_windows, "n_masks": n_masks,
                     "predict_seconds": round(elapsed, 1),
                     "generate_seconds_total": round(float(sum(seconds)), 1),
                     "seconds_per_window_mean": round(float(np.mean(seconds)), 3) if seconds else None,
@@ -334,7 +355,6 @@ def main(argv=None):
     parser.add_argument("--set", help="a test set of bench/configs/e3a_frozen.yaml")
     parser.add_argument("--select", action="store_true", help="choose each model's (density, cap) on the validation pool and print the yaml")
     parser.add_argument("--split", default="test", help="test, or val for a pool run")
-    parser.add_argument("--geometry", default=geo.G1, choices=geo.GEOMETRIES)
     parser.add_argument("--variant", default=geo.MAIN, help="main, or a comparison variant such as fov for TJDR_uwf")
     parser.add_argument("--device")
     parser.add_argument("--predict-only", action="store_true")
@@ -348,7 +368,7 @@ def main(argv=None):
     if args.model is None or args.density is None or args.set is None:
         parser.error("--model, --density and --set are required for a run (or pass --select)")
     drop = [item.strip() for item in (args.drop_maps or "").split(",") if item.strip()]
-    summary = run(args.model, args.density, args.set, args.split, args.geometry, args.variant, args.device,
+    summary = run(args.model, args.density, args.set, args.split, geo.G1, args.variant, args.device,
                   evaluate=not args.predict_only, drop_maps=drop, limit=args.limit)
     print(summary)
 

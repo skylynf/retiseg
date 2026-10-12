@@ -9,7 +9,9 @@ boxes scores 0. This is CPU post-processing of maps that live on the server;
 no model runs. The result is the reference line of figure 5b, evaluated with
 the fixed threshold only.
 
-Directories (bench/e5/outputs.py): b_<model>_ref_<tokens>/<set>[__<variant>]__k<k>.
+Directories (bench/e5/outputs.py): b_<model>_ref_<tokens>/<set>[__<variant>]__k<k>, for
+the k levels of bench.e5.frozen.k_levels_for (every k on the curve sets IDRiD and DDR,
+which are the only sets with reference maps anyway).
 
     python -m bench.e5.same_info --model M2MRF --tokens ddr seed0 --pred-dir runs/BS_m2mrf_ddr_seed0/prob_test --set DDR --split test
 """
@@ -65,7 +67,7 @@ def planned(frozen, model, tokens, set_name, split, variant=geo.MAIN):
     source = out.source_name(TIER, model, "ref", *tokens)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
-    return source, {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in fz.k_levels(frozen)}
+    return source, {k: out.out_dir(TIER, source, out.set_dirname(base, canvas_variants + [k_token(k)])) for k in fz.k_levels_for(frozen, set_name, split)}
 
 
 def run(model, tokens, pred_dir, set_name, split, variant=geo.MAIN, frozen=None, data_dir=None, prompts_dir=None,
@@ -80,7 +82,6 @@ def run(model, tokens, pred_dir, set_name, split, variant=geo.MAIN, frozen=None,
     doc = pr.load(prompt_path)
     if doc["set"] != set_name or doc["split"] != split or doc["variant"] != variant:
         raise ValueError(f"{prompt_path} is for {doc['set']}/{doc['split']}/{doc['variant']}, not {set_name}/{split}/{variant}")
-    k_levels = fz.k_levels(frozen)
     source, dirs = planned(frozen, model, tokens, set_name, split, variant)
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if fz.is_pool_split(split) else set_name
@@ -94,6 +95,7 @@ def run(model, tokens, pred_dir, set_name, split, variant=geo.MAIN, frozen=None,
         n_boxes = 0
         for image_id in ids:
             entry = doc["images"][image_id]
+            pr.verify_masks(doc, data_dir, image_id)
             fov = read_fov(data_dir, image_id)
             crop = crop_box(fov)
             canvas_hw = tuple(entry["canvas_hw"])

@@ -216,3 +216,19 @@ def test_sam3_phrase_items_leave_assembly_and_map_removal_to_the_gated_item(tmp_
     other = next(it for it in items if it.label == "b_medsam_vitb_box:FGADR:test:main")
     assert "--drop-maps FGADR" in launch.command(other, py_argv=["python"], drop_maps=("FGADR",))  # every other item drops its own
     assert all("--no-assemble" in it.argv for it in items if it.label.startswith("a_sam3_ph"))
+
+
+# ---- review fix 9 (B3): the oracle items of the five non-curve sets have one directory --------------
+
+
+def test_oracle_items_outside_the_curve_sets_have_the_k_all_directory_only(tmp_path, monkeypatch):
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    items = launch.discover(fz.load_frozen())
+    by_set = {}
+    for it in items:
+        if it.label.startswith("b_") and "_ref_" not in it.label:
+            by_set.setdefault((it.set_name, it.split), set()).add(len(it.dirs))
+    assert by_set[("IDRiD", "test")] == {4} and by_set[("DDR", "test")] == {4} and by_set[("IDRiD", "val")] == {4} and by_set[("DDR", "val")] == {4}
+    assert all(by_set[(name, "test")] == {1} for name in ("TJDR_std", "TJDR_uwf", "FGADR", "Retinal-Lesions", "DiaRetDB1"))
+    fgadr = next(it for it in items if it.label == "b_medsam_vitb_box:FGADR:test:main")
+    assert fgadr.dirs[0].name == "FGADR__kall" and fgadr.log_dir == fgadr.dirs[0] and len(fgadr.gate_dirs) == 2 * 4  # its thresholds still come from every k of the pool

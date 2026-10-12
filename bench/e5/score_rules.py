@@ -78,9 +78,13 @@ def _clip(array, top, left, canvas_hw):
     return slice(top, top + h), slice(left, left + w), array[:h, :w]
 
 
-def combine_max(canvas_hw, pieces):
-    """A float32 canvas map: the pixelwise maximum of ``pieces`` = iterable of (top, left, array), 0 elsewhere."""
-    out = np.zeros((int(canvas_hw[0]), int(canvas_hw[1])), dtype=np.float32)
+def combine_max_into(out, pieces):
+    """Fold ``pieces`` = iterable of (top, left, array) into the float32 canvas ``out`` by pixelwise maximum; returns ``out``.
+
+    The streaming form (review fix 12): a run folds one window's masks at a time into
+    running canvases instead of keeping every window's masks in memory.
+    """
+    canvas_hw = out.shape
     for top, left, array in pieces:
         rows, cols, piece = _clip(np.asarray(array, dtype=np.float32), top, left, canvas_hw)
         if piece.size:
@@ -88,10 +92,15 @@ def combine_max(canvas_hw, pieces):
     return out
 
 
-def masks_to_score(masks, canvas_hw, key=PREDICTED_IOU):
-    """The class-agnostic map: max over covering masks of their ``key``, clipped to [0, 1]."""
+def combine_max(canvas_hw, pieces):
+    """A float32 canvas map: the pixelwise maximum of ``pieces`` = iterable of (top, left, array), 0 elsewhere."""
+    return combine_max_into(np.zeros((int(canvas_hw[0]), int(canvas_hw[1])), dtype=np.float32), pieces)
+
+
+def masks_to_score(masks, canvas_hw, key=PREDICTED_IOU, out=None):
+    """The class-agnostic map: max over covering masks of their ``key``, clipped to [0, 1]; into ``out`` when given."""
     pieces = ((m.top, m.left, m.segmentation.astype(np.float32) * np.clip(m.score(key), 0.0, 1.0)) for m in masks)
-    return combine_max(canvas_hw, pieces)
+    return combine_max(canvas_hw, pieces) if out is None else combine_max_into(out, pieces)
 
 
 def as_four(score):
@@ -109,8 +118,8 @@ def assign_classes(mask, gt_masks, canvas_hw):
     return [overlaps.index(best)]  # ties go to the first class in LESION_CLASSES order
 
 
-def oracle_class(masks, gt_masks, canvas_hw, key=PREDICTED_IOU):
-    """{cls: map}: each mask scored into the class it overlaps most (reads labels: upper bound only)."""
+def oracle_class(masks, gt_masks, canvas_hw, key=PREDICTED_IOU, out=None):
+    """{cls: map}: each mask scored into the class it overlaps most (reads labels: upper bound only); into ``out`` when given."""
     if len(gt_masks) != len(LESION_CLASSES):
         raise ValueError(f"expected {len(LESION_CLASSES)} ground-truth masks, got {len(gt_masks)}")
     per_class = {cls: [] for cls in LESION_CLASSES}
@@ -118,7 +127,11 @@ def oracle_class(masks, gt_masks, canvas_hw, key=PREDICTED_IOU):
         piece = mask.segmentation.astype(np.float32) * np.clip(mask.score(key), 0.0, 1.0)
         for index in assign_classes(mask, gt_masks, canvas_hw):
             per_class[LESION_CLASSES[index]].append((mask.top, mask.left, piece))
-    return {cls: combine_max(canvas_hw, pieces) for cls, pieces in per_class.items()}
+    if out is None:
+        return {cls: combine_max(canvas_hw, pieces) for cls, pieces in per_class.items()}
+    for cls, pieces in per_class.items():
+        combine_max_into(out[cls], pieces)
+    return out
 
 
 def cap_pixels(fraction, fov_pixels):

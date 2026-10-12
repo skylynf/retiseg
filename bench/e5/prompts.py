@@ -102,6 +102,16 @@ def mask_sha256(data_dir, cls, image_id):
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
 
 
+def verify_masks(doc, data_dir, image_id):
+    """Raise when a ground-truth mask file of the image is not the one the prompt file was built from (review fix 12)."""
+    recorded = doc["images"][image_id]["mask_sha256"]
+    for cls in LESION_CLASSES:
+        actual = mask_sha256(data_dir, cls, image_id)
+        if actual != recorded.get(cls):
+            raise ValueError(f"{image_id} {cls}: the mask file differs from the one the prompt file recorded "
+                             f"(sha256 {recorded.get(cls)} -> {actual}); regenerate the prompt file with bench.e5.prompts")
+
+
 def prompts_for_image(cv, image_id, seed=SEED):
     """{cls: {"n": components, "prompts": [...]}} from the canvas masks, LESION_CLASSES order."""
     if cv.masks is None:

@@ -353,6 +353,8 @@ def foundation(sim):
             for cls in CLASSES:
                 v = np.clip(base * cls_scale[cls] * r.uniform(0.7, 1.3), 0.001, 0.9)
                 sim.add("E5", model, f"zero_shot:{variant}", "none", -1, test, cls, "aupr", v)
+            if variant == "auto_any_lesion":  # the class-agnostic result collect_runs writes as metric aupr_any_lesion, cls any
+                sim.add("E5", model, f"zero_shot:{variant}", "none", -1, test, "any", "aupr_any_lesion", float(np.clip(base * 1.8 * r.uniform(0.8, 1.2), 0.001, 0.9)))
     wording = {
         "MA": ["microaneurysm", "red dot", "small red lesion"],
         "HE": ["retinal hemorrhage", "blot hemorrhage", "dark red patch"],
@@ -362,9 +364,13 @@ def foundation(sim):
     sam3 = {"MA": 0.03, "HE": 0.16, "EX": 0.24, "SE": 0.20}
     for test in TESTS:
         for cls in CLASSES:
+            chosen = None
             for i, w in enumerate(wording[cls]):
                 v = np.clip(sam3[cls] * (1.0 - 0.28 * i) * r.uniform(0.75, 1.25) * (0.7 if test not in ("IDRiD", "DDR") else 1), 0.002, 0.9)
                 sim.add("E5", "SAM 3", f"text:{w}", "none", -1, test, cls, "aupr", v)
+                if i == 0:  # the wording "chosen on the validation pool" (a_sam3_selected, variant text:selected): the first one, on every test set alike
+                    chosen = v
+            sim.add("E5", "SAM 3", "text:selected", "none", -1, test, cls, "aupr", chosen)
     # Oracle prompts: performance against prompts per image and class.
     ceiling = {
         ("SAM", "box"): {"MA": 0.30, "HE": 0.62, "EX": 0.66, "SE": 0.72},
