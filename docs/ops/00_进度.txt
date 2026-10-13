@@ -1,7 +1,9 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-10-13 23:55 +0800，服务器；已合入工作站 af0219f）
+一、当前状态（2026-10-14 04:51 +0800 回传包，本机 10-14 接入；仓库 42d4682 之后）
+10-14 包新增（相对 10-13）：nnU-Net 默认 DDR 第三次 0.434（三次 0.432、0.427、0.434，均值 0.431）；E3a 又出 9 份（B-std 七模型两库的 TJDR_uwf 齐；nnU-Net 默认两库七个集合齐，含 TJDR_std 0.518/0.434、DiaRetDB1 0.325/0.268；ResEnc-M 两库除 DDR→TJDR_std 外齐）。论文 results.csv 124 份报告，make 通过；R4 第一段已按三个独立集写实数（14 M10）。训完没评测：E4 的 DDR+Retinal-Lesions、Retinal-Lesions 单独，E8 的 DDR 10%。在跑：E3b U-Net TJDR、E7 M2MRF 512、E8 DDR 50%、E8 细粒度合并、nnU-Net IDRiD rep1、E3a。
+上一状态（2026-10-13 23:55 +0800，服务器；已合入工作站 af0219f）
 服务器：ubuntu-SYS-421GE-TNRT，仓库 /home/qurr/luming/retiseg/retiseg，8 张 A100 40GB。GPU 0、1 是他人 vLLM。本项目 GPU 2–7 都有进程。dataset/prepared 七个库的划分不变。B1 已停。
 在跑：GPU 2 nnU-Net DDR 默认 rep2（第 862/1000 轮），同一脚本之后接 IDRiD rep1、rep2。GPU 3 E3a 种子 0（FCT IDRiD→TJDR_uwf）；主变体 done.json 55 份；这个启动器是 10-12 15:26 拉起的，不会中途发现新来源。GPU 4 E8 M2MRF DDR 10% 已到 83600 步，在写概率图（验证最好 0.479）。GPU 5 E8 细粒度合并（8360/83600，验证 0.364）。GPU 6 E8 DDR 50%（12540/83600，验证 0.453）。GPU 7 E7 M2MRF 长边 512（146800/293600，验证 0.496）。旧 launch_factor 没杀。
 已写入 14，并在服务器用 retiseg-nnunet 的 Python 跑 collect_runs.py 写入论文 data/results.csv（115 份报告；没有跑 make）：
@@ -50,4 +52,11 @@ E5 推理档代码（2026-10-13，本机；pull 到 a4339e3 之后）
 1. 服务器 23:55 的记录与本机预期一致：主表 B-std 七模型三种子齐（FCT DDR 一个种子）、nnU-Net 两配置、影响因素 M2MRF 四项、E3a 55 份主变体，论文 results.csv 已由服务器写入（115 份报告）；本机 make 全部重建通过（numbers 218 键，139 个还来自占位）。
 2. 写了 bench/e5/（a 零样本自动掩码与离线打分规则、b 理想提示一次写全部 k、同信息对照、SAM 3 文本、评测包装、CLI），11 个无 torch 用例通过（bench/tests/test_e5_infer.py）；适配器部分（models.py、sam3_text.py 的 Sam3Adapter）只能在服务器核对。collect_runs.py 加 collect_e5（读 runs/E5/**/paper.json + metrics_test.json，任意病灶 AUPR 以 cls "any" 进表），test_collect_runs.py 覆盖；retifig/data.py 的 sel 默认排除 cls "any"；make_numbers 加 fm.any.* 宏。方法与命名记在 14 M9“推理档实现”，服务器步骤在 17 第六节。
 3. 没有改任何冻结文件；e5_frozen.yaml 两个“待填”字段（area_cap、sam3.selected）由服务器按 17 第六节第 1、5 条填写后提交。
+
+10-14 回传包接入与下一步代码（2026-10-14，本机）
+1. 包 retiseg_runs_handoff_20261014（git 42d4682，2858 个小文件）解入 runs/，collect_runs 124 份报告（新增 9 份：nnU-Net DDR rep2，E3a 的 TJDR_uwf 五个 B-std 模型、nnU-Net 与 ResEnc-M 的 DiaRetDB1/TJDR_std/交叉），make 通过。collect_runs 补了图像级 AUC 行（img_auc、img_auc_top100），否则 DiaRetDB1 测过的模型在表 5 的 DiaRet 列会掉行。
+2. 发现：DiaRetDB1 图像级分数按协议取视野内最大概率时，nnU-Net 的 MA 只有 AUC 0.43/0.56（softmax 输出几乎每张图都有像素接近 1，最大值不区分），前 100 像素平均为 0.83/0.68；协议不改，两个都报，写法在 14 备注 39。
+3. 独立测试第一段（R4）按已测的三个集合写成实数：DDR 训练 9 个监督模型平均降 47–56%，IDRiD 训练降 71–75%，内部名次只在 FGADR 上预测独立名次（ρ 0.88），Retinal-Lesions 和超广角上第一名是内部第六、七的 DeepLabv3 / HACDR-Net；讨论 Q2 加一句。数字在 14 M10。
+4. 代码：launch_factor.py 的 evaluate 加训练源同眼排除（--exclude，FGADR 106、Retinal-Lesions 1），没带排除的 metrics_test.json 自动重评测（test_factor 新用例）；nnU-Net E3b 接线（nnunet_bridge DATASET_IDS 603/604 与 info，nnunet_run.sh 通用化并带 --exclude，nnunet_e3a/launch_e3a 认无视野度数的来源，collect_runs 的 nn_key 把这两个来源记为 E3b）；server_run.sh 的 E5_MODELS 可用环境变量覆盖（MedSAM 权重缺时跳过）。服务器步骤在 17 第十三节。
+5. 仓库卫生：误提交的 retiseg_runs_handoff_20261012.tar.gz 从索引移除，.gitignore 加 *.tar.gz。
 

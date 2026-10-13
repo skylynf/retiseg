@@ -15,3 +15,6 @@ official_code/SAA/
 dataset/
 runs/
 pretrained/
+
+# Server handoff tarballs stay local (52 MB each).
+*.tar.gz

@@ -11,6 +11,7 @@ with write_prob. checkpoint_final.pth, fold 0, as for the internal test.
 Evaluation and done.json are bench.e3a's.
 
     CUDA_VISIBLE_DEVICES=4 python bench/scripts/nnunet_e3a.py --train IDRiD --plan default [--sets TJDR_std]
+    (--train TJDR_std or FGADR for the E3b sources; their same-eye exclusions come from leak_exclusions.json)
 
 Runs in the retiseg-nnunet environment.
 """
@@ -30,10 +31,9 @@ from PIL import Image
 from bench import e3a
 from bench.common.io import LESION_CLASSES, image_path, read_fov, write_prob
 from bench.data.fov import crop_box
-from bench.scripts.nnunet_bridge import LABELS
+from bench.scripts.nnunet_bridge import DATASET_IDS, LABELS
 
 PLANS = {"default": "nnUNetPlans", "resencm": "nnUNetResEncUNetMPlans"}
-DATASET_IDS = {"IDRiD": 601, "DDR": 602}
 # nnUNetv2_predict defaults (nnunetv2/inference/predict_from_raw_data.py, predict_entry_point).
 PREDICTOR = {"tile_step_size": 0.5, "use_gaussian": True, "use_mirroring": True, "perform_everything_on_device": True}
 # NaturalImage2DIO.read_images returns this spacing for every PNG.
@@ -111,7 +111,11 @@ def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=
     run_dir = _ROOT / "runs" / source
     if not (model_folder(train, plan) / "fold_0" / "checkpoint_final.pth").is_file():
         raise FileNotFoundError(f"{model_folder(train, plan)}/fold_0/checkpoint_final.pth")
-    pending = [(t, v) for t, v in e3a.targets([train], frozen, sets) if not e3a.is_done(source, t, v)]
+    # a training source without a frozen field of view (TJDR_std, FGADR; E3b) has no per-degree scale for the
+    # ultra-widefield set: only its field-of-view variant runs, as bench.e3a does for the BF cells
+    no_degrees = train not in frozen["train_field_degrees"]
+    pending = [(t, v) for t, v in e3a.targets([train], frozen, sets)
+               if not e3a.is_done(source, t, v) and not (no_degrees and t in frozen.get("per_degree_sets", ()) and v == e3a.MAIN)]
     if not pending:
         print(f"{source}: every E3a set is done", flush=True)
         return

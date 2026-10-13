@@ -189,3 +189,31 @@ def test_run_cell_trains_on_two_toy_sources_and_scores(tmp_path, monkeypatch):
     assert [row["iteration"] for row in rows] == [2, 4]
     assert (run_dir / "best.pt").is_file() and (run_dir / "environment.json").is_file()
     assert {(c, s) for c, _p, s in written} == {("best.pt", "val"), ("best.pt", "test"), ("last.pt", "val"), ("last.pt", "test")}
+
+
+def test_factor_evaluation_excludes_the_same_eye_images_of_the_training_sources(tmp_path):
+    """FGADR-trained cells drop FGADR's 106 same-eye test images (leak_exclusions.json); a metrics_test.json
+    written without them is queued for re-evaluation; DDR-trained cells exclude nothing."""
+    from bench.scripts import launch_factor as lf
+
+    fgadr = _cell(None, factor="E3b", dataset="dataset/prepared/FGADR", train=[{"dataset": "dataset/prepared/FGADR", "split": "train"}])
+    excluded = lf.internal_exclusions(fgadr)
+    assert len(excluded) == 106 and excluded == sorted(excluded)
+    assert lf.internal_exclusions(_cell(None)) == []
+    (tmp_path / "cell.yaml").write_text(yaml.safe_dump(fgadr))
+    job = {"config": str(tmp_path / "cell.yaml"), "run_dir": "runs/x", "name": "x"}
+    argv = lf.evaluate_argv(job, ["python"])
+    assert argv[argv.index("--exclude") + 1].split(",") == excluded
+    (tmp_path / "ddr.yaml").write_text(yaml.safe_dump(_cell(None)))
+    assert "--exclude" not in lf.evaluate_argv({"config": str(tmp_path / "ddr.yaml"), "run_dir": "runs/y"}, ["python"])
+    run = tmp_path / "runs" / "x"
+    run.mkdir(parents=True)
+    (run / "metrics_test.json").write_text(json.dumps({"excluded_ids": []}))
+    job["run_dir"] = str(run.relative_to(tmp_path))
+    import unittest.mock as mock
+
+    with mock.patch.object(lf, "_ROOT", tmp_path):
+        assert lf.needs_reevaluation(job)
+        (run / "metrics_test.json").write_text(json.dumps({"excluded_ids": excluded}))
+        assert not lf.needs_reevaluation(job)
+

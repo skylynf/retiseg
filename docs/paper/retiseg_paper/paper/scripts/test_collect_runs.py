@@ -76,7 +76,7 @@ def main():
         got = new[(new.cls == "MA") & (new.metric == "aupr")]["value"].iloc[0]
         assert abs(got - report["per_class"]["MA"]["aupr"]) < 1e-12
         needed = {"aupr", "aupr_11pt", "aupr_ci_lo", "aupr_ci_hi", "dice_fixed", "dice_valopt", "iou_valopt", "lesion_precision",
-                  "lesion_recall_small", "lesion_recall_medium", "lesion_recall_large"}
+                  "lesion_recall_small", "lesion_recall_medium", "lesion_recall_large", "img_auc", "img_auc_top100"}
         assert needed <= set(new["metric"]), needed - set(new["metric"])
         table = pd.read_csv(PAPER / "data" / "results.csv", keep_default_na=False)
         # the test starts from a placeholder-only table so that the merge arithmetic is checked
@@ -106,6 +106,10 @@ def main():
         shutil.copyfile(run / "metrics_test.json", sam3 / "metrics_test.json")
         (sam3 / "paper.json").write_text(json.dumps({"experiment": "E5", "model": "SAM 3", "variant": "text:phrase0", "train_set": "none",
                                                      "seed": -1, "test_set": "IDRiD", "variant_by_class": {c: f"text:{c.lower()}" for c in CLASSES}}))
+        # nnU-Net run names: main-table sources are E2, the E3b training sources TJDR_std and FGADR are E3b
+        assert collect_runs.nn_key(collect_runs.NN.match("NN_default_ddr_fold0_rep2")) == ("E2", "bstd", "nnU-Net", "DDR", 2)
+        assert collect_runs.nn_key(collect_runs.NN.match("NN_default_fgadr_fold0")) == ("E3b", "bstd", "nnU-Net", "FGADR", 0)
+        assert collect_runs.nn_key(collect_runs.NN.match("NN_resencm_tjdr_std_fold0")) == ("E3b", "bstd", "nnU-Net ResEnc-M", "TJDR-std", 0)
         rows, seen5 = collect_runs.collect_e5(tmp / "runs")
         assert len(seen5) == 2 and all(not name.startswith("E5/a/sam/default/DDR_val") for name, _v, _m in seen5), seen5
         sam = rows[rows.model == "SAM"]

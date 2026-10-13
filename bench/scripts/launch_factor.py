@@ -7,7 +7,10 @@ RETISEG_GPUS, longest first. A job whose run directory holds metrics_test.json
 is finished and skipped; one whose console.log shows a live process is skipped
 too. A run that finished training (best.pt and timing.json) without
 metrics_test.json is scored (--score-only predicts from the saved checkpoints)
-and evaluated instead of retrained; --score-only restricts the queue to those. Jobs of a factor whose weights or subsets are missing
+and evaluated instead of retrained; --score-only restricts the queue to those.
+The internal test excludes the same-eye images of the cell's training sources
+(leak_exclusions.json, --exclude); a metrics_test.json written without them is
+re-evaluated (evaluate only, no new maps). Jobs of a factor whose weights or subsets are missing
 fail at their first step and are reported, not retried.
 
     python bench/scripts/launch_factor.py [--experiment E4] [--only NAME,...]
@@ -50,13 +53,43 @@ def load_jobs(path=JOBS):
     return jobs
 
 
+def internal_exclusions(cell):
+    """Internal-test images that show an eye one of the cell's training sources has seen
+    (bench/data/splits/leak_exclusions.json, the same list bench/e3a.py applies): FGADR's 106 same-eye test
+    images for a run trained on FGADR, Retinal-Lesions' 1, TJDR_uwf's 2; empty for IDRiD and DDR."""
+    from bench.e3a import PREPARED_TO_SET, leak_exclusions, train_sources_of
+
+    test_name = PREPARED_TO_SET.get(Path(cell["dataset"]).name, Path(cell["dataset"]).name)
+    return sorted(leak_exclusions(train_sources_of(cell), test_name))
+
+
 def evaluate_argv(job, py_argv):
     """bench.eval on the primary test maps of a finished run: the step that writes metrics_test.json
-    (the training script only writes the maps, as in launch_b1's formal wave)."""
+    (the training script only writes the maps, as in launch_b1's formal wave). Same-eye test images of a
+    training source are excluded (--exclude), as E3a does for every other test set."""
     cell = yaml.safe_load((_ROOT / job["config"]).read_text())
     run_dir = job["run_dir"]
-    return list(py_argv) + ["-m", "bench.eval.cli", "evaluate", "--data", str(cell["dataset"]), "--split", cell["split_test"],
+    argv = list(py_argv) + ["-m", "bench.eval.cli", "evaluate", "--data", str(cell["dataset"]), "--split", cell["split_test"],
                             "--pred", f"{run_dir}/prob_test", "--val-pred", f"{run_dir}/prob_val", "--out", f"{run_dir}/metrics_test"]
+    exclude = internal_exclusions(cell)
+    if exclude:
+        argv += ["--exclude", ",".join(exclude)]
+    return argv
+
+
+def needs_reevaluation(job):
+    """metrics_test.json written without the exclusions the cell needs (runs scored by hand on 2026-10-13)."""
+    path = _ROOT / job["run_dir"] / "metrics_test.json"
+    if not path.is_file():
+        return False
+    cell = yaml.safe_load((_ROOT / job["config"]).read_text())
+    expected = internal_exclusions(cell)
+    if not expected:
+        return False
+    import json
+
+    written = sorted(json.loads(path.read_text()).get("excluded_ids") or [])
+    return written != expected
 
 
 def maps_written(run_dir):
@@ -100,7 +133,11 @@ def main(argv=None):
         if only and job["name"] not in only:
             continue
         if (_ROOT / job["run_dir"] / "metrics_test.json").is_file():
-            print(f"skip {job['name']}: finished", flush=True)
+            if needs_reevaluation(job):
+                print(f"queued {job['name']} (re-evaluating with the same-eye exclusions) -> {job['run_dir']}", flush=True)
+                chosen.append(dict(job, _score_only=True, est_hours=0.3))
+            else:
+                print(f"skip {job['name']}: finished", flush=True)
             continue
         running = in_progress(Path(job["run_dir"]))
         if running is not None:

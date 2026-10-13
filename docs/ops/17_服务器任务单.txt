@@ -84,6 +84,7 @@
   进度（2026-10-13 23:55）：DDR rep1 已打分，测试 mAUPR 0.427（14 M7）。DDR rep2 在 GPU 2 训练（第 862/1000 轮），同一脚本之后接 IDRiD rep1、rep2。IDRiD 两次还没开始。
 
 九、本机（本机 agent）接下来写的代码，写好后服务器才有任务可排
+  5. nnU-Net 的 E3b（2026-10-14 本机已写）：nnunet_bridge.py 的 DATASET_IDS 加 TJDR_std 603、FGADR 604 和 info 子命令；nnunet_run.sh 按 info 取 id、raw 目录名和同眼排除，评测带 --exclude；nnunet_e3a.py、launch_e3a.py 认这两个来源（无视野度数，超广角只跑 fov 变体）；collect_runs.py 把 NN_*_tjdr_std / fgadr 记为 E3b 行。服务器步骤见第十三节第 1c、2d 条。
   1. E5 推理档 bench/e5/（15 第四至六节）——2026-10-13 本机已写：common.py、masks.py、prompts.py、models.py、amg.py、rules.py、prompted.py、control.py、sam3_text.py、score.py、__main__.py，测试 bench/tests/test_e5_infer.py；collect_runs.py 的 collect_e5。服务器步骤见第六节。retiseg-sam3 环境由服务器写进 cluster_env.sh。
   2. 影响因素实验的接线（16 第三节的缩减版）——2026-10-12 本机已写：bench/factor.py、bench/data/factor_input.py、bench/scripts/make_subsets.py、make_factor_jobs.py、launch_factor.py，server_run.sh 的 factor 阶段，e3a 认 BF 运行，collect_runs.py 认 runs/BF_*。服务器步骤见第十一节。原计划：
      E3b：代表模型在 TJDR_std、FGADR 上训练，像素预算与 DDR 相同（不是新库自己的等效 epoch），bs_frozen.yaml 加这两个库的预算条目；FGADR 训练时评测按 leak_exclusions.json 去重。
@@ -114,7 +115,30 @@
   6. 权重：SAM 3 和 RETFound 两份已于 2026-10-13 下到服务器，sha256 在 e5_frozen.yaml。仍然缺 MedSAM 和公开 DINOv2；E5 还没开。公开权重里已在盘上的模型可以先跑 python bench/scripts/cost_audit.py --models U-Net DeepLabv3 HRNet Swin-Unet FCT M2MRF（第九节第 4 条）。
   7. 回传：下一次打包时带上 runs/BF_*、runs/E3a/、runs/E2c_*、runs/NN_*_rep*、runs/BS_unet_*（新三种子）。
 
-十、顺序和卡的分配（6 张卡，GPU 2–7）
+十三、2026-10-14 更新（依据 04:51 的回传包；pull 本次提交后执行；本节覆盖第十节的顺序）
+  收到的包已接入论文（124 份报告，results.csv 和 make 已更新；R4 第一段按已测的三个独立集写了实数）。本次提交改了什么、服务器要做什么：
+  1. 现在就做，CPU（不占卡）：
+     a. python bench/scripts/launch_factor.py --score-only          # 打印；三项训完没评测的（e4 ddr_retles、e4 retles、e8 ddr10）和 e3b_m2mrf_fgadr 的重评测
+        launch_factor.py 这次给影响因素运行的 evaluate 加了 --exclude：训练源的同眼测试图（leak_exclusions.json，FGADR 106 张、Retinal-Lesions 1 张）从内部测试里去掉，与 E3a 对其他测试集的做法相同；已有 metrics_test.json 但没带这份排除名单的运行会被自动排成"只评测"。
+        四条命令在 CPU 上跑完即可（每条十几分钟），或 RETISEG_GPUS="<一张空卡>" ... --submit。
+     b. E5 推理档准备（第六节第 0、1 条）：pytest bench/tests/test_e5_infer.py；七个集合加 DDR val 的提示文件；python -m bench.e5 areacap 后把 area_cap 填进 e5_frozen.yaml；提示文件和 yaml 一起提交。
+     c. nnU-Net E3b 的数据（第 2 条 d 要用）：在 retiseg-nnunet 环境里
+        python bench/scripts/nnunet_bridge.py convert --data dataset/prepared/TJDR_std --dataset-id 603
+        python bench/scripts/nnunet_bridge.py convert --data dataset/prepared/FGADR --dataset-id 604
+        nnUNetv2_plan_and_preprocess -d 603 604 -c 2d --verify_dataset_integrity
+        python bench/scripts/nnunet_bridge.py splits --data dataset/prepared/TJDR_std --dataset-id 603 ；FGADR 同理（604）
+        核对 python bench/scripts/nnunet_bridge.py info --train FGADR 打印的 Dataset604_<名> 与 raw 目录一致（名字取 meta.json 的 name）。
+  2. 卡的顺序（空出一张就按这个顺序接；不杀正在跑的）：
+     a. E3a 仍第一：GPU 3 的旧启动器跑完后（或任一卡空出时）RETISEG_GPUS="3 <空卡>" bash bench/scripts/server_run.sh e3a --drop-maps FGADR,Retinal-Lesions，新启动器会把 nnU-Net rep、影响因素的新检查点一起纳入。
+     b. E5 训练档种子 0（16 的排期 10-14 到 10-20）：权重除 MedSAM 外都在，先 E5_MODELS=SAMed,SAM-Adapter,SAM2-UNet,RETFound bash bench/scripts/server_run.sh e5-smoke（server_run.sh 这次允许用 E5_MODELS 覆盖模型表），冒烟过了就 RETISEG_GPUS="<两张卡>" E5_MODELS=... server_run.sh e5-seed0（DDR 长任务先排；估时 15 第九节）。冒烟记录每步耗时、显存和实际步数到 00，est_hours 按实测改 make_bs_jobs.py。MedSAM 权重到了再单独补（E5_MODELS=MedSAM）。
+     c. 影响因素剩余（旧 launch_factor 在接，不用管）：SAM2-UNet、RETFound 的 E3b/E4/E7 cell 现在有权重了，旧启动器会自动排到；它们和 E5 种子 0 抢卡时以 E5 种子 0 优先（第十节"不砍"里两者都在，E5 的 DDR 任务更长、先开）。
+     d. nnU-Net E3b（16 第三节 E3b 的第 5 个模型）：数据准备好后 NNUNET_GPU=<空卡> bash bench/scripts/server_run.sh nnunet TJDR_std default，再 FGADR default；运行名 NN_default_tjdr_std_fold0、NN_default_fgadr_fold0，FGADR 内部测试自动带 106 张同眼排除。跑完后 e3a 启动器会把它们当作来源（超广角只跑 fov 变体）。排在 E5 种子 0 之后、E5 推理档之前。
+     e. E5 推理档 a、b（第六节第 2–5 条）：GPU 4、5 在 E3a 收尾后；SAM 3 等 retiseg-sam3 环境。
+     f. nnU-Net IDRiD rep1、rep2 照旧在 GPU 2；E1r 剩余最低优先。
+  3. 回传：下一包带 runs/E5/、runs/NN_*（含 tjdr_std、fgadr）、runs/BF_*、runs/E3a/，格式同第一节；并附 e5 冒烟的每步耗时。
+  4. 仓库卫生：上一次本机提交误把 retiseg_runs_handoff_20261012.tar.gz（52 MB）提交进了仓库，本次已从索引移除并在 .gitignore 加 *.tar.gz；服务器 pull 后工作区里的 tar.gz 会保留为未跟踪文件，不用处理。
+
+十、顺序和卡的分配（6 张卡，GPU 2–7；2026-10-14 起以第十三节为准）
   今天：二.1 HACDR 打分；三 E3a 种子 0（2 张卡插空）；四 下载公开权重、用户申请 gated 权重；E2c、U-Net DDR 继续。
   权重到位后：五.1 冒烟 → 五.2 种子 0（4 张卡）→ 五.3、五.4；E3a 对新检查点续跑。
   之后：十一 的影响因素实验（U-Net、M2MRF 行不等权重，可以先于 E5 用空卡）；八 nnU-Net 补跑；七 E1r 剩余。

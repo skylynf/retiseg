@@ -79,8 +79,17 @@ TESTSET = {  # suffix of metrics_<suffix>.json -> test set name
 }
 EXPERIMENT = {"BS": ("E2", "bstd"), "B1": ("E2b", "b1")}
 RUN = re.compile(r"^(BS|B1)_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)(?P<registered>_registered)?(?:_runner)?$")
-NN = re.compile(r"^NN_(?P<cfg>default|resencm)_(?P<dataset>idrid|ddr)_fold0(?:_rep(?P<rep>\d+))?$")
+NN = re.compile(r"^NN_(?P<cfg>default|resencm)_(?P<dataset>idrid|ddr|tjdr_std|fgadr)_fold0(?:_rep(?P<rep>\d+))?$")
 NN_MODEL = {"default": "nnU-Net", "resencm": "nnU-Net ResEnc-M"}
+NN_TRAIN = {"idrid": "IDRiD", "ddr": "DDR", "tjdr_std": "TJDR-std", "fgadr": "FGADR"}
+
+
+def nn_key(match):
+    """(experiment, variant, model, train_set, seed) of an NN_* run: E2 for the main-table sources, E3b for a
+    run trained on TJDR_std or FGADR (the nnU-Net row of the training-source matrix, docs/paper/16)."""
+    train = NN_TRAIN[match["dataset"]]
+    experiment = "E2" if train in ("IDRiD", "DDR") else "E3b"
+    return experiment, "bstd", NN_MODEL[match["cfg"]], train, int(match["rep"] or 0)
 E1R = re.compile(r"^E1r_(?P<slug>[a-z0-9]+)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)_bs4(?:_[a-z0-9]+)?$")
 E2C = re.compile(r"^E2c_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed0_(?P<lr>lr1o3|lr3)$")
 E2C_LEVEL = {"lr1o3": "1/3", "lr3": "3"}
@@ -135,6 +144,13 @@ def rows_from_report(report, experiment, variant, model, train, seed, test):
             add(cls, "lesion_precision", lesion.get("precision"))
             for size, part in (lesion.get("by_size") or {}).items():
                 add(cls, f"lesion_recall_{size}", part.get("recall"))
+        image = entry.get("image_level") or {}
+        if image.get("max"):
+            # image-level detection (DiaRetDB1 protocol): the maximum pixel score is the main score,
+            # the mean of the top 100 the check (bench/eval/protocol.yaml image_level)
+            add(cls, "img_auc", image["max"].get("auc"))
+            if image.get("top100_mean"):
+                add(cls, "img_auc_top100", image["top100_mean"].get("auc"))
     return out
 
 
@@ -201,15 +217,14 @@ def collect(runs_dir):
             continue
         m = NN.match(run.name)
         if m:
-            model, train = NN_MODEL[m["cfg"]], DATASET[m["dataset"]]
-            seed = int(m["rep"] or 0)  # nnU-Net fixes no seed; the first run is "seed 0", repeats rep1, rep2 are seeds 1, 2
+            experiment, variant, model, train, seed = nn_key(m)  # nnU-Net fixes no seed; rep1, rep2 are seeds 1, 2
             for path in sorted(run.glob("metrics_*.json")):
                 suffix = path.stem[len("metrics_"):].lower()
                 if suffix not in TESTSET:
                     continue
                 test = TESTSET[suffix] or train
                 report = json.loads(path.read_text())
-                rows += rows_from_report(report, "E2", "bstd", model, train, seed, test)
+                rows += rows_from_report(report, experiment, variant, model, train, seed, test)
                 seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
             continue
         m = E1R.match(run.name)
@@ -274,7 +289,7 @@ def collect_e3a(runs_dir):
             experiment, variant = EXPERIMENT[m.group(1)]
             model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
         elif nn:
-            experiment, variant, model, train, seed = "E2", "bstd", NN_MODEL[nn["cfg"]], DATASET[nn["dataset"]], int(nn["rep"] or 0)
+            experiment, variant, model, train, seed = nn_key(nn)
         elif au and au["slug"] in SLUG:
             experiment, variant, model, train, seed = "E1", "author_weights", SLUG[au["slug"]], DATASET[au["dataset"]], 0
         elif src.name.startswith("BF_") and factor_key(Path(runs_dir) / src.name) is not None:

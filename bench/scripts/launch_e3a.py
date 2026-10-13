@@ -75,17 +75,21 @@ def discover(seed0_only=False):
         env = _BINDING[config["model"]][0]
         argv = ["-m", "bench.e3a", "run", "--run", f"runs/{run.name}"]
         found.append((2, run.name, env, argv, e3a.train_sources_of(config)))
-    for train in ("IDRiD", "DDR"):
+    from bench.scripts.nnunet_bridge import DATASET_IDS
+
+    for train, dataset_id in DATASET_IDS.items():
         for plan in NNUNET_PLANS:
             name = f"NN_{plan}_{train.lower()}_fold0"
-            ckpt = (
-                runs / "nnunet" / f"Dataset{601 if train == 'IDRiD' else 602:03d}_{train}"
-                / f"nnUNetTrainer__{'nnUNetPlans' if plan == 'default' else 'nnUNetResEncUNetMPlans'}__2d"
-                / "fold_0" / "checkpoint_final.pth"
-            )
-            if (runs / name / "metrics_test.json").is_file() and ckpt.is_file():
+            # the raw folder is Dataset<id>_<meta name>; the meta name equals the test-set name for the sources used so far
+            folders = list((runs / "nnunet").glob(f"Dataset{dataset_id:03d}_*")) if (runs / "nnunet").is_dir() else []
+            ckpts = [
+                folder / f"nnUNetTrainer__{'nnUNetPlans' if plan == 'default' else 'nnUNetResEncUNetMPlans'}__2d" / "fold_0" / "checkpoint_final.pth"
+                for folder in folders
+            ]
+            if (runs / name / "metrics_test.json").is_file() and any(ckpt.is_file() for ckpt in ckpts):
                 argv = ["bench/scripts/nnunet_e3a.py", "--train", train, "--plan", plan]
-                found.append((1, name, NNUNET_ENV, argv, [train]))
+                tier = 1 if train in ("IDRiD", "DDR") else 2
+                found.append((tier, name, NNUNET_ENV, argv, [train]))
     for model, by_train in frozen.get("author_weights", {}).items():
         for train, spec in by_train.items():
             if (_ROOT / spec["checkpoint"]).is_file():
@@ -98,7 +102,9 @@ def pending_sets(source, trained_on, author=False):
     """Sets a source still has to run. A BF source whose training field of view is not frozen
     (TJDR_std, FGADR, Retinal-Lesions) skips the per-degree variant of the ultra-widefield set, as bench.e3a does."""
     frozen = e3a.load_frozen()
-    no_degrees = source.startswith("BF_") and e3a.scale_source_of(yaml.safe_load((_ROOT / "runs" / source / "config.yaml").read_text())) is None
+    no_degrees = (source.startswith("BF_") and e3a.scale_source_of(yaml.safe_load((_ROOT / "runs" / source / "config.yaml").read_text())) is None) or (
+        source.startswith("NN_") and any(name not in frozen["train_field_degrees"] for name in trained_on)
+    )
     return [
         (test, variant)
         for test, variant in e3a.targets(trained_on, frozen)
@@ -119,11 +125,13 @@ def item_cost(kind, source, test, train_names, frozen):
     n = len(load_split(_ROOT / frozen["test_sets"][test]["data"], frozen["split"])) if (
         _ROOT / frozen["test_sets"][test]["data"]
     ).is_dir() else 100
-    reference = {"IDRiD": 3413, "DDR": 1658}[train_names[0]] if kind == "nnunet" else frozen["canvas_reference"]
+    reference = {"IDRiD": 3413, "DDR": 1658}.get(train_names[0], 1440) if kind == "nnunet" else frozen["canvas_reference"]
     total = 0.0
     for name, variant in e3a.targets(train_names, frozen, [test]):
         if kind == "author" and variant != e3a.MAIN:
             continue
+        if name in frozen.get("per_degree_sets", ()) and variant == e3a.MAIN and train_names[0] not in frozen["train_field_degrees"]:
+            continue   # no per-degree scale for a source without a frozen field of view (E3b sources)
         side = e3a.target_long_side(name, variant, train_names[0], reference, frozen)
         total += n * (side / 1440.0) ** 2
     return _COST[kind] * total

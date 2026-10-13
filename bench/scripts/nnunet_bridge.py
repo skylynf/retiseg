@@ -10,6 +10,13 @@ the prepared JPEG decoded to RGB and written as PNG at original resolution.
     python bench/scripts/nnunet_bridge.py convert --data dataset/prepared/IDRiD --dataset-id 601
     python bench/scripts/nnunet_bridge.py splits  --data dataset/prepared/IDRiD --dataset-id 601
     python bench/scripts/nnunet_bridge.py export  --data dataset/prepared/IDRiD --npz-dir DIR --pred-dir DIR --split test
+    python bench/scripts/nnunet_bridge.py info    --train FGADR      # id, raw folder name, data dir, same-eye exclusions
+
+E3b (docs/paper/16): the same bridge trains nnU-Net on TJDR_std (603) and
+FGADR (604); nnU-Net's training length is 1,000 epochs of 250 iterations
+whatever the dataset size, so its training amount is its own, as in the
+main table. The FGADR internal test drops the 106 same-eye images
+(leak_exclusions.json), as every other FGADR-trained run does.
 """
 
 import argparse
@@ -36,6 +43,9 @@ from bench.common.io import (
     write_prob,
 )
 
+# nnU-Net dataset ids of the training sources (E2: IDRiD, DDR; E3b: TJDR_std, FGADR, docs/paper/16 section 3).
+# nnunet_run.sh, nnunet_e3a.py and launch_e3a.py read this table.
+DATASET_IDS = {"IDRiD": 601, "DDR": 602, "TJDR_std": 603, "FGADR": 604}
 RAW = _ROOT / "dataset" / "nnunet" / "raw"
 PREPROCESSED = _ROOT / "dataset" / "nnunet" / "preprocessed"
 LABELS = {"background": 0, **{cls: index for index, cls in enumerate(M2MRF_OVERWRITE_ORDER, start=1)}}
@@ -148,11 +158,19 @@ def main(argv=None):
     e.add_argument("--npz-dir", required=True)
     e.add_argument("--pred-dir", required=True)
     e.add_argument("--split", required=True)
+    i = sub.add_parser("info", help="print '<id> <DatasetXXX_name> <excluded internal test ids>' for a training source (nnunet_run.sh)")
+    i.add_argument("--train", required=True, choices=sorted(DATASET_IDS))
     args = parser.parse_args(argv)
     if args.command == "convert":
         convert(args.data, args.dataset_id, args.workers)
     elif args.command == "splits":
         write_splits(args.data, args.dataset_id)
+    elif args.command == "info":
+        from bench.e3a import leak_exclusions, load_frozen
+
+        data = _ROOT / load_frozen()["test_sets"][args.train]["data"]
+        exclude = ",".join(sorted(leak_exclusions([args.train], args.train)))
+        print(DATASET_IDS[args.train], dataset_folder(data, DATASET_IDS[args.train]), data.relative_to(_ROOT), exclude)
     else:
         export(args.data, args.npz_dir, args.pred_dir, args.split)
 
