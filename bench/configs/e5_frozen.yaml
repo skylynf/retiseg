@@ -21,9 +21,9 @@ weights:
   sam2.1_hiera_large.pt: {source: "https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large.pt", used_by: [SAM 2 a, SAM 2 b]}
   sam2_hiera_large.pt: {source: "https://dl.fbaipublicfiles.com/segment_anything_2/072824/sam2_hiera_large.pt", used_by: [SAM2-UNet]}
   medsam_vit_b.pth: {source: "MedSAM README, Google Drive folder 1ETWmi4AiniJeWOt6HAsYgTjYv_fkgzoN", used_by: [MedSAM b, MedSAM d]}
-  sam3.pt: {source: "huggingface.co/facebook/sam3 (gated)", used_by: [SAM 3 a]}
-  RETFound_mae_natureCFP.pth: {source: "huggingface.co/YukunZhou/RETFound_mae_natureCFP (gated)", used_by: [RETFound d, encoder comparison]}
-  RETFound_dinov2_meh.pth: {source: "huggingface.co/YukunZhou/RETFound_dinov2_meh (gated)", used_by: [encoder comparison]}
+  sam3.pt: {source: "huggingface.co/facebook/sam3 (gated)", sha256: 9999e2341ceef5e136daa386eecb55cb414446a00ac2b55eb2dfd2f7c3cf8c9e, used_by: [SAM 3 a]}
+  RETFound_mae_natureCFP.pth: {source: "huggingface.co/YukunZhou/RETFound_mae_natureCFP (gated)", sha256: e1e4f66a1b792eeb6e2efaf158f33be35c8255f36b3d17ed67cd5129da246485, used_by: [RETFound d, encoder comparison]}
+  RETFound_dinov2_meh.pth: {source: "huggingface.co/YukunZhou/RETFound_dinov2_meh (gated)", sha256: a3feeaf69b44a0baa0934162d06b11ca517d1ca71a8459e04ef72c287d4e7124, used_by: [encoder comparison]}
   mae_pretrain_vit_large.pth: {source: "https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_large.pth", used_by: [encoder comparison]}
   timm: [vit_large_patch14_dinov2.lvd142m, vit_large_patch16_224.augreg_in21k_ft_in1k]   # hub cache or pretrained/<arch>.safetensors
 

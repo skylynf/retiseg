@@ -1,4 +1,4 @@
-# retiseg 检查点（2026-10-12）
+# retiseg 检查点（2026-10-13）
 
 给下一次会话或其他 agent 的最小上下文。细节都在仓库里，按下面的路径读；本文件只说“在哪、什么状态、怎么接着做”。
 
@@ -11,12 +11,12 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 3. `docs/paper/13` 第三节状态表；`docs/paper/14` 论文里要用的数字和方法（M1–M14、备注 1–38）。
 4. 论文源：`docs/paper/retiseg_paper/paper/`（`STRUCTURE.md` 图表清单；`README.md` 哪些是实数）。
 
-## 现状（2026-10-12）
-- 主表：7 个 B-std 模型 + nnU-Net 两配置有测试数（HRNet 0.700/0.447 第一；M2MRF 0.657/0.369；HACDR 0.562/0.269）。U-Net 改整批 Dice（IDRiD 0.658），DDR 在训。E1r：作者配方 61.19 对已发布 67.55。
-- L1 文献审计完成（30 篇，`literature/meta/`）。图 2b/c、图 4a、表 4 等已是实数；E5、独立测试、影响因素仍是占位（图上带 simulated）。
-- 服务器在跑：U-Net DDR、E2c DDR 四项、HACDR 种子 1/2 打分 → E3a 种子 0（单卡）。公开权重下载中；SAM 3 / RETFound ×2 / MedSAM 需用户申请。
-- 代码已就绪、未在服务器跑：影响因素实验（`bench/factor.py`，28 个 cell，`server_run.sh factor`）；E5 训练档 5 个包装器。
-- 还没写：E5 推理档 `bench/e5/`（零样本、理想提示、SAM 3 文本）；nnU-Net 的 E3b。
+## 现状（2026-10-13 23:55 +0800）
+- 主表数字在 14 M7，并已进 `data/results.csv`（服务器跑过 collect，没跑 make）。U-Net 整批 Dice 三种子均值 0.644 / 0.371；HACDR-Net 三种子均值 0.538 / 0.252。nnU-Net 默认 DDR 两次 0.432、0.427，第三次在训。E1r 仍只有 M2MRF IDRiD 种子 0（作者函数 61.19，本项目 0.549）。
+- 影响因素：M2MRF 四项已打分（14 M9b）。TJDR 标准 0.554；FGADR 完整测试集 0.349（同眼 106 张还没去掉）；DDR 测试集上 DDR+FGADR 抽 383 为 0.336、全集为 0.320。另两档 E4 已训完、还没有 metrics_test.json。E2c 只有验证数（14 备注 17），×1/3 时验证名次对调，学习率未改。
+- 服务器在跑（GPU 2–7）：nnU-Net DDR rep2；E3a 种子 0（主变体 done 55，当前 FCT IDRiD→TJDR_uwf）；E8 三项和 E7 长边 512。旧 launch_factor 没杀。GPU 0、1 是他人 vLLM。
+- 权重：SAM、SAM 2、MAE 和三份 gated（SAM 3、RETFound ×2，sha256 在 e5_frozen.yaml）已在 `pretrained/`。MedSAM 和 DINOv2 没有。E5 训练未开始。
+- 还没写：E5 推理档 `bench/e5/`；nnU-Net 的 E3b。图还是 10-12 的 make，跟现在的 results.csv 不一致。
 
 ## 数据流（结果 → 论文）
 服务器打包 `runs/` 小文件（17 第一节格式）→ 本机解到仓库 `runs/` → `python docs/paper/retiseg_paper/paper/scripts/collect_runs.py`（认 BS/B1/*_registered/NN_*/E1r/E2c/BF_*/runs/E3a）→ `make -C docs/paper/retiseg_paper/paper`。`collect_literature.py` 写 L1 行。占位数据由 `build_placeholder.py --force` 重生成后要再跑两个 collect。
