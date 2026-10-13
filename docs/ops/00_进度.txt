@@ -148,8 +148,8 @@ E5 推理档评审修复 14：现存问题 27–36 里不需 Luming 决定的部
 9. 27 端到端流程测试：新建 bench/tests/test_e5_flow.py，按 17 第六节 b–f 的顺序在进程内走一遍：启动器出计划并逐项检查闸门（与 run_queue 同一判断），每项按它的命令行参数用假生成器 / 假解码器 / 假打分器执行；四个玩具集（IDRiD、DDR 作池，FGADR 作 drop-maps 且非曲线集，TJDR_uwf 带 fov 变体），画布 20、窗口 8。断言：冒烟后全量池运行把 22 项重新列出并重做（A5）；两处选择按打印的 yaml 写回协议；--test-only 先排两个池拼装项，每个闸门轮到时都是 open，全部测试 done.json 为 pool val_opt、只有 drop-maps 集的图被删（A3、A2），a_sam3_selected/FGADR 存在且措辞目录的图在拼装后才消失，FGADR 只有 k=全部目录（D6），TJDR_uwf 主变体与 fov 各三个目录；collect 对每个集都读到任意病灶、oracle_class、text:selected、oracle:box:all 等行，k 曲线行只在 IDRiD、DDR，TJDR-uwf 带 canvas_long_side 行。17 第六节改流程时此用例跟着改。
 10. 测试：test_e5_infer 加 2 个、test_launch_e5_infer 加 1 个，新文件四个（含 test_e5_flow.py）；整套 bench/tests 214 通过、25 跳过（新增 6 个契约用例和 1 个 pandas 包装都在工作站albert 跳过）、6 失败、4 错误。test_docs_paths 要求被引用的文件受跟踪，新文件在 git add 之前它会报未跟踪，这是预期行为。pandas 包装在带 pandas 的临时 venv 里 1 passed。
 
-E5 推理档评审修复 15：2026-10-13 复审的 N1、N2a、N4、N5（2026-10-12，工作站albert；待提交）
-1. 复审（albert @ 034616f 对照 20、22，原文由用户入库）确认 A1–A5 全部修复、B1/B3/B5 与工程项已实现、B2/B4/B6 部分完成（余下在待 Luming 清单），新提 N1–N5；登在 21 第 37–41 条。
+E5 推理档评审修复 15：2026-10-13 复审的 N1、N2a、N4、N5（2026-10-12，工作站albert；提交 192ea8b）
+1. 复审（albert @ 034616f 对照 20、22；原文在 docs/design/20_代码审计.md 第二部分「albert 分支复审（2026-10-13）」）确认 A1–A5 全部修复、B1/B3/B5 与工程项已实现、B2/B4/B6 部分完成（余下在待 Luming 清单），新提 N1–N5；登在 21 第 37–41 条。
 2. N1：evaluate 修复 8 的 fov 顶替以目录是否存在为条件，预算规则没生效时也会触发（64 密度下主变体失败或未完成，先跑完的 fov 数字顶上）。改为：amg 在 predicted.json 记 stands_in_for_main，只在测试划分的 fov 变体且 budget_rule_skips 对该模型的主变体为真时为真；collect 只对标志为真且主变体无 done.json 的 fov 目录顶替。test_collect_runs 加一个 64 密度 fov 不顶替的目录。呈现（独立 test_set 或脚注）仍在待 Luming 第 5 项。
 3. N2a：fig5 与表 6 的取数函数缺 aupr_any_lesion 行时不再回退为逐类均值，直接报错并提示重生成占位；N2b（零样本块内统一指标、块内排名、图 5e）写进待 Luming 第 5 项。
 4. N3：待 Luming 第 8 项补「合并与重生成同一次操作」。

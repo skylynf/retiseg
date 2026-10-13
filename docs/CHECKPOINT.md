@@ -16,7 +16,7 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 - L1 文献审计完成（30 篇，`literature/meta/`）。图 2b/c、图 4a、表 4 等已是实数；E5、独立测试、影响因素仍是占位（图上带 simulated）。
 - 服务器在跑：U-Net DDR、E2c DDR 四项、HACDR 种子 1/2 打分 → E3a 种子 0（单卡）。公开权重下载中；SAM 3 / RETFound ×2 / MedSAM 需用户申请。
 - 代码已就绪、未在服务器跑：影响因素实验（`bench/factor.py`，28 个 cell，`server_run.sh factor`）；E5 训练档 5 个包装器。
-- E5 推理档 `bench/e5/` 已写成（2026-10-12 工作站albert，提交 e886f2a…1992cdf，实现记录 `docs/design/18_E5推理档实现.txt`，服务器步骤 17 第六节）；同日的 peer review（docs/design/20）修复见 00「E5 推理档评审修复 1–13」各段；评审配套修复建议（docs/ops/22）里未做的项在 docs/ops/21 第 27–36 条。2026-10-13 的复审（原文由用户入库）提了 N1–N5，处理在 00「评审修复 15」与 21 第 37–41 条。**待用户 Luming 处理**：00「待用户 Luming 处理（2026-10-12 汇总）」八项，含 D1–D9 确认、预算规则二选一、图表呈现、CI 与哈希锁、占位重生成；还没写：nnU-Net 的 E3b。
+- E5 推理档 `bench/e5/` 已写成（2026-10-12 工作站albert，提交 e886f2a…1992cdf，实现记录 `docs/design/18_E5推理档实现.txt`，服务器步骤 17 第六节）；同日的 peer review（docs/design/20）修复见 00「E5 推理档评审修复 1–13」各段；评审配套修复建议（docs/ops/22）里未做的项在 docs/ops/21 第 27–36 条。2026-10-13 的复审（docs/design/20 第二部分）提了 N1–N5，处理在 00「评审修复 15」与 21 第 37–41 条。**待用户 Luming 处理**：00「待用户 Luming 处理（2026-10-12 汇总）」八项，含 D1–D9 确认、预算规则二选一、图表呈现、CI 与哈希锁、占位重生成；还没写：nnU-Net 的 E3b。
 
 ## 数据流（结果 → 论文）
 服务器打包 `runs/` 小文件（17 第一节格式）→ 本机解到仓库 `runs/` → `python docs/paper/retiseg_paper/paper/scripts/collect_runs.py`（认 BS/B1/*_registered/NN_*/E1r/E2c/BF_*/runs/E3a/runs/E5）→ `make -C docs/paper/retiseg_paper/paper`。`collect_literature.py` 写 L1 行。占位数据由 `build_placeholder.py --force` 重生成后要再跑两个 collect。
