@@ -78,7 +78,7 @@ E5 推理档实现记录（a 零样本、b 理想提示）
   文件名 prompted.py（15 原写 oracle.py）；面积上限按比例而非训练集最大连通域（D1）；验证池而非 DDR 验证集（D2）；画布比窗口小时右下补零（与 bench.infer 一致，每窗点密度相同）；测试划分的主结果目录不带上限 token（选中的组记在 predicted.json）；MedSAM 在 G2 整图时用 torch 双三次 + antialias 缩放代替 MedSAM_Inference 的 skimage（G1 窗口已是 1024 不缩放）；oracle_class 并列按 MA、HE、EX、SE；k 图是前缀最大值，解码只做一次；--limit 只做冒烟、只评预测过的图、之后被重做；any-lesion 行对所有报告都写（指标名 aupr_any_lesion）；TJDR_uwf 的 fov 变体目录不进 collect（以后进补充表；预算规则让主变体缺席时 a 档以 fov 顶替并记 canvas_long_side，评审修复 8）；G2 整图几何（16 已砍）只留在 run() 参数和 geometry.plan 供测试，三个 CLI 不再提供 --geometry（评审修复 12）。
   现存问题（docs/ops/21_现存问题.txt）：7 128 当选超预算的风险；8 论文脚本改键后占位数据待重生成；9 HACDR-Net 可编辑安装改动子模块工作树。
 
-十、提交清单（分支 albert，已推送到 origin/albert；2026-10-12 评审修复的提交另见 00「E5 推理档评审修复 1–13」）
+十、提交清单（分支 albert，已推送到 origin/albert）。完整清单不再手写，用 git log --oneline 3c505bb..albert 生成；下面是 71e803b 时的 E5 实现提交，2026-10-12 之后的评审修复提交见 00 各段的标题。
   e886f2a 步骤 0 协议对齐（e5_frozen.yaml、15、14、16、build_placeholder.py、test_e5_infer.py）
   7b2d482 步骤 1 frozen.py；bdbfbd6 步骤 2 geometry.py；718e882 步骤 3 prompts.py；1f0bfb6 步骤 4 score_rules.py（步骤 5 取消）；1f1d34f 步骤 6 outputs.py 与 evaluate 的 val_thresholds
   5fa661f 基线记录与 test_factor.py 修复（非 E5）

@@ -258,6 +258,29 @@ def pool_class_aupr(tier, source, frozen, proto, pool=None, variants=()):
     return {cls: float(pixel.average_precision(pos, neg)) for cls, (pos, neg) in totals.items()}
 
 
+def write_selection_record(name, payload, frozen, pool=None):
+    """Write runs/E5/<name>.json: what a --select chose, the numbers it saw, the pool's image counts, git and host.
+
+    The pre-registered selections (zero_shot.grid.selected, zero_shot.sam3.selected) are pasted into
+    e5_frozen.yaml by hand; this file keeps the evidence next to the runs (open issue 30).
+    """
+    from bench.common.io import load_split
+
+    pool_sets = fz.pool_sets(frozen) if pool is None else list(pool)
+    record = dict(payload)
+    record.update(
+        {
+            "pool_images": {str(set_name): len(load_split(data_dir, split)) for set_name, data_dir, split in pool_sets},
+            "written": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            **environment(),
+        }
+    )
+    OUT_ROOT.mkdir(parents=True, exist_ok=True)
+    path = OUT_ROOT / f"{name}.json"
+    path.write_text(json.dumps(record, indent=1) + "\n")
+    return path
+
+
 def drop_maps_of(directory, split):
     """Remove the maps of an evaluated directory and say so in its done.json (maps_dropped)."""
     directory = Path(directory)

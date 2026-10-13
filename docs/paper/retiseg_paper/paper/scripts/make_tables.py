@@ -481,7 +481,11 @@ def table_foundation():
         kw = dict(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr")
         if train:
             kw["train_set"] = train
-        return D.sel(**kw).groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
+        r = D.sel(**kw)
+        inference = r[r["seed"] == -1]  # one run per (model, variant, test set) in the inference tiers: never average two
+        if len(inference) and int(inference.groupby("cls").size().max()) > 1:
+            raise ValueError(f"E5 {model} {variant} {test}: more than one inference-tier row per class; a variant must name one run directory")
+        return r.groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
 
     def any_lesion(model, variant, test):
         # the registered zero-shot result of the automatic masks is class-agnostic (e5_frozen.yaml zero_shot.outputs.main):

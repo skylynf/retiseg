@@ -408,8 +408,14 @@ def main(argv=None):
     args = parser.parse_args(argv)
     drop = [item.strip() for item in (args.drop_maps or "").split(",") if item.strip()]
     if args.select:
-        chosen, table = select_phrases()
+        frozen = fz.load_frozen()
+        if _selection_filled(frozen):
+            raise SystemExit("zero_shot.sam3.selected is already filled; the selection is made once. Clear it in e5_frozen.yaml first if the pool "
+                             "runs were redone, and record why in 00.")
+        chosen, table = select_phrases(frozen)
         print(format_selected_yaml(chosen, table))
+        payload = {"kind": "sam3", "rule": spec(frozen)["select_on"], "chosen": chosen, "table": table}
+        print(f"record: {out.write_selection_record('selection_sam3', payload, frozen)}")
         return
     if args.set is None:
         parser.error("--set is required unless --select")

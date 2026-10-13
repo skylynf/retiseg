@@ -78,7 +78,7 @@ zero_shot:
     area_cap_fraction: [0.005, 0.02, 1.0]     # of the canvas field-of-view area; 1.0 = no cap
     select_on: validation_pool
     select_by: AUPR_any_lesion
-    select_rule: "per model: the pair with the highest any-lesion AUPR on the pixel histograms pooled over both pool sets (python -m bench.e5.amg --select); ties go to the lower density, then to the larger cap (registered 2026-10-12 before any pool run)"
+    select_rule: "per model: the pair with the highest any-lesion AUPR on the pixel histograms pooled over both pool sets (python -m bench.e5.amg --select; the two sets are pooled by pixel, so DDR's 149 images outweigh IDRiD's 10); ties go to the lower density, then to the larger cap (registered 2026-10-12 before any pool run); the selection is written once (runs/E5/selection_grid.json) and --select refuses to run while selected is filled"
     selected: {}                              # {SAM: {points_per_side, area_cap_fraction}, SAM 2: {...}} filled from the pool before any test run
     budget_rule: "if 128 is selected for a model, that model's TJDR_uwf runs its fov variant (1440 canvas) only and its per-degree main variant is skipped (registered 2026-10-12; the user may overrule it in 00 once the pool result is in)"
   sam:

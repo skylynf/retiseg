@@ -145,7 +145,7 @@ print("torchvision ImageNet weights cached")'
   py retiseg -m pytest bench/tests -q -p no:cacheprovider
   py retiseg-hacdr -m pytest bench/tests/test_hacdr_recipe.py -q -p no:cacheprovider
   if "$(pick_tool)" env list | awk 'NF && $1 !~ /^#/ {print $1}' | grep -qx retiseg-sam3; then
-    py retiseg-sam3 -m pytest bench/tests/test_e5_infer.py -q -p no:cacheprovider
+    py retiseg-sam3 -m pytest bench/tests/test_e5_infer.py bench/tests/test_e5_contract.py -q -p no:cacheprovider
   fi
 }
 

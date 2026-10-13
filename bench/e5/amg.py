@@ -338,6 +338,14 @@ def select_grid(frozen=None, proto=None, pool=None):
     return chosen, table
 
 
+def selection_payload(chosen, table, frozen):
+    """The selection_grid.json content: rule, chosen pairs, the six numbers per model."""
+    return {
+        "kind": "grid", "rule": frozen["zero_shot"]["grid"]["select_rule"], "chosen": chosen,
+        "table": {model: {f"p{density} {cap_token(cap) or 'nocap'}": value for (density, cap), value in sorted(values.items())} for model, values in table.items()},
+    }
+
+
 def format_selected_yaml(chosen, table):
     """The lines to paste under zero_shot.grid in e5_frozen.yaml (selected: {...}) with the pool AUPRs as comments."""
     lines = ["    selected:  # per model, chosen on the validation pool by pooled any-lesion AUPR (bench/e5/amg.py --select)"]
@@ -362,8 +370,14 @@ def main(argv=None):
     parser.add_argument("--limit", type=int, help="first N images only (smoke); the directory is predicted again by a later run without --limit")
     args = parser.parse_args(argv)
     if args.select:
-        chosen, table = select_grid()
+        frozen = fz.load_frozen()
+        filled = [model for model in MODELS if (frozen["zero_shot"]["grid"].get("selected") or {}).get(model)]
+        if filled:
+            raise SystemExit(f"zero_shot.grid.selected is already filled for {filled}; the selection is made once (e5_frozen.yaml select_rule). "
+                             "Clear it in e5_frozen.yaml first if the pool runs were redone, and record why in 00.")
+        chosen, table = select_grid(frozen)
         print(format_selected_yaml(chosen, table))
+        print(f"record: {out.write_selection_record('selection_grid', selection_payload(chosen, table, frozen), frozen)}")
         return
     if args.model is None or args.density is None or args.set is None:
         parser.error("--model, --density and --set are required for a run (or pass --select)")

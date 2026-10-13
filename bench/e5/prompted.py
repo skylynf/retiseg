@@ -54,6 +54,7 @@ TIER = "b"
 BOXES, POINTS = "boxes", "points"
 KIND_TOKEN = {BOXES: "box", POINTS: "point"}
 SAM, SAM2, MEDSAM = "SAM", "SAM 2", "MedSAM"
+BOX_CONVENTION = "file: [x0, y0, x1, y1] with x1, y1 exclusive; decoder: [x0, y0, x1-1, y1-1] inclusive pixel indices (e5_frozen.yaml oracle.box)"
 SAM2_CONFIG = {"sam2.1_hiera_large.pt": "configs/sam2.1/sam2.1_hiera_l.yaml", "sam2_hiera_large.pt": "configs/sam2/sam2_hiera_l.yaml"}
 SAM_MODEL_TYPE = {"sam_vit_h_4b8939.pth": "vit_h", "sam_vit_b_01ec64.pth": "vit_b"}
 MEDSAM_INPUT = 1024
@@ -336,6 +337,7 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
                     "canvas_long_side": "native" if long_side == geo.NATIVE else int(long_side),
                     "window": window_size, "overlap": None if window_size is None else geo.overlap(frozen),
                     "prompt_file": str(prompt_path), "prompt_file_sha256": _file_sha256(prompt_path), "prompt_rule": doc["rule"],
+                    "box_convention": BOX_CONVENTION,
                     "n_images": len(ids), "limit": limit, "resumed_images": resumed, "n_windows": totals["n_windows"],
                     "n_windows_encoded": totals["n_windows_encoded"], "n_prompts": totals["n_prompts"],
                     "predict_seconds": round(elapsed, 1), "encode_seconds_total": round(totals["encode_seconds"], 1),

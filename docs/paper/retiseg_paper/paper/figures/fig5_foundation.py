@@ -24,6 +24,9 @@ def e5(model, variant, test, train=None):
     if train:
         kw["train_set"] = train
     r = D.sel(**kw)
+    inference = r[r["seed"] == -1]  # the inference tiers have one run per (model, variant, test set): never average two
+    if len(inference) and int(inference.groupby("cls").size().max()) > 1:
+        raise ValueError(f"E5 {model} {variant} {test}: more than one inference-tier row per class; a variant must name one run directory")
     return r.groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
 
 

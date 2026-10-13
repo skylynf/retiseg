@@ -1414,3 +1414,58 @@ def test_the_command_lines_no_longer_take_a_geometry():
         with pytest.raises(SystemExit):
             module.main(argv)
     assert geo.GEOMETRIES == ("G1", "G2")  # the geometry stays a run() argument for tests
+
+
+# ---- review fix 14 (open issues 30, 33): the selection leaves a record and runs once; the box convention is recorded
+
+
+def test_select_writes_a_record_and_refuses_a_second_selection(tmp_path, monkeypatch):
+    import json
+
+    import pytest
+
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.e5 import sam3_text
+    from bench.eval.evaluate import load_protocol
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    proto = load_protocol(REPO / "bench/eval/protocol.yaml")
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0", "v1"]})
+    pool = [("DDR", root, "val")]
+    for model in ("SAM", "SAM 2"):
+        for density in (64, 128):
+            amg.run(model, density, "DDR", "val", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8)
+    chosen, table = amg.select_grid(frozen, proto, pool=pool)
+    path = out.write_selection_record("selection_grid", amg.selection_payload(chosen, table, frozen), frozen, pool=pool)
+    record = json.loads(path.read_text())
+    assert path == tmp_path / "runs" / "E5" / "selection_grid.json" and record["kind"] == "grid" and record["pool_images"] == {"DDR": 2}
+    assert record["chosen"]["SAM"]["points_per_side"] == 64 and record["rule"].startswith("per model") and "git" in record and record["written"]
+    assert set(record["table"]["SAM"]) == {"p64 nocap", "p64 cap0.02", "p64 cap0.005", "p128 nocap", "p128 cap0.02", "p128 cap0.005"}
+    # the command lines refuse while the selection is filled: it is made once
+    monkeypatch.setattr(fz, "FROZEN_PATH", _filled_frozen(tmp_path, 64, 1.0))
+    with pytest.raises(SystemExit, match="already filled"):
+        amg.main(["--select"])
+    with pytest.raises(SystemExit, match="already filled"):
+        sam3_text.main(["--select"])
+
+
+def test_prompted_records_the_box_convention(tmp_path, monkeypatch):
+    import json
+
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+    from bench.e5 import prompted, prompts
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _two_component_set(root, {"val": ["v0"]})
+    pdir = tmp_path / "prompts"
+    prompts.build("DDR", "val", frozen=frozen, out_dir=pdir, data_dir=root, long_side=20)
+    prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
+    predicted = json.loads((tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box" / "DDR-val__kall" / "predicted.json").read_text())
+    assert predicted["box_convention"] == prompted.BOX_CONVENTION and predicted["box_convention"].startswith("file: [x0, y0, x1, y1] with x1, y1 exclusive")

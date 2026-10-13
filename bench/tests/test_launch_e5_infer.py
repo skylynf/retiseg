@@ -232,3 +232,34 @@ def test_oracle_items_outside_the_curve_sets_have_the_k_all_directory_only(tmp_p
     assert all(by_set[(name, "test")] == {1} for name in ("TJDR_std", "TJDR_uwf", "FGADR", "Retinal-Lesions", "DiaRetDB1"))
     fgadr = next(it for it in items if it.label == "b_medsam_vitb_box:FGADR:test:main")
     assert fgadr.dirs[0].name == "FGADR__kall" and fgadr.log_dir == fgadr.dirs[0] and len(fgadr.gate_dirs) == 2 * 4  # its thresholds still come from every k of the pool
+
+
+# ---- review fix 14 (open issue 32): --estimate from the measured seconds per image ---------------------
+
+
+def test_estimate_scales_measured_seconds_per_image_by_canvas_area(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    items = launch.plan(frozen, pool_only=True)
+    rows, total = launch.estimate(items, frozen)
+    assert rows and all(row[3] is None for row in rows) and total == 0.0  # nothing measured yet
+    # a smoke of a_sam_vith_p64 on the 1440 canvas took 10 s per image
+    smoke = tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64" / "DDR-val"
+    smoke.mkdir(parents=True)
+    (smoke / "predicted.json").write_text(json.dumps({"n_images": 2, "resumed_images": 0, "predict_seconds": 20.0, "canvas_long_side": 1440, "limit": 2}))
+    assert launch.measured_rate("a", "a_sam_vith_p64") == (10.0, 1440) and launch.measured_rate("a", "a_sam2_hieral21_p64") is None
+    rows, total = launch.estimate(items, frozen)
+    by = {row[0]: row for row in rows}
+    ddr, idrid = by["a_sam_vith_p64:DDR:val:main"], by["a_sam_vith_p64:IDRiD:val:main"]
+    assert ddr[2] == 1440 and abs(ddr[3] - 10.0 * ddr[1] / 3600) < 1e-9 and idrid[3] is not None and by["a_sam2_hieral21_p64:DDR:val:main"][3] is None
+    assert abs(total - (ddr[3] + idrid[3])) < 1e-9
+    # the 4256 canvas of TJDR_uwf scales the rate by the canvas area
+    filled = _filled(tmp_path)
+    test_items = launch.plan(filled, test_only=True)
+    rows, _total = launch.estimate(test_items, filled)
+    uwf = next(row for row in rows if row[0] == "a_sam_vith_p64:TJDR_uwf:test:main")
+    assert uwf[2] == 4256 and abs(uwf[3] - 10.0 * (4256 / 1440) ** 2 * uwf[1] / 3600) < 1e-9
+    assert launch.estimate_lines(test_items, filled)[-1].startswith("estimate:") and "no predicted.json" in launch.estimate_lines(test_items, filled)[-1]
+    launch.main(["--estimate", "--pool-only"])
+    text = capsys.readouterr().out
+    assert "estimate:" in text and "not submitted" not in text

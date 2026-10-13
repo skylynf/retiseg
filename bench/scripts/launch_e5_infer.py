@@ -27,6 +27,7 @@ required, so a --pool-only smoke runs on a machine that holds IDRiD and DDR alon
 """
 
 import argparse
+import json
 import os
 import shlex
 import sys
@@ -188,6 +189,56 @@ def discover(frozen):
     return items
 
 
+def measured_rate(tier, source):
+    """(seconds per predicted image, canvas long side) from the source's predicted.json with the most images, or None.
+
+    Any finished prediction counts, a --limit smoke included: that is what the smoke of 17 section 6
+    is for. Images a resumed run skipped are left out of the rate.
+    """
+    best, best_n = None, 0
+    root = out.OUT_ROOT / tier / source
+    if not root.is_dir():
+        return None
+    for path in root.glob("*/predicted.json"):
+        record = json.loads(path.read_text())
+        n = int(record.get("n_images") or 0) - int(record.get("resumed_images") or 0)
+        side = record.get("canvas_long_side")
+        if n <= 0 or not record.get("predict_seconds") or side in (None, "native"):
+            continue
+        if n > best_n:
+            best, best_n = (float(record["predict_seconds"]) / n, int(side)), n
+    return best
+
+
+def estimate(items, frozen):
+    """[(label, images, canvas, hours or None)] and the total hours of the items that have a measured rate.
+
+    Seconds per image scale with the canvas area (windows per image grow with it); an item whose
+    source has no predicted.json yet gets None (open issue 32: run the --limit smoke first).
+    """
+    rows, total = [], 0.0
+    for item in items:
+        source = item.label.split(":", 1)[0]
+        n = n_images(item.set_name, item.split)
+        side = geo.long_side_for(item.set_name, item.variant, frozen)
+        rate = measured_rate(item.label[0], source)
+        if rate is None:
+            rows.append((item.label, n, side, None))
+            continue
+        hours = rate[0] * (side / rate[1]) ** 2 * n / 3600.0
+        total += hours
+        rows.append((item.label, n, side, hours))
+    return rows, total
+
+
+def estimate_lines(items, frozen):
+    rows, total = estimate(items, frozen)
+    lines = [f"{label}: {n} images, canvas {side}, " + ("no measurement yet" if hours is None else f"{hours:.2f} GPU h") for label, n, side, hours in rows]
+    unmeasured = sum(1 for row in rows if row[3] is None)
+    lines.append(f"estimate: {total:.1f} GPU h over {len(rows) - unmeasured} measured items; {unmeasured} items have no predicted.json to measure from")
+    return lines
+
+
 def missing_prompt_files(frozen, items=None):
     """(set, split, variant) whose oracle prompt file does not exist yet: of every target, or only of the
     planned ``items`` that read one (the oracle tier and the references), so a plan limited by --only,
@@ -309,6 +360,7 @@ def main(argv=None):
     parser.add_argument("--only", help="comma-separated source names, e.g. a_sam_vith_p64,b_sam2_box")
     parser.add_argument("--drop-maps", default="", help="comma-separated test sets whose maps are removed after evaluation (e.g. FGADR,Retinal-Lesions)")
     parser.add_argument("--limit", type=int, help="first N images of every item (smoke)")
+    parser.add_argument("--estimate", action="store_true", help="GPU hours of the planned items from the measured seconds per image of each source (after a smoke)")
     args = parser.parse_args(argv)
     drop = tuple(item.strip() for item in args.drop_maps.split(",") if item.strip())
     only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
@@ -320,6 +372,10 @@ def main(argv=None):
     missing = missing_prompt_files(frozen, items)
     if missing:
         print("prompt files to write first: " + ", ".join(f"{n}/{s}/{v}" for n, s, v in missing), flush=True)
+    if args.estimate:
+        for line in estimate_lines(items, frozen):
+            print(line, flush=True)
+        return
     if not args.submit:
         for item in items[:3]:
             print("command " + command(item, py_argv=["python"], drop_maps=drop, limit=args.limit), flush=True)
