@@ -1,13 +1,13 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-10-13 23:55 +0800，服务器；HEAD 仍是 3c505bb，git fetch 失败，没有 pull）
+一、当前状态（2026-10-13 23:55 +0800，服务器；已合入工作站 af0219f）
 服务器：ubuntu-SYS-421GE-TNRT，仓库 /home/qurr/luming/retiseg/retiseg，8 张 A100 40GB。GPU 0、1 是他人 vLLM。本项目 GPU 2–7 都有进程。dataset/prepared 七个库的划分不变。B1 已停。
 在跑：GPU 2 nnU-Net DDR 默认 rep2（第 862/1000 轮），同一脚本之后接 IDRiD rep1、rep2。GPU 3 E3a 种子 0（FCT IDRiD→TJDR_uwf）；主变体 done.json 55 份；这个启动器是 10-12 15:26 拉起的，不会中途发现新来源。GPU 4 E8 M2MRF DDR 10% 已到 83600 步，在写概率图（验证最好 0.479）。GPU 5 E8 细粒度合并（8360/83600，验证 0.364）。GPU 6 E8 DDR 50%（12540/83600，验证 0.453）。GPU 7 E7 M2MRF 长边 512（146800/293600，验证 0.496）。旧 launch_factor 没杀。
 已写入 14，并在服务器用 retiseg-nnunet 的 Python 跑 collect_runs.py 写入论文 data/results.csv（115 份报告；没有跑 make）：
 主表 U-Net 整批 Dice 三种子，IDRiD 均值 0.644、DDR 均值 0.371。HACDR-Net 三种子，均值 0.538、0.252。nnU-Net 默认 DDR 第二次 0.427（第一次 0.432）；ResEnc-M 0.631、0.428。E2c 四项只有验证数（14 备注 17）。影响因素 M2MRF 四项：TJDR 标准内部测试 0.554；FGADR 完整测试集 0.349（同眼 106 张还没去掉）；DDR+FGADR 抽 383 张在 DDR 上 0.336；DDR+FGADR 全集在 DDR 上 0.320。
 训完、概率图在、还没有 metrics_test.json：E4 的 DDR+Retinal-Lesions、Retinal-Lesions 单独。
-权重：公开的 SAM、SAM 2、MAE 在 pretrained/。三份 gated 已下完，sha256 在 e5_frozen.yaml。MedSAM 和 DINOv2 没有。E5 还没开。
+权重：公开的 SAM、SAM 2、MAE 在 pretrained/。三份 gated 已下完，sha256 在 e5_frozen.yaml。MedSAM 和 DINOv2 没有。E5 还没开。工作站 af0219f 给 launch_factor 接上了 evaluate，并加了 --score-only；上面四项是在那之前按同一条 evaluate 在 CPU 上打完的。
 本机工作站只收快照小文件。文献：L1 完成（30 篇、3403 个数字）；作者回信截止 10-31。
 
 二、决定日志（日期、决定、依据；细节在 archive）
@@ -35,6 +35,10 @@ HACDR-Net 种子 1、2 两库的训练已到预算，退出码 1 是之后用 to
 不打断 E2c（GPU 4–7）和已经在 GPU 3 上的 E3a。HACDR DDR 种子 1、2 打分已结束（14:54、15:27），种子 0 的 E3a 随原脚本在 GPU 3 启动：108 项，先跑 NN_default_idrid_fold0 的 FGADR（15:36 时 51/553），FGADR 和 Retinal-Lesions 不存图。
 GPU 2：U-Net 种子 1、2。launch_b1.py --rest --only U-Net 被 SAMed 种子 0 没有 diagnostic.json 拦住（assert 检查的是整张表，不只 U-Net）。改由 runs/logs/unet_rest_gpu2.sh 按 DDR 种子 1、DDR 种子 2、IDRiD 种子 1、IDRiD 种子 2 的顺序训练并打分（15:35 开始，GPU 2 已占约 18GB），四项之后同一张卡接 nnU-Net 默认配置 DDR 的 rep1、rep2。
 GPU 4–7：E2c 结束后由 launch_factor.py 自动接上不需要新权重的 21 个影响因素任务（约 182 GPU 时，最长的 M2MRF 各项约 11.6 小时排在前面）。不含 SAM2-UNet、RETFound，也不含 E7 原分辨率。子集名单已写到 bench/data/splits/subsets/（DDR 10% 38 张、50% 192 张、FGADR 383 张），尚未提交。bench/tests/test_factor.py 六个用例在服务器上通过；端到端用例里的模型族和玩具数据路径已改。
+
+影响因素启动器的评测步骤（2026-10-13，本机；依据服务器 13:33 汇报）
+服务器：4 个 M2MRF 影响因素运行训完、概率图写出，但没有 metrics_test.json；launch_factor.py 只跑了训练脚本，没有像 launch_b1 的 formal 波那样接 bench.eval.cli evaluate。修复：launch_factor.py 的命令在训练后接 evaluate；对已有 best.pt 和 timing.json 的运行改为只评测（概率图已在时不重算，predict 会拒绝覆盖已完成的目录），--score-only 只排这类运行。E7 512 格子的估时改为 2 倍（实测步数 3.5 倍、每步更便宜）。服务器的做法在 17 第十二节。
+U-Net 整批 Dice 三种子完成：IDRiD 0.644 ± 0.015，DDR 0.370 ± 0.009（原配方 0.594 ± 0.024、0.114 ± 0.009）；DDR 上与 M2MRF（0.369）持平。
 
 2026-10-13 14:30（服务器，未改正在跑的启动器）
 GPU 2–7 都有进程。GPU 2 是 nnU-Net DDR 默认 rep1（约第 800/1000 轮）；unet_rest_gpu2.sh 尚未读到的后半段已加上 DDR rep2 之后的 IDRiD rep1、rep2，文件偏移在 DDR rep2 之前，跑完会接着读。GPU 3 是 E3a 种子 0（DeepLabv3 IDRiD→FGADR，已过 351/553）。GPU 4–7 仍是四个 M2MRF 影响因素训练，旧 launch_factor.py 没杀，空卡会自己接下一项。git fetch 失败（empty reply），本机 launch_factor.py 还没有 --score-only；四个已训完的 M2MRF 在 CPU 上按 launch_b1 的 evaluate 补完 metrics_test.json（16:10 全部 exit 0）。测试 mAUPR：TJDR 标准 0.554，FGADR 0.349，DDR+FGADR 抽 383 张在 DDR 测试集 0.336，DDR+FGADR 全集在 DDR 测试集 0.320。Hugging Face 官方站从这台机器连不上，经 hf-mirror 用已获批的账号下完三份 gated 权重，大小与仓库一致，sha256 写入 e5_frozen.yaml：sam3.pt（3450062241，9999e234…）、RETFound_mae_natureCFP.pth（3952489221，e1e4f66a…）、RETFound_dinov2_meh.pth（1609833910，a3feeaf6…）。MedSAM 不在 Hugging Face。runs/logs/keep_busy.py 盯 11 小时：只有对应启动器死了且卡空闲超过约 10 分钟才补启动，不动 GPU 0、1。

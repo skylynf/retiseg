@@ -1,10 +1,13 @@
 """Print or queue the factor jobs in bench/configs/factor_jobs.yaml (E3b, E4, E7, E8, E9).
 
-Each job runs `<script> --config <cell> --run-dir <run_dir> --resume` in its
-environment (training, then the internal test through score_run), one process
-per card in RETISEG_GPUS, longest first. A job whose run directory holds
-metrics_test.json is finished and skipped; one whose console.log shows a live
-process is skipped too. Jobs of a factor whose weights or subsets are missing
+Each job runs `<script> --config <cell> --run-dir <run_dir> --resume` (training,
+then the test maps through score_run) followed by `bench.eval.cli evaluate` on
+the primary maps, which writes metrics_test.json; one process per card in
+RETISEG_GPUS, longest first. A job whose run directory holds metrics_test.json
+is finished and skipped; one whose console.log shows a live process is skipped
+too. A run that finished training (best.pt and timing.json) without
+metrics_test.json is scored (--score-only predicts from the saved checkpoints)
+and evaluated instead of retrained; --score-only restricts the queue to those. Jobs of a factor whose weights or subsets are missing
 fail at their first step and are reported, not retried.
 
     python bench/scripts/launch_factor.py [--experiment E4] [--only NAME,...]
@@ -47,11 +50,33 @@ def load_jobs(path=JOBS):
     return jobs
 
 
-def command(job, py_argv=None):
+def evaluate_argv(job, py_argv):
+    """bench.eval on the primary test maps of a finished run: the step that writes metrics_test.json
+    (the training script only writes the maps, as in launch_b1's formal wave)."""
+    cell = yaml.safe_load((_ROOT / job["config"]).read_text())
+    run_dir = job["run_dir"]
+    return list(py_argv) + ["-m", "bench.eval.cli", "evaluate", "--data", str(cell["dataset"]), "--split", cell["split_test"],
+                            "--pred", f"{run_dir}/prob_test", "--val-pred", f"{run_dir}/prob_val", "--out", f"{run_dir}/metrics_test"]
+
+
+def maps_written(run_dir):
+    """score_run already wrote the primary maps (checkpoint_roles.json and a non-empty prob_test)."""
+    run_dir = _ROOT / run_dir
+    return (run_dir / "checkpoint_roles.json").is_file() and any((run_dir / "prob_test").glob("*"))
+
+
+def command(job, py_argv=None, score_only=False):
+    """Train, then evaluate. With score_only: predict from the saved checkpoints when the maps are
+    missing (score_run refuses to overwrite a finished prediction directory), then evaluate."""
     py_argv = python_argv(job["env"]) if py_argv is None else py_argv
     run_dir = job["run_dir"]
-    train = list(py_argv) + [job["script"], "--config", job["config"], "--run-dir", run_dir, "--resume"]
-    chain = "unset " + " ".join(_DIST_VARS) + "; " + shlex.join(train)
+    steps = []
+    if not score_only:
+        steps.append(list(py_argv) + [job["script"], "--config", job["config"], "--run-dir", run_dir, "--resume"])
+    elif not maps_written(run_dir):
+        steps.append(list(py_argv) + [job["script"], "--config", job["config"], "--run-dir", run_dir, "--score-only"])
+    steps.append(evaluate_argv(job, py_argv))
+    chain = "unset " + " ".join(_DIST_VARS) + "; " + " && ".join(shlex.join(step) for step in steps)
     log = shlex.quote(str(Path(run_dir) / "console.log"))
     return (
         f"mkdir -p {shlex.quote(run_dir)} && "
@@ -65,6 +90,7 @@ def main(argv=None):
     parser.add_argument("--submit", action="store_true")
     parser.add_argument("--experiment")
     parser.add_argument("--only")
+    parser.add_argument("--score-only", action="store_true", help="only runs with best.pt and prob_test: predict again and evaluate")
     args = parser.parse_args(argv)
     only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
     chosen = []
@@ -80,17 +106,26 @@ def main(argv=None):
         if running is not None:
             print(f"skip {job['name']}: still running ({running})", flush=True)
             continue
+        trained = (_ROOT / job["run_dir"] / "best.pt").is_file() and (_ROOT / job["run_dir"] / "timing.json").is_file()
+        if args.score_only and not trained:
+            print(f"skip {job['name']}: not trained yet", flush=True)
+            continue
+        if trained and not args.score_only:
+            # trained before this launcher evaluated (2026-10-13): score and evaluate instead of retraining
+            print(f"queued {job['name']} (trained; predicting from best.pt and evaluating) -> {job['run_dir']}", flush=True)
+            chosen.append(dict(job, _score_only=True, est_hours=0.5))
+            continue
         print(f"queued {job['name']} est {job.get('est_hours', '?')} h -> {job['run_dir']}", flush=True)
-        chosen.append(job)
+        chosen.append(dict(job, _score_only=args.score_only))
     if not args.submit:
         for job in chosen[:2]:
-            print("command " + command(job, py_argv=["python"]), flush=True)
+            print("command " + command(job, py_argv=["python"], score_only=job.get("_score_only", False)), flush=True)
         print(f"{len(chosen)} jobs; not submitted, pass --submit with RETISEG_GPUS", flush=True)
         return
     gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
     if not gpus:
         raise SystemExit("--submit needs RETISEG_GPUS")
-    errors = run_queue([(job["name"], command(job)) for job in chosen], gpus, wait_free=True)
+    errors = run_queue([(job["name"], command(job, score_only=job.get("_score_only", False))) for job in chosen], gpus, wait_free=True)
     if errors:
         raise SystemExit("\n".join(errors))
 

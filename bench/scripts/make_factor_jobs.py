@@ -93,7 +93,8 @@ def jobs():
             add(name, "E4", model, cell("E4", model, train, evaluation, {"experiment": "E4", "variant": label, "train_set": label}), DDR_HOURS[model])
     # E7: canvas size, DDR.
     for model in ("M2MRF", "RETFound"):
-        for fov, tag, label, factor_h in ((512, "512", "512", 1.0), (0, "native", "native patches", 1.6)):
+        # 512: the patch shrinks to 512 so the pixel budget takes 3.5x the steps (M2MRF measured 2x the DDR hours, 10-13); native: bigger canvases
+        for fov, tag, label, factor_h in ((512, "512", "512", 2.0), (0, "native", "native patches", 1.6)):
             name = f"e7_{_SLUG[model]}_ddr_{tag}_seed0"
             add(name, "E7", model, cell("E7", model, [src("DDR")], "DDR", {"experiment": "E7", "variant": f"res:{label}", "train_set": "DDR"}, fov=fov), DDR_HOURS[model] * factor_h)
     # E8: amount of DDR, and the fine-grained sources merged; same pixel budget in every row.
