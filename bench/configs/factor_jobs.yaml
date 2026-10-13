@@ -171,7 +171,7 @@ jobs:
   config: bench/configs/cells/e7_m2mrf_ddr_512_seed0.yaml
   script: bench/scripts/train_m2mrf_b1.py
   run_dir: runs/BF_e7_m2mrf_ddr_512_seed0
-  est_hours: 11.6
+  est_hours: 23.2
 - name: e7_m2mrf_ddr_native_seed0
   experiment: E7
   model: M2MRF
@@ -191,7 +191,7 @@ jobs:
   config: bench/configs/cells/e7_retfound_ddr_512_seed0.yaml
   script: bench/train.py
   run_dir: runs/BF_e7_retfound_ddr_512_seed0
-  est_hours: 22.0
+  est_hours: 44.0
 - name: e7_retfound_ddr_native_seed0
   experiment: E7
   model: RETFound

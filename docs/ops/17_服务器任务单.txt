@@ -14,8 +14,8 @@
 
 二、现在就做（不等新卡）
   1. HACDR-Net 种子 1、2 补打分（两库各两个，只推理，约 1 小时）：用 10-11 补打种子 0 时的同一条打分命令（launch_b1.py 的 score 项，runs/BS_hacdr_{idrid,ddr}_seed{1,2}）。打完后主表 HACDR-Net 也有三个种子。
-  2. U-Net DDR 种子 0 训完后由启动器自动打分，核对 runs/BS_unet_ddr_seed0/metrics_test.json 出现；然后按 16 补 U-Net 两库的种子 1、2（launch_b1.py --jobs bench/configs/bs_jobs.yaml --rest --only U-Net，约 15 GPU 时）。
-  3. E2c 四项训完后不用打分（只看验证）；timing.json 出现即可回传。
+  2. U-Net DDR 种子 0 训完后由启动器自动打分，核对 runs/BS_unet_ddr_seed0/metrics_test.json 出现；然后按 16 补 U-Net 两库的种子 1、2（launch_b1.py --jobs bench/configs/bs_jobs.yaml --rest --only U-Net，约 15 GPU 时）。完成 2026-10-13（IDRiD 0.658/0.646/0.629，DDR 0.378/0.361/0.372）。
+  3. E2c 四项训完后不用打分（只看验证）；timing.json 出现即可回传。完成 2026-10-12 晚。
   4. B1 不再续跑（16）。runs/B1_* 保留原样。完成 2026-10-12（09:08 已停，本次不续）。
 
 三、E3a 独立测试（七个库都在 dataset/prepared，可以开；只推理，插空卡）
@@ -73,6 +73,17 @@
   4. 排队：RETISEG_GPUS="..." bash bench/scripts/server_run.sh factor E9；然后 E4、E8、E3b（U-Net、M2MRF 先；SAM2-UNet、RETFound 行等权重）、E7。launch_factor.py 按 est_hours 从长到短排，metrics_test.json 存在的跳过。
   5. 训完后 e3a 会自动发现 BF_e3b_*、BF_e4_*、BF_e8_*（E7、E9 不进独立测试）；以 FGADR 训练的运行其内部测试按 14 备注 33 重算一次（evaluate --exclude 去掉 106 张）。
   6. 回传：runs/BF_*/ 的小文件和 runs/E3a/BF_*/。
+
+十二、2026-10-13 更新（依据服务器 13:33 的汇报；pull 本次提交后执行）
+  1. 已训完但没有 metrics_test.json 的影响因素运行（4 个 M2MRF：e3b tjdr_std、e3b fgadr、e4 ddr_fgadr383、e4 ddr_fgadr）：launch_factor.py 以前只跑训练脚本，没有接 bench.eval 的 evaluate，这次修了（训练后接 evaluate；对已训完的运行只评测，不重算概率图）。现在就做：
+       python bench/scripts/launch_factor.py --score-only          # 只打印命令
+     把打印出来的 4 条 evaluate 命令在 CPU 上直接跑（不需要卡，每条十几分钟），或 RETISEG_GPUS="<一张空卡>" python bench/scripts/launch_factor.py --score-only --submit。有了 metrics_test.json 之后，下一次 e3a 启动器会自动把这 4 个当作来源。
+  2. 正在跑的旧启动器（进程里的 launch_factor）不要杀：它排完剩下的 13 项后，再跑一次 --score-only 补全部评测；之后 server_run.sh factor 用的是新命令。
+  3. E3a 只有 GPU 3，还剩 83 项。影响因素的 4 个任务结束后（10-13 夜间到 10-14），把 GPU 4、5 给 E3a：RETISEG_GPUS="4 5" bash bench/scripts/server_run.sh e3a --drop-maps FGADR,Retinal-Lesions（不带 --seed0-only；已完成的集合会跳过）。E3a 比影响因素实验优先（16 第二节）；影响因素的剩余 13 项由旧启动器在 6、7 上接着跑。
+  4. nnU-Net 默认 DDR rep1 结束后自动接 rep2；IDRiD 的 rep1、rep2 排在之后（RETISEG_NN_REP=rep1/rep2 NNUNET_GPU=2 server_run.sh nnunet IDRiD default）。
+  5. E7 的 M2MRF 512 格子按像素预算要 3.5 倍步数，24 小时是预期内的；任务表的估时已改（factor_jobs.yaml 重生成，内容不变）。
+  6. 仍然缺：SAM 3、RETFound 两份、MedSAM 权重（第四节）；E5 不能开。公开权重下完后先跑 python bench/scripts/cost_audit.py --models U-Net DeepLabv3 HRNet Swin-Unet FCT M2MRF（第九节第 4 条）。
+  7. 回传：下一次打包时带上 runs/BF_*、runs/E3a/、runs/E2c_*、runs/NN_*_rep*、runs/BS_unet_*（新三种子）。
 
 十、顺序和卡的分配（6 张卡，GPU 2–7）
   今天：二.1 HACDR 打分；三 E3a 种子 0（2 张卡插空）；四 下载公开权重、用户申请 gated 权重；E2c、U-Net DDR 继续。

@@ -3,9 +3,10 @@
 
 一、当前状态（2026-10-12，服务器提交 eca5098；本机按此同步）
 服务器：ubuntu-SYS-421GE-TNRT，仓库 /home/qurr/luming/retiseg/retiseg，8 张 A100 40GB，GPU 0、1 长期被他人 vLLM 占用，本项目用 2–7。dataset/prepared 有七个库（IDRiD 44/10/27，DDR 383/149/225，TJDR_std 172/30/55，TJDR_uwf 209/37/58，FGADR 1096/193/553，RetinalLesions 951/164/478，DiaRetDB1 0/28/61）。pretrained/ 正在下公开权重（SAM ViT-H/B、SAM 2.0/2.1 Hiera-L、MAE ViT-L）；SAM 3、RETFound 两份、MedSAM 需用户申请或网盘，未到。
-在跑（10-12）：GPU 2 U-Net DDR 种子 0（整批 Dice）；GPU 4–7 E2c DDR 四项；GPU 3 排 HACDR-Net 种子 1、2 打分，之后 E3a 种子 0（单卡）。B1 已停，六个未完成运行留 resume.pt。
-已有测试数（都已收进论文 data/results.csv，14 的 M6、M7 有数字）：B-std 7 个模型两库（HRNet、Swin-Unet、M2MRF、DeepLabv3、U-Net 旧配方 3 种子；FCT IDRiD 3 种子、DDR 1 种子；HACDR 种子 0；U-Net 整批 Dice IDRiD 种子 0）；nnU-Net 默认和 ResEnc-M 两库各一次；E1r M2MRF bs4 IDRiD 种子 0；M2MRF 作者权重（E1）。
-没有的：独立测试（E3a）全部；E5 全部；E3b、E4、E7、E8、E9 全部（cell 也还没写，17 第九节）；E2c 的 ×1/3、×3；nnU-Net 重复运行；E1r 其余。
+在跑（10-13 13:33）：GPU 2 nnU-Net 默认 DDR rep1（之后 rep2）；GPU 3 E3a（108 项里 24 项成功，剩 83，单卡）；GPU 4–7 影响因素实验（E8 M2MRF DDR 10%、E4 M2MRF Retinal-Lesions 单独、E4 M2MRF DDR+Retinal-Lesions、E7 M2MRF 512），启动器还排着 13 项。B1 已停。
+已有测试数：B-std 7 个模型两库（HRNet、Swin-Unet、M2MRF、DeepLabv3 3 种子；U-Net 整批 Dice 3 种子，10-13：IDRiD 0.658/0.646/0.629、DDR 0.378/0.361/0.372；旧配方 3 种子作 registered；FCT IDRiD 3 种子、DDR 1 种子；HACDR 种子 0，种子 1、2 已打分待回传）；nnU-Net 默认和 ResEnc-M 两库各一次；E1r M2MRF bs4 IDRiD 种子 0；M2MRF 作者权重（E1）；E2c DDR 四项（只验证，10-12 晚结束）；E3a 24 项（nnU-Net 两配置在 FGADR、Retinal-Lesions、TJDR_uwf，DDR 训练的 6 个模型在 TJDR_uwf）。论文 data/results.csv 收到 10-12 快照为止，10-13 的数等下一次回传。
+影响因素（10-13）：4 个 M2MRF 训完（验证 mAUPR：TJDR_std 0.511、FGADR 0.345、DDR+FGADR 383 0.535、DDR+FGADR 0.529）但没有 metrics_test.json——launch_factor 没接 evaluate，10-13 本机修了（17 第十二节）。
+没有的：E3a 其余 83 项；E5 全部（缺 gated 权重）；影响因素其余 17 项；nnU-Net 重复运行（在跑）；E1r 其余。
 本机：工作站 RTX 4060 Ti 16GB、30GB 内存，只做开发、测试、评测、作图；服务器 runs/ 通过快照包回传（格式见 17 第一节），本机 runs/ 只有快照里的小文件。
 文献：L1 完成（literature/meta/paper_audit.tsv、reported_results.tsv，30 篇、3403 个数字）；作者回信截止 10-31。
 
@@ -29,3 +30,7 @@ HACDR-Net 种子 1、2 两库的训练已到预算，退出码 1 是之后用 to
 2. 文档精简：00 改为检查点格式（当前状态、决定日志、最近记录），逐条旧记录移到 ops/archive/00_进度_20261003-20261012.txt；13 第四节旧排期改为指向 16/17；09 标为存档；新建 docs/CHECKPOINT.md（新会话先读）。
 3. 影响因素实验接线（16 第三节的范围）：bench/factor.py（BF cell：B-std 协议 + DDR 像素预算与配方 + 只改一个因素），bench/data/factor_input.py（任意 prepared 来源、冻结子集、多来源拼接），bench/scripts/make_subsets.py（DDR 10%/50%、FGADR 383 的名单，服务器生成后提交），make_factor_jobs.py（28 个 cell，bench/configs/factor_jobs.yaml，约 330 GPU 时），launch_factor.py，server_run.sh 的 factor 阶段；b1_input 的 fov_diameter 0 = 原分辨率（E7）；bench/train.py、train_m2mrf_b1.py、predict_m2mrf_b1.py 认 BF；bench/e3a.py 和 launch_e3a.py 认 BF_e3b/e4/e8 运行（训练源视野度数未知时超广角只跑 fov 变体）；collect_runs.py 读 runs/BF_* 的 paper 块。写法在 14 的 M9b，备注 38（Retinal-Lesions 忽略区在训练里按背景）。
 4. 测试：bench/tests/test_factor.py 六个用例；本机没有 torch，只用桩跑通了 MultiSource/子集、原分辨率、几何裁块、任务表四个，run_cell 端到端和 assert 用例要在服务器跑（17 第十一节第 1 条）。
+
+影响因素启动器的评测步骤（2026-10-13，本机；依据服务器 13:33 汇报）
+服务器：4 个 M2MRF 影响因素运行训完、概率图写出，但没有 metrics_test.json；launch_factor.py 只跑了训练脚本，没有像 launch_b1 的 formal 波那样接 bench.eval.cli evaluate。修复：launch_factor.py 的命令在训练后接 evaluate；对已有 best.pt 和 timing.json 的运行改为只评测（概率图已在时不重算，predict 会拒绝覆盖已完成的目录），--score-only 只排这类运行。E7 512 格子的估时改为 2 倍（实测步数 3.5 倍、每步更便宜）。服务器的做法在 17 第十二节。
+U-Net 整批 Dice 三种子完成：IDRiD 0.644 ± 0.015，DDR 0.370 ± 0.009（原配方 0.594 ± 0.024、0.114 ± 0.009）；DDR 上与 M2MRF（0.369）持平。
