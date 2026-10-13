@@ -16,10 +16,10 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 - 影响因素：M2MRF 四项已打分（14 M9b）。TJDR 标准 0.554；FGADR 完整测试集 0.349（同眼 106 张还没去掉）；DDR 测试集上 DDR+FGADR 抽 383 为 0.336、全集为 0.320。另两档 E4 已训完、还没有 metrics_test.json。E2c 只有验证数（14 备注 17），×1/3 时验证名次对调，学习率未改。
 - 服务器在跑（GPU 2–7）：nnU-Net DDR rep2；E3a 种子 0（主变体 done 55，当前 FCT IDRiD→TJDR_uwf）；E8 三项和 E7 长边 512。旧 launch_factor 没杀。GPU 0、1 是他人 vLLM。
 - 权重：SAM、SAM 2、MAE 和三份 gated（SAM 3、RETFound ×2，sha256 在 e5_frozen.yaml）已在 `pretrained/`。MedSAM 和 DINOv2 没有。E5 训练未开始。
-- 还没写：E5 推理档 `bench/e5/`；nnU-Net 的 E3b。图还是 10-12 的 make，跟现在的 results.csv 不一致。
+- E5 推理档 `bench/e5/` 已写（10-13，本机；服务器步骤 17 第六节，方法 14 M9“推理档实现”），适配器要在服务器核对。还没写：nnU-Net 的 E3b。图已按 115 份报告重建（10-13 本机 make）。
 
 ## 数据流（结果 → 论文）
-服务器打包 `runs/` 小文件（17 第一节格式）→ 本机解到仓库 `runs/` → `python docs/paper/retiseg_paper/paper/scripts/collect_runs.py`（认 BS/B1/*_registered/NN_*/E1r/E2c/BF_*/runs/E3a）→ `make -C docs/paper/retiseg_paper/paper`。`collect_literature.py` 写 L1 行。占位数据由 `build_placeholder.py --force` 重生成后要再跑两个 collect。
+服务器打包 `runs/` 小文件（17 第一节格式）→ 本机解到仓库 `runs/` → `python docs/paper/retiseg_paper/paper/scripts/collect_runs.py`（认 BS/B1/*_registered/NN_*/E1r/E2c/BF_*/runs/E3a/runs/E5）→ `make -C docs/paper/retiseg_paper/paper`。`collect_literature.py` 写 L1 行。占位数据由 `build_placeholder.py --force` 重生成后要再跑两个 collect。
 
 ## 规则（不要违反）
 看过测试指标后不改预算、增强、选择规则；协议文件 `bench/configs/*_frozen.yaml` 只增不改；每个会进论文的决定同一次提交写进 14；每次改动在 00 记一笔；文件编号从 18 起。

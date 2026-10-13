@@ -7,7 +7,7 @@
 已写入 14，并在服务器用 retiseg-nnunet 的 Python 跑 collect_runs.py 写入论文 data/results.csv（115 份报告；没有跑 make）：
 主表 U-Net 整批 Dice 三种子，IDRiD 均值 0.644、DDR 均值 0.371。HACDR-Net 三种子，均值 0.538、0.252。nnU-Net 默认 DDR 第二次 0.427（第一次 0.432）；ResEnc-M 0.631、0.428。E2c 四项只有验证数（14 备注 17）。影响因素 M2MRF 四项：TJDR 标准内部测试 0.554；FGADR 完整测试集 0.349（同眼 106 张还没去掉）；DDR+FGADR 抽 383 张在 DDR 上 0.336；DDR+FGADR 全集在 DDR 上 0.320。
 训完、概率图在、还没有 metrics_test.json：E4 的 DDR+Retinal-Lesions、Retinal-Lesions 单独。
-权重：公开的 SAM、SAM 2、MAE 在 pretrained/。三份 gated 已下完，sha256 在 e5_frozen.yaml。MedSAM 和 DINOv2 没有。E5 还没开。工作站 af0219f 给 launch_factor 接上了 evaluate，并加了 --score-only；上面四项是在那之前按同一条 evaluate 在 CPU 上打完的。
+权重：公开的 SAM、SAM 2、MAE 在 pretrained/。三份 gated 已下完，sha256 在 e5_frozen.yaml。MedSAM 和 DINOv2 没有。E5 还没开；推理档代码 bench/e5/ 已于 10-13 在本机写好（17 第六节）。工作站 af0219f 给 launch_factor 接上了 evaluate，并加了 --score-only；上面四项是在那之前按同一条 evaluate 在 CPU 上打完的。
 本机工作站只收快照小文件。文献：L1 完成（30 篇、3403 个数字）；作者回信截止 10-31。
 
 二、决定日志（日期、决定、依据；细节在 archive）
@@ -45,3 +45,9 @@ GPU 2–7 都有进程。GPU 2 是 nnU-Net DDR 默认 rep1（约第 800/1000 轮
 
 结果入文档（2026-10-13 23:55，服务器）
 已打分的结果写入 14 的 M7、M9、M9b 和备注 17，13 第三节状态改到同一时刻，17 里做完的条目标了完成日期。collect_runs.py 在服务器上写入论文 data/results.csv（115 份报告：4472 行占位被替换，478 行是表里原来没有的键，4864 行同组占位种子被删）。没有跑 make。FGADR 上训练的 M2MRF 内部测试 0.349 是完整 553 张，去掉同眼 106 张的重算还没做。两份已训完的 E4（DDR+Retinal-Lesions、Retinal-Lesions 单独）还没有 metrics_test.json。
+
+E5 推理档代码（2026-10-13，本机；pull 到 a4339e3 之后）
+1. 服务器 23:55 的记录与本机预期一致：主表 B-std 七模型三种子齐（FCT DDR 一个种子）、nnU-Net 两配置、影响因素 M2MRF 四项、E3a 55 份主变体，论文 results.csv 已由服务器写入（115 份报告）；本机 make 全部重建通过（numbers 218 键，139 个还来自占位）。
+2. 写了 bench/e5/（a 零样本自动掩码与离线打分规则、b 理想提示一次写全部 k、同信息对照、SAM 3 文本、评测包装、CLI），11 个无 torch 用例通过（bench/tests/test_e5_infer.py）；适配器部分（models.py、sam3_text.py 的 Sam3Adapter）只能在服务器核对。collect_runs.py 加 collect_e5（读 runs/E5/**/paper.json + metrics_test.json，任意病灶 AUPR 以 cls "any" 进表），test_collect_runs.py 覆盖；retifig/data.py 的 sel 默认排除 cls "any"；make_numbers 加 fm.any.* 宏。方法与命名记在 14 M9“推理档实现”，服务器步骤在 17 第六节。
+3. 没有改任何冻结文件；e5_frozen.yaml 两个“待填”字段（area_cap、sam3.selected）由服务器按 17 第六节第 1、5 条填写后提交。
+

@@ -65,9 +65,13 @@ def results():
 
 
 def sel(**kw):
-    """Rows of the long table matching every keyword; a list value means isin."""
+    """Rows of the long table matching every keyword; a list value means isin. The any-lesion rows
+    (cls "any", written by collect_runs from the protocol's merged AUPR) are left out unless cls is asked for,
+    so that class means stay means over the four classes."""
     df = results()
     mask = np.ones(len(df), bool)
+    if "cls" not in kw:
+        mask &= (df["cls"] != "any").to_numpy()
     for key, val in kw.items():
         if isinstance(val, (list, tuple, set)):
             mask &= df[key].isin(list(val)).to_numpy()

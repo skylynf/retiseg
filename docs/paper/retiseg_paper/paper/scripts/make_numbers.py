@@ -217,6 +217,12 @@ def foundation():
     best = max(zs, key=zs.get)
     put("fm.zero.model", best, True)
     put("fm.zero.value", f2(zs[best]), True)
+    # the class-agnostic main number of tier a: the protocol's merged any-lesion AUPR (cls "any"), measured only
+    for model, tag in (("SAM", "sam"), ("SAM 2", "samtwo")):
+        for test in ("IDRiD", "DDR"):
+            r = D.sel(experiment="E5", model=model, variant="zero_shot:auto_any_lesion", test_set=test, metric="aupr", cls="any")
+            if len(r):
+                put(f"fm.any.{tag}.{test}", f2(r["value"].iloc[0]), D.simulated(r))
     put("fm.oracle.all", f2(e5("SAM 2", "oracle:box:all", "IDRiD")), True)
     put("fm.oracle.five", f2(e5("SAM 2", "oracle:box:5", "IDRiD")), True)
     put("fm.oracle.twenty", f2(e5("SAM 2", "oracle:box:20", "IDRiD")), True)

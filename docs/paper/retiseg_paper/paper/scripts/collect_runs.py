@@ -293,6 +293,41 @@ def collect_e3a(runs_dir):
     return pd.DataFrame(rows), seen
 
 
+def collect_e5(runs_dir):
+    """runs/E5/**/paper.json next to metrics_test.json (bench/e5: tiers a, b, SAM 3 text, the same-information
+    control). paper.json is the results.csv key (experiment E5, model, variant, train_set none, seed -1, test_set);
+    variant_by_class (SAM 3 phrasings) gives every class its own variant. Only the test splits are rows; the
+    DDR validation directories choose thresholds and the SAM 3 phrasing and stay out of the table. The
+    any-lesion AUPR (bench/eval protocol) is added as cls "any"."""
+    rows, seen = [], []
+    root = Path(runs_dir) / "E5"
+    if not root.is_dir():
+        return pd.DataFrame(rows), seen
+    for paper in sorted(root.rglob("paper.json")):
+        directory = paper.parent
+        metrics = directory / "metrics_test.json"
+        if not metrics.exists():
+            continue
+        key = json.loads(paper.read_text())
+        set_part = [part for part in directory.parts if part.endswith("_test") or part.endswith("_val")]
+        if not set_part or not set_part[-1].endswith("_test"):
+            continue
+        report = json.loads(metrics.read_text())
+        by_class = key.get("variant_by_class") or {}
+        base = rows_from_report(report, key["experiment"], key["variant"], key["model"], key["train_set"], int(key["seed"]), key["test_set"])
+        for row in base:
+            if row["cls"] in by_class:
+                row["variant"] = by_class[row["cls"]]
+        rows += base
+        any_entry = report.get("any_lesion") or {}
+        if any_entry.get("aupr") is not None:
+            rows.append(dict(experiment=key["experiment"], model=key["model"], variant=key["variant"], train_set=key["train_set"],
+                             seed=int(key["seed"]), test_set=key["test_set"], cls="any", metric="aupr", value=float(any_entry["aupr"]),
+                             source="measured"))
+        seen.append((f"E5/{directory.relative_to(root)}", key["variant"], report.get("summary", {}).get("mAUPR")))
+    return pd.DataFrame(rows), seen
+
+
 def merge(table, new):
     """Replace placeholder rows by key; then drop the remaining placeholder rows of every
     (experiment, model, variant, train_set, test_set) group that has at least one measured row,
@@ -325,6 +360,10 @@ def main():
     if len(e3a):
         new = pd.concat([new, e3a], ignore_index=True)
         seen += seen_e3a
+    e5, seen_e5 = collect_e5(args.runs)
+    if len(e5):
+        new = pd.concat([new, e5], ignore_index=True)
+        seen += seen_e5
     sheets = [collect_sheet(PAPER / "data" / f) for f in ("cost_measured.tsv", "cost_audit.tsv")]
     sheet = pd.concat([x for x in sheets if len(x)], ignore_index=True) if any(len(x) for x in sheets) else pd.DataFrame()
     new = pd.concat([sheet, new], ignore_index=True) if len(new) else sheet

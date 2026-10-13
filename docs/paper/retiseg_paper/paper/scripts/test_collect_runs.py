@@ -91,7 +91,29 @@ def main():
         assert (other["source"] == "measured").all() and set(other["seed"]) == {0}, set(other["seed"])
         assert len(merged) == len(table) - replaced - stale + len(new)
         assert new[new.metric == "lesion_recall_small"]["value"].isna().all()  # toy lesions are all large
-        print(f"ok: {len(new)} rows from one report replaced {replaced} placeholder rows; nothing else changed")
+        # E5 scored directories: paper.json + metrics_test.json, DDR_val ignored, any-lesion row, per-class variants
+        e5 = tmp / "runs" / "E5" / "a" / "sam" / "default" / "TOY_test" / "any"
+        e5.mkdir(parents=True)
+        shutil.copyfile(run / "metrics_test.json", e5 / "metrics_test.json")
+        (e5 / "paper.json").write_text(json.dumps({"experiment": "E5", "model": "SAM", "variant": "zero_shot:auto_any_lesion",
+                                                   "train_set": "none", "seed": -1, "test_set": "IDRiD"}))
+        val = tmp / "runs" / "E5" / "a" / "sam" / "default" / "DDR_val" / "any"
+        val.mkdir(parents=True)
+        shutil.copyfile(run / "metrics_test.json", val / "metrics_test.json")
+        shutil.copyfile(e5 / "paper.json", val / "paper.json")
+        sam3 = tmp / "runs" / "E5" / "sam3" / "phrase0" / "TOY_test"
+        sam3.mkdir(parents=True)
+        shutil.copyfile(run / "metrics_test.json", sam3 / "metrics_test.json")
+        (sam3 / "paper.json").write_text(json.dumps({"experiment": "E5", "model": "SAM 3", "variant": "text:phrase0", "train_set": "none",
+                                                     "seed": -1, "test_set": "IDRiD", "variant_by_class": {c: f"text:{c.lower()}" for c in CLASSES}}))
+        rows, seen5 = collect_runs.collect_e5(tmp / "runs")
+        assert len(seen5) == 2 and all(not name.startswith("E5/a/sam/default/DDR_val") for name, _v, _m in seen5), seen5
+        sam = rows[rows.model == "SAM"]
+        assert set(sam.cls) == set(CLASSES) | {"any"} and (sam.variant == "zero_shot:auto_any_lesion").all()
+        assert abs(sam[(sam.cls == "any")]["value"].iloc[0] - report["any_lesion"]["aupr"]) < 1e-12
+        three = rows[rows.model == "SAM 3"]
+        assert set(three[three.cls == "MA"].variant) == {"text:ma"} and set(three[three.cls == "any"].variant) == {"text:phrase0"}
+        print(f"ok: {len(new)} rows from one report replaced {replaced} placeholder rows; nothing else changed; E5 reader {len(rows)} rows")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

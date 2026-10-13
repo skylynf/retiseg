@@ -45,8 +45,34 @@
   5. 第二优先：SAM2-UNet 和 RETFound 两库的种子 1、2（launch_b1.py --rest --only SAM2-UNet,RETFound）。
   6. 全部 E5 检查点打分后再跑一轮 e3a（launch_e3a.py 会把新来源补上）。
 
-六、E5 推理档（a 零样本、b 理想提示）
-  代码还没写（bench/e5/：提示生成、自动掩码、点框解码、SAM 3 文本），由本机 agent 写并配单元测试，见第九节。服务器在代码到位后：先在验证池（IDRiD 验证 10 张加 DDR 验证 149 张）上做 e5_frozen.yaml 登记的网格选择，把选中的参数写回 e5_frozen.yaml 并提交，再跑七个测试集。a 档三模型约 40 GPU 时，b 档约 12。
+六、E5 推理档（a 零样本、b 理想提示）——代码 2026-10-13 到位（bench/e5/，命令见 bench/e5/__main__.py 顶部；方法记录在 14 M9“推理档实现”）
+  0. 先跑测试：pytest bench/tests/test_e5_infer.py（无 torch 也能过；本机 11 个用例已过）。SAM、SAM 2 的适配器 bench/e5/models.py 只在服务器能验证：python -c "from bench.e5 import models; m = models.build('sam'); print(m.window)"，SAM 2 同理；MedSAM 等权重。
+  1. 一次性准备（CPU 即可，各几分钟）：
+       for s in IDRiD DDR TJDR_std TJDR_uwf FGADR Retinal-Lesions DiaRetDB1; do python -m bench.e5 prompts --set $s; done
+       python -m bench.e5 prompts --set DDR --split val
+       python -m bench.e5 areacap        # 打印 area_cap 的数值，按提示追加进 e5_frozen.yaml 的 zero_shot.area_cap（原值 null），提交
+     提示文件（runs/E5/prompts/）和 e5_frozen.yaml 的改动一起提交，之后不再动。
+  2. a 档冒烟（一张卡，各几分钟）：python -m bench.e5 amg --model sam --generator default --set DDR --split val --limit 3；sam2 同理。看每图掩码数和秒数；确认 SAM 2 的 min_mask_region_area 后处理确实执行（15 第五节第 2 条：sam2/utils/transforms.py 的 CUDA 连通域算子失败时静默跳过；在 python 里对一个带小碎点的掩码调一次 sam2.utils.transforms 的后处理看是否去碎点，结果写进 00）。
+  3. a 档正式（顺序固定：先 DDR val，再测试集；评测时 DDR_val 目录先评，别的目录从它取阈值）：
+       for g in default more_masks; do for s in DDR_val IDRiD DDR TJDR_std TJDR_uwf FGADR Retinal-Lesions DiaRetDB1; do ...; done; done
+       每个 (model, generator, set)：python -m bench.e5 amg --model sam --generator $g --set $s [--split val]
+       打分（CPU，可并行）：python -m bench.e5 score --model sam --generator $g --set $s [--split val]          # any，主结果
+                            同一命令加 --output oracle_class；加 --cap train；加 --cap 0.005；加 --cap 0.02；加 --score stability_score
+       评测：python -m bench.e5 evaluate --all
+     G2（整图，对照）只在 IDRiD、DDR 测试集和 DDR val 上跑：--geometry G2。
+     估时：SAM ViT-H 1440 画布 4 窗，每窗 32×32 点约 10–20 秒，七个测试集约 1,700 张图（TJDR_uwf 按 4256 画布约 49 窗，单独算）；两套参数、两模型合计约 40 GPU 时，与 16 一致。GPU 4、5 在 E3a 收尾后给 E5；E3a 仍优先。
+  4. b 档（读测试标签，只作上界；一次写全部 k）：
+       python -m bench.e5 prompted --model sam2 --kind box --set $s      # 三模型框：sam2、sam（ViT-H）、medsam（等权重）
+       python -m bench.e5 prompted --model sam2 --kind point --set $s    # 点只做 SAM 2（16）
+     七个测试集加 DDR val（阈值）。估时：每个提示一次解码器，IDRiD 每图约 200 个连通域、FGADR 更多，三模型约 12 GPU 时。
+     同信息对照（CPU）：对 HRNet DDR 种子 0 与 IDRiD 种子 0，在 IDRiD、DDR、TJDR_std 三个测试集：
+       python -m bench.e5 control --pred-dir runs/E3a/BS_hrnet_ddr_seed0/IDRiD/prob_test --model HRNet-W48 --train-set DDR --seed 0 --set IDRiD
+       （内部测试用该运行自己的 prob_test；目录名以实际的 E3a 运行名为准，prob_test 已删的集合跳过）
+  5. SAM 3（retiseg-sam3 环境，Python ≥3.12、PyTorch ≥2.7；cluster_env.sh 加一行）：
+       python -m bench.e5 sam3 --set DDR --split val --limit 2   # 先核对 Sam3Processor 的函数名（适配器按 set_text_prompt/set_text/add_text_prompt 顺序找；masks_logits、scores 两个键），不对就改 bench/e5/sam3_text.py 并记到 00
+       python -m bench.e5 sam3 --set DDR --split val ; python -m bench.e5 evaluate --all ; python -m bench.e5 sam3-select
+       按打印把 selected 写进 e5_frozen.yaml 并提交，再跑七个测试集：sam3 --set $s；sam3-compose --set $s；evaluate --all。
+  6. 回传：runs/E5/ 全部（概率图可以不带，带 masks/、prompts/、每个目录的 paper.json、done.json、metrics_test.json、inbox.json），再在服务器或本机跑 collect_runs.py。
 
 七、E1r 剩余（低优先，有空卡再排）
   M2MRF IDRiD 种子 1、2：bench/train_m2mrf.py --config bench/configs/e1r_m2mrf_idrid_seed0.yaml 改 seed 后 --run-dir runs/E1r_m2mrf_idrid_seed{1,2}_bs4_a100（各约 16 GPU 时），打分同种子 0（第 40000 步，不挑检查点）。
@@ -58,7 +84,7 @@
   进度（2026-10-13 23:55）：DDR rep1 已打分，测试 mAUPR 0.427（14 M7）。DDR rep2 在 GPU 2 训练（第 862/1000 轮），同一脚本之后接 IDRiD rep1、rep2。IDRiD 两次还没开始。
 
 九、本机（本机 agent）接下来写的代码，写好后服务器才有任务可排
-  1. E5 推理档 bench/e5/（15 第四、五节）：prompts.py、amg.py、score_rules.py、sam3_text.py、prompted.py，配单元测试；retiseg-sam3 环境写进 cluster_env.sh。
+  1. E5 推理档 bench/e5/（15 第四至六节）——2026-10-13 本机已写：common.py、masks.py、prompts.py、models.py、amg.py、rules.py、prompted.py、control.py、sam3_text.py、score.py、__main__.py，测试 bench/tests/test_e5_infer.py；collect_runs.py 的 collect_e5。服务器步骤见第六节。retiseg-sam3 环境由服务器写进 cluster_env.sh。
   2. 影响因素实验的接线（16 第三节的缩减版）——2026-10-12 本机已写：bench/factor.py、bench/data/factor_input.py、bench/scripts/make_subsets.py、make_factor_jobs.py、launch_factor.py，server_run.sh 的 factor 阶段，e3a 认 BF 运行，collect_runs.py 认 runs/BF_*。服务器步骤见第十一节。原计划：
      E3b：代表模型在 TJDR_std、FGADR 上训练，像素预算与 DDR 相同（不是新库自己的等效 epoch），bs_frozen.yaml 加这两个库的预算条目；FGADR 训练时评测按 leak_exclusions.json 去重。
      E4：训练集合并（DDR+FGADR 抽 383、DDR+FGADR、DDR+Retinal-Lesions）和 Retinal-Lesions 单独；多来源的数据读取、忽略区（Retinal-Lesions 的 127）在训练损失里的处理。
