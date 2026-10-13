@@ -97,3 +97,6 @@
 [submodule "official_code/PMCNet"]
 	path = official_code/PMCNet
 	url = https://github.com/NKUhealong/PMCNet.git
+[submodule "official_code/HRDecoder"]
+	path = official_code/HRDecoder
+	url = https://github.com/CVIU-CSU/HRDecoder
