@@ -181,10 +181,13 @@ MODEL_NOTE = {
     "UPerNet": ("official", "tier 2"),
     "M2MRF": ("official; weights released", "A, E1r, B-std"),
     "HACDR-Net": ("official; no weights", "E1r, B-std"),
-    "WSRFNet": ("model and test code only", "A if weights arrive; C"),
+    "HRDecoder": ("official; weights released", "A, B-std"),
+    "WSRFNet": ("model and test code only; training loop added", "A if weights arrive; B-std"),
     "L-Seg": ("Caffe prototxt and loss layer", "C"),
     "SAA": ("repository empty", "C"),
-    "PMCNet": ("official, TF\\,1.13; no weights", "tier 2"),
+    "PMCNet": ("official Keras code rewritten in PyTorch", "B-std"),
+    "CLC-Net": ("no code; re-implemented from the paper", "C, B-std"),
+    "TC-Net": ("no code; re-implemented from the paper", "C, B-std"),
     "RTNet": ("no code; image + vessel input", "C"),
     "SAM": ("official inference", "zero-shot, oracle prompt"),
     "SAM2": ("official", "zero-shot, oracle prompt"),
@@ -371,7 +374,8 @@ def table_main():
         for model in models:
             i = D.MAIN_MODELS.index(model)
             p = params.loc[model]
-            cells = [model, num(float(p["value"]), "{:.1f}", sim=p["source"] != "measured", strip=False)]
+            label = model + ("$^{\\rm C}$" if model in D.TRACK_C else "")
+            cells = [label, num(float(p["value"]), "{:.1f}", sim=p["source"] != "measured", strip=False)]
             for train in D.TRAIN_MAIN:
                 tab, m, d = cols[train]
                 for c in D.CLASSES:
@@ -398,7 +402,7 @@ def table_main():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item Params in millions. nnU-Net uses its own preprocessing and planning with the same splits, test images and evaluation. H2Former is registered in tier~1 but deferred: at its 960-pixel input one training step exceeds the 40\,GB of the cards used here.
+\item Params in millions. nnU-Net uses its own preprocessing and planning with the same splits, test images and evaluation. $^{{\rm C}}$, no author code: re-implemented from the paper (Track~C); the row shows what the published description yields under this protocol, not the authors' implementation. HRDecoder, M2MRF and HRNet-W48 share the HRNet-W48 backbone. H2Former is registered in tier~1 but deferred: at its 960-pixel input one training step exceeds the 40\,GB of the cards used here.
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}

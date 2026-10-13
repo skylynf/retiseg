@@ -134,7 +134,7 @@ M9b 影响因素实验（E3b、E4、E7、E8、E9；范围按 16 第三节，接�
   E8 训练量：U-Net、M2MRF 在 DDR 训练集的 10%（38 张）、50%（192 张）和细粒度合并（IDRiD + DDR + TJDR 常规）上训练，像素预算不变，所以每张图被看到的次数反比于图数；子集名单冻结（PCG64 种子 20261012，10% 嵌套在 50% 里）。
   E9 损失：U-Net 在 DDR 上换损失项，结构不变：交叉熵；整批 Dice；交叉熵加整批 Dice（主表）；交叉熵加逐图 Dice（原配方的 registered 运行）。
   多来源训练集按图像顺序拼接后由同一个块采样器采样；忽略区（Retinal-Lesions 的不确定标注）在训练目标里是背景，评测照旧去掉（备注 38）。每个运行的 recipe.json 记录来源、子集、预算参照和偏差。独立测试：E3b、E4、E8 的检查点进 E3a（去重按训练来源的 leak_exclusions.json），训练源视野度数未知时（TJDR 常规、FGADR、Retinal-Lesions）超广角只报按视野大小对齐的一档。
-  结果（2026-10-13，种子 0，测试集精确 mAUPR，只有 M2MRF）：E3b 在 TJDR 标准视野上训练、内部测试 0.554；在 FGADR 上训练、内部测试 0.349。FGADR 这一格是完整测试集 553 张。E4 在 DDR 测试集上：DDR+FGADR 抽 383 张 0.336，DDR+FGADR 全集 0.320（对照 B-std M2MRF DDR 种子 0 的 0.380）。已训完、概率图已写出、还没有 metrics_test.json：DDR+Retinal-Lesions，Retinal-Lesions 单独。还在训练、数字不算结果：E7 长边 512，E8 的 10%、50% 和细粒度合并。U-Net 各行还没开始。
+  结果（2026-10-13，种子 0，测试集精确 mAUPR，只有 M2MRF）：E3b 在 TJDR 标准视野上训练、内部测试 0.554；在 FGADR 上训练、内部测试 0.349（撤回：这是完整测试集 553 张，没有去掉同眼的 106 张；2026-10-14 起 collect_runs 拒收排除名单不对齐的报告，这一格在 results.csv 里退回占位，等服务器按 launch_factor 的重评测写出带 106 张排除的 metrics_test.json 后再进表）。E4 在 DDR 测试集上：DDR+FGADR 抽 383 张 0.336，DDR+FGADR 全集 0.320（对照 B-std M2MRF DDR 种子 0 的 0.380）。已训完、概率图已写出、还没有 metrics_test.json：DDR+Retinal-Lesions，Retinal-Lesions 单独。还在训练、数字不算结果：E7 长边 512，E8 的 10%、50% 和细粒度合并。U-Net 各行还没开始。
   待补：其余结果；nnU-Net 的 E3b；以 FGADR 训练的内部测试重算（去掉同眼的 106 张，evaluate --exclude）。服务器上 bench/tests/test_factor.py 六个用例已于 2026-10-12 通过。
 
 M10 测试场景与泄漏审计

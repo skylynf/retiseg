@@ -27,6 +27,9 @@
 #                                               after a recipe revision in bs_frozen.yaml: move the model's
 #                                               superseded runs to *_registered, then its seed 0 (train and score)
 #   bash bench/scripts/server_run.sh e5-smoke   20-step B-std smoke of the five E5 training settings (weights in pretrained/)
+#   RETISEG_GPUS="3 4 5" bash bench/scripts/server_run.sh queue
+#                                               the one queue (bench/configs/queue.yaml, bench/scripts/launch_queue.py):
+#                                               a free card re-reads the file and takes the first pending item
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-seed0
 #                                               E5 seed 0 on both sources, then its test maps (one queue, like b1-queue)
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh extra E2c | E5tf32 | E5enc
@@ -234,6 +237,10 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
       [ -f "bench/data/splits/subsets/$f.json" ] || { echo "bench/data/splits/subsets/$f.json missing; run python bench/scripts/make_subsets.py and commit" >&2; exit 1; }
     done
     background "factor_${2:-all}" "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_factor.py --submit ${2:+--experiment "$2"} ;;
+  queue)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "queue needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"3 4 5\"" >&2; exit 1; }
+    background queue "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_queue.py --submit "${@:2}" ;;
   e3a)
     require_clean
     [ -n "${RETISEG_GPUS:-}" ] || { echo "e3a needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"2 3\"" >&2; exit 1; }

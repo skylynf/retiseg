@@ -118,17 +118,12 @@ def command(job, py_argv=None, score_only=False):
     )
 
 
-def main(argv=None):
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--submit", action="store_true")
-    parser.add_argument("--experiment")
-    parser.add_argument("--only")
-    parser.add_argument("--score-only", action="store_true", help="only runs with best.pt and prob_test: predict again and evaluate")
-    args = parser.parse_args(argv)
-    only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
+def plan(experiment=None, only=(), score_only=False):
+    """The jobs this launcher would start now, in order, each with _score_only set (launch_queue reads this too)."""
+    only = set(only or ())
     chosen = []
     for job in sorted(load_jobs(), key=lambda job: -float(job.get("est_hours", 1.0))):
-        if args.experiment and job["experiment"] != args.experiment:
+        if experiment and job["experiment"] != experiment:
             continue
         if only and job["name"] not in only:
             continue
@@ -144,16 +139,28 @@ def main(argv=None):
             print(f"skip {job['name']}: still running ({running})", flush=True)
             continue
         trained = (_ROOT / job["run_dir"] / "best.pt").is_file() and (_ROOT / job["run_dir"] / "timing.json").is_file()
-        if args.score_only and not trained:
+        if score_only and not trained:
             print(f"skip {job['name']}: not trained yet", flush=True)
             continue
-        if trained and not args.score_only:
+        if trained and not score_only:
             # trained before this launcher evaluated (2026-10-13): score and evaluate instead of retraining
             print(f"queued {job['name']} (trained; predicting from best.pt and evaluating) -> {job['run_dir']}", flush=True)
             chosen.append(dict(job, _score_only=True, est_hours=0.5))
             continue
         print(f"queued {job['name']} est {job.get('est_hours', '?')} h -> {job['run_dir']}", flush=True)
-        chosen.append(dict(job, _score_only=args.score_only))
+        chosen.append(dict(job, _score_only=score_only))
+    return chosen
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--submit", action="store_true")
+    parser.add_argument("--experiment")
+    parser.add_argument("--only")
+    parser.add_argument("--score-only", action="store_true", help="only runs with best.pt and prob_test: predict again and evaluate")
+    args = parser.parse_args(argv)
+    only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
+    chosen = plan(args.experiment, only, args.score_only)
     if not args.submit:
         for job in chosen[:2]:
             print("command " + command(job, py_argv=["python"], score_only=job.get("_score_only", False)), flush=True)

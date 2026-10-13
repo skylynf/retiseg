@@ -724,13 +724,313 @@ jobs:
   config: bench/configs/cells/bs_retfound_ddr_seed2.yaml
   script: bench/train.py
   est_hours: 21
+- name: bs_hrdecoder_idrid_seed0
+  experiment: BS
+  model: HRDecoder
+  dataset: IDRiD
+  seed: 0
+  gpu: 0
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_idrid_seed0.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_hrdecoder_idrid_seed1
+  experiment: BS
+  model: HRDecoder
+  dataset: IDRiD
+  seed: 1
+  gpu: 1
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_idrid_seed1.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_hrdecoder_idrid_seed2
+  experiment: BS
+  model: HRDecoder
+  dataset: IDRiD
+  seed: 2
+  gpu: 2
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_idrid_seed2.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_hrdecoder_ddr_seed0
+  experiment: BS
+  model: HRDecoder
+  dataset: DDR
+  seed: 0
+  gpu: 3
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_ddr_seed0.yaml
+  script: bench/train.py
+  est_hours: 18
+- name: bs_hrdecoder_ddr_seed1
+  experiment: BS
+  model: HRDecoder
+  dataset: DDR
+  seed: 1
+  gpu: 4
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_ddr_seed1.yaml
+  script: bench/train.py
+  est_hours: 18
+- name: bs_hrdecoder_ddr_seed2
+  experiment: BS
+  model: HRDecoder
+  dataset: DDR
+  seed: 2
+  gpu: 5
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_ddr_seed2.yaml
+  script: bench/train.py
+  est_hours: 18
+- name: bs_pmcnet_idrid_seed0
+  experiment: BS
+  model: PMCNet
+  dataset: IDRiD
+  seed: 0
+  gpu: 6
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_idrid_seed0.yaml
+  script: bench/train.py
+  est_hours: 2
+- name: bs_pmcnet_idrid_seed1
+  experiment: BS
+  model: PMCNet
+  dataset: IDRiD
+  seed: 1
+  gpu: 7
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_idrid_seed1.yaml
+  script: bench/train.py
+  est_hours: 2
+- name: bs_pmcnet_idrid_seed2
+  experiment: BS
+  model: PMCNet
+  dataset: IDRiD
+  seed: 2
+  gpu: 0
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_idrid_seed2.yaml
+  script: bench/train.py
+  est_hours: 2
+- name: bs_pmcnet_ddr_seed0
+  experiment: BS
+  model: PMCNet
+  dataset: DDR
+  seed: 0
+  gpu: 1
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_ddr_seed0.yaml
+  script: bench/train.py
+  est_hours: 8
+- name: bs_pmcnet_ddr_seed1
+  experiment: BS
+  model: PMCNet
+  dataset: DDR
+  seed: 1
+  gpu: 2
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_ddr_seed1.yaml
+  script: bench/train.py
+  est_hours: 8
+- name: bs_pmcnet_ddr_seed2
+  experiment: BS
+  model: PMCNet
+  dataset: DDR
+  seed: 2
+  gpu: 3
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_ddr_seed2.yaml
+  script: bench/train.py
+  est_hours: 8
+- name: bs_wsrfnet_idrid_seed0
+  experiment: BS
+  model: WSRFNet
+  dataset: IDRiD
+  seed: 0
+  gpu: 4
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_idrid_seed0.yaml
+  script: bench/train.py
+  est_hours: 3
+- name: bs_wsrfnet_idrid_seed1
+  experiment: BS
+  model: WSRFNet
+  dataset: IDRiD
+  seed: 1
+  gpu: 5
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_idrid_seed1.yaml
+  script: bench/train.py
+  est_hours: 3
+- name: bs_wsrfnet_idrid_seed2
+  experiment: BS
+  model: WSRFNet
+  dataset: IDRiD
+  seed: 2
+  gpu: 6
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_idrid_seed2.yaml
+  script: bench/train.py
+  est_hours: 3
+- name: bs_wsrfnet_ddr_seed0
+  experiment: BS
+  model: WSRFNet
+  dataset: DDR
+  seed: 0
+  gpu: 7
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_ddr_seed0.yaml
+  script: bench/train.py
+  est_hours: 12
+- name: bs_wsrfnet_ddr_seed1
+  experiment: BS
+  model: WSRFNet
+  dataset: DDR
+  seed: 1
+  gpu: 0
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_ddr_seed1.yaml
+  script: bench/train.py
+  est_hours: 12
+- name: bs_wsrfnet_ddr_seed2
+  experiment: BS
+  model: WSRFNet
+  dataset: DDR
+  seed: 2
+  gpu: 1
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_ddr_seed2.yaml
+  script: bench/train.py
+  est_hours: 12
+- name: bs_clcnet_idrid_seed0
+  experiment: BS
+  model: CLC-Net
+  dataset: IDRiD
+  seed: 0
+  gpu: 2
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_idrid_seed0.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_clcnet_idrid_seed1
+  experiment: BS
+  model: CLC-Net
+  dataset: IDRiD
+  seed: 1
+  gpu: 3
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_idrid_seed1.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_clcnet_idrid_seed2
+  experiment: BS
+  model: CLC-Net
+  dataset: IDRiD
+  seed: 2
+  gpu: 4
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_idrid_seed2.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_clcnet_ddr_seed0
+  experiment: BS
+  model: CLC-Net
+  dataset: DDR
+  seed: 0
+  gpu: 5
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_ddr_seed0.yaml
+  script: bench/train.py
+  est_hours: 20
+- name: bs_clcnet_ddr_seed1
+  experiment: BS
+  model: CLC-Net
+  dataset: DDR
+  seed: 1
+  gpu: 6
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_ddr_seed1.yaml
+  script: bench/train.py
+  est_hours: 20
+- name: bs_clcnet_ddr_seed2
+  experiment: BS
+  model: CLC-Net
+  dataset: DDR
+  seed: 2
+  gpu: 7
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_ddr_seed2.yaml
+  script: bench/train.py
+  est_hours: 20
+- name: bs_tcnet_idrid_seed0
+  experiment: BS
+  model: TC-Net
+  dataset: IDRiD
+  seed: 0
+  gpu: 0
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_idrid_seed0.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_tcnet_idrid_seed1
+  experiment: BS
+  model: TC-Net
+  dataset: IDRiD
+  seed: 1
+  gpu: 1
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_idrid_seed1.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_tcnet_idrid_seed2
+  experiment: BS
+  model: TC-Net
+  dataset: IDRiD
+  seed: 2
+  gpu: 2
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_idrid_seed2.yaml
+  script: bench/train.py
+  est_hours: 5
+- name: bs_tcnet_ddr_seed0
+  experiment: BS
+  model: TC-Net
+  dataset: DDR
+  seed: 0
+  gpu: 3
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_ddr_seed0.yaml
+  script: bench/train.py
+  est_hours: 20
+- name: bs_tcnet_ddr_seed1
+  experiment: BS
+  model: TC-Net
+  dataset: DDR
+  seed: 1
+  gpu: 4
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_ddr_seed1.yaml
+  script: bench/train.py
+  est_hours: 20
+- name: bs_tcnet_ddr_seed2
+  experiment: BS
+  model: TC-Net
+  dataset: DDR
+  seed: 2
+  gpu: 5
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_ddr_seed2.yaml
+  script: bench/train.py
+  est_hours: 20
 smoke:
 - name: smoke_bs_unet_idrid_seed0
   experiment: BS
   model: U-Net
   dataset: IDRiD
   seed: 0
-  gpu: 0
+  gpu: 6
   env: retiseg
   config: bench/configs/cells/bs_unet_idrid_seed0.yaml
   script: bench/train.py
@@ -740,7 +1040,7 @@ smoke:
   model: U-Net
   dataset: DDR
   seed: 0
-  gpu: 1
+  gpu: 7
   env: retiseg
   config: bench/configs/cells/bs_unet_ddr_seed0.yaml
   script: bench/train.py
@@ -750,7 +1050,7 @@ smoke:
   model: DeepLabv3
   dataset: IDRiD
   seed: 0
-  gpu: 2
+  gpu: 0
   env: retiseg
   config: bench/configs/cells/bs_deeplabv3_idrid_seed0.yaml
   script: bench/train.py
@@ -760,7 +1060,7 @@ smoke:
   model: DeepLabv3
   dataset: DDR
   seed: 0
-  gpu: 3
+  gpu: 1
   env: retiseg
   config: bench/configs/cells/bs_deeplabv3_ddr_seed0.yaml
   script: bench/train.py
@@ -770,7 +1070,7 @@ smoke:
   model: HRNet
   dataset: IDRiD
   seed: 0
-  gpu: 4
+  gpu: 2
   env: retiseg
   config: bench/configs/cells/bs_hrnet_idrid_seed0.yaml
   script: bench/train.py
@@ -780,7 +1080,7 @@ smoke:
   model: HRNet
   dataset: DDR
   seed: 0
-  gpu: 5
+  gpu: 3
   env: retiseg
   config: bench/configs/cells/bs_hrnet_ddr_seed0.yaml
   script: bench/train.py
@@ -790,7 +1090,7 @@ smoke:
   model: Swin-Unet
   dataset: IDRiD
   seed: 0
-  gpu: 6
+  gpu: 4
   env: retiseg
   config: bench/configs/cells/bs_swin_unet_idrid_seed0.yaml
   script: bench/train.py
@@ -800,7 +1100,7 @@ smoke:
   model: Swin-Unet
   dataset: DDR
   seed: 0
-  gpu: 7
+  gpu: 5
   env: retiseg
   config: bench/configs/cells/bs_swin_unet_ddr_seed0.yaml
   script: bench/train.py
@@ -810,7 +1110,7 @@ smoke:
   model: FCT
   dataset: IDRiD
   seed: 0
-  gpu: 0
+  gpu: 6
   env: retiseg
   config: bench/configs/cells/bs_fct_idrid_seed0.yaml
   script: bench/train.py
@@ -820,7 +1120,7 @@ smoke:
   model: FCT
   dataset: DDR
   seed: 0
-  gpu: 1
+  gpu: 7
   env: retiseg
   config: bench/configs/cells/bs_fct_ddr_seed0.yaml
   script: bench/train.py
@@ -830,7 +1130,7 @@ smoke:
   model: M2MRF
   dataset: IDRiD
   seed: 0
-  gpu: 2
+  gpu: 0
   env: retiseg
   config: bench/configs/cells/bs_m2mrf_idrid_seed0.yaml
   script: bench/scripts/train_m2mrf_b1.py
@@ -840,7 +1140,7 @@ smoke:
   model: M2MRF
   dataset: DDR
   seed: 0
-  gpu: 3
+  gpu: 1
   env: retiseg
   config: bench/configs/cells/bs_m2mrf_ddr_seed0.yaml
   script: bench/scripts/train_m2mrf_b1.py
@@ -850,7 +1150,7 @@ smoke:
   model: HACDR-Net
   dataset: IDRiD
   seed: 0
-  gpu: 4
+  gpu: 2
   env: retiseg-hacdr
   config: bench/configs/cells/bs_hacdr_idrid_seed0.yaml
   script: bench/scripts/train_hacdr_b1.py
@@ -860,7 +1160,7 @@ smoke:
   model: HACDR-Net
   dataset: DDR
   seed: 0
-  gpu: 5
+  gpu: 3
   env: retiseg-hacdr
   config: bench/configs/cells/bs_hacdr_ddr_seed0.yaml
   script: bench/scripts/train_hacdr_b1.py
@@ -870,7 +1170,7 @@ smoke:
   model: SAMed
   dataset: IDRiD
   seed: 0
-  gpu: 6
+  gpu: 4
   env: retiseg
   config: bench/configs/cells/bs_samed_idrid_seed0.yaml
   script: bench/train.py
@@ -880,7 +1180,7 @@ smoke:
   model: SAMed
   dataset: DDR
   seed: 0
-  gpu: 7
+  gpu: 5
   env: retiseg
   config: bench/configs/cells/bs_samed_ddr_seed0.yaml
   script: bench/train.py
@@ -890,7 +1190,7 @@ smoke:
   model: SAM-Adapter
   dataset: IDRiD
   seed: 0
-  gpu: 0
+  gpu: 6
   env: retiseg
   config: bench/configs/cells/bs_sam_adapter_idrid_seed0.yaml
   script: bench/train.py
@@ -900,7 +1200,7 @@ smoke:
   model: SAM-Adapter
   dataset: DDR
   seed: 0
-  gpu: 1
+  gpu: 7
   env: retiseg
   config: bench/configs/cells/bs_sam_adapter_ddr_seed0.yaml
   script: bench/train.py
@@ -910,7 +1210,7 @@ smoke:
   model: SAM2-UNet
   dataset: IDRiD
   seed: 0
-  gpu: 2
+  gpu: 0
   env: retiseg
   config: bench/configs/cells/bs_sam2_unet_idrid_seed0.yaml
   script: bench/train.py
@@ -920,7 +1220,7 @@ smoke:
   model: SAM2-UNet
   dataset: DDR
   seed: 0
-  gpu: 3
+  gpu: 1
   env: retiseg
   config: bench/configs/cells/bs_sam2_unet_ddr_seed0.yaml
   script: bench/train.py
@@ -930,7 +1230,7 @@ smoke:
   model: MedSAM
   dataset: IDRiD
   seed: 0
-  gpu: 4
+  gpu: 2
   env: retiseg
   config: bench/configs/cells/bs_medsam_idrid_seed0.yaml
   script: bench/train.py
@@ -940,7 +1240,7 @@ smoke:
   model: MedSAM
   dataset: DDR
   seed: 0
-  gpu: 5
+  gpu: 3
   env: retiseg
   config: bench/configs/cells/bs_medsam_ddr_seed0.yaml
   script: bench/train.py
@@ -950,7 +1250,7 @@ smoke:
   model: RETFound
   dataset: IDRiD
   seed: 0
-  gpu: 6
+  gpu: 4
   env: retiseg
   config: bench/configs/cells/bs_retfound_idrid_seed0.yaml
   script: bench/train.py
@@ -960,8 +1260,108 @@ smoke:
   model: RETFound
   dataset: DDR
   seed: 0
-  gpu: 7
+  gpu: 5
   env: retiseg
   config: bench/configs/cells/bs_retfound_ddr_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_hrdecoder_idrid_seed0
+  experiment: BS
+  model: HRDecoder
+  dataset: IDRiD
+  seed: 0
+  gpu: 6
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_idrid_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_hrdecoder_ddr_seed0
+  experiment: BS
+  model: HRDecoder
+  dataset: DDR
+  seed: 0
+  gpu: 7
+  env: retiseg-hacdr
+  config: bench/configs/cells/bs_hrdecoder_ddr_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_pmcnet_idrid_seed0
+  experiment: BS
+  model: PMCNet
+  dataset: IDRiD
+  seed: 0
+  gpu: 0
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_idrid_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_pmcnet_ddr_seed0
+  experiment: BS
+  model: PMCNet
+  dataset: DDR
+  seed: 0
+  gpu: 1
+  env: retiseg
+  config: bench/configs/cells/bs_pmcnet_ddr_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_wsrfnet_idrid_seed0
+  experiment: BS
+  model: WSRFNet
+  dataset: IDRiD
+  seed: 0
+  gpu: 2
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_idrid_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_wsrfnet_ddr_seed0
+  experiment: BS
+  model: WSRFNet
+  dataset: DDR
+  seed: 0
+  gpu: 3
+  env: retiseg
+  config: bench/configs/cells/bs_wsrfnet_ddr_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_clcnet_idrid_seed0
+  experiment: BS
+  model: CLC-Net
+  dataset: IDRiD
+  seed: 0
+  gpu: 4
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_idrid_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_clcnet_ddr_seed0
+  experiment: BS
+  model: CLC-Net
+  dataset: DDR
+  seed: 0
+  gpu: 5
+  env: retiseg
+  config: bench/configs/cells/bs_clcnet_ddr_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_tcnet_idrid_seed0
+  experiment: BS
+  model: TC-Net
+  dataset: IDRiD
+  seed: 0
+  gpu: 6
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_idrid_seed0.yaml
+  script: bench/train.py
+  max_steps: 20
+- name: smoke_bs_tcnet_ddr_seed0
+  experiment: BS
+  model: TC-Net
+  dataset: DDR
+  seed: 0
+  gpu: 7
+  env: retiseg
+  config: bench/configs/cells/bs_tcnet_ddr_seed0.yaml
   script: bench/train.py
   max_steps: 20

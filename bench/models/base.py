@@ -52,6 +52,11 @@ class ModelCard:
     # Windows per forward pass in sliding-window validation and prediction (bench.infer).
     # It changes memory only; SAM's ViT-H holds 16 x 4096^2 attention maps per 1024 window.
     window_batch: int = 8
+    # The network predicts only the centre of its input: logits are (H - 2m, W - 2m) for an (H, W) input
+    # (CLC-Net: the local 256 window inside its 512 context). The trainer scores the centre of the target,
+    # the pixel budget counts the supervised centre, and sliding inference pads the canvas by m and steps
+    # over the valid centres (bench.infer.canvas_logits). 0 for every other model.
+    output_margin: int = 0
 
     def __post_init__(self):
         if self.family not in FAMILIES:
@@ -77,6 +82,12 @@ class ModelCard:
             raise ValueError("softmax output needs class_index with the MA, HE, EX, SE channel ids")
         if not isinstance(self.window_batch, int) or isinstance(self.window_batch, bool) or self.window_batch < 1:
             raise ValueError("window_batch must be a positive integer")
+        if not isinstance(self.output_margin, int) or isinstance(self.output_margin, bool) or self.output_margin < 0:
+            raise ValueError("output_margin must be a non-negative integer")
+        if self.output_margin and self.forward_size is None:
+            raise ValueError("output_margin needs forward_size: the window the margin is taken from")
+        if self.output_margin and any(2 * self.output_margin >= side for side in self.forward_size):
+            raise ValueError("output_margin leaves no supervised centre in forward_size")
 
 
 @dataclass

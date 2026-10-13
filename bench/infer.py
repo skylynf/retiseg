@@ -31,14 +31,18 @@ def canvas_logits(model, tensor, card, window=None, overlap=0.5, batch=8):
     win_h, win_w = int(window[0]), int(window[1])
     if not 0.0 <= float(overlap) < 1.0:
         raise ValueError(f"overlap must be in [0, 1), got {overlap}")
-    full_h, full_w = max(height, win_h), max(width, win_w)
-    padded = torch.nn.functional.pad(tensor, (0, full_w - width, 0, full_h - height), value=0.0)
-    stride_h = max(1, int(round(win_h * (1.0 - float(overlap)))))
-    stride_w = max(1, int(round(win_w * (1.0 - float(overlap)))))
+    margin = int(getattr(card, "output_margin", 0) or 0)
+    # A network with an output margin predicts the (win - 2m) centre of each window: the canvas is padded
+    # by m on every side, the windows step over the centres, and each centre lands on the unpadded canvas.
+    out_h, out_w = win_h - 2 * margin, win_w - 2 * margin
+    full_h, full_w = max(height, out_h), max(width, out_w)
+    padded = torch.nn.functional.pad(tensor, (margin, full_w - width + margin, margin, full_h - height + margin), value=0.0)
+    stride_h = max(1, int(round(out_h * (1.0 - float(overlap)))))
+    stride_w = max(1, int(round(out_w * (1.0 - float(overlap)))))
     boxes = [
         (top, left)
-        for top in window_starts(full_h, win_h, stride_h)
-        for left in window_starts(full_w, win_w, stride_w)
+        for top in window_starts(full_h, out_h, stride_h)
+        for left in window_starts(full_w, out_w, stride_w)
     ]
     total = None
     count = torch.zeros((1, full_h, full_w), device=tensor.device, dtype=torch.float32)
@@ -46,9 +50,11 @@ def canvas_logits(model, tensor, card, window=None, overlap=0.5, batch=8):
         chunk = boxes[start : start + int(batch)]
         crops = torch.stack([padded[:, top : top + win_h, left : left + win_w] for top, left in chunk])
         out = model(crops).float()
+        if out.shape[-2:] != (out_h, out_w):
+            raise RuntimeError(f"{card.name}: window {win_h}x{win_w} with margin {margin} must give {out_h}x{out_w} logits, got {tuple(out.shape[-2:])}")
         if total is None:
             total = torch.zeros((out.shape[1], full_h, full_w), device=tensor.device, dtype=torch.float32)
         for (top, left), logits in zip(chunk, out):
-            total[:, top : top + win_h, left : left + win_w] += logits
-            count[:, top : top + win_h, left : left + win_w] += 1.0
+            total[:, top : top + out_h, left : left + out_w] += logits
+            count[:, top : top + out_h, left : left + out_w] += 1.0
     return (total / count)[:, :height, :width]

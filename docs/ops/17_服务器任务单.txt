@@ -8,10 +8,12 @@
   collect_runs.py 新认识的目录：NN_<default|resencm>_<库>_fold0[_repN]、E1r_*_bs4*、E2c_*（要有 timing.json 才收）、*_registered（作补充表，U-Net DDR 种子 0 另作 E9 的“逐图 Dice”一行）。
   2026-10-13 23:55 服务器又跑了一次 collect_runs.py（115 份报告写入 data/results.csv）。没有跑 make：E3a 和影响因素都还没收齐，图仍是 10-12 那次 make 的结果，等工作站收快照后再 make。
 
-一、回传格式（每次都这样）
-  同一种打包：runs/ 下的 json、jsonl、yaml、log、txt、tsv、pkl 和小于 20MB 的 npz，加 summary/ 两张表和 snapshot/。不要权重和概率图。
-  新增要带上的：runs/E3a/<来源>/<测试集>[__变体]/metrics.json 和 done.json；runs/E5/ 下 a、b 档的指标 json；docs/ops/00_进度.txt 全文；bench/configs 若有重生成的任务表。
-  本机收到后跑：python docs/paper/retiseg_paper/paper/scripts/collect_runs.py，再 make -C docs/paper/retiseg_paper/paper。
+一、回传格式（2026-10-14 起用仓库里的脚本，每次都一样）
+  python bench/scripts/pack_handoff.py [--since runs/handoff_manifest_<上次日期>.tsv]
+  打进包的：runs/ 下的 json、jsonl、yaml、log、txt、tsv、md 和 done.json 等标记（单个 ≤8 MB）；summary/scored_metrics.tsv（每个指标文件一行）、summary/new_since.tsv（给了 --since 时）、summary/unaligned.tsv、manifest.tsv、snapshot/（git、nvidia-smi、日期）、docs/ops/00_进度.txt。
+  不进包的：npz、pt、pth、png、prob_*/、masks/、nnunet 的 raw/preprocessed/pkl。
+  排除名单没对齐的指标文件（excluded_ids 与 leak_exclusions.json 要求的不一致）只列在 unaligned.tsv，不进包；本机的 collect_runs.py 也拒收这类报告。
+  本机收到后：解入 runs/，python docs/paper/retiseg_paper/paper/scripts/collect_runs.py，make -C docs/paper/retiseg_paper/paper；14、13、CHECKPOINT 由本机改。
 
 二、现在就做（不等新卡）
   1. HACDR-Net 种子 1、2 补打分（两库各两个，只推理，约 1 小时）：用 10-11 补打种子 0 时的同一条打分命令（launch_b1.py 的 score 项，runs/BS_hacdr_{idrid,ddr}_seed{1,2}）。打完后主表 HACDR-Net 也有三个种子。完成 2026-10-12（DDR 种子 1、2 于 14:54、15:27；三种子数字在 14 M7）。
@@ -115,6 +117,25 @@
   6. 权重：SAM 3 和 RETFound 两份已于 2026-10-13 下到服务器，sha256 在 e5_frozen.yaml。仍然缺 MedSAM 和公开 DINOv2；E5 还没开。公开权重里已在盘上的模型可以先跑 python bench/scripts/cost_audit.py --models U-Net DeepLabv3 HRNet Swin-Unet FCT M2MRF（第九节第 4 条）。
   7. 回传：下一次打包时带上 runs/BF_*、runs/E3a/、runs/E2c_*、runs/NN_*_rep*、runs/BS_unet_*（新三种子）。
 
+十五、专用模型扩充（2026-10-14，设计在 docs/paper/18；pull 到含本节的提交后执行）
+  前提（用户做）：official_code/HRDecoder 子模块已加并 git submodule update --init；pretrained/ 里有 hrdecoder_idrid.pth、hrdecoder_ddr.pth（E1 用，轨 B 不需要）；reproductions/ 两个目录在仓库里（已在）。
+  1. 环境：retiseg 里装 timm、efficientnet_pytorch、safetensors（pip，版本随意，写进 cluster_env.sh）；retiseg-hacdr 里核对 official_code/HRDecoder/mmseg 能导入：
+       python -c "import sys; sys.path.insert(0,'official_code/HRDecoder'); import mmseg; print(mmseg.__version__)"
+     若 mmseg/__init__.py 的 mmcv 版本断言不过（它要 mmcv 1.7），把断言的上下界记到 00，再决定是改环境还是加 mmcv 1.7.1 的新环境 retiseg-hrdec（_BINDING 里的环境名随之改）。
+  2. 测试：pytest bench/tests/test_fundus_expansion.py（含 PMCNet 前向、WSRFNet 循环损失、CLC-Net 与 TC-Net 的包装器约定、输出边距的滑窗）。失败的先修再冒烟。
+  3. 冒烟：python bench/scripts/launch_b1.py --jobs bench/configs/bs_jobs.yaml --submit --smoke --only HRDecoder,PMCNet,WSRFNet,CLC-Net,TC-Net（20 步 + 一次验证）。记每步耗时、显存、实际步数到 00；改 make_bs_jobs.py 的 EST_HOURS 并重生成任务表提交。CLC-Net 显存放不下批 16 时按 B-std 规则累积（cell 里 batch_size），记偏差。
+  4. 队列：queue.yaml 的 fundus_seed0 阶段（优先级 25）把 enabled 改 true 提交，launch_queue 下一次空卡就接。
+  5. E1（HRDecoder 作者权重）：权重到位后由本机写 e3a_frozen.yaml 的 author_weights.HRDecoder 条目（只增）和推理入口，再排。
+
+十四、协作规则（2026-10-14，采纳服务器的方案；从此以后以本节为准）
+  1. 服务器只执行仓库 HEAD 里的本文件；聊天里的话与 HEAD 不一致时停下，等下一次 pull。
+  2. 一个启动器、一份队列文件：bench/scripts/launch_queue.py 读 bench/configs/queue.yaml，优先级写在文件里，每次有空卡就重读；改顺序只改文件并提交，不杀进程。正在跑的旧启动器（launch_e3a、launch_factor、nnunet 脚本）让它们自然结束，新启动器会跳过它们正在跑的目录（console.log 的 == start / == exit）。本文件不再写"某个已启动的进程会自动做新任务"。
+     RETISEG_GPUS="<卡>" bash bench/scripts/server_run.sh queue      # 或 python bench/scripts/launch_queue.py 只打印计划
+  3. 评测在训练结束时直接带冻结的排除名单写出 metrics_test.json（launch_factor.evaluate_argv、nnunet_run.sh、bench.e3a 都已如此）。excluded_ids 没对齐的指标：不写进 14，pack_handoff.py 不打包，collect_runs.py 拒收。
+  4. 服务器只在 docs/ops/00_进度.txt 第三节追加短状态（提交号、卡、目录、刚落盘的指标文件名和 mAUPR）。14、13、CHECKPOINT、论文由本机在 collect_runs 之后改。
+  5. CPU 步骤都是可单条重跑的命令（bench.e5 的子命令、launch_factor.py --score-only 打印的 evaluate、nnunet_bridge.py 的 convert/splits/info），不再写总脚本。
+  6. 本机写回后由用户提交推送；服务器 pull 到的提交号写进 00 的状态行。
+
 十三、2026-10-14 更新（依据 04:51 的回传包；pull 本次提交后执行；本节覆盖第十节的顺序）
   收到的包已接入论文（124 份报告，results.csv 和 make 已更新；R4 第一段按已测的三个独立集写了实数）。本次提交改了什么、服务器要做什么：
   1. 现在就做，CPU（不占卡）：
@@ -128,7 +149,7 @@
         nnUNetv2_plan_and_preprocess -d 603 604 -c 2d --verify_dataset_integrity
         python bench/scripts/nnunet_bridge.py splits --data dataset/prepared/TJDR_std --dataset-id 603 ；FGADR 同理（604）
         核对 python bench/scripts/nnunet_bridge.py info --train FGADR 打印的 Dataset604_<名> 与 raw 目录一致（名字取 meta.json 的 name）。
-  2. 卡的顺序（空出一张就按这个顺序接；不杀正在跑的）：
+  2. 卡的顺序——已写成 bench/configs/queue.yaml（第十四节第 2 条），空卡一律由 launch_queue 按文件接；下面是文件里的顺序和每项的前提：
      a. E3a 仍第一：GPU 3 的旧启动器跑完后（或任一卡空出时）RETISEG_GPUS="3 <空卡>" bash bench/scripts/server_run.sh e3a --drop-maps FGADR,Retinal-Lesions，新启动器会把 nnU-Net rep、影响因素的新检查点一起纳入。
      b. E5 训练档种子 0（16 的排期 10-14 到 10-20）：权重除 MedSAM 外都在，先 E5_MODELS=SAMed,SAM-Adapter,SAM2-UNet,RETFound bash bench/scripts/server_run.sh e5-smoke（server_run.sh 这次允许用 E5_MODELS 覆盖模型表），冒烟过了就 RETISEG_GPUS="<两张卡>" E5_MODELS=... server_run.sh e5-seed0（DDR 长任务先排；估时 15 第九节）。冒烟记录每步耗时、显存和实际步数到 00，est_hours 按实测改 make_bs_jobs.py。MedSAM 权重到了再单独补（E5_MODELS=MedSAM）。
      c. 影响因素剩余（旧 launch_factor 在接，不用管）：SAM2-UNet、RETFound 的 E3b/E4/E7 cell 现在有权重了，旧启动器会自动排到；它们和 E5 种子 0 抢卡时以 E5 种子 0 优先（第十节"不砍"里两者都在，E5 的 DDR 任务更长、先开）。

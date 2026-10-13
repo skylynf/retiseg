@@ -3,8 +3,9 @@
 The map is explicit. Official repositories are not imported or scanned; the
 E5 wrappers import theirs only when a model is built.
 Registered names are U-Net, DeepLabv3, Swin-Unet, FCT, HRNet, M2MRF and HACDR-Net,
-and the E5 training settings SAMed, SAM-Adapter, SAM2-UNet, MedSAM and RETFound
-(design/15). Other names in the yaml fail until their wrapper is added here.
+the fundus-specific expansion HRDecoder, PMCNet, WSRFNet, CLC-Net and TC-Net
+(docs/paper/18), and the E5 training settings SAMed, SAM-Adapter, SAM2-UNet,
+MedSAM and RETFound (design/15). Other names in the yaml fail until their wrapper is added here.
 EXPERIMENT_ONLY holds the encoders of the E5 encoder comparison: experimental
 conditions, not registered methods, so they are not in models.yaml.
 ``build_model`` calls the class with no arguments, so a wrapper's
@@ -16,12 +17,17 @@ from pathlib import Path
 
 import yaml
 
+from bench.models.clcnet import CLCNet
 from bench.models.deeplabv3plus import DeepLabV3Plus
 from bench.models.fct import FCT
 from bench.models.hacdr import HACDRNet
+from bench.models.hrdecoder import HRDecoder
 from bench.models.hrnet import HRNet
 from bench.models.m2mrf import M2MRF
 from bench.models.medsam import MedSAM
+from bench.models.pmcnet import PMCNet
+from bench.models.tcnet import TCNet
+from bench.models.wsrfnet import WSRFNet
 from bench.models.sam2_unet import SAM2UNet
 from bench.models.sam_adapter import SAMAdapter
 from bench.models.samed import SAMed
@@ -40,6 +46,12 @@ WRAPPERS = {
     # the backward recomputation in bench/models/h2former.py.
     "M2MRF": M2MRF,
     "HACDR-Net": HACDRNet,
+    # fundus-specific expansion (docs/paper/18): three more author codes and two paper re-implementations
+    "HRDecoder": HRDecoder,
+    "PMCNet": PMCNet,
+    "WSRFNet": WSRFNet,
+    "CLC-Net": CLCNet,
+    "TC-Net": TCNet,
     # E5 training settings (design/15 sections 7-8): B-std main table, seed 0 first.
     "SAMed": SAMed,
     "SAM-Adapter": SAMAdapter,

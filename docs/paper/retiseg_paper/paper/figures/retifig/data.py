@@ -46,6 +46,11 @@ FAMILY_OF = {
     "nnU-Net ResEnc-M": "auto",
     "M2MRF": "fundus",
     "HACDR-Net": "fundus",
+    "HRDecoder": "fundus",
+    "PMCNet": "fundus",
+    "WSRFNet": "fundus",
+    "CLC-Net": "fundus",
+    "TC-Net": "fundus",
     "SAMed": "foundation",
     "SAM-Adapter": "foundation",
     "SAM2-UNet": "foundation",
@@ -53,6 +58,8 @@ FAMILY_OF = {
     "RETFound + UPerNet": "foundation",
 }
 MAIN_MODELS = list(FAMILY_OF)
+TRACK_C = ["CLC-Net", "TC-Net"]   # re-implemented from the paper (docs/paper/18); marked in the tables
+SAME_BACKBONE = ["HRNet-W48", "M2MRF", "HRDecoder"]   # HRNet-W48 backbone: the backbone-controlled comparison
 MAIN_VARIANTS = ["bstd", "peft", "encoder_decoder"]
 REPRESENTATIVE = ["U-Net", "nnU-Net", "M2MRF", "SAM2-UNet", "RETFound + UPerNet"]
 

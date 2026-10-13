@@ -124,7 +124,7 @@ def _run_epoch(
             break
         images = images.to(device, non_blocking=True)
         targets = targets.to(device, non_blocking=True)
-        raw = loss_fn(model(images), targets)
+        raw = loss_fn(model(images), supervised_target(targets, model))
         count = int(images.shape[0])
         loss_sum += float(raw.detach()) * count
         seen += count
@@ -145,6 +145,14 @@ def _run_epoch(
     return loss_sum / seen, step, lr
 
 
+def supervised_target(targets, model):
+    """The part of the target the network predicts: the centre when card.output_margin > 0 (bench/models/base.py)."""
+    margin = int(getattr(getattr(model, "card", None), "output_margin", 0) or 0)
+    if margin == 0 or getattr(model, "loss_takes_full_target", False):
+        return targets   # a wrapper whose loss derives the centre itself (CLC-Net's contextual terms) gets everything
+    return targets[..., margin:-margin, margin:-margin]
+
+
 @torch.no_grad()
 def _validate(model, loader, loss_fn, device):
     model.eval()
@@ -153,7 +161,7 @@ def _validate(model, loader, loss_fn, device):
     for images, targets in loader:
         images = images.to(device, non_blocking=True)
         targets = targets.to(device, non_blocking=True)
-        loss_sum += float(loss_fn(model(images), targets)) * images.shape[0]
+        loss_sum += float(loss_fn(model(images), supervised_target(targets, model))) * images.shape[0]
         seen += int(images.shape[0])
     if seen == 0:
         raise RuntimeError("the validation loader produced no images")

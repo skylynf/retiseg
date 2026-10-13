@@ -35,6 +35,12 @@ EST_HOURS = {
     "H2Former": (5, 20),
     "M2MRF": (3.5, 12.5),
     "HACDR-Net": (6, 24),
+    # fundus-specific expansion (docs/paper/18 section 3); replace with the smoke timings
+    "HRDecoder": (5, 18),
+    "PMCNet": (2, 8),
+    "WSRFNet": (3, 12),
+    "CLC-Net": (5, 20),
+    "TC-Net": (5, 20),
 }
 # Budget probe: seed 0 at twice the frozen amount, train and validation only.
 # Not in bs_jobs.yaml; bench/scripts/server_run.sh probe runs them.

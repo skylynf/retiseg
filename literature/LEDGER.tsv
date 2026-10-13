@@ -85,3 +85,4 @@ B-HED-2015	基线-通用分割	batch2	基线	不单独当病灶模型	papers/05_
 B-UNETPP-2018	基线-通用分割	batch2	基线	可选基线	papers/05_general_baselines/Zhou2018_UNet++.pdf	meta/05_general_baselines/Zhou2018_UNet++.txt	UNet++
 B-SEGNET-2017	基线-通用分割	batch2	基线	第一轮不必跑	papers/05_general_baselines/Badrinarayanan2017_SegNet.pdf	meta/05_general_baselines/Badrinarayanan2017_SegNet.txt	SegNet
 O-DRAC-2023	OCTA独立任务	batch1	否，单独成章	独立任务	papers/06_octa/Qian2023_DRAC.pdf	meta/06_octa/Qian2023_DRAC.txt	DRAC challenge with ultra-wide OCTA
+M-HRDEC-2024	主比较-CNN多尺度	addendum-20261014	是	主比较集，优先重训（冻结后补充，18）	papers/03_dr_methods/cnn_multiscale/Ding2024_HRDecoder.pdf	meta/03_dr_methods/cnn_multiscale/Ding2024_HRDecoder.txt	HRDecoder: High-Resolution Decoder Network for Fundus Image Lesion Segmentation

@@ -1,0 +1,26 @@
+文献ID: M-HRDEC-2024
+PDF: literature/papers/03_dr_methods/cnn_multiscale/Ding2024_HRDecoder.pdf（待下载：arXiv 2411.03976 / MICCAI 2024 论文 4020）
+批次: addendum-20261014（检索冻结后的定向补检，见 08 第六节）
+角色: 专用多病灶
+主任务纳入: 是
+归类: 主比较-CNN多尺度
+身份核对: 待核（PDF 到位后）
+题名: HRDecoder: High-Resolution Decoder Network for Fundus Image Lesion Segmentation
+作者: Ziyuan Ding, Yixiong Liang, Shichao Kan, Qing Liu
+年份: 2024
+出处: MICCAI 2024
+标识: arXiv:2411.03976；papers.miccai.org/miccai-2024/390-Paper4020.html
+任务: 四类同时分割
+成像: 彩色眼底
+病灶: EX, HE, SE, MA
+数据: IDRiD, DDR
+标注粒度: 细像素
+模型族: HRNet-W48 骨干加高分辨率解码（低分辨率骨干特征裁块后在高分辨率解码并融合）
+额外输入: 仅图像
+报告指标: mAUPR、mIoU（README：IDRiD 71.34 / 52.20，DDR 49.24 / 32.24）
+代码: https://github.com/CVIU-CSU/HRDecoder（mmseg 0.16 / mmcv 1.7.1 / torch 2.0.1；配置 configs/lesion/*；2026-10-14 核对远程仓库）
+权重: README 给出 Google Drive 链接（IDRiD 1tRBNqpbFwnNBGQBMw8UYL8sjJzWlI3O9，DDR 1CBTHOtxToHQ13H4SZIUBZTwX0zwmIduh）
+重训轨: 主比较集，优先重训；轨 A 作者权重，轨 B B-std（docs/paper/18）
+摘要: 把解码放到高分辨率上以保住细小病灶，同时避免多尺度融合方法的显存和重复前向开销。
+
+管理备注: 2026-09-30 冻结的检索没有命中这篇；2026-10-14 按"有官方代码的方法"做定向补检时加入，作为协议偏差写进方法。L1 抽取待 PDF 到位。

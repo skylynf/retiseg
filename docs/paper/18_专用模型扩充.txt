@@ -1,0 +1,79 @@
+专用模型扩充
+制定日期 2026-10-14。起因：主表里"眼底专用"一族只有 M2MRF 和 HACDR-Net，而 M2MRF 的骨干就是主表里的通用 HRNet-W48，所以 R3 和讨论 Q2 里"专用网络在同等条件下不占优"这句话实际只由一个独立结构支撑；HRDecoder（MICCAI 2024，报告数字最高、有官方代码和权重）又不在 2026-09-30 冻结的检索结果里。用户 2026-10-14 决定：加 HRDecoder、PMCNet、WSRFNet 三个有代码的模型，并把用户按论文复现的 CLC-Net、TC-Net（reproductions/）接进 B-std；Attention-DeepLab 不加。本文件记录设计、每个模型的接法与偏差、算力、论文改动和各方要做的事。范围与排期改动同步写进 16、13、17。
+
+一、顶层设计的三处改动
+
+1. 专用一族从 2 个扩到 7 个重训模型：M2MRF、HACDR-Net（已有）、HRDecoder、PMCNet、WSRFNet（有代码，轨 B）、CLC-Net、TC-Net（无代码，按论文复现，轨 C）。族比较和 Friedman 用全部 7 个；轨 C 的两个在表里单独标明"按论文复现"，它们的数字只说明"按论文描述能做到什么"，不代表作者的实现。
+2. 同骨干受控比较作为设计点：HRNet-W48（通用）、M2MRF、HRDecoder 三者骨干相同，正好回答"专用解码头比它所基于的通用网络多出什么"。R3 加一段，图 4 加一个小面板（三个模型两库的逐类 AUPR）。
+3. 检索冻结后的定向补检：9-30 的检索漏掉了 HRDecoder，说明检索式对"有官方代码的方法"覆盖不够。做一次有记录的补检（只针对 2023–2026 年、有官方代码或权重的 DR 病灶分割方法），结果作为"冻结后补充"写进 06/08，L1 补审 HRDecoder；方法里如实写这是协议偏差。补检由本机做，结果交用户定夺后再写进文献台账。
+
+二、每个模型的接法（都走 B-std：1440 画布、按像素计的训练量、共享增强、按验证 mAUPR 选检查点、同一推理几何与评测；各自保留损失、优化器、学习率、权重衰减、调度形状、有效批、归一化和头）
+
+1. HRDecoder（Ding 等，MICCAI 2024；official_code/HRDecoder，待用户加子模块；权重 Google Drive，待用户下载）
+   结构：HRNet-W48（ImageNet hrnetv2_w48，与 M2MRF、HRNet 行同一份权重）+ FCNHead（7×7 卷积、64 通道、compress）；骨干在把输入缩到 hr_scale 的图上跑，解码头在高分辨率的特征裁块上跑（随机 2 或 4 个裁块，训练时 hr_loss_weight 0.1），最终 logits 是上采样的低分辨率 logits 与高分辨率裁块 logits 的平均（HRDecoder.py forward_train / encode_decode）。4 路 sigmoid，作者类别顺序 EX、HE、SE、MA（同 M2MRF），损失 BinaryLoss dice 平滑 1e-5。
+   作者配方：SGD 0.01、动量 0.9、权重衰减 5e-4，poly 1.0 加 1500 步线性 warmup（poly10warm.py，来自 DAFormer）；IDRiD 图缩到 2880×1920、随机裁 1920、hr_scale 960、crop_num 2、20k 步；DDR 2048、hr_scale 1024、crop_num 4、40k 步；samples_per_gpu 1，README 用 4 卡，有效批 4。
+   B-std 下的几何：作者把骨干分辨率定为裁块的 1/2（1920→960、2048→1024），这是方法本身的设计（省骨干算力、解码头补回细节），不是数据预处理，所以保留比例：960 训练块对应 hr_scale 480，crop_num 按作者 IDRiD 2、DDR 4，裁块尺度比例 (0.75, 1.25) 照旧；推理用 960 窗口、重叠 0.5（整画布直接缩到 480 会把比例压到 1/3，不用）。这意味着 HRDecoder 的骨干看到的像素尺度是 HRNet-W48 行的一半，而解码头在同一尺度——这正是"同骨干受控比较"要检验的东西，写进 14 M7。
+   环境：它的 mmseg 分支要 mmcv 1.7；在 retiseg-hacdr 环境（mmcv-full 1.6.2、torch 1.10）里导入 official_code/HRDecoder/mmseg，入口 bench/scripts/train_hrdecoder_b1.py（仿 train_hacdr_b1.py）。冒烟时核对 mmseg/__init__.py 的 mmcv 版本断言。
+   轨 A（E1）：作者 IDRiD/DDR 权重按作者测试管线（整图缩到 2880×1920 / 2048，IDRiD 滑窗 1920 步长 960）推理，走 bench.e3a author 的路径，e3a_frozen.yaml 追加 author_weights.HRDecoder（只增不改）。与 M2MRF 一样进 L2 复现漏斗：作者函数（11 阈值）与本项目精确 AUPR 各报一次。
+   偏差：SyncBN 改 BN；作者增强（0.5–2 缩放、随机裁、翻转、±45° 旋转）换成共享增强；4 卡 DDP 改单卡累积到 4；hr_scale 按比例换算。
+
+2. PMCNet（He 等，TMI 2022；official_code/PMCNet 是 TF 1.13/Keras 2.3，A100 上跑不了；按作者代码逐层改写成 PyTorch，记为"按代码重写"，轨 B′）
+   结构（models.py）：EfficientNet-B0 编码器，取四个 expand 激活：block2a（96 通道，1/2）、block3a（144，1/4）、block4a（240，1/8）、block6a（672，1/16）（bundled efficientnet 包每个 MBConv 有 expand、depthwise、SE 三个 Swish，swish_4/10/16/34 对应这四处）；PFF 模块（相邻尺度相乘后拼接，DAB 注意力 = 通道、空间、像素三路 sigmoid 相加，1×1 回原通道）；加法跳连；解码每级双线性 ×2 + 1×1 + ReLU，再两个 3×3 + ReLU（LeakyReLU(0) 即 ReLU）；最终 ×2 到原分辨率，1×1 到 5 类 softmax。类别顺序 bg、EX、HE、MA、SE（test.py）。
+   作者配方（train.py）：Adam 1e-4，学习率按 (1−(e+1)/60)^0.9 逐 epoch 衰减，60 个 epoch，批 1，整图 1024（DDR）/ 960×1440（IDRiD），损失 categorical cross-entropy，无增强（ImageDataGenerator 只做 nearest 填充）。
+   偏差：ImageNet 权重用 timm 的 tf_efficientnet_b0.in1k（与 Keras 包里的 EfficientNetB0.h5 同源于 TF 官方权重，但不逐位核对）；Keras 的 same padding 用 timm 的 tf_ 变体复现；作者发布的 dataGenerator 把标签 to_categorical(label, 3)、与 5 类模型不匹配，代码本身跑不通（L2 漏斗里记 R3 带缺陷），本项目按论文 5 类；批 1 → B-std 有效批 1（作者值），BatchNorm 看 1 张；960 块训练、整画布推理。
+   参数量核对：改写后用 cost_audit 统计，与论文报告值对照并写进 14。
+
+3. WSRFNet（Li 和 Wu，IJCAI 2024；official_code/WSRFNet 只有 model.py、test.py，无 train.py；权重向作者索取）
+   结构（model.py）：EfficientNet-B1 编码器（efficientnet_pytorch，ImageNet），五级特征转成 64 通道，MFA 解码，RefineModule（小波反馈金字塔 WFPM + 按尺度精炼 SRM）循环 4 次；测试时把 4 次的多尺度特征按 n/Σn 加权平均后过 3×3 卷积得到 4 路 sigmoid，类别顺序 EX、HE、SE、MA。
+   作者配方（论文 4.2 节）：Dice 损失，每次循环的预测 P_n 各算一次、权重 n/N（式 6）；SGD 0.01、poly 0.9、动量 0.9、权重衰减 5e-4；IDRiD 80k 步、DDR 100k 步、批 4；训练图缩到 1440×960 / 1024，随机裁块、翻转、90° 旋转。
+   接法：子类化作者的 WSRFNet，跳过构造函数里的 load_state_dict（作者代码在 __init__ 里读检查点），训练时前向返回每次循环的 P_n（共用 spv1 卷积，论文没写是否共用，记为假设）和融合输出；损失按式 6 在本项目的 Dice（sigmoid、平滑按 M2MRF 的 1e-5，论文未写）上算。偏差：训练循环是本项目写的；上采样 align_corners=True 照作者代码。
+   轨 A：拿到作者权重后按作者 test.py 推理进 E1。
+
+4. CLC-Net（Wang 等，Neurocomputing 2023；用户按论文复现，reproductions/Wang2023_CLC-Net，轨 C）
+   结构：两条 SE-ResNeXt-50 分支，局部分支输入 256 窗口，上下文分支输入以该窗口为中心的 512 再缩到 256，SKM 融合，解码块 1×1-BN-SKConv-TransConv，深监督 1×1 投影后拼接；两个分类头（补丁里出现的病灶类型）；5 类 softmax（bg、HE、MA、EX、SE）；损失 Dice（病灶类求和、整批、ε=1）+ 加权交叉熵（1,2,2,2,2）+ 分类 BCE；Adam 3e-4，第 20、50 轮乘 0.1，60 轮，批 16。假设 A1–A22 在 clcnet/assumptions.py。
+   B-std 下的几何：网络只对 512 输入的中心 256 给出分割，所以引入"输出边距"：ModelCard 新字段 output_margin=128，训练块 512（forward_size），损失只算中心 256，像素预算按被监督的 256² 计；推理窗口 512、步长按有效输出 256 × (1−0.5)，画布四周补 128 后滑窗。这是运行器的一个通用机制（bench/infer.canvas_logits、bench/train 的损失裁剪），别的模型 margin=0 不受影响。
+   偏差：复现本身的假设列表；B-std 的共享增强替代 A12 的增强；像素除以 255 不减均值（A14，卡片写均值 0、标准差 1）。
+
+5. TC-Net（Zhang 等，CBM 2023；用户按论文复现，reproductions/Zhang2023_TC-Net，轨 C）
+   结构：ResNeSt 块的 CNN 分支 + 四个 Transformer 块的分支（MHSSA 四头、相对位置偏置），交叉注意力解码，LLCS 融合，分割头 3×3-ReLU-1×1；5 类 softmax（bg、EX、HE、MA、SE）；输入边长须是 64 的倍数；损失 DCFL（式 9–13，r=2、γ1=3、γ2=2，随 epoch 周期变化）；Adam 5e-4、权重衰减 1e-5、批 4；论文把整图缩到 512。
+   B-std 下的几何：按固定输入模型处理，forward_size 512（与 Swin-Unet 的规则相同：按作者输入尺寸切块训练、重叠 0.5 滑窗推理），pad_multiple 64。DCFL 的"epoch"换算成训练进度 step/总步数（运行器每步调用 adjust_lr 时把进度交给包装器，损失读取），论文的 1000 epoch 不用，训练量按 B-std。
+   偏差：复现假设列表（tcnet/assumptions.py）；进度换算；共享增强替代作者的翻转、颜色、仿射。
+
+6. 共用改动
+   - ModelCard 新字段 output_margin（默认 0）。
+   - 包装器可以在 forward 里缓存辅助输出（分类头 logits、各循环的 logits、HR 裁块），由自己的 build_loss 返回的损失模块读取：运行器的损失调用仍是 loss_fn(logits, target)，不改接口。CLC-Net、WSRFNet、HRDecoder、TC-Net 用这个约定，recipe.json 的偏差里注明。
+   - 类别映射：PMCNet、TC-Net class_index (3,2,1,4)；CLC-Net (2,1,3,4)；WSRFNet、HRDecoder sigmoid 通道由 EX,HE,SE,MA 置换成 MA,HE,EX,SE。
+   - 训练入口：PMCNet、WSRFNet、CLC-Net、TC-Net 走 bench/train.py（retiseg 环境）；HRDecoder 走 bench/scripts/train_hrdecoder_b1.py（retiseg-hacdr 环境）。
+
+三、算力与排期（A100 时；估计，冒烟后改）
+
+  HRDecoder   IDRiD 13 / DDR 26 每种子（按 M2MRF ×1.3）   种子 0 两库 39；三种子 117；E1 推理 2；E3a 推理 4
+  PMCNet      2 / 8                                        种子 0 10；三种子 30
+  WSRFNet     3 / 12                                       种子 0 15；三种子 45
+  CLC-Net     5 / 20（双分支，512 块）                      种子 0 25；三种子 75
+  TC-Net      5 / 20（512 块，注意力）                       种子 0 25；三种子 75
+  合计：种子 0 约 115；三种子约 340；E3a 约 20。
+  排法：种子 0 五个模型 + HRDecoder 的 E1 排在 E5 种子 0 之后、影响因素剩余之前（queue.yaml 的 fundus_seed0 阶段，优先级 25）；HRDecoder 种子 1、2 排在 nnU-Net E3b 之后（优先级 45）；其余四个的种子 1、2 第二优先（优先级 75，默认关）。
+  抵扣（16 第三节改）：E1r 剩余 4 次（约 80）砍掉，M2MRF IDRiD 的一次重训已回答了"作者代码能否复现论文数字"；E5 a 档的 more_masks 第二套参数与 G2 整图对照（约 20）进未来工作。净增约 150，排期从 10-27 推到 10-29。
+
+四、论文改动
+
+1. 主表 14 行 → 19 行（专用一族 7 行，其中轨 C 两行标注）；表 2 模型登记表加 5 行；表 3/5 行数随之；Friedman 的 n 从 14 到 19，临界差重算。
+2. R3 加"同骨干受控比较"一段和图 4 小面板；族比较改为 7 个专用模型；轨 C 的句子单独写（"按论文复现的两个模型……"）。
+3. R2/E1/L2：HRDecoder 的作者权重进复现漏斗（两个 R4 模型来自同一实验室，权重数字与本项目精确 AUPR 并列）。
+4. 方法：模型纳入标准补一句（有官方训练代码进轨 B；只有模型定义的补训练循环；无代码的按论文复现为轨 C，复现假设随代码发布）；检索冻结后补检的披露。
+5. 文献：LEDGER 加 M-HRDEC-2024；L1 补审一篇；06/08 加"冻结后补充"小节；图 2b/c 的文献统计随之变化（n 从 30 到 31）。
+
+五、各方要做的事
+
+用户：
+  1. git submodule add https://github.com/CVIU-CSU/HRDecoder official_code/HRDecoder，提交推送（服务器 git submodule update --init official_code/HRDecoder）。
+  2. 把 reproductions/ 两个目录加进仓库提交（现在只在本机工作区）。
+  3. 下载 HRDecoder 权重到服务器 pretrained/：Google Drive 1tRBNqpbFwnNBGQBMw8UYL8sjJzWlI3O9（IDRiD）、1CBTHOtxToHQ13H4SZIUBZTwX0zwmIduh（DDR），命名 hrdecoder_idrid.pth、hrdecoder_ddr.pth，sha256 回填到 e3a_frozen.yaml 的 author_weights 条目。
+  4. 向 xuanli@stu.hit.edu.cn 索取 WSRFNet 权重（轨 A，可选；不影响轨 B）。
+  5. 确认第三节的抵扣。
+本机：第二节的代码与测试；models.yaml、registry、launch_b1 绑定、make_bs_jobs 任务表、collect_runs 的 SLUG；论文侧 MAIN_MODELS、占位、表格；13/14/16/17 更新；定向补检。
+服务器：按 17 第十五节冒烟（每个模型 20 步 + 一次验证），记每步耗时与显存，改 est_hours，再按 queue.yaml 跑。
+
+六、状态
+  2026-10-14：本文件写成；代码见 00 当天记录。

@@ -62,3 +62,10 @@ literature/papers/03_dr_methods/cnn_multiscale/Qi2026_TEDR-YNet.pdf
 literature/papers/02_datasets/Mao2023_TJDR.pdf
 literature/papers/02_datasets/Chankhachon2026_RefinedIDRiD.pdf
 其余纳入论文在付费墙后。入库依据是摘要里已经写明的成像、类别和数据集，不把未看到的表格数字抄进主表。
+
+六、冻结后补充（2026-10-14）
+标准：2026-09-30 的检索式对"有官方代码或权重的方法"覆盖不够，主表专用一族只剩两个可重训模型。2026-10-14 做一次定向补检，只收 2023–2026 年、有官方代码或权重、在 IDRiD 或 DDR 上做四类分割的方法；加入的论文批次记为 addendum-20261014，论文方法里如实写为协议偏差。
+加入：M-HRDEC-2024 HRDecoder（MICCAI 2024，CVIU-CSU，HRNet-W48 骨干，代码与权重公开；README 报 IDRiD 71.34、DDR 49.24）。
+同日决定进主表的既有登记：M-PMCNET-2022（Keras 代码按层改写）、M-WSRF-2024（补训练循环）、M-CLC-2023 与 M-TCNET-2023（按论文复现，轨 C）。
+待做：HRDecoder 的 PDF 下载与 L1 抽取；一轮系统的 GitHub/论文代码链接补检（结果追加在本节）。
+

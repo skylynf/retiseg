@@ -32,6 +32,7 @@ step is not wired in bench/ yet: adjust TESTSET when it is.
 
 import argparse
 import json
+import sys
 import re
 from pathlib import Path
 
@@ -59,6 +60,11 @@ SLUG = {  # bench/scripts/launch_b1.py::_SLUG -> names used in the paper
     "h2former": "H2Former",
     "m2mrf": "M2MRF",
     "hacdr": "HACDR-Net",
+    "hrdecoder": "HRDecoder",
+    "pmcnet": "PMCNet",
+    "wsrfnet": "WSRFNet",
+    "clcnet": "CLC-Net",
+    "tcnet": "TC-Net",
     "sam2_unet": "SAM2-UNet",
     "samed": "SAMed",
     "sam_adapter": "SAM-Adapter",
@@ -113,6 +119,29 @@ def factor_key(run):
     model = MODEL_NAME.get(config["model"], config["model"])
     test = PREPARED[Path(config["dataset"]).name]
     return paper["experiment"], model, paper["variant"], paper["train_set"], int(config["seed"]), test
+
+
+UNALIGNED = []
+
+
+def load_report(path):
+    """An evaluate() report, or None (and a line in UNALIGNED) when its excluded_ids are not the list its training
+    sources require (bench/data/splits/leak_exclusions.json): such a number never reaches results.csv (17 section 14)."""
+    path = Path(path)
+    report = json.loads(path.read_text())
+    try:
+        if str(REPO) not in sys.path:
+            sys.path.insert(0, str(REPO))
+        from bench.scripts.pack_handoff import expected_exclusions
+
+        expected = expected_exclusions(path)
+    except Exception as exc:  # the rule itself failing is reported, the report is kept
+        print(f"warning: exclusion check failed for {path}: {exc}")
+        return report
+    if expected is not None and sorted(report.get("excluded_ids") or []) != expected:
+        UNALIGNED.append(f"{path}: excluded {len(report.get('excluded_ids') or [])}, expected {len(expected)}")
+        return None
+    return report
 
 
 def rows_from_report(report, experiment, variant, model, train, seed, test):
@@ -209,7 +238,9 @@ def collect(runs_dir):
                 if suffix not in TESTSET:
                     continue
                 test = TESTSET[suffix] or train
-                report = json.loads(path.read_text())
+                report = load_report(path)
+                if report is None:
+                    continue
                 rows += rows_from_report(report, experiment, variant, model, train, seed, test)
                 if variant == "registered" and model == "U-Net" and train == "DDR" and seed == 0 and test == "DDR":
                     rows += rows_from_report(report, "E9", "loss:CE + per-image Dice", model, train, seed, test)
@@ -223,7 +254,9 @@ def collect(runs_dir):
                 if suffix not in TESTSET:
                     continue
                 test = TESTSET[suffix] or train
-                report = json.loads(path.read_text())
+                report = load_report(path)
+                if report is None:
+                    continue
                 rows += rows_from_report(report, experiment, variant, model, train, seed, test)
                 seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
             continue
@@ -253,7 +286,9 @@ def collect(runs_dir):
             if key is None or not path.exists():
                 continue
             experiment, model, variant, train, seed, test = key
-            report = json.loads(path.read_text())
+            report = load_report(path)
+            if report is None:
+                continue
             rows += rows_from_report(report, experiment, variant, model, train, seed, test)
             seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
             continue
@@ -302,7 +337,9 @@ def collect_e3a(runs_dir):
             path = setdir / "metrics.json"
             if not path.exists():
                 continue
-            report = json.loads(path.read_text())
+            report = load_report(path)
+            if report is None:
+                continue
             rows += rows_from_report(report, experiment, variant, model, train, seed, E3A_SET[setdir.name])
             seen.append((f"E3a/{src.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
     return pd.DataFrame(rows), seen
@@ -327,7 +364,9 @@ def collect_e5(runs_dir):
         set_part = [part for part in directory.parts if part.endswith("_test") or part.endswith("_val")]
         if not set_part or not set_part[-1].endswith("_test"):
             continue
-        report = json.loads(metrics.read_text())
+        report = load_report(metrics)
+        if report is None:
+            continue
         by_class = key.get("variant_by_class") or {}
         base = rows_from_report(report, key["experiment"], key["variant"], key["model"], key["train_set"], int(key["seed"]), key["test_set"])
         for row in base:
@@ -388,6 +427,8 @@ def main():
         print(f"{len(sheet)} cost rows from data/cost_measured.tsv and data/cost_audit.tsv")
     for run, name, maupr in seen:
         print(f"{run}/{name}  mAUPR {maupr if maupr is None else round(maupr, 4)}")
+    for line in UNALIGNED:
+        print(f"left out (exclusions not aligned): {line}")
     table = pd.read_csv(args.csv, keep_default_na=False)
     merged, replaced, added, stale = merge(table, new)
     print(f"{len(seen)} reports, {len(new)} measured rows: {replaced} placeholder rows replaced, {added} rows with no placeholder counterpart added, {stale} placeholder seeds of measured groups dropped")

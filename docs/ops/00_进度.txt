@@ -60,3 +60,15 @@ E5 推理档代码（2026-10-13，本机；pull 到 a4339e3 之后）
 4. 代码：launch_factor.py 的 evaluate 加训练源同眼排除（--exclude，FGADR 106、Retinal-Lesions 1），没带排除的 metrics_test.json 自动重评测（test_factor 新用例）；nnU-Net E3b 接线（nnunet_bridge DATASET_IDS 603/604 与 info，nnunet_run.sh 通用化并带 --exclude，nnunet_e3a/launch_e3a 认无视野度数的来源，collect_runs 的 nn_key 把这两个来源记为 E3b）；server_run.sh 的 E5_MODELS 可用环境变量覆盖（MedSAM 权重缺时跳过）。服务器步骤在 17 第十三节。
 5. 仓库卫生：误提交的 retiseg_runs_handoff_20261012.tar.gz 从索引移除，.gitignore 加 *.tar.gz。
 
+协作规则与统一队列（2026-10-14，本机；采纳服务器的方案，写成 17 第十四节）
+1. 新代码：bench/scripts/launch_queue.py 读 bench/configs/queue.yaml（阶段带优先级：e3a 10、E5 种子 0 20、影响因素 30、nnU-Net E3b 40、E5 推理档 50–60、第二优先种子 70 关、E1r 90 关），空卡时重读文件；规划复用现有启动器（launch_e3a.plan、launch_b1.plan_queue_all、launch_factor.plan 这次拆出来，行为不变）。本机对 10-14 包的 runs/ 干跑：E3a 剩余项、E5 种子 0 的 8 个训练加 8 个打分、影响因素 21 项、E5 推理档 64 项都列出；nnU-Net E3b 因 raw 数据未转换被报告跳过。3 个无 torch 用例（test_launch_queue.py）。
+2. bench/scripts/pack_handoff.py 代替手工打包：不带 npz/pkl/png，带 summary 三张表与 manifest；排除名单不对齐的指标文件不进包。collect_runs.py 同样拒收（load_report），FGADR 训练 M2MRF 的内部测试 0.349 因此从 results.csv 退回占位（14 M9b 标撤回），等带 106 张排除的重评测。results.csv 由 build_placeholder --force 重生成后重新 collect（123 份报告），make 通过。
+3. 分工：服务器只追加 00 第三节；14、13、CHECKPOINT、论文由本机改。
+
+专用模型扩充（2026-10-14，本机；用户决定：HRDecoder、PMCNet、WSRFNet 进轨 B，CLC-Net、TC-Net（reproductions/）进轨 C，Attention-DeepLab 不加）
+1. 设计写成 docs/paper/18（接法、偏差、算力、论文改动、各方待办）；16 加第八节（抵扣：E1r 剩余与 E5 a 档的 more_masks/G2），13 状态表加一行，17 加第十五节（环境、测试、冒烟、队列），queue.yaml 加 fundus_seed0（优先级 25，关）、hrdecoder_rest（45，关）、fundus_rest（75，关）。
+2. 运行器：ModelCard 加 output_margin（网络只预测输入中心时：训练损失裁中心、预算按被监督像素、滑窗补边后按有效中心步进，bench/infer.canvas_logits）；包装器可声明 loss_takes_full_target。
+3. 包装器：bench/models/hrdecoder.py（作者 mmseg 分支，patch 级复现 forward_train/encode_decode，hr_scale 按作者比例 0.5 → 960 块对应 480，poly10warm 调度，损失 fused Dice + 0.1×HR 裁块 Dice；retiseg-hacdr 环境）、pmcnet.py（Keras 逐层改写，timm tf_efficientnet_b0 四个 expand 激活为 tap，作者 0–255 输入、Adam 1e-4 逐 epoch 衰减）、wsrfnet.py（作者模块 + 论文损失式 6/7、SGD poly；逐库归一化）、clcnet.py（512 输入中心 256 输出，margin 128，论文三项损失，两次 ×0.1 里程碑）、tcnet.py（512 固定输入，DCFL 按训练进度）。registry、models.yaml、launch_b1 的 _SLUG/_BINDING/_FUNDUS、make_bs_jobs（任务表 102 项，新增 30 个 cell）、collect_runs 的 SLUG、论文 MAIN_MODELS（19 行，轨 C 标 C，表注说明同骨干三行）、E10 占位、方法段（纳入标准与冻结后补检的披露）、R3 的 simtext 一段、宏 backbone.*。make 通过（25 页）。
+4. 文献：LEDGER 加 M-HRDEC-2024（批次 addendum-20261014），meta 笔记，08 加第六节"冻结后补充"；PDF 与 L1 抽取待下载。
+5. 测试：bench/tests/test_fundus_expansion.py 8 个用例，本机只有无 torch 的 3 个通过（边距校验、预算、配方读取），其余要在服务器跑。HRDecoder 包装器没法在本机核对 mmseg 导入，17 第十五节第 1 条先核对。
+

@@ -19,21 +19,22 @@ general:
 fundus_multiscale:
   - {name: M2MRF,       repo: official_code/M2MRF,      repro_level: R4, tracks: [A, B], tier: 1, notes: "mmseg 0.8 / torch 1.6; weights on Google Drive; README: paper reports mean of 3 runs, code reports best"}
   - {name: HACDR-Net,   repo: official_code/HACDR-Net,  repro_level: R3, tracks: [B],    tier: 1, notes: "mmseg 0.30 / mmcv-full 1.6.2; no released weights found"}
-  - {name: WSRFNet,     repo: official_code/WSRFNet,    repro_level: R1, tracks: [A, C], tier: 2, notes: "checked 2026-10-03: model.py + test.py, no train.py; weights by email to xuanli@stu.hit.edu.cn"}
+  - {name: HRDecoder,   repo: official_code/HRDecoder,  repro_level: R4, tracks: [A, B], tier: 1, notes: "added 2026-10-14 (docs/paper/18): MICCAI 2024, mmseg 0.16 / mmcv 1.7, HRNet-W48 backbone; weights on Google Drive (IDRiD 1tRBNqpbFwnNBGQBMw8UYL8sjJzWlI3O9, DDR 1CBTHOtxToHQ13H4SZIUBZTwX0zwmIduh); runs in the retiseg-hacdr environment"}
+  - {name: WSRFNet,     repo: official_code/WSRFNet,    repro_level: R1, tracks: [A, B], tier: 1, notes: "checked 2026-10-03: model.py + test.py, no train.py; weights by email to xuanli@stu.hit.edu.cn. 2026-10-14: tier 1, the training loop and the paper's loss are in bench/models/wsrfnet.py (docs/paper/18)"}
   - {name: L-Seg,       repo: official_code/L-Seg,      repro_level: R1, tracks: [C],    tier: 2, notes: "Caffe prototxt and loss layer"}
   - {name: SAA,         repo: official_code/SAA,        repro_level: R0, tracks: [C],    tier: 2, notes: "official repo empty"}
   - {name: CARNet,      repo: null, repro_level: R0, tracks: [], tier: 3}
-  - {name: PMCNet,      repo: official_code/PMCNet, repro_level: R3, tracks: [B], tier: 2, notes: "train.py present; TF 1.13/Keras 2.3; no released weights; bundled data is one sample image"}
+  - {name: PMCNet,      repo: official_code/PMCNet, repro_level: R3, tracks: [B], tier: 1, notes: "train.py present; TF 1.13/Keras 2.3; no released weights; bundled data is one sample image. 2026-10-14: tier 1, rewritten layer by layer in PyTorch (bench/models/pmcnet.py, docs/paper/18); the released dataGenerator one-hot-encodes 3 classes against the 5-class head"}
   - {name: MLNet,       repo: null, repro_level: R0, tracks: [], tier: 3}
   - {name: LezioSeg,    repo: null, repro_level: R0, tracks: [], tier: 3}
   - {name: HEDNet-cGAN, repo: null, repro_level: R0, tracks: [], tier: 3}
   - {name: Guo2024,     repo: null, repro_level: R0, tracks: [], tier: 3, notes: "Google Drive link of unknown content"}
-  - {name: CLC-Net,     repo: null, repro_level: R0, tracks: [], tier: 3}
+  - {name: CLC-Net,     repo: reproductions/Wang2023_CLC-Net, repro_level: R0, tracks: [C], tier: 1, notes: "no author code; re-implemented from the paper by the user (assumptions A1-A22 in the reproduction), B-std through bench/models/clcnet.py (docs/paper/18)"}
 
 relational_transformer:
   - {name: RTNet,       repo: null, repro_level: R0, tracks: [C], tier: 2, notes: "image + vessel input"}
   - {name: VTA,         repo: null, repro_level: R0, tracks: [],  tier: 3}
-  - {name: TC-Net,      repo: null, repro_level: R0, tracks: [],  tier: 3}
+  - {name: TC-Net,      repo: reproductions/Zhang2023_TC-Net, repro_level: R0, tracks: [C], tier: 1, notes: "no author code; re-implemented from the paper by the user (assumptions in the reproduction), B-std through bench/models/tcnet.py (docs/paper/18)"}
 
 semi_supervised:
   - {name: SSMD-UNet,   repo: null, repro_level: R0, tracks: [], tier: 3, notes: "author split 70/5/25; EyePACS pretraining overlaps Retinal-Lesions source"}

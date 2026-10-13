@@ -168,9 +168,33 @@ def main(argv=None):
     args = parser.parse_args(argv)
     drop = tuple(item.strip() for item in args.drop_maps.split(",") if item.strip())
     only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
+    items = plan(args.seed0_only, only)
+    for tier, negative_cost, label, spec in items:
+        print(f"tier {tier} {label} env {spec[1]} cost {-negative_cost:.0f}", flush=True)
+    print(f"E3a queue: {len(items)} items", flush=True)
+    if not args.submit:
+        for _tier, _cost, _label, spec in items[:3]:
+            print("command " + command(*spec, py_argv=["python"], drop_maps=drop), flush=True)
+        print("not submitted; pass --submit (with RETISEG_GPUS) to start", flush=True)
+        return
+    plan_items = [(label, command(*spec, drop_maps=drop)) for _tier, _cost, label, spec in items]
+    gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
+    if not gpus:
+        raise SystemExit("--submit needs RETISEG_GPUS, the cards this queue may use")
+    missing = [name for name, spec in e3a.load_frozen()["test_sets"].items() if not (_ROOT / spec["data"]).is_dir()]
+    if missing:
+        raise SystemExit("prepared test sets missing on this machine: " + ", ".join(missing))
+    errors = run_queue(plan_items, gpus, wait_free=True)
+    if errors:
+        raise SystemExit("\n".join(errors))
+
+
+def plan(seed0_only=False, only=()):
+    """Pending (tier, -cost, label, (source, env, argv, test)) items, ordered; launch_queue reads this too."""
+    only = set(only or ())
     frozen = e3a.load_frozen()
     items = []
-    for tier, source, env, run_argv, trained_on in discover(args.seed0_only):
+    for tier, source, env, run_argv, trained_on in discover(seed0_only):
         if only and source not in only:
             continue
         kind = "nnunet" if source.startswith("NN_") else ("author" if source.startswith("E1_") else "run")
@@ -186,24 +210,7 @@ def main(argv=None):
             cost = item_cost(kind, source, test, trained_on, frozen)
             items.append((tier, -cost, f"{source}:{test}", (source, env, run_argv, test)))
     items.sort(key=lambda item: (item[0], item[1]))
-    for tier, negative_cost, label, spec in items:
-        print(f"tier {tier} {label} env {spec[1]} cost {-negative_cost:.0f}", flush=True)
-    print(f"E3a queue: {len(items)} items", flush=True)
-    if not args.submit:
-        for _tier, _cost, _label, spec in items[:3]:
-            print("command " + command(*spec, py_argv=["python"], drop_maps=drop), flush=True)
-        print("not submitted; pass --submit (with RETISEG_GPUS) to start", flush=True)
-        return
-    plan = [(label, command(*spec, drop_maps=drop)) for _tier, _cost, label, spec in items]
-    gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
-    if not gpus:
-        raise SystemExit("--submit needs RETISEG_GPUS, the cards this queue may use")
-    missing = [name for name, spec in e3a.load_frozen()["test_sets"].items() if not (_ROOT / spec["data"]).is_dir()]
-    if missing:
-        raise SystemExit("prepared test sets missing on this machine: " + ", ".join(missing))
-    errors = run_queue(plan, gpus, wait_free=True)
-    if errors:
-        raise SystemExit("\n".join(errors))
+    return items
 
 
 if __name__ == "__main__":

@@ -51,7 +51,8 @@ L2     复现漏斗：R0–R4 计数、作者回复率、失败原因       Q1  
 E0     U-Net 流水线                                      —     —                            完成
 E1     作者权重：官方测试、独立测试                      Q1    独立测试库导出（12）         M2MRF 的 IDRiD、DDR 完成；独立测试待做；其余模型等权重
 E1r    作者配方重训：M2MRF bs4、HACDR-Net，各 3 种子     Q1    服务器                       M2MRF IDRiD 种子 0 有效批 4 已打分（作者函数 61.19，本项目 0.549）；种子 1、2 和 HACDR-Net、DDR 未开始
-E2     B-std 主表：7 个模型（无 H2Former）× IDRiD、DDR × 3 种子，42 个任务  Q2  预算已冻结（IDRiD 1000、DDR 400） 2026-10-13：HRNet、Swin-Unet、M2MRF、DeepLabv3、U-Net 整批 Dice、HACDR-Net 两库 3 种子都已打分；FCT DDR 只留种子 0。U-Net 整批 Dice 均值 IDRiD 0.644、DDR 0.371；HACDR-Net 均值 0.538、0.252（14 M7）。数在 data/results.csv
+E2     B-std 主表：7 个模型（无 H2Former）× IDRiD、DDR × 3 种子，42 个任务；2026-10-14 加专用 5 个（18）  Q2  预算已冻结（IDRiD 1000、DDR 400） 2026-10-13：HRNet、Swin-Unet、M2MRF、DeepLabv3、U-Net 整批 Dice、HACDR-Net 两库 3 种子都已打分；FCT DDR 只留种子 0。U-Net 整批 Dice 均值 IDRiD 0.644、DDR 0.371；HACDR-Net 均值 0.538、0.252（14 M7）。数在 data/results.csv
+       专用扩充：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net（18）  Q2  子模块与权重（用户）    2026-10-14 包装器已写（bench/models/{hrdecoder,pmcnet,wsrfnet,clcnet,tcnet}.py），任务表已生成；等服务器冒烟。HRDecoder 的 E1 权重推理待权重
        nnU-Net（默认和 ResEnc-M）                        Q2    数据转换、固定划分           两种配置两库都有测试数：默认 IDRiD 0.671、DDR 0.432；ResEnc-M 0.631、0.428。默认 DDR 三次 0.432、0.427、0.434（均值 0.431，2026-10-14）；IDRiD 第一次重复在训
 E2b    B1 来源配方，种子 0，14 个任务（无 H2Former）     Q2    —                            10-12 09:08 按 16 停止；六个未完成的运行停在上次验证，进未来工作。已完成的运行作补充表
 E2c    小规模调参：每族一个模型，学习率 ×1/3、1、3       Q2    E2 种子 0                    DDR 四项 2026-10-12 训完，只留验证曲线（14 备注 17）；×1/3 时 HRNet 与 M2MRF 的验证名次对调，主表学习率未改

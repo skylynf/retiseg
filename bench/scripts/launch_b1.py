@@ -67,6 +67,12 @@ _SLUG = {
     "H2Former": "h2former",
     "M2MRF": "m2mrf",
     "HACDR-Net": "hacdr",
+    # fundus-specific expansion (docs/paper/18)
+    "HRDecoder": "hrdecoder",
+    "PMCNet": "pmcnet",
+    "WSRFNet": "wsrfnet",
+    "CLC-Net": "clcnet",
+    "TC-Net": "tcnet",
 }
 _BINDING = {
     "U-Net": ("retiseg", "bench/train.py", "bench/predict.py"),
@@ -79,6 +85,13 @@ _BINDING = {
     # PyTorch 2.x. PyTorch 1.6 with CUDA 10.2 has no sm_80 kernels for A100.
     "M2MRF": ("retiseg", "bench/scripts/train_m2mrf_b1.py", "bench/scripts/predict_m2mrf_b1.py"),
     "HACDR-Net": ("retiseg-hacdr", "bench/scripts/train_hacdr_b1.py", "bench/scripts/predict_hacdr_b1.py"),
+    # Fundus-specific expansion (docs/paper/18). HRDecoder's mmseg fork needs mmcv 1.x: the HACDR environment,
+    # through the shared runner (bench.models.hrdecoder imports mmseg only when the network is built).
+    "HRDecoder": ("retiseg-hacdr", "bench/train.py", "bench/predict.py"),
+    "PMCNet": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "WSRFNet": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "CLC-Net": ("retiseg", "bench/train.py", "bench/predict.py"),
+    "TC-Net": ("retiseg", "bench/train.py", "bench/predict.py"),
     # E5 (design/15): B-std only, the shared runner, retiseg environment.
     "SAMed": ("retiseg", "bench/train.py", "bench/predict.py"),
     "SAM-Adapter": ("retiseg", "bench/train.py", "bench/predict.py"),
@@ -92,6 +105,8 @@ _BINDING = {
 }
 # E5 training settings join the B-std table only (the B1 table is the source-recipe column).
 _E5 = ("SAMed", "SAM-Adapter", "SAM2-UNet", "MedSAM", "RETFound")
+# Fundus-specific expansion (docs/paper/18): B-std only, after the main-table models in the job table.
+_FUNDUS = ("HRDecoder", "PMCNet", "WSRFNet", "CLC-Net", "TC-Net")
 _PAIRS = {
     "B1": [("IDRiD", seed) for seed in range(5)] + [("DDR", seed) for seed in range(3)],
     "BS": [("IDRiD", seed) for seed in range(3)] + [("DDR", seed) for seed in range(3)],
@@ -171,6 +186,7 @@ def active_models(experiment="B1"):
         )
     if experiment == "BS":
         models += [name for name in _E5 if name in wrapped]
+        models += [name for name in _FUNDUS if name in wrapped]
     return models
 
 
@@ -749,6 +765,15 @@ def queue_all(formal, gpus):
     ]
     if missing:
         raise SystemExit("prepared dataset missing: " + ", ".join(missing))
+    plan = plan_queue_all(formal, gpus[0])
+    print(f"queue: {len(plan)} items on gpus {','.join(str(gpu) for gpu in gpus)}", flush=True)
+    errors = run_queue(plan, gpus, wait_free=True)
+    if errors:
+        raise SystemExit("\n".join(errors))
+
+
+def plan_queue_all(formal, gpu=0):
+    """The (label, command, gate) items queue_all would start now (launch_queue reads this too)."""
     seed0 = [job for job in formal if int(job["seed"]) == 0]
     gates = {(job["model"], job["dataset"]): seed0_gate([job]) for job in seed0}
     plan = []
@@ -759,7 +784,7 @@ def queue_all(formal, gpus):
     ):
         for job in jobs:
             placed = dict(job)
-            placed["gpu"] = gpus[0]
+            placed["gpu"] = gpu
             _config, run_dir = check_job(placed, False, placeholder=False)
             marker = finished_marker(run_dir, False, wave)
             if (_ROOT / marker).is_file():
@@ -777,10 +802,7 @@ def queue_all(formal, gpus):
                 raise SystemExit(f"{job['name']}: no seed-0 job of {key[0]} on {key[1]} in this queue")
             plan.append(_queue_item(placed, wave, gate))
             print(f"queued {wave} {job['name']} est {estimated_hours(job):g} h", flush=True)
-    print(f"queue: {len(plan)} items on gpus {','.join(str(gpu) for gpu in gpus)}", flush=True)
-    errors = run_queue(plan, gpus, wait_free=True)
-    if errors:
-        raise SystemExit("\n".join(errors))
+    return plan
 
 
 def _load_train_module(script):

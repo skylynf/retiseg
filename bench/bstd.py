@@ -134,15 +134,18 @@ def revision_for(model_name, frozen):
     return revision
 
 
-def budget(declared, name, frozen, pixels, patch, scale=1, model_name=None):
+def budget(declared, name, frozen, pixels, patch, scale=1, model_name=None, margin=0):
     """Resolve the BS step count. Returns resolved recipe, deviations, steps per epoch, samples per epoch, eval_every.
 
     A recipe revision for ``model_name`` in bs_frozen.yaml (recipe_revisions)
     is merged into loss_params here, so a run and the seed-0 gate see the same recipe.
+    ``margin`` (card.output_margin) shrinks the pixels a patch supervises: the budget
+    counts supervised pixels, so a model that predicts only the centre of its window
+    sees the same number of labelled pixels as every other model.
     """
     epochs = int(frozen["equivalent_epochs"][name]) * int(scale)
     effective = int(declared.effective_batch_size)
-    patch_pixels = int(patch[0]) * int(patch[1])
+    patch_pixels = (int(patch[0]) - 2 * int(margin)) * (int(patch[1]) - 2 * int(margin))
     patches = math.ceil(int(pixels) / patch_pixels)
     per_epoch = math.ceil(patches / effective)
     samples = per_epoch * effective
@@ -155,7 +158,7 @@ def budget(declared, name, frozen, pixels, patch, scale=1, model_name=None):
         loss_params = {**loss_params, **revision["loss_params"]}
     deviations = [
         f"B-std budget: {epochs} equivalent epochs of {pixels} canvas pixels; "
-        f"{patches} patches of {patch[0]}x{patch[1]} per epoch, rounded up to {samples} "
+        f"{patches} patches of {patch[0]}x{patch[1]}{f' (supervised centre {patch[0] - 2 * margin}x{patch[1] - 2 * margin})' if margin else ''} per epoch, rounded up to {samples} "
         f"({per_epoch} steps of {effective}); {iterations} steps in total",
         f"author iterations {int(declared.iterations)} and epochs {int(declared.epochs)} are not used",
         f"validation mAUPR every {eval_epochs} epochs ({eval_every} steps); best.pt is the highest",
@@ -284,7 +287,7 @@ def run_cell(
         raise ValueError("a budget probe is train and validation only; run it with --diagnostic")
     pixels = canvas_pixels(config["dataset"], source.ids, diameter)
     resolved, deviations, per_epoch, samples, eval_every = budget(
-        declared, name, frozen, pixels, patch, scale, model_name=card.name
+        declared, name, frozen, pixels, patch, scale, model_name=card.name, margin=int(getattr(card, "output_margin", 0) or 0)
     )
     factor = lr_scale(config)
     if factor != 1.0:

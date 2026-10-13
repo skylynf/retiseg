@@ -1,0 +1,108 @@
+# The server's one queue (bench/scripts/launch_queue.py; docs/ops/17 section 14).
+# Lower priority runs first; inside a stage the stage's own order holds (E3a: tier, then cost;
+# B-std jobs: seed 0 longest first, then its test maps, then the other seeds; factor cells:
+# longest first). The launcher reads this file again every time one of its cards is free,
+# so reordering is an edit and a commit, never a kill. Finished and running items are left
+# out by each stage's own markers; a stage whose inputs are missing (weights, converted
+# data, an environment) is reported and skipped until they exist.
+#
+# Priorities on 2026-10-14 (docs/paper/16 sections 2 and 6: E3a first; E5 seed 0; the
+# remaining factor cells; nnU-Net's E3b; the E5 inference tiers; E1r last).
+stages:
+  - name: e3a
+    priority: 10
+    kind: e3a
+    drop_maps: [FGADR, Retinal-Lesions]
+
+  - name: e5_seed0
+    priority: 20
+    kind: bs
+    jobs: bench/configs/bs_jobs.yaml
+    only: [SAMed, SAM-Adapter, SAM2-UNet, RETFound]   # MedSAM joins when pretrained/medsam_vit_b.pth exists
+    seed0_only: true
+
+  # Fundus-specific expansion (docs/paper/18): seed 0 of the five models after the smoke (17 section 15).
+  - name: fundus_seed0
+    priority: 25
+    kind: bs
+    enabled: false
+    jobs: bench/configs/bs_jobs.yaml
+    only: [HRDecoder, PMCNet, WSRFNet, CLC-Net, TC-Net]
+    seed0_only: true
+
+  - name: factor
+    priority: 30
+    kind: factor
+
+  - name: nnunet_e3b
+    priority: 40
+    kind: nnunet
+    runs:
+      - {train: TJDR_std, plan: default}
+      - {train: FGADR, plan: default}
+
+  # E5 inference tiers (17 section 6). DDR val first: its maps choose the Dice thresholds of every test set.
+  - name: e5_amg
+    priority: 50
+    kind: e5_amg
+    env: retiseg
+    models: [sam, sam2]
+    generators: [default, more_masks]
+    sets: [DDR:val, IDRiD, DDR, TJDR_std, FGADR, Retinal-Lesions, DiaRetDB1, TJDR_uwf]
+
+  - name: e5_prompted
+    priority: 55
+    kind: e5_prompted
+    env: retiseg
+    models: [sam2, sam]        # medsam joins when its weights exist; points are SAM 2 only (docs/paper/16)
+    kinds: [box]
+    k: 1,5,10,20,all
+    sets: [DDR:val, IDRiD, DDR, TJDR_std, FGADR, Retinal-Lesions, DiaRetDB1, TJDR_uwf]
+
+  - name: e5_prompted_points
+    priority: 56
+    kind: e5_prompted
+    env: retiseg
+    models: [sam2]
+    kinds: [point]
+    k: 1,5,10,20,all
+    sets: [DDR:val, IDRiD, DDR, TJDR_std, FGADR, Retinal-Lesions, DiaRetDB1, TJDR_uwf]
+
+  - name: e5_amg_g2
+    priority: 60
+    kind: e5_amg
+    env: retiseg
+    models: [sam, sam2]
+    generators: [default]
+    geometry: G2
+    sets: [DDR:val, IDRiD, DDR]
+
+  # Second priority (16 section 3): SAM2-UNet and RETFound seeds 1, 2; the encoder comparison; the TF32 check.
+  # Enable by changing enabled to true once seed 0 of E5 is scored.
+  - name: hrdecoder_rest
+    priority: 45
+    kind: bs
+    enabled: false
+    jobs: bench/configs/bs_jobs.yaml
+    only: [HRDecoder]
+
+  - name: e5_rest
+    priority: 70
+    kind: bs
+    enabled: false
+    jobs: bench/configs/bs_jobs.yaml
+    only: [SAM2-UNet, RETFound]
+
+  - name: fundus_rest
+    priority: 75
+    kind: bs
+    enabled: false
+    jobs: bench/configs/bs_jobs.yaml
+    only: [PMCNet, WSRFNet, CLC-Net, TC-Net]
+
+  - name: e1r
+    priority: 90
+    kind: shell
+    enabled: false
+    env: retiseg
+    items: []   # filled from 17 section 7 when the cards are free
