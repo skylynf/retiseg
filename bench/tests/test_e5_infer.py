@@ -1469,3 +1469,75 @@ def test_prompted_records_the_box_convention(tmp_path, monkeypatch):
     prompted.run("SAM", "boxes", "DDR", "val", decoder=_FakeDecoder(), frozen=frozen, data_dir=root, long_side=20, window=8, prompts_dir=pdir)
     predicted = json.loads((tmp_path / "runs" / "E5" / "b" / "b_sam_vitb_box" / "DDR-val__kall" / "predicted.json").read_text())
     assert predicted["box_convention"] == prompted.BOX_CONVENTION and predicted["box_convention"].startswith("file: [x0, y0, x1, y1] with x1, y1 exclusive")
+
+
+# ---- review fix 15 (second review, N1 and N5): the stand-in flag, complete maps only, atomic writes ------
+
+
+def test_fov_run_records_whether_it_stands_in_for_the_main_variant(tmp_path, monkeypatch):
+    import json
+
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    root = tmp_path / "prepared" / "TJDR_uwf"
+    _toy_e5_source(root, "TJDR_uwf", {"val": ["v0"], "test": ["t0"]})
+    kwargs = dict(generator=_FakeGenerator(), data_dir=root, long_side=20, window=8, evaluate=False)
+    largest = fz.load_frozen(_filled_frozen(tmp_path, 128, 1.0, name="largest.yaml"))
+    amg.run("SAM", 128, "TJDR_uwf", "test", variant="fov", frozen=largest, **kwargs)
+    flagged = json.loads((tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p128" / "TJDR_uwf__fov" / "predicted.json").read_text())
+    assert flagged["stands_in_for_main"] is True  # the registered rule skips this model's 4256 main variant
+    assert amg.run("SAM", 128, "TJDR_uwf", "test", frozen=largest, **kwargs)["skipped"] == "budget_rule"
+    smaller = fz.load_frozen(_filled_frozen(tmp_path, 64, 1.0, name="smaller.yaml"))
+    amg.run("SAM", 64, "TJDR_uwf", "test", variant="fov", frozen=smaller, **kwargs)
+    amg.run("SAM", 64, "TJDR_uwf", "test", frozen=smaller, **kwargs)
+    for name in ("TJDR_uwf__fov", "TJDR_uwf"):
+        assert json.loads((tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64" / name / "predicted.json").read_text())["stands_in_for_main"] is False
+    amg.run("SAM", 64, "TJDR_uwf", "val", frozen=smaller, **kwargs)
+    assert json.loads((tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64" / "TJDR_uwf-val" / "predicted.json").read_text())["stands_in_for_main"] is False
+
+
+def test_maps_are_written_atomically_and_a_truncated_map_is_predicted_again(tmp_path, monkeypatch):
+    import json
+
+    import numpy as np
+
+    from bench.common.io import read_prob_quantized, write_prob
+    from bench.e5 import amg
+    from bench.e5 import frozen as fz
+    from bench.e5 import outputs as out
+
+    # write_prob: the final name appears complete or not at all; a leftover temporary is overwritten
+    maps = tmp_path / "maps"
+    prob = np.linspace(0, 1, 12).reshape(3, 4)
+    (maps / "MA").mkdir(parents=True)
+    (maps / "MA" / ".img.png.tmp").write_bytes(b"stale")
+    write_prob(maps, "MA", "img", prob)
+    assert sorted(p.name for p in (maps / "MA").iterdir()) == ["img.png"]
+    assert np.array_equal(read_prob_quantized(maps, "MA", "img"), np.rint(prob * 65535).astype(np.int64))
+    # maps_written: every class file present and decodable
+    for cls in ("HE", "EX", "SE"):
+        write_prob(maps, cls, "img", prob)
+    assert out.maps_written(maps, "img")
+    path = maps / "SE" / "img.png"
+    path.write_bytes(path.read_bytes()[:40])  # truncated, as a killed writer of the old kind could leave it
+    assert not out.maps_written(maps, "img")
+    # a resumed run predicts that image again instead of trusting the file
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    root = tmp_path / "prepared" / "DDR"
+    _toy_e5_source(root, "DDR", {"val": ["v0", "v1"]})
+    kwargs = dict(frozen=frozen, data_dir=root, long_side=20, window=8)
+    amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), **kwargs)
+    directory = tmp_path / "runs" / "E5" / "a" / "a_sam_vith_p64" / "DDR-val"
+    for name in out.EVALUATION_FILES + ("predicted.json",):
+        (directory / name).unlink(missing_ok=True)
+    broken = directory / "prob_val" / "HE" / "v1.png"
+    broken.write_bytes(broken.read_bytes()[:40])
+    again = _FakeGenerator()
+    amg.run("SAM", 64, "DDR", "val", generator=again, **kwargs)
+    predicted = json.loads((directory / "predicted.json").read_text())
+    assert predicted["resumed_images"] == 1 and again.calls  # v0 kept, v1 redone
+    assert read_prob_quantized(directory / "prob_val", "HE", "v1").shape == read_prob_quantized(directory / "prob_val", "HE", "v0").shape

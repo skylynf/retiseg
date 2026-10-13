@@ -32,12 +32,14 @@ def e5(model, variant, test, train=None):
 
 def any_lesion(model, variant, test):
     """The class-agnostic any-lesion AUPR (collect_runs metric aupr_any_lesion), the registered zero-shot
-    result of the automatic masks (e5_frozen.yaml zero_shot.outputs.main); the mean of the per-class rows
-    of the same directory while only the placeholder table exists."""
+    result of the automatic masks (e5_frozen.yaml zero_shot.outputs.main). Missing rows are an error, never
+    a substitute number (review N2): results.csv predates the key until build_placeholder.py --force and
+    the two collects are run (docs/ops/00, the Luming list, item 8)."""
     r = D.sel(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr_any_lesion")
-    if len(r):
-        return float(r["value"].mean())
-    return float(np.nanmean(e5(model, variant, test)))
+    if not len(r):
+        raise ValueError(f"E5 {model} {variant} {test}: no aupr_any_lesion row in results.csv; regenerate the placeholder table "
+                         "(python scripts/build_placeholder.py --force, then collect_runs.py and collect_literature.py) or collect the runs")
+    return float(r["value"].mean())
 
 
 def rows_for(test):

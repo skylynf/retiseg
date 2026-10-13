@@ -96,9 +96,26 @@ def is_done(directory, limit=None):
 
 
 def maps_written(maps_dir, image_id):
-    """True when every class map of the image is in ``maps_dir`` (bench.common.io.write_prob layout): a run that
-    stopped before predicted.json resumes after such images (review fix 12)."""
-    return all((Path(maps_dir) / cls / f"{image_id}.png").is_file() for cls in fz.CLASSES)
+    """True when every class map of the image is in ``maps_dir`` and decodes as a complete PNG.
+
+    The resume check of a run that stopped before predicted.json (review fix 12). A truncated
+    file does not count, so it is predicted again rather than left for the evaluation to trip
+    over (review N5; write_prob now writes atomically, so truncation needs an older writer).
+    The check does not know which code wrote the maps: clear runs/E5 before a formal run
+    when the map semantics changed (17 section 6).
+    """
+    from PIL import Image
+
+    for cls in fz.CLASSES:
+        path = Path(maps_dir) / cls / f"{image_id}.png"
+        if not path.is_file():
+            return False
+        try:
+            with Image.open(path) as image:
+                image.verify()
+        except Exception:  # noqa: BLE001  (PIL raises SyntaxError, OSError or ValueError on a damaged file)
+            return False
+    return True
 
 
 def needs_prediction(directory, limit=None):

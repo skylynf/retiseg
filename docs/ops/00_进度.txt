@@ -131,10 +131,10 @@ E5 推理档评审修复 13：文档小处（2026-10-12，工作站albert；提�
 2. 评审修复 6：送解码器的框改为含端点像素下标（e5_frozen.yaml oracle.box）：确认。
 3. 评审修复 7：a 档网格每模型各选一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限（zero_shot.grid.select_rule）：确认。
 4. 评审修复 8（二选一）：a. 保留预算规则，某模型 128 当选时该模型的 TJDR_uwf 只跑 fov 变体，collect 以 fov 顶替并记 canvas_long_side（16 修订行、21 第 18 条）；b. 否决预算规则，接受 128 当选时每模型约 150 GPU 时（21 第 7 条）。
-5. 评审修复 11 与 21 第 31、32 条（论文呈现）：图 5、表 6 零样本行的口径（任意病灶 AUPR 为主、按重叠分类标为上界）已改；待定的是：auto_oracle_class 是否单独成「上界」一块；训练模型的任意病灶 AUPR 是否作参考线；fov 顶替格用 canvas_long_side 行标注、独立 test_set「TJDR-uwf (fov)」还是「未运行」行。
+5. 评审修复 11 与 21 第 31、32 条（论文呈现）：图 5、表 6 零样本行的口径（任意病灶 AUPR 为主、按重叠分类标为上界）已改；待定的是：auto_oracle_class 是否单独成「上界」一块；训练模型的任意病灶 AUPR 是否作参考线；fov 顶替格用 canvas_long_side 行标注、独立 test_set「TJDR-uwf (fov)」还是「未运行」行。 2026-10-13 复审 N2 补充（21 第 38 条 b）：零样本一块内是否统一用任意病灶 AUPR 作汇总（SAM 3 也有 any 行），表 6 的最好/次好是否只在各块内排名（caption 本就说四种用法不互相排名），图 5e 零样本组内是否比任意病灶 AUPR。
 6. 21 第 29 条 b：是否给仓库加 GitHub Actions，在每次推送上用 CPU 版 torch 跑 bench/tests 与 test_collect_runs（test_collect_runs 已可由 pytest 收集、缺 pandas 跳过）。
 7. 21 第 34 条 b、c：协议文件冻结后是否加 sha256 锁文件与配套测试；albert 合并进 main 是否走 PR，由 Luming 在 PR 描述里逐条确认第 1–4 项。
-8. 本机收尾（21 第 4、8 条）：python docs/paper/retiseg_paper/paper/scripts/build_placeholder.py --force → collect_runs.py → collect_literature.py → make -C paper；工作站albert 没有 runs/，在这里重生成会抹掉 results.csv 的实测 E2 行，所以只能在本机做。重生成后 any 行的新指标名 aupr_any_lesion 和 SAM 3 的 text:selected 键才会出现在 results.csv 里。
+8. 本机收尾（21 第 4、8 条）：python docs/paper/retiseg_paper/paper/scripts/build_placeholder.py --force → collect_runs.py → collect_literature.py → make -C paper；工作站albert 没有 runs/，在这里重生成会抹掉 results.csv 的实测 E2 行，所以只能在本机做。重生成后 any 行的新指标名 aupr_any_lesion 和 SAM 3 的 text:selected 键才会出现在 results.csv 里。 2026-10-13 复审 N3：合并 albert 与这次重生成必须放在同一次操作里；评审修复 15 起取数函数缺 aupr_any_lesion 行直接报错，不重生成 make 会失败而不是带着空行构建。
 
 E5 推理档评审修复 14：现存问题 27–36 里不需 Luming 决定的部分（2026-10-12，工作站albert；提交 f5397da）
 1. 28 契约测试：新建 bench/tests/test_e5_contract.py，六个用例分别构建真实的 SAM ViT-H 与 SAM 2.1 生成器（需 CUDA）、SAM ViT-B / SAM 2.1 / MedSAM 解码器、SAM 3 打分器，各喂一张合成窗口，断言输出形状、类型、取值范围和参数所在设备；没有权重即跳过，sam3 不可导入即跳过。server_run.sh check 阶段在 retiseg-sam3 里加跑它。工作站albert 没有权重，这里六个全部跳过，要到服务器才真正执行。
@@ -147,4 +147,13 @@ E5 推理档评审修复 14：现存问题 27–36 里不需 Luming 决定的部
 8. 36：18 第十节不再手写提交数，改为给出 git log --oneline 3c505bb..albert。
 9. 27 端到端流程测试：新建 bench/tests/test_e5_flow.py，按 17 第六节 b–f 的顺序在进程内走一遍：启动器出计划并逐项检查闸门（与 run_queue 同一判断），每项按它的命令行参数用假生成器 / 假解码器 / 假打分器执行；四个玩具集（IDRiD、DDR 作池，FGADR 作 drop-maps 且非曲线集，TJDR_uwf 带 fov 变体），画布 20、窗口 8。断言：冒烟后全量池运行把 22 项重新列出并重做（A5）；两处选择按打印的 yaml 写回协议；--test-only 先排两个池拼装项，每个闸门轮到时都是 open，全部测试 done.json 为 pool val_opt、只有 drop-maps 集的图被删（A3、A2），a_sam3_selected/FGADR 存在且措辞目录的图在拼装后才消失，FGADR 只有 k=全部目录（D6），TJDR_uwf 主变体与 fov 各三个目录；collect 对每个集都读到任意病灶、oracle_class、text:selected、oracle:box:all 等行，k 曲线行只在 IDRiD、DDR，TJDR-uwf 带 canvas_long_side 行。17 第六节改流程时此用例跟着改。
 10. 测试：test_e5_infer 加 2 个、test_launch_e5_infer 加 1 个，新文件四个（含 test_e5_flow.py）；整套 bench/tests 214 通过、25 跳过（新增 6 个契约用例和 1 个 pandas 包装都在工作站albert 跳过）、6 失败、4 错误。test_docs_paths 要求被引用的文件受跟踪，新文件在 git add 之前它会报未跟踪，这是预期行为。pandas 包装在带 pandas 的临时 venv 里 1 passed。
+
+E5 推理档评审修复 15：2026-10-13 复审的 N1、N2a、N4、N5（2026-10-12，工作站albert；待提交）
+1. 复审（albert @ 034616f 对照 20、22，原文由用户入库）确认 A1–A5 全部修复、B1/B3/B5 与工程项已实现、B2/B4/B6 部分完成（余下在待 Luming 清单），新提 N1–N5；登在 21 第 37–41 条。
+2. N1：evaluate 修复 8 的 fov 顶替以目录是否存在为条件，预算规则没生效时也会触发（64 密度下主变体失败或未完成，先跑完的 fov 数字顶上）。改为：amg 在 predicted.json 记 stands_in_for_main，只在测试划分的 fov 变体且 budget_rule_skips 对该模型的主变体为真时为真；collect 只对标志为真且主变体无 done.json 的 fov 目录顶替。test_collect_runs 加一个 64 密度 fov 不顶替的目录。呈现（独立 test_set 或脚注）仍在待 Luming 第 5 项。
+3. N2a：fig5 与表 6 的取数函数缺 aupr_any_lesion 行时不再回退为逐类均值，直接报错并提示重生成占位；N2b（零样本块内统一指标、块内排名、图 5e）写进待 Luming 第 5 项。
+4. N3：待 Luming 第 8 项补「合并与重生成同一次操作」。
+5. N4：test_docs_paths 对子模块目录不存在或为空的 official_code 路径跳过。
+6. N5：bench/common/io.write_prob 先写同目录临时名再 os.replace，文件要么不存在要么完整，九个预测写图点都受益，内容与路径不变（代价是每文件一次改名，微秒级；进程中途被杀会留一个 .tmp，下次写同一张图时覆盖）；outputs.maps_written 还校验四个 PNG 能完整解码，截断的图在续跑时重做；17 第六节 c 步加「正式运行前清空 runs/E5」。
+7. 测试：test_e5_infer 加 2 个（fov 运行的标志随密度与划分变化；write_prob 原子性与 .tmp 覆盖、截断图不算完成且续跑重做）；test_collect_runs 玩具树加一例。整套 bench/tests 预期 216 通过、25 跳过、6 失败、4 错误。18 第三、六、七节同步。
 

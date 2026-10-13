@@ -77,11 +77,13 @@ def e5_toy(runs):
         "b/b_m2mrf_ref_ddr_seed0/DDR__kall": ({"kind": "same_information_reference"}, [0.7, 0.7, 0.7, 0.7], 0.75),
         "b/b_sam_vitb_box/TJDR_uwf__fov__k1": ({"kind": "boxes"}, [0.9, 0.9, 0.9, 0.9], 0.9),  # canvas variant: skipped
         "a/a_sam_vith_p64/FGADR": None,  # no done.json: skipped
-        # the budget rule (review fix 8): SAM at 128 has no TJDR_uwf main variant, its fov run stands in (canvas 1440);
-        # SAM 2 has both, the main one (4256) is the result and its fov directory is skipped
-        "a/a_sam_vith_p128/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 1.0, "canvas_long_side": 1440}, [0.2, 0.2, 0.2, 0.2], 0.3),
-        "a/a_sam2_hieral21_p64/TJDR_uwf": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 4256}, [0.4, 0.4, 0.4, 0.4], 0.6),
-        "a/a_sam2_hieral21_p64/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 1440}, [0.1, 0.1, 0.1, 0.1], 0.1),
+        # the budget rule (review fix 8, N1): SAM at 128 has no TJDR_uwf main variant and its fov run says so
+        # (stands_in_for_main), so it stands in (canvas 1440); SAM 2 at 64 has both, the main one (4256) is the
+        # result and its fov directory is skipped; SAM at 64 lost its main run and its fov run does not stand in
+        "a/a_sam_vith_p128/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 1.0, "canvas_long_side": 1440, "stands_in_for_main": True}, [0.2, 0.2, 0.2, 0.2], 0.3),
+        "a/a_sam2_hieral21_p64/TJDR_uwf": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 4256, "stands_in_for_main": False}, [0.4, 0.4, 0.4, 0.4], 0.6),
+        "a/a_sam2_hieral21_p64/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 1440, "stands_in_for_main": False}, [0.1, 0.1, 0.1, 0.1], 0.1),
+        "a/a_sam_vith_p64/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 1440, "stands_in_for_main": False}, [0.9, 0.9, 0.9, 0.9], 0.9),  # skipped: the rule did not apply
     }
     for rel, spec in tree.items():
         d = runs / "E5" / rel
@@ -113,7 +115,8 @@ def check_e5(runs):
     assert not any("fov" in k[5] or k[5] == "FGADR" for k in got)
     uwf_sam = new[(new.model == "SAM") & (new.test_set == "TJDR-uwf")]
     assert set(uwf_sam.variant) == {"zero_shot:auto_any_lesion"} and uwf_sam[uwf_sam.metric == "canvas_long_side"]["value"].iloc[0] == 1440
-    assert uwf_sam[uwf_sam.metric == "points_per_side"]["value"].iloc[0] == 128 and abs(uwf_sam[uwf_sam.metric == "aupr_any_lesion"]["value"].iloc[0] - 0.3) < 1e-12
+    assert list(uwf_sam[uwf_sam.metric == "points_per_side"]["value"]) == [128] and abs(uwf_sam[uwf_sam.metric == "aupr_any_lesion"]["value"].iloc[0] - 0.3) < 1e-12
+    assert not any(abs(v - 0.9) < 1e-12 for v in uwf_sam["value"])  # the SAM p64 fov run (0.9) never stands in
     uwf_sam2 = new[(new.model == "SAM 2") & (new.test_set == "TJDR-uwf")]
     assert uwf_sam2[uwf_sam2.metric == "canvas_long_side"]["value"].iloc[0] == 4256 and abs(uwf_sam2[uwf_sam2.metric == "aupr_any_lesion"]["value"].iloc[0] - 0.6) < 1e-12
     assert len(new[(new.model == "SAM") & (new.test_set == "DDR") & (new.metric == "canvas_long_side")]) == 0  # the toy DDR done.json has no canvas: no row

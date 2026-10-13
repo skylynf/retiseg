@@ -489,9 +489,13 @@ def table_foundation():
 
     def any_lesion(model, variant, test):
         # the registered zero-shot result of the automatic masks is class-agnostic (e5_frozen.yaml zero_shot.outputs.main):
-        # collect_runs metric aupr_any_lesion; the mean of the per-class rows while only the placeholder table exists
+        # collect_runs metric aupr_any_lesion; a missing row is an error, never a substitute number (review N2): results.csv
+        # predates the key until build_placeholder.py --force and the two collects are run (docs/ops/00, Luming list, item 8)
         r = D.sel(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr_any_lesion")
-        return float(r["value"].mean()) if len(r) else float(np.nanmean(e5(model, variant, test)))
+        if not len(r):
+            raise ValueError(f"E5 {model} {variant} {test}: no aupr_any_lesion row in results.csv; regenerate the placeholder table "
+                             "(python scripts/build_placeholder.py --force, then collect_runs.py and collect_literature.py) or collect the runs")
+        return float(r["value"].mean())
 
     # (model, use, backbone, per-class values, optional summary for the mAUPR column); review fix 11 (B2): the zero-shot
     # rows show the class-by-overlap upper bound per class and the any-lesion AUPR as their summary, SAM 3 shows the

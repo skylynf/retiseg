@@ -3,7 +3,9 @@
 Review B6 found tracked documents citing untracked notes. The live docs are the ones a reader
 follows today: CHECKPOINT, the index, 00, 17, 18, 21 and 16. Historical records (19, 20, 22,
 the archive) are not checked. Paths under docs/notes(albert)/ are Albert's private notes and are
-cited as such; paths listed in PRODUCED_LATER are written by a later step.
+cited as such; paths listed in PRODUCED_LATER are written by a later step. A path inside a
+submodule (official_code/<name>/...) is checked only when that submodule is checked out, so a
+checkout without submodules, or a CI job, is not failed by it (review N4).
 """
 import re
 import subprocess
@@ -30,12 +32,21 @@ def cited_paths(text):
     return sorted({m.group(1).rstrip(".") for m in PATH.finditer(text) if "..." not in m.group(1)})
 
 
+def submodule_checked_out(path):
+    """False for an official_code/<name>/... path whose submodule directory is absent or empty."""
+    parts = Path(path).parts
+    if parts[0] != "official_code" or len(parts) < 2:
+        return True
+    root = REPO / parts[0] / parts[1]
+    return root.is_dir() and any(root.iterdir())
+
+
 def test_live_docs_cite_existing_tracked_paths():
     tracked = set(subprocess.run(["git", "-c", "core.quotepath=false", "ls-files"], cwd=REPO, capture_output=True, text=True, check=True).stdout.split("\n"))
     problems = []
     for name in LIVE_DOCS:
         for path in cited_paths((REPO / name).read_text()):
-            if path.startswith(PRIVATE) or path in PRODUCED_LATER:
+            if path.startswith(PRIVATE) or path in PRODUCED_LATER or not submodule_checked_out(path):
                 continue
             if not (REPO / path).exists():
                 problems.append(f"{name}: {path} does not exist")

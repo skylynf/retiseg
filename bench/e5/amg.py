@@ -287,6 +287,9 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
                     "canvas_long_side": "native" if long_side == geo.NATIVE else int(long_side),
                     "window": window_size, "overlap": None if window_size is None else geo.overlap(frozen),
                     "density": density, "area_cap_fraction": cap, "kind": kind,
+                    # True only for the fov variant of a test set whose per-degree main variant the registered budget rule
+                    # skips for this model (review N1): collect_runs lets exactly these runs stand in for the main result
+                    "stands_in_for_main": bool(variant != geo.MAIN and not pool_run and budget_rule_skips(frozen, split, density, set_name, geo.MAIN)),
                     "pixel_score": sr.STABILITY if kind == STABILITY else frozen["zero_shot"]["pixel_score"],
                     "n_images": len(ids), "limit": limit, "resumed_images": resumed, "n_windows": n_windows, "n_masks": n_masks,
                     "predict_seconds": round(elapsed, 1),

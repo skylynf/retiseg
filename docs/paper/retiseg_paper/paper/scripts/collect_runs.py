@@ -322,9 +322,11 @@ def e5_rows(runs_dir):
         its selected density, cap and canvas as rows (metric points_per_side, area_cap_fraction,
         canvas_long_side). When a model's largest density is selected, e5_frozen.yaml's budget rule
         skips its TJDR_uwf per-degree main variant (4256 canvas) and runs the fov variant (1440) only;
-        a <set>__fov[...] directory whose main counterpart has no done.json then stands in for the
-        main result, and its canvas_long_side row (1440 instead of 4256) marks the cell (review fix 8,
-        B4; docs/paper/16, docs/ops/00). Any other __fov directory is skipped as before.
+        that fov run records stands_in_for_main = true (bench/e5/amg.py evaluates the registered rule),
+        and only such a directory, with no done.json in its main counterpart, stands in for the main
+        result; its canvas_long_side row (1440 instead of 4256) marks the cell (review fix 8, B4, and
+        review N1: a fov run of a density the rule does not cover never stands in, however the main
+        variant fares). Any other __fov directory is skipped as before.
     a_sam3_ph<i>/<set>      model SAM 3, per class the variant text:<that class's phrase> (figure 5c)
     a_sam3_selected/<set>   model SAM 3, variant text:selected
     b_<sam|sam2|medsam>_<backbone>_<box|point>/<set>__k<k>   variant oracle:<box|point>:<k>
@@ -348,15 +350,16 @@ def e5_rows(runs_dir):
                 set_name, pool, tokens = e5_set(setdir.name)
                 if set_name not in E3A_SET:
                     continue
+                done = json.loads((setdir / "done.json").read_text())
                 if "fov" in tokens:
                     main_tokens = [t for t in tokens if t != "fov"]
                     main_dir = src / "".join([setdir.name.split("__")[0], *(f"__{t}" for t in main_tokens)])
-                    if pool or tier != "a" or slug not in ("sam", "sam2") or (main_dir / "done.json").exists():
+                    stands_in = tier == "a" and slug in ("sam", "sam2") and not pool and bool(done.get("stands_in_for_main"))
+                    if not stands_in or (main_dir / "done.json").exists():
                         continue  # a canvas variant for the supplement; the main variant, where it exists, is the result
-                    tokens = main_tokens  # the budget rule left no main variant: the fov run stands in for it
+                    tokens = main_tokens  # the registered budget rule left no main variant: this fov run stands in for it
                 test = E3A_SET[set_name] + ("-val" if pool else "")
                 report = json.loads((setdir / "metrics.json").read_text())
-                done = json.loads((setdir / "done.json").read_text())
                 k = next((t[1:] for t in tokens if re.fullmatch(r"k(\d+|all)", t)), None)
                 if tier == "a" and slug in ("sam", "sam2"):
                     density = int(rest.rsplit("_p", 1)[1])

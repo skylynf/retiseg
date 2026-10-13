@@ -16,6 +16,7 @@ Prediction directory (written by bench/predict.py):
 """
 
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -91,7 +92,13 @@ def write_prob(pred_dir, cls, image_id, prob):
     q = np.rint(prob * PROB_LEVELS).astype(np.uint16)
     out = Path(pred_dir) / cls
     out.mkdir(parents=True, exist_ok=True)
-    Image.fromarray(q).save(out / f"{image_id}.png")
+    # written under a temporary name and renamed, so <image_id>.png either does not exist or is complete:
+    # a process killed mid-write leaves .<image_id>.png.tmp, which the next write of the image overwrites
+    # (2026-10-12, docs/ops/21 open issue 41 / review N5)
+    final = out / f"{image_id}.png"
+    temporary = out / f".{image_id}.png.tmp"
+    Image.fromarray(q).save(temporary, format="PNG")
+    os.replace(temporary, final)
 
 
 def read_prob_quantized(pred_dir, cls, image_id):
