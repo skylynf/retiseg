@@ -136,7 +136,7 @@ E5 推理档评审修复 13：文档小处（2026-10-12，工作站albert；提�
 7. 21 第 34 条 b、c：协议文件冻结后是否加 sha256 锁文件与配套测试；albert 合并进 main 是否走 PR，由 Luming 在 PR 描述里逐条确认第 1–4 项。
 8. 本机收尾（21 第 4、8 条）：python docs/paper/retiseg_paper/paper/scripts/build_placeholder.py --force → collect_runs.py → collect_literature.py → make -C paper；工作站albert 没有 runs/，在这里重生成会抹掉 results.csv 的实测 E2 行，所以只能在本机做。重生成后 any 行的新指标名 aupr_any_lesion 和 SAM 3 的 text:selected 键才会出现在 results.csv 里。
 
-E5 推理档评审修复 14：现存问题 28–36 里不需 Luming 决定的部分（2026-10-12，工作站albert；待提交）
+E5 推理档评审修复 14：现存问题 27–36 里不需 Luming 决定的部分（2026-10-12，工作站albert；提交 f5397da）
 1. 28 契约测试：新建 bench/tests/test_e5_contract.py，六个用例分别构建真实的 SAM ViT-H 与 SAM 2.1 生成器（需 CUDA）、SAM ViT-B / SAM 2.1 / MedSAM 解码器、SAM 3 打分器，各喂一张合成窗口，断言输出形状、类型、取值范围和参数所在设备；没有权重即跳过，sam3 不可导入即跳过。server_run.sh check 阶段在 retiseg-sam3 里加跑它。工作站albert 没有权重，这里六个全部跳过，要到服务器才真正执行。
 2. 29a：新建 bench/tests/test_collect_runs_paper.py，在有 pandas 的环境里由 pytest 运行论文的 test_collect_runs.py，没有 pandas 则跳过。29b（CI）待 Luming。
 3. 30：amg --select 与 sam3_text --select 各写一份记录（runs/E5/selection_grid.json、selection_sam3.json：规则、所选、全部数字、两池图数、时间、git、主机），selected 已填时拒绝再选并提示先清空并在 00 记原因；e5_frozen.yaml select_rule 补一句两池按像素合并、DDR 149 张占主导、选择只做一次。
