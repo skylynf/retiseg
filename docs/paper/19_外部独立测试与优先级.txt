@@ -46,7 +46,7 @@
      10 e3a（max_concurrent 2）：独立测试，所有来源；MAPLES-DR 到位自动加入。
      20 e5_seed0：SAMed、SAM-Adapter、SAM2-UNet、RETFound 的 IDRiD/DDR 种子 0（8 个运行，最长 22 小时；表 3 的训练档）。
      25 fundus_seed0（冒烟后开）：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net 种子 0（10 个运行；主表 5 行、同骨干比较）。
-     28/29/30 e5_amg、e5_prompted（box）、e5_prompted_points（各 max_concurrent 1）：零样本与理想提示行；more_masks 与 G2 砍掉（16 第八节）。
+     28/29 e5_infer_pool、e5_infer_test（各 max_concurrent 1；2026-10-14 albert 合并后取代原来的 e5_amg、e5_prompted、e5_prompted_points，两个都关着等 Luming 确认 D1–D9，见 docs/ops/25）：零样本与理想提示行；G2 砍掉（16 第八、九节）。
      32 factor_cheap：U-Net、M2MRF 的影响因素格子（旧 launch_factor 正在跑，这一阶段只接它漏下的）。
      40 nnunet_e3b：TJDR_std、FGADR 两个 nnU-Net（E3b 第五个模型）。
      45 factor_e3b_heavy：SAM2-UNet、RETFound 的 E3b 四格（约 76 小时）。

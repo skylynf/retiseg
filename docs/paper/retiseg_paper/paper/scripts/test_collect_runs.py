@@ -54,6 +54,83 @@ def toy(root):
     return ids, truth
 
 
+def e5_report(values, any_aupr):
+    """A minimal evaluate() report: per-class AUPR and fixed / val_opt thresholds, plus the any-lesion entry."""
+    per_class = {}
+    for cls, v in zip(CLASSES, values):
+        per_class[cls] = {"aupr": v, "aupr_m2mrf_impl": v, "aupr_ci": [v - 0.05, v + 0.05],
+                          "thresholds": {"fixed": {"pooled": {"dice": v / 2}},
+                                         "val_opt": {"pooled": {"dice": v / 2, "iou": v / 3}, "lesion": {"precision": v, "by_size": {"small": {"recall": v}}}}}}
+    return {"summary": {"mAUPR": sum(values) / 4, "AUPR_any_lesion": any_aupr}, "any_lesion": {"aupr": any_aupr}, "per_class": per_class}
+
+
+def e5_toy(runs):
+    """runs/E5 as bench/e5 writes it: one directory of every kind the collector reads, plus two it must skip."""
+    tree = {
+        "a/a_sam_vith_p64/DDR": ({"kind": "any_lesion", "area_cap_fraction": 0.02}, [0.1, 0.2, 0.3, 0.4], 0.5),
+        "a/a_sam_vith_p64/DDR__oracle_class": ({"kind": "oracle_class", "area_cap_fraction": 0.02}, [0.2, 0.3, 0.4, 0.5], 0.5),
+        "a/a_sam2_hieral21_p128/IDRiD-val__cap0.02__stability": ({"kind": "stability", "area_cap_fraction": 0.02}, [0.1, 0.1, 0.1, 0.1], 0.2),
+        "a/a_sam3_ph1/IDRiD": ({"kind": "text", "phrases": {"MA": "red dot", "HE": "blot hemorrhage", "EX": "yellow deposit", "SE": "soft exudate"}}, [0.3, 0.3, 0.3, 0.3], 0.4),
+        "a/a_sam3_selected/IDRiD": ({"kind": "text_selected"}, [0.35, 0.35, 0.35, 0.35], 0.45),
+        "b/b_sam2_hieral21_point/IDRiD__k5": ({"kind": "points", "k": 5}, [0.5, 0.6, 0.7, 0.8], 0.8),
+        "b/b_medsam_vitb_box/TJDR_std__kall": ({"kind": "boxes", "k": "all"}, [0.6, 0.6, 0.6, 0.6], 0.7),
+        "b/b_m2mrf_ref_ddr_seed0/DDR__kall": ({"kind": "same_information_reference"}, [0.7, 0.7, 0.7, 0.7], 0.75),
+        "b/b_sam_vitb_box/TJDR_uwf__fov__k1": ({"kind": "boxes"}, [0.9, 0.9, 0.9, 0.9], 0.9),  # canvas variant: skipped
+        "a/a_sam_vith_p64/FGADR": None,  # no done.json: skipped
+        # the budget rule (review fix 8, N1): SAM at 128 has no TJDR_uwf main variant and its fov run says so
+        # (stands_in_for_main), so it stands in (canvas 1440); SAM 2 at 64 has both, the main one (4256) is the
+        # result and its fov directory is skipped; SAM at 64 lost its main run and its fov run does not stand in
+        "a/a_sam_vith_p128/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 1.0, "canvas_long_side": 1440, "stands_in_for_main": True}, [0.2, 0.2, 0.2, 0.2], 0.3),
+        "a/a_sam2_hieral21_p64/TJDR_uwf": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 4256, "stands_in_for_main": False}, [0.4, 0.4, 0.4, 0.4], 0.6),
+        "a/a_sam2_hieral21_p64/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 1440, "stands_in_for_main": False}, [0.1, 0.1, 0.1, 0.1], 0.1),
+        "a/a_sam_vith_p64/TJDR_uwf__fov": ({"kind": "any_lesion", "area_cap_fraction": 0.02, "canvas_long_side": 1440, "stands_in_for_main": False}, [0.9, 0.9, 0.9, 0.9], 0.9),  # skipped: the rule did not apply
+    }
+    for rel, spec in tree.items():
+        d = runs / "E5" / rel
+        d.mkdir(parents=True)
+        if spec is None:
+            continue
+        done, values, any_aupr = spec
+        (d / "metrics.json").write_text(json.dumps(e5_report(values, any_aupr)))
+        (d / "done.json").write_text(json.dumps(done))
+
+
+def check_e5(runs):
+    e5_toy(runs)
+    new, seen = collect_runs.collect_e5(runs)
+    assert len(seen) == 10, seen
+    keys = new[["experiment", "model", "variant", "train_set", "seed", "test_set"]].drop_duplicates()
+    got = {tuple(r) for r in keys.values.tolist()}
+    expected = {
+        ("E5", "SAM", "zero_shot:auto_any_lesion", "none", -1, "DDR"),
+        ("E5", "SAM", "zero_shot:auto_oracle_class", "none", -1, "DDR"),
+        ("E5", "SAM 2", "zero_shot:auto_stability:p128:cap0.02", "none", -1, "IDRiD-val"),
+        ("E5", "SAM 3", "text:selected", "none", -1, "IDRiD"),
+        ("E5", "SAM 2", "oracle:point:5", "none", -1, "IDRiD"),
+        ("E5", "MedSAM", "oracle:box:all", "none", -1, "TJDR-std"),
+        ("E5", "M2MRF", "oracle_ref:box:all", "DDR", 0, "DDR"),
+    }
+    assert expected <= got, expected - got
+    assert ("E5", "SAM 3", "text:red dot", "none", -1, "IDRiD") in got and ("E5", "SAM 3", "text:yellow deposit", "none", -1, "IDRiD") in got
+    assert not any("fov" in k[5] or k[5] == "FGADR" for k in got)
+    uwf_sam = new[(new.model == "SAM") & (new.test_set == "TJDR-uwf")]
+    assert set(uwf_sam.variant) == {"zero_shot:auto_any_lesion"} and uwf_sam[uwf_sam.metric == "canvas_long_side"]["value"].iloc[0] == 1440
+    assert list(uwf_sam[uwf_sam.metric == "points_per_side"]["value"]) == [128] and abs(uwf_sam[uwf_sam.metric == "aupr_any_lesion"]["value"].iloc[0] - 0.3) < 1e-12
+    assert not any(abs(v - 0.9) < 1e-12 for v in uwf_sam["value"])  # the SAM p64 fov run (0.9) never stands in
+    uwf_sam2 = new[(new.model == "SAM 2") & (new.test_set == "TJDR-uwf")]
+    assert uwf_sam2[uwf_sam2.metric == "canvas_long_side"]["value"].iloc[0] == 4256 and abs(uwf_sam2[uwf_sam2.metric == "aupr_any_lesion"]["value"].iloc[0] - 0.6) < 1e-12
+    assert len(new[(new.model == "SAM") & (new.test_set == "DDR") & (new.metric == "canvas_long_side")]) == 0  # the toy DDR done.json has no canvas: no row
+    assert set(new[new.metric == "aupr"]["cls"]) <= set(CLASSES)
+    any_rows = new[(new.cls == "any") & (new.metric == collect_runs.ANY_LESION_METRIC)]
+    assert len(any_rows) == 9 and abs(any_rows[any_rows.model == "SAM 2"]["value"].max() - 0.8) < 1e-12  # no any-lesion row for a phrase run
+    extra = new[(new.model == "SAM") & (new.test_set == "DDR") & (new.cls == "")]
+    assert set(extra.metric) == {"points_per_side", "area_cap_fraction"} and extra[extra.metric == "points_per_side"]["value"].iloc[0] == 64
+    phrase_rows = new[(new.model == "SAM 3") & (new.variant == "text:red dot")]
+    assert set(phrase_rows.cls) == {"MA"}
+    assert "dice_valopt" in set(new.metric) and "lesion_recall_small" in set(new.metric)
+    print(f"ok: {len(new)} E5 rows from {len(seen)} inference-tier directories")
+
+
 def main():
     tmp = Path(tempfile.mkdtemp())
     try:
@@ -70,7 +147,12 @@ def main():
         (tmp / "runs" / "BSprobe_unet_ddr_seed0").mkdir()  # must be ignored
         new, seen = collect_runs.collect(tmp / "runs")
         assert len(seen) == 1 and seen[0][0] == "BS_unet_ddr_seed0", seen
-        assert set(new["cls"]) == set(CLASSES)
+        assert set(new["cls"]) == set(CLASSES) | {"any"}
+        # metric "aupr" is the four classes and nothing else: their mean is the evaluator's mAUPR (the main-table number)
+        aupr = new[new.metric == "aupr"]
+        assert set(aupr["cls"]) == set(CLASSES) and abs(aupr["value"].mean() - report["summary"]["mAUPR"]) < 1e-12
+        any_row = new[new.metric == collect_runs.ANY_LESION_METRIC]
+        assert list(any_row["cls"]) == ["any"] and abs(any_row["value"].iloc[0] - report["summary"]["AUPR_any_lesion"]) < 1e-12
         assert (new[["experiment", "model", "variant", "train_set", "seed", "test_set"]].drop_duplicates().values.tolist()
                 == [["E2", "U-Net", "bstd", "DDR", 0, "DDR"]])
         got = new[(new.cls == "MA") & (new.metric == "aupr")]["value"].iloc[0]
@@ -83,7 +165,7 @@ def main():
         table = table[(table.experiment != "E2") | (table.source != "measured")]
         merged, replaced, added, stale = collect_runs.merge(table, new)
         key = (merged.experiment == "E2") & (merged.model == "U-Net") & (merged.train_set == "DDR") & (merged.seed == 0) & (merged.test_set == "DDR")
-        cell = merged[key & merged.metric.isin(needed)]
+        cell = merged[key & merged.metric.isin(needed | {collect_runs.ANY_LESION_METRIC})]
         assert (cell["source"] == "measured").all() and len(cell) == len(new), (len(cell), len(new))
         assert replaced + added == len(new), (replaced, added)
         # placeholder seeds of the measured (U-Net, DDR, DDR) group are dropped; other models keep theirs
@@ -91,33 +173,12 @@ def main():
         assert (other["source"] == "measured").all() and set(other["seed"]) == {0}, set(other["seed"])
         assert len(merged) == len(table) - replaced - stale + len(new)
         assert new[new.metric == "lesion_recall_small"]["value"].isna().all()  # toy lesions are all large
-        # E5 scored directories: paper.json + metrics_test.json, DDR_val ignored, any-lesion row, per-class variants
-        e5 = tmp / "runs" / "E5" / "a" / "sam" / "default" / "TOY_test" / "any"
-        e5.mkdir(parents=True)
-        shutil.copyfile(run / "metrics_test.json", e5 / "metrics_test.json")
-        (e5 / "paper.json").write_text(json.dumps({"experiment": "E5", "model": "SAM", "variant": "zero_shot:auto_any_lesion",
-                                                   "train_set": "none", "seed": -1, "test_set": "IDRiD"}))
-        val = tmp / "runs" / "E5" / "a" / "sam" / "default" / "DDR_val" / "any"
-        val.mkdir(parents=True)
-        shutil.copyfile(run / "metrics_test.json", val / "metrics_test.json")
-        shutil.copyfile(e5 / "paper.json", val / "paper.json")
-        sam3 = tmp / "runs" / "E5" / "sam3" / "phrase0" / "TOY_test"
-        sam3.mkdir(parents=True)
-        shutil.copyfile(run / "metrics_test.json", sam3 / "metrics_test.json")
-        (sam3 / "paper.json").write_text(json.dumps({"experiment": "E5", "model": "SAM 3", "variant": "text:phrase0", "train_set": "none",
-                                                     "seed": -1, "test_set": "IDRiD", "variant_by_class": {c: f"text:{c.lower()}" for c in CLASSES}}))
         # nnU-Net run names: main-table sources are E2, the E3b training sources TJDR_std and FGADR are E3b
         assert collect_runs.nn_key(collect_runs.NN.match("NN_default_ddr_fold0_rep2")) == ("E2", "bstd", "nnU-Net", "DDR", 2)
         assert collect_runs.nn_key(collect_runs.NN.match("NN_default_fgadr_fold0")) == ("E3b", "bstd", "nnU-Net", "FGADR", 0)
         assert collect_runs.nn_key(collect_runs.NN.match("NN_resencm_tjdr_std_fold0")) == ("E3b", "bstd", "nnU-Net ResEnc-M", "TJDR-std", 0)
-        rows, seen5 = collect_runs.collect_e5(tmp / "runs")
-        assert len(seen5) == 2 and all(not name.startswith("E5/a/sam/default/DDR_val") for name, _v, _m in seen5), seen5
-        sam = rows[rows.model == "SAM"]
-        assert set(sam.cls) == set(CLASSES) | {"any"} and (sam.variant == "zero_shot:auto_any_lesion").all()
-        assert abs(sam[(sam.cls == "any")]["value"].iloc[0] - report["any_lesion"]["aupr"]) < 1e-12
-        three = rows[rows.model == "SAM 3"]
-        assert set(three[three.cls == "MA"].variant) == {"text:ma"} and set(three[three.cls == "any"].variant) == {"text:phrase0"}
-        print(f"ok: {len(new)} rows from one report replaced {replaced} placeholder rows; nothing else changed; E5 reader {len(rows)} rows")
+        print(f"ok: {len(new)} rows from one report replaced {replaced} placeholder rows; nothing else changed")
+        check_e5(tmp / "runs")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

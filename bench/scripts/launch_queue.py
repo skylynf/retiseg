@@ -18,8 +18,7 @@ working on their own as before):
     bs       bench/scripts/launch_b1.py plan_queue_all keys: jobs (yaml), only (models), seed0_only, datasets
     factor   bench/scripts/launch_factor.py plan()     keys: experiment, only, models, score_only
     nnunet   bench/scripts/nnunet_run.sh               keys: runs: [{train, plan}]; needs the converted raw data
-    e5_amg   python -m bench.e5 amg                    keys: models, generators, sets (each "<set>" or "<set>:<split>"), geometry
-    e5_prompted  python -m bench.e5 prompted           keys: models, kinds, sets, k
+    e5_infer bench/scripts/launch_e5_infer.py plan()   keys: phase (pool | test), only (sources), drop_maps
     shell    literal items                             keys: env, items: [{label, command, done, run_dir}]
 
 An item is "done" when its stage says so (marker files); "running" when its
@@ -156,59 +155,48 @@ def plan_nnunet(stage, dry):
     return out
 
 
-def _e5_sets(stage):
-    """(set, split) of the stage, leaving out a set whose prepared directory is not on this machine
-    (MAPLES-DR before its export); the stage picks it up once the directory exists."""
-    from bench.e5 import common
-
-    for item in stage.get("sets") or ():
-        name, _, split = str(item).partition(":")
-        if not common.data_dir(name).is_dir():
-            continue
-        yield name, split or "test"
+_PROMPT_LOCK = threading.Lock()
 
 
-def _e5_py(stage, dry):
-    return ["python"] if dry else python_argv(stage.get("env", "retiseg"))
+def plan_e5_infer(stage, dry):
+    """The E5 inference tiers through bench/scripts/launch_e5_infer.py (docs/ops/25, the albert merge).
 
+    ``phase: pool`` lists the validation-pool runs (the grid, the SAM 3 phrases, the oracle tier on
+    IDRiD and DDR val); ``phase: test`` lists the test runs, which appear only once e5_frozen.yaml's
+    selections are filled, each gated on its own source's pool directories (three-state gate:
+    "never" when nothing queued writes them). Items of a set whose prepared directory is not on this
+    machine are left out until it exists (MAPLES-DR before its export). Missing oracle prompt files are
+    written here, on the CPU, before the first item is returned (not in a dry plan).
+    """
+    from bench.e5 import frozen as fz
+    from bench.e5 import geometry as geo
+    from bench.scripts import launch_e5_infer as le
 
-def plan_e5_amg(stage, dry):
-    from bench.e5 import amg, common
-
+    phase = stage.get("phase", "pool")
+    if phase not in ("pool", "test"):
+        raise ValueError(f"e5_infer stage: phase must be pool or test, got {phase!r}")
+    frozen = fz.load_frozen()
+    only = set(stage.get("only") or ())
+    items = _quiet(le.plan, frozen, only, phase == "pool", phase == "test")
+    items = [item for item in items if geo.data_dir(item.set_name).is_dir()]
+    if dry:
+        missing = le.missing_prompt_files(frozen, items)
+        if missing:
+            print("e5_infer: prompt files to write first: " + ", ".join(f"{n}/{s}/{v}" for n, s, v in missing), flush=True)
+    else:
+        with _PROMPT_LOCK:  # every worker thread calls gather; one of them writes a missing file
+            missing = le.missing_prompt_files(frozen, items)
+            if missing:
+                le.write_prompt_files(frozen, missing)
+    drop = tuple(stage.get("drop_maps") or ())
+    producers = None
+    if not dry:
+        running = [it for it in _quiet(le.discover, frozen) if it.running() is not None]
+        producers = le.producers_of(running + _quiet(le.plan, frozen, only, False, False))
     out = []
-    geometry = stage.get("geometry", "G1")
-    for model in stage.get("models") or ("sam", "sam2"):
-        for generator in stage.get("generators") or ("default",):
-            for test_set, split in _e5_sets(stage):
-                directory = amg.out_dir(model, generator, test_set, split, geometry)
-                if common.is_done(directory):
-                    continue
-                log_dir = directory.relative_to(_ROOT)
-                if in_progress(log_dir) is not None:
-                    continue
-                argv = ["-m", "bench.e5", "amg", "--model", model, "--generator", generator, "--set", test_set, "--split", split,
-                        "--geometry", geometry]
-                out.append((f"e5_amg:{model}/{generator}/{test_set}_{split}", _wrap("e5_amg", log_dir, _e5_py(stage, dry), argv), None))
-    return out
-
-
-def plan_e5_prompted(stage, dry):
-    from bench.e5 import common, prompted
-
-    out = []
-    ks = prompted.parse_k(stage.get("k", "1,5,10,20,all"))
-    for model in stage.get("models") or ("sam2",):
-        for kind in stage.get("kinds") or ("box",):
-            for test_set, split in _e5_sets(stage):
-                dirs = {k: prompted.out_dir(model, kind, k, test_set, split) for k in ks}
-                if all(common.is_done(d) for d in dirs.values()):
-                    continue
-                log_dir = dirs[ks[-1]].relative_to(_ROOT)
-                if in_progress(log_dir) is not None:
-                    continue
-                argv = ["-m", "bench.e5", "prompted", "--model", model, "--kind", kind, "--set", test_set, "--split", split,
-                        "--k", ",".join(str(k) for k in ks)]
-                out.append((f"e5_prompted:{model}/{kind}/{test_set}_{split}", _wrap("e5_prompted", log_dir, _e5_py(stage, dry), argv), None))
+    for item in items:
+        command = le.command(item, py_argv=["python"] if dry else None, drop_maps=drop)
+        out.append((f"e5_infer:{item.label}", command, le.gate_for(item, producers)))
     return out
 
 
@@ -232,8 +220,8 @@ def plan_shell(stage, dry):
     return out
 
 
-PLANNERS = {"e3a": plan_e3a, "bs": plan_bs, "factor": plan_factor, "nnunet": plan_nnunet, "e5_amg": plan_e5_amg,
-            "e5_prompted": plan_e5_prompted, "shell": plan_shell}
+PLANNERS = {"e3a": plan_e3a, "bs": plan_bs, "factor": plan_factor, "nnunet": plan_nnunet, "e5_infer": plan_e5_infer,
+            "shell": plan_shell}
 
 
 @contextlib.contextmanager
@@ -253,11 +241,13 @@ def gather(path=QUEUE, dry=False, report=None):
         if not stage.get("enabled", True):
             continue
         planner = PLANNERS.get(stage["kind"])
-        if planner is None:
-            raise ValueError(f"stage {stage['name']}: unknown kind {stage['kind']}")
         try:
+            if planner is None:
+                raise ValueError(f"unknown kind {stage['kind']} (a launcher older than the queue file: restart it)")
             items = planner(stage, dry)
-        except Exception as exc:  # a stage that cannot plan is reported, the queue goes on
+        except (Exception, SystemExit) as exc:  # a stage that cannot plan is reported, the queue goes on
+            # SystemExit too: python_argv exits when a stage's conda env is missing (retiseg-sam3 before
+            # cluster_env.sh sam3), which must not end every worker thread (merge review 2026-10-14)
             if report is not None:
                 report.append(f"{stage['name']}: {type(exc).__name__}: {exc}")
             continue

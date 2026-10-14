@@ -375,6 +375,8 @@ def foundation(sim):
             for cls in CLASSES:
                 v = np.clip(base * cls_scale[cls] * r.uniform(0.7, 1.3), 0.001, 0.9)
                 sim.add("E5", model, f"zero_shot:{variant}", "none", -1, test, cls, "aupr", v)
+            if variant == "auto_any_lesion":  # the class-agnostic result collect_runs writes as metric aupr_any_lesion, cls any
+                sim.add("E5", model, f"zero_shot:{variant}", "none", -1, test, "any", "aupr_any_lesion", float(np.clip(base * 1.8 * r.uniform(0.8, 1.2), 0.001, 0.9)))
     wording = {
         "MA": ["microaneurysm", "red dot", "small red lesion"],
         "HE": ["retinal hemorrhage", "blot hemorrhage", "dark red patch"],
@@ -384,13 +386,16 @@ def foundation(sim):
     sam3 = {"MA": 0.03, "HE": 0.16, "EX": 0.24, "SE": 0.20}
     for test in TESTS:
         for cls in CLASSES:
+            chosen = None
             for i, w in enumerate(wording[cls]):
                 v = np.clip(sam3[cls] * (1.0 - 0.28 * i) * r.uniform(0.75, 1.25) * (0.7 if test not in ("IDRiD", "DDR") else 1), 0.002, 0.9)
                 sim.add("E5", "SAM 3", f"text:{w}", "none", -1, test, cls, "aupr", v)
+                if i == 0:  # the wording "chosen on the validation pool" (a_sam3_selected, variant text:selected): the first one, on every test set alike
+                    chosen = v
+            sim.add("E5", "SAM 3", "text:selected", "none", -1, test, cls, "aupr", chosen)
     # Oracle prompts: performance against prompts per image and class.
     ceiling = {
         ("SAM", "box"): {"MA": 0.30, "HE": 0.62, "EX": 0.66, "SE": 0.72},
-        ("SAM", "point"): {"MA": 0.18, "HE": 0.45, "EX": 0.48, "SE": 0.60},
         ("SAM 2", "box"): {"MA": 0.33, "HE": 0.66, "EX": 0.69, "SE": 0.75},
         ("SAM 2", "point"): {"MA": 0.20, "HE": 0.50, "EX": 0.52, "SE": 0.63},
         ("MedSAM", "box"): {"MA": 0.22, "HE": 0.58, "EX": 0.57, "SE": 0.70},
@@ -401,7 +406,7 @@ def foundation(sim):
     for (model, kind), ceil in ceiling.items():
         for test in ("IDRiD", "DDR", "TJDR-std"):
             scale = {"IDRiD": 1.0, "DDR": 0.88, "TJDR-std": 0.92}[test]
-            for k in (1, 5, 10, 20, "all"):
+            for k in (1, 5, 20, "all"):  # docs/paper/16 E5b (2026-10-12): four levels
                 for cls in CLASSES:
                     frac = 1.0 if k == "all" else k / (k + half[cls])
                     v = np.clip(ceil[cls] * scale * frac + r.normal(0, 0.008), 0.001, 0.95)

@@ -135,3 +135,13 @@
      --exclude='*' SERVER:retiseg/runs/ runs/
 6. 叙述记录：每个阶段的结论写进 00_进度.txt，一段一个日期，写清做了什么、看了哪些数、结论是什么、对应的提交号。改协议的决定（预算、批大小）写在 00，并与对应的配置一起提交。
 7. 不允许的事：看过测试指标以后再改预算、增强或选择规则；在 runs/ 里手工删改 history.jsonl 或 recipe.json。
+
+十一、E5 推理档（a 零样本、b 理想提示；2026-10-12 接线，工作站albert）
+实现记录在 design/23，逐项任务在 17 第六节。要点：
+1. 环境：bash bench/scripts/cluster_env.sh sam3 建 retiseg-sam3（SAM 3 专用；env 阶段也会建，RETISEG_SKIP_SAM3=1 跳过）。权重放 pretrained/：sam_vit_h_4b8939.pth、sam_vit_b_01ec64.pth、sam2.1_hiera_large.pt、medsam_vit_b.pth、sam3.pt。
+2. 看计划，不占卡：conda run -n retiseg python bench/scripts/launch_e5_infer.py（列出每项的来源、集、环境和相对代价；测试集的 a 档项只在 e5_frozen.yaml 的两个 selected 填好后出现）。
+3. 冒烟：RETISEG_GPUS="2" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2。看 runs/E5/<档>/<来源>/<集>-val/predicted.json 的 seconds_per_window_mean / seconds_per_prompt_mean、done.json 的 summary，nvidia-smi 的显存。带 --limit 的目录在之后不带 --limit 的运行里会重做。
+4. 池运行：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer --pool-only。
+5. 选择写回：a 档按池上六组（每个来源 a_sam*_p64 / p128 下 <集>-val[__cap0.005|__cap0.02] 的 done.json summary.AUPR_any_lesion，两个池集按像素合并后比；bench.e5.outputs.pool_class_aupr 可直接算）填 zero_shot.grid.selected；SAM 3 跑 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select 得到 selected。提交 e5_frozen.yaml，00 记一笔。
+6. 测试集：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer --test-only --drop-maps FGADR,Retinal-Lesions。拼装项等三个序号完成后自动开。
+7. 回传 runs/E5 下的 json（第六节第 5 条的 rsync 同样带回）。

@@ -20,6 +20,7 @@
 2026-10-08  B1 暂停（算力，用户决定）。预算规则两次修订后冻结：IDRiD 1000、DDR 400 个等效 epoch（探测曲线平滑后最高点不早于 90% 才翻倍）。B-std 统一队列启动（48 项）。U-Net 稀有类塌缩确诊为逐图 Dice（平滑 1）的机制，只读训练块和验证。
 2026-10-11  B-std 种子 0 全部出数（HRNet 两库第一）；HACDR 打分修复（torch 1.10 的 weights_only）。用户决定：种子 1、2 暂缓。启动 E1r bs4（A100）、U-Net 整批 Dice 诊断、nnU-Net 两种配置、B1 补位。泄漏审计 IDRiD/DDR：无近重复。E5 设计写成 15。范围精简写成 16（剩余约 5500 A100 时压到约 810）；L1 原文数字抽取完成。
 2026-10-12  nnU-Net 默认 0.671 / 0.432，ResEnc-M 0.631 / 0.428。U-Net 整批 Dice 诊断验证 0.569 / 0.544；用户决定主表 U-Net 采用整批 Dice（bs_frozen.yaml recipe_revisions，原运行改名 *_registered）；E5 五项待定按建议（TF32、natureCFP、按代码、塌缩同 U-Net 规则、编码器对照后按 16 缩减）；以 FGADR 等训练时评测去重（leak_exclusions.json）。独立测试接线（e3a_frozen.yaml、bench/e3a.py）；全库泄漏审计（FGADR _3 批来自 EyePACS，与 Retinal-Lesions 90 张同图；FGADR 内部同眼重复；TJDR_uwf 跨划分重复 2 对）；E2c 接线；E5 训练档五个包装器接线。服务器 09:08：停 B1；E1r bs4 打分 61.19 / 0.549；U-Net 两库种子 0 重跑；E2c 只排 DDR。本机：快照接入论文、R3/R4 改写、17 任务单。
+2026-10-14  albert 分支并入 main（Liuyc05）：E5 推理档用 albert 按 16 写的实现，main 10-13 的实现与 runs/E5/prompts/、area_cap 244004 弃用（未解码、未读测试指标）；队列里推理档改为 e5_infer_pool / e5_infer_test，关着等 Luming 确认 D1–D9；评审修复 16（框装进窗口、选择一致性）。记录 docs/ops/25。
 
 三、最近的服务器记录（原文；新记录追加在后面）
 按 17 执行（2026-10-12，pull 到 b73b99d）
@@ -82,3 +83,140 @@ E5 推理档代码（2026-10-13，本机；pull 到 a4339e3 之后）
 E5 推理档队列先关（2026-10-14，Liuyc05）
 1. queue.yaml 的 e5_amg、e5_prompted、e5_prompted_points 三个阶段加 enabled: false。原因：这三项按 SAM ViT-H 做 b 档、k 含 10、零样本用作者 32 点参数，与 16 的 E5a/E5b 行不一致（ViT-B；k ∈ {1, 5, 20, all}；点密度 {64, 128} × 面积上限 {0.5%, 2%, 100%}）。这三项还没有任何解码，没有结果作废。
 2. albert 分支按 16 的范围实现了推理档（bench/e5，评审修复 1–15），合并记录与注意事项在 docs/ops/25_albert合并记录.txt（随合并分支提交）。合并落地前这三个阶段保持关闭；e5_amg_g2 原本就关。
+
+（以下到「albert 分支并入 main」为止是 albert 分支 2026-10-12、13 在工作站albert 写的记录，2026-10-14 合并时整段并入，正文未改；其中的“18”“19”指今天的 docs/design/23、24，见 docs/README.txt。）
+
+工作站albert 接入与测试基线（2026-10-12，工作站albert；提交 3c505bb，未新增提交）
+1. 机器：Albert 的工作站（RTX 5090 32GB，WSL2，conda retiseg：Python 3.11、torch 2.11.0+cu128），没有 dataset/、pretrained/、runs/。docs 里凡在这台机器上做的事记为“工作站albert”，“本机”仍指 Luming 的工作站。环境细节和测试命令在 docs/notes(albert)/albert环境.txt。
+2. 仓库：以协作者身份重新克隆 skylynf/retiseg，分支 albert 自 main 3c505bb；fetch 后 origin/main 没有新提交。33 个子模块全部 --depth 1 初始化（477MB）。
+3. 测试：16GB 虚拟内存上限下跑 bench/tests，未改动时 165 通过、18 跳过、7 失败、4 错误。18 个跳过和 6 个失败都是缺 dataset/（prepared IDRiD、DDR 和原始包；失败的六个用例没有 skipif）；4 个错误是 test_h2former_forward 的模块级 fixture 在 960 建 H2Former 时 3.3GB 分配超出上限。第 7 个失败是 test_factor.py 的端到端用例自身写错两处（ModelCard 的 family 写成 "fundus"；玩具数据写在 root/prepared 而 cell 指向 dataset/prepared）；改测试两行后 test_factor.py 5 通过、1 跳过，整套 166 通过、18 跳过、6 失败、4 错误，三次一致（其中一次由用户手动跑）。这是 run_cell 第一次在有 torch 的机器上端到端跑通（17 第十一节第 1 条）；bench/factor.py 未改；服务器 torch 2.6 下仍要再跑一次。改动未提交。
+
+E5 推理档步骤 0：协议对齐到 16（2026-10-12，工作站albert）
+1. 用户决定（依据和代价估算在 docs/design/24_E5推理档流程.txt 第十七节，2026-10-12 入库）：D1 按 16，a 档自动掩码参数从登记网格 点密度 {64, 128} × 面积上限 {0.5%, 2%, 不限} 里在验证池上按任意病灶 AUPR 选一组，测试集只跑选中的一组，其余生成器参数取库默认，原来“两套作者参数、不调”作废；同时登记一条预算规则：128 当选则 TJDR_uwf 只跑 fov 变体（这条是建议，用户可在验证池结果出来后否决）。D2 验证池 = IDRiD 验证 10 张加 DDR 验证 149 张（17 第六节），a 档网格、SAM 3 措辞、推理档 Dice 阈值都只在池上选。D3 b 档 SAM 用 ViT-B（a 档仍 ViT-H）。D4 k = {1, 5, 20, 全部}。D5 点提示只做 SAM 2.1。D6 k = 全部跑 7 个测试集，k 曲线只在 IDRiD、DDR；同信息对照（M2MRF、nnU-Net 加同样框）保留。D7 TJDR_uwf 在 G1 下按 45° 取 4256，另报 fov 1440。D8 零样本任意病灶图四类目录写同一张图。D9 文件名 prompted.py。
+2. 改动：bench/configs/e5_frozen.yaml（头注、decisions.inference_scope、weights.used_by、新增 validation_pool、zero_shot.grid 替换两套作者参数和 area_cap、geometry.G1.TJDR_uwf、oracle 整节、outputs）；15 加 10-12 修订行并改第三节第 8 条、第四、五、六、十一、十三、十七节；14 M9 检查点、零样本、理想提示三段加一行已定；16 加修订行、E5a 行加一句；build_placeholder.py 去掉 k=10 和 SAM 点提示的占位（results.csv 要在有 pandas 的机器上重生成，现存问题 4）；新测试 bench/tests/test_e5_infer.py 两个用例。还没有读过任何 E5 指标，e5_frozen.yaml 的改动在它文件头允许的时间内。
+3. 测试：整套 168 通过、18 跳过、6 失败、4 错误（比基线多两个新用例，其余不变）。
+4. 现存问题清单重建（分级 1–5；2026-10-12 入库为 docs/ops/21_现存问题.txt），首批 7 条：H2Former 用例在上限下报错（1）、六个数据用例无 skipif（1）、本机缺 pandas/matplotlib/TeX（3）、占位数据待重生成（2）、子模块 __pycache__（1）、e5_frozen 与 16 不一致（5，本次已处理）、128 当选超预算（4）。
+
+E5 推理档步骤 1–6：协议读取、画布与窗口、提示文件、分数规则、输出布局（2026-10-12，工作站albert；步骤 1–4 提交 7b2d482、bdbfbd6、718e882、1f0bfb6，步骤 6 提交 1f1d34f）
+1. 新目录 bench/e5/：frozen.py 读 e5_frozen.yaml 并在读测试划分前检查两个 selected 和提示文件（池运行不要求）；geometry.py 给七个测试集的画布（标准视野 1440，TJDR_uwf 4256 加 fov 1440）、G1 窗口（复用 bench.infer 的网格，画布小于窗口时补零）和回贴原图；prompts.py 生成 b 档提示文件 runs/E5_prompts/<集>_<划分>[__变体].json（八连通域、行主序排序后 PCG64(20261003) 按图和类派生置换、紧框、EDT 最远点，记真值文件 sha256 和每图每类连通域数）；score_rules.py 把生成器的掩码拼成像素分数（跨窗口取最大、任意病灶四类同图、按重叠分类的上界、面积上限按视野比例）；outputs.py 定下 runs/E5/<档>/<来源>/<集>[__变体]/ 的布局和 predicted.json、done.json 的字段，池运行写在 <集>-val 下。原步骤 5（训练集最大连通域）因 D1 取消。
+2. 评测：bench/eval/evaluate.py 的 evaluate 加一个可选参数 val_thresholds，推理档把两个池运行合并直方图的每类 Dice 最优阈值直接传入，指标名与其他模型相同（dice_valopt 等）；不传时行为不变，test_evaluate 全部照旧通过；结果多记一个 val_thresholds_given 字段。
+3. 测试：bench/tests/test_e5_infer.py 共 16 个用例，全部玩具数据和假模型，不读 dataset/、不下权重；整套 182 / 18 / 6 / 4（比基线多的都是新用例，跳过 / 失败 / 错误三个数未变）。
+4. 顺带：TJDR_uwf 的 4256 画布切 1024 窗、重叠 0.5 是每边 8 个起点共 64 窗（E5推理档流程.txt 原估 49 算错，a 档算力估算随之改）。接下来是步骤 7 amg.py、8 prompted.py / same_info.py、9 sam3_text.py，仍只用假模型做单元测试；真实权重与数据的冒烟在服务器（17 第六节）。
+
+E5 推理档步骤 7–9：自动掩码、点框提示、SAM 3 文本（2026-10-12，工作站albert；步骤 7、8 提交 36a43ea、3e181c7，步骤 9 提交 c9d9eb6）
+1. bench/e5/amg.py：SAM、SAM 2.1 自动掩码。参数只有网格里的点密度加 yaml 登记的库默认值；池运行对每档面积上限写任意病灶、oracle_class、stability 三种图共九个目录，测试运行只跑选中的一组三个目录，上限只记在 predicted.json；登记的预算规则（最大密度不跑 TJDR_uwf 的每度像素主变体）在代码里实现；每窗耗时写进 predicted.json，供服务器冒烟重估现存问题 7 的算力。
+2. bench/e5/prompted.py：b 档点框提示。每个提示在框中心离窗口边缘最远的窗口里解码，每窗只编码一次；k 图按提示 rank 一遍填成前缀最大值，不存逐提示的图；SAM / SAM 2 共用一个解码器适配（点取 IoU 最高、框取单掩码、logits 过 sigmoid），MedSAM 照 MedSAM_Inference.py；提示文件的集、划分、变体、画布尺寸不符就拒绝。bench/e5/same_info.py：16 的同信息对照，监督模型的原分辨率概率图乘以前 k 个框的并集，只用固定阈值评测。
+3. bench/e5/sam3_text.py：一个运行是一个措辞序号覆盖四类（a_sam3_ph0/1/2），置信阈值 0，像素分数取查询分数乘掩码概率的最大值，窗口 1008；措辞选择按池运行合并像素直方图的每类 AUPR，打印可粘进 e5_frozen.yaml 的 selected；主结果 a_sam3_selected 由选中措辞的图逐类复制拼成，不另推理。环境：bench/scripts/cluster_env.sh 新增 retiseg-sam3（Python 3.12、torch ≥ 2.7、CUDA ≥ 12.6、pip install -e official_code/sam3；RETISEG_SKIP_SAM3=1 跳过），server_run.sh 的 check 阶段在该环境里跑 test_e5_infer.py。
+4. 测试：全部用注入的假生成器 / 假解码器 / 假打分器，不下权重、不读 dataset/；整套 189 / 18 / 6 / 4。真实权重与数据的冒烟仍在服务器（17 第六节）。还没写的：步骤 11 启动器 launch_e5_infer.py 与 server_run.sh 的 e5-infer 阶段、步骤 12a 论文脚本改键、步骤 12 collect_runs.py 读 runs/E5。
+
+E5 推理档步骤 11–12：启动器与论文收集，工作站albert 的代码部分完成（2026-10-12，工作站albert；提交 b47e724、5b99ea5、1992cdf）
+1. bench/scripts/launch_e5_infer.py 和 server_run.sh 的 e5-infer 阶段：按 e5_frozen.yaml 枚举队列，池运行 22 项在前，测试运行在 grid.selected / sam3.selected 填好后才列出，SAM 3 的 a_sam3_selected 以三个序号目录为闸门自动拼装，done.json 齐的和正在跑的跳过，缺的提示文件先在启动器进程里生成；SAM 3 用 retiseg-sam3，其余 retiseg。不带 --submit 打印计划：当前协议下 54 项。
+2. 论文脚本按 16 改键（fig5 去 SAM 点提示、k 四档；表 6 的 SAM 框提示骨干 ViT-B），collect_runs.py 读 runs/E5（a 档 zero_shot:auto_*、SAM 3 逐类 text:<措辞>、b 档 oracle:<kind>:<k>、同信息对照 oracle_ref:box:<k>），并对所有报告写 cls "any" 的任意病灶 AUPR 行。test_collect_runs.py 加了 E5 玩具树；它和占位数据的重生成（build_placeholder.py 已去 k=10 和 SAM 点提示）要在有 pandas 的机器上做。
+3. 至此 17 第九节第 1 条的本机代码全部到位（提交 e886f2a 到 1992cdf，12 个提交）；bench/tests 194 通过、18 跳过、6 失败、4 错误（失败和错误仍是缺数据和 H2Former 上限两类）。未做的：步骤 10（服务器验证池运行、两处选择写回）、步骤 13（服务器冒烟与全量）、12 的收尾（Luming：test_collect_runs、重生成占位、make）。服务器步骤写在 17 第六节，实现记录、依赖和与 15 的差异写在 design/18（同日新建，今 design/23）。
+
+E5 推理档评审修复 1：any 行独立指标名（2026-10-12，工作站albert；提交 3b03b93）
+1. 背景：albert 分支（main 3c505bb 对 71e803b）收到一份 peer review（第二版入库为 docs/design/20_代码审计.md；云端沙箱做的，配套修复建议入库为 docs/ops/22_fixPlan.md，补丁已被实际提交取代），合并前必修 A1–A4，补丁另发现 A5（冒烟目录的 done.json 被当成完成）；协议与科学层面 B1–B6；工程四项。工作站albert 逐条对照代码、子模块和文档核实，全部成立；分级与处理决定登在 docs/ops/21_现存问题.txt 第 10–26 条（修复建议中未做的项在第 27–36 条）。用户 2026-10-12 决定全部采纳工作站albert 的处理建议（原则：不与 Luming 原有安排冲突），一步一个关注点修，每步用户核验后提交；顺序 A1、A5、A3、A2、A4，再 B5、B1、B4、B3、B6、B2 和工程项。
+2. A1：collect_runs.rows_from_report 给每份报告加的 cls "any" 行原用 metric "aupr"；retifig/data.py 的 seed_table 对 metric=aupr 的全部行取均值，E2 主表 mAUPR、score_matrix、Friedman 区组都会变成五个数的平均（工作站albert 复现：四类 0.1/0.2/0.3/0.4 加 any 0.5，评测器 mAUPR 0.25，汇总 0.30；真实评测器下 test_collect_runs.py 第 135 行断言失败）。results.csv 尚未重生成，错数还没进仓库，合并后下一次 collect 就会触发。
+3. 改动：collect_runs.py 的 any 行改用独立指标名 aupr_any_lesion（常量 ANY_LESION_METRIC）；data.py 的 seed_table 在 cls=mean 时只对四类取均值（双保险）；test_collect_runs.py 断言 metric=aupr 的 cls 恰为四类、其均值等于评测器 mAUPR、any 行等于 AUPR_any_lesion。18 第七、九节同步。bench/ 未改。
+4. 验证：工作站albert 在 retiseg 之外建了带 pandas 的临时 venv（现存问题 3 的做法，不装进 retiseg），test_collect_runs.py 修前在 135 行失败、修后两行 ok（一份报告 45 行替换 44 个占位；E5 玩具树 8 个目录 299 行）。Luming 侧 collect 时注意 any 行的新指标名；图 5、表 6 之后读 aupr_any_lesion（评审 B2，待办）。
+
+E5 推理档评审修复 2：冒烟目录不算完成，启动器只查计划用到的库（2026-10-12，工作站albert；提交 4493d68）
+1. A5（补丁新发现，工作站albert 按原代码核实）：outputs.is_done 只看 done.json 是否存在。17 第六节 b 步 --limit 2 冒烟之后，c 步不带 limit 的 --pool-only 会把 22 项全部 "skip: done"；手动重跑时预测会重做（needs_prediction 认 limit）但评测被 is_done 跳过，留下 2 张图的指标配全量的图；冒烟的池运行还能喂给 --select 和池阈值。
+2. 改动：is_done(目录, limit)：全量请求（limit 为 None）只认 done.json 里 limit 为 None 的评测，冒烟请求认任何评测；write_predicted 重写预测时删旧的 done.json、metrics.json、metrics.npz；_pool_totals 对 limit 不为 None 的池运行返回 None（选择和阈值不来自前 N 张）。amg、prompted、same_info、sam3_text 的评测循环传 limit；启动器 Item.done(limit)、plan(..., limit)。
+3. 顺带（现存问题 26）：launch_e5_infer.py --submit 原来要求七个 prepared 库都在，--pool-only 也不例外，只有 IDRiD、DDR 的工作站albert 做池冒烟会直接退出。改成 absent_sets(items) 只查本次计划用到的集，missing_prompt_files(frozen, items) 只生成计划里要读提示文件的项（b 档和同信息对照；Item 新增 split、variant、needs_prompts）。测试阶段的保护不变，因为测试项会把七个库都列进计划。server_run.sh 的 e5-infer 阶段仍查七个库（服务器用，Luming 的脚本不改）。
+4. 测试：test_e5_infer 加 1 个（冒烟→全量→再冒烟三次 run：全量重评、冒烟池不给阈值、第三次什么都不做），test_launch_e5_infer 加 2 个（冒烟 done.json 对全量队列不算完成；只有两个库时 --pool-only 计划的 absent_sets 为空、提示文件只要池的两份）。整套 bench/tests 预期 197 / 18 / 6 / 4。17 第六节 b 步、18 第三、五节同步。
+
+E5 推理档评审修复 3：测试划分不再静默退成 fixed only，测试项等本来源的池（2026-10-12，工作站albert；提交 bead155）
+1. A3：按 17 第六节 pool-only → 选择 → --test-only 的流程，池上的 a_sam3_selected 拼装项属 POOL 阶段被 --test-only 过滤掉，测试集的 a_sam3_selected 拿不到池阈值，退成 "fixed only" 并写 done.json；更一般地，任何早于同来源池运行的测试运行（--only、--test-only、池项失败）都静默退化，且 done.json 写下后不再重评。顺带发现：评测的排除集和阈值例外跟随本次请求的 --limit 而不是目录里的预测，冒烟请求落在一个全量预测目录上会只评前 N 张却写出看似全量的 done.json。
+2. 改动：outputs.thresholds_for_test 在测试划分拿不到池阈值时抛 RuntimeError（预测已落盘，池跑完后重跑同一命令只做评测），预测本身为冒烟时例外；outputs.evaluation_scope 从 predicted.json 取 limit 和排除集，amg、prompted、same_info、sam3_text 的评测都改用它。启动器：测试项以本来源池目录为闸门（amg 九个目录、prompted 各 k、SAM 3 措辞各自序号；测试拼装项另加两个池拼装项），同信息对照无闸门；池拼装项标 prerequisite，--test-only 保留它；gate_for(item, producers, limit) 在队列里没有谁会写该目录、或写它的项自队列启动后已完成一轮却没写出 done.json 时返回 never（run_queue 记为 not started），producers_of 在排队前记下每个生产者日志里已完成的轮数，所以上一轮的失败不会误关闸门（补丁原方案读日志最后一个退出码，被重新排队的失败项在启动前会被误判，这里改掉）。
+3. 测试：test_e5_infer 加 1 个（测试划分无池直接报错、冒烟请求不把全量目录当冒烟评、冒烟池不算池、冒烟预测例外标 fixed only、池到位后同一命令只评测且阈值为 pool val_opt）；test_launch_e5_infer 改 1 个、加 1 个（--test-only 保留池拼装项并排在最前；各档闸门目录；producers 缺席 → never、运行中 → wait、完成未写出 → never、旧失败 → wait、冒烟 done 只开冒烟队列）。整套 bench/tests 预期 199 / 18 / 6 / 4。17 第六节 e 步、18 第三、五节同步。
+
+E5 推理档评审修复 4：SAM 3 拼装项是唯一写者，图在拼装评测后才删（2026-10-12，工作站albert；提交 4a02de6）
+1. A2：17 第六节 e 步带 --drop-maps FGADR,Retinal-Lesions 时，每个措辞运行评测完立即删自己的图，assemble_selected 要三个来源的图都在，返回 None 且 --assemble 退出码 0，a_sam3_selected/FGADR 不会存在；三个措辞进程并发时还有 copytree 撞 rmtree 的竞态。
+2. 改动：sam3_text.run 先评自己的目录且不删图（--drop-maps 对措辞运行无效），再在选择已填时拼装（队列里的措辞项带 --no-assemble，不拼装）；assemble_selected 成为 a_sam3_selected 的唯一写者：缺措辞运行抛 FileNotFoundError（run 里 missing_ok 返回 None），图已丢且目标未拼装抛错，全量请求遇到冒烟的措辞运行抛 ValueError，复制经 prob_*.partial 暂存后 rename，评测前 ensure_pool_selected 补拼池上的 a_sam3_selected（启动器已用闸门保证，这里兜手动运行），评测完且集合在 drop_maps 里才用 outputs.drop_maps_of 删三个措辞目录和自己的图（done.json 记 maps_dropped）。--assemble 缺来源时非零退出。启动器：措辞项 argv 带 --no-assemble、owns_drop 为 False 不接 --drop-maps，拼装项接。
+3. 测试：test_e5_infer 加 1 个（FGADR 做 drop-maps 集：措辞测试运行保留图，拼装在没人预先拼池的情况下补拼池、评出 pool val_opt、删三个措辞目录和自己的图、幂等；冒烟措辞运行拒绝全量拼装、接受冒烟拼装），test_launch_e5_infer 加 1 个（措辞项 --no-assemble 不接 --drop-maps，拼装项接）。原有的 SAM 3 用例不改照过。整套 bench/tests 预期 201 / 18 / 6 / 4。17 第六节 e 步、18 第三、五节同步。
+
+E5 推理档评审修复 5：SAM 3 构建传设备类型字串，构建后核对（2026-10-12，工作站albert；提交 a1fb089）
+1. A4：sam3_text.build_scorer 把 torch.device 对象传给 build_sam3_image_model，sam3 2345a4a 的 _setup_device_and_mode 只在 device == "cuda"（字串比较）时 model.cuda()；工作站albert 在 torch 2.11 实测 torch.device("cuda") == "cuda" 为 False，模型会留在 CPU、输入在 GPU，冒烟第一窗报设备不一致。sam3 的 decoder.py:301 和 io_utils.py 多处还硬编码默认 CUDA 设备，所以 cuda:N（N>0）本就跑不了。
+2. 改动：新增 sam3_device(device) 返回 (torch.device, 给 builder 的类型字串)，cuda 且 index 非 0 时抛 ValueError 提示用 CUDA_VISIBLE_DEVICES 选卡（队列本就这样分卡）；builder 和 Sam3Processor 都收字串；新增 check_placed 构建后核对全部参数所在设备，不符抛 RuntimeError；predicted.json 多记 builder_device。不加 torch.cuda.set_device（用户 2026-10-12 决定）。
+3. 测试：test_e5_infer 加 1 个（断言前提 torch.device("cuda") != "cuda"；cpu / cuda / cuda:0 的返回；cuda:1 拒绝；check_placed 对 CPU 上的小模型放行 cpu、拒绝 cuda）。真实权重的构建仍要服务器冒烟（18 第八节）。整套 bench/tests 预期 202 / 18 / 6 / 4。18 第三、八节同步。
+
+E5 推理档评审修复 6：送解码器的框改为含端点像素下标（2026-10-12，工作站albert；提交 df2c28d）
+1. B5：提示文件的紧框是 [x0, y0, x1, y1]、右下不含（x1 = 最大列 + 1），prompted.py 原样送解码器。SAM 系 prompt encoder 把坐标当像素下标并加 0.5 取像素中心，SAM 自己的 batched_mask_to_box 返回含端点的最大下标，MedSAM 训练用 np.max(x_indices) 也含端点，所以送进去的框右、下各大一像素；对几像素宽的 MA 偏差占比不小，实际影响估计很小（位置编码在 1/16 尺度），但属登记事项，必须早于第一次 b 档运行定下。
+2. 决定（用户 2026-10-12 采纳）：不改提示文件（same_info.py 的切片并集用不含端点是对的），在送解码器处转换。改动：prompted.decoder_box 返回 [x0−left, y0−top, x1−1−left, y1−1−top]，decode_image 改用；e5_frozen.yaml oracle.box 写明两套约定（读到首个 E5 测试指标前的登记，尚无任何 b 档运行）；15 第六节第 2 条、14 M9 理想提示段加一句；测试的假解码器改成和真解码器一样按含端点读框。
+3. 测试：test_e5_infer 加 1 个（decoder_box 的两例，单像素连通域得零宽框），原 prompted 用例加断言（送给假解码器的每个框等于 decoder_box 的结果）。整套 bench/tests 预期 203 / 18 / 6 / 4。
+
+E5 推理档评审修复 7：a 档网格每模型各选一组，amg --select（2026-10-12，工作站albert；提交 d5f22f6）
+1. B1：a 档网格的选择没有脚本（SAM 3 有 --select，网格没有）；grid.selected 只有一组，SAM 与 SAM 2 共用；pool_class_aupr 算的是逐类 AUPR，登记的任意病灶 AUPR 在合并直方图上没有实现；两模型在池上的最优组不同时按什么合并没有登记。这是预登记的选择点，必须在第一次池运行前写死。
+2. 决定（用户 2026-10-12 采纳工作站albert 建议）：每模型各选一组。理由：两个生成器的默认阈值不同（SAM pred_iou 0.88、SAM 2.1 0.8），同一密度和上限对两者的最优点未必一致，共用一组会让其中一个吃亏；统计量为两个池集合并像素直方图的任意病灶 AUPR（与阈值的合并方式一致），并列取低密度、再取大上限。e5_frozen.yaml 新增 zero_shot.grid.select_rule，selected 改为 {SAM: {...}, SAM 2: {...}}，budget_rule 改为按模型生效；16 E5a 行、15 第三节第 8 条、14 M9 零样本段加带日期的一句。读到首个 E5 测试指标前的登记，尚无任何池运行。
+3. 改动：frozen.selected_pair(frozen, model)、selected_pairs、validate 校验映射与 select_rule；evaluate.pooled_any_lesion_histogram（与 evaluate() 的 any_pooled 同一累加）；outputs._pool_maps 抽出池目录检查，pool_any_lesion_aupr 新增；amg.select_grid、format_selected_yaml、CLI --select（--model/--density/--set 改为运行时必填）；amg.planned / run 按模型取组；启动器按模型取密度，全部模型都选好才列测试项。17 第六节 d 步改为跑 --select。
+4. 测试：test_e5_infer 加 1 个（部分填写只放行所点名的模型、扁平写法拒绝、缺池运行拒绝、两模型四个池运行后选出的组在网格内且等于表中最大、密度并列取 64、单池集时统计量等于该目录 done.json 的 AUPR_any_lesion、1 像素上限最差、打印的 yaml 粘回后 selected_pairs 可读）；现有填 selected 的用例改为按模型嵌套，启动器预算规则用例改为 SAM 128、SAM 2 64 各自生效。整套 bench/tests 预期 204 / 18 / 6 / 4。
+
+E5 推理档评审修复 8：预算规则生效时 collect 以 fov 变体填 TJDR-uwf 并标注画布（2026-10-12，工作站albert；代码提交 5501fe5，文档提交 dd2bd79；待 Luming 确认）
+1. B4：登记的预算规则（某模型 128 当选则该模型的 TJDR_uwf 只跑 fov 变体）与 collect_runs.py 跳过 __fov 目录叠加，SAM、SAM 2 在 TJDR-uwf 一列会没有任何行。算力背景：17 估 a 档 64 点约 45 GPU 时/模型、128 约 150，16 给 E5a 的约 40（现存问题 7）。
+2. 决定（用户 2026-10-12 采纳工作站albert 建议；需 Luming 确认，不同意就在 00 否决预算规则）：保留预算规则；collect_runs.e5_rows 对 a 档 SAM / SAM 2 的测试运行，在主变体目录没有 done.json 时以同名 __fov 目录顶替为主结果，并对所有 a 档测试运行加 metric canvas_long_side 一行（4256 或 1440）标出该格的画布；其他 __fov 目录照旧跳过（以后进补充表）。图表读 TJDR-uwf 的零样本格时须按 canvas_long_side 加注（B2 时一并做）。16 加修订行、E5a 行加半句；17 第六节 d 步、18 第七、九节同步。
+3. 测试：test_collect_runs.py 的 E5 玩具树加三个目录（SAM p128 只有 fov → 顶替，canvas 1440；SAM 2 p64 主变体和 fov 都在 → 取主变体 4256，fov 跳过），工作站albert 的 pandas venv 上两行 ok。bench/ 未改。
+
+E5 推理档评审修复 9：D6 落实，k 曲线只在 IDRiD、DDR（2026-10-12，工作站albert；代码提交 5501fe5，文档提交 dd2bd79）
+1. B3：协议登记「k 曲线只在 IDRiD、DDR，其余五个集只做 k=全部」（D6，oracle.curve_sets），代码里 curve_sets 只被校验存在，prompted.planned 对七个集都出四档 k 目录；推理只做一次，多的是三倍的图和三次评测。
+2. 改动（实现而非改登记）：frozen.curve_sets、frozen.k_levels_for(frozen, set, split)：池划分和曲线集给全部四档（曲线集的逐 k 阈值来自池），其余集只给 ["all"]；prompted.planned / run 和 same_info.planned 按它取目录，解码按它填前缀最大值。启动器、collect 不改：目录少了自动跟随。
+3. 测试：test_e5_infer 加 1 个（k_levels_for 的四种情况；非曲线集 FGADR 的池运行仍写四档、测试运行只写 FGADR__kall 且提示数不变），test_launch_e5_infer 加 1 个（b 档测试项在 IDRiD、DDR 各 4 个目录，其余五个集各 1 个，阈值闸门仍指向池的四档）。整套 bench/tests 预期 206 / 18 / 6 / 4。18 D6、第三节同步。
+
+E5 推理档评审修复 10：协议改法的说明与待 Luming 确认的事项（2026-10-12，工作站albert；提交 dd2bd79）
+1. B6：CHECKPOINT 规定 *_frozen.yaml 只增不改，步骤 0 是原地替换；e5_frozen.yaml 文件头允许在读到首个 E5 测试指标前修改，时间上合规但两条规则没有互相说明。D1–D9 的依据原在未跟踪的 Albert 笔记 E5推理档流程.txt 第十七节，00 和 18 都引用它，仓库里看不到。
+2. 改动：CHECKPOINT 规则一行加括号说明两条规则的关系并点名步骤 0、评审修复 6、7 在窗口内；现状一行指向评审修复各段。笔记入库（用户 2026-10-12）：流程笔记为 docs/design/24_E5推理档流程.txt（D1–D9 依据在第十七节），评审第二版为 docs/design/20_代码审计.md，修复建议为 docs/ops/22_fixPlan.md，现存问题清单为 docs/ops/21_现存问题.txt；00、18、CHECKPOINT、docs/README 的引用随之改为仓库内路径。
+3. 请 Luming 在合并前于 00 确认：D1–D9（步骤 0）；评审修复 6 的框约定；评审修复 7 的每模型各选与 select_rule；评审修复 8 的 fov 回退（或否决预算规则）；评审修复 11 的图 5、表 6 口径。确认写法：在本段下加一行「Luming 2026-xx-xx 确认 …」。
+
+E5 推理档评审修复 11：图 5、表 6 跟上 D1、D2、D8（2026-10-12，工作站albert；代码提交 5501fe5，文档提交 dd2bd79；口径待 Luming 确认）
+1. B2：图 5a 和表 6 的零样本行用 auto_oracle_class（读测试真值的上界），登记的主结果任意病灶 AUPR（D8，zero_shot.outputs.main）没人读；SAM 3 一行取全部 SAM 3 行的最大值（best of three wordings），等于在测试集上挑措辞，text:selected 混在其中；表 6 小标题「no prompt from labels」与 D1 之后在验证池上选参数不符。
+2. 改动（论文脚本）：fig5_foundation.py 的 rows_for 带第四项 summary：零样本 SAM、SAM 2 的逐类格仍是按重叠分类的上界（标 †），右侧条改为该模型 zero_shot:auto_any_lesion 的 aupr_any_lesion 行（无实测时回退为该目录逐类行的均值，即占位），SAM 3 行改用 text:selected（「wording chosen on val」），删 sam3_best；面板 c 排除 text:selected 只画三条措辞；面板 e 的 best 用同一 summary；说明文字加 † 与「在验证池上选」。make_tables.table_foundation 同口径：零样本组标题改为「density, area cap and wording chosen on the validation pool」，SAM、SAM 2 行的 mAUPR 列改为任意病灶 AUPR 并加 ‡ 脚注，SAM 3 行 text:selected，caption 改「sees no test label」。build_placeholder.py 加 aupr_any_lesion（cls any）占位行和 SAM 3 text:selected 占位行（取第一条措辞），下次 --force 重生成后读者与键一致（现存问题 4、8）。
+3. 验证：工作站albert 的临时 paper venv 加装 matplotlib 后，用现有占位 results.csv 跑 fig5 与表 6 生成（见下一段的验证记录）。bench/ 未改。
+
+E5 推理档评审修复 12：工程四项，内存、续跑、G2、真值哈希（2026-10-12，工作站albert；代码提交 5501fe5，文档提交 dd2bd79）
+1. 内存（评审 4.4）：amg.window_masks 把一张图所有窗口的掩码以整窗 bool 数组留在内存，TJDR_uwf 4256 画布 64 窗按每窗数百掩码估单张图 10 GB 量级。改为逐窗流式：每窗 generate 后立即用 accumulate 折进各待写目录的运行画布再丢弃掩码（score_rules 加 combine_max_into，masks_to_score / oracle_class 加 out= 参数），面积上限、按重叠分类、stability 都是逐掩码局部量，输出逐像素相同（测试与一次性函数逐像素比对）。
+2. 续跑（评审 4.4）：predicted.json 在全部图片后才写，中途崩溃整项重来。amg、prompted、sam3_text 的预测循环开头用 outputs.maps_written 检查该图在所有待写目录是否已有四类图，齐则跳过；predicted.json 记 resumed_images，n_windows、n_masks、n_prompts、耗时只覆盖本进程预测的图（续跑后的 predicted.json 按此读）。半写的图（缺任一类文件）会重做；截断的 PNG 不会被这条判据发现，评测时读图会报错。
+3. G2（评审 4.4）：16 已砍整图几何，三个 CLI 去掉 --geometry（run() 仍接受 geometry 参数，geometry.plan 保留供测试）。
+4. 真值哈希（评审 4.4）：prompts.verify_masks 按提示文件记录的 sha256 核对每张图四类真值文件，prompted 与 same_info 每张图预测前调用，不符则报错并要求重生成提示文件。
+5. 测试：test_e5_infer 加 3 个（流式与续跑：冒烟后全量续跑 resumed_images 1、半写图重做、流式累加与一次性结果逐像素相同；哈希：改一个真值像素即拒绝，重生成后续跑只预测剩下的图，same_info 同样拒绝；三个 CLI 不再接受 --geometry）。整套 bench/tests 预期 209 / 18 / 6 / 4。18 第三、八、九节同步。
+
+E5 推理档评审修复 13：文档小处（2026-10-12，工作站albert；提交 dd2bd79）
+1. 评审 4.4 文档项：18 建立日期一行写「共 12 个提交、未推送」，实际 e886f2a 到 1992cdf 是 13 个提交（12 个 E5 步骤加基线修复 5fa661f），文档提交 71e803b，分支已推送到 origin/albert；第十节标题同步。00 两处标题「步骤 6 待提交」「步骤 9 待提交」填入 1f1d34f、c9d9eb6。18 第八节把 SAM 2 的 min_mask_region_area 后处理列为待验，登记默认值 0 不进该路径，改为注记。
+
+待用户 Luming 处理（2026-10-12 汇总，工作站albert；每项处理后在本段下加一行「Luming <日期> 确认 / 否决 / 决定：…」，并在 21 的对应条目标状态）
+1. D1–D9（步骤 0 的九项决定，依据 docs/design/24 第十七节，登记在 e5_frozen.yaml、15、14、16）：逐条确认或否决。否决任何一条都要在第一次池运行之前。
+2. 评审修复 6：送解码器的框改为含端点像素下标（e5_frozen.yaml oracle.box）：确认。
+3. 评审修复 7：a 档网格每模型各选一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限（zero_shot.grid.select_rule）：确认。
+4. 评审修复 8（二选一）：a. 保留预算规则，某模型 128 当选时该模型的 TJDR_uwf 只跑 fov 变体，collect 以 fov 顶替并记 canvas_long_side（16 修订行、21 第 18 条）；b. 否决预算规则，接受 128 当选时每模型约 150 GPU 时（21 第 7 条）。
+5. 评审修复 11 与 21 第 31、32 条（论文呈现）：图 5、表 6 零样本行的口径（任意病灶 AUPR 为主、按重叠分类标为上界）已改；待定的是：auto_oracle_class 是否单独成「上界」一块；训练模型的任意病灶 AUPR 是否作参考线；fov 顶替格用 canvas_long_side 行标注、独立 test_set「TJDR-uwf (fov)」还是「未运行」行。 2026-10-13 复审 N2 补充（21 第 38 条 b）：零样本一块内是否统一用任意病灶 AUPR 作汇总（SAM 3 也有 any 行），表 6 的最好/次好是否只在各块内排名（caption 本就说四种用法不互相排名），图 5e 零样本组内是否比任意病灶 AUPR。
+6. 21 第 29 条 b：是否给仓库加 GitHub Actions，在每次推送上用 CPU 版 torch 跑 bench/tests 与 test_collect_runs（test_collect_runs 已可由 pytest 收集、缺 pandas 跳过）。
+7. 21 第 34 条 b、c：协议文件冻结后是否加 sha256 锁文件与配套测试；albert 合并进 main 是否走 PR，由 Luming 在 PR 描述里逐条确认第 1–4 项。
+8. 本机收尾（21 第 4、8 条）：python docs/paper/retiseg_paper/paper/scripts/build_placeholder.py --force → collect_runs.py → collect_literature.py → make -C paper；工作站albert 没有 runs/，在这里重生成会抹掉 results.csv 的实测 E2 行，所以只能在本机做。重生成后 any 行的新指标名 aupr_any_lesion 和 SAM 3 的 text:selected 键才会出现在 results.csv 里。 2026-10-13 复审 N3：合并 albert 与这次重生成必须放在同一次操作里；评审修复 15 起取数函数缺 aupr_any_lesion 行直接报错，不重生成 make 会失败而不是带着空行构建。
+
+E5 推理档评审修复 14：现存问题 27–36 里不需 Luming 决定的部分（2026-10-12，工作站albert；提交 f5397da）
+1. 28 契约测试：新建 bench/tests/test_e5_contract.py，六个用例分别构建真实的 SAM ViT-H 与 SAM 2.1 生成器（需 CUDA）、SAM ViT-B / SAM 2.1 / MedSAM 解码器、SAM 3 打分器，各喂一张合成窗口，断言输出形状、类型、取值范围和参数所在设备；没有权重即跳过，sam3 不可导入即跳过。server_run.sh check 阶段在 retiseg-sam3 里加跑它。工作站albert 没有权重，这里六个全部跳过，要到服务器才真正执行。
+2. 29a：新建 bench/tests/test_collect_runs_paper.py，在有 pandas 的环境里由 pytest 运行论文的 test_collect_runs.py，没有 pandas 则跳过。29b（CI）待 Luming。
+3. 30：amg --select 与 sam3_text --select 各写一份记录（runs/E5/selection_grid.json、selection_sam3.json：规则、所选、全部数字、两池图数、时间、git、主机），selected 已填时拒绝再选并提示先清空并在 00 记原因；e5_frozen.yaml select_rule 补一句两池按像素合并、DDR 149 张占主导、选择只做一次。
+4. 31 的无需决定部分：图 5、表 6 的取数函数对推理档行（seed −1）断言每类恰好一行，不再可能静默平均两个运行目录；其余呈现方式待 Luming。
+5. 32：启动器加 --estimate，按各来源 predicted.json 里实测的每图秒数（取图最多的那份，冒烟也算，续跑跳过的图不计）乘画布面积比乘图数，给出每项和合计 GPU 时，没有实测的项标明；fov 顶替格的呈现待 Luming。
+6. 33：prompted 的 predicted.json 记 box_convention。
+7. 34a：新建 bench/tests/test_docs_paths.py，扫描 CHECKPOINT、README、00、17、18、21、16 里出现的仓库路径，须存在且受跟踪；docs/notes(albert)/ 下的引用视为私有笔记放行，17 引用的 cost_audit.tsv 是服务器之后才产生的文件，列入白名单。19、20、22 是历史记录不查。34b、c 待 Luming。
+8. 36：18 第十节不再手写提交数，改为给出 git log --oneline 3c505bb..albert。
+9. 27 端到端流程测试：新建 bench/tests/test_e5_flow.py，按 17 第六节 b–f 的顺序在进程内走一遍：启动器出计划并逐项检查闸门（与 run_queue 同一判断），每项按它的命令行参数用假生成器 / 假解码器 / 假打分器执行；四个玩具集（IDRiD、DDR 作池，FGADR 作 drop-maps 且非曲线集，TJDR_uwf 带 fov 变体），画布 20、窗口 8。断言：冒烟后全量池运行把 22 项重新列出并重做（A5）；两处选择按打印的 yaml 写回协议；--test-only 先排两个池拼装项，每个闸门轮到时都是 open，全部测试 done.json 为 pool val_opt、只有 drop-maps 集的图被删（A3、A2），a_sam3_selected/FGADR 存在且措辞目录的图在拼装后才消失，FGADR 只有 k=全部目录（D6），TJDR_uwf 主变体与 fov 各三个目录；collect 对每个集都读到任意病灶、oracle_class、text:selected、oracle:box:all 等行，k 曲线行只在 IDRiD、DDR，TJDR-uwf 带 canvas_long_side 行。17 第六节改流程时此用例跟着改。
+10. 测试：test_e5_infer 加 2 个、test_launch_e5_infer 加 1 个，新文件四个（含 test_e5_flow.py）；整套 bench/tests 214 通过、25 跳过（新增 6 个契约用例和 1 个 pandas 包装都在工作站albert 跳过）、6 失败、4 错误。test_docs_paths 要求被引用的文件受跟踪，新文件在 git add 之前它会报未跟踪，这是预期行为。pandas 包装在带 pandas 的临时 venv 里 1 passed。
+
+E5 推理档评审修复 15：2026-10-13 复审的 N1、N2a、N4、N5（2026-10-12，工作站albert；提交 192ea8b）
+1. 复审（albert @ 034616f 对照 20、22；原文在 docs/design/20_代码审计.md 第二部分「albert 分支复审（2026-10-13）」）确认 A1–A5 全部修复、B1/B3/B5 与工程项已实现、B2/B4/B6 部分完成（余下在待 Luming 清单），新提 N1–N5；登在 21 第 37–41 条。
+2. N1：evaluate 修复 8 的 fov 顶替以目录是否存在为条件，预算规则没生效时也会触发（64 密度下主变体失败或未完成，先跑完的 fov 数字顶上）。改为：amg 在 predicted.json 记 stands_in_for_main，只在测试划分的 fov 变体且 budget_rule_skips 对该模型的主变体为真时为真；collect 只对标志为真且主变体无 done.json 的 fov 目录顶替。test_collect_runs 加一个 64 密度 fov 不顶替的目录。呈现（独立 test_set 或脚注）仍在待 Luming 第 5 项。
+3. N2a：fig5 与表 6 的取数函数缺 aupr_any_lesion 行时不再回退为逐类均值，直接报错并提示重生成占位；N2b（零样本块内统一指标、块内排名、图 5e）写进待 Luming 第 5 项。
+4. N3：待 Luming 第 8 项补「合并与重生成同一次操作」。
+5. N4：test_docs_paths 对子模块目录不存在或为空的 official_code 路径跳过。
+6. N5：bench/common/io.write_prob 先写同目录临时名再 os.replace，文件要么不存在要么完整，九个预测写图点都受益，内容与路径不变（代价是每文件一次改名，微秒级；进程中途被杀会留一个 .tmp，下次写同一张图时覆盖）；outputs.maps_written 还校验四个 PNG 能完整解码，截断的图在续跑时重做；17 第六节 c 步加「正式运行前清空 runs/E5」。
+7. 测试：test_e5_infer 加 2 个（fov 运行的标志随密度与划分变化；write_prob 原子性与 .tmp 覆盖、截断图不算完成且续跑重做）；test_collect_runs 玩具树加一例。整套 bench/tests 预期 216 通过、25 跳过、6 失败、4 错误。18 第三、六、七节同步。
+
+albert 分支并入 main（2026-10-14，Liuyc05；记录与理由在 docs/ops/25）
+1. 合并前先在 albert 上做了评审修复 16（3a1bc77）：b 档每个框在能完整装下它的窗口里解码（原规则靠近画布边缘会选到截断框的窗口；1440 画布上宽高 ≤512 的框约 0.8%、≤800 的约 1.5% 本可装下却被截），装不下的框计入 predicted.json；a 档和 SAM 3 拼装的测试目录记下所选的面积上限 / 措辞（run_params.json），选择重做后旧目录报错。登记 e5_frozen.yaml oracle.window_choice，读到任何 E5 测试指标之前。
+2. 合并：bench/e5 取 albert，删 main 10-13 的七个模块和 runs/E5/prompts/；e5_frozen.yaml 取 albert 的网格、验证池和 oracle 节，保留 main 的 sha256，area_cap 244004 改为注释；launch_queue 加 e5_infer 阶段类型（调 launch_e5_infer.plan，三态闸门），queue.yaml 的推理档换成 e5_infer_pool / e5_infer_test，都关；collect_runs 保留 main 的非 E5 部分，E5 用 albert 的读取并经 load_report；任意病灶统一为 aupr_any_lesion（cls any），fig5、make_tables、make_numbers 同步；albert 的 design/18、19 改号为 23、24。
+3. 论文数据：results.csv 只换 E5 推理档的占位行（496 → 430，全是占位），其余未动；make、make test 通过。非 E5 的表与只用 main 构建的结果逐字相同。
+4. 测试（云端，torch 导入替身）：E5 五个文件加 test_launch_queue 60 通过、6 跳过、1 失败（替身所致，21 第 44 条）；整套 bench/tests 与 main 对比没有新增失败。MAPLES-DR 进了 e3a_frozen.yaml，两个 E5 测试的集合数改为按协议推算。
+5. 待用户 Luming 处理（接 2026-10-12 汇总的八项）：第 2 项加上评审修复 16 的确认；第 4 项（预算规则）的算力账见 16 第九节。服务器步骤在 17 第十七节。
+
