@@ -155,6 +155,9 @@ def plan_nnunet(stage, dry):
     return out
 
 
+_PROMPT_LOCK = threading.Lock()
+
+
 def plan_e5_infer(stage, dry):
     """The E5 inference tiers through bench/scripts/launch_e5_infer.py (docs/ops/25, the albert merge).
 
@@ -176,12 +179,15 @@ def plan_e5_infer(stage, dry):
     only = set(stage.get("only") or ())
     items = _quiet(le.plan, frozen, only, phase == "pool", phase == "test")
     items = [item for item in items if geo.data_dir(item.set_name).is_dir()]
-    missing = le.missing_prompt_files(frozen, items)
-    if missing:
-        if dry:
+    if dry:
+        missing = le.missing_prompt_files(frozen, items)
+        if missing:
             print("e5_infer: prompt files to write first: " + ", ".join(f"{n}/{s}/{v}" for n, s, v in missing), flush=True)
-        else:
-            le.write_prompt_files(frozen, missing)
+    else:
+        with _PROMPT_LOCK:  # every worker thread calls gather; one of them writes a missing file
+            missing = le.missing_prompt_files(frozen, items)
+            if missing:
+                le.write_prompt_files(frozen, missing)
     drop = tuple(stage.get("drop_maps") or ())
     producers = None
     if not dry:
@@ -235,11 +241,13 @@ def gather(path=QUEUE, dry=False, report=None):
         if not stage.get("enabled", True):
             continue
         planner = PLANNERS.get(stage["kind"])
-        if planner is None:
-            raise ValueError(f"stage {stage['name']}: unknown kind {stage['kind']}")
         try:
+            if planner is None:
+                raise ValueError(f"unknown kind {stage['kind']} (a launcher older than the queue file: restart it)")
             items = planner(stage, dry)
-        except Exception as exc:  # a stage that cannot plan is reported, the queue goes on
+        except (Exception, SystemExit) as exc:  # a stage that cannot plan is reported, the queue goes on
+            # SystemExit too: python_argv exits when a stage's conda env is missing (retiseg-sam3 before
+            # cluster_env.sh sam3), which must not end every worker thread (merge review 2026-10-14)
             if report is not None:
                 report.append(f"{stage['name']}: {type(exc).__name__}: {exc}")
             continue

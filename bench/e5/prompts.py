@@ -26,6 +26,7 @@ and the number of components per image and class, the statistic of 15 section
 import argparse
 import hashlib
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -163,7 +164,9 @@ def build(set_name, split, variant=geo.MAIN, frozen=None, out_dir=None, data_dir
     }
     path = fz.prompt_file(set_name, split, out_dir, variant)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(doc, indent=1) + "\n")
+    staging = path.with_name(f".{path.name}.{os.getpid()}.tmp")  # a reader never sees a half-written file
+    staging.write_text(json.dumps(doc, indent=1) + "\n")
+    os.replace(staging, path)
     return path
 
 

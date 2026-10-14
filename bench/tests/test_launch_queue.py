@@ -193,3 +193,25 @@ def test_e5_infer_stage_plans_the_pool_through_launch_e5_infer(tmp_path, monkeyp
 
     with pytest.raises(ValueError, match="phase"):
         lq.plan_e5_infer({"name": "x", "kind": "e5_infer", "phase": "both"}, dry=True)
+
+
+def test_a_stage_that_exits_or_has_an_unknown_kind_is_reported_not_fatal(tmp_path, monkeypatch):
+    """python_argv raises SystemExit for a missing conda env (retiseg-sam3); a launcher older than the
+    queue file meets an unknown kind. Both are reported and the other stages still plan (merge review)."""
+    from bench.scripts import launch_queue as lq
+
+    monkeypatch.setattr(lq, "_ROOT", tmp_path)
+
+    def _exits(stage, dry):
+        raise SystemExit("conda env retiseg-sam3 not found")
+
+    monkeypatch.setitem(lq.PLANNERS, "exits", _exits)
+    path = _queue(tmp_path, [
+        {"name": "bad", "priority": 1, "kind": "exits"},
+        {"name": "new", "priority": 2, "kind": "from_the_future"},
+        {"name": "ok", "priority": 3, "kind": "shell", "items": [{"label": "a", "command": "true", "run_dir": "runs/a"}]},
+    ])
+    report = []
+    items = lq.gather(path, dry=True, report=report)
+    assert [label for _p, _s, label, _c, _g in items] == ["shell:a"]
+    assert report[0].startswith("bad: SystemExit") and report[1].startswith("new: ValueError") and "restart" in report[1]

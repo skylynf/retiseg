@@ -217,6 +217,6 @@ albert 分支并入 main（2026-10-14，Liuyc05；记录与理由在 docs/ops/25
 1. 合并前先在 albert 上做了评审修复 16（3a1bc77）：b 档每个框在能完整装下它的窗口里解码（原规则靠近画布边缘会选到截断框的窗口；1440 画布上宽高 ≤512 的框约 0.8%、≤800 的约 1.5% 本可装下却被截），装不下的框计入 predicted.json；a 档和 SAM 3 拼装的测试目录记下所选的面积上限 / 措辞（run_params.json），选择重做后旧目录报错。登记 e5_frozen.yaml oracle.window_choice，读到任何 E5 测试指标之前。
 2. 合并：bench/e5 取 albert，删 main 10-13 的七个模块和 runs/E5/prompts/；e5_frozen.yaml 取 albert 的网格、验证池和 oracle 节，保留 main 的 sha256，area_cap 244004 改为注释；launch_queue 加 e5_infer 阶段类型（调 launch_e5_infer.plan，三态闸门），queue.yaml 的推理档换成 e5_infer_pool / e5_infer_test，都关；collect_runs 保留 main 的非 E5 部分，E5 用 albert 的读取并经 load_report；任意病灶统一为 aupr_any_lesion（cls any），fig5、make_tables、make_numbers 同步；albert 的 design/18、19 改号为 23、24。
 3. 论文数据：results.csv 只换 E5 推理档的占位行（496 → 430，全是占位），其余未动；make、make test 通过。非 E5 的表与只用 main 构建的结果逐字相同。
-4. 测试（云端，torch 导入替身）：E5 五个文件加 test_launch_queue 59 通过、6 跳过、1 失败（替身所致，21 第 44 条）；整套 bench/tests 与 main 对比没有新增失败。MAPLES-DR 进了 e3a_frozen.yaml，两个 E5 测试的集合数改为按协议推算。
+4. 测试（云端，torch 导入替身）：E5 五个文件加 test_launch_queue 60 通过、6 跳过、1 失败（替身所致，21 第 44 条）；整套 bench/tests 与 main 对比没有新增失败。MAPLES-DR 进了 e3a_frozen.yaml，两个 E5 测试的集合数改为按协议推算。
 5. 待用户 Luming 处理（接 2026-10-12 汇总的八项）：第 2 项加上评审修复 16 的确认；第 4 项（预算规则）的算力账见 16 第九节。服务器步骤在 17 第十七节。
 

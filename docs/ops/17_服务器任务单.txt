@@ -49,7 +49,7 @@
 
 六、E5 推理档（a 零样本、b 理想提示）——2026-10-14 albert 合并后的版本（docs/ops/25）；10-13 本机那套 python -m bench.e5 <子命令>（prompts、areacap、amg --generator、score、control、sam3-select）已随 main 的旧实现删除，不再执行
   0. 前提：Luming 确认 00「待用户 Luming 处理」第 1–4 项（D1–D9、框含端点、每模型各选、预算规则二选一）。确认之前不跑任何池运行：第一次池运行就把这些决定定下来了。确认后在 queue.yaml 把 e5_infer_pool 的 enabled 改 true 并提交。
-  0′. 清理：服务器上 runs/E5/prompts/（main 10-13 的提示文件，格式与 albert 的不兼容，提交 3d00468 里有存档）移到 runs/archive/E5_prompts_main_20261014/，不要删；runs/E5 下其他东西（如有）同样移走，00 记一笔。新提示文件写在 runs/E5_prompts/，由启动器在第一项开始前在 CPU 上生成（launch_queue 的 e5_infer 阶段或 launch_e5_infer.py --submit 都会做）。
+  0′. 清理：runs/E5/prompts/（main 10-13 的提示文件，格式与 albert 的不兼容）是受跟踪的文件，pull 合并提交时 git 会把它们从工作区删掉，不用手动处理；要看原文用 git show 3d00468:runs/E5/prompts/<文件>。runs/E5 下其他东西（如有，比如冒烟留下的目录）移到 runs/archive/，00 记一笔。新提示文件写在 runs/E5_prompts/，由启动器在第一项开始前在 CPU 上生成（launch_queue 的 e5_infer 阶段或 launch_e5_infer.py --submit 都会做）。
   代码已到位（工作站albert 2026-10-12，提交 e886f2a 到 1992cdf；bench/e5/ 的 frozen、geometry、prompts、score_rules、outputs、amg、prompted、same_info、sam3_text，启动器 bench/scripts/launch_e5_infer.py，server_run.sh 的 e5-infer 阶段，cluster_env.sh 的 retiseg-sam3；全部只用假模型做了单元测试，没碰过权重和数据）。服务器步骤：
     a. bash bench/scripts/cluster_env.sh sam3（或 env 阶段）建 retiseg-sam3；权重 sam_vit_h、sam_vit_b、sam2.1_hiera_large、medsam_vit_b、sam3.pt 放 pretrained/。
     b. 冒烟：RETISEG_GPUS="2" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2，看 runs/E5/a|b/<来源>/<集>-val/predicted.json 的每窗 / 每提示耗时和显存；之后不带 --limit 重跑会把冒烟目录重做（2026-10-12 评审修复 2 起：冒烟写的 done.json 不算完成，启动器会把这些项重新排队，重做预测并重评；冒烟的池运行也不会喂给选择和阈值。启动器只检查并生成本次计划用到的 prepared 库和提示文件，所以只有 IDRiD、DDR 的工作站albert 也能做 --pool-only 冒烟）。
@@ -59,7 +59,7 @@
     f. 回传 runs/E5/ 下的 json（第一节格式）；本机 collect_runs.py 已认 runs/E5（提交 1992cdf）。
   算力粗估：a 档 64 点/边约 45 GPU 时/模型、128 约 150（现存问题 7），b 档约 12，SAM 3 三个序号约 3 × 单模型；冒烟后按 predicted.json 的实测重估。
   2026-10-14 评审修复 16（合并时）：b 档每个框提示在能完整装下它的窗口里解码（取四边余量最大的），装不下的框（比窗口还宽或高）计入 predicted.json 的 n_prompts_box_uncontained，冒烟后看这个数，正常应为 0 或个位数；测试目录记下所选的面积上限 / SAM 3 措辞（run_params.json），选择重做后旧目录会被拒绝而不是沿用，要手动移走并在 00 记原因。
-  合并后的测试基线（云端，无 torch，torch 用导入替身）：bench/tests 的 E5 五个文件加 test_launch_queue 59 通过、6 跳过（契约用例缺权重），1 个用例因替身的 torch.device 失败、在真 torch 下应通过；整套与 main 对比没有新增失败；论文 make test 通过。服务器 retiseg 环境里先跑 pytest bench/tests/test_e5_infer.py bench/tests/test_e5_flow.py bench/tests/test_launch_e5_infer.py bench/tests/test_launch_queue.py -q，再在 retiseg-sam3 里跑 test_e5_contract.py（server_run.sh check 阶段已包含）。
+  合并后的测试基线（云端，无 torch，torch 用导入替身）：bench/tests 的 E5 五个文件加 test_launch_queue 60 通过、6 跳过（契约用例缺权重），1 个用例因替身的 torch.device 失败、在真 torch 下应通过；整套与 main 对比没有新增失败；论文 make test 通过。服务器 retiseg 环境里先跑 pytest bench/tests/test_e5_infer.py bench/tests/test_e5_flow.py bench/tests/test_launch_e5_infer.py bench/tests/test_launch_queue.py -q，再在 retiseg-sam3 里跑 test_e5_contract.py（server_run.sh check 阶段已包含）。
 
 七、E1r 剩余（低优先，有空卡再排）
   M2MRF IDRiD 种子 1、2：bench/train_m2mrf.py --config bench/configs/e1r_m2mrf_idrid_seed0.yaml 改 seed 后 --run-dir runs/E1r_m2mrf_idrid_seed{1,2}_bs4_a100（各约 16 GPU 时），打分同种子 0（第 40000 步，不挑检查点）。
@@ -136,7 +136,7 @@
      RETISEG_GPUS="<卡>" bash bench/scripts/server_run.sh queue      # 或 python bench/scripts/launch_queue.py 只打印计划
   3. 评测在训练结束时直接带冻结的排除名单写出 metrics_test.json（launch_factor.evaluate_argv、nnunet_run.sh、bench.e3a 都已如此）。excluded_ids 没对齐的指标：不写进 14，pack_handoff.py 不打包，collect_runs.py 拒收。
   4. 服务器只在 docs/ops/00_进度.txt 第三节追加短状态（提交号、卡、目录、刚落盘的指标文件名和 mAUPR）。14、13、CHECKPOINT、论文由本机在 collect_runs 之后改。
-  5. CPU 步骤都是可单条重跑的命令（bench.e5 的子命令、launch_factor.py --score-only 打印的 evaluate、nnunet_bridge.py 的 convert/splits/info），不再写总脚本。
+  5. CPU 步骤都是可单条重跑的命令（bench.e5 各模块的命令行，如 python -m bench.e5.prompts、python -m bench.e5.amg --select；launch_factor.py --score-only 打印的 evaluate、nnunet_bridge.py 的 convert/splits/info），不再写总脚本。
   6. 本机写回后由用户提交推送；服务器 pull 到的提交号写进 00 的状态行。
 
 十三、2026-10-14 更新（依据 04:51 的回传包；pull 本次提交后执行；本节覆盖第十节的顺序）
@@ -171,12 +171,12 @@
 十七、2026-10-14 albert 分支并入 main（docs/ops/25；pull 到含本节的提交后执行；本节覆盖第十三节第 1 条 b、第 2 条 e 和第十六节里关于 E5 推理档的话）
   改了什么：bench/e5/ 换成 albert 分支的实现（按 16 的 E5a/E5b 行：零样本点密度 {64, 128} × 面积上限 {0.5%, 2%, 100%}、在 IDRiD+DDR 验证池上按模型选；b 档 SAM ViT-B、SAM 2.1、MedSAM，点提示只做 SAM 2.1，k ∈ {1, 5, 20, all}；Dice 阈值取验证池）。main 10-13 的 bench/e5（__main__、common、masks、models、rules、score、control）和 runs/E5/prompts/ 已从仓库删除。queue.yaml 的 e5_amg、e5_prompted、e5_prompted_points、e5_amg_g2 四个阶段换成 e5_infer_pool（28）、e5_infer_test（29），两个都 enabled: false。launch_queue.py 新阶段类型 e5_infer 调 launch_e5_infer.plan，带三态闸门。
   1. 现在就做（不占卡）：
-     a. 正在跑的 launch_queue 不用重启；它重读 queue.yaml 后不会再排任何 E5 推理档项。
-     b. runs/E5/prompts/ 移到 runs/archive/E5_prompts_main_20261014/（第六节第 0′ 条）；00 第三节记一笔。
+     a. 正在跑的 launch_queue 在两个 E5 推理阶段关着时不用重启（它重读 queue.yaml，只会把新阶段报成“unknown kind”并跳过）。但在把 e5_infer_pool 改 enabled: true 之前，必须用合并后的代码重启 launch_queue：旧进程不认识 e5_infer 这个阶段类型。
+     b. pull 时 git 会删掉 runs/E5/prompts/（第六节第 0′ 条），不用手动移；00 第三节记一笔 pull 到的提交号。
      c. retiseg 环境：pytest bench/tests/test_e5_infer.py bench/tests/test_e5_flow.py bench/tests/test_launch_e5_infer.py bench/tests/test_launch_queue.py -q；retiseg-sam3 建好后（bash bench/scripts/cluster_env.sh sam3）再跑 test_e5_contract.py。失败的记 00，不要改协议文件。
   2. 等 Luming 确认 00「待用户 Luming 处理」第 1–4 项之后：
      a. 冒烟：RETISEG_GPUS="<一张空卡>" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2。记每窗、每提示耗时和显存，看 b 档 predicted.json 的 n_prompts_box_uncontained。python bench/scripts/launch_e5_infer.py --estimate 给出全量 GPU 时，写进 00。
-     b. 清空 runs/E5（冒烟的目录移走），把 queue.yaml 的 e5_infer_pool 改 enabled: true 并提交。
+     b. 清空 runs/E5（冒烟的目录移走），确认 retiseg-sam3 已建好（没有它，SAM 3 那几项的命令会因找不到环境而退出，队列把整个阶段报为不能规划并跳过），重启 launch_queue，再把 queue.yaml 的 e5_infer_pool 改 enabled: true 并提交。
      c. 池跑完后按第六节 d 写回两处 selected 并提交；再把 e5_infer_test 改 enabled: true 并提交。
   3. 回传：runs/E5/ 的 json 与 selection_*.json（第一节格式）；runs/E5_prompts/ 不用回传（服务器上可由同一提交重新生成）。
 

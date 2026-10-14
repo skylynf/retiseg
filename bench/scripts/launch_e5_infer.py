@@ -385,8 +385,12 @@ def main(argv=None):
     if not gpus:
         raise SystemExit("--submit needs RETISEG_GPUS, the cards this queue may use")
     absent = absent_sets(items)
-    if absent:
-        raise SystemExit("prepared sets this plan needs are missing on this machine: " + ", ".join(absent))
+    if absent:  # left out, as the queue's e5_infer stage does: MAPLES-DR joins once it is exported (merge review 2026-10-14)
+        print("left out, prepared set not on this machine: " + ", ".join(absent), flush=True)
+        items = [item for item in items if item.set_name not in set(absent)]
+        missing = missing_prompt_files(frozen, items)
+        if not items:
+            raise SystemExit("no planned item has its prepared set on this machine")
     write_prompt_files(frozen, missing)
     # who writes each gate directory: the items of this queue and the items another launcher is still running
     running = [it for it in discover(frozen) if it.running() is not None]
