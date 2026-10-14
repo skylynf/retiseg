@@ -78,3 +78,7 @@ E5 推理档代码（2026-10-13，本机；pull 到 a4339e3 之后）
 3. 队列第二版 bench/configs/queue.yaml：e3a 10（max_concurrent 2，新支持）→ e5_seed0 20 → fundus_seed0 25（关，冒烟后开）→ e5_amg 28 / e5_prompted 29 / e5_prompted_points 30（各 max_concurrent 1；more_masks、G2 砍）→ factor_cheap 32（U-Net、M2MRF；launch_factor.plan 新增 models 过滤）→ nnunet_e3b 40 → factor_e3b_heavy 45 → factor_e7_heavy 55 → hrdecoder_rest 60 / e5_rest 70 / fundus_rest 75（关）→ e1r 90（关）。写作里程碑在 19 第四节第 2 条。
 4. 测试：bench/tests/test_launch_queue.py 7 个用例通过（新增 max_concurrent、factor models 过滤、E3a 缺目录跳过、MAPLES-DR 映射与忽略层）；test_e5_infer 11 个通过；paper 的 test_collect_runs 通过；build_placeholder --force → collect_literature → collect_runs（123 份报告，E3a/BF 的"未对齐"仍是 e3b_m2mrf_fgadr 一份）→ make（numbers 221 键，142 来自占位）→ PDF 通过。
 5. 文档：19 新建；17 加第十六节（队列、E1 命令、MAPLES-DR 步骤）；18 第五/六节标权重已下载；16 收回 MAPLES-DR；14 M1 加映射与备注 40；13、12 改来源描述；CHECKPOINT 更新。
+
+E5 推理档队列先关（2026-10-14，Liuyc05）
+1. queue.yaml 的 e5_amg、e5_prompted、e5_prompted_points 三个阶段加 enabled: false。原因：这三项按 SAM ViT-H 做 b 档、k 含 10、零样本用作者 32 点参数，与 16 的 E5a/E5b 行不一致（ViT-B；k ∈ {1, 5, 20, all}；点密度 {64, 128} × 面积上限 {0.5%, 2%, 100%}）。这三项还没有任何解码，没有结果作废。
+2. albert 分支按 16 的范围实现了推理档（bench/e5，评审修复 1–15），合并记录与注意事项在 docs/ops/25_albert合并记录.txt（随合并分支提交）。合并落地前这三个阶段保持关闭；e5_amg_g2 原本就关。
