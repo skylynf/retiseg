@@ -1,4 +1,4 @@
-# retiseg 检查点（2026-10-13）
+# retiseg 检查点（2026-10-14）
 
 给下一次会话或其他 agent 的最小上下文。细节都在仓库里，按下面的路径读；本文件只说“在哪、什么状态、怎么接着做”。
 
@@ -7,7 +7,7 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 
 ## 先读哪些文件（按顺序）
 1. `docs/ops/00_进度.txt` —— 当前状态 + 决定日志（检查点格式，旧记录在 `docs/ops/archive/`）。
-2. `docs/paper/16_范围精简.txt` —— 实验范围（剩余约 810 A100 时）；`docs/ops/17_服务器任务单.txt` —— 服务器要做的事和回传格式。
+2. `docs/paper/16_范围精简.txt` —— 实验范围；`docs/paper/19_外部独立测试与优先级.txt` —— 现在的优先级、写作里程碑、MAPLES-DR 与 HRDecoder E1 的接法；`docs/ops/17_服务器任务单.txt` —— 服务器要做的事（最新一节是第十六节）和回传格式。
 3. `docs/paper/13` 第三节状态表；`docs/paper/14` 论文里要用的数字和方法（M1–M14、备注 1–38）。
 4. 论文源：`docs/paper/retiseg_paper/paper/`（`STRUCTURE.md` 图表清单；`README.md` 哪些是实数）。
 
@@ -18,6 +18,9 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 - 服务器在跑（GPU 2–7）：nnU-Net IDRiD rep1；E3a 种子 0（主变体 done 63）；E3b U-Net TJDR、E8 DDR 50%、E8 细粒度合并、E7 长边 512。旧 launch_factor 没杀。GPU 0、1 是他人 vLLM。下一步顺序在 17 第十三节（E3a > E5 训练档种子 0 > 影响因素剩余 > nnU-Net E3b > E5 推理档）。
 - 权重：SAM、SAM 2、MAE 和三份 gated（SAM 3、RETFound ×2，sha256 在 e5_frozen.yaml）已在 `pretrained/`。MedSAM 和 DINOv2 没有。E5 训练未开始。
 - 专用模型扩充（10-14，`docs/paper/18`）：主表专用一族扩到 7 个（HRDecoder、PMCNet、WSRFNet 轨 B；CLC-Net、TC-Net 轨 C），包装器在 `bench/models/`，任务表已生成，queue.yaml 的 fundus_seed0 阶段关着等服务器冒烟（17 第十五节）；用户要加 `official_code/HRDecoder` 子模块并下载其权重。
+- 队列第二版（10-14 晚，`bench/configs/queue.yaml`，理由在 19 第四节）：E3a 最多两张卡 → E5 种子 0 → 专用模型种子 0（冒烟后开）→ E5 推理档 a/b → 便宜的影响因素格子 → nnU-Net E3b → 贵的 E3b/E7 格子 → 种子 1、2（关）。写作按种子 0 的数先写，多种子只换误差棒。
+- MAPLES-DR 是第八个独立测试集（细档，官方测试 60 张；`bench/data/maples.py`，e3a_frozen 已追加）：等用户向 adcis.net 申请 MESSIDOR 原图，到后服务器 export + 泄漏审计（17 第十六节第 5 条），队列自动接；论文侧表 1/图 6/方法在 report.json 出来后改。
+- HRDecoder 作者权重已下载：`bench/predict_hrdecoder.py` + `bench.e3a author --model HRDecoder`（retiseg-hacdr），命令在 17 第十六节第 4 条；表 3a 已留两行。
 - E5 推理档 `bench/e5/` 已写（10-13；服务器步骤 17 第六节，方法 14 M9“推理档实现”），适配器要在服务器核对。nnU-Net 的 E3b 已接线（10-14；`nnunet_run.sh TJDR_std|FGADR default`）。影响因素运行的评测现在带训练源同眼排除（launch_factor.py）。
 
 ## 数据流（结果 → 论文）

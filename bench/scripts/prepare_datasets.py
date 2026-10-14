@@ -2,14 +2,16 @@
 
     python bench/scripts/prepare_datasets.py splits TJDR|FGADR|Retinal-Lesions [--force]
     python bench/scripts/prepare_datasets.py check-diaretdb1
-    python bench/scripts/prepare_datasets.py export TJDR|FGADR|DiaRetDB1|Retinal-Lesions
+    python bench/scripts/prepare_datasets.py export TJDR|FGADR|DiaRetDB1|Retinal-Lesions|MAPLES-DR
     python bench/scripts/prepare_datasets.py report NAME
 
 splits draws once and writes bench/data/splits/<name>.json; commit it before
 any training. Rerunning with the same draw is a no-op, a different draw is an
 error unless --force. export reads only the committed lists and resumes after
 the last finished image. check-diaretdb1 reads ground truth only. All of it
-streams one image at a time.
+streams one image at a time. DiaRetDB1 and MAPLES-DR use their official lists
+(no draw); MAPLES-DR needs `pip install maples_dr`, the figshare archive in
+dataset/maples-dr and the MESSIDOR images in dataset/messidor (bench/data/maples.py).
 """
 
 import argparse

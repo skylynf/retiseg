@@ -1,0 +1,67 @@
+19 外部独立测试与实验优先级（2026-10-14；回答"什么时候做外部独立测试""现在先跑什么能加速论文"；MAPLES-DR 作为第八个独立测试集的接法）
+
+一、外部独立测试什么时候做：已经在做，不等任何训练
+  1. 独立测试（E3a）是推理，不是训练：一个检查点打完分（metrics_test.json 落盘）就是 E3a 的来源，启动器自动发现（launch_e3a.discover）。主表 B-std 七模型种子 0 与 nnU-Net 两配置已测完 55 份主变体（14 M10，R4 第一段已按实数写）；剩下的是种子 1、2、B1、交叉训练源和 TJDR_std/DiaRetDB1 的补齐，以及之后每个新检查点（E5 种子 0、专用模型种子 0、BF、nnU-Net E3b）各自的一轮。
+  2. 卡的分配：queue.yaml 里 e3a 优先级 10 但 max_concurrent 2——最多两张卡做独立测试，其余四张从今天起训练种子 0。独立测试的单项很短（几分钟到一小时），两张卡足够在训练结束前把积压清掉。
+  3. 新测试集（MAPLES-DR）的加入时间与训练无关：图像到位 → 导出 → 泄漏审计 → 下一次空卡自动进 e3a（第二节）。所有已完成来源都会对它补跑一轮，60 张图、每个来源几分钟。
+  4. 底线：R4/图 6 定稿前，细档平均要包含 MAPLES-DR（它是细档），所以 MESSIDOR 原图的申请是现在最该发出的一封邮件。
+
+二、MAPLES-DR 作为第八个独立测试集
+  1. 事实（Lepetit-Aimon 等，Scientific Data 2024；figshare 10.6084/m9.figshare.24328660；LEDGER D-MAPLES-2024）
+     198 张 MESSIDOR 图像（官方 138 训练 / 60 测试，另有 2 张训练集重复图默认剔除）；标注在 1500×1500 的视野裁剪上画，maples_dr 包按 ROI 框最近邻放回 MESSIDOR 原分辨率（1440×960、2240×1488、2304×1536）。
+     字段：microaneurysms、hemorrhages、exudates、cottonWoolSpots、drusens、neovascularization、redUncertains（MA 或 HE 之一，未定）、brightUncertains（EX、SE 或 drusen 之一，未定）、vessels、opticDisc、opticCup、macula；DR 分级 R0–R4A、ME 分级 M0–M2。
+     标注方式：MA、HE、EX、vessels 由网络预标注后由视网膜医生逐张修正；CWS 从零画（原文 Methods）。meta.json 记 ai_assisted_classes，论文表 1 注明。
+     图像本体是 MESSIDOR（adcis.net，须另行申请，Base11–Base34），不能随 prepared 目录再分发。
+  2. 接法（代码已写，bench/data/maples.py、bench/data/prepare.py prepare_maples）
+     映射：microaneurysms→MA、hemorrhages→HE、exudates→EX、cottonWoolSpots→SE；drusens、neovascularization 进 masks_ext（DRUSEN、NV）；血管、视盘、视杯、黄斑不导出。
+     不确定层：redUncertains 进 MA 与 HE 的 ignore/，brightUncertains 进 EX 与 SE 的 ignore/（与已确定的正例重叠处仍是正例）。评测（bench.eval）对 ignore 像素既不计对也不计错，与 Retinal-Lesions 的 127 灰度一致。
+     划分：官方 train 138 / val 空 / test 60，不抽样。E3a 只读 test 60（e3a_frozen split: test）。选官方 60 而不是全部 198 的理由：与数据集自己的基线表可比；138 张训练图留给将来的细档合并实验（E4/E8 的"fine merged"档）；且冻结文件读到指标后不能再改，现在定下。
+     画布：标准视野（MESSIDOR 45°），按视野框匹配 1440，与 IDRiD/DDR 相同。
+     冻结：bench/configs/e3a_frozen.yaml 的 test_sets 末尾追加 MAPLES-DR（tier fine，注明日期；上面的条目一字未动，仍是 append-only）；bench/e5/common.PAPER_SET、collect_runs 的 E3A_SET/TESTSET/PREPARED、queue.yaml 的 E5 推理档 sets 都已加。prepared 目录不存在时，launch_e3a.plan 与 launch_queue 的 E5 阶段自动跳过它（不再 SystemExit），目录出现后下一次空卡接上。
+  3. 泄漏审计（导出后、读任何指标前）
+     python bench/scripts/leak_audit.py --min-vessel 0.3 --data dataset/prepared/IDRiD dataset/prepared/DDR dataset/prepared/TJDR_std dataset/prepared/FGADR dataset/prepared/RetinalLesions dataset/prepared/MAPLES-DR --out runs/audit/leak_maples
+     结果按训练源写进 bench/data/splits/leak_exclusions.json 的 by_training_source.<源>.MAPLES-DR（预期为空：MESSIDOR 是 2004–2009 年法国三家医院的图像，与其他七个库无来源重叠；只有 Retinal-Lesions 是 EyePACS，也不同源）。审计结果记 00，提交后 e3a 才能跑 MAPLES-DR。
+  4. 论文侧改动（等 report.json 出来再做，一次改完）
+     figures/retifig/data.py 的 TESTS、INDEPENDENT、FINE_INDEPENDENT、DATASETS 行；style.py 的档位与短标签；build_placeholder 的 TESTS 与各实验的占位；表 1 加一行；图 6 多一列；方法 M1 的来源段与映射表；14 M1 的"待补"改为已入。细档平均（R4、表 5 的 Indep. fine、表 3 的"Indep. fine"列）会因此变化，所以这一步要在 R4 定稿前完成。
+  5. 用户要做的
+     a. 向 adcis.net 申请 MESSIDOR（Base11–Base14、Base21–Base24、Base31–Base34 的 zip），放服务器 dataset/messidor/（zip 或解开的目录均可，maples_dr 两种都认）。
+     b. figshare 下载 MAPLES-DR 附加数据 zip（约 60 MB）放 dataset/maples-dr/（没有时包会自己下，服务器通常没有外网）。
+     c. retiseg 环境 pip install maples_dr，写进 cluster_env.sh。
+     服务器（CPU，一条命令）：python bench/scripts/prepare_datasets.py export MAPLES-DR → dataset/prepared/MAPLES-DR/report.json；然后第 3 条的审计；两者都记 00。
+
+三、HRDecoder 作者权重（E1）——权重已下载，接线已写
+  1. 代码：bench/predict_hrdecoder.py（作者测试流水线：按配置的 image_scale 缩放、keep_ratio False、IDRiD 滑窗 1920/步 960、DDR 整图；归一化与 hr_scale 取自作者配置；输出 EX、HE、SE、MA 四个 sigmoid 图；作者指标用 bench.eval.m2mrf_stream 的 11 阈值 AUPR，与该分支 lesion_metric.py 相同）；bench.e3a author --model HRDecoder（独立测试，retiseg-hacdr 环境，launch_e3a 按 _BINDING 选环境）；e3a_frozen.yaml 的 author_weights.HRDecoder（只增）；collect_runs 新增 collect_e1（runs/E1_<slug>/author_<库>_test.json 与 metrics_<库>.json → 表 3a 的 author_function / this_protocol 行），E3a 的作者权重行改用 this_protocol 键（原来写成 author_weights，表格读不到）；表 3a 加 HRDecoder 两行（占位），表注说明流水线。
+  2. 用户：权重命名 pretrained/hrdecoder_idrid.pth、pretrained/hrdecoder_ddr.pth 放服务器；sha256 回填 e3a_frozen.yaml 的条目注释（只增）。official_code/HRDecoder 子模块要先在（18 第五节第 1 条）。
+  3. 服务器（retiseg-hacdr 环境；先 17 第十五节第 1 条核对 mmseg 能导入）：
+     python -m bench.predict_hrdecoder --dataset idrid --limit 2     # 冒烟：检查点键全部对上、输出 4 通道、尺寸等于原图
+     python -m bench.predict_hrdecoder --dataset idrid ；--dataset ddr      # 各自的内部测试，写 runs/E1_hrdecoder/
+     python -m bench.eval.cli evaluate --data dataset/prepared/IDRiD --split test --pred runs/E1_hrdecoder/prob_test --out runs/E1_hrdecoder/metrics_idrid
+     python -m bench.eval.cli evaluate --data dataset/prepared/DDR --split test --pred runs/E1_hrdecoder/ddr_prob_test --out runs/E1_hrdecoder/metrics_ddr
+     独立测试不用手动排：权重文件存在后 launch_e3a.discover 把 E1_hrdecoder_idrid、E1_hrdecoder_ddr 列为第一档来源，queue 的 e3a 阶段自动接。
+  4. 核对点（记 00）：README 表 IDRiD mAUPR 71.34 / DDR 49.24 与 author_<库>_test.json 的 mAUPR 相差应在 0.5 个点以内；差得多先查 image_scale 的宽高顺序（mmseg 是 (w, h)）和 test_cfg。
+
+四、优先级重排（bench/configs/queue.yaml 第二版）与写作里程碑
+  原则：论文的表格先要种子 0 的数，多种子只给误差棒；推理档比训练便宜得多；昂贵的影响因素格子排在表格需要的数之后。
+  1. 顺序（优先级）
+     10 e3a（max_concurrent 2）：独立测试，所有来源；MAPLES-DR 到位自动加入。
+     20 e5_seed0：SAMed、SAM-Adapter、SAM2-UNet、RETFound 的 IDRiD/DDR 种子 0（8 个运行，最长 22 小时；表 3 的训练档）。
+     25 fundus_seed0（冒烟后开）：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net 种子 0（10 个运行；主表 5 行、同骨干比较）。
+     28/29/30 e5_amg、e5_prompted（box）、e5_prompted_points（各 max_concurrent 1）：零样本与理想提示行；more_masks 与 G2 砍掉（16 第八节）。
+     32 factor_cheap：U-Net、M2MRF 的影响因素格子（旧 launch_factor 正在跑，这一阶段只接它漏下的）。
+     40 nnunet_e3b：TJDR_std、FGADR 两个 nnU-Net（E3b 第五个模型）。
+     45 factor_e3b_heavy：SAM2-UNet、RETFound 的 E3b 四格（约 76 小时）。
+     55 factor_e7_heavy：RETFound 的 E7 两格（约 79 小时）。
+     60/70/75 hrdecoder_rest、e5_rest、fundus_rest（关）：种子 1、2，按此顺序在种子 0 阶段全部无待办后逐个打开。
+     90 e1r（关）。
+  2. 写作里程碑（每一档数据到位就写相应段落、画图，不等多种子）
+     现在：表 2/图 4/图 5（主表 B-std 七模型）、R1–R3 已是实数；R4 第一段已是实数。
+     E3a 种子 0 补齐（预计 10-16）：图 6 全部列、R4 全段、讨论 Q2。
+     E5 种子 0 + 推理档（预计 10-18 推理档、10-20 训练档）：表 3、图 5 基础模型面板、R3 全段——论文的中心论点（Q3），写在种子 0 上，种子 1、2 只换误差棒。
+     专用模型种子 0（冒烟后约 7 天，预计 10-22）：主表 5 行、图 4 同骨干小面板、R3 的"专用解码头"段、Friedman 重算（n 从 14 到 19）。
+     影响因素 U-Net/M2MRF（旧启动器，预计 10-17）：图 7 的 U-Net、M2MRF 面板、R5；SAM2-UNet/RETFound 的格子到了再补点。
+     MAPLES-DR（图像到位后 1 天）：表 1 一行、图 6 一列、细档平均更新。
+     种子 1、2：误差棒、s.d.、Friedman 的最终 p 值；不改任何结论性文字。
+  3. 不砍：主表（含 5 个专用模型）种子 0、E3a、E5 c/d 种子 0 与推理档 a/b、E3b。可砍（算力不够时按此顺序）：E7 重格、E1r 剩余、fundus_rest 中 CLC-Net/TC-Net 的种子 2。
+
+五、状态
+  2026-10-14：本文件写成；代码（maples.py、prepare_maples、predict_hrdecoder.py、e3a author 分发、launch_e3a 缺目录跳过、launch_queue max_concurrent 与 factor models 过滤、collect_e1、表 3a）见 00 当天记录；queue.yaml 第二版已提交。等：MESSIDOR 原图（用户申请）、服务器 pull 后按 17 第十六节执行。

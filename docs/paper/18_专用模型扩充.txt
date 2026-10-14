@@ -69,7 +69,7 @@
 用户：
   1. git submodule add https://github.com/CVIU-CSU/HRDecoder official_code/HRDecoder，提交推送（服务器 git submodule update --init official_code/HRDecoder）。
   2. 把 reproductions/ 两个目录加进仓库提交（现在只在本机工作区）。
-  3. 下载 HRDecoder 权重到服务器 pretrained/：Google Drive 1tRBNqpbFwnNBGQBMw8UYL8sjJzWlI3O9（IDRiD）、1CBTHOtxToHQ13H4SZIUBZTwX0zwmIduh（DDR），命名 hrdecoder_idrid.pth、hrdecoder_ddr.pth，sha256 回填到 e3a_frozen.yaml 的 author_weights 条目。
+  3. 下载 HRDecoder 权重到服务器 pretrained/：Google Drive 1tRBNqpbFwnNBGQBMw8UYL8sjJzWlI3O9（IDRiD）、1CBTHOtxToHQ13H4SZIUBZTwX0zwmIduh（DDR），命名 hrdecoder_idrid.pth、hrdecoder_ddr.pth，sha256 回填到 e3a_frozen.yaml 的 author_weights 条目。已下载 2026-10-14（用户）；E1 入口见 19 第三节、17 第十六节第 4 条。
   4. 向 xuanli@stu.hit.edu.cn 索取 WSRFNet 权重（轨 A，可选；不影响轨 B）。
   5. 确认第三节的抵扣。
 本机：第二节的代码与测试；models.yaml、registry、launch_b1 绑定、make_bs_jobs 任务表、collect_runs 的 SLUG；论文侧 MAIN_MODELS、占位、表格；13/14/16/17 更新；定向补检。
@@ -77,3 +77,4 @@
 
 六、状态
   2026-10-14：本文件写成；代码见 00 当天记录。
+  2026-10-14（晚）：HRDecoder 权重已下载；E1 作者流水线 bench/predict_hrdecoder.py 与 bench.e3a author 分发写好，e3a_frozen.yaml 追加 author_weights.HRDecoder，表 3a 加两行占位；队列第二版把 fundus_seed0 排在 E5 种子 0 之后、推理档之前（19 第四节）。

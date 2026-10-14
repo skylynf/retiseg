@@ -16,7 +16,7 @@ Stage kinds (all planning is done by the existing launchers, which keep
 working on their own as before):
     e3a      bench/scripts/launch_e3a.py plan()        keys: seed0_only, only, drop_maps
     bs       bench/scripts/launch_b1.py plan_queue_all keys: jobs (yaml), only (models), seed0_only, datasets
-    factor   bench/scripts/launch_factor.py plan()     keys: experiment, only, score_only
+    factor   bench/scripts/launch_factor.py plan()     keys: experiment, only, models, score_only
     nnunet   bench/scripts/nnunet_run.sh               keys: runs: [{train, plan}]; needs the converted raw data
     e5_amg   python -m bench.e5 amg                    keys: models, generators, sets (each "<set>" or "<set>:<split>"), geometry
     e5_prompted  python -m bench.e5 prompted           keys: models, kinds, sets, k
@@ -25,7 +25,9 @@ working on their own as before):
 An item is "done" when its stage says so (marker files); "running" when its
 console.log has an open "== start" of a live process (launch_b1.in_progress),
 whichever launcher started it. A stage that cannot plan (missing data, a
-missing environment) is reported and skipped, never fatal. --submit needs
+missing environment) is reported and skipped, never fatal. A stage may set
+max_concurrent (how many of its items this launcher runs at once; the next
+stage gets the card when the cap is reached) and max_items. --submit needs
 RETISEG_GPUS; the launcher never touches other cards.
 """
 
@@ -121,7 +123,8 @@ def plan_bs(stage, dry):
 def plan_factor(stage, dry):
     from bench.scripts import launch_factor
 
-    chosen = _quiet(launch_factor.plan, stage.get("experiment"), set(stage.get("only") or ()), bool(stage.get("score_only")))
+    chosen = _quiet(launch_factor.plan, stage.get("experiment"), set(stage.get("only") or ()), bool(stage.get("score_only")),
+                    set(stage.get("models") or ()))
     out = []
     for job in chosen:
         py = ["python"] if dry else None
@@ -154,8 +157,14 @@ def plan_nnunet(stage, dry):
 
 
 def _e5_sets(stage):
+    """(set, split) of the stage, leaving out a set whose prepared directory is not on this machine
+    (MAPLES-DR before its export); the stage picks it up once the directory exists."""
+    from bench.e5 import common
+
     for item in stage.get("sets") or ():
         name, _, split = str(item).partition(":")
+        if not common.data_dir(name).is_dir():
+            continue
         yield name, split or "test"
 
 
@@ -261,9 +270,15 @@ def gather(path=QUEUE, dry=False, report=None):
 
 
 def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
-    """One worker per card; a free card reads the queue again and takes the first item nobody holds."""
+    """One worker per card; a free card reads the queue again and takes the first item nobody holds.
+
+    A stage's ``max_concurrent`` caps how many of its items this launcher runs
+    at once (E3a keeps two cards, the rest go to training); items of a stage at
+    its cap are passed over for the next stage, not waited for.
+    """
     lock = threading.Lock()
     taken = set()
+    running = {}   # label -> stage of the items this launcher has on a card
     errors = []
     idle_since = {gpu: None for gpu in gpus}
 
@@ -272,9 +287,13 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
         items = gather(path, dry=False, report=report)
         for line in report:
             print(f"stage skipped: {line}", flush=True)
+        caps = {stage["name"]: stage.get("max_concurrent") for stage in load_queue(path)}
         with lock:
             for _priority, stage, label, command, gate in items:
                 if label in taken:
+                    continue
+                cap = caps.get(stage)
+                if cap and sum(1 for held in running.values() if held == stage) >= int(cap):
                     continue
                 state = gate() if gate is not None else "open"
                 if state == "never":
@@ -284,6 +303,7 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
                 if state != "open":
                     continue
                 taken.add(label)
+                running[label] = stage
                 return stage, label, command
         return None
 
@@ -312,6 +332,7 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
                 print(f"gpu {gpu}: {label} exited {code}", flush=True)
             with lock:
                 taken.discard(label)   # the stage's own done/running rules decide whether it comes back
+                running.pop(label, None)
 
     threads = [threading.Thread(target=_worker, args=(gpu,), daemon=True) for gpu in gpus]
     for thread in threads:

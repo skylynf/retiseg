@@ -8,9 +8,11 @@ cards share a slow source. Sources, in this order:
 Inside a tier the items with the most canvas pixels go first. A B-std or B1
 run is a source once its metrics_test.json exists (it has its test maps,
 prob_val and checkpoint_roles.json). An item whose sets all have done.json is
-skipped, and so is one whose console.log shows a live process. One process
-per card; a card with any process of this user, or another user's processes
-holding RETISEG_BUSY_MIB or more, is waited for (bench/scripts/launch_b1.py
+skipped, and so is one whose console.log shows a live process; a test set
+whose prepared directory is missing on this machine is reported and left out
+until it exists (MAPLES-DR until its export). One process per card; a card
+with any process of this user, or another user's processes holding
+RETISEG_BUSY_MIB or more, is waited for (bench/scripts/launch_b1.py
 run_queue). Each item writes runs/E3a/<source>/<set>/console.log.
 
     python bench/scripts/launch_e3a.py                      # print the plan
@@ -94,8 +96,15 @@ def discover(seed0_only=False):
         for train, spec in by_train.items():
             if (_ROOT / spec["checkpoint"]).is_file():
                 argv = ["-m", "bench.e3a", "author", "--model", model, "--train", train]
-                found.append((1, e3a.author_source(model, train), "retiseg", argv, list(spec["trained_on"])))
+                env = _BINDING[model][0] if model in _BINDING else "retiseg"   # HRDecoder's fork needs retiseg-hacdr
+                found.append((1, e3a.author_source(model, train), env, argv, list(spec["trained_on"])))
     return sorted(found, key=lambda item: (item[0], item[1]))
+
+
+def missing_test_sets(frozen=None):
+    """Test sets of the frozen protocol whose prepared directory is not on this machine (skipped, reported)."""
+    frozen = frozen or e3a.load_frozen()
+    return sorted(name for name, spec in frozen["test_sets"].items() if not (_ROOT / spec["data"]).is_dir())
 
 
 def pending_sets(source, trained_on, author=False):
@@ -181,9 +190,6 @@ def main(argv=None):
     gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
     if not gpus:
         raise SystemExit("--submit needs RETISEG_GPUS, the cards this queue may use")
-    missing = [name for name, spec in e3a.load_frozen()["test_sets"].items() if not (_ROOT / spec["data"]).is_dir()]
-    if missing:
-        raise SystemExit("prepared test sets missing on this machine: " + ", ".join(missing))
     errors = run_queue(plan_items, gpus, wait_free=True)
     if errors:
         raise SystemExit("\n".join(errors))
@@ -193,12 +199,15 @@ def plan(seed0_only=False, only=()):
     """Pending (tier, -cost, label, (source, env, argv, test)) items, ordered; launch_queue reads this too."""
     only = set(only or ())
     frozen = e3a.load_frozen()
+    missing = set(missing_test_sets(frozen))
+    if missing:
+        print("prepared test sets missing on this machine, skipped until they exist: " + ", ".join(sorted(missing)), flush=True)
     items = []
     for tier, source, env, run_argv, trained_on in discover(seed0_only):
         if only and source not in only:
             continue
         kind = "nnunet" if source.startswith("NN_") else ("author" if source.startswith("E1_") else "run")
-        todo = pending_sets(source, trained_on, author=kind == "author")
+        todo = [(name, variant) for name, variant in pending_sets(source, trained_on, author=kind == "author") if name not in missing]
         if not todo:
             print(f"skip {source}: every set is done", flush=True)
             continue

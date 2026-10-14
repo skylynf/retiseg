@@ -6,7 +6,7 @@ The FOV mask is computed here and stored beside the image. Lesion-size
 statistics use only the training ids passed in, never the test split.
 
 The independent sources (TJDR_std, TJDR_uwf, FGADR, DiaRetDB1,
-Retinal-Lesions) go through export_cases. Their images keep the release
+Retinal-Lesions, MAPLES-DR) go through export_cases. Their images keep the release
 bytes and extension. Besides masks/ they may have masks_ext/<CLS> (classes
 outside the four), ignore/<CLS> (pixels excluded from that class in
 evaluation and loss) and dataset-specific layers. Each finished image appends
@@ -36,6 +36,7 @@ PREPARED = {
     "FGADR": "dataset/prepared/FGADR",
     "DiaRetDB1": "dataset/prepared/DiaRetDB1",
     "Retinal-Lesions": "dataset/prepared/RetinalLesions",
+    "MAPLES-DR": "dataset/prepared/MAPLES-DR",
 }
 CASE_LOG = "export_cases.jsonl"
 
@@ -457,9 +458,35 @@ def prepare_retlesion(repo_root, log=print):
     return write_report(dest)
 
 
+def prepare_maples(repo_root, log=print):
+    """MAPLES-DR at MESSIDOR resolution (bench/data/maples.py); official lists, no draw. Added 2026-10-14 as
+    the eighth independent test set (docs/paper/19 section 2); only its test split is read by E3a."""
+    from bench.data import maples as source
+
+    data = source.open_maples(repo_root)
+    splits = data.splits()
+    dest = _start(
+        repo_root,
+        "MAPLES-DR",
+        splits,
+        "fine",
+        source="MAPLES-DR v1 (figshare 10.6084/m9.figshare.24328660) on MESSIDOR",
+        extra_classes=list(source.EXTRA),
+        class_fields=dict(source.BIOMARKERS),
+        ignore_fields=dict(source.UNCERTAIN),
+        ai_assisted_classes=list(source.AI_ASSISTED),
+        annotation_resolution="1500x1500 on the field-of-view crop, resized (nearest) to the MESSIDOR image",
+        split_rule=source.SPLIT_RULE,
+        license="MAPLES-DR labels CC BY 4.0; MESSIDOR images under their own licence (adcis.net), not redistributed",
+    )
+    export_cases(dest, splits["train"] + splits["test"], data.read_case, log)
+    return write_report(dest)
+
+
 PREPARERS = {
     "TJDR": prepare_tjdr,
     "FGADR": prepare_fgadr,
     "DiaRetDB1": prepare_diaretdb1,
     "Retinal-Lesions": prepare_retlesion,
+    "MAPLES-DR": prepare_maples,
 }

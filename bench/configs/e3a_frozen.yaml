@@ -17,6 +17,13 @@ test_sets:
   FGADR: {data: dataset/prepared/FGADR, tier: mixed}
   Retinal-Lesions: {data: dataset/prepared/RetinalLesions, tier: coarse}
   DiaRetDB1: {data: dataset/prepared/DiaRetDB1, tier: region}
+  # Appended 2026-10-14 (docs/paper/19 section 2), before any model was run on
+  # it: MAPLES-DR, pixel labels on 198 MESSIDOR images, official test split of
+  # 60; the uncertain red / bright lesions are ignore pixels of MA, HE / EX, SE.
+  # Standard field (45 degrees, MESSIDOR), field-of-view matched like the rest.
+  # Nothing above this line changed. A source whose prepared directory is
+  # missing on a machine is skipped by the launcher until it exists.
+  MAPLES-DR: {data: dataset/prepared/MAPLES-DR, tier: fine}
 # The internal test of a training source is its own metrics_test.json; E3a
 # writes every other test set.
 train_sources: [IDRiD, DDR]
@@ -58,6 +65,13 @@ author_weights:
   M2MRF:
     IDRiD: {checkpoint: runs/E1_m2mrf/fcn_hr48-M2MRF-C_40k_idrid.pth, trained_on: [IDRiD]}
     DDR: {checkpoint: runs/E1_m2mrf/fcn_hr48-M2MRF-C_60k_ddr.pth, trained_on: [DDR]}
+  # Appended 2026-10-14 (docs/paper/19 section 3): the released HRDecoder
+  # checkpoints (README of CVIU-CSU/HRDecoder, Google Drive), run through the
+  # author's test pipeline in bench/predict_hrdecoder.py (resize to the config's
+  # image_scale without keeping the ratio, IDRiD slide 1920/960, DDR whole).
+  HRDecoder:
+    IDRiD: {checkpoint: pretrained/hrdecoder_idrid.pth, trained_on: [IDRiD]}
+    DDR: {checkpoint: pretrained/hrdecoder_ddr.pth, trained_on: [DDR]}
 
 # Near-duplicates of training images in a test set are removed from that
 # test set and listed (05 section 1, item 6). Leak audit 2026-10-12 over all

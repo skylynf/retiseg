@@ -12,11 +12,14 @@
 \cmidrule(lr){3-5}\cmidrule(lr){6-10}
 \colh{Model} & \colh{Source} & Paper & Function & Stored & \colh{mAUPR} & MA & HE & EX & SE & \colh{$\Delta$ metric} & \colh{Indep.\ fine} \\
 \midrule
-M2MRF & IDRiD & .672 & .676 & .645 & .639 & \cellcolor[HTML]{C0E4D8}.408 & \cellcolor[HTML]{88CEC9}.653 & \cellcolor[HTML]{5BB9C0}.832 & \cellcolor[HTML]{85CDC8}.664 & \down{.036} & \ph{.231} \\
-M2MRF & DDR & .489 & .492 & .426 & .401 & \na & \na & \na & \na & \down{.091} & \ph{.263} \\
+M2MRF & IDRiD & .672 & .676 & .645 & .639 & \cellcolor[HTML]{C0E4D8}.408 & \cellcolor[HTML]{88CEC9}.653 & \cellcolor[HTML]{5BB9C0}.832 & \cellcolor[HTML]{85CDC8}.664 & \down{.036} & \ph{.240} \\
+M2MRF & DDR & .489 & .492 & .426 & .401 & \na & \na & \na & \na & \down{.091} & \ph{.276} \\
 \addlinespace[2pt]
-WSRFNet & IDRiD & \ph{.690} & \ph{.681} & \ph{.659} & \ph{.639} & \cellcolor[HTML]{BEE3D7}\ph{.418} & \cellcolor[HTML]{88CEC9}\ph{.654} & \cellcolor[HTML]{5DBAC0}\ph{.824} & \cellcolor[HTML]{87CDC8}\ph{.660} & \down{\ph{.042}} & \ph{.292} \\
-WSRFNet & DDR & \ph{.500} & \ph{.483} & \ph{.432} & \ph{.412} & \cellcolor[HTML]{E0F0E5}\ph{.232} & \cellcolor[HTML]{B5E0D3}\ph{.471} & \cellcolor[HTML]{9CD6CC}\ph{.578} & \cellcolor[HTML]{C8E7DB}\ph{.366} & \down{\ph{.071}} & \ph{.341} \\
+HRDecoder & IDRiD & \ph{.713} & \ph{.713} & \ph{.687} & \ph{.667} & \cellcolor[HTML]{B9E1D5}\ph{.449} & \cellcolor[HTML]{7CC9C6}\ph{.696} & \cellcolor[HTML]{59B7BF}\ph{.849} & \cellcolor[HTML]{83CCC8}\ph{.673} & \down{\ph{.047}} & \ph{.269} \\
+HRDecoder & DDR & \ph{.492} & \ph{.492} & \ph{.449} & \ph{.429} & \cellcolor[HTML]{DFF0E5}\ph{.240} & \cellcolor[HTML]{AFDDD1}\ph{.500} & \cellcolor[HTML]{9CD6CC}\ph{.577} & \cellcolor[HTML]{C2E5D8}\ph{.400} & \down{\ph{.063}} & \ph{.310} \\
+\addlinespace[2pt]
+WSRFNet & IDRiD & \ph{.690} & \ph{.676} & \ph{.665} & \ph{.645} & \cellcolor[HTML]{BEE3D7}\ph{.424} & \cellcolor[HTML]{88CEC9}\ph{.650} & \cellcolor[HTML]{5AB8BF}\ph{.839} & \cellcolor[HTML]{85CDC8}\ph{.665} & \down{\ph{.032}} & \ph{.228} \\
+WSRFNet & DDR & \ph{.500} & \ph{.494} & \ph{.425} & \ph{.405} & \cellcolor[HTML]{E1F1E6}\ph{.225} & \cellcolor[HTML]{B7E0D4}\ph{.465} & \cellcolor[HTML]{9ED7CD}\ph{.569} & \cellcolor[HTML]{C8E7DB}\ph{.364} & \down{\ph{.089}} & \ph{.254} \\
 \bottomrule
 \end{tabular}
 
@@ -29,13 +32,13 @@ WSRFNet & DDR & \ph{.500} & \ph{.483} & \ph{.432} & \ph{.412} & \cellcolor[HTML]
 \midrule
 M2MRF & IDRiD & .672 & \ph{.612}\sd{\ph{.154}} & \ph{3} & \down{\ph{.060}} & \ph{.549}\sd{\ph{.198}} \\
 \quad first run, batch 1 & IDRiD & .672 & .576 & 1 & \down{.096} & .493 \\
-M2MRF & DDR & .489 & \ph{.455}\sd{\ph{.008}} & \ph{3} & \down{\ph{.035}} & \ph{.420}\sd{\ph{.019}} \\
-HACDR-Net & IDRiD & \ph{.700} & \ph{.593}\sd{\ph{.008}} & \ph{3} & \down{\ph{.107}} & \ph{.552}\sd{\ph{.010}} \\
-HACDR-Net & DDR & \ph{.520} & \ph{.429}\sd{\ph{.006}} & \ph{3} & \down{\ph{.091}} & \ph{.390}\sd{\ph{.011}} \\
+M2MRF & DDR & .489 & \ph{.454}\sd{\ph{.002}} & \ph{3} & \down{\ph{.036}} & \ph{.416}\sd{\ph{.008}} \\
+HACDR-Net & IDRiD & \ph{.700} & \ph{.596}\sd{\ph{.011}} & \ph{3} & \down{\ph{.104}} & \ph{.563}\sd{\ph{.016}} \\
+HACDR-Net & DDR & \ph{.520} & \ph{.426}\sd{\ph{.006}} & \ph{3} & \down{\ph{.094}} & \ph{.389}\sd{\ph{.004}} \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize
-\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on TJDR standard-field and ultra-widefield test sets. The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
+\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on TJDR standard-field and ultra-widefield test sets. The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). HRDecoder: the released checkpoints (repository table 71.34, 49.24) through the authors' test pipeline (resize to $2880\times1920$ with sliding $1920$ windows on IDRiD, $2048\times2048$ whole image on DDR). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
 \phnote
 \end{tablenotes}
 \end{threeparttable}

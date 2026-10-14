@@ -264,6 +264,22 @@ def original_models(sim):
                     vals.append(ap)
         sim.add("E1", "WSRFNet", "this_protocol", train, -1, train, "mean", "aupr", np.mean(vals))
         sim.add("E1", "WSRFNet", "this_protocol", train, -1, train, "mean", "aupr_11pt", np.mean(vals) + 0.02)
+    # --- HRDecoder: released checkpoints (README of CVIU-CSU/HRDecoder: mAUPR 71.34 IDRiD, 49.24 DDR), run
+    # through bench/predict_hrdecoder.py and bench.e3a author (docs/paper/19 section 3); collect_runs
+    # (collect_e1, collect_e3a) replaces these rows. The "paper" value is the README's until L1 extracts the table.
+    readme = {"IDRiD": 0.7134, "DDR": 0.4924}
+    for train in TRAIN_MAIN:
+        sim.add("E1", "HRDecoder", "paper", train, -1, train, "mean", "aupr_author_impl", readme[train])
+        sim.add("E1", "HRDecoder", "author_function", train, -1, train, "mean", "aupr_author_impl", readme[train])
+        vals = []
+        for test in TESTS:
+            for cls in CLASSES:
+                ap = sim.aupr("HRDecoder-author", "fundus", 0.10, 0.08, train, test, cls, r.normal(0, 0.05))
+                sim.add("E1", "HRDecoder", "this_protocol", train, -1, test, cls, "aupr", ap)
+                if test == train:
+                    vals.append(ap)
+        sim.add("E1", "HRDecoder", "this_protocol", train, -1, train, "mean", "aupr", np.mean(vals))
+        sim.add("E1", "HRDecoder", "this_protocol", train, -1, train, "mean", "aupr_11pt", np.mean(vals) + 0.02)
 
     # --- E1r. First M2MRF run (effective batch 1, workstation) is measured.
     sim.add("E1r", "M2MRF", "bs1_first_run", "IDRiD", 0, "IDRiD", "mean", "aupr_author_impl", 0.5763, m)

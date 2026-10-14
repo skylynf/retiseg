@@ -82,6 +82,7 @@ TESTSET = {  # suffix of metrics_<suffix>.json -> test set name
     "fgadr": "FGADR",
     "retinallesions": "Retinal-Lesions",
     "diaretdb1": "DiaRetDB1",
+    "maples-dr": "MAPLES-DR",
 }
 EXPERIMENT = {"BS": ("E2", "bstd"), "B1": ("E2b", "b1")}
 RUN = re.compile(r"^(BS|B1)_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)(?P<registered>_registered)?(?:_runner)?$")
@@ -99,9 +100,9 @@ def nn_key(match):
 E1R = re.compile(r"^E1r_(?P<slug>[a-z0-9]+)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)_bs4(?:_[a-z0-9]+)?$")
 E2C = re.compile(r"^E2c_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed0_(?P<lr>lr1o3|lr3)$")
 E2C_LEVEL = {"lr1o3": "1/3", "lr3": "3"}
-E3A_SET = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "Retinal-Lesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1"}
+E3A_SET = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "Retinal-Lesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1", "MAPLES-DR": "MAPLES-DR"}
 E1_AUTHOR = re.compile(r"^E1_(?P<slug>[a-z0-9]+)_(?P<dataset>idrid|ddr)$")
-PREPARED = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "RetinalLesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1"}
+PREPARED = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "RetinalLesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1", "MAPLES-DR": "MAPLES-DR"}
 MODEL_NAME = {"RETFound": "RETFound + UPerNet", "HRNet": "HRNet-W48", "MedSAM": "MedSAM (full FT)"}  # cell model name -> paper name
 
 
@@ -311,7 +312,7 @@ GROUP = ["experiment", "model", "variant", "train_set", "test_set"]
 def collect_e3a(runs_dir):
     """runs/E3a/<source>/<set>[__variant]/metrics.json (bench/e3a.py). The main variant only; __fov and
     other sensitivity variants go to the supplement later. Sources are B-std/nnU-Net run names or
-    E1_<model>_<train> for author weights (experiment E1, variant author_weights)."""
+    E1_<model>_<train> for author weights (experiment E1, variant this_protocol, seed -1: the E1 table's key)."""
     rows, seen = [], []
     root = Path(runs_dir) / "E3a"
     if not root.is_dir():
@@ -326,7 +327,8 @@ def collect_e3a(runs_dir):
         elif nn:
             experiment, variant, model, train, seed = nn_key(nn)
         elif au and au["slug"] in SLUG:
-            experiment, variant, model, train, seed = "E1", "author_weights", SLUG[au["slug"]], DATASET[au["dataset"]], 0
+            # the E1 table's key for the released weights under this protocol (build_placeholder.original_models)
+            experiment, variant, model, train, seed = "E1", "this_protocol", SLUG[au["slug"]], DATASET[au["dataset"]], -1
         elif src.name.startswith("BF_") and factor_key(Path(runs_dir) / src.name) is not None:
             experiment, model, variant, train, seed, _test = factor_key(Path(runs_dir) / src.name)
         else:
@@ -342,6 +344,46 @@ def collect_e3a(runs_dir):
                 continue
             rows += rows_from_report(report, experiment, variant, model, train, seed, E3A_SET[setdir.name])
             seen.append((f"E3a/{src.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
+    return pd.DataFrame(rows), seen
+
+
+E1_RUN = re.compile(r"^E1_(?P<slug>[a-z0-9]+)$")   # runs/E1_<slug>: the released weights on their own test split
+
+
+def collect_e1(runs_dir):
+    """runs/E1_<slug>/author_<idrid|ddr>_test.json (the author's own metric, bench/predict_<slug>.py) and
+    metrics_<idrid|ddr>.json (bench.eval on the same maps under this protocol) -> the E1 table's rows
+    (variant author_function / this_protocol, seed -1, test set = training source). M2MRF's were typed
+    into build_placeholder before this collector existed; HRDecoder's arrive through it."""
+    rows, seen = [], []
+    root = Path(runs_dir)
+    if not root.is_dir():
+        return pd.DataFrame(rows), seen
+    for run in sorted(root.iterdir()):
+        m = E1_RUN.match(run.name)
+        if not m or m["slug"] not in SLUG:
+            continue
+        model = SLUG[m["slug"]]
+        for dataset, train in DATASET.items():
+            author = run / f"author_{dataset}_test.json"
+            if author.exists():
+                a = json.loads(author.read_text())["author_metric"]
+                rows.append(dict(experiment="E1", model=model, variant="author_function", train_set=train, seed=-1, test_set=train, cls="mean", metric="aupr_author_impl", value=float(a["mAUPR"]), source="measured"))
+                for cls, entry in a["per_class"].items():
+                    if cls in ("MA", "HE", "EX", "SE"):
+                        rows.append(dict(experiment="E1", model=model, variant="author_function", train_set=train, seed=-1, test_set=train, cls=cls, metric="aupr_author_impl", value=float(entry["aupr"]), source="measured"))
+                seen.append((run.name, author.name, float(a["mAUPR"])))
+            metrics = run / f"metrics_{dataset}.json"
+            if metrics.exists():
+                report = load_report(metrics)
+                if report is None:
+                    continue
+                rows += rows_from_report(report, "E1", "this_protocol", model, train, -1, train)
+                summ = report.get("summary", {})
+                for metric, key in (("aupr", "mAUPR"), ("aupr_11pt", "mAUPR_m2mrf_impl"), ("dice_fixed", "mDice_pooled_fixed")):
+                    if summ.get(key) is not None:
+                        rows.append(dict(experiment="E1", model=model, variant="this_protocol", train_set=train, seed=-1, test_set=train, cls="mean", metric=metric, value=float(summ[key]), source="measured"))
+                seen.append((run.name, metrics.name, summ.get("mAUPR")))
     return pd.DataFrame(rows), seen
 
 
@@ -418,6 +460,10 @@ def main():
     if len(e5):
         new = pd.concat([new, e5], ignore_index=True)
         seen += seen_e5
+    e1, seen_e1 = collect_e1(args.runs)
+    if len(e1):
+        new = pd.concat([new, e1], ignore_index=True)
+        seen += seen_e1
     sheets = [collect_sheet(PAPER / "data" / f) for f in ("cost_measured.tsv", "cost_audit.tsv")]
     sheet = pd.concat([x for x in sheets if len(x)], ignore_index=True) if any(len(x) for x in sheets) else pd.DataFrame()
     new = pd.concat([sheet, new], ignore_index=True) if len(new) else sheet

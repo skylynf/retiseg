@@ -125,7 +125,25 @@
   2. 测试：pytest bench/tests/test_fundus_expansion.py（含 PMCNet 前向、WSRFNet 循环损失、CLC-Net 与 TC-Net 的包装器约定、输出边距的滑窗）。失败的先修再冒烟。
   3. 冒烟：python bench/scripts/launch_b1.py --jobs bench/configs/bs_jobs.yaml --submit --smoke --only HRDecoder,PMCNet,WSRFNet,CLC-Net,TC-Net（20 步 + 一次验证）。记每步耗时、显存、实际步数到 00；改 make_bs_jobs.py 的 EST_HOURS 并重生成任务表提交。CLC-Net 显存放不下批 16 时按 B-std 规则累积（cell 里 batch_size），记偏差。
   4. 队列：queue.yaml 的 fundus_seed0 阶段（优先级 25）把 enabled 改 true 提交，launch_queue 下一次空卡就接。
-  5. E1（HRDecoder 作者权重）：权重到位后由本机写 e3a_frozen.yaml 的 author_weights.HRDecoder 条目（只增）和推理入口，再排。
+  5. E1（HRDecoder 作者权重）：权重到位后由本机写 e3a_frozen.yaml 的 author_weights.HRDecoder 条目（只增）和推理入口，再排。完成 2026-10-14（条目与 bench/predict_hrdecoder.py 已写；命令见第十六节第 4 条）。
+
+十六、2026-10-14 第二次更新（依据 docs/paper/19；pull 到含本节的提交后执行；本节的队列顺序覆盖第十三节第 2 条）
+  改了什么：queue.yaml 第二版（e3a 最多占两张卡 max_concurrent 2；E5 种子 0 → 专用模型种子 0 → E5 推理档 a/b → 便宜的影响因素格子 → nnU-Net E3b → 贵的 E3b/E7 格子 → 种子 1、2 关着；more_masks 与 G2 砍）；launch_queue 支持 max_concurrent、factor 阶段支持 models；MAPLES-DR 作为第八个独立测试集（e3a_frozen 追加，数据未到前启动器自动跳过）；HRDecoder 作者权重的 E1 入口（bench/predict_hrdecoder.py、bench.e3a author --model HRDecoder、collect_e1）。
+  1. 现在就做：把正在跑的旧 launch_queue（若有）让它自然读到新文件即可——它每次空卡重读 queue.yaml，不用重启；没起过的话 RETISEG_GPUS="2 3 4 5 6 7"（减去旧启动器占着的卡）bash bench/scripts/server_run.sh queue。旧 launch_factor 不杀。
+  2. E5 种子 0 前的冒烟（第十三节第 2 条 b）若还没做，先做：E5_MODELS=SAMed,SAM-Adapter,SAM2-UNet,RETFound bash bench/scripts/server_run.sh e5-smoke；通过后 queue 的 e5_seed0 阶段自动接（已是 enabled）。
+  3. 专用模型：第十五节第 1–3 条（环境、测试、冒烟）；通过后 queue.yaml 的 fundus_seed0 改 enabled: true 提交。
+  4. HRDecoder 作者权重（权重已由用户下载；命名 pretrained/hrdecoder_idrid.pth、hrdecoder_ddr.pth，sha256 由用户回填 e3a_frozen.yaml 注释）：retiseg-hacdr 环境
+       python -m bench.predict_hrdecoder --dataset idrid --limit 2       # 冒烟：检查点键对上、4 通道、尺寸等于原图；README 表 71.34/49.24 作核对
+       python -m bench.predict_hrdecoder --dataset idrid ； --dataset ddr
+       python -m bench.eval.cli evaluate --data dataset/prepared/IDRiD --split test --pred runs/E1_hrdecoder/prob_test --out runs/E1_hrdecoder/metrics_idrid
+       python -m bench.eval.cli evaluate --data dataset/prepared/DDR --split test --pred runs/E1_hrdecoder/ddr_prob_test --out runs/E1_hrdecoder/metrics_ddr
+     独立测试不用手排：权重文件在，launch_e3a.discover 自动把 E1_hrdecoder_idrid/ddr 当第一档来源（retiseg-hacdr 环境）。回传 runs/E1_hrdecoder/ 的 json。
+  5. MAPLES-DR（等用户把 MESSIDOR 原图放到 dataset/messidor/、figshare zip 放到 dataset/maples-dr/）：retiseg 环境 pip install maples_dr（写进 cluster_env.sh）；
+       python bench/scripts/prepare_datasets.py export MAPLES-DR          # CPU，198 张，写 dataset/prepared/MAPLES-DR/report.json
+       python bench/scripts/leak_audit.py --min-vessel 0.3 --data dataset/prepared/IDRiD dataset/prepared/DDR dataset/prepared/TJDR_std dataset/prepared/FGADR dataset/prepared/RetinalLesions dataset/prepared/MAPLES-DR --out runs/audit/leak_maples
+     审计结果（预期无同眼对）记 00，并把 by_training_source.<源>.MAPLES-DR 的名单（预期空表）写进 bench/data/splits/leak_exclusions.json 提交；之后 e3a 与 E5 推理档自动把 MAPLES-DR 排进去（prepared 目录出现即可）。report.json 回传，本机据此改表 1、图 6、方法。
+  6. 回传：下一包带 runs/E1_hrdecoder/、runs/E5/、runs/NN_*、runs/BF_*、runs/E3a/、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json，格式同第一节。
+  7. 写作节奏（本机做，服务器只要按上面顺序出数）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒（19 第四节第 2 条）。
 
 十四、协作规则（2026-10-14，采纳服务器的方案；从此以后以本节为准）
   1. 服务器只执行仓库 HEAD 里的本文件；聊天里的话与 HEAD 不一致时停下，等下一次 pull。

@@ -271,7 +271,7 @@ def e1(model, variant, train, metric, cls="mean", test=None):
 
 def table_original():
     rows = []
-    for model in ("M2MRF", "WSRFNet"):
+    for model in ("M2MRF", "HRDecoder", "WSRFNet"):
         for train in D.TRAIN_MAIN:
             paper = e1(model, "paper", train, "aupr_author_impl")
             auth = e1(model, "author_function", train, "aupr_author_impl")
@@ -335,7 +335,7 @@ def table_original():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on TJDR standard-field and ultra-widefield test sets. The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
+\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on TJDR standard-field and ultra-widefield test sets. The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). HRDecoder: the released checkpoints (repository table 71.34, 49.24) through the authors' test pipeline (resize to $2880\times1920$ with sliding $1920$ windows on IDRiD, $2048\times2048$ whole image on DDR). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}

@@ -118,14 +118,19 @@ def command(job, py_argv=None, score_only=False):
     )
 
 
-def plan(experiment=None, only=(), score_only=False):
-    """The jobs this launcher would start now, in order, each with _score_only set (launch_queue reads this too)."""
+def plan(experiment=None, only=(), score_only=False, models=()):
+    """The jobs this launcher would start now, in order, each with _score_only set (launch_queue reads this too).
+    ``models`` restricts to cells of those models (the queue file splits the cheap U-Net / M2MRF cells from
+    the SAM2-UNet / RETFound ones, which wait behind the E5 inference tiers)."""
     only = set(only or ())
+    models = set(models or ())
     chosen = []
     for job in sorted(load_jobs(), key=lambda job: -float(job.get("est_hours", 1.0))):
         if experiment and job["experiment"] != experiment:
             continue
         if only and job["name"] not in only:
+            continue
+        if models and job["model"] not in models:
             continue
         if (_ROOT / job["run_dir"] / "metrics_test.json").is_file():
             if needs_reevaluation(job):
@@ -157,10 +162,12 @@ def main(argv=None):
     parser.add_argument("--submit", action="store_true")
     parser.add_argument("--experiment")
     parser.add_argument("--only")
+    parser.add_argument("--models", help="comma-separated cell models, e.g. U-Net,M2MRF")
     parser.add_argument("--score-only", action="store_true", help="only runs with best.pt and prob_test: predict again and evaluate")
     args = parser.parse_args(argv)
     only = {item.strip() for item in (args.only or "").split(",") if item.strip()}
-    chosen = plan(args.experiment, only, args.score_only)
+    models = {item.strip() for item in (args.models or "").split(",") if item.strip()}
+    chosen = plan(args.experiment, only, args.score_only, models)
     if not args.submit:
         for job in chosen[:2]:
             print("command " + command(job, py_argv=["python"], score_only=job.get("_score_only", False)), flush=True)

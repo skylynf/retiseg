@@ -15,7 +15,7 @@ Q3 决定因素：标注粒度、训练来源、训练量、输入分辨率、�
 
 1. 数据（细节在 12）
    训练来源：IDRiD（官方训练 54 张，统一重训用 44/10，测试 27）、DDR（383/149/225）。主表只在这两个库上训练。
-   独立测试来源：TJDR 常规视野、TJDR 超广角、FGADR、Retinal-Lesions、DiaRetDB1，以及到位后的 MAPLES-DR、e-ophtha。主表模型不在这些库上训练，只推理。
+   独立测试来源：TJDR 常规视野、TJDR 超广角、FGADR、Retinal-Lesions、DiaRetDB1，以及 MAPLES-DR（2026-10-14 加入，细档，官方测试 60 张；等 MESSIDOR 原图，19 第二节）。e-ophtha 仍在未来工作。主表模型不在这些库上训练，只推理。
    影响因素实验的额外训练来源：TJDR 常规、FGADR、Retinal-Lesions，只用代表模型。
    粒度档：细、混合（FGADR）、粗（Retinal-Lesions）、区域共识（DiaRetDB1）。只在同一档内求平均。
 2. 模型（登记在 bench/configs/models.yaml，共 38 个）

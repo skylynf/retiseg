@@ -13,7 +13,7 @@ IDRiD、DDR 的做法见 05。MAPLES-DR 和 e-ophtha 的状态见 07，本文件
   D-TJDR-2023：细，常规视野和 133° 超广角作为两个测试集分开报。
   D-FGADR-2021：混合。D-RETLESION-2020：粗。D-DIARETDB1-2007：区域共识。
 到位后加入的独立测试
-  D-MAPLES-2024：约 200 张 MESSIDOR 图像的细像素标注。图像本体是 D-MESSIDOR-2014，原图还没有。
+  D-MAPLES-2024：198 张 MESSIDOR 图像的细像素标注（官方 138/60；MA、HE、EX、CWS，另有 drusen、NV、不确定层、血管、视盘、视杯、黄斑）。图像本体是 D-MESSIDOR-2014，原图待用户向 adcis.net 申请。2026-10-14 起是第八个独立测试集（只推理、官方测试 60 张、细档），接法与冻结见 docs/paper/19 第二节，代码 bench/data/maples.py。
   D-EOPHTHA-2013：只有 MA 和 EX，只报这两类，不进四类平均。已申请，未批。
 不进入像素主榜
   D-ROC-2010：100 张，微动脉瘤中心和半径，用病灶级自由响应曲线。

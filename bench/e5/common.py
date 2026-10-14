@@ -46,7 +46,7 @@ OVERLAP = 0.5
 UWF_LONG_SIDE = 4256
 THRESHOLD_SOURCE = ("DDR", "val")   # design/15 section 4: Dice thresholds of the inference tiers come from DDR val
 PAPER_SET = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR",
-             "Retinal-Lesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1"}
+             "Retinal-Lesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1", "MAPLES-DR": "MAPLES-DR"}
 PAPER_MODEL = {"sam": "SAM", "sam2": "SAM 2", "medsam": "MedSAM", "sam3": "SAM 3"}
 
 

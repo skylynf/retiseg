@@ -56,7 +56,7 @@ E9     交叉熵、Dice、两者相加、bin loss × 5 × 3          缩：U-Net
 E10    计算代价                                        保留。参数量和训练时间从 environment.json 和 00 收集（已接线）；FLOPs、推理时间和推理显存由 bench/scripts/cost_audit.py 在服务器上跑一次。   约 2
 轨 C   按论文重写最多两个                              砍，进未来工作。reproductions/ 里已有的 CLC-Net、TC-Net 不进论文。              0
 第二层 UNet++、UPerNet、PMCNet、PerSAM、WSRFNet、L-Seg、SAA、RTNet  砍，进未来工作。H2Former 同样（显存不可行）。表 2 保留它们的登记和原因。   0
-数据   MAPLES-DR、e-ophtha、ROC、DRAC                   砍，进未来工作。七个测试集不变。                                               0
+数据   MAPLES-DR、e-ophtha、ROC、DRAC                   砍，进未来工作。七个测试集不变。2026-10-14 改：MAPLES-DR 回到范围内（第八个独立测试集，只推理，19 第二节）；其余仍砍。 ≈2
 合计                                                                                                                                  约 810（第二优先种子再加约 50，SAMed/SAM-Adapter 种子另计）
 按 6 张卡算约 6 天的卡时；10-12 到 11-06 共 25 天，留出失败重跑和排队的余量。
 
@@ -90,7 +90,7 @@ E10    计算代价                                        保留。参数量和
 5. 输入信息：加血管图（E6）、文本提示的专用模型（TP-DRSeg，等代码）。
 6. 影响因素的其余档位：E7 的 1024；E8 的 25%、DDR+IDRiD、全部合并；E9 的 bin loss 和其他模型；E4 的其余模型。
 7. b 档的其余设定：SAM ViT-H、框扰动、按面积取提示、SAM 3 示例框、多套抽样。
-8. 更多数据：MAPLES-DR、e-ophtha（两类）、ROC（病灶级）、DRAC 超广角 OCTA。
+8. 更多数据：e-ophtha（两类）、ROC（病灶级）、DRAC 超广角 OCTA。（MAPLES-DR 于 2026-10-14 收回范围，见 19。）
 9. 临床相关的评价：按患者分组的划分、图像级分级与分割的联合评价。
 
 六、排期（6 张卡；日期是目标，实际以 00 为准；逐项任务和命令在 17）

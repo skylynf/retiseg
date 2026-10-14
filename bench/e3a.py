@@ -11,7 +11,7 @@ its done.json exists; a rerun skips it and redoes any set that was cut short.
 
     python -m bench.e3a plan --run runs/BS_hrnet_idrid_seed0
     python -m bench.e3a run --run runs/BS_hrnet_idrid_seed0 [--sets TJDR_std,FGADR]
-    python -m bench.e3a author --model M2MRF --train IDRiD
+    python -m bench.e3a author --model M2MRF --train IDRiD      # also HRDecoder (retiseg-hacdr environment)
     python -m bench.e3a evaluate --source BS_hrnet_idrid_seed0 [--sets ...]
 
 The canvas of a test image follows the training scale: field-of-view size
@@ -373,8 +373,51 @@ def author_source(model, train_name):
     return f"E1_{model.lower()}_{train_name.lower()}"
 
 
+def author_pipeline(model_name, train_name, checkpoint, device):
+    """(predict(image path) -> 4 maps in author class order, class names, pipeline record) of a released checkpoint.
+
+    M2MRF: bench/predict_m2mrf.py (keep-ratio resize, whole image). HRDecoder: bench/predict_hrdecoder.py
+    (resize without keeping the ratio, slide for the IDRiD config). Both forks read BGR and normalise in RGB.
+    """
+    if model_name == "M2MRF":
+        import numpy as np
+        import torch
+
+        from bench import predict_m2mrf as author
+
+        spec = author.DATASETS[train_name.lower()]
+        network, _meta = author.load_model(checkpoint, device)
+
+        def predict(path):
+            tensor, img_meta = author.preprocess(path, spec["mean"], spec["std"], spec["image_scale"])
+            with torch.no_grad():
+                prob = network.simple_test(tensor.to(device), img_meta, rescale=True)[0][0]
+            prob = np.asarray(prob)
+            if prob.shape[0] != 4:
+                raise RuntimeError(f"expected 4 channels, got {prob.shape}")
+            return prob
+
+        record = {"image_scale": list(spec["image_scale"]), "keep_ratio": True, "mean": spec["mean"], "std": spec["std"],
+                  "mode": "whole"}
+        return predict, author.AUTHOR_CLASSES, record
+    if model_name == "HRDecoder":
+        from bench import predict_hrdecoder as author
+
+        spec = author.DATASETS[train_name.lower()]
+        network, info = author.load_model(checkpoint, device, spec["config_name"])
+
+        def predict(path):
+            tensor, img_meta = author.preprocess(path, spec["mean"], spec["std"], spec["image_scale"])
+            return author.predict(network, tensor, img_meta, device)
+
+        record = {"image_scale": list(spec["image_scale"]), "keep_ratio": False, "mean": spec["mean"], "std": spec["std"],
+                  "hr_scale": info.get("hr_scale"), "test_cfg": info.get("test_cfg")}
+        return predict, author.AUTHOR_CLASSES, record
+    raise ValueError(f"no author pipeline wired for {model_name}")
+
+
 def run_author(model_name, train_name, sets=None, device=None, predict_only=False, drop_maps=()):
-    """The released checkpoint through the author's own test pipeline (bench/predict_m2mrf.py)."""
+    """The released checkpoint through the author's own test pipeline (author_pipeline)."""
     import numpy as np
     import torch
 
@@ -391,30 +434,23 @@ def run_author(model_name, train_name, sets=None, device=None, predict_only=Fals
     if not pending:
         print(f"{source}: every E3a set is done", flush=True)
         return
-    if model_name != "M2MRF":
-        raise ValueError(f"no author pipeline wired for {model_name}")
-    from bench import predict_m2mrf as author
-
-    spec = author.DATASETS[train_name.lower()]
     checkpoint = REPO / spec_frozen["checkpoint"]
+    if not checkpoint.is_file():
+        raise FileNotFoundError(f"{checkpoint} (author_weights.{model_name}.{train_name} in e3a_frozen.yaml)")
     device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
-    network = None
+    predict = classes = record = None
     env = environment()
     for test_name, variant in pending:
         directory = out_dir(source, test_name, variant)
         if not (directory / "predicted.json").is_file():
-            if network is None:
-                network, _meta = author.load_model(checkpoint, device)
+            if predict is None:
+                predict, classes, record = author_pipeline(model_name, train_name, checkpoint, device)
             ids, excluded = test_ids(test_name, frozen, spec_frozen["trained_on"])
             data_dir = test_data_dir(test_name, frozen)
             started = time.perf_counter()
             for index, image_id in enumerate(ids):
-                tensor, img_meta = author.preprocess(image_path(data_dir, image_id), spec["mean"], spec["std"], spec["image_scale"])
-                with torch.no_grad():
-                    prob = network.simple_test(tensor.to(device), img_meta, rescale=True)[0][0]
-                if prob.shape[0] != 4:
-                    raise RuntimeError(f"expected 4 channels, got {prob.shape}")
-                for channel, cls in enumerate(author.AUTHOR_CLASSES):
+                prob = predict(image_path(data_dir, image_id))
+                for channel, cls in enumerate(classes):
                     write_prob(directory / "prob_test", cls, image_id, np.clip(prob[channel], 0, 1))
                 if index % 50 == 0:
                     print(f"{source} {test_name} {index + 1}/{len(ids)}", flush=True)
@@ -428,8 +464,7 @@ def run_author(model_name, train_name, sets=None, device=None, predict_only=Fals
                     "checkpoint": spec_frozen["checkpoint"],
                     "test_set": test_name,
                     "variant": variant,
-                    "author_pipeline": {"image_scale": list(spec["image_scale"]), "keep_ratio": True,
-                                        "mean": spec["mean"], "std": spec["std"]},
+                    "author_pipeline": record,
                     "n_images": len(ids),
                     "excluded": excluded,
                     "predict_seconds": round(time.perf_counter() - started, 1),
