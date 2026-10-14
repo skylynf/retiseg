@@ -15,7 +15,7 @@ Q3 决定因素：标注粒度、训练来源、训练量、输入分辨率、�
 
 1. 数据（细节在 12）
    训练来源：IDRiD（官方训练 54 张，统一重训用 44/10，测试 27）、DDR（383/149/225）。主表只在这两个库上训练。
-   独立测试来源：TJDR 常规视野、TJDR 超广角、FGADR、Retinal-Lesions、DiaRetDB1，以及 MAPLES-DR（2026-10-14 加入，细档，官方测试 60 张；等 MESSIDOR 原图，19 第二节）。e-ophtha 仍在未来工作。主表模型不在这些库上训练，只推理。
+   独立测试来源：TJDR 常规视野、TJDR 超广角、FGADR、Retinal-Lesions、DiaRetDB1，以及 MAPLES-DR（2026-10-14 加入，细档，官方测试 60 张；标注与 MESSIDOR 原图已在服务器，等导出与泄漏审计，17 第十节；19 第二节）。e-ophtha 仍在未来工作。主表模型不在这些库上训练，只推理。
    影响因素实验的额外训练来源：TJDR 常规、FGADR、Retinal-Lesions，只用代表模型。
    粒度档：细、混合（FGADR）、粗（Retinal-Lesions）、区域共识（DiaRetDB1）。只在同一档内求平均。
 2. 模型（登记在 bench/configs/models.yaml，共 38 个）
@@ -49,18 +49,18 @@ L1     原文数字抽取 reported_results.tsv：数据集、划分、 Q1    LED
        分辨率、视野、指标实现、数字来源与沿用关系                                        由 l1_build.py 从 meta/l1_raw/ 合成）；图 2b、c 已改为实数
 L2     复现漏斗：R0–R4 计数、作者回复率、失败原因       Q1    作者回信，截止 2026-10-31   等级已登记；索取信 10-03 已发
 E0     U-Net 流水线                                      —     —                            完成
-E1     作者权重：官方测试、独立测试                      Q1    独立测试库导出（12）         M2MRF 的 IDRiD、DDR 完成；独立测试待做；其余模型等权重
+E1     作者权重：官方测试、独立测试                      Q1    独立测试库导出（12）         M2MRF 的 IDRiD、DDR 完成；独立测试在 e3a 队列；HRDecoder 权重已下载，作者流水线 bench/predict_hrdecoder.py 已写，等服务器冒烟（17 第九节）；WSRFNet 权重待作者回信
 E1r    作者配方重训：M2MRF bs4、HACDR-Net，各 3 种子     Q1    服务器                       M2MRF IDRiD 种子 0 有效批 4 已打分（作者函数 61.19，本项目 0.549）；种子 1、2 和 HACDR-Net、DDR 未开始
 E2     B-std 主表：7 个模型（无 H2Former）× IDRiD、DDR × 3 种子，42 个任务；2026-10-14 加专用 5 个（18）  Q2  预算已冻结（IDRiD 1000、DDR 400） 2026-10-13：HRNet、Swin-Unet、M2MRF、DeepLabv3、U-Net 整批 Dice、HACDR-Net 两库 3 种子都已打分；FCT DDR 只留种子 0。U-Net 整批 Dice 均值 IDRiD 0.644、DDR 0.371；HACDR-Net 均值 0.538、0.252（14 M7）。数在 data/results.csv
-       专用扩充：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net（18）  Q2  子模块与权重（用户）    2026-10-14 包装器已写（bench/models/{hrdecoder,pmcnet,wsrfnet,clcnet,tcnet}.py），任务表已生成；等服务器冒烟。HRDecoder 的 E1 权重推理待权重
+       专用扩充：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net（18）  Q2  子模块与权重（用户）    2026-10-14 包装器已写（bench/models/{hrdecoder,pmcnet,wsrfnet,clcnet,tcnet}.py），任务表已生成；等服务器冒烟（17 第八节）。HRDecoder 的 E1 入口已写（17 第九节）
        nnU-Net（默认和 ResEnc-M）                        Q2    数据转换、固定划分           两种配置两库都有测试数：默认 IDRiD 0.671、DDR 0.432；ResEnc-M 0.631、0.428。默认 DDR 三次 0.432、0.427、0.434（均值 0.431，2026-10-14）；IDRiD 第一次重复在训
 E2b    B1 来源配方，种子 0，14 个任务（无 H2Former）     Q2    —                            10-12 09:08 按 16 停止；六个未完成的运行停在上次验证，进未来工作。已完成的运行作补充表
 E2c    小规模调参：每族一个模型，学习率 ×1/3、1、3       Q2    E2 种子 0                    DDR 四项 2026-10-12 训完，只留验证曲线（14 备注 17）；×1/3 时 HRNet 与 M2MRF 的验证名次对调，主表学习率未改
 E3a    独立测试：E1、E2 的全部检查点推理                 Q2    12 的导出、泄漏审计          2026-10-12 15:26 起在 GPU 3 跑种子 0。2026-10-14 04:51 主变体 done.json 63 份：B-std 七模型两库在 FGADR、Retinal-Lesions、TJDR_uwf 齐，nnU-Net 两库七集合齐；R4 第一段已写实数（14 M10）。TJDR_std、DiaRetDB1、交叉集对 B-std 模型还在队列。这次启动器不会中途纳入之后打分的来源
-E3b    训练来源交叉效应：代表模型在 TJDR 常规、FGADR 上训 Q3    导出、预算探测（U-Net 修好前用 M2MRF） M2MRF 两个来源已打分：TJDR 标准内部测试 0.554，FGADR 完整测试集 0.349（同眼 106 张未去掉）。U-Net 和其余模型未开始；nnU-Net 的 E3b 未接线
+E3b    训练来源交叉效应：代表模型在 TJDR 常规、FGADR 上训 Q3    导出、预算探测（U-Net 修好前用 M2MRF） M2MRF 两个来源已打分：TJDR 标准内部测试 0.554，FGADR 完整测试集 0.349（同眼 106 张未去掉）。U-Net 和其余模型未开始；nnU-Net 的 E3b 已接线（17 第十一节第 2 条，等数据转换）
 E4     标注粒度：DDR、FGADR、Retinal-Lesions 及其组合    Q3    Retinal-Lesions 下载          M2MRF：DDR+FGADR 抽 383、全集在 DDR 测试集上 0.336、0.320。另两档已训完、概率图在、还没有 metrics_test.json。U-Net 未开始
 E5     基础模型四档：零样本、理想提示、参数高效微调、    Q2    权重申请（SAM 3、RETFound   训练档已写好。2026-10-13 公开权重和三份 gated（SAM 3、RETFound ×2）已在 pretrained/，sha256 在 e5_frozen.yaml；MedSAM 和 DINOv2 没有。训练未开始；
-       编码器加解码头（含 DINOv2 和 ImageNet 编码器对照）       两份）、接口                 推理档代码未写（17 第九节）；范围按 16
+       编码器加解码头（含 DINOv2 和 ImageNet 编码器对照）       两份）、接口                 推理档代码 2026-10-14 随 albert 分支并入 main（bench/e5，design/23、24，ops/25），队列阶段 e5_infer_pool/test 关着等 Luming 确认 D1–D9；范围按 16
 E6     输入加血管图                                      Q3    代表模型                     取消（16），未来工作
 E7     分辨率：长边 512、1024、1440、原分辨率块训练      Q3    代表模型                     M2MRF 长边 512 在训（2026-10-13 23:55 第 146800/293600 步，验证 0.496）。原分辨率和另一模型未开始
 E8     训练量：DDR 10–100%、DDR+IDRiD、细粒度合并、全部合并 Q3 E3b 的导出                   M2MRF：10% 已到预算、在写概率图（验证最好 0.479）；50% 第 12540/83600 步（验证 0.453）；细粒度合并第 8360/83600 步（验证 0.364）。U-Net 未开始。时间为 2026-10-13 23:55

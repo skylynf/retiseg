@@ -32,9 +32,10 @@ from bench.eval import stats as bstats  # noqa: E402  (the benchmark's own stati
 
 CLASSES = ["MA", "HE", "EX", "SE"]
 TRAIN_MAIN = ["IDRiD", "DDR"]
-TESTS = ["IDRiD", "DDR", "TJDR-std", "TJDR-uwf", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
-INDEPENDENT = ["TJDR-std", "TJDR-uwf", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
-FINE_INDEPENDENT = ["TJDR-std", "TJDR-uwf"]
+# MAPLES-DR joined on 2026-10-14 (docs/paper/19 section 2): fine tier, official test split of 60 MESSIDOR images.
+TESTS = ["IDRiD", "DDR", "TJDR-std", "TJDR-uwf", "MAPLES-DR", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
+INDEPENDENT = ["TJDR-std", "TJDR-uwf", "MAPLES-DR", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
+FINE_INDEPENDENT = ["TJDR-std", "TJDR-uwf", "MAPLES-DR"]
 
 FAMILY_OF = {
     "U-Net": "general",
@@ -201,6 +202,7 @@ DATASETS = [
     dict(name="DDR", ref="Li 2019", n=757, train=383, val=149, test=225, role="train", tier="fine", res="variable", fov="45°", ann="pixel masks", public=True),
     dict(name="TJDR-std", ref="Mao 2023", n=257, train=172, val=30, test=55, role="independent", tier="fine", res="2048×2048", fov="35–50°", ann="polygons, 2 graders + adjudicator", public=True),
     dict(name="TJDR-uwf", ref="Mao 2023", n=304, train=209, val=37, test=58, role="independent", tier="fine", res="3912×3912", fov="133°", ann="polygons, 2 graders + adjudicator", public=True),
+    dict(name="MAPLES-DR", ref="Lepetit-Aimon 2024", n=198, train=0, val=0, test=60, role="independent", tier="fine", res="1440×960–2304×1536", fov="45°", ann="pixel masks, 7 retinologists; MA/HE/EX AI-assisted", public=True),
     dict(name="FGADR", ref="Zhou 2021", n=1842, train=1096, val=193, test=553, role="independent", tier="mixed", res="1280×1280", fov="n.s.", ann="pixel masks, 2 residents + senior", public=False),
     dict(name="Retinal-Lesions", ref="Wei 2020", n=1593, train=951, val=164, test=478, role="independent", tier="coarse", res="896×896", fov="n.s.", ann="ellipses and polygons, ≥3 of 45 graders", public=False),
     dict(name="DiaRetDB1", ref="Kauppi 2007", n=89, train=0, val=28, test=61, role="independent", tier="region", res="1500×1152", fov="50°", ann="regions with confidence, 4 experts", public=None),

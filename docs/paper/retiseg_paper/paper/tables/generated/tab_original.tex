@@ -12,14 +12,14 @@
 \cmidrule(lr){3-5}\cmidrule(lr){6-10}
 \colh{Model} & \colh{Source} & Paper & Function & Stored & \colh{mAUPR} & MA & HE & EX & SE & \colh{$\Delta$ metric} & \colh{Indep.\ fine} \\
 \midrule
-M2MRF & IDRiD & .672 & .676 & .645 & .639 & \cellcolor[HTML]{C0E4D8}.408 & \cellcolor[HTML]{88CEC9}.653 & \cellcolor[HTML]{5BB9C0}.832 & \cellcolor[HTML]{85CDC8}.664 & \down{.036} & \ph{.240} \\
-M2MRF & DDR & .489 & .492 & .426 & .401 & \na & \na & \na & \na & \down{.091} & \ph{.276} \\
+M2MRF & IDRiD & .672 & .676 & .645 & .639 & \cellcolor[HTML]{C0E4D8}.408 & \cellcolor[HTML]{88CEC9}.653 & \cellcolor[HTML]{5BB9C0}.832 & \cellcolor[HTML]{85CDC8}.664 & \down{.036} & \ph{.283} \\
+M2MRF & DDR & .489 & .492 & .426 & .401 & \na & \na & \na & \na & \down{.091} & \ph{.322} \\
 \addlinespace[2pt]
-HRDecoder & IDRiD & \ph{.713} & \ph{.713} & \ph{.687} & \ph{.667} & \cellcolor[HTML]{B9E1D5}\ph{.449} & \cellcolor[HTML]{7CC9C6}\ph{.696} & \cellcolor[HTML]{59B7BF}\ph{.849} & \cellcolor[HTML]{83CCC8}\ph{.673} & \down{\ph{.047}} & \ph{.269} \\
-HRDecoder & DDR & \ph{.492} & \ph{.492} & \ph{.449} & \ph{.429} & \cellcolor[HTML]{DFF0E5}\ph{.240} & \cellcolor[HTML]{AFDDD1}\ph{.500} & \cellcolor[HTML]{9CD6CC}\ph{.577} & \cellcolor[HTML]{C2E5D8}\ph{.400} & \down{\ph{.063}} & \ph{.310} \\
+HRDecoder & IDRiD & \ph{.713} & \ph{.713} & \ph{.683} & \ph{.663} & \cellcolor[HTML]{B5E0D3}\ph{.470} & \cellcolor[HTML]{85CDC8}\ph{.666} & \cellcolor[HTML]{59B7BF}\ph{.844} & \cellcolor[HTML]{83CCC8}\ph{.674} & \down{\ph{.050}} & \ph{.258} \\
+HRDecoder & DDR & \ph{.492} & \ph{.492} & \ph{.442} & \ph{.422} & \cellcolor[HTML]{DFF0E5}\ph{.239} & \cellcolor[HTML]{B2DED2}\ph{.490} & \cellcolor[HTML]{9CD6CC}\ph{.574} & \cellcolor[HTML]{C5E6DA}\ph{.383} & \down{\ph{.071}} & \ph{.293} \\
 \addlinespace[2pt]
-WSRFNet & IDRiD & \ph{.690} & \ph{.676} & \ph{.665} & \ph{.645} & \cellcolor[HTML]{BEE3D7}\ph{.424} & \cellcolor[HTML]{88CEC9}\ph{.650} & \cellcolor[HTML]{5AB8BF}\ph{.839} & \cellcolor[HTML]{85CDC8}\ph{.665} & \down{\ph{.032}} & \ph{.228} \\
-WSRFNet & DDR & \ph{.500} & \ph{.494} & \ph{.425} & \ph{.405} & \cellcolor[HTML]{E1F1E6}\ph{.225} & \cellcolor[HTML]{B7E0D4}\ph{.465} & \cellcolor[HTML]{9ED7CD}\ph{.569} & \cellcolor[HTML]{C8E7DB}\ph{.364} & \down{\ph{.089}} & \ph{.254} \\
+WSRFNet & IDRiD & \ph{.690} & \ph{.661} & \ph{.662} & \ph{.642} & \cellcolor[HTML]{BDE3D6}\ph{.425} & \cellcolor[HTML]{83CCC8}\ph{.668} & \cellcolor[HTML]{5DBAC0}\ph{.828} & \cellcolor[HTML]{88CEC9}\ph{.648} & \down{\ph{.018}} & \ph{.283} \\
+WSRFNet & DDR & \ph{.500} & \ph{.491} & \ph{.433} & \ph{.413} & \cellcolor[HTML]{E1F1E6}\ph{.227} & \cellcolor[HTML]{B8E1D4}\ph{.457} & \cellcolor[HTML]{99D5CC}\ph{.593} & \cellcolor[HTML]{C6E6DA}\ph{.374} & \down{\ph{.078}} & \ph{.317} \\
 \bottomrule
 \end{tabular}
 
@@ -32,9 +32,9 @@ WSRFNet & DDR & \ph{.500} & \ph{.494} & \ph{.425} & \ph{.405} & \cellcolor[HTML]
 \midrule
 M2MRF & IDRiD & .672 & \ph{.612}\sd{\ph{.154}} & \ph{3} & \down{\ph{.060}} & \ph{.549}\sd{\ph{.198}} \\
 \quad first run, batch 1 & IDRiD & .672 & .576 & 1 & \down{.096} & .493 \\
-M2MRF & DDR & .489 & \ph{.454}\sd{\ph{.002}} & \ph{3} & \down{\ph{.036}} & \ph{.416}\sd{\ph{.008}} \\
-HACDR-Net & IDRiD & \ph{.700} & \ph{.596}\sd{\ph{.011}} & \ph{3} & \down{\ph{.104}} & \ph{.563}\sd{\ph{.016}} \\
-HACDR-Net & DDR & \ph{.520} & \ph{.426}\sd{\ph{.006}} & \ph{3} & \down{\ph{.094}} & \ph{.389}\sd{\ph{.004}} \\
+M2MRF & DDR & .489 & \ph{.457}\sd{\ph{.010}} & \ph{3} & \down{\ph{.033}} & \ph{.419}\sd{\ph{.009}} \\
+HACDR-Net & IDRiD & \ph{.700} & \ph{.588}\sd{\ph{.006}} & \ph{3} & \down{\ph{.112}} & \ph{.557}\sd{\ph{.014}} \\
+HACDR-Net & DDR & \ph{.520} & \ph{.423}\sd{\ph{.013}} & \ph{3} & \down{\ph{.097}} & \ph{.386}\sd{\ph{.010}} \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize

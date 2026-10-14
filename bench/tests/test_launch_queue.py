@@ -117,7 +117,7 @@ def test_max_concurrent_hands_the_card_to_the_next_stage(tmp_path, monkeypatch):
 
     monkeypatch.setattr(lq, "_start", _start)
     monkeypatch.setattr(lq, "gpu_is_free", lambda gpu: True)
-    lq.run([0, 1], path, poll_seconds=0.01, idle_exit_minutes=0.0001)
+    lq.run([0, 1], path, poll_seconds=0.01, idle_exit_minutes=0.002)
     first_two = started[:2]
     assert any("runs/c0/console.log" in c for c in first_two) and any("runs/o/console.log" in c for c in first_two)
     assert len(started) == 4
@@ -149,12 +149,12 @@ def test_maples_case_mapping_and_ignore_layers():
 
     fundus = np.zeros((8, 10, 3), dtype=np.uint8)
     fields = {name: np.zeros((8, 10), dtype=bool) for name in list(maples.BIOMARKERS.values()) + list(maples.UNCERTAIN.values()) + list(maples.EXTRA.values())}
-    fields["microaneurysms"][1, 1] = True
-    fields["cottonWoolSpots"][2, 2] = True
-    fields["redUncertains"][3, 3] = True
-    fields["redUncertains"][1, 1] = True           # overlaps a certain MA: stays a positive, not an ignore pixel
-    fields["brightUncertains"][4, 4] = True
-    fields["drusens"][5, 5] = True
+    fields["Microaneurysms"][1, 1] = True
+    fields["CottonWoolSpots"][2, 2] = True
+    fields["RedUncertains"][3, 3] = True
+    fields["RedUncertains"][1, 1] = True           # overlaps a certain MA: stays a positive, not an ignore pixel
+    fields["BrightUncertains"][4, 4] = True
+    fields["Drusens"][5, 5] = True
     case = maples.case_from_sample("x", fundus, lambda field: fields[field], {"dr": "R2", "me": "M0"})
     assert case["ext"] == "png" and case["bytes"][:8] == b"\x89PNG\r\n\x1a\n"
     assert case["masks"]["MA"][1, 1] and case["masks"]["SE"][2, 2] and not case["masks"]["HE"].any()
@@ -162,13 +162,44 @@ def test_maples_case_mapping_and_ignore_layers():
     assert ignore["MA"][3, 3] and ignore["HE"][3, 3] and not ignore["MA"][1, 1]
     assert ignore["EX"][4, 4] and ignore["SE"][4, 4] and not ignore["MA"][4, 4]
     assert case["binary"]["masks_ext"]["DRUSEN"][5, 5] and case["stats"] == {"dr": {"R2": 1}, "me": {"M0": 1}}
-    bad = dict(fields, hemorrhages=np.zeros((4, 4), dtype=bool))
+    bad = dict(fields, Hemorrhages=np.zeros((4, 4), dtype=bool))
     try:
         maples.case_from_sample("x", fundus, lambda field: bad[field])
     except ValueError as exc:
-        assert "hemorrhages" in str(exc)
+        assert "Hemorrhages" in str(exc)
     else:
         raise AssertionError("a mask of the wrong size must be refused")
+
+
+def test_maples_annotation_is_placed_in_the_roi_box_at_messidor_resolution(tmp_path):
+    """The package's resize=False geometry: 1500 x 1500 label -> nearest resize to the ROI box -> pasted on the canvas."""
+    import numpy as np
+    import zipfile
+    from PIL import Image
+
+    from bench.data import maples
+
+    label = np.zeros((1500, 1500), dtype=bool)
+    label[:750, :750] = True                       # the top-left quarter
+    canvas = maples.place_annotation(label, (420, 57, 1803, 1439), (1488, 2240))
+    assert canvas.shape == (1488, 2240) and canvas[57:57 + 691, 420:420 + 691].all()
+    assert not canvas[:57].any() and not canvas[:, :420].any() and not canvas[57 + 692:, :].any() and not canvas[:, 420 + 692:].any()
+    try:
+        maples.place_annotation(label, (420, 57, 2300, 1439), (1488, 2240))
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("a box outside the image must be refused")
+    # images are found flat, in Base directories or inside the released zips
+    root = tmp_path / "messidor"
+    (root / "Base12").mkdir(parents=True)
+    Image.new("RGB", (4, 4)).save(root / "a.tif")
+    Image.new("RGB", (4, 4)).save(root / "Base12" / "b.tif")
+    with zipfile.ZipFile(root / "Base11.zip", "w") as handle:
+        handle.writestr("Base11/c.tif", b"not read here")
+    found = maples.index_messidor(root, ["a", "b", "c", "d"])
+    assert found["a"] == root / "a.tif" and found["b"] == root / "Base12" / "b.tif"
+    assert found["c"] == (root / "Base11.zip", "Base11/c.tif") and "d" not in found
 
 
 def test_e5_infer_stage_plans_the_pool_through_launch_e5_infer(tmp_path, monkeypatch):

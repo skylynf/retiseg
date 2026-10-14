@@ -149,7 +149,7 @@ def table_datasets():
         "tab_datasets",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Datasets, frozen splits and roles.}} All seven sources carry pixel- or region-level labels for microaneurysms (MA), hemorrhages (HE), hard exudates (EX) and soft exudates (SE). Granularity decides which test sets may be averaged: averages are taken only within one tier. Split is train\,/\,validation\,/\,test in images; official test sets are never changed. ``Maps'' marks sources whose probability maps we can release.}}
+\caption{{\textbf{{Datasets, frozen splits and roles.}} All eight sources carry pixel- or region-level labels for microaneurysms (MA), hemorrhages (HE), hard exudates (EX) and soft exudates (SE). Granularity decides which test sets may be averaged: averages are taken only within one tier. Split is train\,/\,validation\,/\,test in images; official test sets are never changed. ``Maps'' marks sources whose probability maps we can release.}}
 \label{{tab:datasets}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l l l l l l c r c@{{}}}}
@@ -160,7 +160,7 @@ def table_datasets():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item FOV, field of view; n.s., not stated in the source paper. IDRiD: 10 of the 54 official training images are held out for validation in unified retraining; author-recipe retraining uses all 54. DiaRetDB1: ground truth is the mean confidence of four experts thresholded at 0.75; the 28 official training images are used only to choose thresholds. Retinal-Lesions: split by patient; grey-level 127 regions are ignored. The FGADR licence forbids redistribution of derived data; maps for Retinal-Lesions are not released either.
+\item FOV, field of view; n.s., not stated in the source paper. IDRiD: 10 of the 54 official training images are held out for validation in unified retraining; author-recipe retraining uses all 54. DiaRetDB1: ground truth is the mean confidence of four experts thresholded at 0.75; the 28 official training images are used only to choose thresholds. Retinal-Lesions: split by patient; grey-level 127 regions are ignored. MAPLES-DR: labels drawn at $1500\\times1500$ on the field-of-view crop of MESSIDOR images and placed back at the original resolution; the 138 training images are not used, the official 60 test images are; uncertain red (MA or HE) and bright (EX, SE or drusen) lesions are ignored for the two classes they could belong to. The FGADR licence forbids redistribution of derived data; maps for Retinal-Lesions are not released either.
 \end{{tablenotes}}
 \end{{threeparttable}}
 \end{{table*}}
@@ -690,7 +690,7 @@ def table_recipes():
 
 
 CITE = {"IDRiD": "porwal2018idrid", "DDR": "li2019ddr", "TJDR-std": "mao2023tjdr", "TJDR-uwf": "mao2023tjdr", "FGADR": "zhou2021fgadr",
-        "Retinal-Lesions": "wei2020retinallesionslesionnet", "DiaRetDB1": "kauppi2007diaretdb1"}
+        "Retinal-Lesions": "wei2020retinallesionslesionnet", "DiaRetDB1": "kauppi2007diaretdb1", "MAPLES-DR": "maplesdr2024scientificdata"}
 
 
 def main():

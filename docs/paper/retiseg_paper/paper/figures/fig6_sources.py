@@ -29,7 +29,7 @@ def matrix(model=None):
     return g.loc[TRAINS, D.TESTS], D.simulated(df)
 
 
-CODE = {"IDRiD": "I", "DDR": "D", "TJDR-std": "Ts", "TJDR-uwf": "Tu", "FGADR": "F", "Retinal-Lesions": "R", "DiaRetDB1": "Dr"}
+CODE = {"IDRiD": "I", "DDR": "D", "TJDR-std": "Ts", "TJDR-uwf": "Tu", "MAPLES-DR": "M", "FGADR": "F", "Retinal-Lesions": "R", "DiaRetDB1": "Dr"}
 
 
 def panel_a(fig, top):
@@ -74,9 +74,9 @@ def tier_ticks(ax, tests):
 
 def panel_b(fig, top):
     M, sim = matrix()
-    ax = S.axes_mm(fig, 92, top, 46, 22)
-    P.heat(ax, M.to_numpy(), rows=TRAINS, cols=[S.DATASET_SHORT[t] for t in D.TESTS], vmin=0, vmax=0.7, fs=5.4)
-    ax.tick_params(axis="x", labelsize=5.0)
+    ax = S.axes_mm(fig, 92, top, 50, 22)   # eight test columns since MAPLES-DR joined (2026-10-14)
+    P.heat(ax, M.to_numpy(), rows=TRAINS, cols=[S.DATASET_SHORT[t] for t in D.TESTS], vmin=0, vmax=0.7, fs=5.2)
+    ax.tick_params(axis="x", labelsize=4.4)
     for i, tr in enumerate(TRAINS):
         j = D.TESTS.index(tr)
         ax.add_patch(__import__("matplotlib").patches.Rectangle((j + 0.04, i + 0.05), 0.92, 0.9, fill=False, ec=S.INK, lw=0.9, zorder=6))
@@ -105,7 +105,7 @@ def panel_d(fig, top):
     for k, model in enumerate(D.REPRESENTATIVE):
         M, _ = matrix(model)
         ax = S.axes_mm(fig, x, top, 28, 12.5)
-        P.heat(ax, M.to_numpy(), rows=TRAINS if k == 0 else None, cols=["I", "D", "Ts", "Tu", "F", "R", "Dr"], vmin=0, vmax=0.7, fs=4.3)
+        P.heat(ax, M.to_numpy(), rows=TRAINS if k == 0 else None, cols=[CODE[t] for t in D.TESTS], vmin=0, vmax=0.7, fs=4.3)
         ax.tick_params(axis="both", labelsize=4.9)
         tier_ticks(ax, D.TESTS)
         st = S.REP_STYLE[model]
@@ -113,7 +113,7 @@ def panel_d(fig, top):
         ax.scatter([0.02], [1.2], transform=ax.transAxes, s=10, marker=st["marker"], color=st["color"], clip_on=False)
         x += 31.3
     S.tag_simulated(ax, loc="br", dy=-0.42)
-    S.text_mm(fig, "I, IDRiD · D, DDR · Ts, TJDR-std · Tu, TJDR-uwf · F, FGADR · R, Retinal-Lesions · Dr, DiaRetDB1", 22, top + 17.5, fontsize=4.9, color=S.INK2)
+    S.text_mm(fig, "I, IDRiD · D, DDR · Ts, TJDR-std · Tu, TJDR-uwf · M, MAPLES-DR · F, FGADR · R, Retinal-Lesions · Dr, DiaRetDB1", 22, top + 17.5, fontsize=4.9, color=S.INK2)
 
 
 def panel_e(fig, top):

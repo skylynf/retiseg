@@ -24,7 +24,7 @@ M1 数据集
     Retinal-Lesions hard_exudate→EX、retinal_hemorrhage→HE、microaneurysm→MA、cotton_wool_spots→SE；玻璃体积血、视网膜前出血、NV、纤维增殖为扩展，不并入 HE（与 Playout 2024 一致）。
     DiaRetDB1 Hard_exudates→EX、Haemorrhages→HE、Red_small_dots→MA、Soft_exudates→SE；IRMA、Neovascularisation、Disc、Fundus_area 不用。
     MAPLES-DR（2026-10-14 加入，19 第二节）microaneurysms→MA、hemorrhages→HE、exudates→EX、cottonWoolSpots→SE；redUncertains 进 MA 与 HE 的忽略区，brightUncertains 进 EX 与 SE 的忽略区；drusens、neovascularization 为扩展；血管、视盘、视杯、黄斑不导出。198 张 MESSIDOR 图（官方 138/60），标注在 1500×1500 视野裁剪上画、按最近邻放回 MESSIDOR 原分辨率；MA、HE、EX 为网络预标注后人工修正，SE 从零画（表 1 注明）。只读官方测试 60 张；原图须向 adcis.net 申请，不随 prepared 目录分发。
-  待补：MAPLES-DR 的 MESSIDOR 原图（用户申请中，接法已写）；e-ophtha（已申请，只有 MA、EX）仍在未来工作。
+  MAPLES-DR 的标注与 MESSIDOR 原图 2026-10-14 已到服务器，读法不依赖 maples_dr 包（bench/data/maples.py）；等导出与泄漏审计后进 E3a。e-ophtha（已申请，只有 MA、EX）仍在未来工作。
   出处：07；12 第一、三节；bench/data/*.py。
 
 M2 预处理

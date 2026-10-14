@@ -45,7 +45,7 @@ DIARETDB0
 
 三、本地还没有
 
-MAPLES-DR：标注用 maples-dr 包从 Figshare 自动下载。原图是 MESSIDOR，要另外准备。
+MAPLES-DR（2026-10-14 到位）：标注是 figshare 附加数据，解开在 dataset/maples-dr/（dataset_record.yaml、MESSIDOR-ROIs.csv、annotations/、preannotations/、两份 xls；AdditionalData.zip 原包也在）；原图是 MESSIDOR：本机工作站 dataset/messidor/ 是完整的 12 个 Base11–Base34.zip（约 3.6 GB），服务器 dataset/messidor/ 是 MAPLES-DR 用到的 200 张 tif 平铺（约 1.4 GB，另有 dataset/messidor-manifest.tsv：split、base、name）。读法不用 maples_dr 包：bench/data/maples.py 直接读，两种布局都认；导出 python bench/scripts/prepare_datasets.py export MAPLES-DR → dataset/prepared/MAPLES-DR（198 张；官方 138/0/60）。
 e-ophtha：2026-10-03 已申请，未批。
 Retinal-Lesions（2026-10-07 到位）：dataset/retinal-lesions/retinal-lesions-v20191227.zip，所有成员 ZipCrypto 加密；已解压到同目录 retinal-lesions-v20191227/，读取器优先读解压目录。
   1593 张 RGB 896×896 JPEG，文件名保留 Kaggle 的“编号_left/right”：1505 名患者，88 名双眼都在。dr_grades.csv 三列：image id、kaggle label、our label；README 的分级计数（0:166、1:337、2:929、3:99、4:62）对应 our label。

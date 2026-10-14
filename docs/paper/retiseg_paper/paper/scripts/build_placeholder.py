@@ -29,8 +29,8 @@ RNG_SEED = 20261009
 
 CLASSES = ["MA", "HE", "EX", "SE"]
 TRAIN_MAIN = ["IDRiD", "DDR"]
-TESTS = ["IDRiD", "DDR", "TJDR-std", "TJDR-uwf", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
-INDEPENDENT = ["TJDR-std", "TJDR-uwf", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
+TESTS = ["IDRiD", "DDR", "TJDR-std", "TJDR-uwf", "MAPLES-DR", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
+INDEPENDENT = ["TJDR-std", "TJDR-uwf", "MAPLES-DR", "FGADR", "Retinal-Lesions", "DiaRetDB1"]
 
 # name, family, experiment that produces it, logit offset, MA handicap
 # (models with a coarse stride or 16-pixel tokens lose the smallest lesions).
@@ -80,6 +80,7 @@ BASE = {
     "DDR": {"MA": 0.21, "HE": 0.46, "EX": 0.56, "SE": 0.37},
     "TJDR-std": {"MA": 0.30, "HE": 0.58, "EX": 0.70, "SE": 0.52},
     "TJDR-uwf": {"MA": 0.22, "HE": 0.50, "EX": 0.60, "SE": 0.45},
+    "MAPLES-DR": {"MA": 0.28, "HE": 0.55, "EX": 0.66, "SE": 0.50},
     "FGADR": {"MA": 0.20, "HE": 0.55, "EX": 0.62, "SE": 0.45},
     "Retinal-Lesions": {"MA": 0.15, "HE": 0.45, "EX": 0.50, "SE": 0.40},
     "DiaRetDB1": {"MA": 0.12, "HE": 0.35, "EX": 0.40, "SE": 0.30},
@@ -90,6 +91,7 @@ SHIFT = {
     ("IDRiD", "IDRiD"): 0.0,
     ("IDRiD", "DDR"): -0.75,
     ("IDRiD", "TJDR-std"): -0.85,
+    ("IDRiD", "MAPLES-DR"): -0.80,
     ("IDRiD", "TJDR-uwf"): -1.50,
     ("IDRiD", "FGADR"): -1.10,
     ("IDRiD", "Retinal-Lesions"): -1.20,
@@ -97,6 +99,7 @@ SHIFT = {
     ("DDR", "DDR"): 0.0,
     ("DDR", "IDRiD"): -0.50,
     ("DDR", "TJDR-std"): -0.65,
+    ("DDR", "MAPLES-DR"): -0.60,
     ("DDR", "TJDR-uwf"): -1.30,
     ("DDR", "FGADR"): -0.90,
     ("DDR", "Retinal-Lesions"): -1.05,
@@ -104,6 +107,7 @@ SHIFT = {
     ("TJDR-std", "TJDR-std"): 0.0,
     ("TJDR-std", "IDRiD"): -0.60,
     ("TJDR-std", "DDR"): -0.65,
+    ("TJDR-std", "MAPLES-DR"): -0.65,
     ("TJDR-std", "TJDR-uwf"): -0.70,
     ("TJDR-std", "FGADR"): -1.00,
     ("TJDR-std", "Retinal-Lesions"): -1.15,
@@ -112,6 +116,7 @@ SHIFT = {
     ("FGADR", "IDRiD"): -1.00,
     ("FGADR", "DDR"): -0.95,
     ("FGADR", "TJDR-std"): -0.90,
+    ("FGADR", "MAPLES-DR"): -0.95,
     ("FGADR", "TJDR-uwf"): -1.60,
     ("FGADR", "Retinal-Lesions"): -0.70,
     ("FGADR", "DiaRetDB1"): -0.60,
@@ -558,6 +563,7 @@ def label_audit(sim):
         "DDR": dict(MA=15.1, HE=12.4, EX=35.0, SE=1.9),
         "TJDR-std": dict(MA=18.0, HE=15.0, EX=40.0, SE=2.4),
         "TJDR-uwf": dict(MA=26.0, HE=24.0, EX=55.0, SE=3.5),
+        "MAPLES-DR": dict(MA=14.0, HE=9.0, EX=30.0, SE=2.0),
         "FGADR": dict(MA=9.0, HE=6.5, EX=11.0, SE=1.6),
         "Retinal-Lesions": dict(MA=4.2, HE=3.6, EX=3.0, SE=1.3),
         "DiaRetDB1": dict(MA=5.0, HE=4.4, EX=2.6, SE=1.2),
@@ -567,6 +573,7 @@ def label_audit(sim):
         "DDR": dict(MA=0.0044, HE=0.0102, EX=0.0047, SE=0.0190),
         "TJDR-std": dict(MA=0.0050, HE=0.0120, EX=0.0052, SE=0.0240),
         "TJDR-uwf": dict(MA=0.0026, HE=0.0065, EX=0.0030, SE=0.0110),
+        "MAPLES-DR": dict(MA=0.0050, HE=0.0125, EX=0.0050, SE=0.0250),
         "FGADR": dict(MA=0.0075, HE=0.0220, EX=0.0130, SE=0.0330),
         "Retinal-Lesions": dict(MA=0.0160, HE=0.0460, EX=0.0520, SE=0.0500),
         "DiaRetDB1": dict(MA=0.0300, HE=0.0700, EX=0.0900, SE=0.0800),

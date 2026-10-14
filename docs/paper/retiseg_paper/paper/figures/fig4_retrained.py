@@ -1,10 +1,13 @@
 """Fig. 4 | Performance of retrained models under the unified protocol (E2, E3a).
 
 a  internal tests, per-class AUPR and mAUPR with seed s.d.
-b  every model on the seven test sets, by training source
+b  every model on the eight test sets, by training source
 c  internal against independent tests, one line per model
 d  model families
-e  critical-difference diagram over the seven test sets
+e  critical-difference diagram over the eight test sets
+
+The panel tops follow the number of main-table models (19 since the
+fundus-specific expansion, docs/paper/18), so the row blocks never overlap.
 f  published rank against retrained rank on IDRiD
 """
 
@@ -64,13 +67,13 @@ def panel_b(fig, models, fams, top):
     for k, train in enumerate(D.TRAIN_MAIN):
         tests = [train] + [t for t in D.TESTS if t != train]
         M = D.score_matrix(train, models=models)[tests].to_numpy()
-        ax = S.axes_mm(fig, x, top, 42, ROW * len(models))
-        P.dot_matrix(ax, M, rows=models if k == 0 else None, cols=[S.DATASET_SHORT[t] for t in tests], vmin=0, vmax=0.7, size=21, col_fs=4.9)
+        ax = S.axes_mm(fig, x, top, 45, ROW * len(models))
+        P.dot_matrix(ax, M, rows=models if k == 0 else None, cols=[S.DATASET_SHORT[t] for t in tests], vmin=0, vmax=0.7, size=19, col_fs=4.2)
         if k == 0:
             S.family_chips(ax, fams, x=-0.03)
         ax.axvline(1, color=S.INK, lw=0.6)
         ax.axvline(2, color=S.INK, lw=0.6, ls=(0, (2, 2)))
-        spans = [(0, 1, "Int.", "#3d3d3a"), (1, 2, "Cross", "#8f8d86"), (2, 7, "Independent", "#d9d7cf")]
+        spans = [(0, 1, "Int.", "#3d3d3a"), (1, 2, "Cross", "#8f8d86"), (2, len(tests), "Independent", "#d9d7cf")]
         P.header_band(ax, spans, y=1.015, h=0.055)
         trans = ax.get_xaxis_transform()
         for j, t in enumerate(tests):
@@ -78,17 +81,17 @@ def panel_b(fig, models, fams, top):
         S.text_mm(fig, f"Trained on {train}", x, top - 7.4, fontsize=6.5, fontweight="bold")
         int_s, ind_fine = D.internal_vs_independent(train, models=models, tests=D.FINE_INDEPENDENT)
         A = np.c_[int_s.to_numpy(), ind_fine.to_numpy(), (ind_fine - int_s).to_numpy()]
-        ax2 = S.axes_mm(fig, x + 43.5, top, 14, ROW * len(models))
+        ax2 = S.axes_mm(fig, x + 46.5, top, 14, ROW * len(models))
         P.heat(ax2, A[:, :2], cols=["Int.", "Ind.\nfine"], vmin=0, vmax=0.7, fs=5.0)
         ax2.tick_params(axis="x", labelsize=4.9)
-        ax3 = S.axes_mm(fig, x + 58.2, top, 7, ROW * len(models))
+        ax3 = S.axes_mm(fig, x + 61.2, top, 7, ROW * len(models))
         P.heat(ax3, A[:, 2:], cols=["Δ"], cmap=S.CMAP_DIV, vmin=-0.4, vmax=0.4, fmt="{:+.2f}", fs=5.0)
         ax3.tick_params(axis="x", labelsize=5.4)
         if sim:
             S.tag_simulated(ax3, loc="tr", dy=0.02)
         x += 72
-    P.colorbar(fig, S.rect_mm(fig, 168, top + 4, 2.2, 14), S.CMAP_SEQ, 0, 0.7, "mAUPR", ticks=[0, 0.35, 0.7], orientation="vertical")
-    P.colorbar(fig, S.rect_mm(fig, 168, top + 27, 2.2, 14), S.CMAP_DIV, -0.4, 0.4, "Δ", ticks=[-0.4, 0, 0.4], orientation="vertical")
+    P.colorbar(fig, S.rect_mm(fig, 171.5, top + 4, 2.2, 14), S.CMAP_SEQ, 0, 0.7, "mAUPR", ticks=[0, 0.35, 0.7], orientation="vertical")
+    P.colorbar(fig, S.rect_mm(fig, 171.5, top + 27, 2.2, 14), S.CMAP_DIV, -0.4, 0.4, "Δ", ticks=[-0.4, 0, 0.4], orientation="vertical")
     # granularity key
     W, H = fig.get_size_inches() / S.MM
     y = top + ROW * len(models) + 9.8
@@ -106,9 +109,9 @@ def panel_c(fig, models, fams, top):
     pvals, axes = [], []
     for train in D.TRAIN_MAIN:
         m = D.score_matrix(train, models=models)
-        keys = [train, "TJDR-std", "TJDR-uwf", "FGADR", "Retinal-Lesions"]
+        keys = [train, "TJDR-std", "TJDR-uwf", "MAPLES-DR", "FGADR", "Retinal-Lesions"]
         ax = S.axes_mm(fig, x, top, 47, 36)
-        P.paired_slope(ax, [m[k].to_numpy() for k in keys], cols, ["Internal", "TJDR\nstd", "TJDR\nUWF", "FGADR", "Ret.-\nLesions"])
+        P.paired_slope(ax, [m[k].to_numpy() for k in keys], cols, ["Internal", "TJDR\nstd", "TJDR\nUWF", "Maples", "FGADR", "Ret.-\nLesions"])
         ax.set_ylim(0, 0.9)
         ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
         ax.set_ylabel("mAUPR")
@@ -116,14 +119,14 @@ def panel_c(fig, models, fams, top):
         ax.set_title(f"Trained on {train}", fontsize=6.5, fontweight="bold", loc="left", pad=6)
         ax.tick_params(axis="x", labelsize=5.2)
         S.light_grid(ax)
-        for j in (1, 3):
+        for j in (1, 4):
             pvals.append(sps.wilcoxon(m[train].to_numpy(), m[keys[j]].to_numpy()).pvalue)
         axes.append(ax)
         x += 57
     adj = D.bstats.holm(pvals)
     i = 0
     for ax in axes:
-        for j, yb in ((1, 0.78), (3, 0.86)):
+        for j, yb in ((1, 0.78), (4, 0.86)):
             P.bracket(ax, 0, j, yb, P.p_text(adj[i]), h=0.012)
             i += 1
         if D.simulated(D.main_runs()):
@@ -162,7 +165,7 @@ def panel_e(fig, blocks, fr, top):
     short = [m.replace(" (full FT)", "").replace("RETFound + UPerNet", "RETFound+UPerNet") for m in blocks.index]
     cols = [S.FAMILY[D.FAMILY_OF[m]] for m in blocks.index]
     P.cd_diagram(ax, short, fr["avg_rank"], fr["critical_difference"], cols)
-    S.text_mm(fig, f"Friedman χ² = {fr['statistic']:.1f}, {P.p_text(fr['p'])}; Nemenyi critical difference at α = 0.05; n = 7 test sets",
+    S.text_mm(fig, f"Friedman χ² = {fr['statistic']:.1f}, {P.p_text(fr['p'])}; Nemenyi critical difference at α = 0.05; n = {len(D.TESTS)} test sets",
               61, top + 45.5, ha="center", fontsize=5.2, color=S.INK2)
     if D.simulated(D.main_runs()):
         S.tag_simulated(ax, loc="tr", dy=-0.1)
@@ -185,8 +188,12 @@ def panel_f(fig, top):
 def main():
     models, blocks, fr = order_models()
     fams = [D.FAMILY_OF[m] for m in models]
-    fig = S.figure(236)
-    ta, tb, tc, te = 15, 75, 139, 189
+    block = ROW * len(models)                 # height of one model-row block (42.7 mm for 14 models, 58 for 19)
+    ta = 15
+    tb = ta + block + 17                      # headers of b sit 9.5 mm above its block
+    tc = tb + block + 24                      # x labels, the granularity key, then c's title
+    te = tc + 36 + 14
+    fig = S.figure(te + 48)
     S.label_mm(fig, "a", 2, ta - 11.5)
     panel_a(fig, models, fams, ta)
     S.label_mm(fig, "b", 2, tb - 9.5)

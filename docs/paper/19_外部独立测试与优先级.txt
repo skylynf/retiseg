@@ -12,8 +12,8 @@
      字段：microaneurysms、hemorrhages、exudates、cottonWoolSpots、drusens、neovascularization、redUncertains（MA 或 HE 之一，未定）、brightUncertains（EX、SE 或 drusen 之一，未定）、vessels、opticDisc、opticCup、macula；DR 分级 R0–R4A、ME 分级 M0–M2。
      标注方式：MA、HE、EX、vessels 由网络预标注后由视网膜医生逐张修正；CWS 从零画（原文 Methods）。meta.json 记 ai_assisted_classes，论文表 1 注明。
      图像本体是 MESSIDOR（adcis.net，须另行申请，Base11–Base34），不能随 prepared 目录再分发。
-  2. 接法（代码已写，bench/data/maples.py、bench/data/prepare.py prepare_maples）
-     映射：microaneurysms→MA、hemorrhages→HE、exudates→EX、cottonWoolSpots→SE；drusens、neovascularization 进 masks_ext（DRUSEN、NV）；血管、视盘、视杯、黄斑不导出。
+  2. 接法（代码已写，bench/data/maples.py、bench/data/prepare.py prepare_maples；2026-10-14 晚改为不依赖 maples_dr 包：直接读解开的 figshare 附加数据和 tif，平铺、Base 目录、Base*.zip 都认，复现包 resize=False 的放回几何，本机两张图核对逐像素相同）
+     映射：Microaneurysms→MA、Hemorrhages→HE、Exudates→EX、CottonWoolSpots→SE；drusens、neovascularization 进 masks_ext（DRUSEN、NV）；血管、视盘、视杯、黄斑不导出。
      不确定层：redUncertains 进 MA 与 HE 的 ignore/，brightUncertains 进 EX 与 SE 的 ignore/（与已确定的正例重叠处仍是正例）。评测（bench.eval）对 ignore 像素既不计对也不计错，与 Retinal-Lesions 的 127 灰度一致。
      划分：官方 train 138 / val 空 / test 60，不抽样。E3a 只读 test 60（e3a_frozen split: test）。选官方 60 而不是全部 198 的理由：与数据集自己的基线表可比；138 张训练图留给将来的细档合并实验（E4/E8 的"fine merged"档）；且冻结文件读到指标后不能再改，现在定下。
      画布：标准视野（MESSIDOR 45°），按视野框匹配 1440，与 IDRiD/DDR 相同。
@@ -21,13 +21,9 @@
   3. 泄漏审计（导出后、读任何指标前）
      python bench/scripts/leak_audit.py --min-vessel 0.3 --data dataset/prepared/IDRiD dataset/prepared/DDR dataset/prepared/TJDR_std dataset/prepared/FGADR dataset/prepared/RetinalLesions dataset/prepared/MAPLES-DR --out runs/audit/leak_maples
      结果按训练源写进 bench/data/splits/leak_exclusions.json 的 by_training_source.<源>.MAPLES-DR（预期为空：MESSIDOR 是 2004–2009 年法国三家医院的图像，与其他七个库无来源重叠；只有 Retinal-Lesions 是 EyePACS，也不同源）。审计结果记 00，提交后 e3a 才能跑 MAPLES-DR。
-  4. 论文侧改动（等 report.json 出来再做，一次改完）
+  4. 论文侧改动（2026-10-14 晚已做：data.py 三张名单与 DATASETS 行、style.py、build_placeholder 的名单与占位、表 1 行与注、图 6 列码、方法与结果文字、Friedman N=8；report.json 回来后只核对表 1 的数）。原计划：
      figures/retifig/data.py 的 TESTS、INDEPENDENT、FINE_INDEPENDENT、DATASETS 行；style.py 的档位与短标签；build_placeholder 的 TESTS 与各实验的占位；表 1 加一行；图 6 多一列；方法 M1 的来源段与映射表；14 M1 的"待补"改为已入。细档平均（R4、表 5 的 Indep. fine、表 3 的"Indep. fine"列）会因此变化，所以这一步要在 R4 定稿前完成。
-  5. 用户要做的
-     a. 向 adcis.net 申请 MESSIDOR（Base11–Base14、Base21–Base24、Base31–Base34 的 zip），放服务器 dataset/messidor/（zip 或解开的目录均可，maples_dr 两种都认）。
-     b. figshare 下载 MAPLES-DR 附加数据 zip（约 60 MB）放 dataset/maples-dr/（没有时包会自己下，服务器通常没有外网）。
-     c. retiseg 环境 pip install maples_dr，写进 cluster_env.sh。
-     服务器（CPU，一条命令）：python bench/scripts/prepare_datasets.py export MAPLES-DR → dataset/prepared/MAPLES-DR/report.json；然后第 3 条的审计；两者都记 00。
+  5. 数据（2026-10-14 用户已放好）：服务器 dataset/maples-dr/（解开的附加数据）、dataset/messidor/（200 张 tif 平铺）、dataset/messidor-manifest.tsv；本机工作站 dataset/messidor/ 是完整的 Base11–Base34.zip。不用装包。服务器步骤在 17 第十节：export（CPU，几分钟）→ 泄漏审计 → 提交名单 → e3a 自动接。
 
 三、HRDecoder 作者权重（E1）——权重已下载，接线已写
   1. 代码：bench/predict_hrdecoder.py（作者测试流水线：按配置的 image_scale 缩放、keep_ratio False、IDRiD 滑窗 1920/步 960、DDR 整图；归一化与 hr_scale 取自作者配置；输出 EX、HE、SE、MA 四个 sigmoid 图；作者指标用 bench.eval.m2mrf_stream 的 11 阈值 AUPR，与该分支 lesion_metric.py 相同）；bench.e3a author --model HRDecoder（独立测试，retiseg-hacdr 环境，launch_e3a 按 _BINDING 选环境）；e3a_frozen.yaml 的 author_weights.HRDecoder（只增）；collect_runs 新增 collect_e1（runs/E1_<slug>/author_<库>_test.json 与 metrics_<库>.json → 表 3a 的 author_function / this_protocol 行），E3a 的作者权重行改用 this_protocol 键（原来写成 author_weights，表格读不到）；表 3a 加 HRDecoder 两行（占位），表注说明流水线。
@@ -65,3 +61,4 @@
 
 五、状态
   2026-10-14：本文件写成；代码（maples.py、prepare_maples、predict_hrdecoder.py、e3a author 分发、launch_e3a 缺目录跳过、launch_queue max_concurrent 与 factor models 过滤、collect_e1、表 3a）见 00 当天记录；queue.yaml 第二版已提交。等：MESSIDOR 原图（用户申请）、服务器 pull 后按 17 第十六节执行。
+  2026-10-14 晚：MAPLES-DR 数据到位（服务器与本机），读法改为不依赖包并核对；论文侧第八列已加；albert 分支并入后 E5 推理档阶段改为 e5_infer_pool/test（关）；17 重写为第二版，服务器按 17 第四节起步。

@@ -171,7 +171,7 @@
    状态与决定：待处理（并入第 14 条那一步）。改成只查本次计划真正用到的集；测试阶段的保护不变。
    来源：工作站albert 2026-10-12 规划本地冒烟时发现。
 
-以下第 27–36 条来自修复建议（docs/ops/22_fixPlan.md，与 docs/design/20 配套）里建议了、2026-10-12 评审修复 1–13 没有做的项，工作站albert 2026-10-12 按级别登记；都属「可做、非合并前必须」。
+以下第 27–36 条来自修复建议（原 ops/22 修复建议，2026-10-14 并入 docs/design/20_代码审计.md 第三部分）里建议了、2026-10-12 评审修复 1–13 没有做的项，工作站albert 2026-10-12 按级别登记；都属「可做、非合并前必须」。
 
 27  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 14，bench/tests/test_e5_flow.py，提交 f5397da）
    问题：五个阻断问题里四个出在已有单元测试的模块之间的接缝上（A2、A3、A5 都是启动器、运行模块、评测三者衔接的问题），没有一个测试按 17 第六节 a–f 的顺序把流程走一遍。
@@ -229,10 +229,10 @@
    处理条件：a 可随时；b 在首个 E5 测试指标读出前后；c 由用户与 Luming 定。
    来源：22 B6。
 
-35  2026-10-12  2 级 → 已处理（2026-10-12，用户把修复建议入库为 docs/ops/22_fixPlan.md，20 第 6 行的引用随之改）
+35  2026-10-12  2 级 → 已处理（2026-10-12，用户把修复建议入库为 22；2026-10-14 并入 docs/design/20_代码审计.md 第三部分）
    问题：docs/design/20_代码审计.md 第 6 行的修订记录引用配套修复建议 claude/albert-branch-fix-plan-2026-10-12.md，该文件以 fixPlan.md 留在未跟踪的 Albert 笔记里，仓库内读不到。
    影响：20 的读者找不到修复建议原文；第 27–36 条的来源不可核对。
-   状态与决定：已处理：另存为 docs/ops/22_fixPlan.md，20 第 6 行的引用改为指向它。
+   状态与决定：已处理：另存为 22，20 第 6 行的引用改为指向它；2026-10-14 并入 20 第三部分，22 删除。
    处理条件：用户决定。
    来源：工作站albert 2026-10-12 整理笔记入库时发现。
 
@@ -257,7 +257,7 @@
    状态与决定：a 已处理：缺行直接报错并提示重生成占位（合并后不重生成 make 会失败，见第 39 条）。b 待 Luming：零样本一块内统一用任意病灶 AUPR 作汇总（SAM 3 的 a_sam3_selected 也有 any 行），最好/次好只在各块内排名，图 5e 零样本组内比任意病灶 AUPR。
    来源：复审 N2。
 
-39  2026-10-13  2 级 → 待 Luming 执行（00 第 8 项）
+39  2026-10-13  2 级 → 已处理（2026-10-14 晚，本机：合并后在有 runs/ 的机器上 build_placeholder --force → collect_literature → collect_runs → make，实测行无丢失；00 当日记录）
    问题：results.csv 还没重生成，没有 text:selected 和 aupr_any_lesion 行；合并到 main 后若不同时重生成，论文构建会带着空行（第 38 条 a 生效后改为报错）。
    影响：合并与占位重生成的顺序。
    状态与决定：合并与 build_placeholder --force、collect_runs、collect_literature、make 放在同一次操作里；写进 00 第 8 项。
@@ -299,9 +299,20 @@
    状态与决定：不移植；需要时在 albert 的 prompted.decode_image 里按同一定义加一份 per-prompt 记录。
    来源：2026-10-14 合并评审。
 
-46  2026-10-14  1 级 → 记录，不处理
+46  2026-10-14  1 级 → 已处理（2026-10-14 晚，整表重生成，见第 39 条）
    问题：albert 的 build_placeholder.py 新增 aupr_any_lesion 等占位行，消耗随机数，此后整表 --force 重生成得到的 E5 encoder_control、E7–E9、L1、audit 占位值与 2026-10-14 合并时 results.csv 里的不同。
    影响：只是占位数字变化，实测行不受影响；图上的 simulated 角标照旧。合并时只替换了 E5 推理档的占位行，所以现在的 results.csv 与“从头重生成”的结果不完全一致。
    状态与决定：不处理；下一次在有 runs/ 的机器上整表重生成时自然统一。
    来源：2026-10-14 合并后的独立复查（docs/ops/25 第七节第 0 条）。
 
+47  2026-10-14  1 级 → 已处理（2026-10-14 晚，本机，git rm --cached）
+   问题：retiseg_runs_handoff_20261012.tar.gz（52 MB）10-14 本机已从索引移除并加 .gitignore，但用户随后的提交 5707144 又把它提交了进来（git add 对已跟踪文件不看 .gitignore）。
+   影响：仓库体积；pull 慢。
+   状态与决定：再次 git rm --cached；pull 后工作区里的文件保留为未跟踪。以后 git status 看到 tar.gz 为已跟踪时先 rm --cached。
+   来源：2026-10-14 晚 git ls-tree origin/main。
+
+48  2026-10-14  2 级 → 已处理（2026-10-14 晚，本机）
+   问题：bench/data/maples.py 第一版通过 maples_dr 包读 MAPLES-DR；该包要 pip 安装且依赖 xlrd、rich，服务器通常没有外网，且它的 MESSIDOR 发现逻辑会把 zip 解到 dataset/messidor/maples_dr/。
+   影响：服务器导出可能卡在装包。
+   状态与决定：改为直接读解开的 figshare 附加数据（dataset_record.yaml、MESSIDOR-ROIs.csv、annotations/）和 tif（平铺、Base 目录或 Base*.zip），复现包的 resize=False 几何；本机两张图核对与包逻辑逐像素相同。DR/ME 分级只在 pandas 能读 xls 时写入（可选）。
+   来源：2026-10-14 晚接入服务器数据布局。

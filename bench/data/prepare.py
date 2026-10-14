@@ -459,8 +459,9 @@ def prepare_retlesion(repo_root, log=print):
 
 
 def prepare_maples(repo_root, log=print):
-    """MAPLES-DR at MESSIDOR resolution (bench/data/maples.py); official lists, no draw. Added 2026-10-14 as
-    the eighth independent test set (docs/paper/19 section 2); only its test split is read by E3a."""
+    """MAPLES-DR at MESSIDOR resolution (bench/data/maples.py reads the unpacked figshare archive and the
+    MESSIDOR tif files or Base*.zip directly); official lists, no draw. Added 2026-10-14 as the eighth
+    independent test set (docs/paper/19 section 2); only its test split is read by E3a."""
     from bench.data import maples as source
 
     data = source.open_maples(repo_root)
