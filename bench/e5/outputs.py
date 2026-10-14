@@ -161,6 +161,37 @@ def write_predicted(directory, payload):
     (directory / "predicted.json").write_text(json.dumps(payload, indent=1) + "\n")
 
 
+RUN_PARAMS = "run_params.json"
+
+
+def claim(directory, params):
+    """Tie a run directory to the values that decide its maps, or refuse one made with other values.
+
+    ``params`` holds the keys a test directory's name does not carry (the selected
+    area cap of the automatic masks, the selected phrase of each SAM 3 class). A
+    directory with predicted.json, or with maps from an interrupted run
+    (run_params.json, written here before the first map), that recorded other
+    values raises: the selection was redone after this directory was made, and
+    its maps and metrics belong to the old one. Remove the directory by hand and
+    record why in docs/ops/00. Registered 2026-10-14 (merge review of albert).
+    """
+    directory = Path(directory)
+    expected = {key: params[key] for key in sorted(params)}
+    recorded = None
+    if (directory / "predicted.json").is_file():
+        predicted = read_predicted(directory)
+        recorded = {key: predicted.get(key) for key in expected}
+    elif (directory / RUN_PARAMS).is_file():
+        recorded = json.loads((directory / RUN_PARAMS).read_text())
+    if recorded is not None:
+        if json.loads(json.dumps(recorded)) != json.loads(json.dumps(expected)):
+            raise ValueError(f"{directory} was made with {recorded}, the current selection is {expected}; "
+                             "remove the directory (and record why in docs/ops/00) before running it again")
+        return
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / RUN_PARAMS).write_text(json.dumps(expected) + "\n")
+
+
 def read_predicted(directory):
     path = Path(directory) / "predicted.json"
     if not path.is_file():

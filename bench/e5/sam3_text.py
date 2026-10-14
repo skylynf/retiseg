@@ -315,6 +315,7 @@ def assemble_selected(set_name, split, variant=geo.MAIN, frozen=None, data_dir=N
     lost = sorted({path for path in sources.values() if not out.pred_dir(path, split).is_dir()})
     if lost and not (target / "predicted.json").is_file():
         raise FileNotFoundError(f"a_sam3_selected {set_dir}: the maps of {[str(p) for p in lost]} are gone; predict those phrase runs again")
+    out.claim(target, {"phrase_index": indices})  # the selected phrases are not in the directory's name
     if out.needs_prediction(target, run_limit):
         _copy_selected(sources, records, target, set_name, split, variant, canvas_variants, indices, run_limit, frozen)
     if evaluate and not out.is_done(target, run_limit):

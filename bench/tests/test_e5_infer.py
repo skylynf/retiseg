@@ -704,6 +704,10 @@ def test_amg_test_run_needs_the_selection_uses_pool_thresholds_and_obeys_the_bud
     assert (source / "DDR" / "prob_test").is_dir() and done["n_images"] == 2
     oracle = json.loads((source / "DDR__oracle_class" / "done.json").read_text())
     assert oracle["kind"] == "oracle_class" and oracle["thresholds"] == "fixed and pool val_opt"
+    # a selection redone at the same density with another cap does not reuse these directories
+    recapped = fz.load_frozen(_filled_frozen(tmp_path, 64, 1.0, "recapped.yaml"))
+    with pytest.raises(ValueError, match="current selection"):
+        amg.run("SAM", 64, "DDR", "test", generator=_FakeGenerator(), frozen=recapped, data_dir=root, long_side=20, window=8, pool=pool)
     # drop_maps and limit
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs2" / "E5")
     amg.run("SAM", 64, "DDR", "val", generator=_FakeGenerator(), frozen=frozen, data_dir=root, long_side=20, window=8)
@@ -786,6 +790,39 @@ def test_choose_window_takes_the_window_whose_edges_are_farthest_from_the_centre
     assert prompted.box_center([2, 4, 6, 8]) == (3.5, 5.5)
 
 
+def test_window_for_box_prefers_a_window_holding_the_whole_box():
+    from bench.e5 import geometry as geo
+    from bench.e5 import prompted
+
+    # 1440 canvas, 1024 windows, overlap 0.5: starts 0 and 416 on each side
+    boxes = geo.windows((1440, 1440), 1024, 0.5)
+    assert sorted(set(t for t, _ in boxes)) == [0, 416]
+    # the case the centre rule got wrong: near the bottom edge every window of the row ties on the vertical
+    # margin, and the first one (left 0, ending at x = 1023) cuts a box reaching x = 1033
+    box = [871, 1383, 1034, 1422]
+    old = boxes[prompted.choose_window(boxes, 1024, prompted.box_center(box))]
+    assert old == (416, 0)
+    index, contained = prompted.window_for_box(boxes, 1024, box)
+    assert contained and boxes[index] == (416, 416)
+    # inside several windows: the largest box-to-edge margin, ties to the first
+    # a small box at (900, 900): window (0, 0) leaves 114 px to its far edges, (416, 416) leaves 484
+    assert prompted.window_for_box(boxes, 1024, [900, 900, 910, 910]) == (boxes.index((416, 416)), True)
+    assert prompted.window_for_box(boxes, 1024, [10, 10, 20, 20]) == (boxes.index((0, 0)), True)
+    # wider than any window: not contained, the window keeping most of it, counted by the run
+    index, contained = prompted.window_for_box(boxes, 1024, [0, 100, 1440, 140])
+    assert not contained and boxes[index][0] == 0
+    # every box up to 608 px fits a window on this canvas, so none is reported uncontained
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    for _ in range(2000):
+        w, h = rng.integers(1, 609, size=2)
+        x0, y0 = rng.integers(0, 1440 - w + 1), rng.integers(0, 1440 - h + 1)
+        index, contained = prompted.window_for_box(boxes, 1024, [x0, y0, x0 + w, y0 + h])
+        top, left = boxes[index]
+        assert contained and left <= x0 and x0 + w <= left + 1024 and top <= y0 and y0 + h <= top + 1024
+
+
 def test_prompted_pool_run_decodes_once_per_window_and_fills_prefix_maxima(tmp_path, monkeypatch):
     import json
 
@@ -821,6 +858,7 @@ def test_prompted_pool_run_decodes_once_per_window_and_fills_prefix_maxima(tmp_p
     assert predicted["kind"] == "boxes" and predicted["k"] == "all" and predicted["n_prompts"] == 2 * 3  # MA 2 + EX 1 per image
     assert predicted["n_windows_encoded"] == len(fake.images) and all(hw == (8, 8) for hw in fake.images)
     assert predicted["n_windows_encoded"] <= predicted["n_windows"] and predicted["decoder"] == "_FakeDecoder"
+    assert predicted["n_prompts_box_uncontained"] == 0 and predicted["window_choice"].startswith("a window holding")
     assert predicted["prompt_file_sha256"] and predicted["prompt_rule"]["box"].startswith("tight") and "git" in predicted
     doc = prompts.load(fz.prompt_file("DDR", "val", pdir))
     distinct = set()
@@ -828,7 +866,7 @@ def test_prompted_pool_run_decodes_once_per_window_and_fills_prefix_maxima(tmp_p
     boxes = geo.windows(cv.hw, 8, 0.5)
     for cls in ("MA", "EX"):
         for prompt in doc["images"]["v0"]["classes"][cls]["prompts"]:
-            distinct.add(prompted.choose_window(boxes, 8, prompted.box_center(prompt["box"])))
+            distinct.add(prompted.window_for_box(boxes, 8, prompt["box"])[0])
     assert len(fake.images) == 2 * len(distinct) or len(fake.images) >= len(distinct)  # one encode per window with prompts, per image
     # k maps are prefix maxima: k1 has the first-ranked MA box only, kall both; EX has one component so k1 == kall
     k1 = read_prob_quantized(source / "DDR-val__k1" / "prob_val", "MA", "v0")
@@ -844,7 +882,7 @@ def test_prompted_pool_run_decodes_once_per_window_and_fills_prefix_maxima(tmp_p
     handed = set(fake.boxes)
     for cls in ("MA", "EX"):
         for prompt in doc["images"]["v0"]["classes"][cls]["prompts"]:
-            top, left = boxes[prompted.choose_window(boxes, 8, prompted.box_center(prompt["box"]))]
+            top, left = boxes[prompted.window_for_box(boxes, 8, prompt["box"])[0]]
             x0, y0, x1, y1 = prompt["box"]
             assert tuple(prompted.decoder_box(prompt["box"], top, left)) == (x0 - left, y0 - top, x1 - 1 - left, y1 - 1 - top) in handed
     assert json.loads((source / "DDR-val__k5" / "done.json").read_text())["thresholds"] == "fixed only"
@@ -1541,3 +1579,30 @@ def test_maps_are_written_atomically_and_a_truncated_map_is_predicted_again(tmp_
     predicted = json.loads((directory / "predicted.json").read_text())
     assert predicted["resumed_images"] == 1 and again.calls  # v0 kept, v1 redone
     assert read_prob_quantized(directory / "prob_val", "HE", "v1").shape == read_prob_quantized(directory / "prob_val", "HE", "v0").shape
+
+
+# ---- merge review 2026-10-14: a test directory is tied to the selection it was made with ----------------
+
+
+def test_claim_refuses_a_directory_made_with_another_selection(tmp_path):
+    import json
+
+    import pytest
+
+    from bench.e5 import outputs as out
+
+    run = tmp_path / "a_sam_vith_p64" / "IDRiD"
+    out.claim(run, {"density": 64, "area_cap_fraction": 0.02})
+    assert json.loads((run / out.RUN_PARAMS).read_text()) == {"area_cap_fraction": 0.02, "density": 64}
+    out.claim(run, {"density": 64, "area_cap_fraction": 0.02})  # same values: fine, repeatedly
+    with pytest.raises(ValueError, match="remove the directory"):
+        out.claim(run, {"density": 64, "area_cap_fraction": 1.0})  # interrupted maps of an old selection
+    out.write_predicted(run, {"density": 64, "area_cap_fraction": 1.0})
+    with pytest.raises(ValueError, match="current selection"):
+        out.claim(run, {"density": 64, "area_cap_fraction": 0.02})  # predicted.json wins over run_params.json
+    out.claim(run, {"density": 64, "area_cap_fraction": 1.0})
+    sam3 = tmp_path / "a_sam3_selected" / "DDR"
+    out.write_predicted(sam3, {"phrase_index": {"MA": 0, "HE": 1, "EX": 0, "SE": 2}})
+    out.claim(sam3, {"phrase_index": {"MA": 0, "HE": 1, "EX": 0, "SE": 2}})
+    with pytest.raises(ValueError):
+        out.claim(sam3, {"phrase_index": {"MA": 1, "HE": 1, "EX": 0, "SE": 2}})

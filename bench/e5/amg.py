@@ -229,6 +229,9 @@ def run(model, density, set_name, split, geometry=geo.G1, variant=geo.MAIN, devi
     canvas_variants = [] if variant == geo.MAIN else [variant]
     base = out.pool_set_dirname(set_name) if pool_run else set_name
     _source, directories, dirs = planned(frozen, model, density, set_name, split, variant)
+    if not pool_run:  # the selected cap is not in a test directory's name
+        for name, path in dirs.items():
+            out.claim(path, {"density": density, "area_cap_fraction": directories[name][1]})
     pending = [name for name, path in dirs.items() if out.needs_prediction(path, limit)]
     data_dir = Path(data_dir) if data_dir is not None else geo.data_dir(set_name)
     if long_side is None:

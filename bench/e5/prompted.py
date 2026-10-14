@@ -55,6 +55,7 @@ BOXES, POINTS = "boxes", "points"
 KIND_TOKEN = {BOXES: "box", POINTS: "point"}
 SAM, SAM2, MEDSAM = "SAM", "SAM 2", "MedSAM"
 BOX_CONVENTION = "file: [x0, y0, x1, y1] with x1, y1 exclusive; decoder: [x0, y0, x1-1, y1-1] inclusive pixel indices (e5_frozen.yaml oracle.box)"
+WINDOW_CHOICE = "a window holding the whole box, largest box-to-edge margin, ties to the first; else the largest overlap (e5_frozen.yaml oracle.window_choice)"
 SAM2_CONFIG = {"sam2.1_hiera_large.pt": "configs/sam2.1/sam2.1_hiera_l.yaml", "sam2_hiera_large.pt": "configs/sam2/sam2_hiera_l.yaml"}
 SAM_MODEL_TYPE = {"sam_vit_h_4b8939.pth": "vit_h", "sam_vit_b_01ec64.pth": "vit_b"}
 MEDSAM_INPUT = 1024
@@ -107,7 +108,10 @@ def decoder_box(box, top, left):
 
 
 def choose_window(boxes, window, center):
-    """Index of the window containing the centre with the largest margin to its edges; ties to the first."""
+    """Index of the window containing the centre with the largest margin to its edges; ties to the first.
+
+    Used only as the fall-back of ``window_for_box`` for a box no window holds whole.
+    """
     cx, cy = center
     best, best_margin = None, None
     for index, (top, left) in enumerate(boxes):
@@ -118,6 +122,42 @@ def choose_window(boxes, window, center):
     if best is None:  # a centre outside every window: the nearest window centre
         best = int(np.argmin([(top + window / 2 - cy) ** 2 + (left + window / 2 - cx) ** 2 for top, left in boxes]))
     return best
+
+
+def window_for_box(boxes, window, box):
+    """(index, contained) of the window a box prompt is decoded in.
+
+    A window that holds the whole box is preferred (exclusive right and bottom,
+    as the prompt file stores them); among those, the one whose edges are
+    farthest from the box (the smallest of the four box-to-edge distances is
+    largest); ties to the first. Only when no window holds the box (a component
+    wider or taller than the window allows) the window that keeps most of the
+    box is taken, ties broken by the centre margin of ``choose_window``, and
+    ``contained`` is False so the run can count it. Registered 2026-10-14 before
+    any oracle run (e5_frozen.yaml oracle.window_choice): the earlier rule chose
+    by the centre's smallest margin alone, which near a canvas edge ties every
+    window of a row and sent part of the large boxes to a window that cut them.
+    """
+    x0, y0, x1, y1 = (int(v) for v in box)
+    win = int(window)
+    best, best_margin = None, None
+    for index, (top, left) in enumerate(boxes):
+        if left <= x0 and x1 <= left + win and top <= y0 and y1 <= top + win:
+            margin = min(x0 - left, left + win - x1, y0 - top, top + win - y1)
+            if best_margin is None or margin > best_margin:
+                best, best_margin = index, margin
+    if best is not None:
+        return best, True
+    overlaps = [
+        max(0, min(x1, left + win) - max(x0, left)) * max(0, min(y1, top + win) - max(y0, top))
+        for top, left in boxes
+    ]
+    most = max(overlaps)
+    candidates = [index for index, area in enumerate(overlaps) if area == most]
+    if len(candidates) == 1:
+        return candidates[0], False
+    centre_pick = choose_window([boxes[i] for i in candidates], win, box_center(box))
+    return candidates[centre_pick], False
 
 
 # ---- decoders: one window at a time, prompts in window coordinates, probabilities in [0, 1] ----
@@ -221,11 +261,16 @@ def decode_image(decoder, cv, window, boxes, prompts_by_class, kind, k_levels):
     """{cls: {k: canvas map}} of one image plus counts and seconds; one set_image per window that has prompts."""
     maps = {cls: {k: np.zeros(cv.hw, dtype=np.float32) for k in k_levels} for cls in LESION_CLASSES}
     per_window = defaultdict(list)
+    uncontained = 0
     for cls in LESION_CLASSES:
         for prompt in prompts_by_class.get(cls, []):
-            index = 0 if window is None else choose_window(boxes, window, box_center(prompt["box"]))
+            if window is None:
+                index = 0
+            else:
+                index, contained = window_for_box(boxes, window, prompt["box"])
+                uncontained += 0 if contained else 1
             per_window[index].append((cls, prompt))
-    stats = {"n_prompts": 0, "n_windows_encoded": 0, "encode_seconds": 0.0, "decode_seconds": 0.0}
+    stats = {"n_prompts": 0, "n_windows_encoded": 0, "encode_seconds": 0.0, "decode_seconds": 0.0, "n_prompts_box_uncontained": uncontained}
     for index in sorted(per_window):
         top, left = boxes[index]
         if window is None:
@@ -302,7 +347,7 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
             decoder, record = build_decoder(model, frozen, device)
         else:
             record = {"checkpoint": None, "device": str(device), "decoder": type(decoder).__name__}
-        totals = {"n_prompts": 0, "n_windows_encoded": 0, "encode_seconds": 0.0, "decode_seconds": 0.0, "n_windows": 0}
+        totals = {"n_prompts": 0, "n_windows_encoded": 0, "encode_seconds": 0.0, "decode_seconds": 0.0, "n_windows": 0, "n_prompts_box_uncontained": 0}
         resumed = 0
         started = time.perf_counter()
         for index, image_id in enumerate(ids):
@@ -340,6 +385,7 @@ def run(model, kind, set_name, split, variant=geo.MAIN, geometry=geo.G1, device=
                     "box_convention": BOX_CONVENTION,
                     "n_images": len(ids), "limit": limit, "resumed_images": resumed, "n_windows": totals["n_windows"],
                     "n_windows_encoded": totals["n_windows_encoded"], "n_prompts": totals["n_prompts"],
+                    "window_choice": WINDOW_CHOICE, "n_prompts_box_uncontained": totals["n_prompts_box_uncontained"],
                     "predict_seconds": round(elapsed, 1), "encode_seconds_total": round(totals["encode_seconds"], 1),
                     "decode_seconds_total": round(totals["decode_seconds"], 1),
                     "seconds_per_prompt_mean": round(totals["decode_seconds"] / totals["n_prompts"], 4) if totals["n_prompts"] else None,
