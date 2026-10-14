@@ -69,7 +69,7 @@ zero_shot:
                    min_mask_region_area: 25, use_m2m: true, apply_postprocessing: false}
   pixel_score: predicted_iou          # stability_score reported as well
   outputs: {main: any_lesion, upper_bound: oracle_class}
-  area_cap: null                      # largest lesion component on the IDRiD and DDR training canvases, set before inference
+  area_cap: 244004                  # DDR 007-6562-400 HE; largest training lesion component on the 1440 canvas (python -m bench.e5 areacap, 2026-10-14)
   sam3:
     checkpoint: sam3.pt
     confidence_threshold: 0.0         # keep all 200 queries; the processor default 0.5 cuts the PR curve

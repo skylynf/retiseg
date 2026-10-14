@@ -72,3 +72,6 @@ E5 推理档代码（2026-10-13，本机；pull 到 a4339e3 之后）
 4. 文献：LEDGER 加 M-HRDEC-2024（批次 addendum-20261014），meta 笔记，08 加第六节"冻结后补充"；PDF 与 L1 抽取待下载。
 5. 测试：bench/tests/test_fundus_expansion.py 8 个用例，本机只有无 torch 的 3 个通过（边距校验、预算、配方读取），其余要在服务器跑。HRDecoder 包装器没法在本机核对 mmseg 导入，17 第十五节第 1 条先核对。
 
+pull 46888f1（2026-10-14 08:10 +0800，服务器）
+第十三节 CPU 已于 05:57 结束。指标：BF_e3b_m2mrf_fgadr_seed0/metrics_test.json mAUPR 0.359（排除 106 张；完整集 0.349 在 metrics_test_full.json）；BF_e4_m2mrf_ddr_retles_seed0/metrics_test.json 0.286；BF_e4_m2mrf_retles_seed0/metrics_test.json 0.469（排除 26076_left）；BF_e8_m2mrf_ddr10_seed0/metrics_test.json 0.307。e5_frozen.yaml 的 area_cap 244004，与 runs/E5/prompts/ 八个提示文件一起提交。nnU-Net 603/604 转换、2d 预处理和 splits 完成；info 打印 Dataset603_TJDR_std、Dataset604_FGADR。official_code/HRDecoder 已 submodule update 到 cfc6c88。pretrained/ 里是 hrdecoder_idrid_iter_20000.pth、hrdecoder_ddr_iter_40000.pth，还没有第十五节写的 hrdecoder_idrid.pth、hrdecoder_ddr.pth。GPU 2–7 仍有进程。第十五节的环境核对、测试、冒烟还没做。
+
