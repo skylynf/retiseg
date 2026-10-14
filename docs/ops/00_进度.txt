@@ -19,6 +19,7 @@
 2026-10-08  B1 暂停（算力，用户决定）。预算规则两次修订后冻结：IDRiD 1000、DDR 400 个等效 epoch（探测曲线平滑后最高点不早于 90% 才翻倍）。B-std 统一队列启动（48 项）。U-Net 稀有类塌缩确诊为逐图 Dice（平滑 1）的机制，只读训练块和验证。
 2026-10-11  B-std 种子 0 全部出数（HRNet 两库第一）；HACDR 打分修复（torch 1.10 的 weights_only）。用户决定：种子 1、2 暂缓。启动 E1r bs4（A100）、U-Net 整批 Dice 诊断、nnU-Net 两种配置、B1 补位。泄漏审计 IDRiD/DDR：无近重复。E5 设计写成 15。范围精简写成 16（剩余约 5500 A100 时压到约 810）；L1 原文数字抽取完成。
 2026-10-12  nnU-Net 默认 0.671 / 0.432，ResEnc-M 0.631 / 0.428。U-Net 整批 Dice 诊断验证 0.569 / 0.544；用户决定主表 U-Net 采用整批 Dice（bs_frozen.yaml recipe_revisions，原运行改名 *_registered）；E5 五项待定按建议（TF32、natureCFP、按代码、塌缩同 U-Net 规则、编码器对照后按 16 缩减）；以 FGADR 等训练时评测去重（leak_exclusions.json）。独立测试接线（e3a_frozen.yaml、bench/e3a.py）；全库泄漏审计（FGADR _3 批来自 EyePACS，与 Retinal-Lesions 90 张同图；FGADR 内部同眼重复；TJDR_uwf 跨划分重复 2 对）；E2c 接线；E5 训练档五个包装器接线。服务器 09:08：停 B1；E1r bs4 打分 61.19 / 0.549；U-Net 两库种子 0 重跑；E2c 只排 DDR。本机：快照接入论文、R3/R4 改写、17 任务单。
+2026-10-14  Luming 确认 E5 推理档的全部登记（D1–D9、评审修复 6/7/16、预算规则 a）、表 6/图 5 的呈现方式、加 CI、协议锁文件（E5 首个测试指标后）、MAPLES-DR 官方测试 60 张；细节在第三节前的待办清单下。
 2026-10-14  albert 分支并入 main（Liuyc05）：E5 推理档用 albert 按 16 写的实现，main 10-13 的实现与 runs/E5/prompts/、area_cap 244004 弃用（未解码、未读测试指标）；队列里推理档改为 e5_infer_pool / e5_infer_test，关着等 Luming 确认 D1–D9；评审修复 16（框装进窗口、选择一致性）。记录 docs/ops/25。
 
 三、最近的服务器记录（原文；新记录追加在后面）
@@ -94,6 +95,12 @@ E5 推理档队列先关（2026-10-14，Liuyc05）
 6. 21 第 29 条 b：是否给仓库加 GitHub Actions，在每次推送上用 CPU 版 torch 跑 bench/tests 与 test_collect_runs（test_collect_runs 已可由 pytest 收集、缺 pandas 跳过）。
 7. 21 第 34 条 b、c：协议文件冻结后是否加 sha256 锁文件与配套测试；albert 合并进 main 是否走 PR，由 Luming 在 PR 描述里逐条确认第 1–4 项。
 8. 本机收尾（21 第 4、8 条）：python docs/paper/retiseg_paper/paper/scripts/build_placeholder.py --force → collect_runs.py → collect_literature.py → make -C paper；工作站albert 没有 runs/，在这里重生成会抹掉 results.csv 的实测 E2 行，所以只能在本机做。重生成后 any 行的新指标名 aupr_any_lesion 和 SAM 3 的 text:selected 键才会出现在 results.csv 里。 2026-10-13 复审 N3：合并 albert 与这次重生成必须放在同一次操作里；评审修复 15 起取数函数缺 aupr_any_lesion 行直接报错，不重生成 make 会失败而不是带着空行构建。
+Luming 2026-10-14 确认（本机代记，依据聊天里"全部按照你推荐的方式完成"）：
+  第 1 项 D1–D9 全部确认；第 2 项评审修复 6、7、16 确认；第 3 项确认（每模型各选、select_rule 不变）；第 4 项选 a（保留预算规则：128 当选时该模型的 TJDR_uwf 只跑 fov 变体，表里以 fov 顶替并标注画布，冒烟后按 --estimate 可再议）；
+  第 5 项呈现：auto_oracle_class 与理想提示合为"读测试标签的上界"一块；监督模型（M2MRF、nnU-Net）的任意病灶 AUPR 作参考（表 6 脚注、图 5a 虚线、图 5e 菱形）；fov 顶替格用脚注加画布标注，不另加列；零样本块内统一用任意病灶 AUPR 作汇总（SAM 3 也取 any 行），最好/次好只在各块内排名，图 5e 零样本组内比任意病灶 AUPR——当晚已改进表 6、图 5、make_numbers 与 R3 文字；
+  第 6 项加 GitHub Actions（.github/workflows/tests.yml，当晚已加）；第 7 项 b 加协议 sha256 锁文件，时点定为读出首个 E5 测试指标、e5_frozen.yaml 冻结之后（本机做）；c 已以 PR #1 完成；
+  另确认：MAPLES-DR 只用官方测试 60 张；R4 定稿等 MAPLES-DR 测完。
+  服务器据此可以在 E5 推理档冒烟后直接打开 e5_infer_pool（17 第七节）。
 
 albert 分支并入 main（2026-10-14，Liuyc05；记录与理由在 docs/ops/25）
 1. 合并前先在 albert 上做了评审修复 16（3a1bc77）：b 档每个框在能完整装下它的窗口里解码（原规则靠近画布边缘会选到截断框的窗口；1440 画布上宽高 ≤512 的框约 0.8%、≤800 的约 1.5% 本可装下却被截），装不下的框计入 predicted.json；a 档和 SAM 3 拼装的测试目录记下所选的面积上限 / 措辞（run_params.json），选择重做后旧目录报错。登记 e5_frozen.yaml oracle.window_choice，读到任何 E5 测试指标之前。
@@ -109,3 +116,10 @@ albert 合并后的收尾、MAPLES-DR 数据接入、文档合并（2026-10-14 �
 4. 论文侧第八个测试集：data.py TESTS/INDEPENDENT/FINE_INDEPENDENT 加 MAPLES-DR（细档），DATASETS 加一行（198 张，官方测试 60，"pixel masks, 7 retinologists; MA/HE/EX AI-assisted"）；style.py 档位与短标签；build_placeholder 的 TESTS、BASE、SHIFT、标注审计占位；fig6 列码 M；表 1 注、方法（来源段、档位、映射、数据可得性）、结果（八个测试集、独立来源列表）、讨论（未来工作去掉 MAPLES-DR）；Friedman N=8。results.csv 整表重生成（上一条第 8 项），实测行 6167 → 6246（新增的是 any 行），无丢失；make 通过，PDF 通过。细档平均含 MAPLES-DR 占位后，R4 的 indep.* 宏仍是占位（它们原本就因专用模型与 E5 占位而是占位）。
 4′. 图 4 的版式原按 14 行模型写死（面板顶边 15/75/139/189 mm），主表扩到 19 行后面板互相压住（10-14 专用模型扩充时重生成过但没看图）；改为按模型数算面板顶边与图高，面板 b 的测试列加宽、c 的折线加 MAPLES-DR 一列（Wilcoxon 括号指向 FGADR 不变）、e 的脚注按测试集数写；图 6 面板 b 加宽到 50 mm，MAPLES-DR 的短标签用 "Maples"。
 5. 文档：17 重写为第二版（只留还要做的，旧版归档 docs/ops/archive/17_服务器任务单_v1_20261012-20261014.txt，文末有章节对照）；00 的 albert 逐条记录归档，待办清单留在 00；22 修复建议并入 20 第三部分后删除；21 第 39、46 条标已处理，加第 47 条（tar.gz）、第 48 条（MAPLES-DR 读法）；README、CHECKPOINT、07、13、14 M1、19、25 第六节同步。
+
+Luming 的决定落地（2026-10-14 晚，本机）
+1. 决定清单见「待用户 Luming 处理」下的确认行。e5_frozen.yaml 只加了一行头注（确认日期），内容未动；queue.yaml 未动（e5_infer_pool 由服务器在推理档冒烟后打开，17 第七节）。
+2. 表 6 / 图 5 按决定改：零样本块只剩 SAM、SAM 2 的类无关任意病灶 AUPR 与 SAM 3（text:selected，汇总也取 any 行）；"读测试标签的上界"块 = 按重叠分类的自动掩码 + 四行理想提示；最好/次好只在块内排（单行列不标）；参考行脚注给 M2MRF、nnU-Net 的任意病灶 AUPR（现有实测只有 nnU-Net DDR 种子 1、2，其余运行早于该指标，脚注写 --）；图 5a 零样本行旁画 nnU-Net 任意病灶虚线（DDR 有、IDRiD 无），图 5e 零样本柱为任意病灶 AUPR、参考柱加菱形；make_numbers 的 fm.zero.* 改为任意病灶（不再在测试集上取措辞最大值），新增 fm.zero.ub.*、fm.any.ref.nnunet.IDRiD；R3 文字同改；data.py 加 reference_any_lesion、fov_stands_in（fov 顶替格的脚注标记，供以后的补充表用）。build_placeholder 加 SAM 3 text:selected 的 any 占位行并整表重生成（实测行 6,246 不变）；make、PDF、collect 测试通过。
+   可选的 CPU 补数：M2MRF、nnU-Net 种子 0 的内部测试 metrics_test.json 早于任意病灶指标，想让参考值齐全可按 17 第四节第 8 条用现有概率图只重评一次。
+3. CI：.github/workflows/tests.yml（push/PR；浅检出子模块；CPU torch + requirements-train + pandas/matplotlib；pytest bench/tests 去掉 test_h2former_forward.py）。21 第 2 条的六个数据用例加了 skipif（dataset/prepared/IDRiD、DDR 不在时跳过）。第一次运行的结果要看 Actions 页面；失败记 21。
+4. 协议锁文件：按决定等首个 E5 测试指标读出后由本机加（21 第 34 条 b 标已采纳、待时点）。

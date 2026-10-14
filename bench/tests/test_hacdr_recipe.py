@@ -24,6 +24,9 @@ from bench.models.registry import WRAPPERS, build_model
 from bench.scripts.train_hacdr_b1 import training_step
 
 REPO = Path(__file__).resolve().parents[2]
+# the prepared IDRiD / DDR layout lives on the workstation and the server only (docs/ops/21 item 2; CI 2026-10-14)
+needs_prepared = pytest.mark.skipif(not (REPO / "dataset" / "prepared" / "IDRiD").is_dir() or not (REPO / "dataset" / "prepared" / "DDR").is_dir(),
+                                    reason="dataset/prepared/IDRiD and DDR are not on this machine")
 
 
 def _namespace(dataset):
@@ -171,6 +174,7 @@ def test_paramwise_keys_follow_the_longest_match():
     assert by_name["decode_head.norm.weight"]["weight_decay"] == pytest.approx(recipe.weight_decay)
 
 
+@needs_prepared
 def test_ddr_loss_channels_pretrained_and_probability_export(tmp_path):
     from bench.common.io import read_fov, read_prob_quantized
     from bench.predict import predict_image
@@ -227,6 +231,7 @@ def test_ddr_loss_channels_pretrained_and_probability_export(tmp_path):
     assert math.isfinite(value)
 
 
+@needs_prepared
 def test_one_prepared_image_step_is_finite_when_the_network_imports():
     try:
         value = training_step(REPO / "dataset" / "prepared" / "IDRiD")

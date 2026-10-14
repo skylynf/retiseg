@@ -14,7 +14,7 @@ from retifig import data as D
 from retifig import panels as P
 from retifig import style as S
 
-MODE_COLOR = {"Zero-shot": "#c8c4ee", "Oracle prompt": "#9085e9", "PEFT": "#6a5bc9", "Encoder + decoder": "#4a3aa7"}
+MODE_COLOR = {"Zero-shot": "#c8c4ee", "Upper bound": "#9085e9", "PEFT": "#6a5bc9", "Encoder + decoder": "#4a3aa7"}
 PROMPT_COLOR = {"SAM": "#2a78d6", "SAM 2": "#eb6834", "MedSAM": "#1baf7a"}
 ROW = 3.05
 
@@ -45,19 +45,23 @@ def any_lesion(model, variant, test):
 def rows_for(test):
     """(kind of use, label, per-class AUPR, summary) per row; summary None means the mean of the four classes.
 
-    Zero-shot SAM and SAM 2 (docs/paper/16 E5a, review fix 11 / B2): the per-class cells are the
-    class-by-overlap upper bound, the summary is the any-lesion AUPR of the class-agnostic map;
-    SAM 3 shows the wording chosen on the validation pool (text:selected), the three wordings are
-    panel c. Nothing here is chosen on a test set.
+    Blocks as decided on 2026-10-14 (docs/ops/00, Luming list item 5): the zero-shot block holds only what sees
+    no test label and is summarised by the any-lesion AUPR of the class-agnostic map (automatic masks carry no
+    class, so their per-class cells are empty; SAM 3's per-class cells are its text prompts, its summary the
+    any-lesion AUPR of the same maps); everything that reads the test labels (masks classed by overlap, oracle
+    prompts from every component) is the upper-bound block. Nothing here is chosen on a test set.
     """
+    blank = np.full(4, np.nan)
     out = [
-        ("Zero-shot", "SAM · auto masks, class by overlap†", e5("SAM", "zero_shot:auto_oracle_class", test), any_lesion("SAM", "zero_shot:auto_any_lesion", test)),
-        ("Zero-shot", "SAM 2 · auto masks, class by overlap†", e5("SAM 2", "zero_shot:auto_oracle_class", test), any_lesion("SAM 2", "zero_shot:auto_any_lesion", test)),
-        ("Zero-shot", "SAM 3 · text, wording chosen on val", e5("SAM 3", "text:selected", test), None),
-        ("Oracle prompt", "SAM · all boxes", e5("SAM", "oracle:box:all", test), None),
-        ("Oracle prompt", "SAM 2 · all points", e5("SAM 2", "oracle:point:all", test), None),
-        ("Oracle prompt", "SAM 2 · all boxes", e5("SAM 2", "oracle:box:all", test), None),
-        ("Oracle prompt", "MedSAM · all boxes", e5("MedSAM", "oracle:box:all", test), None),
+        ("Zero-shot", "SAM · auto masks, class-agnostic", blank, any_lesion("SAM", "zero_shot:auto_any_lesion", test)),
+        ("Zero-shot", "SAM 2 · auto masks, class-agnostic", blank, any_lesion("SAM 2", "zero_shot:auto_any_lesion", test)),
+        ("Zero-shot", "SAM 3 · text, wording chosen on val", e5("SAM 3", "text:selected", test), any_lesion("SAM 3", "text:selected", test)),
+        ("Upper bound", "SAM · auto masks, class by overlap†", e5("SAM", "zero_shot:auto_oracle_class", test), None),
+        ("Upper bound", "SAM 2 · auto masks, class by overlap†", e5("SAM 2", "zero_shot:auto_oracle_class", test), None),
+        ("Upper bound", "SAM · all boxes", e5("SAM", "oracle:box:all", test), None),
+        ("Upper bound", "SAM 2 · all points", e5("SAM 2", "oracle:point:all", test), None),
+        ("Upper bound", "SAM 2 · all boxes", e5("SAM 2", "oracle:box:all", test), None),
+        ("Upper bound", "MedSAM · all boxes", e5("MedSAM", "oracle:box:all", test), None),
         ("PEFT", "SAMed (LoRA)", e5("SAMed", "peft", test, test), None),
         ("PEFT", "SAM-Adapter", e5("SAM-Adapter", "peft", test, test), None),
         ("PEFT", "SAM2-UNet", e5("SAM2-UNet", "peft", test, test), None),
@@ -84,6 +88,13 @@ def panel_a(fig, top):
         S.text_mm(fig, f"{test} test", x, top - 7.6, fontsize=6.4, fontweight="bold")
         axb = S.axes_mm(fig, x + 23.2, top, 15, ROW * len(rows))
         P.score_bars(axb, np.array([summary_of(r) for r in rows]), [MODE_COLOR[r[0]] for r in rows], xmax=0.9, fs=5.0)
+        # the zero-shot rows are read against the any-lesion AUPR of a trained reference on the same test set
+        # (decided 2026-10-14); drawn only where a measured run carries the metric
+        n_zero = sum(1 for r in rows if r[0] == "Zero-shot")
+        ref_any = D.reference_any_lesion("nnU-Net", test)
+        if ref_any is not None:
+            axb.plot([ref_any, ref_any], [0, n_zero], color=S.INK, lw=0.7, ls=(0, (1, 1.5)), zorder=4, transform=axb.transData)
+            axb.text(ref_any + 0.025, 1.0, "nnU-Net\nany-lesion", fontsize=4.2, color=S.INK2, ha="left", va="center", linespacing=1.0, clip_on=False)
         axb.set_xticks([0, 0.4, 0.8])
         axb.xaxis.tick_top()
         axb.spines["bottom"].set_visible(False)
@@ -98,7 +109,7 @@ def panel_a(fig, top):
             for mode in dict.fromkeys(modes):
                 n = modes.count(mode)
                 ax.plot([-1.84, -1.84], [start + 0.12, start + n - 0.12], transform=trans, color=MODE_COLOR[mode], lw=2.2, clip_on=False, solid_capstyle="butt")
-                ax.text(-1.9, start + n / 2, mode.replace(" + ", " +\n").replace("Oracle prompt", "Oracle\nprompt"), transform=trans, ha="right", va="center", fontsize=5.4, linespacing=1.1)
+                ax.text(-1.9, start + n / 2, mode.replace(" + ", " +\n").replace("Upper bound", "Upper\nbound"), transform=trans, ha="right", va="center", fontsize=5.4, linespacing=1.1)
                 if start:
                     ax.plot([-1.86, 4.0], [start, start], transform=trans, color=S.PAPER, lw=1.6, clip_on=False)
                 start += n
@@ -106,7 +117,7 @@ def panel_a(fig, top):
             S.tag_simulated(axb, loc="tr", dy=0.1)
         x += 43
     P.colorbar(fig, S.rect_mm(fig, 146, top + 2, 2.2, 14), S.CMAP_SEQ, 0, 0.9, "AUPR", ticks=[0, 0.3, 0.6, 0.9], orientation="vertical")
-    S.text_mm(fig, "Zero-shot and oracle rows use no\ntraining image. PEFT and encoder +\ndecoder rows are trained on the\nsource of the test set (internal test).\nOracle prompts come from ground-\ntruth components: an upper bound,\nnot a usable setting.\n† per-class cells assign each auto-\nmatic mask the class it overlaps most\n(upper bound); the bar is the any-\nlesion AUPR of the class-agnostic\nmap. Density, area cap and SAM 3\nwording were chosen on the\nvalidation pool.", 146, top + 21, fontsize=4.9, color=S.INK2, linespacing=1.25)
+    S.text_mm(fig, "Zero-shot rows see no test label; the\nbar is the any-lesion AUPR of the\nclass-agnostic map (automatic masks\ncarry no class). Density, area cap and\nSAM 3 wording were chosen on the\nvalidation pool. Upper-bound rows\nread the test labels († masks given the\nclass they overlap most; oracle\nprompts from every component) and\nare not usable settings. PEFT and\nencoder + decoder rows are trained\non the test set's source.", 146, top + 19, fontsize=4.7, color=S.INK2, linespacing=1.2)
 
 
 def panel_b(fig, top):
@@ -198,7 +209,7 @@ def panel_e(fig, top):
     sm = D.score_matrix("DDR")
     for mode in MODE_COLOR:
         name, v = best("DDR", mode)
-        cats.append(mode.replace(" + ", " +\n") + "\n" + name.replace(" + UPerNet", ""))
+        cats.append(mode.replace(" + ", " +\n") + ("\n(any-lesion)" if mode == "Zero-shot" else "") + "\n" + name.replace(" + UPerNet", ""))
         internal.append(v)
         if mode in ("PEFT", "Encoder + decoder"):
             key = {"SAMed": "SAMed", "SAM-Adapter": "SAM-Adapter", "SAM2-UNet": "SAM2-UNet", "MedSAM": "MedSAM (full FT)", "RETFound + UPerNet": "RETFound + UPerNet"}[name]
@@ -207,11 +218,13 @@ def panel_e(fig, top):
             rows = [r for r in rows_for("TJDR-std") if r[0] == mode and r[1].startswith(name)]
             indep.append(max(summary_of(r) for r in rows))
         colors.append(MODE_COLOR[mode])
+    ref_any = []
     for ref in ("M2MRF", "nnU-Net"):
         cats.append(f"Reference\n{ref}")
         internal.append(sm.loc[ref, "DDR"])
         indep.append(sm.loc[ref, "TJDR-std"])
         colors.append(S.FAMILY[D.FAMILY_OF[ref]])
+        ref_any.append(D.reference_any_lesion(ref, "DDR"))
     ax = S.axes_mm(fig, 100, top, 76, 20)
     x = np.arange(len(cats))
     ax.bar(x - 0.19, internal, 0.34, color=colors, lw=0, zorder=2)
@@ -219,6 +232,13 @@ def panel_e(fig, top):
     for xi, a, b in zip(x, internal, indep):
         ax.text(xi - 0.19, a + 0.012, f"{a:.2f}", ha="center", va="bottom", fontsize=5.0)
         ax.text(xi + 0.19, b + 0.012, f"{b:.2f}", ha="center", va="bottom", fontsize=5.0, color=S.INK2)
+    # the zero-shot bar is an any-lesion AUPR (decided 2026-10-14); the references' any-lesion AUPR on the DDR test
+    # is drawn as a diamond on their internal bar so the two are read on the same scale (missing where the run
+    # predates the metric)
+    for xi, a in zip(x[-2:], ref_any):
+        if a is not None:
+            ax.scatter([xi - 0.19], [a], marker="D", s=11, color=S.PAPER, edgecolors=S.INK, linewidths=0.6, zorder=5)
+            ax.text(xi - 0.19 - 0.22, a, f"{a:.2f}", ha="right", va="center", fontsize=4.6, color=S.INK2)
     ax.set_xticks(x)
     ax.set_xticklabels(cats, fontsize=4.9, linespacing=1.15)
     ax.set_ylim(0, 0.6)
@@ -227,9 +247,10 @@ def panel_e(fig, top):
     ax.axvline(3.5, color=S.INK2, lw=0.5, ls=(0, (2, 2)))
     S.light_grid(ax)
     from matplotlib.patches import Patch
-    ax.legend(handles=[Patch(fc=S.INK2, label="DDR test (internal for trained models)"), Patch(fc=S.INK2, alpha=0.45, label="TJDR-std test (independent)")],
-              loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=2, fontsize=5.4, columnspacing=1.2, handlelength=1.0)
-    S.tag_simulated(ax, loc="tr")
+    ax.legend(handles=[Patch(fc=S.INK2, label="DDR test (internal for trained models)"), Patch(fc=S.INK2, alpha=0.45, label="TJDR-std test (independent)"),
+                       Line2D([], [], ls="", marker="D", ms=3.2, mfc=S.PAPER, mec=S.INK, label="ref. any-lesion AUPR (DDR)")],
+              loc="lower left", bbox_to_anchor=(-0.02, 1.0), ncol=3, fontsize=4.8, columnspacing=0.8, handlelength=1.0, handletextpad=0.4)
+    S.tag_simulated(ax, loc="tl", dx=0.01, dy=-0.2)
 
 
 def main():
@@ -247,7 +268,7 @@ def main():
     S.text_mm(fig, "Does ophthalmic pretraining help?", 8, 108.6, fontsize=6.8, fontweight="bold")
     panel_d(fig, 117)
     S.label_mm(fig, "e", 86, 108)
-    S.text_mm(fig, "Best of each kind of use against the references", 92, 108.6, fontsize=6.8, fontweight="bold")
+    S.text_mm(fig, "Best of each block against the references (zero-shot: any-lesion AUPR)", 92, 108.6, fontsize=6.8, fontweight="bold")
     panel_e(fig, 117)
     S.save(fig, "fig5_foundation")
 

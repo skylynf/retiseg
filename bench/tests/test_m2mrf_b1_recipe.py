@@ -22,6 +22,9 @@ from bench.runtime import adjust_lr, build_optimizer
 from bench.scripts.predict_m2mrf_b1 import write_image
 
 REPO = Path(__file__).resolve().parents[2]
+# the prepared IDRiD / DDR layout lives on the workstation and the server only (docs/ops/21 item 2; CI 2026-10-14)
+needs_prepared = pytest.mark.skipif(not (REPO / "dataset" / "prepared" / "IDRiD").is_dir() or not (REPO / "dataset" / "prepared" / "DDR").is_dir(),
+                                    reason="dataset/prepared/IDRiD and DDR are not on this machine")
 
 
 def test_idrid_and_ddr_iterations_differ_and_do_not_name_train_official():
@@ -115,6 +118,7 @@ def test_forward_permutes_ex_he_se_ma_into_ma_he_ex_se():
     assert out[0, :, 0, 0].tolist() == [4, 2, 1, 3]
 
 
+@needs_prepared
 def test_scripts_call_b1_input_and_write_prob():
     import bench.scripts.predict_m2mrf_b1 as predict_script
     import bench.scripts.train_m2mrf_b1 as train_script
@@ -128,6 +132,7 @@ def test_scripts_call_b1_input_and_write_prob():
     assert len(split) == 44
 
 
+@needs_prepared
 def test_one_prepared_image_writes_four_full_size_maps(tmp_path):
     model = build_model("M2MRF")
     if model.network is None:

@@ -398,6 +398,9 @@ def foundation(sim):
                 if i == 0:  # the wording "chosen on the validation pool" (a_sam3_selected, variant text:selected): the first one, on every test set alike
                     chosen = v
             sim.add("E5", "SAM 3", "text:selected", "none", -1, test, cls, "aupr", chosen)
+        # the any-lesion AUPR of the assembled SAM 3 maps (collect_runs writes cls any for every E5 report; the zero-shot
+        # block is summarised by it, decided 2026-10-14)
+        sim.add("E5", "SAM 3", "text:selected", "none", -1, test, "any", "aupr_any_lesion", float(np.clip(0.9 * np.mean(list(sam3.values())) * r.uniform(0.8, 1.2), 0.002, 0.9)))
     # Oracle prompts: performance against prompts per image and class.
     ceiling = {
         ("SAM", "box"): {"MA": 0.30, "HE": 0.62, "EX": 0.66, "SE": 0.72},

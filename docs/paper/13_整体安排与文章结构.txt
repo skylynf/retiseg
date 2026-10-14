@@ -60,7 +60,7 @@ E3a    独立测试：E1、E2 的全部检查点推理                 Q2    12 
 E3b    训练来源交叉效应：代表模型在 TJDR 常规、FGADR 上训 Q3    导出、预算探测（U-Net 修好前用 M2MRF） M2MRF 两个来源已打分：TJDR 标准内部测试 0.554，FGADR 完整测试集 0.349（同眼 106 张未去掉）。U-Net 和其余模型未开始；nnU-Net 的 E3b 已接线（17 第十一节第 2 条，等数据转换）
 E4     标注粒度：DDR、FGADR、Retinal-Lesions 及其组合    Q3    Retinal-Lesions 下载          M2MRF：DDR+FGADR 抽 383、全集在 DDR 测试集上 0.336、0.320。另两档已训完、概率图在、还没有 metrics_test.json。U-Net 未开始
 E5     基础模型四档：零样本、理想提示、参数高效微调、    Q2    权重申请（SAM 3、RETFound   训练档已写好。2026-10-13 公开权重和三份 gated（SAM 3、RETFound ×2）已在 pretrained/，sha256 在 e5_frozen.yaml；MedSAM 和 DINOv2 没有。训练未开始；
-       编码器加解码头（含 DINOv2 和 ImageNet 编码器对照）       两份）、接口                 推理档代码 2026-10-14 随 albert 分支并入 main（bench/e5，design/23、24，ops/25），队列阶段 e5_infer_pool/test 关着等 Luming 确认 D1–D9；范围按 16
+       编码器加解码头（含 DINOv2 和 ImageNet 编码器对照）       两份）、接口                 推理档代码 2026-10-14 随 albert 分支并入 main（bench/e5，design/23、24，ops/25），Luming 2026-10-14 已确认 D1–D9 等全部登记，服务器冒烟后打开 e5_infer_pool（17 第七节）；范围按 16
 E6     输入加血管图                                      Q3    代表模型                     取消（16），未来工作
 E7     分辨率：长边 512、1024、1440、原分辨率块训练      Q3    代表模型                     M2MRF 长边 512 在训（2026-10-13 23:55 第 146800/293600 步，验证 0.496）。原分辨率和另一模型未开始
 E8     训练量：DDR 10–100%、DDR+IDRiD、细粒度合并、全部合并 Q3 E3b 的导出                   M2MRF：10% 已到预算、在写概率图（验证最好 0.479）；50% 第 12540/83600 步（验证 0.453）；细粒度合并第 8360/83600 步（验证 0.364）。U-Net 未开始。时间为 2026-10-13 23:55

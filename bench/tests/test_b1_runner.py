@@ -29,6 +29,9 @@ from bench.scripts.launch_b1 import main as launch_main
 from bench.train import run_training
 
 REPO = Path(__file__).resolve().parents[2]
+# the prepared IDRiD / DDR layout lives on the workstation and the server only (docs/ops/21 item 2; CI 2026-10-14)
+needs_prepared = pytest.mark.skipif(not (REPO / "dataset" / "prepared" / "IDRiD").is_dir() or not (REPO / "dataset" / "prepared" / "DDR").is_dir(),
+                                    reason="dataset/prepared/IDRiD and DDR are not on this machine")
 SOURCE = (
     "Ronneberger 2015 uses cross-entropy from scratch. "
     "Adam and 1e-4 are the E0 pipeline settings, not a searched optimum. "
@@ -226,6 +229,7 @@ def test_collate_pads_with_zero_after_normalization():
     assert torch.all(images[0, :, :, 19:] == 0)
 
 
+@needs_prepared
 def test_train_official_is_rejected():
     root = REPO / "dataset/prepared/IDRiD"
     with pytest.raises(ValueError, match="train_official"):
@@ -326,6 +330,7 @@ def test_optimizer_steps_follow_the_effective_batch(tmp_path):
     assert last["step"] == 2
 
 
+@needs_prepared
 def test_one_idrid_training_image_writes_a_full_size_probability(tmp_path):
     root = REPO / "dataset/prepared/IDRiD"
     model = UNet().cpu().eval()

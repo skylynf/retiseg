@@ -17,7 +17,7 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 - 独立测试（14 M10）：主变体 55 份；R4 第一段实数（DDR 训练平均降 47–56%，IDRiD 训练降 71–75%）。队列 e3a 阶段最多两张卡继续补；每个新检查点自动排入。
 - 第八个测试集 MAPLES-DR：标注与 MESSIDOR 原图已在服务器（`dataset/maples-dr`、`dataset/messidor`）；`bench/data/maples.py` 直接读（不装包），本机两张图核对通过；论文侧第八列已加（细档，官方测试 60 张）。等服务器导出 + 泄漏审计（17 第十节），之后 e3a 自动补。R4 定稿前要测完。
 - E5 训练档：未开始，等冒烟（17 第六节）；权重除 MedSAM、公开 DINOv2 外都在 `pretrained/`。
-- E5 推理档：albert 分支的实现（`bench/e5/`，`launch_e5_infer.py`，队列阶段 e5_infer_pool / e5_infer_test），关着等 Luming 确认 D1–D9、评审修复 6/7/16、预算规则（00「待用户 Luming 处理」）。第一次池运行把这些定下来。
+- E5 推理档：albert 分支的实现（`bench/e5/`，`launch_e5_infer.py`，队列阶段 e5_infer_pool / e5_infer_test）。D1–D9、评审修复 6/7/16、预算规则 a 已由 Luming 2026-10-14 确认（00 的确认行）；服务器冒烟后打开池阶段（17 第七节），池跑完写回两处 selected 再开测试阶段。表 6/图 5 按确认的口径改好（零样本块任意病灶 AUPR、上界块、块内排名、参考值）。
 - 专用模型扩充（`docs/paper/18`）：五个包装器与任务表已写，等服务器冒烟后开 fundus_seed0（17 第八节）。HRDecoder 作者权重已下载，E1 入口 `bench/predict_hrdecoder.py` + `bench.e3a author --model HRDecoder`，等服务器冒烟（17 第九节）。
 - 影响因素：M2MRF 四项打分（FGADR 训练的 0.349 待带 106 张排除的重评）；U-Net/M2MRF 其余格子旧 launch_factor 在接；SAM2-UNet/RETFound 的重格子在队列后段；nnU-Net E3b 接线完成，等数据转换（17 第十一节）。
 - 队列（`bench/configs/queue.yaml` 第二版）：e3a（≤2 卡）→ e5_seed0 → fundus_seed0（关）→ e5_infer_pool/test（关）→ factor_cheap → nnunet_e3b → factor_e3b_heavy / factor_e7_heavy → 种子 1、2（关）→ e1r（关）。写作按种子 0 的数先写，多种子只换误差棒。
@@ -27,6 +27,9 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 
 ## 规则（不要违反）
 协作规则在 17 第一节：服务器只执行 HEAD 里的 17；一个启动器一份队列（`bench/configs/queue.yaml`，`launch_queue.py`）；排除名单不对齐的指标不进 14、不打包、collect 拒收；服务器只追加 00 第三节，14/13/CHECKPOINT/论文由本机改；回传用 `bench/scripts/pack_handoff.py`。看过测试指标后不改预算、增强、选择规则；`bench/configs/*_frozen.yaml` 只增不改（e5_frozen.yaml 在读到首个 E5 测试指标前允许改写，之后只增）。每个论文相关决定记 14，每次改动记 00；新文档从 26 起编（22 已并入 20，不再用）。
+
+## 自动测试
+GitHub Actions（`.github/workflows/tests.yml`，2026-10-14）：每次 push/PR 用 CPU torch 跑 `bench/tests`（去掉 H2Former 前向，数据与权重相关的用例自动跳过）。红了先看是不是缺跳过标记，记 21，不放松断言。协议 sha256 锁文件在读出首个 E5 测试指标后加（21 第 49 条）。
 
 ## 本机环境限制
 云端工作区没有 torch、连不上 PyPI；涉及 torch 的测试要在用户机器或服务器跑；torch 导入替身下 bench/tests 的队列与 E5 文件可跑（结果在 00）。

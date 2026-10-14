@@ -7,6 +7,9 @@
 # before any E5 inference (decisions D1-D9, docs/ops/00 same day): a registered grid chosen on a validation pool
 # instead of the authors' two parameter sets, SAM ViT-B for the oracle tier, k on four levels, points for SAM 2.1
 # only, the TJDR_uwf canvas of the inference tiers, and how the class-agnostic map is stored.
+# 2026-10-14: Luming confirmed D1-D9, review fixes 6, 7 and 16 and the budget rule as registered (docs/ops/00); nothing
+# below changed with the confirmation. Still to be filled from the validation pool: zero_shot.grid.selected and
+# zero_shot.sam3.selected (written once by the server, then committed).
 experiment: E5
 
 # design/15 section 16; the user delegated all five to the recommendations on 2026-10-12.

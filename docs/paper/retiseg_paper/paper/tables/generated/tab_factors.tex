@@ -16,23 +16,23 @@
 \quad FGADR \tier{mixed} & \ph{.31} \down{\ph{.09}} & \ph{.38} \down{\ph{.09}} & -- & \cellcolor[HTML]{EDCDC8}\ph{.35} {\scriptsize \ph{$$-$$.09}} \\
 \quad Retinal-Lesions \tier{coarse} & \ph{.22} \down{\ph{.17}} & \ph{.28} \down{\ph{.19}} & -- & \cellcolor[HTML]{EBABA3}\ph{.25} {\scriptsize \ph{$$-$$.18}} \\
 \grouprow{5}{Input resolution, long side in pixels (E7) --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}
-\quad 512 & -- & \ph{.24} \down{\ph{.17}} & \ph{.23} \down{\ph{.12}} & \cellcolor[HTML]{ECB8B1}\ph{.23} {\scriptsize \ph{$$-$$.14}} \\
-\quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.41} & \ph{.34} & \ph{.37} \\
-\quad native-resolution patches & -- & \ph{.40} \same{\ph{.00}} & \ph{.33} \down{\ph{.01}} & \cellcolor[HTML]{F0EDE9}\ph{.37} {\scriptsize \ph{$$-$$.01}} \\
+\quad 512 & -- & \ph{.22} \down{\ph{.18}} & \ph{.25} \down{\ph{.06}} & \cellcolor[HTML]{ECC0BA}\ph{.24} {\scriptsize \ph{$$-$$.12}} \\
+\quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.41} & \ph{.31} & \ph{.36} \\
+\quad native-resolution patches & -- & \ph{.43} \up{\ph{.03}} & \ph{.34} \up{\ph{.03}} & \cellcolor[HTML]{E5E9EC}\ph{.39} {\scriptsize \ph{+.03}} \\
 \grouprow{5}{Input resolution (E7) --- lesion-level recall of small lesions on DDR test}
-\quad 512 & -- & \ph{.06} \down{\ph{.28}} & \ph{.10} \down{\ph{.17}} & \cellcolor[HTML]{E99990}\ph{.08} {\scriptsize \ph{$$-$$.23}} \\
-\quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.34} & \ph{.27} & \ph{.30} \\
-\quad native-resolution patches & -- & \ph{.38} \up{\ph{.04}} & \ph{.29} \up{\ph{.02}} & \cellcolor[HTML]{E4E8EC}\ph{.33} {\scriptsize \ph{+.03}} \\
+\quad 512 & -- & \ph{.05} \down{\ph{.30}} & \ph{.11} \down{\ph{.15}} & \cellcolor[HTML]{EA9A92}\ph{.08} {\scriptsize \ph{$$-$$.22}} \\
+\quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.35} & \ph{.26} & \ph{.30} \\
+\quad native-resolution patches & -- & \ph{.40} \up{\ph{.06}} & \ph{.29} \up{\ph{.03}} & \cellcolor[HTML]{E0E7EC}\ph{.35} {\scriptsize \ph{+.04}} \\
 \grouprow{5}{Training amount (E8) --- mAUPR on DDR test; U-Net and M2MRF}
-\quad DDR, 10\% (38 images) & \ph{.16} \down{\ph{.19}} & \ph{.23} \down{\ph{.17}} & -- & \cellcolor[HTML]{EBA9A1}\ph{.20} {\scriptsize \ph{$$-$$.18}} \\
-\quad DDR, 50\% (192) & \ph{.30} \down{\ph{.06}} & \ph{.35} \down{\ph{.05}} & -- & \cellcolor[HTML]{EEDAD6}\ph{.33} {\scriptsize \ph{$$-$$.05}} \\
-\quad DDR, 100\% (383) {\scriptsize\color{inkmuted}(ref.)} & \ph{.36} & \ph{.40} & -- & \ph{.38} \\
-\quad + IDRiD + TJDR standard field (599) & \ph{.37} \up{\ph{.01}} & \ph{.44} \up{\ph{.04}} & -- & \cellcolor[HTML]{E7EAEC}\ph{.41} {\scriptsize \ph{+.03}} \\
+\quad DDR, 10\% (38 images) & \ph{.17} \down{\ph{.15}} & \ph{.22} \down{\ph{.19}} & -- & \cellcolor[HTML]{EBAEA7}\ph{.19} {\scriptsize \ph{$$-$$.17}} \\
+\quad DDR, 50\% (192) & \ph{.29} \down{\ph{.04}} & \ph{.34} \down{\ph{.06}} & -- & \cellcolor[HTML]{EFDEDA}\ph{.32} {\scriptsize \ph{$$-$$.05}} \\
+\quad DDR, 100\% (383) {\scriptsize\color{inkmuted}(ref.)} & \ph{.32} & \ph{.40} & -- & \ph{.36} \\
+\quad + IDRiD + TJDR standard field (599) & \ph{.37} \up{\ph{.04}} & \ph{.44} \up{\ph{.03}} & -- & \cellcolor[HTML]{E2E7EC}\ph{.40} {\scriptsize \ph{+.04}} \\
 \grouprow{5}{Loss, architecture fixed (E9) --- mAUPR on DDR test; U-Net}
-\quad cross-entropy {\scriptsize\color{inkmuted}(ref.)} & \ph{.31} & -- & -- & \ph{.31} \\
-\quad batch Dice & \ph{.33} \up{\ph{.03}} & -- & -- & \cellcolor[HTML]{E7EAEC}\ph{.33} {\scriptsize \ph{+.03}} \\
-\quad cross-entropy + batch Dice (unified protocol) & \ph{.33} \up{\ph{.02}} & -- & -- & \cellcolor[HTML]{EAECEC}\ph{.33} {\scriptsize \ph{+.02}} \\
-\quad cross-entropy + per-image Dice (registered recipe) & \ph{.12} \down{\ph{.19}} & -- & -- & \cellcolor[HTML]{EBA7A0}\ph{.12} {\scriptsize \ph{$$-$$.19}} \\
+\quad cross-entropy {\scriptsize\color{inkmuted}(ref.)} & \ph{.29} & -- & -- & \ph{.29} \\
+\quad batch Dice & \ph{.33} \up{\ph{.04}} & -- & -- & \cellcolor[HTML]{E2E7EC}\ph{.33} {\scriptsize \ph{+.04}} \\
+\quad cross-entropy + batch Dice (unified protocol) & \ph{.33} \up{\ph{.04}} & -- & -- & \cellcolor[HTML]{E0E7EC}\ph{.33} {\scriptsize \ph{+.04}} \\
+\quad cross-entropy + per-image Dice (registered recipe) & \ph{.12} \down{\ph{.17}} & -- & -- & \cellcolor[HTML]{EBACA5}\ph{.12} {\scriptsize \ph{$$-$$.17}} \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize

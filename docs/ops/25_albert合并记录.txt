@@ -65,7 +65,7 @@ albert 分支并入 main 的记录
     3. Luming 确认后：冒烟（--pool-only --limit 2），看 n_prompts_box_uncontained 和 --estimate；清空 runs/E5；开 e5_infer_pool；池跑完写回两处 selected 并提交；开 e5_infer_test。
   用户（本次）
     推送：这次会话没有仓库的推送权限，三个分支以 git bundle 和补丁交付（fix/disable-e5-queue、albert-fixes、merge/albert）。建议先单独推 fix/disable-e5-queue 到 main（只关三个队列阶段，服务器 pull 后立即生效），再把 merge/albert 开成 PR 给 Luming 审。
-  2026-10-14 晚（本机）：PR #1 已并入 main（0491603）；第 8 项（整表重生成）已做，results.csv 实测行无丢失；17 改写为第二版（第七节是推理档步骤），本文件第六节的服务器步骤以 17 第四、七节为准；22 已并入 20 第三部分。仍待 Luming：第 1–5 项。
+  2026-10-14 晚（本机）：PR #1 已并入 main（0491603）；第 8 项（整表重生成）已做，results.csv 实测行无丢失；17 改写为第二版（第七节是推理档步骤），本文件第六节的服务器步骤以 17 第四、七节为准；22 已并入 20 第三部分。Luming 2026-10-14 已全部确认（00「待用户 Luming 处理」下的确认行）：D1–D9、修复 6/7/16、预算规则 a、呈现方式、CI、锁文件（E5 首个测试指标后）。服务器可按 17 第七节在冒烟后打开 e5_infer_pool。
 
 七、注意事项
   0. 合并后的独立复查（另一个 agent，只读）没有找到阻断问题，提的三条应修项已在同一分支的后续提交里处理：队列遇到不认识的阶段类型或缺 conda 环境（SystemExit）时只报告该阶段、不再让全部工作线程退出；launch_e5_infer.py --submit 对本机没有 prepared 目录的集合（MAPLES-DR 导出之前）只是跳过；runs/E5/prompts/ 的处理改为“pull 时由 git 删除”。另做了两处小改：提示文件原子写、队列里写提示文件加锁。记下未改的：队列每次空卡都重新取 producers 快照，所以三态闸门的 never 在队列里很少触发，失败的池项会在下次空卡时重排（与其他阶段的重试方式相同）；build_placeholder.py 新增的 sim.add 会消耗随机数，整表 --force 重生成时 E5 encoder_control、E7–E9、L1、audit 的占位值会和现在 results.csv 里的不同（只换占位，不影响实测；21 第 46 条）。

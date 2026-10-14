@@ -122,6 +122,24 @@ def internal(metric="aupr"):
     return df.groupby(["model", "train_set", "cls"], sort=False)["value"].mean().unstack("cls")[CLASSES]
 
 
+def reference_any_lesion(model, test):
+    """Measured any-lesion AUPR (metric aupr_any_lesion, cls any) of a main-table model trained on ``test``'s
+    source and scored on its official test set: the reference the zero-shot block is read against (docs/ops/00,
+    Luming list item 5, 2026-10-14). None when no measured run of that model carries the metric (runs scored
+    before the any-lesion metric joined the protocol have no row; a placeholder is never used here)."""
+    r = sel(experiment="E2", variant=MAIN_VARIANTS, model=model, train_set=test, test_set=test, metric="aupr_any_lesion", cls="any")
+    r = r[r["source"] == "measured"]
+    return float(r["value"].mean()) if len(r) else None
+
+
+def fov_stands_in(model, variant, test="TJDR-uwf"):
+    """True when an inference-tier result on the ultra-widefield set comes from the fov variant (1440 canvas) under the
+    registered budget rule (collect_runs writes metric canvas_long_side = 1440 for that cell); such a cell is marked in
+    the tables with a footnote instead of a separate column (decided 2026-10-14)."""
+    r = sel(experiment="E5", model=model, variant=variant, test_set=test, metric="canvas_long_side")
+    return bool(len(r)) and float(r["value"].iloc[0]) < 2000
+
+
 def score_matrix(train, metric="aupr", models=None):
     """model x test-set seed-mean score for one training source."""
     t = mean_sd(metric)

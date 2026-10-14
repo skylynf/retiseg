@@ -81,6 +81,8 @@ literature/（仓库根目录下）文献。04 代码审计、06 检索、08 全
   扩展数据图 ED1–ED10、补充表 ST1–ST7、每个模型一节的补充说明：13 第五节
   各表的数据来源：14 第二节
 
+自动测试：.github/workflows/tests.yml（2026-10-14 起，每次 push/PR 在 GitHub Actions 用 CPU torch 跑 bench/tests）。
+
 三、写在哪里
 发生了什么、看了哪些数：00，一段一个日期，写清提交号。
 论文里怎么写：14，与做出决定的那次提交一起改。

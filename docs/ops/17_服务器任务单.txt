@@ -1,5 +1,5 @@
 服务器任务单（第二版）
-第一版建立 2026-10-12；本版 2026-10-14 重写（本机，依据 albert 分支并入 main 后的仓库 0491603 与 MAPLES-DR 数据到位）。写给在服务器上执行的 agent。范围以 docs/paper/16 为准，做法以 05、12、15、18、19 为准，命令以 11 和 bench/scripts/server_run.sh 为准。
+第一版建立 2026-10-12；本版 2026-10-14 重写（本机，依据 albert 分支并入 main 后的仓库 0491603 与 MAPLES-DR 数据到位）；同日晚 Luming 确认了 E5 推理档的全部登记（00「待用户 Luming 处理」下的确认行），本文件不再有等用户决定的前提。写给在服务器上执行的 agent。范围以 docs/paper/16 为准，做法以 05、12、15、18、19 为准，命令以 11 和 bench/scripts/server_run.sh 为准。
 第一版的全文（第零–十七节，含 10-13、10-14 的历次更新）原样归档在 docs/ops/archive/17_服务器任务单_v1_20261012-20261014.txt；其他文档里引用的"17 第 N 节"若在本文件找不到，按归档版读，对照表在文末。已完成的条目不再重复列出，只留还要做的。
 
 一、协作规则（不变，2026-10-14 定）
@@ -22,7 +22,7 @@
   10      e3a                开（最多两张卡）     所有已打分来源；MAPLES-DR 导出并审计后自动加入
   20      e5_seed0           开                   SAMed、SAM-Adapter、SAM2-UNet、RETFound 种子 0；先过第六节第 1 条的冒烟；MedSAM 等权重
   25      fundus_seed0       关                   第八节冒烟通过后改 enabled: true
-  28      e5_infer_pool      关                   第七节第 0 条：Luming 确认 D1–D9 等，retiseg-sam3 建好，启动器已用含 e5_infer 的提交重启
+  28      e5_infer_pool      关                   第七节：推理档冒烟通过、runs/E5 清空、retiseg-sam3 建好、启动器已用含 e5_infer 的提交重启后改 enabled: true（决定已全部确认）
   29      e5_infer_test      关                   池跑完、两处 selected 写回并提交后
   32      factor_cheap       开                   U-Net、M2MRF 的影响因素格子（旧 launch_factor 在接，本阶段只捡漏）
   40      nnunet_e3b         开                   第十一节第 2 条的数据准备好后自动可规划
@@ -39,6 +39,10 @@
   5. nnU-Net E3b 的数据准备：第十一节第 2 条（CPU）。
   6. 算力审计（权重在盘上的模型）：python bench/scripts/cost_audit.py --repeat 5，输出 docs/paper/retiseg_paper/paper/data/cost_audit.tsv，回传。
   7. 若 launch_queue 还没起：RETISEG_GPUS="<空卡>" bash bench/scripts/server_run.sh queue。已在跑的让它自然读到新文件。
+  8. 可选（CPU，十几分钟一条；表 6 的参考任意病灶 AUPR 要用）：M2MRF、nnU-Net 两库种子 0 的内部测试 metrics_test.json 早于任意病灶指标，用现有概率图只重评一次，不改图、不改阈值：
+       python -m bench.eval.cli evaluate --data dataset/prepared/IDRiD --split test --pred runs/BS_m2mrf_idrid_seed0/prob_test --val-pred runs/BS_m2mrf_idrid_seed0/prob_val --out runs/BS_m2mrf_idrid_seed0/metrics_test
+     DDR 同理（runs/BS_m2mrf_ddr_seed0）；nnU-Net 的 NN_default_idrid_fold0、NN_default_ddr_fold0 用 nnunet_run.sh 里那条 evaluate（带各自的 --exclude，IDRiD/DDR 为空）。重评后 mAUPR 必须与原文件一致（只多出 any_lesion 一节），不一致就停下记 00。
+  9. E5 推理档：第七节（决定已确认，冒烟后直接开池）。
 
 五、E3a 独立测试
   由 queue 的 e3a 阶段接（max_concurrent 2）；手动等价命令 RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e3a --drop-maps FGADR,Retinal-Lesions。对象：全部已打分的检查点（B-std 各模型各种子、nnU-Net 两配置及 rep、BF_e3b/e4/e8、E1 作者权重 M2MRF 与 HRDecoder）。尺度、阈值、排除名单都在 bench/configs/e3a_frozen.yaml 和 14 备注 33、35、36，不改。prepared 目录不在的集合（MAPLES-DR 导出前）启动器自动跳过。
@@ -51,11 +55,11 @@
   4. 种子 1、2：queue 的 e5_rest 阶段，等种子 0 阶段全部无待办后打开。
 
 七、E5 推理档（a 零样本、b 理想提示；albert 分支的实现，docs/ops/25、docs/design/23、24）
-  0. 前提：Luming 确认 00「待用户 Luming 处理」第 1–4 项（D1–D9、框含端点、每模型各选、评审修复 16、预算规则二选一）。确认之前不跑任何池运行：第一次池运行就把这些决定定下来了。确认后在 queue.yaml 把 e5_infer_pool 的 enabled 改 true 并提交。
+  0. 前提已满足：Luming 2026-10-14 确认了 D1–D9、评审修复 6/7/16 与预算规则（a：128 当选时该模型的 TJDR_uwf 只跑 fov 变体）。协议文件按现状执行，不再等任何决定；第一次池运行把登记定死，之后 e5_frozen.yaml 只增不改。
   0′. 清理：runs/E5 下若有旧目录（冒烟留下的）移到 runs/archive/，00 记一笔。新提示文件写在 runs/E5_prompts/，由启动器在第一项开始前在 CPU 上生成（launch_queue 的 e5_infer 阶段或 launch_e5_infer.py --submit 都会做）。
   1. 环境：bash bench/scripts/cluster_env.sh sam3 建 retiseg-sam3；权重 sam_vit_h、sam_vit_b、sam2.1_hiera_large、medsam_vit_b（缺）、sam3.pt 放 pretrained/。
   2. 冒烟：RETISEG_GPUS="2" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2，看 runs/E5/a|b/<来源>/<集>-val/predicted.json 的每窗 / 每提示耗时和显存，b 档的 n_prompts_box_uncontained（正常 0 或个位数）；python bench/scripts/launch_e5_infer.py --estimate 给全量 GPU 时，写进 00。冒烟写的 done.json 不算完成，全量会重做；冒烟的池运行不喂给选择和阈值。
-  3. 池运行：清空 runs/E5（冒烟目录移走），重启 launch_queue，开 e5_infer_pool（22 项：a 档两模型 × 两密度、SAM 3 三个序号、b 档四个模型种类，各在 IDRiD 验证 10 张和 DDR 验证 149 张上）。手动等价：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer --pool-only（二者不要同时开）。
+  3. 池运行：清空 runs/E5（冒烟目录移走），重启 launch_queue，把 queue.yaml 的 e5_infer_pool 改 enabled: true 并提交（22 项：a 档两模型 × 两密度、SAM 3 三个序号、b 档四个模型种类，各在 IDRiD 验证 10 张和 DDR 验证 149 张上）。手动等价：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer --pool-only（二者不要同时开）。
   4. 选择并写回 e5_frozen.yaml：a 档 python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限；记录写 runs/E5/selection_grid.json）；SAM 3 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select（selection_sam3.json）。把打印的 yaml 粘进 zero_shot.grid.selected / zero_shot.sam3.selected，提交，00 记一笔。某模型 128 当选时预算规则让它的 TJDR_uwf 主变体不跑（本机 collect 以 fov 变体顶替并记 canvas_long_side；用户可否决）。
   5. 测试集：e5_infer_test 改 enabled: true 并提交（手动等价 server_run.sh e5-infer --test-only --drop-maps FGADR,Retinal-Lesions）。每个测试项以本来源的池目录为闸门；SAM 3 的 a_sam3_selected 由闸门项自动拼装；同信息对照在 runs/BS_m2mrf_<库>_seed0/prob_test 和 runs/NN_default_<库>_fold0/prob_test 存在时自动加入；MAPLES-DR 在 dataset/prepared/MAPLES-DR 出现后自动进计划。测试目录记所选面积上限 / 措辞（run_params.json），选择重做后旧目录报错，手动移走并在 00 记原因。
   6. 回传 runs/E5/ 的 json 与 selection_*.json；runs/E5_prompts/ 不回传。
@@ -104,11 +108,8 @@
 十三、回传清单（下一包）
   runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*、runs/E3a/、runs/BS_*（新种子）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
 
-十四、待用户（Luming）决定（都在 00「待用户 Luming 处理」，处理后在那一段下加一行）
-  1. D1–D9 逐条确认或否决；评审修复 6、7、16 确认——第一次池运行之前。
-  2. 预算规则二选一：128 当选时 TJDR_uwf 只跑 fov 变体，或接受每模型约 150 GPU 时（16 第九节）。
-  3. 图 5、表 6 的呈现（00 第 5 项）。
-  4. 是否加 CI 与协议文件哈希锁（00 第 6、7 项）。
+十四、用户决定（2026-10-14 晚已全部定下，00「待用户 Luming 处理」下的确认行）
+  D1–D9 确认；评审修复 6、7、16 确认；预算规则保留（a）；表 6/图 5 呈现已改；CI 已加（.github/workflows/tests.yml，push 后看 Actions 页面，失败记 21）；协议 sha256 锁文件在读出首个 E5 测试指标后由本机加；MAPLES-DR 只用官方测试 60 张。服务器不再有需要等待的决定。
 
 附：第一版章节 → 本版
   一 回传格式 → 二；二 现在就做（10-12）→ 已完成，归档；三 E3a → 五；四 E5 权重 → 六的括号；五 E5 训练档 → 六；六 E5 推理档 → 七；七 E1r → 十二；八 nnU-Net 补跑 → 十一.3；九 本机代码 → 已完成，归档（九.4 算力审计 → 四.6）；十 顺序（10-12）→ 三；十一 影响因素 → 十一.1；十二 10-13 更新 → 已完成，归档；十三 10-14 更新 → 三、十一.2；十四 协作规则 → 一；十五 专用模型 → 八；十六 10-14 第二次更新 → 三、九、十；十七 albert 合并 → 四.1–2、七。

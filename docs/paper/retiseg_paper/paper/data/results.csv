@@ -30795,1222 +30795,1230 @@ E5,SAM 3,text:cotton wool spot,none,-1,IDRiD,SE,aupr,0.21575,placeholder
 E5,SAM 3,text:soft exudate,none,-1,IDRiD,SE,aupr,0.15109,placeholder
 E5,SAM 3,text:white fluffy patch,none,-1,IDRiD,SE,aupr,0.07897,placeholder
 E5,SAM 3,text:selected,none,-1,IDRiD,SE,aupr,0.21575,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,DDR,MA,aupr,0.03411,placeholder
-E5,SAM 3,text:red dot,none,-1,DDR,MA,aupr,0.01942,placeholder
-E5,SAM 3,text:small red lesion,none,-1,DDR,MA,aupr,0.01261,placeholder
-E5,SAM 3,text:selected,none,-1,DDR,MA,aupr,0.03411,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,DDR,HE,aupr,0.18227,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,DDR,HE,aupr,0.10039,placeholder
-E5,SAM 3,text:dark red patch,none,-1,DDR,HE,aupr,0.05691,placeholder
-E5,SAM 3,text:selected,none,-1,DDR,HE,aupr,0.18227,placeholder
-E5,SAM 3,text:hard exudate,none,-1,DDR,EX,aupr,0.26831,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,DDR,EX,aupr,0.17753,placeholder
-E5,SAM 3,text:bright lesion,none,-1,DDR,EX,aupr,0.12188,placeholder
-E5,SAM 3,text:selected,none,-1,DDR,EX,aupr,0.26831,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,DDR,SE,aupr,0.16146,placeholder
-E5,SAM 3,text:soft exudate,none,-1,DDR,SE,aupr,0.15139,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,DDR,SE,aupr,0.10822,placeholder
-E5,SAM 3,text:selected,none,-1,DDR,SE,aupr,0.16146,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,TJDR-std,MA,aupr,0.02295,placeholder
-E5,SAM 3,text:red dot,none,-1,TJDR-std,MA,aupr,0.01287,placeholder
-E5,SAM 3,text:small red lesion,none,-1,TJDR-std,MA,aupr,0.00822,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-std,MA,aupr,0.02295,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-std,HE,aupr,0.11228,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-std,HE,aupr,0.07293,placeholder
-E5,SAM 3,text:dark red patch,none,-1,TJDR-std,HE,aupr,0.04816,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-std,HE,aupr,0.11228,placeholder
-E5,SAM 3,text:hard exudate,none,-1,TJDR-std,EX,aupr,0.12896,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,TJDR-std,EX,aupr,0.12638,placeholder
-E5,SAM 3,text:bright lesion,none,-1,TJDR-std,EX,aupr,0.06933,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-std,EX,aupr,0.12896,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,TJDR-std,SE,aupr,0.11811,placeholder
-E5,SAM 3,text:soft exudate,none,-1,TJDR-std,SE,aupr,0.10353,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,TJDR-std,SE,aupr,0.0531,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-std,SE,aupr,0.11811,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,TJDR-uwf,MA,aupr,0.025,placeholder
-E5,SAM 3,text:red dot,none,-1,TJDR-uwf,MA,aupr,0.01538,placeholder
-E5,SAM 3,text:small red lesion,none,-1,TJDR-uwf,MA,aupr,0.00881,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-uwf,MA,aupr,0.025,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.10486,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.09869,placeholder
-E5,SAM 3,text:dark red patch,none,-1,TJDR-uwf,HE,aupr,0.03859,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-uwf,HE,aupr,0.10486,placeholder
-E5,SAM 3,text:hard exudate,none,-1,TJDR-uwf,EX,aupr,0.13456,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,TJDR-uwf,EX,aupr,0.11111,placeholder
-E5,SAM 3,text:bright lesion,none,-1,TJDR-uwf,EX,aupr,0.09054,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-uwf,EX,aupr,0.13456,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,TJDR-uwf,SE,aupr,0.15584,placeholder
-E5,SAM 3,text:soft exudate,none,-1,TJDR-uwf,SE,aupr,0.08331,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,TJDR-uwf,SE,aupr,0.07647,placeholder
-E5,SAM 3,text:selected,none,-1,TJDR-uwf,SE,aupr,0.15584,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,MAPLES-DR,MA,aupr,0.02079,placeholder
-E5,SAM 3,text:red dot,none,-1,MAPLES-DR,MA,aupr,0.01523,placeholder
-E5,SAM 3,text:small red lesion,none,-1,MAPLES-DR,MA,aupr,0.0098,placeholder
-E5,SAM 3,text:selected,none,-1,MAPLES-DR,MA,aupr,0.02079,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,MAPLES-DR,HE,aupr,0.12023,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,MAPLES-DR,HE,aupr,0.09665,placeholder
-E5,SAM 3,text:dark red patch,none,-1,MAPLES-DR,HE,aupr,0.06059,placeholder
-E5,SAM 3,text:selected,none,-1,MAPLES-DR,HE,aupr,0.12023,placeholder
-E5,SAM 3,text:hard exudate,none,-1,MAPLES-DR,EX,aupr,0.19394,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,MAPLES-DR,EX,aupr,0.14042,placeholder
-E5,SAM 3,text:bright lesion,none,-1,MAPLES-DR,EX,aupr,0.0857,placeholder
-E5,SAM 3,text:selected,none,-1,MAPLES-DR,EX,aupr,0.19394,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,MAPLES-DR,SE,aupr,0.13712,placeholder
-E5,SAM 3,text:soft exudate,none,-1,MAPLES-DR,SE,aupr,0.09425,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,MAPLES-DR,SE,aupr,0.07538,placeholder
-E5,SAM 3,text:selected,none,-1,MAPLES-DR,SE,aupr,0.13712,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,FGADR,MA,aupr,0.02618,placeholder
-E5,SAM 3,text:red dot,none,-1,FGADR,MA,aupr,0.0117,placeholder
-E5,SAM 3,text:small red lesion,none,-1,FGADR,MA,aupr,0.00779,placeholder
-E5,SAM 3,text:selected,none,-1,FGADR,MA,aupr,0.02618,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,FGADR,HE,aupr,0.0865,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,FGADR,HE,aupr,0.09881,placeholder
-E5,SAM 3,text:dark red patch,none,-1,FGADR,HE,aupr,0.04463,placeholder
-E5,SAM 3,text:selected,none,-1,FGADR,HE,aupr,0.0865,placeholder
-E5,SAM 3,text:hard exudate,none,-1,FGADR,EX,aupr,0.17223,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,FGADR,EX,aupr,0.14411,placeholder
-E5,SAM 3,text:bright lesion,none,-1,FGADR,EX,aupr,0.05744,placeholder
-E5,SAM 3,text:selected,none,-1,FGADR,EX,aupr,0.17223,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,FGADR,SE,aupr,0.14854,placeholder
-E5,SAM 3,text:soft exudate,none,-1,FGADR,SE,aupr,0.11163,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,FGADR,SE,aupr,0.06271,placeholder
-E5,SAM 3,text:selected,none,-1,FGADR,SE,aupr,0.14854,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,Retinal-Lesions,MA,aupr,0.01942,placeholder
-E5,SAM 3,text:red dot,none,-1,Retinal-Lesions,MA,aupr,0.01839,placeholder
-E5,SAM 3,text:small red lesion,none,-1,Retinal-Lesions,MA,aupr,0.00781,placeholder
-E5,SAM 3,text:selected,none,-1,Retinal-Lesions,MA,aupr,0.01942,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.12708,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.09072,placeholder
-E5,SAM 3,text:dark red patch,none,-1,Retinal-Lesions,HE,aupr,0.05471,placeholder
-E5,SAM 3,text:selected,none,-1,Retinal-Lesions,HE,aupr,0.12708,placeholder
-E5,SAM 3,text:hard exudate,none,-1,Retinal-Lesions,EX,aupr,0.13125,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,Retinal-Lesions,EX,aupr,0.12584,placeholder
-E5,SAM 3,text:bright lesion,none,-1,Retinal-Lesions,EX,aupr,0.06163,placeholder
-E5,SAM 3,text:selected,none,-1,Retinal-Lesions,EX,aupr,0.13125,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,Retinal-Lesions,SE,aupr,0.11726,placeholder
-E5,SAM 3,text:soft exudate,none,-1,Retinal-Lesions,SE,aupr,0.08471,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,Retinal-Lesions,SE,aupr,0.04723,placeholder
-E5,SAM 3,text:selected,none,-1,Retinal-Lesions,SE,aupr,0.11726,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,DiaRetDB1,MA,aupr,0.01723,placeholder
-E5,SAM 3,text:red dot,none,-1,DiaRetDB1,MA,aupr,0.01795,placeholder
-E5,SAM 3,text:small red lesion,none,-1,DiaRetDB1,MA,aupr,0.00836,placeholder
-E5,SAM 3,text:selected,none,-1,DiaRetDB1,MA,aupr,0.01723,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.0918,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.09689,placeholder
-E5,SAM 3,text:dark red patch,none,-1,DiaRetDB1,HE,aupr,0.03877,placeholder
-E5,SAM 3,text:selected,none,-1,DiaRetDB1,HE,aupr,0.0918,placeholder
-E5,SAM 3,text:hard exudate,none,-1,DiaRetDB1,EX,aupr,0.15411,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,DiaRetDB1,EX,aupr,0.09766,placeholder
-E5,SAM 3,text:bright lesion,none,-1,DiaRetDB1,EX,aupr,0.05711,placeholder
-E5,SAM 3,text:selected,none,-1,DiaRetDB1,EX,aupr,0.15411,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,DiaRetDB1,SE,aupr,0.15203,placeholder
-E5,SAM 3,text:soft exudate,none,-1,DiaRetDB1,SE,aupr,0.10715,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,DiaRetDB1,SE,aupr,0.0608,placeholder
-E5,SAM 3,text:selected,none,-1,DiaRetDB1,SE,aupr,0.15203,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.00108,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.02339,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.02602,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.24575,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.04292,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.15239,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05923,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.51545,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.11413,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.35442,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.16877,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.6514,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.3186,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.63238,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.66099,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.71615,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,MA,aupr,0.01316,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,HE,aupr,0.02808,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,EX,aupr,0.00265,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,SE,aupr,0.20452,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,MA,aupr,0.03537,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,HE,aupr,0.1331,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,EX,aupr,0.04159,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,SE,aupr,0.44939,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,MA,aupr,0.11171,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,HE,aupr,0.30572,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,EX,aupr,0.14964,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,SE,aupr,0.57038,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,MA,aupr,0.2575,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,HE,aupr,0.53751,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,EX,aupr,0.58345,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,SE,aupr,0.63541,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.00822,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.03887,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.00232,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22559,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.03324,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.13409,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04907,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.47984,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.12429,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.34474,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.15241,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.59807,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.27534,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.57482,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.59858,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.65467,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,MA,aupr,0.01275,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,HE,aupr,0.04203,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01142,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,SE,aupr,0.24302,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,MA,aupr,0.03228,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,HE,aupr,0.18063,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,EX,aupr,0.06402,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,SE,aupr,0.53592,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,MA,aupr,0.1229,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,HE,aupr,0.38899,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,EX,aupr,0.18232,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,SE,aupr,0.68553,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,MA,aupr,0.32804,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,HE,aupr,0.66434,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,EX,aupr,0.68634,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,SE,aupr,0.7488,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,MA,aupr,0.00524,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,HE,aupr,0.04552,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,EX,aupr,0.00132,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,SE,aupr,0.21771,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,MA,aupr,0.05007,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,HE,aupr,0.14083,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,EX,aupr,0.05464,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,SE,aupr,0.47305,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,MA,aupr,0.11197,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,HE,aupr,0.34988,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,EX,aupr,0.16387,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,SE,aupr,0.6011,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,MA,aupr,0.28604,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,HE,aupr,0.58423,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,EX,aupr,0.61385,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,SE,aupr,0.65766,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.00333,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.05234,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.01753,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22583,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.04099,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.17002,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04873,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.50023,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.12709,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.35134,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.14982,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.62596,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.30411,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.60197,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.63889,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.68107,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,MA,aupr,0.01417,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,HE,aupr,0.03835,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,EX,aupr,0.001,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,SE,aupr,0.20554,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,MA,aupr,0.04056,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,HE,aupr,0.11989,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,EX,aupr,0.02949,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,SE,aupr,0.43904,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,MA,aupr,0.07871,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,HE,aupr,0.28227,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,EX,aupr,0.12753,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,SE,aupr,0.56638,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,MA,aupr,0.20301,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,HE,aupr,0.49199,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,EX,aupr,0.50719,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,SE,aupr,0.62064,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,MA,aupr,0.02207,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,HE,aupr,0.03787,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,EX,aupr,0.00723,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,SE,aupr,0.19569,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,MA,aupr,0.03369,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,HE,aupr,0.1158,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,EX,aupr,0.03214,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,SE,aupr,0.38355,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,MA,aupr,0.06166,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,HE,aupr,0.25727,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,EX,aupr,0.13055,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,SE,aupr,0.51222,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,MA,aupr,0.18446,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,HE,aupr,0.43598,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,EX,aupr,0.4601,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,SE,aupr,0.55038,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,MA,aupr,0.001,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,HE,aupr,0.03724,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,EX,aupr,0.01271,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,SE,aupr,0.19265,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,MA,aupr,0.03611,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,HE,aupr,0.13156,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,EX,aupr,0.03089,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,SE,aupr,0.42416,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,MA,aupr,0.07252,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,HE,aupr,0.26897,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,EX,aupr,0.11576,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,SE,aupr,0.53007,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,MA,aupr,0.196,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,HE,aupr,0.46327,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,EX,aupr,0.45837,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,SE,aupr,0.58392,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.001,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.04633,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01275,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.23255,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.02839,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.15436,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05403,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.50399,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.08677,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.35031,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.14173,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.63855,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.20413,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.56625,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.57765,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.70006,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,MA,aupr,0.00964,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,HE,aupr,0.03626,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,EX,aupr,0.0112,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,SE,aupr,0.20812,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,MA,aupr,0.01262,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,HE,aupr,0.12323,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,EX,aupr,0.04472,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,SE,aupr,0.43043,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,MA,aupr,0.07533,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,HE,aupr,0.28907,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,EX,aupr,0.12967,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,SE,aupr,0.5744,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,MA,aupr,0.20702,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,HE,aupr,0.51069,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,EX,aupr,0.50168,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,SE,aupr,0.64059,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.00549,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.03236,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.01102,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22989,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.03535,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.13543,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04981,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.46606,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.08529,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.31393,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.13217,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.59247,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.21472,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.52288,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.52654,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.64058,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.28085,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.60034,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.79194,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.58317,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,aupr,0.05939,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,aupr,0.28067,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,aupr,0.39285,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,aupr,0.18983,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.0716,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.34505,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.49723,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.25926,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.02899,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.18439,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.26068,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.13516,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.07681,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.33585,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.47326,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.27493,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,aupr,0.02989,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,aupr,0.2373,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,aupr,0.31115,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,aupr,0.15293,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.02361,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.18744,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.23298,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.13784,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.02297,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.15935,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.20977,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.11703,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.26994,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.54729,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.77956,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.57891,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,MA,aupr,0.0551,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,HE,aupr,0.27741,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,EX,aupr,0.38455,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,SE,aupr,0.17853,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.07272,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.33839,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.48588,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.2477,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02807,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.17583,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.2565,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.13066,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.07556,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.33561,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.45542,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.26201,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,MA,aupr,0.03118,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,HE,aupr,0.22518,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,EX,aupr,0.29238,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,SE,aupr,0.14485,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.02165,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.17277,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.21473,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.12708,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.02275,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.15799,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.19988,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.1153,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.2766,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.58496,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.77836,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.58608,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,MA,aupr,0.05808,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,HE,aupr,0.2744,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,EX,aupr,0.3914,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,SE,aupr,0.17765,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.07138,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.34268,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.48323,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.26237,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.03185,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.18527,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.26079,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.13406,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.07764,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.34423,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.47942,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.26446,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,MA,aupr,0.02974,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,HE,aupr,0.23973,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,EX,aupr,0.30894,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,SE,aupr,0.15128,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.02286,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.18883,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.22908,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.13036,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.02319,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.16018,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.21126,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.11695,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,MA,aupr,0.14673,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,HE,aupr,0.48002,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,EX,aupr,0.71314,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,SE,aupr,0.4557,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DDR,MA,aupr,0.11988,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DDR,HE,aupr,0.37545,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DDR,EX,aupr,0.48293,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DDR,SE,aupr,0.3035,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,MA,aupr,0.08314,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,HE,aupr,0.38111,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,EX,aupr,0.52595,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,SE,aupr,0.29392,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.03364,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.20849,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.30713,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.15469,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.08728,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.3878,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.52763,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.29793,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,FGADR,MA,aupr,0.03494,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,FGADR,HE,aupr,0.26298,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,FGADR,EX,aupr,0.35079,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,FGADR,SE,aupr,0.1729,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.02488,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.19761,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.24959,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.14141,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.02656,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.17151,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.23283,placeholder
-E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.13104,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,MA,aupr,0.14431,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,HE,aupr,0.48997,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,EX,aupr,0.72896,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,SE,aupr,0.46809,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DDR,MA,aupr,0.12799,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DDR,HE,aupr,0.39518,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DDR,EX,aupr,0.49026,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DDR,SE,aupr,0.31469,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,MA,aupr,0.08872,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,HE,aupr,0.37894,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,EX,aupr,0.55107,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,SE,aupr,0.30781,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.03649,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.21392,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.29527,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.15747,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.09225,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.38683,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.53062,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.30739,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,FGADR,MA,aupr,0.03711,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,FGADR,HE,aupr,0.27483,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,FGADR,EX,aupr,0.36287,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,FGADR,SE,aupr,0.18306,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.02633,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.20865,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.26482,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.15176,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.02884,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.18414,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.23142,placeholder
-E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.13209,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,MA,aupr,0.15413,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,HE,aupr,0.505,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,EX,aupr,0.73961,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,SE,aupr,0.4735,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DDR,MA,aupr,0.12781,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DDR,HE,aupr,0.39448,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DDR,EX,aupr,0.49241,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DDR,SE,aupr,0.30469,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,MA,aupr,0.08792,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,HE,aupr,0.39479,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,EX,aupr,0.55372,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,SE,aupr,0.30087,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.03692,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.21865,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.30592,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.15846,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.08976,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.39077,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.53478,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.30936,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,FGADR,MA,aupr,0.03551,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,FGADR,HE,aupr,0.27493,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,FGADR,EX,aupr,0.36534,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,FGADR,SE,aupr,0.17354,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.02646,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.19957,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.25703,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.15381,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.02703,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.18979,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.22854,placeholder
-E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.13489,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.29739,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.61005,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.79572,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.60537,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,MA,aupr,0.07643,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,HE,aupr,0.3362,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,EX,aupr,0.46946,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,SE,aupr,0.22956,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.09321,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.40013,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.55924,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.31096,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.03267,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.1903,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.28692,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.14312,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.07413,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.33895,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.47848,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.26446,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,MA,aupr,0.05181,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,HE,aupr,0.33989,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,EX,aupr,0.43047,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,SE,aupr,0.2349,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.02405,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.17976,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.22821,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.13658,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.03153,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.20465,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.25487,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.14295,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.3157,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.61354,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.80172,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.62827,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,MA,aupr,0.07925,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,HE,aupr,0.35019,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,EX,aupr,0.46924,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,SE,aupr,0.24415,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.09599,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.41699,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.56075,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.31942,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.03477,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.19673,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.28954,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.15779,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.07965,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.36126,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.4928,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.26654,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,MA,aupr,0.05359,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,HE,aupr,0.35747,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,EX,aupr,0.43866,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,SE,aupr,0.24013,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.02476,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.189,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.23336,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.13854,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.03288,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.2082,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.26083,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.15236,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.2946,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.60384,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.79772,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.61035,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,MA,aupr,0.07411,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,HE,aupr,0.34622,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,EX,aupr,0.45368,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,SE,aupr,0.22722,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.08925,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.41473,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.54004,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.30616,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.03163,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.18782,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.27145,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.13734,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.07477,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.329,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.47426,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.26096,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,MA,aupr,0.05194,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,HE,aupr,0.32466,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,EX,aupr,0.41341,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,SE,aupr,0.22584,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.02426,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.17865,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.22747,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.13297,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.03139,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.19672,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.24869,placeholder
-E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.14217,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,MA,aupr,0.17238,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,HE,aupr,0.5304,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,EX,aupr,0.76288,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,SE,aupr,0.51253,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,MA,aupr,0.14302,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,HE,aupr,0.41716,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,EX,aupr,0.52856,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,SE,aupr,0.33356,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,MA,aupr,0.12554,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,HE,aupr,0.45418,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,EX,aupr,0.60676,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,SE,aupr,0.36235,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.03926,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.22127,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.33261,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.17555,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.09683,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.39798,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.52552,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.32244,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,MA,aupr,0.0612,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,HE,aupr,0.38787,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,EX,aupr,0.51018,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,SE,aupr,0.27425,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.02782,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.20201,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.2548,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.16121,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.03719,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.22536,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.29519,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.16183,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,MA,aupr,0.15787,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,HE,aupr,0.51395,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,EX,aupr,0.75831,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,SE,aupr,0.4927,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,MA,aupr,0.13057,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,HE,aupr,0.40561,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,EX,aupr,0.48245,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,SE,aupr,0.31542,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,MA,aupr,0.10338,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,HE,aupr,0.45312,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,EX,aupr,0.59283,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,SE,aupr,0.35094,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.03808,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.22484,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.3124,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.15908,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.08886,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.39125,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.5081,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.29331,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,MA,aupr,0.05902,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,HE,aupr,0.37979,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,EX,aupr,0.48307,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,SE,aupr,0.25925,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.02566,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.19451,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.2533,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.15099,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.03549,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.21785,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.26466,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.16029,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,MA,aupr,0.17452,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,HE,aupr,0.53718,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,EX,aupr,0.75768,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,SE,aupr,0.51071,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,MA,aupr,0.13532,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,HE,aupr,0.40187,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,EX,aupr,0.50186,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,SE,aupr,0.31331,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,MA,aupr,0.10882,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,HE,aupr,0.44167,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,EX,aupr,0.59909,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,SE,aupr,0.36152,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.03746,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.22398,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.32284,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.16736,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.09649,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.38947,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.51357,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.31104,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,MA,aupr,0.06073,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,HE,aupr,0.39554,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,EX,aupr,0.48895,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,SE,aupr,0.26478,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.02883,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.20676,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.26014,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.15246,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.03732,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.23196,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.2872,placeholder
-E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.15455,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.29265,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.60254,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.80553,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.61617,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,MA,aupr,0.04735,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,HE,aupr,0.25675,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,EX,aupr,0.35096,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,SE,aupr,0.16135,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.08574,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.3677,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.53696,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.2833,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.02667,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.15649,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.23809,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.11364,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.07245,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.32268,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.45216,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.25823,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,MA,aupr,0.04053,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,HE,aupr,0.28462,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,EX,aupr,0.36971,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,SE,aupr,0.1901,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.03053,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.22372,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.28357,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.16792,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.03043,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.20243,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.26249,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.15072,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.31208,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.62525,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.81727,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.63239,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,MA,aupr,0.0504,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,HE,aupr,0.24427,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,EX,aupr,0.36609,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,SE,aupr,0.17262,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.09263,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.39955,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.55444,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.31488,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02632,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.16309,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.2494,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.12354,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.07188,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.3279,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.47589,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.26621,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,MA,aupr,0.04218,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,HE,aupr,0.30192,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,EX,aupr,0.38711,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,SE,aupr,0.20151,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.03368,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.24271,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.30137,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.18442,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.03068,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.20114,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.27221,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.15404,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.28286,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.59471,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.79221,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.58886,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,MA,aupr,0.04461,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,HE,aupr,0.22966,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,EX,aupr,0.34367,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,SE,aupr,0.147,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.08148,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.35466,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.50229,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.28091,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.02493,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.14804,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.21768,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.11007,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.06272,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.32276,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.4482,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.2439,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,MA,aupr,0.03616,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,HE,aupr,0.27359,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,EX,aupr,0.36653,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,SE,aupr,0.17458,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.02929,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.21561,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.25968,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.16399,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.02879,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.18734,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.24531,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.1341,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,MA,aupr,0.15336,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,HE,aupr,0.48883,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,EX,aupr,0.74701,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,SE,aupr,0.4721,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.12914,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,aupr,0.39937,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,aupr,0.49707,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,aupr,0.30114,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr,0.09769,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr,0.41949,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr,0.57027,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr,0.32427,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.02867,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.18246,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.26951,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.13261,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.07755,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.34867,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.49686,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.26674,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,MA,aupr,0.04322,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,HE,aupr,0.31778,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,EX,aupr,0.39879,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,SE,aupr,0.21408,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.03415,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.25155,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.29061,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.18156,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.03401,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.20637,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.26906,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.15291,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,MA,aupr,0.16723,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,HE,aupr,0.51423,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,EX,aupr,0.74933,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,SE,aupr,0.47643,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,MA,aupr,0.13402,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,HE,aupr,0.4057,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,EX,aupr,0.49296,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,SE,aupr,0.31365,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,MA,aupr,0.10182,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,HE,aupr,0.40682,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,EX,aupr,0.56371,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,SE,aupr,0.31028,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.03055,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.1755,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.26293,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.13399,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.08135,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.35034,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.47771,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.27845,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,MA,aupr,0.04657,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,HE,aupr,0.32668,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,EX,aupr,0.41032,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,SE,aupr,0.22245,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.03409,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.24459,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.29777,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.18843,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.03163,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.21879,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.27152,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.15436,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,MA,aupr,0.16085,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,HE,aupr,0.50208,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,EX,aupr,0.75426,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,SE,aupr,0.4793,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,MA,aupr,0.13258,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,HE,aupr,0.39235,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,EX,aupr,0.4875,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,SE,aupr,0.32312,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,MA,aupr,0.10005,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,HE,aupr,0.42383,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,EX,aupr,0.57249,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,SE,aupr,0.32522,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.02891,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.17282,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.27334,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.13748,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.07946,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.36303,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.50074,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.28875,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,MA,aupr,0.04494,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,HE,aupr,0.33924,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,EX,aupr,0.40914,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,SE,aupr,0.22307,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.0345,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.2516,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.31233,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.18885,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.03155,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.21402,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.28483,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.16295,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.22977,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.5434,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.75434,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.54781,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,MA,aupr,0.03906,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,HE,aupr,0.2145,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,EX,aupr,0.29818,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,SE,aupr,0.1434,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.05344,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.28948,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.42962,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.22079,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.02121,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.13488,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.20512,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.0915,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.05509,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.28942,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.41368,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.23413,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,MA,aupr,0.03118,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,HE,aupr,0.24959,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,EX,aupr,0.33009,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,SE,aupr,0.16401,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.01601,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.13446,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.17725,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.09845,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.01739,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.12211,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.16061,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.08742,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.24798,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.55568,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.76756,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.56332,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,MA,aupr,0.04099,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,HE,aupr,0.20889,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,EX,aupr,0.32578,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,SE,aupr,0.1425,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.05801,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.28291,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.43452,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.21393,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02115,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.14061,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.20875,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.10166,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.06077,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.30162,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.41892,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.23344,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,MA,aupr,0.03231,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,HE,aupr,0.25286,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,EX,aupr,0.34263,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,SE,aupr,0.16664,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.01603,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.14139,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.17707,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.09996,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.01707,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.13048,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.15847,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.09027,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.24743,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.5617,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.77071,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.58061,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,MA,aupr,0.04249,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,HE,aupr,0.22206,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,EX,aupr,0.32589,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,SE,aupr,0.14601,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.06214,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.29954,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.43587,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.22715,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.02171,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.14284,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.21377,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.11118,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.06052,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.3002,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.43522,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.23157,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,MA,aupr,0.03181,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,HE,aupr,0.25985,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,EX,aupr,0.34637,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,SE,aupr,0.1831,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.01738,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.13495,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.18008,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.10431,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.01848,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.12894,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.17104,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.09766,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,MA,aupr,0.11364,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,HE,aupr,0.40673,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,EX,aupr,0.66473,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,SE,aupr,0.38558,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.10129,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,HE,aupr,0.33121,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,EX,aupr,0.44077,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,SE,aupr,0.25859,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr,0.05877,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr,0.30445,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr,0.45107,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr,0.23981,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.02272,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.14745,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.2256,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.10741,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.06596,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.31391,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.4429,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.2458,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,MA,aupr,0.03421,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,HE,aupr,0.27448,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,EX,aupr,0.3507,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,SE,aupr,0.18236,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.01679,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.1441,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.19414,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.10278,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.01845,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.13502,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.17743,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.09681,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,MA,aupr,0.11608,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,HE,aupr,0.43941,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,EX,aupr,0.69181,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,SE,aupr,0.42016,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,MA,aupr,0.11177,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,HE,aupr,0.3592,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,EX,aupr,0.46605,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,SE,aupr,0.28258,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,MA,aupr,0.06954,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,HE,aupr,0.34666,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,EX,aupr,0.4997,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,SE,aupr,0.25824,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.02439,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.1726,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.24852,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.11949,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.07003,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.34497,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.47525,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.25446,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,MA,aupr,0.03969,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,HE,aupr,0.30661,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,EX,aupr,0.3698,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,SE,aupr,0.20372,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.01881,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.15828,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.20548,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.12238,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.02107,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.14825,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.19219,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.10683,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,MA,aupr,0.12849,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,HE,aupr,0.44095,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,EX,aupr,0.6892,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,SE,aupr,0.40303,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,MA,aupr,0.11095,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,HE,aupr,0.35628,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,EX,aupr,0.45853,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,SE,aupr,0.27903,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,MA,aupr,0.06898,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,HE,aupr,0.3222,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,EX,aupr,0.47819,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,SE,aupr,0.25388,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.02611,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.16607,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.24646,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.11772,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.07314,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.34052,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.48163,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.26609,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,MA,aupr,0.03859,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,HE,aupr,0.28082,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,EX,aupr,0.37221,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,SE,aupr,0.19165,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.01796,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.15917,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.20187,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.10751,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.01952,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.13984,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.184,placeholder
-E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.10081,placeholder
-E7,M2MRF,res:512,DDR,0,DDR,MA,aupr,0.07304,placeholder
-E7,M2MRF,res:512,DDR,0,DDR,HE,aupr,0.34835,placeholder
-E7,M2MRF,res:512,DDR,0,DDR,EX,aupr,0.25449,placeholder
-E7,M2MRF,res:512,DDR,0,DDR,SE,aupr,0.2693,placeholder
-E7,M2MRF,res:512,DDR,0,DDR,mean,lesion_recall_small,0.05543,placeholder
-E7,M2MRF,res:512,DDR,0,DDR,mean,lesion_recall_large,0.5713,placeholder
-E7,M2MRF,res:1440,DDR,0,DDR,MA,aupr,0.2296,placeholder
-E7,M2MRF,res:1440,DDR,0,DDR,HE,aupr,0.46357,placeholder
-E7,M2MRF,res:1440,DDR,0,DDR,EX,aupr,0.56353,placeholder
-E7,M2MRF,res:1440,DDR,0,DDR,SE,aupr,0.37335,placeholder
-E7,M2MRF,res:1440,DDR,0,DDR,mean,lesion_recall_small,0.33834,placeholder
-E7,M2MRF,res:1440,DDR,0,DDR,mean,lesion_recall_large,0.7757,placeholder
-E7,M2MRF,res:native patches,DDR,0,DDR,MA,aupr,0.23164,placeholder
-E7,M2MRF,res:native patches,DDR,0,DDR,HE,aupr,0.45153,placeholder
-E7,M2MRF,res:native patches,DDR,0,DDR,EX,aupr,0.56636,placeholder
-E7,M2MRF,res:native patches,DDR,0,DDR,SE,aupr,0.36207,placeholder
-E7,M2MRF,res:native patches,DDR,0,DDR,mean,lesion_recall_small,0.37889,placeholder
-E7,M2MRF,res:native patches,DDR,0,DDR,mean,lesion_recall_large,0.771,placeholder
-E7,RETFound + UPerNet,res:512,DDR,0,DDR,MA,aupr,0.0595,placeholder
-E7,RETFound + UPerNet,res:512,DDR,0,DDR,HE,aupr,0.31305,placeholder
-E7,RETFound + UPerNet,res:512,DDR,0,DDR,EX,aupr,0.2902,placeholder
-E7,RETFound + UPerNet,res:512,DDR,0,DDR,SE,aupr,0.23907,placeholder
-E7,RETFound + UPerNet,res:512,DDR,0,DDR,mean,lesion_recall_small,0.09677,placeholder
-E7,RETFound + UPerNet,res:512,DDR,0,DDR,mean,lesion_recall_large,0.5402,placeholder
-E7,RETFound + UPerNet,res:1440,DDR,0,DDR,MA,aupr,0.13603,placeholder
-E7,RETFound + UPerNet,res:1440,DDR,0,DDR,HE,aupr,0.40515,placeholder
-E7,RETFound + UPerNet,res:1440,DDR,0,DDR,EX,aupr,0.50436,placeholder
-E7,RETFound + UPerNet,res:1440,DDR,0,DDR,SE,aupr,0.31953,placeholder
-E7,RETFound + UPerNet,res:1440,DDR,0,DDR,mean,lesion_recall_small,0.26883,placeholder
-E7,RETFound + UPerNet,res:1440,DDR,0,DDR,mean,lesion_recall_large,0.73153,placeholder
-E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,MA,aupr,0.13214,placeholder
-E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,HE,aupr,0.38851,placeholder
-E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,EX,aupr,0.49598,placeholder
-E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,SE,aupr,0.30461,placeholder
-E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,mean,lesion_recall_small,0.29008,placeholder
-E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,mean,lesion_recall_large,0.73767,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,DDR,MA,aupr,0.06743,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,DDR,HE,aupr,0.18396,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,DDR,EX,aupr,0.26152,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,DDR,SE,aupr,0.14428,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,MA,aupr,0.04258,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,HE,aupr,0.16931,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,EX,aupr,0.27481,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,SE,aupr,0.12443,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,FGADR,MA,aupr,0.01972,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,FGADR,HE,aupr,0.14064,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,FGADR,EX,aupr,0.18587,placeholder
-E8,U-Net,size:DDR 10%,DDR,0,FGADR,SE,aupr,0.08302,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,DDR,MA,aupr,0.13833,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,DDR,HE,aupr,0.34326,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,DDR,EX,aupr,0.44817,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,DDR,SE,aupr,0.2663,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,MA,aupr,0.0881,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,HE,aupr,0.32092,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,EX,aupr,0.46015,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,SE,aupr,0.24287,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,FGADR,MA,aupr,0.04482,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,FGADR,HE,aupr,0.25084,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,FGADR,EX,aupr,0.32818,placeholder
-E8,U-Net,size:DDR 50%,DDR,0,FGADR,SE,aupr,0.15665,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,DDR,MA,aupr,0.17388,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,DDR,HE,aupr,0.42357,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,DDR,EX,aupr,0.51033,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,DDR,SE,aupr,0.32756,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,MA,aupr,0.11418,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,HE,aupr,0.39673,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,EX,aupr,0.53829,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,SE,aupr,0.29654,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,FGADR,MA,aupr,0.05935,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,FGADR,HE,aupr,0.30985,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,FGADR,EX,aupr,0.39887,placeholder
-E8,U-Net,size:DDR 100%,DDR,0,FGADR,SE,aupr,0.21161,placeholder
-E8,U-Net,size:fine merged,DDR,0,DDR,MA,aupr,0.18763,placeholder
-E8,U-Net,size:fine merged,DDR,0,DDR,HE,aupr,0.42886,placeholder
-E8,U-Net,size:fine merged,DDR,0,DDR,EX,aupr,0.5265,placeholder
-E8,U-Net,size:fine merged,DDR,0,DDR,SE,aupr,0.33967,placeholder
-E8,U-Net,size:fine merged,DDR,0,TJDR-std,MA,aupr,0.1911,placeholder
-E8,U-Net,size:fine merged,DDR,0,TJDR-std,HE,aupr,0.54208,placeholder
-E8,U-Net,size:fine merged,DDR,0,TJDR-std,EX,aupr,0.68592,placeholder
-E8,U-Net,size:fine merged,DDR,0,TJDR-std,SE,aupr,0.4456,placeholder
-E8,U-Net,size:fine merged,DDR,0,FGADR,MA,aupr,0.06029,placeholder
-E8,U-Net,size:fine merged,DDR,0,FGADR,HE,aupr,0.32212,placeholder
-E8,U-Net,size:fine merged,DDR,0,FGADR,EX,aupr,0.41767,placeholder
-E8,U-Net,size:fine merged,DDR,0,FGADR,SE,aupr,0.21639,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,DDR,MA,aupr,0.11207,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,DDR,HE,aupr,0.26307,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,DDR,EX,aupr,0.34032,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,DDR,SE,aupr,0.19791,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,MA,aupr,0.05428,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,HE,aupr,0.18691,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,EX,aupr,0.30343,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,SE,aupr,0.14158,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,FGADR,MA,aupr,0.03237,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,FGADR,HE,aupr,0.17476,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,FGADR,EX,aupr,0.22657,placeholder
-E8,M2MRF,size:DDR 10%,DDR,0,FGADR,SE,aupr,0.11243,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,DDR,MA,aupr,0.19361,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,DDR,HE,aupr,0.40767,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,DDR,EX,aupr,0.49751,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,DDR,SE,aupr,0.30769,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,MA,aupr,0.09278,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,HE,aupr,0.31431,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,EX,aupr,0.45668,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,SE,aupr,0.23261,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,FGADR,MA,aupr,0.05609,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,FGADR,HE,aupr,0.27201,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,FGADR,EX,aupr,0.35707,placeholder
-E8,M2MRF,size:DDR 50%,DDR,0,FGADR,SE,aupr,0.18455,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,DDR,MA,aupr,0.2254,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,DDR,HE,aupr,0.46064,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,DDR,EX,aupr,0.55945,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,DDR,SE,aupr,0.35901,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,MA,aupr,0.11504,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,HE,aupr,0.35829,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,EX,aupr,0.52685,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,SE,aupr,0.27403,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,FGADR,MA,aupr,0.07147,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,FGADR,HE,aupr,0.33226,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,FGADR,EX,aupr,0.43409,placeholder
-E8,M2MRF,size:DDR 100%,DDR,0,FGADR,SE,aupr,0.22244,placeholder
-E8,M2MRF,size:fine merged,DDR,0,DDR,MA,aupr,0.25315,placeholder
-E8,M2MRF,size:fine merged,DDR,0,DDR,HE,aupr,0.48699,placeholder
-E8,M2MRF,size:fine merged,DDR,0,DDR,EX,aupr,0.60551,placeholder
-E8,M2MRF,size:fine merged,DDR,0,DDR,SE,aupr,0.41905,placeholder
-E8,M2MRF,size:fine merged,DDR,0,TJDR-std,MA,aupr,0.21362,placeholder
-E8,M2MRF,size:fine merged,DDR,0,TJDR-std,HE,aupr,0.53811,placeholder
-E8,M2MRF,size:fine merged,DDR,0,TJDR-std,EX,aupr,0.68061,placeholder
-E8,M2MRF,size:fine merged,DDR,0,TJDR-std,SE,aupr,0.43281,placeholder
-E8,M2MRF,size:fine merged,DDR,0,FGADR,MA,aupr,0.084,placeholder
-E8,M2MRF,size:fine merged,DDR,0,FGADR,HE,aupr,0.36738,placeholder
-E8,M2MRF,size:fine merged,DDR,0,FGADR,EX,aupr,0.45938,placeholder
-E8,M2MRF,size:fine merged,DDR,0,FGADR,SE,aupr,0.26062,placeholder
-E9,U-Net,loss:CE,DDR,0,DDR,MA,aupr,0.13741,placeholder
-E9,U-Net,loss:CE,DDR,0,DDR,HE,aupr,0.3709,placeholder
-E9,U-Net,loss:CE,DDR,0,DDR,EX,aupr,0.46833,placeholder
-E9,U-Net,loss:CE,DDR,0,DDR,SE,aupr,0.26033,placeholder
-E9,U-Net,loss:Dice,DDR,0,DDR,MA,aupr,0.15959,placeholder
-E9,U-Net,loss:Dice,DDR,0,DDR,HE,aupr,0.39253,placeholder
-E9,U-Net,loss:Dice,DDR,0,DDR,EX,aupr,0.4912,placeholder
-E9,U-Net,loss:Dice,DDR,0,DDR,SE,aupr,0.29555,placeholder
-E9,U-Net,loss:CE + Dice,DDR,0,DDR,MA,aupr,0.15834,placeholder
-E9,U-Net,loss:CE + Dice,DDR,0,DDR,HE,aupr,0.37613,placeholder
-E9,U-Net,loss:CE + Dice,DDR,0,DDR,EX,aupr,0.47389,placeholder
-E9,U-Net,loss:CE + Dice,DDR,0,DDR,SE,aupr,0.29361,placeholder
+E5,SAM 3,text:selected,none,-1,IDRiD,any,aupr_any_lesion,0.1573,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,DDR,MA,aupr,0.02697,placeholder
+E5,SAM 3,text:red dot,none,-1,DDR,MA,aupr,0.02064,placeholder
+E5,SAM 3,text:small red lesion,none,-1,DDR,MA,aupr,0.01504,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,MA,aupr,0.02697,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,DDR,HE,aupr,0.13943,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,DDR,HE,aupr,0.09312,placeholder
+E5,SAM 3,text:dark red patch,none,-1,DDR,HE,aupr,0.0787,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,HE,aupr,0.13943,placeholder
+E5,SAM 3,text:hard exudate,none,-1,DDR,EX,aupr,0.24657,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,DDR,EX,aupr,0.19943,placeholder
+E5,SAM 3,text:bright lesion,none,-1,DDR,EX,aupr,0.08525,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,EX,aupr,0.24657,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,DDR,SE,aupr,0.21027,placeholder
+E5,SAM 3,text:soft exudate,none,-1,DDR,SE,aupr,0.17709,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,DDR,SE,aupr,0.09617,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,SE,aupr,0.21027,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,any,aupr_any_lesion,0.12489,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,TJDR-std,MA,aupr,0.01868,placeholder
+E5,SAM 3,text:red dot,none,-1,TJDR-std,MA,aupr,0.01516,placeholder
+E5,SAM 3,text:small red lesion,none,-1,TJDR-std,MA,aupr,0.00836,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,MA,aupr,0.01868,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-std,HE,aupr,0.10945,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-std,HE,aupr,0.0619,placeholder
+E5,SAM 3,text:dark red patch,none,-1,TJDR-std,HE,aupr,0.05149,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,HE,aupr,0.10945,placeholder
+E5,SAM 3,text:hard exudate,none,-1,TJDR-std,EX,aupr,0.15757,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,TJDR-std,EX,aupr,0.10205,placeholder
+E5,SAM 3,text:bright lesion,none,-1,TJDR-std,EX,aupr,0.07592,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,EX,aupr,0.15757,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,TJDR-std,SE,aupr,0.12068,placeholder
+E5,SAM 3,text:soft exudate,none,-1,TJDR-std,SE,aupr,0.12001,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,TJDR-std,SE,aupr,0.06266,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,SE,aupr,0.12068,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,any,aupr_any_lesion,0.13644,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,TJDR-uwf,MA,aupr,0.01966,placeholder
+E5,SAM 3,text:red dot,none,-1,TJDR-uwf,MA,aupr,0.0185,placeholder
+E5,SAM 3,text:small red lesion,none,-1,TJDR-uwf,MA,aupr,0.00724,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,MA,aupr,0.01966,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.08971,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.07407,placeholder
+E5,SAM 3,text:dark red patch,none,-1,TJDR-uwf,HE,aupr,0.06036,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,HE,aupr,0.08971,placeholder
+E5,SAM 3,text:hard exudate,none,-1,TJDR-uwf,EX,aupr,0.18701,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,TJDR-uwf,EX,aupr,0.09997,placeholder
+E5,SAM 3,text:bright lesion,none,-1,TJDR-uwf,EX,aupr,0.09176,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,EX,aupr,0.18701,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,TJDR-uwf,SE,aupr,0.13862,placeholder
+E5,SAM 3,text:soft exudate,none,-1,TJDR-uwf,SE,aupr,0.10152,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,TJDR-uwf,SE,aupr,0.06534,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,SE,aupr,0.13862,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,any,aupr_any_lesion,0.15008,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,MAPLES-DR,MA,aupr,0.02517,placeholder
+E5,SAM 3,text:red dot,none,-1,MAPLES-DR,MA,aupr,0.01859,placeholder
+E5,SAM 3,text:small red lesion,none,-1,MAPLES-DR,MA,aupr,0.01067,placeholder
+E5,SAM 3,text:selected,none,-1,MAPLES-DR,MA,aupr,0.02517,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,MAPLES-DR,HE,aupr,0.13002,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,MAPLES-DR,HE,aupr,0.09349,placeholder
+E5,SAM 3,text:dark red patch,none,-1,MAPLES-DR,HE,aupr,0.04827,placeholder
+E5,SAM 3,text:selected,none,-1,MAPLES-DR,HE,aupr,0.13002,placeholder
+E5,SAM 3,text:hard exudate,none,-1,MAPLES-DR,EX,aupr,0.15709,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,MAPLES-DR,EX,aupr,0.14801,placeholder
+E5,SAM 3,text:bright lesion,none,-1,MAPLES-DR,EX,aupr,0.09217,placeholder
+E5,SAM 3,text:selected,none,-1,MAPLES-DR,EX,aupr,0.15709,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,MAPLES-DR,SE,aupr,0.10833,placeholder
+E5,SAM 3,text:soft exudate,none,-1,MAPLES-DR,SE,aupr,0.08501,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,MAPLES-DR,SE,aupr,0.04757,placeholder
+E5,SAM 3,text:selected,none,-1,MAPLES-DR,SE,aupr,0.10833,placeholder
+E5,SAM 3,text:selected,none,-1,MAPLES-DR,any,aupr_any_lesion,0.1673,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,FGADR,MA,aupr,0.01902,placeholder
+E5,SAM 3,text:red dot,none,-1,FGADR,MA,aupr,0.0155,placeholder
+E5,SAM 3,text:small red lesion,none,-1,FGADR,MA,aupr,0.01101,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,MA,aupr,0.01902,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,FGADR,HE,aupr,0.08703,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,FGADR,HE,aupr,0.08556,placeholder
+E5,SAM 3,text:dark red patch,none,-1,FGADR,HE,aupr,0.05458,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,HE,aupr,0.08703,placeholder
+E5,SAM 3,text:hard exudate,none,-1,FGADR,EX,aupr,0.17104,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,FGADR,EX,aupr,0.11188,placeholder
+E5,SAM 3,text:bright lesion,none,-1,FGADR,EX,aupr,0.08989,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,EX,aupr,0.17104,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,FGADR,SE,aupr,0.11834,placeholder
+E5,SAM 3,text:soft exudate,none,-1,FGADR,SE,aupr,0.11438,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,FGADR,SE,aupr,0.0693,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,SE,aupr,0.11834,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,any,aupr_any_lesion,0.15425,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,Retinal-Lesions,MA,aupr,0.01641,placeholder
+E5,SAM 3,text:red dot,none,-1,Retinal-Lesions,MA,aupr,0.01573,placeholder
+E5,SAM 3,text:small red lesion,none,-1,Retinal-Lesions,MA,aupr,0.0077,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,MA,aupr,0.01641,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.09381,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.06776,placeholder
+E5,SAM 3,text:dark red patch,none,-1,Retinal-Lesions,HE,aupr,0.03779,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,HE,aupr,0.09381,placeholder
+E5,SAM 3,text:hard exudate,none,-1,Retinal-Lesions,EX,aupr,0.13781,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,Retinal-Lesions,EX,aupr,0.14362,placeholder
+E5,SAM 3,text:bright lesion,none,-1,Retinal-Lesions,EX,aupr,0.06689,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,EX,aupr,0.13781,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,Retinal-Lesions,SE,aupr,0.11475,placeholder
+E5,SAM 3,text:soft exudate,none,-1,Retinal-Lesions,SE,aupr,0.12111,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,Retinal-Lesions,SE,aupr,0.04847,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,SE,aupr,0.11475,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,any,aupr_any_lesion,0.13237,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,DiaRetDB1,MA,aupr,0.01695,placeholder
+E5,SAM 3,text:red dot,none,-1,DiaRetDB1,MA,aupr,0.01168,placeholder
+E5,SAM 3,text:small red lesion,none,-1,DiaRetDB1,MA,aupr,0.01003,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,MA,aupr,0.01695,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.11906,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.07959,placeholder
+E5,SAM 3,text:dark red patch,none,-1,DiaRetDB1,HE,aupr,0.04466,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,HE,aupr,0.11906,placeholder
+E5,SAM 3,text:hard exudate,none,-1,DiaRetDB1,EX,aupr,0.14621,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,DiaRetDB1,EX,aupr,0.09575,placeholder
+E5,SAM 3,text:bright lesion,none,-1,DiaRetDB1,EX,aupr,0.08185,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,EX,aupr,0.14621,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,DiaRetDB1,SE,aupr,0.11382,placeholder
+E5,SAM 3,text:soft exudate,none,-1,DiaRetDB1,SE,aupr,0.09248,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,DiaRetDB1,SE,aupr,0.06012,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,SE,aupr,0.11382,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,any,aupr_any_lesion,0.14234,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.00381,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.03105,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01459,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.23686,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.06146,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.17553,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05176,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.51044,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.12465,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.35641,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.15813,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.64786,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.29765,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.60953,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.65692,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.71682,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,MA,aupr,0.01463,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,HE,aupr,0.02116,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,EX,aupr,0.01396,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,SE,aupr,0.20558,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,MA,aupr,0.03122,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,HE,aupr,0.13549,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,EX,aupr,0.04733,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,SE,aupr,0.45438,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,MA,aupr,0.10492,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,HE,aupr,0.32178,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,EX,aupr,0.13757,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,SE,aupr,0.58079,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,MA,aupr,0.25781,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,HE,aupr,0.52958,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,EX,aupr,0.58316,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,SE,aupr,0.6403,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.0228,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.04723,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.01056,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.21669,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.03877,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.15453,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.03808,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.46542,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.11251,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.33356,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.15191,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.5952,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.26114,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.57735,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.61814,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.6626,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,MA,aupr,0.00155,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,HE,aupr,0.04476,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,EX,aupr,0.02113,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,SE,aupr,0.25372,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,MA,aupr,0.04518,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,HE,aupr,0.17803,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,EX,aupr,0.04941,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,SE,aupr,0.53451,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,MA,aupr,0.12787,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,HE,aupr,0.39504,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,EX,aupr,0.16387,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,SE,aupr,0.67953,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,MA,aupr,0.33859,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,HE,aupr,0.64799,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,EX,aupr,0.69793,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,SE,aupr,0.75162,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,MA,aupr,0.00518,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,HE,aupr,0.04696,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,EX,aupr,0.02202,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,SE,aupr,0.2211,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,MA,aupr,0.03712,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,HE,aupr,0.15627,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,EX,aupr,0.05336,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,SE,aupr,0.46909,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,MA,aupr,0.1097,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,HE,aupr,0.35351,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,EX,aupr,0.15892,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,SE,aupr,0.59583,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,MA,aupr,0.28802,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,HE,aupr,0.59103,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,EX,aupr,0.6071,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,SE,aupr,0.66737,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.01545,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.03465,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.00153,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22869,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.04388,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.15456,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.05292,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.48393,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.12916,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.36219,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.13906,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.62282,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.31558,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.59551,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.62429,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.67904,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,MA,aupr,0.00516,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,HE,aupr,0.02149,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,EX,aupr,0.00605,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,SE,aupr,0.20365,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,MA,aupr,0.03158,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,HE,aupr,0.12357,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,EX,aupr,0.02719,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,SE,aupr,0.44064,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,MA,aupr,0.09639,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,HE,aupr,0.30266,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,EX,aupr,0.12973,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,SE,aupr,0.58362,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,MA,aupr,0.20855,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,HE,aupr,0.50001,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,EX,aupr,0.51694,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,SE,aupr,0.61755,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,MA,aupr,0.001,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,HE,aupr,0.02778,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,EX,aupr,0.02365,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,SE,aupr,0.19302,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,MA,aupr,0.0336,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,HE,aupr,0.11177,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,EX,aupr,0.0377,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,SE,aupr,0.39198,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,MA,aupr,0.04839,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,HE,aupr,0.2654,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,EX,aupr,0.11927,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,SE,aupr,0.50345,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,MA,aupr,0.18583,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,HE,aupr,0.45051,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,EX,aupr,0.45169,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,SE,aupr,0.56456,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,MA,aupr,0.00485,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,HE,aupr,0.02905,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,EX,aupr,0.00401,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,SE,aupr,0.19636,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,MA,aupr,0.03829,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,HE,aupr,0.12432,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,EX,aupr,0.01677,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,SE,aupr,0.41832,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,MA,aupr,0.06513,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,HE,aupr,0.27825,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,EX,aupr,0.12301,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,SE,aupr,0.52612,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,MA,aupr,0.18096,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,HE,aupr,0.46172,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,EX,aupr,0.48859,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,SE,aupr,0.58359,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.00587,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.0478,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.00858,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.23552,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.01556,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.13888,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05149,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.50006,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.09139,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.34341,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.14548,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.63915,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.20496,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.56891,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.57613,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.69043,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,MA,aupr,0.00414,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,HE,aupr,0.02286,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,EX,aupr,0.01249,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,SE,aupr,0.21974,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,MA,aupr,0.04108,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,HE,aupr,0.13461,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,EX,aupr,0.03866,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,SE,aupr,0.46459,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,MA,aupr,0.0764,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,HE,aupr,0.29703,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,EX,aupr,0.12783,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,SE,aupr,0.57522,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,MA,aupr,0.20004,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,HE,aupr,0.50541,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,EX,aupr,0.51107,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,SE,aupr,0.62206,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.01086,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.03562,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.00967,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22169,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.04123,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.1297,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04248,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.45658,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.07927,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.31827,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.15257,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.59712,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.19313,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.53471,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.53393,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.64199,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.27968,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.57843,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.77775,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.59428,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,aupr,0.05866,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,aupr,0.29088,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,aupr,0.39151,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,aupr,0.19696,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.06625,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.31584,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.46279,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.23025,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.02622,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.15164,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.23532,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.11825,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.07735,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.33918,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.48203,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.27618,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,aupr,0.04212,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,aupr,0.2926,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,aupr,0.37446,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,aupr,0.19164,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.02488,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.18774,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.24623,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.13323,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.0285,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.19047,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.24723,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.13947,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.27662,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.58097,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.78293,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.58013,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,MA,aupr,0.05619,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,HE,aupr,0.28445,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,EX,aupr,0.39034,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,SE,aupr,0.19093,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.06645,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.31082,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.44269,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.23308,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02694,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.15346,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.22457,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.11438,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.0725,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.33333,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.45964,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.25924,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,MA,aupr,0.03993,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,HE,aupr,0.29333,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,EX,aupr,0.37338,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,SE,aupr,0.19517,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.02386,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.18881,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.24314,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.13651,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.02735,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.18801,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.23142,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.13439,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.24764,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.55378,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.7581,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.56724,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,MA,aupr,0.0562,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,HE,aupr,0.27118,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,EX,aupr,0.36508,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,SE,aupr,0.17591,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.06048,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.29156,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.43444,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.21278,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.02263,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.14729,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.21579,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.10661,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.06765,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.32857,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.44805,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.24037,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,MA,aupr,0.03592,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,HE,aupr,0.27035,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,EX,aupr,0.3594,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,SE,aupr,0.1779,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.02153,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.17073,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.22232,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.12896,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.02351,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.17231,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.21433,placeholder
+E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.1223,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,MA,aupr,0.19405,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,HE,aupr,0.57556,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,EX,aupr,0.79173,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,IDRiD,SE,aupr,0.54982,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DDR,MA,aupr,0.12963,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DDR,HE,aupr,0.40572,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DDR,EX,aupr,0.5087,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DDR,SE,aupr,0.31711,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,MA,aupr,0.08254,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,HE,aupr,0.37925,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,EX,aupr,0.53404,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-std,SE,aupr,0.28183,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.03254,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.19384,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.29035,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.14688,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.09284,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.40103,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.54024,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.31015,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,FGADR,MA,aupr,0.05247,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,FGADR,HE,aupr,0.34215,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,FGADR,EX,aupr,0.45119,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,FGADR,SE,aupr,0.24165,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.03016,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.21764,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.28455,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.16596,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.03557,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.22356,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.28848,placeholder
+E5,RETFound-MAE,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.16666,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,MA,aupr,0.20882,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,HE,aupr,0.57839,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,EX,aupr,0.81112,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,IDRiD,SE,aupr,0.57122,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DDR,MA,aupr,0.14195,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DDR,HE,aupr,0.41866,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DDR,EX,aupr,0.49983,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DDR,SE,aupr,0.32625,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,MA,aupr,0.08893,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,HE,aupr,0.38321,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,EX,aupr,0.54221,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-std,SE,aupr,0.29531,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.03527,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.20683,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.30571,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.15856,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.09971,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.4226,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.56509,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.33276,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,FGADR,MA,aupr,0.05797,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,FGADR,HE,aupr,0.36668,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,FGADR,EX,aupr,0.45439,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,FGADR,SE,aupr,0.24719,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.0319,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.24059,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.30806,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.18134,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.03821,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.23255,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.29879,placeholder
+E5,RETFound-MAE,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.17534,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,MA,aupr,0.19062,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,HE,aupr,0.56933,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,EX,aupr,0.79642,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,IDRiD,SE,aupr,0.53747,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DDR,MA,aupr,0.13114,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DDR,HE,aupr,0.40029,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DDR,EX,aupr,0.48651,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DDR,SE,aupr,0.30542,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,MA,aupr,0.07865,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,HE,aupr,0.36279,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,EX,aupr,0.52049,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-std,SE,aupr,0.276,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.03052,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.19038,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.28629,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.1373,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.09116,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.38415,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.52935,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.31349,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,FGADR,MA,aupr,0.04931,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,FGADR,HE,aupr,0.35133,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,FGADR,EX,aupr,0.42479,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,FGADR,SE,aupr,0.23267,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.02925,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.21501,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.27888,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.15978,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.03198,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.22069,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.27586,placeholder
+E5,RETFound-MAE,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.15579,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.31158,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.62328,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.80784,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.63037,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,MA,aupr,0.07315,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,HE,aupr,0.33237,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,EX,aupr,0.45239,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DDR,SE,aupr,0.22794,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.10924,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.43089,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.57781,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.33814,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.03352,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.20659,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.29241,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.14633,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.08147,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.34512,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.49074,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.27312,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,MA,aupr,0.0418,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,HE,aupr,0.29817,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,EX,aupr,0.38342,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,FGADR,SE,aupr,0.1976,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.02806,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.219,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.27656,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.16189,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.02873,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.18739,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.23801,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.13447,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.30361,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.62015,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.80402,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.62384,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,MA,aupr,0.07298,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,HE,aupr,0.32607,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,EX,aupr,0.44504,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DDR,SE,aupr,0.23774,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.10413,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.43784,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.58736,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.32425,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.0333,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.19706,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.27921,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.14558,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.07843,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.34618,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.47333,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.26842,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,MA,aupr,0.04083,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,HE,aupr,0.28957,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,EX,aupr,0.37098,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,FGADR,SE,aupr,0.18986,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.02774,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.20983,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.27019,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.15908,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.02763,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.18185,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.24135,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.13139,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.29235,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.62417,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.79483,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.61552,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,MA,aupr,0.06829,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,HE,aupr,0.3193,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,EX,aupr,0.42947,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DDR,SE,aupr,0.21391,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.10027,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.40942,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.57572,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.32373,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.03309,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.17881,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.264,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.13904,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.07881,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.33661,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.47163,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.2643,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,MA,aupr,0.03999,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,HE,aupr,0.28046,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,EX,aupr,0.36227,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,FGADR,SE,aupr,0.18157,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.0274,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.1989,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.24503,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.14765,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.02489,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.17357,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.21834,placeholder
+E5,RETFound-DINOv2,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.12393,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,MA,aupr,0.21912,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,HE,aupr,0.57427,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,EX,aupr,0.79558,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,IDRiD,SE,aupr,0.55104,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,MA,aupr,0.14592,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,HE,aupr,0.41851,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,EX,aupr,0.53221,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,SE,aupr,0.34555,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,MA,aupr,0.13054,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,HE,aupr,0.48694,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,EX,aupr,0.62849,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-std,SE,aupr,0.3958,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.0397,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.22567,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.34993,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.17521,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.09511,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.38666,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.52528,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.3246,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,MA,aupr,0.05033,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,HE,aupr,0.33078,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,EX,aupr,0.43415,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,FGADR,SE,aupr,0.21624,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.03286,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.22893,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.30011,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.18525,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.03304,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.20141,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.26998,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.14478,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,MA,aupr,0.18805,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,HE,aupr,0.5799,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,EX,aupr,0.79054,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,IDRiD,SE,aupr,0.5455,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,MA,aupr,0.14538,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,HE,aupr,0.43022,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,EX,aupr,0.51596,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DDR,SE,aupr,0.32529,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,MA,aupr,0.12309,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,HE,aupr,0.48675,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,EX,aupr,0.61853,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-std,SE,aupr,0.36996,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.03928,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.22448,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.33171,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.16819,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.09042,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.38196,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.53012,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.31368,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,MA,aupr,0.04933,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,HE,aupr,0.32721,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,EX,aupr,0.40392,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,FGADR,SE,aupr,0.21896,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.03166,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.23259,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.29876,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.17019,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.03217,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.19218,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.2479,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.14209,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,MA,aupr,0.17557,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,HE,aupr,0.53364,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,EX,aupr,0.7708,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,IDRiD,SE,aupr,0.52182,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,MA,aupr,0.12677,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,HE,aupr,0.39479,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,EX,aupr,0.49268,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DDR,SE,aupr,0.30784,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,MA,aupr,0.11774,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,HE,aupr,0.44971,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,EX,aupr,0.58998,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-std,SE,aupr,0.35672,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.0353,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.2117,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.30614,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.15301,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.08868,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.36676,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.50379,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.28642,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,MA,aupr,0.04531,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,HE,aupr,0.31407,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,EX,aupr,0.39709,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,FGADR,SE,aupr,0.18903,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.02946,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.21048,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.26781,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.16483,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.02811,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.17655,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.23363,placeholder
+E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.14116,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.2969,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.60506,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.79876,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.60128,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,MA,aupr,0.05931,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,HE,aupr,0.29072,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,EX,aupr,0.42412,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,SE,aupr,0.2006,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.08413,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.37253,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.54141,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.29149,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.02881,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.17023,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.25634,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.12288,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.06934,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.33021,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.45315,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.24576,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,MA,aupr,0.03709,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,HE,aupr,0.28597,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,EX,aupr,0.36437,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,SE,aupr,0.18547,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.03164,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.23681,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.28313,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.1729,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.03073,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.19888,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.24275,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.14797,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.29628,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.60406,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.80066,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.61994,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,MA,aupr,0.05927,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,HE,aupr,0.29104,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,EX,aupr,0.41077,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,SE,aupr,0.20013,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.08196,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.36573,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.53308,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.29135,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02729,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.16656,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.24696,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.12475,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.07087,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.32228,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.45406,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.252,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,MA,aupr,0.03548,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,HE,aupr,0.26594,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,EX,aupr,0.3672,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,SE,aupr,0.18057,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.02992,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.22509,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.28807,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.17193,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.02928,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.19971,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.25254,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.15249,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.27444,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.56577,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.77108,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.5891,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,MA,aupr,0.05803,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,HE,aupr,0.27457,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,EX,aupr,0.37644,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,SE,aupr,0.18501,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.07387,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.36807,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.51363,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.27431,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.02412,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.15251,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.23702,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.10994,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.06393,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.29662,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.41153,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.23207,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,MA,aupr,0.0344,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,HE,aupr,0.25539,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,EX,aupr,0.34273,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,SE,aupr,0.16234,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.02688,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.20721,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.25697,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.14977,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.02797,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.1829,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.23357,placeholder
+E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.13655,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,MA,aupr,0.14922,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,HE,aupr,0.49262,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,EX,aupr,0.73504,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,SE,aupr,0.4621,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.13924,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,aupr,0.42565,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,aupr,0.52476,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,aupr,0.33201,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr,0.1023,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr,0.42661,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr,0.59353,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr,0.3265,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.03274,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.20199,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.28827,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.15319,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.08731,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.38138,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.49404,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.29007,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,MA,aupr,0.04814,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,HE,aupr,0.31626,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,EX,aupr,0.41384,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,SE,aupr,0.21264,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.03523,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.26616,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.32427,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.19495,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.03531,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.22899,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.29299,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.16512,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,MA,aupr,0.1469,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,HE,aupr,0.46353,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,EX,aupr,0.71693,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,SE,aupr,0.43025,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,MA,aupr,0.13938,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,HE,aupr,0.3986,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,EX,aupr,0.50026,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,SE,aupr,0.32049,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,MA,aupr,0.10118,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,HE,aupr,0.41273,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,EX,aupr,0.55911,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,SE,aupr,0.32533,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.03318,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.19821,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.28489,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.15122,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.0822,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.35769,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.48658,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.28622,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,MA,aupr,0.04215,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,HE,aupr,0.3184,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,EX,aupr,0.40131,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,SE,aupr,0.20386,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.03411,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.24633,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.30146,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.19011,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.03377,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.21687,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.27009,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.15446,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,MA,aupr,0.14939,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,HE,aupr,0.49079,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,EX,aupr,0.73191,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,SE,aupr,0.45694,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,MA,aupr,0.13727,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,HE,aupr,0.40355,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,EX,aupr,0.52333,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,SE,aupr,0.3357,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,MA,aupr,0.10243,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,HE,aupr,0.43583,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,EX,aupr,0.59122,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,SE,aupr,0.34539,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.03324,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.21388,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.29195,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.1568,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.08616,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.37554,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.51356,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.29488,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,MA,aupr,0.04366,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,HE,aupr,0.32083,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,EX,aupr,0.42692,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,SE,aupr,0.22121,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.03556,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.24551,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.31835,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.19223,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.03503,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.23021,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.29088,placeholder
+E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.17041,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.23287,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.52375,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.73459,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.54042,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,MA,aupr,0.03977,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,HE,aupr,0.21002,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,EX,aupr,0.31084,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DDR,SE,aupr,0.13568,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.04743,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.27117,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.39544,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.20054,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.01991,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.12653,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.1888,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.09068,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.0554,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.26808,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.39916,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.20757,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,MA,aupr,0.02719,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,HE,aupr,0.22063,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,EX,aupr,0.30276,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,FGADR,SE,aupr,0.1387,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.01414,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.12439,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.16043,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.09109,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.01707,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.12843,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.15644,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.0933,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.24759,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.53962,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.7627,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.55589,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,MA,aupr,0.04183,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,HE,aupr,0.23,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,EX,aupr,0.3242,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DDR,SE,aupr,0.14827,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.05833,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.29768,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.42945,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.22273,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02066,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.13423,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.21155,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.10069,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.05831,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.29787,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.41872,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.22319,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,MA,aupr,0.02943,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,HE,aupr,0.24496,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,EX,aupr,0.30505,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,FGADR,SE,aupr,0.15285,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.01639,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.12958,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.1727,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.09759,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.01929,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.13901,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.17464,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.09801,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.24318,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.53552,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.74572,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.5509,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,MA,aupr,0.03909,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,HE,aupr,0.21634,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,EX,aupr,0.30971,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DDR,SE,aupr,0.14867,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.053,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.27644,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.42201,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.20467,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.01849,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.12737,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.19843,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.10225,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.05751,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.26724,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.40021,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.21469,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,MA,aupr,0.02897,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,HE,aupr,0.22505,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,EX,aupr,0.30385,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,FGADR,SE,aupr,0.15153,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.01448,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.13062,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.17164,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.09314,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.01763,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.13182,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.1726,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.0925,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,MA,aupr,0.11886,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,HE,aupr,0.43956,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,EX,aupr,0.69614,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,IDRiD,SE,aupr,0.4296,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.11656,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,HE,aupr,0.37288,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,EX,aupr,0.47441,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DDR,SE,aupr,0.28827,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr,0.07524,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr,0.35085,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr,0.49978,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr,0.26961,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.02622,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.17261,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.25075,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.13068,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.07587,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.35436,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.50508,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.27271,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,MA,aupr,0.03987,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,HE,aupr,0.29925,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,EX,aupr,0.38885,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,FGADR,SE,aupr,0.19783,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,MA,aupr,0.02006,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,HE,aupr,0.15479,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,EX,aupr,0.20862,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,Retinal-Lesions,SE,aupr,0.11887,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,MA,aupr,0.0241,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,HE,aupr,0.16555,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,EX,aupr,0.21173,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,0,DiaRetDB1,SE,aupr,0.12292,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,MA,aupr,0.11705,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,HE,aupr,0.4384,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,EX,aupr,0.69571,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,IDRiD,SE,aupr,0.40562,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,MA,aupr,0.10432,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,HE,aupr,0.3706,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,EX,aupr,0.45691,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DDR,SE,aupr,0.27274,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,MA,aupr,0.0665,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,HE,aupr,0.3381,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,EX,aupr,0.48308,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-std,SE,aupr,0.24093,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.02515,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.16681,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.2299,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.12402,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.07035,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.33481,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.47356,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.27261,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,MA,aupr,0.03758,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,HE,aupr,0.28108,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,EX,aupr,0.36556,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,FGADR,SE,aupr,0.18432,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,MA,aupr,0.01846,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,HE,aupr,0.16148,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,EX,aupr,0.199,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,Retinal-Lesions,SE,aupr,0.11097,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,MA,aupr,0.02109,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,HE,aupr,0.1556,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,EX,aupr,0.19897,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,1,DiaRetDB1,SE,aupr,0.11296,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,MA,aupr,0.11648,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,HE,aupr,0.41231,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,EX,aupr,0.67787,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,IDRiD,SE,aupr,0.40089,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,MA,aupr,0.11133,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,HE,aupr,0.36058,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,EX,aupr,0.45494,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DDR,SE,aupr,0.27001,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,MA,aupr,0.06968,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,HE,aupr,0.3344,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,EX,aupr,0.49025,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-std,SE,aupr,0.25275,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.02452,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.15063,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.2323,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.11631,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.06755,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.337,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.4688,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.24516,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,MA,aupr,0.03497,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,HE,aupr,0.26811,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,EX,aupr,0.35393,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,FGADR,SE,aupr,0.17523,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,MA,aupr,0.01868,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,HE,aupr,0.15557,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,EX,aupr,0.20242,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,Retinal-Lesions,SE,aupr,0.11302,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.02174,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.15628,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.19408,placeholder
+E5,ImageNet-sup. ViT-L,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.11047,placeholder
+E7,M2MRF,res:512,DDR,0,DDR,MA,aupr,0.06846,placeholder
+E7,M2MRF,res:512,DDR,0,DDR,HE,aupr,0.33271,placeholder
+E7,M2MRF,res:512,DDR,0,DDR,EX,aupr,0.2415,placeholder
+E7,M2MRF,res:512,DDR,0,DDR,SE,aupr,0.25582,placeholder
+E7,M2MRF,res:512,DDR,0,DDR,mean,lesion_recall_small,0.04841,placeholder
+E7,M2MRF,res:512,DDR,0,DDR,mean,lesion_recall_large,0.53783,placeholder
+E7,M2MRF,res:1440,DDR,0,DDR,MA,aupr,0.22801,placeholder
+E7,M2MRF,res:1440,DDR,0,DDR,HE,aupr,0.46132,placeholder
+E7,M2MRF,res:1440,DDR,0,DDR,EX,aupr,0.56131,placeholder
+E7,M2MRF,res:1440,DDR,0,DDR,SE,aupr,0.37124,placeholder
+E7,M2MRF,res:1440,DDR,0,DDR,mean,lesion_recall_small,0.34832,placeholder
+E7,M2MRF,res:1440,DDR,0,DDR,mean,lesion_recall_large,0.76393,placeholder
+E7,M2MRF,res:native patches,DDR,0,DDR,MA,aupr,0.25562,placeholder
+E7,M2MRF,res:native patches,DDR,0,DDR,HE,aupr,0.48394,placeholder
+E7,M2MRF,res:native patches,DDR,0,DDR,EX,aupr,0.59802,placeholder
+E7,M2MRF,res:native patches,DDR,0,DDR,SE,aupr,0.39266,placeholder
+E7,M2MRF,res:native patches,DDR,0,DDR,mean,lesion_recall_small,0.40462,placeholder
+E7,M2MRF,res:native patches,DDR,0,DDR,mean,lesion_recall_large,0.79631,placeholder
+E7,RETFound + UPerNet,res:512,DDR,0,DDR,MA,aupr,0.06829,placeholder
+E7,RETFound + UPerNet,res:512,DDR,0,DDR,HE,aupr,0.34556,placeholder
+E7,RETFound + UPerNet,res:512,DDR,0,DDR,EX,aupr,0.32145,placeholder
+E7,RETFound + UPerNet,res:512,DDR,0,DDR,SE,aupr,0.26688,placeholder
+E7,RETFound + UPerNet,res:512,DDR,0,DDR,mean,lesion_recall_small,0.10623,placeholder
+E7,RETFound + UPerNet,res:512,DDR,0,DDR,mean,lesion_recall_large,0.56577,placeholder
+E7,RETFound + UPerNet,res:1440,DDR,0,DDR,MA,aupr,0.12127,placeholder
+E7,RETFound + UPerNet,res:1440,DDR,0,DDR,HE,aupr,0.37381,placeholder
+E7,RETFound + UPerNet,res:1440,DDR,0,DDR,EX,aupr,0.47144,placeholder
+E7,RETFound + UPerNet,res:1440,DDR,0,DDR,SE,aupr,0.29157,placeholder
+E7,RETFound + UPerNet,res:1440,DDR,0,DDR,mean,lesion_recall_small,0.25522,placeholder
+E7,RETFound + UPerNet,res:1440,DDR,0,DDR,mean,lesion_recall_large,0.70706,placeholder
+E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,MA,aupr,0.13788,placeholder
+E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,HE,aupr,0.40026,placeholder
+E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,EX,aupr,0.50828,placeholder
+E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,SE,aupr,0.31512,placeholder
+E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,mean,lesion_recall_small,0.28558,placeholder
+E7,RETFound + UPerNet,res:native patches,DDR,0,DDR,mean,lesion_recall_large,0.71071,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,DDR,MA,aupr,0.06749,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,DDR,HE,aupr,0.20555,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,DDR,EX,aupr,0.26769,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,DDR,SE,aupr,0.14624,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,MA,aupr,0.04439,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,HE,aupr,0.17612,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,EX,aupr,0.28854,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,TJDR-std,SE,aupr,0.13233,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,FGADR,MA,aupr,0.02113,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,FGADR,HE,aupr,0.13386,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,FGADR,EX,aupr,0.18833,placeholder
+E8,U-Net,size:DDR 10%,DDR,0,FGADR,SE,aupr,0.08048,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,DDR,MA,aupr,0.13846,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,DDR,HE,aupr,0.33507,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,DDR,EX,aupr,0.42678,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,DDR,SE,aupr,0.25066,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,MA,aupr,0.09255,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,HE,aupr,0.30193,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,EX,aupr,0.46807,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,TJDR-std,SE,aupr,0.23197,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,FGADR,MA,aupr,0.0428,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,FGADR,HE,aupr,0.24142,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,FGADR,EX,aupr,0.33258,placeholder
+E8,U-Net,size:DDR 50%,DDR,0,FGADR,SE,aupr,0.15595,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,DDR,MA,aupr,0.15919,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,DDR,HE,aupr,0.37182,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,DDR,EX,aupr,0.46975,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,DDR,SE,aupr,0.29747,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,MA,aupr,0.10303,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,HE,aupr,0.34777,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,EX,aupr,0.50253,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,TJDR-std,SE,aupr,0.2658,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,FGADR,MA,aupr,0.05037,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,FGADR,HE,aupr,0.27434,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,FGADR,EX,aupr,0.36764,placeholder
+E8,U-Net,size:DDR 100%,DDR,0,FGADR,SE,aupr,0.18322,placeholder
+E8,U-Net,size:fine merged,DDR,0,DDR,MA,aupr,0.18348,placeholder
+E8,U-Net,size:fine merged,DDR,0,DDR,HE,aupr,0.42238,placeholder
+E8,U-Net,size:fine merged,DDR,0,DDR,EX,aupr,0.52781,placeholder
+E8,U-Net,size:fine merged,DDR,0,DDR,SE,aupr,0.33709,placeholder
+E8,U-Net,size:fine merged,DDR,0,TJDR-std,MA,aupr,0.20588,placeholder
+E8,U-Net,size:fine merged,DDR,0,TJDR-std,HE,aupr,0.54079,placeholder
+E8,U-Net,size:fine merged,DDR,0,TJDR-std,EX,aupr,0.68204,placeholder
+E8,U-Net,size:fine merged,DDR,0,TJDR-std,SE,aupr,0.42864,placeholder
+E8,U-Net,size:fine merged,DDR,0,FGADR,MA,aupr,0.06153,placeholder
+E8,U-Net,size:fine merged,DDR,0,FGADR,HE,aupr,0.33481,placeholder
+E8,U-Net,size:fine merged,DDR,0,FGADR,EX,aupr,0.40613,placeholder
+E8,U-Net,size:fine merged,DDR,0,FGADR,SE,aupr,0.21323,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,DDR,MA,aupr,0.10634,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,DDR,HE,aupr,0.24869,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,DDR,EX,aupr,0.3168,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,DDR,SE,aupr,0.19154,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,MA,aupr,0.04883,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,HE,aupr,0.18675,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,EX,aupr,0.29771,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,TJDR-std,SE,aupr,0.1286,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,FGADR,MA,aupr,0.02785,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,FGADR,HE,aupr,0.16449,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,FGADR,EX,aupr,0.23036,placeholder
+E8,M2MRF,size:DDR 10%,DDR,0,FGADR,SE,aupr,0.10297,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,DDR,MA,aupr,0.18686,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,DDR,HE,aupr,0.38835,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,DDR,EX,aupr,0.48868,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,DDR,SE,aupr,0.31515,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,MA,aupr,0.0933,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,HE,aupr,0.30696,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,EX,aupr,0.4557,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,TJDR-std,SE,aupr,0.23152,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,FGADR,MA,aupr,0.05434,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,FGADR,HE,aupr,0.28484,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,FGADR,EX,aupr,0.36718,placeholder
+E8,M2MRF,size:DDR 50%,DDR,0,FGADR,SE,aupr,0.19486,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,DDR,MA,aupr,0.2261,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,DDR,HE,aupr,0.45351,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,DDR,EX,aupr,0.56438,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,DDR,SE,aupr,0.36342,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,MA,aupr,0.11322,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,HE,aupr,0.35276,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,EX,aupr,0.49571,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,TJDR-std,SE,aupr,0.27781,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,FGADR,MA,aupr,0.0725,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,FGADR,HE,aupr,0.33655,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,FGADR,EX,aupr,0.42459,placeholder
+E8,M2MRF,size:DDR 100%,DDR,0,FGADR,SE,aupr,0.22014,placeholder
+E8,M2MRF,size:fine merged,DDR,0,DDR,MA,aupr,0.25593,placeholder
+E8,M2MRF,size:fine merged,DDR,0,DDR,HE,aupr,0.48904,placeholder
+E8,M2MRF,size:fine merged,DDR,0,DDR,EX,aupr,0.58647,placeholder
+E8,M2MRF,size:fine merged,DDR,0,DDR,SE,aupr,0.41007,placeholder
+E8,M2MRF,size:fine merged,DDR,0,TJDR-std,MA,aupr,0.2046,placeholder
+E8,M2MRF,size:fine merged,DDR,0,TJDR-std,HE,aupr,0.53546,placeholder
+E8,M2MRF,size:fine merged,DDR,0,TJDR-std,EX,aupr,0.66974,placeholder
+E8,M2MRF,size:fine merged,DDR,0,TJDR-std,SE,aupr,0.43113,placeholder
+E8,M2MRF,size:fine merged,DDR,0,FGADR,MA,aupr,0.07665,placeholder
+E8,M2MRF,size:fine merged,DDR,0,FGADR,HE,aupr,0.37132,placeholder
+E8,M2MRF,size:fine merged,DDR,0,FGADR,EX,aupr,0.45222,placeholder
+E8,M2MRF,size:fine merged,DDR,0,FGADR,SE,aupr,0.24706,placeholder
+E9,U-Net,loss:CE,DDR,0,DDR,MA,aupr,0.12781,placeholder
+E9,U-Net,loss:CE,DDR,0,DDR,HE,aupr,0.35163,placeholder
+E9,U-Net,loss:CE,DDR,0,DDR,EX,aupr,0.4476,placeholder
+E9,U-Net,loss:CE,DDR,0,DDR,SE,aupr,0.24457,placeholder
+E9,U-Net,loss:Dice,DDR,0,DDR,MA,aupr,0.15603,placeholder
+E9,U-Net,loss:Dice,DDR,0,DDR,HE,aupr,0.38616,placeholder
+E9,U-Net,loss:Dice,DDR,0,DDR,EX,aupr,0.48451,placeholder
+E9,U-Net,loss:Dice,DDR,0,DDR,SE,aupr,0.29001,placeholder
+E9,U-Net,loss:CE + Dice,DDR,0,DDR,MA,aupr,0.16275,placeholder
+E9,U-Net,loss:CE + Dice,DDR,0,DDR,HE,aupr,0.38383,placeholder
+E9,U-Net,loss:CE + Dice,DDR,0,DDR,EX,aupr,0.48205,placeholder
+E9,U-Net,loss:CE + Dice,DDR,0,DDR,SE,aupr,0.30044,placeholder
 E10,nnU-Net,,,-1,,,params_m,33.4,placeholder
 E10,nnU-Net,,,-1,,,flops_g,180.0,placeholder
 E10,nnU-Net,,,-1,,,peak_mem_gb,9.2,placeholder
@@ -32074,61 +32082,61 @@ audit,labels,,IDRiD,-1,,EX,lesions_per_image,142.47727,measured
 audit,labels,,IDRiD,-1,,EX,median_rel_diameter,0.005,measured
 audit,labels,,IDRiD,-1,,SE,lesions_per_image,1.95455,measured
 audit,labels,,IDRiD,-1,,SE,median_rel_diameter,0.0318,measured
-audit,labels,,DDR,-1,,MA,lesions_per_image,14.78788,placeholder
+audit,labels,,DDR,-1,,MA,lesions_per_image,15.81512,placeholder
 audit,labels,,DDR,-1,,MA,median_rel_diameter,0.0044,placeholder
-audit,labels,,DDR,-1,,HE,lesions_per_image,12.87157,placeholder
+audit,labels,,DDR,-1,,HE,lesions_per_image,11.98009,placeholder
 audit,labels,,DDR,-1,,HE,median_rel_diameter,0.0102,placeholder
-audit,labels,,DDR,-1,,EX,lesions_per_image,36.56629,placeholder
+audit,labels,,DDR,-1,,EX,lesions_per_image,36.53971,placeholder
 audit,labels,,DDR,-1,,EX,median_rel_diameter,0.0047,placeholder
-audit,labels,,DDR,-1,,SE,lesions_per_image,1.91925,placeholder
+audit,labels,,DDR,-1,,SE,lesions_per_image,1.92884,placeholder
 audit,labels,,DDR,-1,,SE,median_rel_diameter,0.019,placeholder
-audit,labels,,TJDR-std,-1,,MA,lesions_per_image,18.14457,placeholder
+audit,labels,,TJDR-std,-1,,MA,lesions_per_image,18.81226,placeholder
 audit,labels,,TJDR-std,-1,,MA,median_rel_diameter,0.005,placeholder
-audit,labels,,TJDR-std,-1,,HE,lesions_per_image,15.47061,placeholder
+audit,labels,,TJDR-std,-1,,HE,lesions_per_image,14.54275,placeholder
 audit,labels,,TJDR-std,-1,,HE,median_rel_diameter,0.012,placeholder
-audit,labels,,TJDR-std,-1,,EX,lesions_per_image,40.63862,placeholder
+audit,labels,,TJDR-std,-1,,EX,lesions_per_image,40.13241,placeholder
 audit,labels,,TJDR-std,-1,,EX,median_rel_diameter,0.0052,placeholder
-audit,labels,,TJDR-std,-1,,SE,lesions_per_image,2.42439,placeholder
+audit,labels,,TJDR-std,-1,,SE,lesions_per_image,2.3175,placeholder
 audit,labels,,TJDR-std,-1,,SE,median_rel_diameter,0.024,placeholder
-audit,labels,,TJDR-uwf,-1,,MA,lesions_per_image,25.1201,placeholder
+audit,labels,,TJDR-uwf,-1,,MA,lesions_per_image,25.02376,placeholder
 audit,labels,,TJDR-uwf,-1,,MA,median_rel_diameter,0.0026,placeholder
-audit,labels,,TJDR-uwf,-1,,HE,lesions_per_image,25.0319,placeholder
+audit,labels,,TJDR-uwf,-1,,HE,lesions_per_image,23.60353,placeholder
 audit,labels,,TJDR-uwf,-1,,HE,median_rel_diameter,0.0065,placeholder
-audit,labels,,TJDR-uwf,-1,,EX,lesions_per_image,57.60475,placeholder
+audit,labels,,TJDR-uwf,-1,,EX,lesions_per_image,55.03268,placeholder
 audit,labels,,TJDR-uwf,-1,,EX,median_rel_diameter,0.003,placeholder
-audit,labels,,TJDR-uwf,-1,,SE,lesions_per_image,3.38148,placeholder
+audit,labels,,TJDR-uwf,-1,,SE,lesions_per_image,3.61697,placeholder
 audit,labels,,TJDR-uwf,-1,,SE,median_rel_diameter,0.011,placeholder
-audit,labels,,MAPLES-DR,-1,,MA,lesions_per_image,14.61588,placeholder
+audit,labels,,MAPLES-DR,-1,,MA,lesions_per_image,13.55243,placeholder
 audit,labels,,MAPLES-DR,-1,,MA,median_rel_diameter,0.005,placeholder
-audit,labels,,MAPLES-DR,-1,,HE,lesions_per_image,9.13662,placeholder
+audit,labels,,MAPLES-DR,-1,,HE,lesions_per_image,8.57356,placeholder
 audit,labels,,MAPLES-DR,-1,,HE,median_rel_diameter,0.0125,placeholder
-audit,labels,,MAPLES-DR,-1,,EX,lesions_per_image,31.35377,placeholder
+audit,labels,,MAPLES-DR,-1,,EX,lesions_per_image,31.46492,placeholder
 audit,labels,,MAPLES-DR,-1,,EX,median_rel_diameter,0.005,placeholder
-audit,labels,,MAPLES-DR,-1,,SE,lesions_per_image,1.93903,placeholder
+audit,labels,,MAPLES-DR,-1,,SE,lesions_per_image,2.08037,placeholder
 audit,labels,,MAPLES-DR,-1,,SE,median_rel_diameter,0.025,placeholder
-audit,labels,,FGADR,-1,,MA,lesions_per_image,9.02979,placeholder
+audit,labels,,FGADR,-1,,MA,lesions_per_image,9.23614,placeholder
 audit,labels,,FGADR,-1,,MA,median_rel_diameter,0.0075,placeholder
-audit,labels,,FGADR,-1,,HE,lesions_per_image,6.27657,placeholder
+audit,labels,,FGADR,-1,,HE,lesions_per_image,6.28175,placeholder
 audit,labels,,FGADR,-1,,HE,median_rel_diameter,0.022,placeholder
-audit,labels,,FGADR,-1,,EX,lesions_per_image,10.58697,placeholder
+audit,labels,,FGADR,-1,,EX,lesions_per_image,10.7099,placeholder
 audit,labels,,FGADR,-1,,EX,median_rel_diameter,0.013,placeholder
-audit,labels,,FGADR,-1,,SE,lesions_per_image,1.57357,placeholder
+audit,labels,,FGADR,-1,,SE,lesions_per_image,1.67073,placeholder
 audit,labels,,FGADR,-1,,SE,median_rel_diameter,0.033,placeholder
-audit,labels,,Retinal-Lesions,-1,,MA,lesions_per_image,4.2025,placeholder
+audit,labels,,Retinal-Lesions,-1,,MA,lesions_per_image,4.21064,placeholder
 audit,labels,,Retinal-Lesions,-1,,MA,median_rel_diameter,0.016,placeholder
-audit,labels,,Retinal-Lesions,-1,,HE,lesions_per_image,3.72031,placeholder
+audit,labels,,Retinal-Lesions,-1,,HE,lesions_per_image,3.75898,placeholder
 audit,labels,,Retinal-Lesions,-1,,HE,median_rel_diameter,0.046,placeholder
-audit,labels,,Retinal-Lesions,-1,,EX,lesions_per_image,2.90409,placeholder
+audit,labels,,Retinal-Lesions,-1,,EX,lesions_per_image,2.99466,placeholder
 audit,labels,,Retinal-Lesions,-1,,EX,median_rel_diameter,0.052,placeholder
-audit,labels,,Retinal-Lesions,-1,,SE,lesions_per_image,1.2384,placeholder
+audit,labels,,Retinal-Lesions,-1,,SE,lesions_per_image,1.33095,placeholder
 audit,labels,,Retinal-Lesions,-1,,SE,median_rel_diameter,0.05,placeholder
-audit,labels,,DiaRetDB1,-1,,MA,lesions_per_image,5.24415,placeholder
+audit,labels,,DiaRetDB1,-1,,MA,lesions_per_image,4.89931,placeholder
 audit,labels,,DiaRetDB1,-1,,MA,median_rel_diameter,0.03,placeholder
-audit,labels,,DiaRetDB1,-1,,HE,lesions_per_image,4.57681,placeholder
+audit,labels,,DiaRetDB1,-1,,HE,lesions_per_image,4.37806,placeholder
 audit,labels,,DiaRetDB1,-1,,HE,median_rel_diameter,0.07,placeholder
-audit,labels,,DiaRetDB1,-1,,EX,lesions_per_image,2.66822,placeholder
+audit,labels,,DiaRetDB1,-1,,EX,lesions_per_image,2.69489,placeholder
 audit,labels,,DiaRetDB1,-1,,EX,median_rel_diameter,0.09,placeholder
-audit,labels,,DiaRetDB1,-1,,SE,lesions_per_image,1.15971,placeholder
+audit,labels,,DiaRetDB1,-1,,SE,lesions_per_image,1.22437,placeholder
 audit,labels,,DiaRetDB1,-1,,SE,median_rel_diameter,0.08,placeholder
 L1,papers,split:official,IDRiD,2019,,,n_papers,2.0,measured
 L1,papers,split:own split,IDRiD,2019,,,n_papers,0.0,measured

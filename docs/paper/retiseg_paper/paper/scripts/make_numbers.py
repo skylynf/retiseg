@@ -231,11 +231,21 @@ def foundation():
         if train:
             kw["train_set"] = train
         return D.sel(**kw)["value"].mean()
-    zs = {"SAM": e5("SAM", "zero_shot:auto_oracle_class", "IDRiD"), "SAM 2": e5("SAM 2", "zero_shot:auto_oracle_class", "IDRiD"),
-          "SAM 3": D.sel(experiment="E5", model="SAM 3", test_set="IDRiD", metric="aupr").groupby("cls")["value"].max().mean()}
-    best = max(zs, key=zs.get)
-    put("fm.zero.model", best, True)
-    put("fm.zero.value", f2(zs[best]), True)
+    # the zero-shot block is summarised by the any-lesion AUPR (decided 2026-10-14): SAM / SAM 2 class-agnostic maps,
+    # SAM 3 with the wording chosen on the validation pool (text:selected); nothing is picked on the test set
+    def any_of(model, variant):
+        r = D.sel(experiment="E5", model=model, variant=variant, test_set="IDRiD", metric="aupr_any_lesion", cls="any")
+        return (float(r["value"].mean()), D.simulated(r)) if len(r) else (float("nan"), True)
+    zs = {"SAM": any_of("SAM", "zero_shot:auto_any_lesion"), "SAM 2": any_of("SAM 2", "zero_shot:auto_any_lesion"), "SAM 3": any_of("SAM 3", "text:selected")}
+    best = max(zs, key=lambda m: zs[m][0])
+    put("fm.zero.model", best, any(v[1] for v in zs.values()))
+    put("fm.zero.value", f2(zs[best][0]), any(v[1] for v in zs.values()))
+    # the upper bound of the automatic masks when each mask takes the class it overlaps most (reads the test labels)
+    ub = {"SAM": e5("SAM", "zero_shot:auto_oracle_class", "IDRiD"), "SAM 2": e5("SAM 2", "zero_shot:auto_oracle_class", "IDRiD")}
+    put("fm.zero.ub.model", max(ub, key=ub.get), True)
+    put("fm.zero.ub.value", f2(max(ub.values())), True)
+    ref_any = D.reference_any_lesion("nnU-Net", "IDRiD")
+    put("fm.any.ref.nnunet.IDRiD", "--" if ref_any is None else f2(ref_any), ref_any is None)
     # the class-agnostic main number of tier a: the protocol's merged any-lesion AUPR (cls "any"), measured only
     for model, tag in (("SAM", "sam"), ("SAM 2", "samtwo")):
         for test in ("IDRiD", "DDR"):

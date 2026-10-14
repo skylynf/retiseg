@@ -481,6 +481,10 @@ def table_independent():
 
 # ------------------------------------------------ Table 6 foundation models
 def table_foundation():
+    """Table 6 (docs/ops/00, the Luming list item 5, decided 2026-10-14): the zero-shot block holds only what sees no
+    test label and is summarised by the any-lesion AUPR; everything that reads the test labels (automatic masks
+    classed by overlap, oracle prompts) is one 'upper bound' block; best / second-best are marked within a block."""
+
     def e5(model, variant, test, train=None):
         kw = dict(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr")
         if train:
@@ -492,77 +496,80 @@ def table_foundation():
         return r.groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
 
     def any_lesion(model, variant, test):
-        # the registered zero-shot result of the automatic masks is class-agnostic (e5_frozen.yaml zero_shot.outputs.main):
-        # collect_runs metric aupr_any_lesion; a missing row is an error, never a substitute number (review N2): results.csv
-        # predates the key until build_placeholder.py --force and the two collects are run (docs/ops/00, Luming list, item 8)
+        # the registered zero-shot result is class-agnostic (e5_frozen.yaml zero_shot.outputs.main): collect_runs metric
+        # aupr_any_lesion; a missing row is an error, never a substitute number (review N2)
         r = D.sel(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr_any_lesion", cls="any")
         if not len(r):
             raise ValueError(f"E5 {model} {variant} {test}: no aupr_any_lesion row in results.csv; regenerate the placeholder table "
                              "(python scripts/build_placeholder.py --force, then collect_runs.py and collect_literature.py) or collect the runs")
         return float(r["value"].mean())
 
-    # (model, use, backbone, per-class values, optional summary for the mAUPR column); review fix 11 (B2): the zero-shot
-    # rows show the class-by-overlap upper bound per class and the any-lesion AUPR as their summary, SAM 3 shows the
-    # wording chosen on the validation pool; nothing is picked on a test set
+    blank = lambda t: np.full(4, np.nan)
+    # block title, summary column semantics ("any" = any-lesion AUPR, "mean" = mean of the four classes), rows:
+    # (model, use, backbone, per-class values, summary) -- summary None means the mean of the four classes
     spec = [
-        ("Zero-shot (no training image; density, area cap and wording chosen on the validation pool)", [
-            ("SAM", "automatic masks, class by overlap$^\\dagger$; any-lesion$^\\ddagger$", "ViT-H", lambda t: e5("SAM", "zero_shot:auto_oracle_class", t),
-             lambda t: any_lesion("SAM", "zero_shot:auto_any_lesion", t)),
-            ("SAM 2", "automatic masks, class by overlap$^\\dagger$; any-lesion$^\\ddagger$", "Hiera-L", lambda t: e5("SAM 2", "zero_shot:auto_oracle_class", t),
-             lambda t: any_lesion("SAM 2", "zero_shot:auto_any_lesion", t)),
-            ("SAM 3", "text, wording chosen on validation", "--", lambda t: e5("SAM 3", "text:selected", t)),
+        ("Zero-shot: no test label; density, area cap and wording chosen on the validation pool (summary = any-lesion AUPR$^\\ddagger$)", "any", [
+            ("SAM", "automatic masks, class-agnostic", "ViT-H", blank, lambda t: any_lesion("SAM", "zero_shot:auto_any_lesion", t)),
+            ("SAM 2", "automatic masks, class-agnostic", "Hiera-L", blank, lambda t: any_lesion("SAM 2", "zero_shot:auto_any_lesion", t)),
+            ("SAM 3", "text, wording chosen on validation", "--", lambda t: e5("SAM 3", "text:selected", t), lambda t: any_lesion("SAM 3", "text:selected", t)),
         ]),
-        ("Oracle prompt from every ground-truth component (upper bound)", [
-            ("SAM", "boxes", "ViT-B", lambda t: e5("SAM", "oracle:box:all", t)),  # the oracle tier uses ViT-B (16, D3)
-            ("SAM 2", "points", "Hiera-L", lambda t: e5("SAM 2", "oracle:point:all", t)),
-            ("SAM 2", "boxes", "Hiera-L", lambda t: e5("SAM 2", "oracle:box:all", t)),
-            ("MedSAM", "boxes", "ViT-B", lambda t: e5("MedSAM", "oracle:box:all", t)),
+        ("Upper bounds that read the test labels (not a usable setting)", "mean", [
+            ("SAM", "automatic masks, class by overlap$^\\dagger$", "ViT-H", lambda t: e5("SAM", "zero_shot:auto_oracle_class", t), None),
+            ("SAM 2", "automatic masks, class by overlap$^\\dagger$", "Hiera-L", lambda t: e5("SAM 2", "zero_shot:auto_oracle_class", t), None),
+            ("SAM", "oracle boxes, every component", "ViT-B", lambda t: e5("SAM", "oracle:box:all", t), None),  # the oracle tier uses ViT-B (16, D3)
+            ("SAM 2", "oracle points, every component", "Hiera-L", lambda t: e5("SAM 2", "oracle:point:all", t), None),
+            ("SAM 2", "oracle boxes, every component", "Hiera-L", lambda t: e5("SAM 2", "oracle:box:all", t), None),
+            ("MedSAM", "oracle boxes, every component", "ViT-B", lambda t: e5("MedSAM", "oracle:box:all", t), None),
         ]),
-        ("Parameter-efficient fine-tuning (trained on the source of the test set)", [
-            ("SAMed", "LoRA", "ViT-B", lambda t: e5("SAMed", "peft", t, t)),
-            ("SAM-Adapter", "adapters", "ViT-H", lambda t: e5("SAM-Adapter", "peft", t, t)),
-            ("SAM2-UNet", "adapters + U-shaped decoder", "Hiera-L", lambda t: e5("SAM2-UNet", "peft", t, t)),
+        ("Parameter-efficient fine-tuning (trained on the source of the test set)", "mean", [
+            ("SAMed", "LoRA", "ViT-B", lambda t: e5("SAMed", "peft", t, t), None),
+            ("SAM-Adapter", "adapters", "ViT-H", lambda t: e5("SAM-Adapter", "peft", t, t), None),
+            ("SAM2-UNet", "adapters + U-shaped decoder", "Hiera-L", lambda t: e5("SAM2-UNet", "peft", t, t), None),
         ]),
-        ("Encoder + decoder (trained on the source of the test set)", [
-            ("MedSAM", "full fine-tuning", "ViT-B", lambda t: e5("MedSAM (full FT)", "encoder_decoder", t, t)),
-            ("RETFound", "MAE encoder + UPerNet", "ViT-L", lambda t: e5("RETFound + UPerNet", "encoder_decoder", t, t)),
+        ("Encoder + decoder (trained on the source of the test set)", "mean", [
+            ("MedSAM", "full fine-tuning", "ViT-B", lambda t: e5("MedSAM (full FT)", "encoder_decoder", t, t), None),
+            ("RETFound", "MAE encoder + UPerNet", "ViT-L", lambda t: e5("RETFound + UPerNet", "encoder_decoder", t, t), None),
         ]),
     ]
-    flat = [(g, *r) for g, rs in spec for r in rs]
-    vals = {k: np.array([row[4](k) for row in flat]) for k in ("IDRiD", "DDR")}
-    summ = {k: np.array([row[5](k) if len(row) > 5 else float(np.nanmean(vals[k][i])) for i, row in enumerate(flat)]) for k in ("IDRiD", "DDR")}
-    marks = {}
-    for k in vals:
-        for j in range(4):
-            marks[(k, j)] = rank_marks(vals[k][:, j])
-        marks[(k, "m")] = rank_marks(summ[k])
-    rows, i = [], 0
-    for title, rs in spec:
+    rows = []
+    for title, kind, rs in spec:
+        vals = {k: np.array([r[3](k) for r in rs]) for k in ("IDRiD", "DDR")}
+        summ = {k: np.array([r[4](k) if r[4] is not None else float(np.nanmean(vals[k][i])) for i, r in enumerate(rs)]) for k in ("IDRiD", "DDR")}
+        marks = {}
+        for k in vals:   # best and second-best within the block only (decided 2026-10-14); no mark where one row stands alone
+            for j in range(4):
+                marks[(k, j)] = rank_marks(vals[k][:, j]) if np.isfinite(vals[k][:, j]).sum() >= 2 else (-1, -1)
+            marks[(k, "m")] = rank_marks(summ[k]) if np.isfinite(summ[k]).sum() >= 2 else (-1, -1)
         rows.append(f"\\grouprow{{13}}{{{title}}}")
-        for name, how, backbone, *_fns in rs:
-            cells = [f"\\famchip{{foundation}}\\; {name}", how, backbone]
+        for i, (name, how, backbone, *_fns) in enumerate(rs):
+            cells = [f"\\famchip{{foundation}}\; {name}", how, backbone]
             for k in ("IDRiD", "DDR"):
                 for j in range(4):
                     v = vals[k][i, j]
                     b, s2 = marks[(k, j)]
-                    cells.append(tint(v, 0, 0.9) + num(v, "{:.2f}", True, "best" if i == b else "second" if i == s2 else None))
+                    cells.append(tint(v, 0, 0.9) + num(v, "{:.2f}", True, "best" if i == b else "second" if i == s2 else None) if np.isfinite(v) else "\\na")
                 b, s2 = marks[(k, "m")]
                 cells.append(num(summ[k][i], "{:.2f}", True, "best" if i == b else "second" if i == s2 else None))
             rows.append(" & ".join(cells) + " \\\\")
-            i += 1
     ref = D.internal()
     rows.append("\\midrule")
+    any_ref = []
     for model in ("M2MRF", "nnU-Net"):
-        cells = [f"\\famchip{{{D.FAMILY_OF[model]}}}\\; {model}", "reference, Table~\\ref{tab:main}", "--"]
+        cells = [f"\\famchip{{{D.FAMILY_OF[model]}}}\; {model}", "reference, Table~\\ref{tab:main}", "--"]
         for k in ("IDRiD", "DDR"):
             v = ref.loc[(model, k)].to_numpy()
             cells += [num(x, "{:.2f}") for x in v] + [num(v.mean(), "{:.2f}")]
         rows.append(" & ".join(cells) + " \\\\")
+        parts = []
+        for k in ("IDRiD", "DDR"):
+            a = D.reference_any_lesion(model, k)
+            parts.append("--" if a is None else f"{a:.2f}")
+        any_ref.append(f"{model} {parts[0]} / {parts[1]}")
     write(
         "tab_foundation",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Foundation models under four kinds of use.}} The four kinds are reported separately and are not ranked against each other: zero-shot use sees no test label (its density, area cap and wording are chosen on the validation pool), oracle prompts are derived from the test labels, and the two trained settings follow the unified protocol. AUPR on the IDRiD and DDR test sets. \best{{Bold}} and \second{{underlined}} mark the best and second-best foundation-model rows of each column.}}
+\caption{{\textbf{{Foundation models under four kinds of use.}} The kinds are reported in separate blocks and are not ranked against each other: zero-shot use sees no test label (its density, area cap and wording are chosen on the validation pool); the upper-bound block reads the test labels (masks classed by their overlap with the ground truth, prompts derived from every ground-truth component) and is not a usable setting; the two trained settings follow the unified protocol. AUPR on the IDRiD and DDR test sets. \best{{Bold}} and \second{{underlined}} mark the best and second-best rows of each column within a block.}}
 \label{{tab:foundation}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l l l cccc c @{{\hspace{{10pt}}}} cccc c@{{}}}}
@@ -575,8 +582,8 @@ def table_foundation():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item $^\dagger$Automatic masks carry no class; each mask is assigned the class it overlaps most in the ground truth, which makes the per-class cells an upper bound for class-agnostic proposals. Scores of automatic masks use the predicted IoU.
-\item $^\ddagger$The registered zero-shot result is class-agnostic: the mAUPR column of these rows is the any-lesion AUPR of the class-agnostic map (union of the four classes against the pixelwise maximum), not the mean of the four upper-bound cells.
+\item $^\ddagger$The zero-shot block is summarised by the any-lesion AUPR (union of the four classes against the pixelwise maximum of the maps); automatic masks carry no class, so their per-class cells are empty, and SAM~3's per-class cells are its own text prompts. The any-lesion AUPR of the references on the same test sets (IDRiD / DDR): {"; ".join(any_ref)} (-- where the run predates the metric).
+\item $^\dagger$Each automatic mask is assigned the class it overlaps most in the ground truth, an upper bound for class-agnostic proposals. Scores of automatic masks use the predicted IoU.
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}

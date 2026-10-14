@@ -42,8 +42,9 @@ stages:
   #    DDR val): the grid {64, 128} x caps, the SAM 3 phrases and the oracle tier; then
   #    `python -m bench.e5.amg --select` and `python -m bench.e5.sam3_text --select` fill e5_frozen.yaml
   #    (committed), and only then does the test stage list anything. Each test item waits for its own
-  #    source's pool directories (gate). Both stages stay OFF until Luming confirms decisions D1-D9 and
-  #    the 128-point budget (docs/ops/00, docs/ops/25 section 4); the first pool run fixes them.
+  #    source's pool directories (gate). Decisions D1-D9 and the budget rule were confirmed on 2026-10-14
+  #    (docs/ops/00); the pool stage goes ON once the inference smoke has passed, runs/E5 is clean and the
+  #    launcher runs this code (docs/ops/17 section 7); the test stage once the selections are committed.
   - name: e5_infer_pool
     priority: 28
     kind: e5_infer
