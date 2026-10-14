@@ -1,0 +1,73 @@
+albert 分支并入 main 的记录
+建立日期 2026-10-14（Liuyc05，云端会话代做；依据 2026-10-14 的合并评审）。本文件记合并时的取舍、改了什么、合并后还要谁做什么。已经发生的事仍以 00 为准，实验范围以 16 为准，服务器步骤以 17 第六、十七节为准。
+
+一、起点
+  分叉点 3c505bb（2026-10-12 03:16）。
+  albert（Liuyc05，2026-10-12 到 13，28 个提交，止于 a617307）：按 16 的 E5a、E5b 行写了 E5 推理档 bench/e5/（frozen、geometry、prompts、score_rules、outputs、amg、prompted、same_info、sam3_text）和启动器 launch_e5_infer.py，两轮评审修复 1–15，共享代码 evaluate.py（可选参数 val_thresholds，不传时与原来逐字相同）、io.write_prob（原子写）、collect_runs、图 5、表 6，retiseg-sam3 环境，文档 design/18–20（今 23、24、20）、ops/21–22。
+  main（lelel-hue，2026-10-13 到 14，到 5707144）：另写了一套 E5 推理档（10-13，python -m bench.e5 子命令），服务器已用它生成并提交 runs/E5/prompts/*.json 和 area_cap 244004（3d00468），但没有做任何解码、没有读过任何 E5 测试指标；此外有专用模型扩充、launch_queue 与 queue.yaml、pack_handoff、nnU-Net E3b、MAPLES-DR、HRDecoder 作者权重、results.csv 的 124 份报告。
+  试合并：13 个文件冲突，其中 bench/e5 下 5 个双方都新增的文件。两套实现的提示文件格式、排序随机流、目录布局、指标名都不同，只能二选一。
+
+二、取舍：E5 推理档用 albert 的实现
+  依据是 16 的 E5a、E5b 行。两套实现与 16 的对照：
+    零样本参数       main：作者两套参数，32 点            albert：点密度 {64, 128} × 面积上限 {0.5%, 2%, 100%}，验证池上按模型选     16：后者
+    面积上限         main：244004 像素（约一个视野的 15%） albert：视野面积的比例                                                       16：比例
+    b 档 SAM         main：ViT-H                         albert：ViT-B                                                               16：ViT-B
+    k                main：1, 5, 10, 20, all             albert：1, 5, 20, all                                                       16：后者
+    Dice 阈值        main：只用 DDR val                  albert：IDRiD val 加 DDR val 合池                                           17 旧版：验证池
+    框给解码器       main：右下角开区间原样              albert：闭区间 x1−1、y1−1                                                   未规定
+  代价：main 生成的提示文件和 area_cap 不再使用，重新生成只要几分钟 CPU；没有任何测试结果作废，所以重生成不涉及看过测试数据再改协议。
+  保留 main 的：e5_frozen.yaml 里三份 gated 权重的 sha256；launch_queue 作为唯一调度器（17 第十四节）；collect_runs 的全部非 E5 部分（load_report 排除名单检查、nn_key、img_auc、collect_e1）；MAPLES-DR（albert 的 geometry 从 e3a_frozen.yaml 读测试集，自动带上）。
+  删除 main 的：bench/e5 下的 __main__.py、common.py、control.py、masks.py、models.py、rules.py、score.py，test_e5_infer.py 的 main 版，collect_runs 的 main 版 collect_e5，queue.yaml 的 e5_amg、e5_prompted、e5_prompted_points、e5_amg_g2，runs/E5/prompts/（8 个文件，3d00468 里有存档）。
+  没有移植：main prompted 的框内 Dice（inbox.json），论文与 collect 都不读它（21 第 45 条，可选）。
+
+三、合并前在 albert 上补的两处（评审修复 16，提交 3a1bc77；读到任何 E5 测试指标之前，登记在 e5_frozen.yaml）
+  1. 窗口选择。原来 prompted.choose_window 只看框中心到窗口四边的最小距离，平局取第一个；靠近画布边缘时一整行窗口竖直余量相同，就选到第一个窗口，哪怕框超出它的右边。1440 画布、1024 窗口（起点 0、416）下模拟每档 2 万个随机框：宽高不超过 512 像素约 0.8% 本可装下却被截；到 800 像素约 1.5% 本可装下却被截，另有约 6% 任何窗口都装不下。现在 window_for_box 先在能完整装下框的窗口里取四边余量最大者，没有才取覆盖框面积最大的，这类框计入 predicted.json 的 n_prompts_box_uncontained。e5_frozen.yaml 新增 oracle.window_choice。
+  2. 选择一致性。a 档测试目录名里没有所选面积上限，a_sam3_selected 目录名里没有所选措辞；选择重做后旧目录会被当成已完成。outputs.claim 在预测前写 run_params.json，已有 predicted.json 或 run_params.json 而值不同就报错。
+  测试：test_e5_infer 新增 window_for_box 与 claim 用例，并在两处原有用例里加断言。
+
+四、合并时改的东西
+  代码
+    bench/scripts/launch_queue.py：新阶段类型 e5_infer，调 launch_e5_infer.plan（phase: pool | test，only，drop_maps），带三态闸门（launch_e5_infer.gate_for）；prepared 目录不在的集合跳过（MAPLES-DR 导出之前）；缺的提示文件在提交项之前由 CPU 生成。删掉 plan_e5_amg、plan_e5_prompted、_e5_sets。
+    bench/configs/queue.yaml：E5 推理档改为 e5_infer_pool（28）、e5_infer_test（29），两个都 enabled: false。
+    bench/scripts/server_run.sh：e5-infer 阶段保留，注明只用于冒烟和手动运行，全量走 queue。
+    bench/configs/e5_frozen.yaml：取 albert 的网格、验证池、oracle 节；main 的 area_cap 244004 改为一行注释，只作记录。
+    collect_runs.py：E5 读取用 albert 的 e5_rows，改为经 load_report（与其他收集器同一排除名单检查）；collect_e1 与 main 其余部分保留。
+    任意病灶指标名统一为 aupr_any_lesion（cls any）：fig5_foundation.py、make_tables.py 的取数加 cls="any"（main 的 data.sel 默认去掉 cls any 的行，不加会报错）；make_numbers.py 的 fm.any.* 从 metric aupr 改为 aupr_any_lesion。
+    bench/tests/test_launch_queue.py：队列名的断言改为新阶段；新增 e5_infer 阶段的计划用例。
+  论文数据
+    results.csv 没有整表重生成（合并的机器没有 runs/，整表重生成会抹掉 6167 行实测）。只把 E5 推理档的占位行（experiment E5，variant 前缀 zero_shot、oracle、oracle_ref、text，共 496 行，全是占位）换成合并后 build_placeholder.py 生成的同前缀 430 行（k 四档、无 SAM 点提示、14 行 aupr_any_lesion）。之后 make 与 make test 通过（25 页）。对照：只用 main 5707144 跑一次 make，tab_independent、tab_main、tab_models、refs.bib 与合并后逐字相同（main 已提交的这几份比它自己的 results.csv 旧，这次一起更新了）；差别只在 tab_foundation、numbers.tex 的 fm.* 和图 5。
+  文档
+    编号：两个分支各自用了 18、19（main：paper/18 专用模型扩充、paper/19 外部独立测试与优先级；albert：design/18 E5 推理档实现、design/19 E5 推理档流程）。main 的 18、19 在代码注释里被引用约 30 处，不动；albert 的改为 design/23、design/24，明确写出的路径都已替换，albert 2026-10-12、13 记录里裸写的“18”“19”按 docs/README.txt 的说明读作 23、24。本文件 25，新文件从 26 起。
+    00：两边的记录整段保留，albert 的一段放在 main 的记录之后，前面加一行说明；文末加合并记录。
+    17：第六节换成 albert 的步骤并接上队列；第十三节第 1 条 b、第 2 条 e 标为被取代；新增第十七节。
+    14 M9：推理档实现一段改为指向 design/23、24 和本文件；main 那套的描述删除。
+    16：新增第九节（a 档抵扣只剩 G2；128 点的算力待定）。
+    CHECKPOINT、README、21（第 4、8 条标已处理，新增第 42–45 条）同步。
+
+五、合并后的测试（云端会话，2026-10-14）
+  环境：Python 3.11，没有 torch（用只满足导入的替身，放在会话临时目录，不进仓库），pytest 9 从源码，pandas、matplotlib、TeX Live 都在。
+  bench/tests 的 E5 五个文件加 test_launch_queue.py：59 通过、6 跳过（契约用例缺权重）、1 失败。失败的是 test_sam3_device…，替身的 torch.device 返回字符串，真 torch 下应通过（21 第 44 条）。
+  整套 bench/tests 与 main（20f8458）在同一环境下各跑一次：合并后 128 通过、26 跳过、29 失败、13 错误，main 85 / 20 / 29 / 13；失败与错误的集合除上面那个替身用例外完全相同（其余都是缺 dataset/、缺 torch 或缺子模块），没有新增失败。
+  合并时为 MAPLES-DR 改了两个测试：test_launch_e5_infer 的项目数改为按 e3a_frozen.yaml 的测试集推算（原来写死七个集合），test_e5_infer 的测试集名单加上末尾的 MAPLES-DR。
+  论文：make（25 页）与 make test（collect 的端到端检查，含 E5 读取 379 行）通过。
+  没有跑的：需要真 torch、权重或 dataset/ 的用例；服务器第一次跑时以 17 第十七节第 1 条 c 为准。
+
+六、还没做、要谁做
+  Luming（第一次池运行之前，都在 00「待用户 Luming 处理」）
+    1. D1–D9 逐条确认或否决（依据 design/24 第十七节）。
+    2. 评审修复 6（框含端点）、7（每模型各选）、16（框装进窗口、选择一致性）确认。
+    3. 预算规则二选一：128 当选时 TJDR_uwf 只跑 fov 变体，或接受每模型约 150 GPU 时（16 第九节、21 第 7 条）。
+    4. 图 5、表 6 的呈现（00 待处理第 5 项）。
+    5. 是否加 CI 与协议文件哈希锁（00 待处理第 6、7 项）。
+  服务器（17 第十七节）
+    1. runs/E5/prompts/ 移到 runs/archive/E5_prompts_main_20261014/。
+    2. retiseg 里跑 E5 与队列测试；retiseg-sam3 建好后跑契约测试。
+    3. Luming 确认后：冒烟（--pool-only --limit 2），看 n_prompts_box_uncontained 和 --estimate；清空 runs/E5；开 e5_infer_pool；池跑完写回两处 selected 并提交；开 e5_infer_test。
+  用户（本次）
+    推送：这次会话没有仓库的推送权限，三个分支以 git bundle 和补丁交付（fix/disable-e5-queue、albert-fixes、merge/albert）。建议先单独推 fix/disable-e5-queue 到 main（只关三个队列阶段，服务器 pull 后立即生效），再把 merge/albert 开成 PR 给 Luming 审。
+
+七、注意事项
+  1. 两个 E5 推理阶段关着之前，服务器的 queue 不会排任何推理项；main 5707144 的版本里它们在优先级 28–30、默认开着，pull 本次提交前不要让 E5 种子 0 和专用模型的阶段先排空。
+  2. e5_frozen.yaml 的“读到第一个 E5 测试指标之前允许改写”窗口仍开着；第一次测试运行之后只增不改。
+  3. runs/E5_prompts/ 的提示文件随服务器生成，不回传；它们的 sha256 记在每个 predicted.json 里。
+  4. albert 2026-10-12 的记录里写的测试数（如“整套 216 通过”）是工作站albert 当时的数，与第五节的云端数不可比。

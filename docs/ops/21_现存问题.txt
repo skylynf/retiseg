@@ -1,0 +1,301 @@
+现存问题
+建立日期 2026-10-12（工作站albert；fork 里 2026-10-10 的同名文件随 fork 丢失，本文件重建）。探索或实现中发现、但当下故意不修的问题都记在这里，每条一个编号，处理后不删，改成“已处理（日期，提交号）”。
+分级：1 外观或仓库卫生；2 记录或文档不一致；3 阻碍本地开发或测试；4 可能让服务器任务出错或配置错；5 可能改变结果、协议或结论（必须立刻处理并记入 00）。
+每条：编号、日期、级别、问题、影响、状态与决定、处理条件、来源。
+
+1  2026-10-12  1 级
+   问题：bench/tests/test_h2former_forward.py 的模块级 fixture 在 960 建 H2Former，16GB 虚拟内存上限下第 0 级 Swin 层的移位窗口掩码（64 × 3600 × 3600 float32 = 3.3GB）分配失败，4 个用例报错而不是跳过（official_code/H2Former/models/basic_module.py:259）。
+   影响：工作站albert 的整套测试恒有 4 个错误，新的错误要靠人工比对数字才能看出。
+   状态与决定：保留，不改测试；基线按 4 错误记（albert环境.txt 第五节）。
+   处理条件：上游给 fixture 加内存判断或 skip 时随之消失。
+   来源：albert环境.txt 第五节；用户 2026-10-12 的手动运行输出。
+
+2  2026-10-12  1 级
+   问题：六个读 dataset/prepared 的用例没有 skipif：bench/tests/test_b1_runner.py:232、:332，test_hacdr_recipe.py:204、:232，test_m2mrf_b1_recipe.py:127、:143，没有数据的机器上记为失败（FileNotFoundError）。
+   影响：同第 1 条，整套测试恒有 6 个失败。
+   状态与决定：保留；这些文件属上游既有代码，与当前任务无关，不顺手改。
+   处理条件：下次因别的原因改到这些文件时加 skipif，或提给 Luming。
+   来源：albert环境.txt 第五节。
+
+3  2026-10-12  3 级
+   问题：工作站albert 的 retiseg 环境没有 pandas、matplotlib，系统没有 latexmk / pdflatex；论文构建、collect_runs.py、test_collect_runs.py 都不能在这台机器跑。
+   影响：E5 推理档流程第 12 步（collect）的代码只能写、不能测；重生成占位数据也不能本地做（见第 4 条）。
+   状态与决定：保留；暂不往 retiseg 环境装（与服务器 requirements 保持一致，paper 的依赖不在 bench/requirements）。
+   处理条件：需要本地出图时在 retiseg 之外另建 paper 环境。
+   来源：albert环境.txt 第二节。
+
+4  2026-10-12  2 级 → 已处理（2026-10-14，albert 合并）
+   问题：步骤 0 把 docs/paper/retiseg_paper/paper/scripts/build_placeholder.py 的 k 元组改成 (1, 5, 20, "all")、去掉了 ("SAM", "point") 的占位，但 data/results.csv 没有重生成（第 3 条）。
+   影响：重生成前 results.csv 里仍有 oracle:box:10、oracle:point:* 的 SAM 占位行，collect_runs.py 只替换有实测的组，这些组永远不会被替换，图 5b 会多画 simulated 点。
+   状态与决定：待处理。
+   处理条件：先改第 8 条的图表脚本，再在有 pandas 的机器上 python docs/paper/retiseg_paper/paper/scripts/build_placeholder.py --force，再按 paper/README 跑 collect_runs.py 和 collect_literature.py。不要单独重生成：图 5b 脚本还写着 k=10 和 SAM 点提示，重生成后这些键没有数据。
+   处理（2026-10-14）：合并时没有整表重生成（合并的机器没有 runs/，整表重生成会抹掉 6167 行实测）。做法是只换 E5 推理档的占位行：用合并后的 build_placeholder.py 生成一份完整占位表，把 results.csv 里 experiment E5、variant 前缀 zero_shot / oracle / oracle_ref / text 的 496 行（全是占位）换成新表里同前缀的 430 行（k 四档、无 SAM 点提示、14 行 aupr_any_lesion）。其他行一字未动；make 与 make test 通过，非 E5 的表、图与只用 main 构建的结果逐字相同。
+   来源：步骤 0 提交；E5推理档流程.txt D4、D5。
+
+5  2026-10-12  1 级
+   问题：测试导入官方代码后 official_code/SAM-Adapter、SAM2-UNet、Swin-Unet 里留下 __pycache__，git status 显示三行 "(untracked content)"。
+   影响：噪音；server_run.sh 的脏树检查只看 bench/，不受影响。
+   状态与决定：保留；不改 .gitmodules。想隐藏可本地执行 git config diff.ignoreSubmodules untracked。
+   处理条件：无。
+   来源：2026-10-12 git status。
+
+6  2026-10-12  5 级 → 已处理（2026-10-12，步骤 0 提交）
+   问题：bench/configs/e5_frozen.yaml（2026-10-12 初版）照 15 的完整设计写，与 16 第三节 E5a/E5b 行、17 第六节不一致：a 档两套作者参数对网格；验证池 DDR 验证集对 IDRiD+DDR 验证；b 档 SAM ViT-H 对 ViT-B；k 五档对四档；点提示 SAM+SAM 2 对只 SAM 2.1；TJDR_uwf 的 G1 画布参照未定。
+   影响：照初版跑推理会与论文图表的范围不一致，a 档算力也不按 16 的预算。
+   状态与决定：已处理。用户 2026-10-12 决定：D1 按 16，D2–D9 按建议；e5_frozen.yaml、15、14、16 同次提交改，00 同日记录。
+   来源：E5推理档流程.txt 第十七节。
+
+7  2026-10-12  4 级
+   问题：a 档网格里 128 点/边若在验证池上当选，七个测试集的推理粗估约 150 GPU 时/模型（TJDR_uwf 的 4256 画布每图 64 窗，占近一半；2026-10-12 步骤 2 核出每边 8 个窗口，原先写 49 是算错），超过 16 给 a 档的约 40 GPU 时。
+   影响：排期或其他任务的卡时。
+   状态与决定：已登记预算规则（e5_frozen.yaml zero_shot.grid.budget_rule：128 当选则 TJDR_uwf 只跑 fov 变体），是建议，用户可在验证池结果出来后在 00 否决；估算误差约两倍，冒烟后重估。
+   2026-10-12 补：评审修复 7 起规则按模型生效；评审修复 8 起 collect 在主变体缺席时以 fov 顶替并记 canvas_long_side（第 18 条）。
+   处理条件：验证池选择结果出来后由用户决定。
+   来源：E5推理档流程.txt D1。
+
+8  2026-10-12  2 级 → 已处理（2026-10-14，与第 4 条同次）
+   问题：论文脚本里写死了步骤 0 之前的键：figures/fig5_foundation.py:92 的 ks = [1, 5, 10, 20, "all"]，:40 和 :42 的 SAM 点提示行（oracle:point:all），scripts/make_tables.py:496、:498 的 SAM 点提示行和 :497 的 SAM 骨干 "ViT-H"（b 档现在是 ViT-B）。
+   影响：现在不影响构建（results.csv 里的占位行还在）。一旦按第 4 条重生成占位数据，这些键没有行，图 5b 的 k=10 点和 SAM 点提示行会变成空值或报错；表 6 的骨干列会写错。Luming 工作站的 make -C paper 和 make collect 在重生成之前照常可用。
+   状态与决定：脚本已改并提交（2026-10-12 步骤 12a，5b99ea5）：fig5 的 ks 四档、去 SAM 点提示两行，make_tables 去 SAM 点提示行、SAM 框提示骨干 ViT-B。剩下的是 Luming 在有 pandas 的机器上重生成占位并 make 一次（第 4 条）。
+   处理条件：与第 4 条一起做，同一次提交。
+   来源：2026-10-12 grep 论文脚本（回答“是否影响 Luming 工作站”时发现）。
+
+9  2026-10-12  1 级
+   问题：official_code/HACDR-Net 的可编辑安装（cluster_env.sh install_hacdr 的 pip install -e，mmsegmentation 的 setup.py develop 模式）会把子模块里受跟踪的 mmseg/.mim/configs 和 mmseg/.mim/tools 两个目录换成指向 ../../configs、../../tools 的符号链接，并生成 mmsegmentation.egg-info、build/、__pycache__。git 在该子模块里看到 867 个文件被删、10 个未跟踪项。工作站albert 上是 2026-10-12 一条写错的 source 命令误跑了 install_hacdr 造成的；服务器上 env 阶段每次建 retiseg-hacdr 也会这样（server_run.sh 的脏树检查只看 bench/，所以没拦）。
+   影响：子模块工作树与钉住的提交不一致，VS Code 的源代码管理把它们连同 SAM-Adapter / SAM2-UNet / Swin-Unet 里的 __pycache__ 一起数进"930 条更改"；官方代码本身没有被改写，符号链接指向的内容相同。
+   状态与决定：已处理（2026-10-12，工作站albert）：rm 两个符号链接 + git checkout -- mmseg/.mim + 删 egg-info；注意 HACDR-Net 的 build/ 和 SAM-Adapter、SAM2-UNet 的 __pycache__/*.pyc 是上游受跟踪的文件，误删后用 git checkout -- . 恢复，现在三个子模块与钉住的提交完全一致。本地另设 git config diff.ignoreSubmodules untracked 和 VS Code 的 git.detectSubmodules=false。服务器上属上游既有行为，不改 cluster_env.sh。
+   处理条件：若要根治，install_hacdr 改为非可编辑安装或装后 git checkout 恢复 .mim；提给 Luming。
+   来源：2026-10-12 检查 VS Code 930 条更改。
+
+以下第 10–26 条来自 2026-10-12 的 peer review（albert-branch-review-2026-10-12.md，附 reviewFixes.patch 覆盖 A1–A5），工作站albert 逐条核实后登记；处理顺序与决定见 00「E5 推理档评审修复 1」第 1 条。
+
+10  2026-10-12  5 级 → 已处理（2026-10-12，评审修复 1，提交 3b03b93）
+   问题：collect_runs.rows_from_report 给每份报告加 cls "any"、metric "aupr" 的任意病灶行；retifig/data.py 的 seed_table 对 metric=aupr 的全部行取均值，主表 mAUPR、score_matrix、Friedman 区组变成五个数的平均。
+   影响：合并后下一次 collect 改掉 main 上已有的主表数字。
+   状态与决定：已处理：any 行改用指标名 aupr_any_lesion，seed_table 只对四类取均值，test_collect_runs.py 加断言并在本机 pandas venv 上通过。
+   来源：评审 A1；本机复现。
+
+11  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 4，提交 4a02de6）
+   问题：17 第六节 e 步带 --drop-maps FGADR,Retinal-Lesions 时，每个措辞运行评测完立即删自己的图（outputs.py evaluate_dir），assemble_selected 要三个来源的图都在，返回 None 且 --assemble 退出码 0；a_sam3_selected/FGADR 不会存在。三个措辞进程并发时还有 copytree 撞 rmtree 的竞态。
+   影响：SAM 3 主结果在两个集上缺失，队列不报错。
+   状态与决定：待处理（评审修复 4）。采纳补丁方案：措辞运行加 --no-assemble 且不接 --drop-maps，拼装项是唯一写者，拼装评测完才删三个措辞目录的图，复制走 .partial 暂存后 rename，缺来源时抛异常。
+   来源：评审 A2。
+
+12  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 3，提交 bead155）
+   问题：按 17 的流程 pool-only → 选择 → --test-only，池上的 a_sam3_selected 拼装项属 POOL 阶段被过滤掉，测试集的 a_sam3_selected 拿不到池阈值，退成 "fixed only" 并写 done.json；更一般地，任何早于同来源池运行的测试运行（--only、--test-only、池项失败）都静默退化。
+   影响：主结果的 dice_valopt 等阈值指标缺失，AUPR 不受影响；删过图的集合只能重新推理。
+   状态与决定：待处理（评审修复 3）。采纳补丁方案：测试划分拿不到池阈值直接抛错（预测已落盘，重跑只评测）；测试项以本来源池目录为闸门；--test-only 保留池拼装前置项；闸门在生产者缺席或失败时返回 never。加固：补丁的 exit_code 读日志最后一个 == exit，被重新排队的失败池项在启动前仍是旧退出码，要改成只认提交后新增的一轮。
+   来源：评审 A3；工作站albert 审阅补丁。
+
+13  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 5，提交 a1fb089）
+   问题：sam3_text.build_scorer 把 torch.device 对象传给 build_sam3_image_model，官方 _setup_device_and_mode 只在 device == "cuda"（字串比较）时 model.cuda()；torch 2.11 下 torch.device("cuda") == "cuda" 为 False，模型留在 CPU、输入在 GPU。sam3 的 decoder.py:301 和 io_utils 多处硬编码默认 CUDA 设备。
+   影响：冒烟第一窗报设备不一致；不会出错数。
+   状态与决定：待处理（评审修复 5）。采纳补丁方案：传 device.type 字串，构建后核对参数所在设备，device.index 非 0 时拒绝（选卡靠 CUDA_VISIBLE_DEVICES，队列本就如此）。不加 torch.cuda.set_device。
+   来源：评审 A4；本机 torch 实测。
+
+14  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 2，提交 4493d68）
+   问题：outputs.is_done 只看 done.json 是否存在；17 第六节 b 步 --limit 2 冒烟之后，c 步不带 limit 的 --pool-only 会把 22 项全部 "skip: done"；手动重跑时预测会重做但评测被 is_done 跳过，留下 2 张图的指标配全量的图。冒烟的池运行也能喂给选择和阈值。
+   影响：文档流程的第二步什么都不跑，或留下错指标。
+   状态与决定：待处理（评审修复 2）。采纳补丁方案：is_done 带 limit 语义（全量请求不认冒烟的 done.json），write_predicted 顺手删旧 done/metrics，池直方图忽略 limit 运行，启动器 plan 传 limit。同一步把 launch_e5_infer.py --submit 的"七个库都在"检查改成只查本次计划用到的集（第 26 条）。
+   来源：补丁新增 A5；工作站albert 按原代码核实。
+
+15  2026-10-12  5 级 → 已处理（2026-10-12，评审修复 7，提交 d5f22f6）
+   问题：a 档网格选择没有脚本（SAM 3 有 --select，网格没有）；grid.selected 只有一组，SAM 与 SAM 2 共用；pool_class_aupr 算逐类 AUPR，登记的任意病灶 AUPR 在合并直方图上没有实现。这是预登记的选择点，现在是人工操作。
+   影响：选择口径不明，事后可争议。
+   状态与决定：待处理（评审修复 B1）。用户 2026-10-12 采纳：每模型各选一组（selected 按模型嵌套），写 amg --select，复用 evaluate.py 逐图累加 any_pooled 的逻辑抽成 pooled_any_histograms。必须在第一次池运行前写进 e5_frozen.yaml 和 00。
+   来源：评审 B1。
+
+16  2026-10-12  5 级 → 已处理（2026-10-12，评审修复 11，代码提交 5501fe5；口径待 Luming 确认）
+   问题：图 5、表 6 的零样本行用 auto_oracle_class（读测试真值的上界），登记的主结果任意病灶 AUPR 没人读；sam3_best 对全部 SAM 3 行取最大且不筛 variant，等于在测试集上挑措辞，text:selected 混在其中；表 6 小标题"no prompt from labels"与 D1 之后在验证池上选参数不符。
+   影响：论文主张与协议不一致。
+   状态与决定：待处理（评审修复 B2，论文侧，改前与 Luming 确认）。方向：零样本主行用 aupr_any_lesion，oracle_class 标为上界；SAM 3 主行用 text:selected，三条措辞只留 5c；删 sam3_best；小标题改为"参数与措辞在验证池上选定"。
+   来源：评审 B2。
+
+17  2026-10-12  2 级 → 已处理（2026-10-12，评审修复 9，代码提交 5501fe5）
+   问题：D6 "k 曲线只在 IDRiD、DDR，其余五个集只做 k=全部" 没实现：curve_sets 只在 frozen.py 校验存在，prompted.planned 对七个集都出四档 k 目录。推理只做一次，多的是写图和三次评测。
+   影响：五个集多写三倍的图、多评三次。
+   状态与决定：待处理（评审修复 B3）。实现而非改登记：prompted.planned、same_info.planned 对不在 curve_sets 的集只出 k=all。
+   来源：评审 B3。
+
+18  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 8，代码提交 5501fe5；待 Luming 确认）
+   问题：第 7 条的延伸。预算规则（128 当选则 TJDR_uwf 只跑 fov 变体）与 collect_runs.py 跳过 __fov 目录叠加，SAM、SAM 2 在 TJDR_uwf 一列没有任何行。17 估的 a 档 64 点约 45 GPU 时/模型、128 约 150，16 给 E5a 的约 40。
+   影响：一列空掉，或超预算。
+   状态与决定：待处理（评审修复 B4，需与 Luming 一起定）。工作站albert 建议：保留规则，collect 在主目录因规则缺席时回退读 __fov 并把 canvas_long_side 记成一行，16 和 00 登记这条回退。池运行前定。
+   来源：评审 B4。
+
+19  2026-10-12  2 级 → 已处理（2026-10-12，评审修复 6，提交 df2c28d）
+   问题：提示文件的框右下不含（x1 = 最大列 + 1），prompted.py 原样送解码器；SAM 系 prompt encoder 加 0.5 取像素中心，SAM 自己的 batched_mask_to_box 和 MedSAM 训练的 np.max 都是含端点下标，所以送进去的框右、下各大一像素。
+   影响：对几像素宽的 MA 偏差占比不小；实际影响估计很小（位置编码在 1/16 尺度），但属登记事项。
+   状态与决定：待处理（评审修复 B5）。采纳：不改提示文件（same_info 的切片并集用不含端点是对的），在 decode_image 送解码器时传 x1−1、y1−1，e5_frozen 的 oracle.box 写明两套约定。池运行前做。
+   来源：评审 B5。
+
+20  2026-10-12  2 级 → 已处理（2026-10-12，评审修复 10：CHECKPOINT 说明与 00 待确认清单；流程笔记入库为 docs/design/24，评审为 docs/design/20，本清单为 docs/ops/21；D1–D9 仍待 Luming 确认）
+   问题：CHECKPOINT 规定 *_frozen.yaml 只增不改，步骤 0 是原地替换（文件头允许读到首个 E5 测试指标前修改，时间上合规）；D1–D9 的依据在未跟踪的 E5推理档流程.txt 第十七节，00 和 18 都引用它，仓库里看不到。
+   影响：可追溯性。
+   状态与决定：待处理（评审修复 B6）。采纳一半：不入库整个 notes 目录，把第十七节整理成新编号文档（19 起）提交；00 里请 Luming 对 D1–D9 确认后再合并；CHECKPOINT 加一句说明两条规则的关系。
+   来源：评审 B6。
+
+21  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 12，代码提交 5501fe5）
+   问题：amg.window_masks 把一张图所有窗口的掩码以整窗 bool 数组留在内存（Mask.from_record 存 1024² 的 segmentation，每张 1 MiB）；TJDR_uwf 4256 画布 64 窗，按每窗数百掩码估单张图 10 GB 量级。未实测。
+   影响：服务器主机内存。
+   状态与决定：待处理（评审修复，工程）。改为逐窗流式：每窗 generate 后立即对每个待写 (cap, kind) 用 np.maximum 更新画布图再丢弃掩码；面积上限、oracle_class 重叠、stability 都是逐掩码局部量，结果不变。
+   来源：评审 4.4。
+
+22  2026-10-12  3 级 → 已处理（2026-10-12，评审修复 12，代码提交 5501fe5）
+   问题：predicted.json 在全部图片写完后才落盘，中途崩溃整项重来；128 密度最贵。
+   影响：崩溃代价以项为单位（小时级）。
+   状态与决定：待处理（评审修复，工程）。轻量版：预测循环开头检查该图在所有待写目录的四类图文件是否都在，齐则跳过；三个模块共用一个辅助函数。
+   来源：评审 4.4。
+
+23  2026-10-12  2 级 → 已处理（2026-10-12，评审修复 12，代码提交 5501fe5）
+   问题：--geometry G2 还在三个 CLI 里，输出目录没有几何标记，会和 G1 写进同一目录；b 档 G2 还会因提示文件画布不符直接报错。16 已砍 G2。
+   影响：误用时覆盖 G1 结果。
+   状态与决定：待处理（评审修复，工程）。删三个 CLI 的 --geometry 选项，geometry.plan 留给测试。
+   来源：评审 4.4。
+
+24  2026-10-12  2 级 → 已处理（2026-10-12，评审修复 12，代码提交 5501fe5）
+   问题：提示文件记了每个真值文件的 sha256，prompted 运行时没有核对。
+   影响：真值被改动后提示文件与之不符却照常跑。
+   状态与决定：待处理（评审修复，工程）。prompted 预测每张图前比对哈希。
+   来源：评审 4.4。
+
+25  2026-10-12  1 级 → 已处理（2026-10-12，评审修复 13，提交 dd2bd79）
+   问题：18 写"共 12 个提交、未推送"，分支实际 14 个且已推到 origin/albert；00 两处标题留着"待提交"；18 第八节把 SAM 2 的 min_mask_region_area 后处理列为待验，但登记默认值 0 不进该路径。
+   影响：记录不一致。
+   状态与决定：待处理（随 18 的其他修订一并改）。
+   来源：评审 4.4。
+
+26  2026-10-12  3 级 → 已处理（2026-10-12，评审修复 2，并入第 14 条那一步，提交 4493d68）
+   问题：launch_e5_infer.py --submit 在排队前要求七个 prepared 库都在（--pool-only 也不例外），server_run.sh 的 e5-infer 阶段同样；只有 IDRiD、DDR 的工作站albert 做池冒烟时启动器直接退出。
+   影响：阻碍本地冒烟。
+   状态与决定：待处理（并入第 14 条那一步）。改成只查本次计划真正用到的集；测试阶段的保护不变。
+   来源：工作站albert 2026-10-12 规划本地冒烟时发现。
+
+以下第 27–36 条来自修复建议（docs/ops/22_fixPlan.md，与 docs/design/20 配套）里建议了、2026-10-12 评审修复 1–13 没有做的项，工作站albert 2026-10-12 按级别登记；都属「可做、非合并前必须」。
+
+27  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 14，bench/tests/test_e5_flow.py，提交 f5397da）
+   问题：五个阻断问题里四个出在已有单元测试的模块之间的接缝上（A2、A3、A5 都是启动器、运行模块、评测三者衔接的问题），没有一个测试按 17 第六节 a–f 的顺序把流程走一遍。
+   影响：同类接缝问题再出现时，单元测试照样全过，要到服务器上才发现。
+   状态与决定：待处理。写一个端到端用例：用假模型按 17 第六节的顺序执行 冒烟 --pool-only --limit 2 → 池运行 → amg --select 与 sam3_text --select 写回 → --test-only --drop-maps → collect，断言每个预期目录都完成、阈值为 pool val_opt、a_sam3_selected 在 drop-maps 集上存在、collect 的行齐全；17 改流程时这个用例跟着改。本机可做。
+   处理条件：排在服务器冒烟之前最好；至少在池运行前。
+   来源：22 第四节第 2 条。
+
+28  2026-10-12  4 级 → 已处理（2026-10-12，评审修复 14，提交 f5397da；代码写好待服务器有权重时运行）
+   问题：三处真实模型构建（amg.build_generator、prompted.build_decoder、sam3_text.build_scorer）没有任何自动化检查，A4 这类问题只能靠冒烟撞上。
+   影响：服务器上权重或环境变化后无人察觉。
+   状态与决定：待处理。在 server_run.sh check 阶段加一组需要权重的契约用例（没有权重就跳过）：三处构建各跑一张合成图（SAM 3 用 1008），断言输出形状、类型、取值范围和参数所在设备。
+   处理条件：权重到位后，服务器或有权重的机器上。
+   来源：22 A4 确认方式、第四节第 3 条。
+
+29  2026-10-12  3 级 → a 已处理（2026-10-12，评审修复 14，提交 f5397da）；b 待 Luming（00「待用户 Luming 处理」第 6 项）
+   问题：test_collect_runs.py 不在 bench/tests 里、依赖 pandas，写代码的机器上没人跑（A1 因此漏到评审才被发现）；分支推送没有任何自动测试。
+   影响：同类回归只能靠人记得跑。
+   状态与决定：待处理。a. test_collect_runs 改成 pytest 可收集、缺 pandas 时 skip；b. GitHub Actions 用 CPU 版 torch 在每次推送上跑 bench/tests 与 test_collect_runs。b 项需 Luming 同意仓库加工作流。
+   处理条件：a 随下次改 collect 时做；b 由 Luming 定。
+   来源：22 A1 流程根因、第四节第 1 条。
+
+30  2026-10-12  3 级 → 已处理（2026-10-12，评审修复 14，提交 f5397da）
+   问题：amg --select 只打印 yaml，不留运行记录；selected 已填后再跑 --select 不会提醒，粘贴覆盖就改了预登记的选择；select_rule 没写明两池合并后 DDR 的 149 张占主导（IDRiD 只有 10 张）。
+   影响：选择的可追溯性和防误改。
+   状态与决定：待处理。--select 另写 runs/E5/selection_grid.json（六组数字、git 提交、两池图数、时间），selected 已填时拒绝再选并提示；select_rule 补一句 DDR 占主导。sam3_text --select 同样处理。
+   处理条件：池运行前。
+   来源：22 B1。
+
+31  2026-10-12  2 级 → 部分处理（2026-10-12，评审修复 14：取数函数对推理档行断言每类恰一行；呈现方式待 Luming，00「待用户 Luming 处理」第 5 项；键的模式测试待占位重生成后）
+   问题：评审修复 11 之后图 5、表 6 的零样本行仍在零样本组内以 † 标上界，22 建议 auto_oracle_class 单独成「上界（读测试真值）」一块；取数函数 e5() 对命中的行取均值，没有断言每个（类，指标）恰好命中一个 variant；训练模型的任意病灶 AUPR 没有作参考线；没有模式测试核对图表脚本用到的键都在 results.csv 里。
+   影响：论文呈现与读数的稳健性。
+   状态与决定：待处理，与 Luming 定呈现方式（现存问题 16 的口径确认一并）。
+   处理条件：占位重生成（第 4 条）之后、首批实测进表之前。
+   来源：22 B2。
+
+32  2026-10-12  2 级 → 部分处理（2026-10-12，评审修复 14：启动器 --estimate；fov 顶替格的呈现待 Luming，00 第 5 项）
+   问题：预算决定没有数据支撑：启动器没有按冒烟实测（predicted.json 的每窗 / 每提示耗时）估算各项与合计 GPU 时的功能；评审修复 8 的 fov 顶替格在表里只靠 canvas_long_side 行区分，fixPlan 建议改为独立 test_set「TJDR-uwf (fov)」或显式「未运行（预算规则）」行。
+   影响：B4 的决定（第 7、18 条）只能凭粗估；表格读者可能忽略画布差异。
+   状态与决定：待处理。启动器加 --estimate（图数 × 窗口数 × 每窗秒数）；呈现方式与第 31 条一起定。
+   处理条件：冒烟后。
+   来源：22 B4。
+
+33  2026-10-12  2 级 → 已处理（2026-10-12，评审修复 14，提交 f5397da）
+   问题：评审修复 6 把框约定写进了 e5_frozen.yaml，但 predicted.json 没有记约定字段，事后只能靠代码版本推断某批图用的是哪种约定。
+   影响：记录完整性。
+   状态与决定：待处理。prompted 的 predicted.json 加 box_convention 字段（如 "inclusive pixel indices, file exclusive"）。
+   处理条件：b 档池运行前顺手加。
+   来源：22 B5。
+
+34  2026-10-12  2 级 → a 已处理（2026-10-12，评审修复 14，bench/tests/test_docs_paths.py，提交 f5397da）；b、c 待 Luming（00「待用户 Luming 处理」第 7 项）
+   问题：受跟踪文档引用未跟踪文件没有机制拦截（B6 的根因）；协议冻结后没有机械保护；合并方式未定。
+   影响：可追溯性与协议完整性。
+   状态与决定：待处理。a. 小测试扫描 docs 里出现的仓库路径并对照 git ls-files；b. 冻结后把 *_frozen.yaml 各节 sha256 写进锁文件，测试发现改动而锁未更新就失败；c. albert 合并走 PR，描述列 D1–D9 与评审修复 6、7、8、11 的登记，由 Luming 逐条确认。
+   处理条件：a 可随时；b 在首个 E5 测试指标读出前后；c 由用户与 Luming 定。
+   来源：22 B6。
+
+35  2026-10-12  2 级 → 已处理（2026-10-12，用户把修复建议入库为 docs/ops/22_fixPlan.md，20 第 6 行的引用随之改）
+   问题：docs/design/20_代码审计.md 第 6 行的修订记录引用配套修复建议 claude/albert-branch-fix-plan-2026-10-12.md，该文件以 fixPlan.md 留在未跟踪的 Albert 笔记里，仓库内读不到。
+   影响：20 的读者找不到修复建议原文；第 27–36 条的来源不可核对。
+   状态与决定：已处理：另存为 docs/ops/22_fixPlan.md，20 第 6 行的引用改为指向它。
+   处理条件：用户决定。
+   来源：工作站albert 2026-10-12 整理笔记入库时发现。
+
+36  2026-10-12  1 级 → 已处理（2026-10-12，评审修复 14，提交 f5397da）
+   问题：18 第十节的提交清单是手写的，评审已指出数量写错一次（评审修复 13 改正）；评审修复 1–13 的提交号散在 00 各段。
+   影响：清单再次过时的风险。
+   状态与决定：待处理。18 第十节改为给出 git log 命令（git log --oneline 3c505bb..albert），不再手写数量。
+   处理条件：下次改 18 时顺手。
+   来源：22 第三节文档项。
+
+以下第 37–41 条来自 2026-10-13 的复审（albert @ 034616f 对照 20 与 22；原文在 docs/design/20_代码审计.md 第二部分），工作站albert 2026-10-12 登记并处理。
+
+37  2026-10-13  5 级 → 已处理（2026-10-12，评审修复 15，提交 192ea8b；呈现方式待 Luming）
+   问题：评审修复 8 的 fov 顶替以「主变体目录没有 done.json」为条件，预算规则没生效时同样触发：64 密度下主变体失败或尚未完成（fov 画布小、先跑完），fov 的数字会被记成 TJDR-uwf 的主结果；标记替代格的 canvas_long_side 行没有图表脚本读。
+   影响：表里出现未标注的替代数字。
+   状态与决定：已处理：amg 在 predicted.json 记 stands_in_for_main（测试划分的 fov 变体，且登记的预算规则确实跳过该模型的主变体时为真），collect 只对标志为真且主变体无 done.json 的 fov 目录顶替；test_collect_runs 加 64 密度 fov 不顶替的例子。替代格的呈现（独立 test_set 还是脚注）仍是 00 待 Luming 第 5 项。
+   来源：复审 N1。
+
+38  2026-10-13  3 级 → a 已处理（2026-10-12，评审修复 15，提交 192ea8b）；b 待 Luming（00 第 5 项）
+   问题：表 6、图 5 的汇总列混了两种指标：零样本 SAM、SAM 2 行的汇总是任意病灶 AUPR，其余行是四类均值，但表 6 的最好/次好在所有行间排名，图 5e 在零样本组内用汇总值挑最好的一行；取数函数缺 aupr_any_lesion 行时静默回退为逐类均值，现在的 results.csv 正处在这个状态。
+   影响：跨指标比较；回退会给出替代数字。
+   状态与决定：a 已处理：缺行直接报错并提示重生成占位（合并后不重生成 make 会失败，见第 39 条）。b 待 Luming：零样本一块内统一用任意病灶 AUPR 作汇总（SAM 3 的 a_sam3_selected 也有 any 行），最好/次好只在各块内排名，图 5e 零样本组内比任意病灶 AUPR。
+   来源：复审 N2。
+
+39  2026-10-13  2 级 → 待 Luming 执行（00 第 8 项）
+   问题：results.csv 还没重生成，没有 text:selected 和 aupr_any_lesion 行；合并到 main 后若不同时重生成，论文构建会带着空行（第 38 条 a 生效后改为报错）。
+   影响：合并与占位重生成的顺序。
+   状态与决定：合并与 build_placeholder --force、collect_runs、collect_literature、make 放在同一次操作里；写进 00 第 8 项。
+   来源：复审 N3。
+
+40  2026-10-13  3 级 → 已处理（2026-10-12，评审修复 15，提交 192ea8b）
+   问题：test_docs_paths.py 检查文档引用的 official_code/... 路径在磁盘上存在，没有初始化子模块的检出（含将来的 CI）会失败。
+   影响：阻碍无子模块的检出跑测试。
+   状态与决定：已处理：子模块目录不存在或为空时跳过该路径。
+   来源：复审 N4。
+
+41  2026-10-13  2 级 → 已处理（2026-10-12，评审修复 15，提交 192ea8b）
+   问题：续跑信任已有的图文件：写图不是原子操作，截断的 PNG 会被当成已完成跳过，评测才报错且再跑仍跳过；续跑不核对图是哪一版代码写的。
+   影响：响亮失败但要手动删文件；旧版代码写的冒烟图可能被正式运行沿用。
+   状态与决定：已处理：io.write_prob 先写临时名再 os.replace（文件要么不存在要么完整，全部预测写图点受益）；outputs.maps_written 还校验四个 PNG 能完整解码，截断的图重做；17 第六节 c 步加「正式运行前清空 runs/E5」。没做版本标记（清空即可）。
+   来源：复审 N5。
+
+42  2026-10-14  4 级 → 已处理（2026-10-14，评审修复 16）
+   问题：prompted.choose_window 只按框中心离窗口四边的最小距离选窗口，平局取第一个。靠近画布边缘时一整行窗口的竖直余量相同，于是选到第一个窗口，哪怕框超出它的右边。1440 画布、1024 窗口下，宽高不超过 512 像素的框约 0.8% 本可装下却被截；宽高到 800 像素时约 1.5% 本可装下却被截，另有约 6% 任何窗口都装不下（模拟，每档 2 万个随机框）。截掉的是大块 EX、HE。
+   影响：b 档上界被压低，而且没有任何记录。
+   状态与决定：prompted.window_for_box 先在能完整装下框的窗口里取四边余量最大者，没有这样的窗口才取覆盖框面积最大的，并把这类框计入 predicted.json 的 n_prompts_box_uncontained；登记在 e5_frozen.yaml oracle.window_choice（读到任何 oracle 结果之前）。test_e5_infer 新增用例，边缘反例与随机 2000 个框（≤608 像素全部装得下）。
+   来源：2026-10-14 合并评审（docs/ops/25 第三节）。
+
+43  2026-10-14  4 级 → 已处理（2026-10-14，评审修复 16）
+   问题：a 档测试目录名里没有所选面积上限，SAM 3 的 a_sam3_selected 目录名里没有所选措辞；选择若被清空重做（同一密度换了上限），已有 predicted.json 的目录会被当成已完成，旧数字沿用。
+   影响：选择重做后静默混入旧结果。
+   状态与决定：outputs.claim 在预测前把这些值写进 run_params.json，已有 predicted.json 或 run_params.json 而值不同就报错，要求手动移走目录并在 00 记原因。test_e5_infer 新增两处断言。
+   来源：2026-10-14 合并评审。
+
+44  2026-10-14  3 级 → 待服务器
+   问题：合并的机器没有 torch。E5 五个测试文件加 test_launch_queue 在 torch 导入替身下 59 通过、6 跳过、1 失败（test_sam3_device…，替身的 torch.device 返回字符串，真 torch 下应通过），契约用例要权重。
+   影响：适配器（SamDecoder、MedSamDecoder、Sam3Scorer）仍只有带权重才跑的契约测试覆盖（第 28 条）。
+   状态与决定：服务器 retiseg 与 retiseg-sam3 各跑一次（17 第十七节第 1 条 c），结果记 00。
+   来源：2026-10-14 合并。
+
+45  2026-10-14  2 级 → 待处理（可选）
+   问题：main 10-13 的 prompted 给每个提示写过框内 Dice（inbox.json，区分“模型分不开”和“框给得不够”），合并时随 main 的实现删除；论文脚本和 collect 都不读它。
+   影响：图 5b 的解读少一个诊断量。
+   状态与决定：不移植；需要时在 albert 的 prompted.decode_image 里按同一定义加一份 per-prompt 记录。
+   来源：2026-10-14 合并评审。
+

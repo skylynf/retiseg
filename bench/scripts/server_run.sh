@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Stages of the first server batch, in order. Run from anywhere:
 #
-#   bash bench/scripts/server_run.sh env        conda envs (cluster_env.sh)
+#   bash bench/scripts/server_run.sh env        conda envs (cluster_env.sh; also retiseg-sam3 for the E5 text prompts,
+#                                               RETISEG_SKIP_SAM3=1 leaves it out)
 #   bash bench/scripts/server_run.sh check      data, weights, GPUs, test suite
 #   bash bench/scripts/server_run.sh cache      1440 canvas caches
 #   bash bench/scripts/server_run.sh smoke      B1 and B-std smoke, 20 steps each
@@ -38,6 +39,11 @@
 #                                               E3a independent tests of every scored source
 #                                               (bench/configs/e3a_frozen.yaml, bench/scripts/launch_e3a.py);
 #                                               needs the five independent prepared sets
+#   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer [--pool-only|--test-only] [--only SOURCE,...] [--drop-maps FGADR,Retinal-Lesions] [--limit N]
+#                                               E5 inference tiers (zero-shot and oracle prompts; bench/scripts/launch_e5_infer.py);
+#                                               pool runs first, test sets once e5_frozen.yaml's selections are filled; SAM 3 in retiseg-sam3.
+#                                               For the smoke (--pool-only --limit 2) and hand runs; the full campaign goes
+#                                               through `queue` (stages e5_infer_pool / e5_infer_test, docs/ops/17 section 14)
 #   bash bench/scripts/server_run.sh status | curves [GLOB]
 #
 # Long stages start in the background with nohup, so the SSH session can
@@ -144,6 +150,9 @@ resnet101(weights=ResNet101_Weights.IMAGENET1K_V1); resnet34(weights=ResNet34_We
 print("torchvision ImageNet weights cached")'
   py retiseg -m pytest bench/tests -q -p no:cacheprovider
   py retiseg-hacdr -m pytest bench/tests/test_hacdr_recipe.py -q -p no:cacheprovider
+  if "$(pick_tool)" env list | awk 'NF && $1 !~ /^#/ {print $1}' | grep -qx retiseg-sam3; then
+    py retiseg-sam3 -m pytest bench/tests/test_e5_infer.py bench/tests/test_e5_contract.py -q -p no:cacheprovider
+  fi
 }
 
 stage_cache() {
@@ -248,6 +257,13 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
       [ -d "dataset/prepared/$set" ] || { echo "dataset/prepared/$set missing; rsync it from the workstation (11 section 1)" >&2; exit 1; }
     done
     background e3a "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_e3a.py --submit "${@:2}" ;;
+  e5-infer)
+    require_clean
+    [ -n "${RETISEG_GPUS:-}" ] || { echo "e5-infer needs RETISEG_GPUS, e.g. RETISEG_GPUS=\"2 3\"" >&2; exit 1; }
+    for set in IDRiD DDR TJDR_std TJDR_uwf FGADR RetinalLesions DiaRetDB1; do
+      [ -d "dataset/prepared/$set" ] || { echo "dataset/prepared/$set missing; rsync it from the workstation (11 section 1)" >&2; exit 1; }
+    done
+    background e5_infer "$(pick_tool)" run -n retiseg --no-capture-output python bench/scripts/launch_e5_infer.py --submit "${@:2}" ;;
   bs-score0) require_clean; launch bs_score0 --jobs "$BS_JOBS" --submit --score-seed0 ;;
   bs-rest) require_clean; launch bs_rest --jobs "$BS_JOBS" --submit --rest ;;
   status) py retiseg bench/scripts/run_status.py status --glob "${2:-*}" ;;

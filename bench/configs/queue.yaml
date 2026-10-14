@@ -37,44 +37,27 @@ stages:
     only: [HRDecoder, PMCNet, WSRFNet, CLC-Net, TC-Net]
     seed0_only: true
 
-  # 4. E5 inference tiers (17 section 6): zero-shot and oracle-prompt rows of table 3. Inference only;
-  #    DDR val first (its maps choose the Dice thresholds of every test set). more_masks and G2 are cut
-  #    (docs/paper/16 section 8, the offset for the fundus expansion).
-  #    OFF 2026-10-14 (Liuyc05): these three stages still run SAM ViT-H for the oracle tier, k = 10 and the
-  #    authors' 32-point generator, which docs/paper/16 rows E5a/E5b do not allow (ViT-B, k in {1, 5, 20, all},
-  #    grid {64, 128} x caps {0.5%, 2%, 100%}). The albert branch carries an implementation of the 16 scope;
-  #    leave these off until that merge lands (docs/ops/25). Nothing has been decoded yet, so no result is lost.
-  - name: e5_amg
+  # 4. E5 inference tiers (docs/ops/17 section 6; docs/ops/25, the albert merge): zero-shot and
+  #    oracle-prompt rows of table 6. Inference only. The pool stage runs the validation pool (IDRiD and
+  #    DDR val): the grid {64, 128} x caps, the SAM 3 phrases and the oracle tier; then
+  #    `python -m bench.e5.amg --select` and `python -m bench.e5.sam3_text --select` fill e5_frozen.yaml
+  #    (committed), and only then does the test stage list anything. Each test item waits for its own
+  #    source's pool directories (gate). Both stages stay OFF until Luming confirms decisions D1-D9 and
+  #    the 128-point budget (docs/ops/00, docs/ops/25 section 4); the first pool run fixes them.
+  - name: e5_infer_pool
     priority: 28
-    kind: e5_amg
+    kind: e5_infer
     enabled: false
-    env: retiseg
+    phase: pool
     max_concurrent: 1
-    models: [sam, sam2]
-    generators: [default]
-    sets: [DDR:val, IDRiD, DDR, TJDR_std, FGADR, Retinal-Lesions, DiaRetDB1, TJDR_uwf, MAPLES-DR]
 
-  - name: e5_prompted
+  - name: e5_infer_test
     priority: 29
-    kind: e5_prompted
+    kind: e5_infer
     enabled: false
-    env: retiseg
+    phase: test
     max_concurrent: 1
-    models: [sam2, sam]        # medsam joins when its weights exist; points are SAM 2 only (docs/paper/16)
-    kinds: [box]
-    k: 1,5,10,20,all
-    sets: [DDR:val, IDRiD, DDR, TJDR_std, FGADR, Retinal-Lesions, DiaRetDB1, TJDR_uwf, MAPLES-DR]
-
-  - name: e5_prompted_points
-    priority: 30
-    kind: e5_prompted
-    enabled: false
-    env: retiseg
-    max_concurrent: 1
-    models: [sam2]
-    kinds: [point]
-    k: 1,5,10,20,all
-    sets: [DDR:val, IDRiD, DDR, TJDR_std, FGADR, Retinal-Lesions, DiaRetDB1, TJDR_uwf, MAPLES-DR]
+    drop_maps: [FGADR, Retinal-Lesions]
 
   # 5. Factor cells that need no new weights (R5, figure 7): U-Net and M2MRF rows of E3b/E4/E8/E9 and
   #    M2MRF's E7. The old launch_factor process is finishing these; this stage only picks up what
@@ -105,17 +88,6 @@ stages:
     kind: factor
     experiment: E7
     models: [SAM2-UNet, RETFound]
-
-  # Cut 2026-10-14 (docs/paper/16 section 8); kept here so the plan shows it as off.
-  - name: e5_amg_g2
-    priority: 58
-    kind: e5_amg
-    enabled: false
-    env: retiseg
-    models: [sam, sam2]
-    generators: [default]
-    geometry: G2
-    sets: [DDR:val, IDRiD, DDR]
 
   # 8. Seeds 1 and 2 (error bars only; the text is written on seed 0). Enable in this order once
   #    every seed-0 stage above has nothing pending: HRDecoder (the backbone-controlled comparison),

@@ -1,6 +1,6 @@
 \begin{table*}[t]
 \centering\tablefont
-\caption{\textbf{Models entering the retraining tracks.} 38 variants are registered: 17 in tier~1 (main tables), 8 in tier~2 (if time allows) and 13 in tier~3 (paper audit only; Supplementary Table~2). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, reported in a separate column.}
+\caption{\textbf{Models entering the retraining tracks.} 39 variants are registered: 22 in tier~1 (main tables), 6 in tier~2 (if time allows) and 11 in tier~3 (paper audit only; Supplementary Table~2). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, reported in a separate column.}
 \label{tab:models}
 \begin{adjustbox}{max width=\textwidth}
 \begin{threeparttable}
@@ -23,11 +23,14 @@
 \grouprow{8}{Fundus-specific, multi-scale CNN}
 \famchip{fundus}\; M2MRF & 1 & \rlevel{4} {\scriptsize R4} & \yes & \yes & \no & official; weights released & A, E1r, B-std \\
 \famchip{fundus}\; HACDR-Net & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official; no weights & E1r, B-std \\
-\famchip{fundus}\; WSRFNet & 2 & \rlevel{1} {\scriptsize R1} & \yes & \no & \yes & model and test code only & A if weights arrive; C \\
+\famchip{fundus}\; HRDecoder & 1 & \rlevel{4} {\scriptsize R4} & \yes & \yes & \no & official; weights released & A, B-std \\
+\famchip{fundus}\; WSRFNet & 1 & \rlevel{1} {\scriptsize R1} & \yes & \yes & \no & model and test code only; training loop added & A if weights arrive; B-std \\
+\famchip{fundus}\; PMCNet & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official Keras code rewritten in PyTorch & B-std \\
+\famchip{fundus}\; CLC-Net & 1 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; re-implemented from the paper & C, B-std \\
 \famchip{fundus}\; L-Seg & 2 & \rlevel{1} {\scriptsize R1} & \no & \no & \yes & Caffe prototxt and loss layer & C \\
 \famchip{fundus}\; SAA & 2 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & repository empty & C \\
-\famchip{fundus}\; PMCNet & 2 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official, TF\,1.13; no weights & tier 2 \\
 \grouprow{8}{Fundus-specific, relation or transformer}
+\famchip{fundus}\; TC-Net & 1 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; re-implemented from the paper & C, B-std \\
 \famchip{fundus}\; RTNet & 2 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; image + vessel input & C \\
 \grouprow{8}{Foundation models}
 \famchip{foundation}\; SAM & 1 & \rlevel{2} {\scriptsize R2} & \no & \yes & \no & official inference & zero-shot, oracle prompt \\

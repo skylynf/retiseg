@@ -55,15 +55,17 @@ def test_queue_file_in_the_repository_loads_and_names_known_kinds():
 
     stages = lq.load_queue(REPO / "bench" / "configs" / "queue.yaml")
     names = [s["name"] for s in stages]
-    assert names[:6] == ["e3a", "e5_seed0", "fundus_seed0", "e5_amg", "e5_prompted", "e5_prompted_points"]
+    assert names[:5] == ["e3a", "e5_seed0", "fundus_seed0", "e5_infer_pool", "e5_infer_test"]
     assert names.index("factor_cheap") < names.index("nnunet_e3b") < names.index("factor_e3b_heavy") < names.index("factor_e7_heavy")
     assert names.index("factor_e7_heavy") < names.index("hrdecoder_rest") < names.index("e5_rest") < names.index("fundus_rest")
     assert all(s["kind"] in lq.PLANNERS for s in stages)
     assert all(stages[i]["priority"] <= stages[i + 1]["priority"] for i in range(len(stages) - 1))
     by_name = {s["name"]: s for s in stages}
     assert by_name["e3a"]["max_concurrent"] == 2 and by_name["factor_cheap"]["models"] == ["U-Net", "M2MRF"]
-    assert by_name["factor_e3b_heavy"]["experiment"] == "E3b" and not by_name["e5_amg_g2"].get("enabled", True)
-    assert "more_masks" not in by_name["e5_amg"]["generators"] and "MAPLES-DR" in by_name["e5_amg"]["sets"]
+    assert by_name["factor_e3b_heavy"]["experiment"] == "E3b"
+    # the albert merge (docs/ops/25): one e5_infer kind, off until D1-D9 are confirmed
+    assert by_name["e5_infer_pool"]["phase"] == "pool" and by_name["e5_infer_test"]["phase"] == "test"
+    assert not by_name["e5_infer_pool"].get("enabled", True) and not by_name["e5_infer_test"].get("enabled", True)
 
 
 def test_factor_models_filter_keeps_the_cheap_cells_apart(monkeypatch):
@@ -167,3 +169,27 @@ def test_maples_case_mapping_and_ignore_layers():
         assert "hemorrhages" in str(exc)
     else:
         raise AssertionError("a mask of the wrong size must be refused")
+
+
+def test_e5_infer_stage_plans_the_pool_through_launch_e5_infer(tmp_path, monkeypatch):
+    """The unified queue delegates the inference tiers to launch_e5_infer: pool items only while the
+    selections are empty, sets without a prepared directory left out, a gate on every test item."""
+    from bench.e5 import geometry as geo
+    from bench.scripts import launch_e5_infer as le
+    from bench.scripts import launch_queue as lq
+
+    for name in ("IDRiD", "DDR"):   # the pool sets are on this machine, the other test sets are not
+        (tmp_path / "prepared" / name).mkdir(parents=True)
+    monkeypatch.setattr(geo, "data_dir", lambda name: tmp_path / "prepared" / name)
+    monkeypatch.setattr(le, "missing_prompt_files", lambda frozen, items=None: [])
+    monkeypatch.setattr(le.Item, "running", lambda self: None)
+    pool = lq.plan_e5_infer({"name": "p", "kind": "e5_infer", "phase": "pool"}, dry=True)
+    assert pool and all(label.startswith("e5_infer:") for label, _c, _g in pool)
+    assert all("console.log" in command and "== start e5" in command for _l, command, _g in pool)
+    assert {label.split(":", 1)[1].split(":", 1)[0] for label, _c, _g in pool} >= {"b_sam_vitb_box", "b_sam2_hieral21_point"}
+    test = lq.plan_e5_infer({"name": "t", "kind": "e5_infer", "phase": "test"}, dry=True)
+    assert all(gate is not None for _l, _c, gate in test)   # the oracle tier waits for its pool thresholds
+    import pytest
+
+    with pytest.raises(ValueError, match="phase"):
+        lq.plan_e5_infer({"name": "x", "kind": "e5_infer", "phase": "both"}, dry=True)

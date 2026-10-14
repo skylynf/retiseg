@@ -73,6 +73,27 @@ def pooled_histograms(dataset_dir, split, pred_dir, proto):
     return pooled
 
 
+def pooled_any_lesion_histogram(dataset_dir, split, pred_dir, proto):
+    """(pos, neg) pixel histograms of the class-agnostic score against the union ground truth, pooled over ``split``.
+
+    The same accumulation evaluate() does for summary["AUPR_any_lesion"] (protocol
+    any_lesion); bench/e5 pools it further over the validation pool to select the
+    automatic-mask grid (bench/e5/amg.py --select).
+    """
+    if proto.get("any_lesion") is None:
+        raise ValueError("the protocol has no any_lesion entry")
+    classes = _classes(dataset_dir, proto)
+    L = proto["prob_levels"]
+    pos_total, neg_total = np.zeros(L + 1, np.int64), np.zeros(L + 1, np.int64)
+    for image_id in io.load_split(dataset_dir, split):
+        _, valid, masks, probs = _load_image(dataset_dir, pred_dir, image_id, classes, proto)
+        truth, region, score = any_lesion(valid, masks, probs, classes)
+        pos, neg = pixel.histograms(score, truth, region, L)
+        pos_total += pos
+        neg_total += neg
+    return pos_total, neg_total
+
+
 def any_lesion(valid, masks, probs, classes):
     """Union ground truth, pixelwise max score, and the region it is scored on.
 
@@ -113,14 +134,26 @@ def evaluate(
     out_prefix=None,
     val_dataset_dir=None,
     exclude=(),
+    val_thresholds=None,
 ):
-    """``exclude`` lists image ids left out of ``split`` (near-duplicates of training images)."""
+    """``exclude`` lists image ids left out of ``split`` (near-duplicates of training images).
+
+    ``val_thresholds`` ({class: threshold}) supplies the "val_opt" thresholds
+    directly instead of choosing them on ``val_pred_dir``; the E5 inference
+    tiers pass the Dice-optimal thresholds of their pooled validation
+    histograms (bench/e5/outputs.py). Metric names do not change.
+    """
     classes = _classes(dataset_dir, proto)
     L = proto["prob_levels"]
     B = proto["image_hist_bins"]
 
     thresholds = {"fixed": {c: proto["fixed_threshold"] for c in classes}}
-    if val_pred_dir is not None:
+    if val_thresholds is not None:
+        missing = [c for c in classes if c not in val_thresholds]
+        if missing:
+            raise ValueError(f"val_thresholds lacks {missing}; a validation threshold needs every class")
+        thresholds["val_opt"] = {c: float(val_thresholds[c]) for c in classes}
+    elif val_pred_dir is not None:
         val_source = val_dataset_dir if val_dataset_dir is not None else dataset_dir
         missing = [c for c in classes if c not in _classes(val_source, proto)]
         if missing:
@@ -244,6 +277,7 @@ def evaluate(
             "pred_dir": str(pred_dir),
             "val_pred_dir": str(val_pred_dir) if val_pred_dir else None,
             "val_dataset_dir": str(val_dataset_dir) if val_dataset_dir else None,
+            "val_thresholds_given": None if val_thresholds is None else {c: float(val_thresholds[c]) for c in classes},
             "n_images": len(ids),
             "excluded_ids": sorted(exclude),
             "classes": classes,

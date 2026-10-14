@@ -25555,502 +25555,6 @@ E4,M2MRF,DDR + FGADR (383),DDR + FGADR (383),0,DiaRetDB1,MA,aupr,0.04404,placeho
 E4,M2MRF,DDR + FGADR (383),DDR + FGADR (383),0,DiaRetDB1,HE,aupr,0.1905,placeholder
 E4,M2MRF,DDR + FGADR (383),DDR + FGADR (383),0,DiaRetDB1,EX,aupr,0.2497,placeholder
 E4,M2MRF,DDR + FGADR (383),DDR + FGADR (383),0,DiaRetDB1,SE,aupr,0.14048,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,MA,aupr,0.00766,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,HE,aupr,0.03161,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,EX,aupr,0.0531,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,SE,aupr,0.04468,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,MA,aupr,0.00875,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,HE,aupr,0.02741,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,EX,aupr,0.05285,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,SE,aupr,0.06688,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,MA,aupr,0.00786,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,HE,aupr,0.02989,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,EX,aupr,0.04617,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,SE,aupr,0.05032,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,MA,aupr,0.01042,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,HE,aupr,0.02556,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,EX,aupr,0.05866,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,SE,aupr,0.05514,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,MA,aupr,0.0104,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,HE,aupr,0.03312,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,EX,aupr,0.03738,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,SE,aupr,0.04415,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,MA,aupr,0.00637,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,HE,aupr,0.03894,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,EX,aupr,0.0558,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,SE,aupr,0.06024,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,MA,aupr,0.00721,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,HE,aupr,0.03776,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,EX,aupr,0.04568,placeholder
-E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,SE,aupr,0.06721,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,MA,aupr,0.02554,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,HE,aupr,0.09174,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,EX,aupr,0.17755,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,SE,aupr,0.16693,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,MA,aupr,0.02861,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,HE,aupr,0.13788,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,EX,aupr,0.10826,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,SE,aupr,0.13688,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,MA,aupr,0.02495,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,HE,aupr,0.13407,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,EX,aupr,0.14858,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,SE,aupr,0.13351,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,MA,aupr,0.03251,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,HE,aupr,0.09127,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,EX,aupr,0.12347,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,SE,aupr,0.17309,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,MA,aupr,0.02696,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,HE,aupr,0.11672,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,EX,aupr,0.12294,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,SE,aupr,0.17629,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,MA,aupr,0.02096,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,HE,aupr,0.11228,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,EX,aupr,0.14048,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,SE,aupr,0.16828,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,MA,aupr,0.02809,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,HE,aupr,0.12988,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,EX,aupr,0.16745,placeholder
-E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,SE,aupr,0.15396,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,MA,aupr,0.01062,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,HE,aupr,0.0393,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,EX,aupr,0.04469,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,SE,aupr,0.05684,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,MA,aupr,0.012,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,HE,aupr,0.03123,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,EX,aupr,0.04427,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,SE,aupr,0.05277,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,MA,aupr,0.01269,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,HE,aupr,0.0422,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,EX,aupr,0.0587,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,SE,aupr,0.06061,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,MA,aupr,0.01032,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,HE,aupr,0.02928,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,EX,aupr,0.05563,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,SE,aupr,0.04246,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,MA,aupr,0.01194,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,HE,aupr,0.04537,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,EX,aupr,0.0641,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,SE,aupr,0.06023,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,MA,aupr,0.00881,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,HE,aupr,0.03982,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,EX,aupr,0.04443,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,SE,aupr,0.07285,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,MA,aupr,0.00725,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,HE,aupr,0.05,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,EX,aupr,0.06671,placeholder
-E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,SE,aupr,0.07622,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,MA,aupr,0.03027,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,HE,aupr,0.11241,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,EX,aupr,0.18023,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,SE,aupr,0.17111,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,MA,aupr,0.02503,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,HE,aupr,0.15066,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,EX,aupr,0.20815,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,SE,aupr,0.23821,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,MA,aupr,0.03881,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,HE,aupr,0.1568,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,EX,aupr,0.18047,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,SE,aupr,0.14017,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,MA,aupr,0.03905,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,HE,aupr,0.09564,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,EX,aupr,0.12727,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,SE,aupr,0.21949,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,MA,aupr,0.03335,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,HE,aupr,0.12198,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,EX,aupr,0.15082,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,SE,aupr,0.1829,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,MA,aupr,0.0398,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,HE,aupr,0.10578,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,EX,aupr,0.18554,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,SE,aupr,0.2121,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,MA,aupr,0.0304,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,HE,aupr,0.10983,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,EX,aupr,0.17555,placeholder
-E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,SE,aupr,0.23531,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,IDRiD,MA,aupr,0.03659,placeholder
-E5,SAM 3,text:red dot,none,-1,IDRiD,MA,aupr,0.01789,placeholder
-E5,SAM 3,text:small red lesion,none,-1,IDRiD,MA,aupr,0.01078,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,IDRiD,HE,aupr,0.19716,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,IDRiD,HE,aupr,0.09613,placeholder
-E5,SAM 3,text:dark red patch,none,-1,IDRiD,HE,aupr,0.07626,placeholder
-E5,SAM 3,text:hard exudate,none,-1,IDRiD,EX,aupr,0.2808,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,IDRiD,EX,aupr,0.15776,placeholder
-E5,SAM 3,text:bright lesion,none,-1,IDRiD,EX,aupr,0.09924,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,IDRiD,SE,aupr,0.17868,placeholder
-E5,SAM 3,text:soft exudate,none,-1,IDRiD,SE,aupr,0.12109,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,IDRiD,SE,aupr,0.0709,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,DDR,MA,aupr,0.03356,placeholder
-E5,SAM 3,text:red dot,none,-1,DDR,MA,aupr,0.02348,placeholder
-E5,SAM 3,text:small red lesion,none,-1,DDR,MA,aupr,0.01155,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,DDR,HE,aupr,0.13695,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,DDR,HE,aupr,0.08764,placeholder
-E5,SAM 3,text:dark red patch,none,-1,DDR,HE,aupr,0.05484,placeholder
-E5,SAM 3,text:hard exudate,none,-1,DDR,EX,aupr,0.2776,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,DDR,EX,aupr,0.16768,placeholder
-E5,SAM 3,text:bright lesion,none,-1,DDR,EX,aupr,0.09092,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,DDR,SE,aupr,0.17724,placeholder
-E5,SAM 3,text:soft exudate,none,-1,DDR,SE,aupr,0.12515,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,DDR,SE,aupr,0.09556,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,TJDR-std,MA,aupr,0.02551,placeholder
-E5,SAM 3,text:red dot,none,-1,TJDR-std,MA,aupr,0.01193,placeholder
-E5,SAM 3,text:small red lesion,none,-1,TJDR-std,MA,aupr,0.0092,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-std,HE,aupr,0.09488,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-std,HE,aupr,0.08925,placeholder
-E5,SAM 3,text:dark red patch,none,-1,TJDR-std,HE,aupr,0.04715,placeholder
-E5,SAM 3,text:hard exudate,none,-1,TJDR-std,EX,aupr,0.20813,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,TJDR-std,EX,aupr,0.13303,placeholder
-E5,SAM 3,text:bright lesion,none,-1,TJDR-std,EX,aupr,0.07377,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,TJDR-std,SE,aupr,0.11817,placeholder
-E5,SAM 3,text:soft exudate,none,-1,TJDR-std,SE,aupr,0.07914,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,TJDR-std,SE,aupr,0.05636,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,TJDR-uwf,MA,aupr,0.0257,placeholder
-E5,SAM 3,text:red dot,none,-1,TJDR-uwf,MA,aupr,0.01735,placeholder
-E5,SAM 3,text:small red lesion,none,-1,TJDR-uwf,MA,aupr,0.00874,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.1119,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.07698,placeholder
-E5,SAM 3,text:dark red patch,none,-1,TJDR-uwf,HE,aupr,0.05677,placeholder
-E5,SAM 3,text:hard exudate,none,-1,TJDR-uwf,EX,aupr,0.18442,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,TJDR-uwf,EX,aupr,0.11503,placeholder
-E5,SAM 3,text:bright lesion,none,-1,TJDR-uwf,EX,aupr,0.07379,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,TJDR-uwf,SE,aupr,0.10968,placeholder
-E5,SAM 3,text:soft exudate,none,-1,TJDR-uwf,SE,aupr,0.07806,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,TJDR-uwf,SE,aupr,0.05707,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,FGADR,MA,aupr,0.02082,placeholder
-E5,SAM 3,text:red dot,none,-1,FGADR,MA,aupr,0.01304,placeholder
-E5,SAM 3,text:small red lesion,none,-1,FGADR,MA,aupr,0.00814,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,FGADR,HE,aupr,0.11351,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,FGADR,HE,aupr,0.09586,placeholder
-E5,SAM 3,text:dark red patch,none,-1,FGADR,HE,aupr,0.04454,placeholder
-E5,SAM 3,text:hard exudate,none,-1,FGADR,EX,aupr,0.1688,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,FGADR,EX,aupr,0.14346,placeholder
-E5,SAM 3,text:bright lesion,none,-1,FGADR,EX,aupr,0.08245,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,FGADR,SE,aupr,0.13787,placeholder
-E5,SAM 3,text:soft exudate,none,-1,FGADR,SE,aupr,0.08977,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,FGADR,SE,aupr,0.06058,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,Retinal-Lesions,MA,aupr,0.02262,placeholder
-E5,SAM 3,text:red dot,none,-1,Retinal-Lesions,MA,aupr,0.01561,placeholder
-E5,SAM 3,text:small red lesion,none,-1,Retinal-Lesions,MA,aupr,0.00929,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.13735,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.07122,placeholder
-E5,SAM 3,text:dark red patch,none,-1,Retinal-Lesions,HE,aupr,0.05061,placeholder
-E5,SAM 3,text:hard exudate,none,-1,Retinal-Lesions,EX,aupr,0.14173,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,Retinal-Lesions,EX,aupr,0.09489,placeholder
-E5,SAM 3,text:bright lesion,none,-1,Retinal-Lesions,EX,aupr,0.06931,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,Retinal-Lesions,SE,aupr,0.11273,placeholder
-E5,SAM 3,text:soft exudate,none,-1,Retinal-Lesions,SE,aupr,0.12395,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,Retinal-Lesions,SE,aupr,0.06213,placeholder
-E5,SAM 3,text:microaneurysm,none,-1,DiaRetDB1,MA,aupr,0.01801,placeholder
-E5,SAM 3,text:red dot,none,-1,DiaRetDB1,MA,aupr,0.01296,placeholder
-E5,SAM 3,text:small red lesion,none,-1,DiaRetDB1,MA,aupr,0.00961,placeholder
-E5,SAM 3,text:retinal hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.12408,placeholder
-E5,SAM 3,text:blot hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.08279,placeholder
-E5,SAM 3,text:dark red patch,none,-1,DiaRetDB1,HE,aupr,0.05496,placeholder
-E5,SAM 3,text:hard exudate,none,-1,DiaRetDB1,EX,aupr,0.20285,placeholder
-E5,SAM 3,text:yellow deposit,none,-1,DiaRetDB1,EX,aupr,0.11916,placeholder
-E5,SAM 3,text:bright lesion,none,-1,DiaRetDB1,EX,aupr,0.06868,placeholder
-E5,SAM 3,text:cotton wool spot,none,-1,DiaRetDB1,SE,aupr,0.12428,placeholder
-E5,SAM 3,text:soft exudate,none,-1,DiaRetDB1,SE,aupr,0.07886,placeholder
-E5,SAM 3,text:white fluffy patch,none,-1,DiaRetDB1,SE,aupr,0.07455,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.02076,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.03003,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01674,placeholder
-E5,SAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.24372,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.0374,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.16154,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05001,placeholder
-E5,SAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.51475,placeholder
-E5,SAM,oracle:box:10,none,-1,IDRiD,MA,aupr,0.07913,placeholder
-E5,SAM,oracle:box:10,none,-1,IDRiD,HE,aupr,0.26002,placeholder
-E5,SAM,oracle:box:10,none,-1,IDRiD,EX,aupr,0.10408,placeholder
-E5,SAM,oracle:box:10,none,-1,IDRiD,SE,aupr,0.5925,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.12465,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.35792,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.15554,placeholder
-E5,SAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.66212,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.30114,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.6134,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.64803,placeholder
-E5,SAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.74101,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,MA,aupr,0.01753,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,HE,aupr,0.03194,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,EX,aupr,0.00756,placeholder
-E5,SAM,oracle:box:1,none,-1,DDR,SE,aupr,0.2088,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,MA,aupr,0.0435,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,HE,aupr,0.16121,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,EX,aupr,0.06431,placeholder
-E5,SAM,oracle:box:5,none,-1,DDR,SE,aupr,0.44028,placeholder
-E5,SAM,oracle:box:10,none,-1,DDR,MA,aupr,0.07275,placeholder
-E5,SAM,oracle:box:10,none,-1,DDR,HE,aupr,0.23535,placeholder
-E5,SAM,oracle:box:10,none,-1,DDR,EX,aupr,0.08582,placeholder
-E5,SAM,oracle:box:10,none,-1,DDR,SE,aupr,0.53952,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,MA,aupr,0.1075,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,HE,aupr,0.31347,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,EX,aupr,0.14393,placeholder
-E5,SAM,oracle:box:20,none,-1,DDR,SE,aupr,0.57969,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,MA,aupr,0.26128,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,HE,aupr,0.53794,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,EX,aupr,0.59036,placeholder
-E5,SAM,oracle:box:all,none,-1,DDR,SE,aupr,0.63211,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.00495,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.03875,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.001,placeholder
-E5,SAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22291,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.03709,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.14984,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04687,placeholder
-E5,SAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.4768,placeholder
-E5,SAM,oracle:box:10,none,-1,TJDR-std,MA,aupr,0.07293,placeholder
-E5,SAM,oracle:box:10,none,-1,TJDR-std,HE,aupr,0.24624,placeholder
-E5,SAM,oracle:box:10,none,-1,TJDR-std,EX,aupr,0.08967,placeholder
-E5,SAM,oracle:box:10,none,-1,TJDR-std,SE,aupr,0.55536,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.10405,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.33539,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.16422,placeholder
-E5,SAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.60707,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.28418,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.57332,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.60033,placeholder
-E5,SAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.66703,placeholder
-E5,SAM,oracle:point:1,none,-1,IDRiD,MA,aupr,0.00249,placeholder
-E5,SAM,oracle:point:1,none,-1,IDRiD,HE,aupr,0.01526,placeholder
-E5,SAM,oracle:point:1,none,-1,IDRiD,EX,aupr,0.01925,placeholder
-E5,SAM,oracle:point:1,none,-1,IDRiD,SE,aupr,0.20204,placeholder
-E5,SAM,oracle:point:5,none,-1,IDRiD,MA,aupr,0.02185,placeholder
-E5,SAM,oracle:point:5,none,-1,IDRiD,HE,aupr,0.11245,placeholder
-E5,SAM,oracle:point:5,none,-1,IDRiD,EX,aupr,0.03608,placeholder
-E5,SAM,oracle:point:5,none,-1,IDRiD,SE,aupr,0.42786,placeholder
-E5,SAM,oracle:point:10,none,-1,IDRiD,MA,aupr,0.03132,placeholder
-E5,SAM,oracle:point:10,none,-1,IDRiD,HE,aupr,0.18844,placeholder
-E5,SAM,oracle:point:10,none,-1,IDRiD,EX,aupr,0.06448,placeholder
-E5,SAM,oracle:point:10,none,-1,IDRiD,SE,aupr,0.49819,placeholder
-E5,SAM,oracle:point:20,none,-1,IDRiD,MA,aupr,0.08352,placeholder
-E5,SAM,oracle:point:20,none,-1,IDRiD,HE,aupr,0.26679,placeholder
-E5,SAM,oracle:point:20,none,-1,IDRiD,EX,aupr,0.12377,placeholder
-E5,SAM,oracle:point:20,none,-1,IDRiD,SE,aupr,0.55435,placeholder
-E5,SAM,oracle:point:all,none,-1,IDRiD,MA,aupr,0.19446,placeholder
-E5,SAM,oracle:point:all,none,-1,IDRiD,HE,aupr,0.45431,placeholder
-E5,SAM,oracle:point:all,none,-1,IDRiD,EX,aupr,0.48576,placeholder
-E5,SAM,oracle:point:all,none,-1,IDRiD,SE,aupr,0.59026,placeholder
-E5,SAM,oracle:point:1,none,-1,DDR,MA,aupr,0.01191,placeholder
-E5,SAM,oracle:point:1,none,-1,DDR,HE,aupr,0.02836,placeholder
-E5,SAM,oracle:point:1,none,-1,DDR,EX,aupr,0.00461,placeholder
-E5,SAM,oracle:point:1,none,-1,DDR,SE,aupr,0.18151,placeholder
-E5,SAM,oracle:point:5,none,-1,DDR,MA,aupr,0.02629,placeholder
-E5,SAM,oracle:point:5,none,-1,DDR,HE,aupr,0.10051,placeholder
-E5,SAM,oracle:point:5,none,-1,DDR,EX,aupr,0.02725,placeholder
-E5,SAM,oracle:point:5,none,-1,DDR,SE,aupr,0.38042,placeholder
-E5,SAM,oracle:point:10,none,-1,DDR,MA,aupr,0.04843,placeholder
-E5,SAM,oracle:point:10,none,-1,DDR,HE,aupr,0.17336,placeholder
-E5,SAM,oracle:point:10,none,-1,DDR,EX,aupr,0.06691,placeholder
-E5,SAM,oracle:point:10,none,-1,DDR,SE,aupr,0.43618,placeholder
-E5,SAM,oracle:point:20,none,-1,DDR,MA,aupr,0.06195,placeholder
-E5,SAM,oracle:point:20,none,-1,DDR,HE,aupr,0.22666,placeholder
-E5,SAM,oracle:point:20,none,-1,DDR,EX,aupr,0.10928,placeholder
-E5,SAM,oracle:point:20,none,-1,DDR,SE,aupr,0.48272,placeholder
-E5,SAM,oracle:point:all,none,-1,DDR,MA,aupr,0.15388,placeholder
-E5,SAM,oracle:point:all,none,-1,DDR,HE,aupr,0.40136,placeholder
-E5,SAM,oracle:point:all,none,-1,DDR,EX,aupr,0.41449,placeholder
-E5,SAM,oracle:point:all,none,-1,DDR,SE,aupr,0.53356,placeholder
-E5,SAM,oracle:point:1,none,-1,TJDR-std,MA,aupr,0.001,placeholder
-E5,SAM,oracle:point:1,none,-1,TJDR-std,HE,aupr,0.03703,placeholder
-E5,SAM,oracle:point:1,none,-1,TJDR-std,EX,aupr,0.0084,placeholder
-E5,SAM,oracle:point:1,none,-1,TJDR-std,SE,aupr,0.1905,placeholder
-E5,SAM,oracle:point:5,none,-1,TJDR-std,MA,aupr,0.02358,placeholder
-E5,SAM,oracle:point:5,none,-1,TJDR-std,HE,aupr,0.1117,placeholder
-E5,SAM,oracle:point:5,none,-1,TJDR-std,EX,aupr,0.03281,placeholder
-E5,SAM,oracle:point:5,none,-1,TJDR-std,SE,aupr,0.39522,placeholder
-E5,SAM,oracle:point:10,none,-1,TJDR-std,MA,aupr,0.04469,placeholder
-E5,SAM,oracle:point:10,none,-1,TJDR-std,HE,aupr,0.16874,placeholder
-E5,SAM,oracle:point:10,none,-1,TJDR-std,EX,aupr,0.06592,placeholder
-E5,SAM,oracle:point:10,none,-1,TJDR-std,SE,aupr,0.45723,placeholder
-E5,SAM,oracle:point:20,none,-1,TJDR-std,MA,aupr,0.06297,placeholder
-E5,SAM,oracle:point:20,none,-1,TJDR-std,HE,aupr,0.25923,placeholder
-E5,SAM,oracle:point:20,none,-1,TJDR-std,EX,aupr,0.1315,placeholder
-E5,SAM,oracle:point:20,none,-1,TJDR-std,SE,aupr,0.48208,placeholder
-E5,SAM,oracle:point:all,none,-1,TJDR-std,MA,aupr,0.16779,placeholder
-E5,SAM,oracle:point:all,none,-1,TJDR-std,HE,aupr,0.40631,placeholder
-E5,SAM,oracle:point:all,none,-1,TJDR-std,EX,aupr,0.45022,placeholder
-E5,SAM,oracle:point:all,none,-1,TJDR-std,SE,aupr,0.55317,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,MA,aupr,0.02132,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,HE,aupr,0.05714,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01356,placeholder
-E5,SAM 2,oracle:box:1,none,-1,IDRiD,SE,aupr,0.23521,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,MA,aupr,0.05028,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,HE,aupr,0.17432,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,EX,aupr,0.06222,placeholder
-E5,SAM 2,oracle:box:5,none,-1,IDRiD,SE,aupr,0.52777,placeholder
-E5,SAM 2,oracle:box:10,none,-1,IDRiD,MA,aupr,0.08661,placeholder
-E5,SAM 2,oracle:box:10,none,-1,IDRiD,HE,aupr,0.26241,placeholder
-E5,SAM 2,oracle:box:10,none,-1,IDRiD,EX,aupr,0.11961,placeholder
-E5,SAM 2,oracle:box:10,none,-1,IDRiD,SE,aupr,0.6234,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,MA,aupr,0.10305,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,HE,aupr,0.40676,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,EX,aupr,0.16575,placeholder
-E5,SAM 2,oracle:box:20,none,-1,IDRiD,SE,aupr,0.6905,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,MA,aupr,0.32779,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,HE,aupr,0.66526,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,EX,aupr,0.69398,placeholder
-E5,SAM 2,oracle:box:all,none,-1,IDRiD,SE,aupr,0.74664,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,MA,aupr,0.001,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,HE,aupr,0.04465,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,EX,aupr,0.001,placeholder
-E5,SAM 2,oracle:box:1,none,-1,DDR,SE,aupr,0.21979,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,MA,aupr,0.0424,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,HE,aupr,0.16728,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,EX,aupr,0.04677,placeholder
-E5,SAM 2,oracle:box:5,none,-1,DDR,SE,aupr,0.47848,placeholder
-E5,SAM 2,oracle:box:10,none,-1,DDR,MA,aupr,0.06792,placeholder
-E5,SAM 2,oracle:box:10,none,-1,DDR,HE,aupr,0.24048,placeholder
-E5,SAM 2,oracle:box:10,none,-1,DDR,EX,aupr,0.08018,placeholder
-E5,SAM 2,oracle:box:10,none,-1,DDR,SE,aupr,0.55534,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,MA,aupr,0.11518,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,HE,aupr,0.34145,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,EX,aupr,0.14401,placeholder
-E5,SAM 2,oracle:box:20,none,-1,DDR,SE,aupr,0.60041,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,MA,aupr,0.28686,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,HE,aupr,0.5889,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,EX,aupr,0.59446,placeholder
-E5,SAM 2,oracle:box:all,none,-1,DDR,SE,aupr,0.65108,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.01771,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.02499,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.01777,placeholder
-E5,SAM 2,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22139,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.0553,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.16834,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.0462,placeholder
-E5,SAM 2,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.5006,placeholder
-E5,SAM 2,oracle:box:10,none,-1,TJDR-std,MA,aupr,0.08175,placeholder
-E5,SAM 2,oracle:box:10,none,-1,TJDR-std,HE,aupr,0.25224,placeholder
-E5,SAM 2,oracle:box:10,none,-1,TJDR-std,EX,aupr,0.09908,placeholder
-E5,SAM 2,oracle:box:10,none,-1,TJDR-std,SE,aupr,0.56501,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.10986,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.35712,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.1474,placeholder
-E5,SAM 2,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.61655,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.30663,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.60739,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.63365,placeholder
-E5,SAM 2,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.68043,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,MA,aupr,0.00951,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,HE,aupr,0.03551,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,EX,aupr,0.00203,placeholder
-E5,SAM 2,oracle:point:1,none,-1,IDRiD,SE,aupr,0.21254,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,MA,aupr,0.03745,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,HE,aupr,0.11042,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,EX,aupr,0.03878,placeholder
-E5,SAM 2,oracle:point:5,none,-1,IDRiD,SE,aupr,0.46056,placeholder
-E5,SAM 2,oracle:point:10,none,-1,IDRiD,MA,aupr,0.05244,placeholder
-E5,SAM 2,oracle:point:10,none,-1,IDRiD,HE,aupr,0.2166,placeholder
-E5,SAM 2,oracle:point:10,none,-1,IDRiD,EX,aupr,0.0666,placeholder
-E5,SAM 2,oracle:point:10,none,-1,IDRiD,SE,aupr,0.52695,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,MA,aupr,0.07331,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,HE,aupr,0.2967,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,EX,aupr,0.1232,placeholder
-E5,SAM 2,oracle:point:20,none,-1,IDRiD,SE,aupr,0.56685,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,MA,aupr,0.20354,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,HE,aupr,0.5006,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,EX,aupr,0.52076,placeholder
-E5,SAM 2,oracle:point:all,none,-1,IDRiD,SE,aupr,0.62597,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,MA,aupr,0.001,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,HE,aupr,0.03588,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,EX,aupr,0.001,placeholder
-E5,SAM 2,oracle:point:1,none,-1,DDR,SE,aupr,0.17511,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,MA,aupr,0.03558,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,HE,aupr,0.11877,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,EX,aupr,0.02323,placeholder
-E5,SAM 2,oracle:point:5,none,-1,DDR,SE,aupr,0.40262,placeholder
-E5,SAM 2,oracle:point:10,none,-1,DDR,MA,aupr,0.04403,placeholder
-E5,SAM 2,oracle:point:10,none,-1,DDR,HE,aupr,0.19425,placeholder
-E5,SAM 2,oracle:point:10,none,-1,DDR,EX,aupr,0.06028,placeholder
-E5,SAM 2,oracle:point:10,none,-1,DDR,SE,aupr,0.47706,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,MA,aupr,0.06087,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,HE,aupr,0.24521,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,EX,aupr,0.10243,placeholder
-E5,SAM 2,oracle:point:20,none,-1,DDR,SE,aupr,0.50251,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,MA,aupr,0.18261,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,HE,aupr,0.43256,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,EX,aupr,0.45327,placeholder
-E5,SAM 2,oracle:point:all,none,-1,DDR,SE,aupr,0.53989,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,MA,aupr,0.02096,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,HE,aupr,0.04915,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,EX,aupr,0.00729,placeholder
-E5,SAM 2,oracle:point:1,none,-1,TJDR-std,SE,aupr,0.18909,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,MA,aupr,0.02155,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,HE,aupr,0.14169,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,EX,aupr,0.02572,placeholder
-E5,SAM 2,oracle:point:5,none,-1,TJDR-std,SE,aupr,0.40029,placeholder
-E5,SAM 2,oracle:point:10,none,-1,TJDR-std,MA,aupr,0.05085,placeholder
-E5,SAM 2,oracle:point:10,none,-1,TJDR-std,HE,aupr,0.18788,placeholder
-E5,SAM 2,oracle:point:10,none,-1,TJDR-std,EX,aupr,0.06213,placeholder
-E5,SAM 2,oracle:point:10,none,-1,TJDR-std,SE,aupr,0.47975,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,MA,aupr,0.07272,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,HE,aupr,0.27101,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,EX,aupr,0.13076,placeholder
-E5,SAM 2,oracle:point:20,none,-1,TJDR-std,SE,aupr,0.51927,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,MA,aupr,0.18341,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,HE,aupr,0.45309,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,EX,aupr,0.47483,placeholder
-E5,SAM 2,oracle:point:all,none,-1,TJDR-std,SE,aupr,0.60012,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.01172,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.04086,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01352,placeholder
-E5,MedSAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.23588,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.02957,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.14397,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05053,placeholder
-E5,MedSAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.50558,placeholder
-E5,MedSAM,oracle:box:10,none,-1,IDRiD,MA,aupr,0.05314,placeholder
-E5,MedSAM,oracle:box:10,none,-1,IDRiD,HE,aupr,0.25,placeholder
-E5,MedSAM,oracle:box:10,none,-1,IDRiD,EX,aupr,0.07766,placeholder
-E5,MedSAM,oracle:box:10,none,-1,IDRiD,SE,aupr,0.58959,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.07544,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.35021,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.12772,placeholder
-E5,MedSAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.62963,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.22271,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.57753,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.57406,placeholder
-E5,MedSAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.71035,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,MA,aupr,0.01564,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,HE,aupr,0.0266,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,EX,aupr,0.0233,placeholder
-E5,MedSAM,oracle:box:1,none,-1,DDR,SE,aupr,0.20946,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,MA,aupr,0.02765,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,HE,aupr,0.14291,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,EX,aupr,0.03455,placeholder
-E5,MedSAM,oracle:box:5,none,-1,DDR,SE,aupr,0.42559,placeholder
-E5,MedSAM,oracle:box:10,none,-1,DDR,MA,aupr,0.04551,placeholder
-E5,MedSAM,oracle:box:10,none,-1,DDR,HE,aupr,0.20531,placeholder
-E5,MedSAM,oracle:box:10,none,-1,DDR,EX,aupr,0.06324,placeholder
-E5,MedSAM,oracle:box:10,none,-1,DDR,SE,aupr,0.51527,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,MA,aupr,0.07536,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,HE,aupr,0.29581,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,EX,aupr,0.12078,placeholder
-E5,MedSAM,oracle:box:20,none,-1,DDR,SE,aupr,0.5505,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,MA,aupr,0.19772,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,HE,aupr,0.50945,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,EX,aupr,0.50023,placeholder
-E5,MedSAM,oracle:box:all,none,-1,DDR,SE,aupr,0.61717,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.001,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.02885,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.001,placeholder
-E5,MedSAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.2066,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.03084,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.13709,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04499,placeholder
-E5,MedSAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.45256,placeholder
-E5,MedSAM,oracle:box:10,none,-1,TJDR-std,MA,aupr,0.05209,placeholder
-E5,MedSAM,oracle:box:10,none,-1,TJDR-std,HE,aupr,0.22565,placeholder
-E5,MedSAM,oracle:box:10,none,-1,TJDR-std,EX,aupr,0.07596,placeholder
-E5,MedSAM,oracle:box:10,none,-1,TJDR-std,SE,aupr,0.52151,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.07751,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.30226,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.14283,placeholder
-E5,MedSAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.58666,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.17961,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.53763,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.52909,placeholder
-E5,MedSAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.63948,placeholder
 E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.27016,placeholder
 E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.55554,placeholder
 E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.78004,placeholder
@@ -33108,3 +32612,433 @@ L1,SAM-Adapter,published_idrid,IDRiD,-1,IDRiD,mean,reported_maupr,0.345900000000
 L1,SAM-Adapter,published_idrid,IDRiD,-1,IDRiD,mean,reported_maupr_n,2.0,measured
 L1,MedSAM (full FT),published_idrid,IDRiD,-1,IDRiD,mean,reported_maupr,0.2657,measured
 L1,MedSAM (full FT),published_idrid,IDRiD,-1,IDRiD,mean,reported_maupr_n,2.0,measured
+E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,MA,aupr,0.00766,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,HE,aupr,0.03161,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,EX,aupr,0.0531,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,SE,aupr,0.04468,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,IDRiD,any,aupr_any_lesion,0.06302,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,MA,aupr,0.00685,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,HE,aupr,0.04065,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,EX,aupr,0.05797,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,SE,aupr,0.04716,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DDR,any,aupr_any_lesion,0.05687,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,MA,aupr,0.00888,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,HE,aupr,0.03355,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,EX,aupr,0.05421,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,SE,aupr,0.03834,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-std,any,aupr_any_lesion,0.07515,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,MA,aupr,0.00919,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,HE,aupr,0.04161,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,EX,aupr,0.04305,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,SE,aupr,0.04313,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,any,aupr_any_lesion,0.05632,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,MA,aupr,0.00637,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,HE,aupr,0.03894,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,EX,aupr,0.0558,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,SE,aupr,0.06024,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,FGADR,any,aupr_any_lesion,0.05561,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,MA,aupr,0.00944,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,HE,aupr,0.03514,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,EX,aupr,0.05825,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,SE,aupr,0.04875,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,any,aupr_any_lesion,0.05603,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,MA,aupr,0.01086,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,HE,aupr,0.03541,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,EX,aupr,0.04733,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,SE,aupr,0.06581,placeholder
+E5,SAM,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,any,aupr_any_lesion,0.0528,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,MA,aupr,0.02281,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,HE,aupr,0.09981,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,EX,aupr,0.17429,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,IDRiD,SE,aupr,0.17143,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,MA,aupr,0.02225,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,HE,aupr,0.13003,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,EX,aupr,0.11865,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DDR,SE,aupr,0.14247,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,MA,aupr,0.02885,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,HE,aupr,0.10786,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,EX,aupr,0.15174,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-std,SE,aupr,0.14186,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,MA,aupr,0.02938,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,HE,aupr,0.08385,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,EX,aupr,0.14597,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,SE,aupr,0.16209,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,MA,aupr,0.02805,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,HE,aupr,0.11234,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,EX,aupr,0.16885,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,FGADR,SE,aupr,0.19322,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,MA,aupr,0.02566,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,HE,aupr,0.11684,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,EX,aupr,0.14051,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,SE,aupr,0.1418,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,MA,aupr,0.02605,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,HE,aupr,0.13198,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,EX,aupr,0.11166,placeholder
+E5,SAM,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,SE,aupr,0.14048,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,MA,aupr,0.0088,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,HE,aupr,0.05075,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,EX,aupr,0.05486,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,SE,aupr,0.06773,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,IDRiD,any,aupr_any_lesion,0.07249,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,MA,aupr,0.01032,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,HE,aupr,0.02928,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,EX,aupr,0.05563,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,SE,aupr,0.04246,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DDR,any,aupr_any_lesion,0.08134,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,MA,aupr,0.01134,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,HE,aupr,0.04931,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,EX,aupr,0.0522,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,SE,aupr,0.05285,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-std,any,aupr_any_lesion,0.07178,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,MA,aupr,0.00854,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,HE,aupr,0.04856,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,EX,aupr,0.03771,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,SE,aupr,0.07501,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,TJDR-uwf,any,aupr_any_lesion,0.08558,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,MA,aupr,0.0127,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,HE,aupr,0.03726,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,EX,aupr,0.04496,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,SE,aupr,0.06399,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,FGADR,any,aupr_any_lesion,0.06612,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,MA,aupr,0.0077,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,HE,aupr,0.04636,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,EX,aupr,0.06405,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,SE,aupr,0.0733,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,Retinal-Lesions,any,aupr_any_lesion,0.08132,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,MA,aupr,0.01206,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,HE,aupr,0.04271,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,EX,aupr,0.03738,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,SE,aupr,0.07209,placeholder
+E5,SAM 2,zero_shot:auto_any_lesion,none,-1,DiaRetDB1,any,aupr_any_lesion,0.05931,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,MA,aupr,0.02448,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,HE,aupr,0.14633,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,EX,aupr,0.17342,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,IDRiD,SE,aupr,0.18298,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,MA,aupr,0.029,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,HE,aupr,0.12193,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,EX,aupr,0.20697,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DDR,SE,aupr,0.15867,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,MA,aupr,0.03568,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,HE,aupr,0.1414,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,EX,aupr,0.15808,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-std,SE,aupr,0.16474,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,MA,aupr,0.03376,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,HE,aupr,0.15687,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,EX,aupr,0.21357,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,TJDR-uwf,SE,aupr,0.15483,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,MA,aupr,0.02536,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,HE,aupr,0.16623,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,EX,aupr,0.13543,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,FGADR,SE,aupr,0.21447,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,MA,aupr,0.03913,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,HE,aupr,0.11642,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,EX,aupr,0.15679,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,Retinal-Lesions,SE,aupr,0.17005,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,MA,aupr,0.0263,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,HE,aupr,0.09968,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,EX,aupr,0.19309,placeholder
+E5,SAM 2,zero_shot:auto_oracle_class,none,-1,DiaRetDB1,SE,aupr,0.21537,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,IDRiD,MA,aupr,0.02624,placeholder
+E5,SAM 3,text:red dot,none,-1,IDRiD,MA,aupr,0.01849,placeholder
+E5,SAM 3,text:small red lesion,none,-1,IDRiD,MA,aupr,0.01004,placeholder
+E5,SAM 3,text:selected,none,-1,IDRiD,MA,aupr,0.02624,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,IDRiD,HE,aupr,0.12465,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,IDRiD,HE,aupr,0.13325,placeholder
+E5,SAM 3,text:dark red patch,none,-1,IDRiD,HE,aupr,0.06832,placeholder
+E5,SAM 3,text:selected,none,-1,IDRiD,HE,aupr,0.12465,placeholder
+E5,SAM 3,text:hard exudate,none,-1,IDRiD,EX,aupr,0.20664,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,IDRiD,EX,aupr,0.15314,placeholder
+E5,SAM 3,text:bright lesion,none,-1,IDRiD,EX,aupr,0.09178,placeholder
+E5,SAM 3,text:selected,none,-1,IDRiD,EX,aupr,0.20664,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,IDRiD,SE,aupr,0.21718,placeholder
+E5,SAM 3,text:soft exudate,none,-1,IDRiD,SE,aupr,0.17494,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,IDRiD,SE,aupr,0.06945,placeholder
+E5,SAM 3,text:selected,none,-1,IDRiD,SE,aupr,0.21718,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,DDR,MA,aupr,0.02986,placeholder
+E5,SAM 3,text:red dot,none,-1,DDR,MA,aupr,0.0183,placeholder
+E5,SAM 3,text:small red lesion,none,-1,DDR,MA,aupr,0.01461,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,MA,aupr,0.02986,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,DDR,HE,aupr,0.15309,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,DDR,HE,aupr,0.14272,placeholder
+E5,SAM 3,text:dark red patch,none,-1,DDR,HE,aupr,0.07743,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,HE,aupr,0.15309,placeholder
+E5,SAM 3,text:hard exudate,none,-1,DDR,EX,aupr,0.23951,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,DDR,EX,aupr,0.14585,placeholder
+E5,SAM 3,text:bright lesion,none,-1,DDR,EX,aupr,0.08291,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,EX,aupr,0.23951,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,DDR,SE,aupr,0.18297,placeholder
+E5,SAM 3,text:soft exudate,none,-1,DDR,SE,aupr,0.17623,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,DDR,SE,aupr,0.10098,placeholder
+E5,SAM 3,text:selected,none,-1,DDR,SE,aupr,0.18297,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,TJDR-std,MA,aupr,0.01986,placeholder
+E5,SAM 3,text:red dot,none,-1,TJDR-std,MA,aupr,0.01511,placeholder
+E5,SAM 3,text:small red lesion,none,-1,TJDR-std,MA,aupr,0.00882,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,MA,aupr,0.01986,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-std,HE,aupr,0.12903,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-std,HE,aupr,0.08852,placeholder
+E5,SAM 3,text:dark red patch,none,-1,TJDR-std,HE,aupr,0.04686,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,HE,aupr,0.12903,placeholder
+E5,SAM 3,text:hard exudate,none,-1,TJDR-std,EX,aupr,0.16771,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,TJDR-std,EX,aupr,0.09476,placeholder
+E5,SAM 3,text:bright lesion,none,-1,TJDR-std,EX,aupr,0.05724,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,EX,aupr,0.16771,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,TJDR-std,SE,aupr,0.1297,placeholder
+E5,SAM 3,text:soft exudate,none,-1,TJDR-std,SE,aupr,0.09993,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,TJDR-std,SE,aupr,0.05314,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-std,SE,aupr,0.1297,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,TJDR-uwf,MA,aupr,0.01851,placeholder
+E5,SAM 3,text:red dot,none,-1,TJDR-uwf,MA,aupr,0.01532,placeholder
+E5,SAM 3,text:small red lesion,none,-1,TJDR-uwf,MA,aupr,0.01098,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,MA,aupr,0.01851,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.10123,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,TJDR-uwf,HE,aupr,0.08102,placeholder
+E5,SAM 3,text:dark red patch,none,-1,TJDR-uwf,HE,aupr,0.05845,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,HE,aupr,0.10123,placeholder
+E5,SAM 3,text:hard exudate,none,-1,TJDR-uwf,EX,aupr,0.18738,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,TJDR-uwf,EX,aupr,0.11912,placeholder
+E5,SAM 3,text:bright lesion,none,-1,TJDR-uwf,EX,aupr,0.06583,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,EX,aupr,0.18738,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,TJDR-uwf,SE,aupr,0.13767,placeholder
+E5,SAM 3,text:soft exudate,none,-1,TJDR-uwf,SE,aupr,0.10856,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,TJDR-uwf,SE,aupr,0.0636,placeholder
+E5,SAM 3,text:selected,none,-1,TJDR-uwf,SE,aupr,0.13767,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,FGADR,MA,aupr,0.0211,placeholder
+E5,SAM 3,text:red dot,none,-1,FGADR,MA,aupr,0.01854,placeholder
+E5,SAM 3,text:small red lesion,none,-1,FGADR,MA,aupr,0.00816,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,MA,aupr,0.0211,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,FGADR,HE,aupr,0.11503,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,FGADR,HE,aupr,0.06803,placeholder
+E5,SAM 3,text:dark red patch,none,-1,FGADR,HE,aupr,0.03866,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,HE,aupr,0.11503,placeholder
+E5,SAM 3,text:hard exudate,none,-1,FGADR,EX,aupr,0.15752,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,FGADR,EX,aupr,0.0974,placeholder
+E5,SAM 3,text:bright lesion,none,-1,FGADR,EX,aupr,0.0909,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,EX,aupr,0.15752,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,FGADR,SE,aupr,0.14119,placeholder
+E5,SAM 3,text:soft exudate,none,-1,FGADR,SE,aupr,0.08646,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,FGADR,SE,aupr,0.05281,placeholder
+E5,SAM 3,text:selected,none,-1,FGADR,SE,aupr,0.14119,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,Retinal-Lesions,MA,aupr,0.02184,placeholder
+E5,SAM 3,text:red dot,none,-1,Retinal-Lesions,MA,aupr,0.01675,placeholder
+E5,SAM 3,text:small red lesion,none,-1,Retinal-Lesions,MA,aupr,0.00949,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,MA,aupr,0.02184,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.12491,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,Retinal-Lesions,HE,aupr,0.09737,placeholder
+E5,SAM 3,text:dark red patch,none,-1,Retinal-Lesions,HE,aupr,0.04855,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,HE,aupr,0.12491,placeholder
+E5,SAM 3,text:hard exudate,none,-1,Retinal-Lesions,EX,aupr,0.15609,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,Retinal-Lesions,EX,aupr,0.10738,placeholder
+E5,SAM 3,text:bright lesion,none,-1,Retinal-Lesions,EX,aupr,0.05783,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,EX,aupr,0.15609,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,Retinal-Lesions,SE,aupr,0.16944,placeholder
+E5,SAM 3,text:soft exudate,none,-1,Retinal-Lesions,SE,aupr,0.11741,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,Retinal-Lesions,SE,aupr,0.0674,placeholder
+E5,SAM 3,text:selected,none,-1,Retinal-Lesions,SE,aupr,0.16944,placeholder
+E5,SAM 3,text:microaneurysm,none,-1,DiaRetDB1,MA,aupr,0.01763,placeholder
+E5,SAM 3,text:red dot,none,-1,DiaRetDB1,MA,aupr,0.01873,placeholder
+E5,SAM 3,text:small red lesion,none,-1,DiaRetDB1,MA,aupr,0.00721,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,MA,aupr,0.01763,placeholder
+E5,SAM 3,text:retinal hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.11267,placeholder
+E5,SAM 3,text:blot hemorrhage,none,-1,DiaRetDB1,HE,aupr,0.08595,placeholder
+E5,SAM 3,text:dark red patch,none,-1,DiaRetDB1,HE,aupr,0.04327,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,HE,aupr,0.11267,placeholder
+E5,SAM 3,text:hard exudate,none,-1,DiaRetDB1,EX,aupr,0.14453,placeholder
+E5,SAM 3,text:yellow deposit,none,-1,DiaRetDB1,EX,aupr,0.12942,placeholder
+E5,SAM 3,text:bright lesion,none,-1,DiaRetDB1,EX,aupr,0.06368,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,EX,aupr,0.14453,placeholder
+E5,SAM 3,text:cotton wool spot,none,-1,DiaRetDB1,SE,aupr,0.17051,placeholder
+E5,SAM 3,text:soft exudate,none,-1,DiaRetDB1,SE,aupr,0.08571,placeholder
+E5,SAM 3,text:white fluffy patch,none,-1,DiaRetDB1,SE,aupr,0.06034,placeholder
+E5,SAM 3,text:selected,none,-1,DiaRetDB1,SE,aupr,0.17051,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.001,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.04891,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01196,placeholder
+E5,SAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.2334,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.03088,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.18416,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05978,placeholder
+E5,SAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.50986,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.11804,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.3623,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.17078,placeholder
+E5,SAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.67218,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.31964,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.60771,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.66675,placeholder
+E5,SAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.72801,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,MA,aupr,0.01137,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,HE,aupr,0.04789,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,EX,aupr,0.01142,placeholder
+E5,SAM,oracle:box:1,none,-1,DDR,SE,aupr,0.20373,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,MA,aupr,0.03645,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,HE,aupr,0.14727,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,EX,aupr,0.04195,placeholder
+E5,SAM,oracle:box:5,none,-1,DDR,SE,aupr,0.44491,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,MA,aupr,0.11516,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,HE,aupr,0.31945,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,EX,aupr,0.14125,placeholder
+E5,SAM,oracle:box:20,none,-1,DDR,SE,aupr,0.57673,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,MA,aupr,0.2537,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,HE,aupr,0.54771,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,EX,aupr,0.57846,placeholder
+E5,SAM,oracle:box:all,none,-1,DDR,SE,aupr,0.63334,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.00906,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.04169,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.01388,placeholder
+E5,SAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.22937,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.04235,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.15347,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04036,placeholder
+E5,SAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.473,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.12282,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.34042,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.15998,placeholder
+E5,SAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.60511,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.26913,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.57503,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.60389,placeholder
+E5,SAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.64766,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,MA,aupr,0.02203,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,HE,aupr,0.04604,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,EX,aupr,0.00745,placeholder
+E5,SAM 2,oracle:box:1,none,-1,IDRiD,SE,aupr,0.24403,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,MA,aupr,0.0463,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,HE,aupr,0.17298,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,EX,aupr,0.0394,placeholder
+E5,SAM 2,oracle:box:5,none,-1,IDRiD,SE,aupr,0.53665,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,MA,aupr,0.12791,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,HE,aupr,0.38643,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,EX,aupr,0.18402,placeholder
+E5,SAM 2,oracle:box:20,none,-1,IDRiD,SE,aupr,0.68391,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,MA,aupr,0.33377,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,HE,aupr,0.6689,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,EX,aupr,0.70446,placeholder
+E5,SAM 2,oracle:box:all,none,-1,IDRiD,SE,aupr,0.75431,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,MA,aupr,0.01513,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,HE,aupr,0.02898,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,EX,aupr,0.01676,placeholder
+E5,SAM 2,oracle:box:1,none,-1,DDR,SE,aupr,0.22196,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,MA,aupr,0.03918,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,HE,aupr,0.15835,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,EX,aupr,0.05037,placeholder
+E5,SAM 2,oracle:box:5,none,-1,DDR,SE,aupr,0.46773,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,MA,aupr,0.11092,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,HE,aupr,0.34493,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,EX,aupr,0.16063,placeholder
+E5,SAM 2,oracle:box:20,none,-1,DDR,SE,aupr,0.60836,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,MA,aupr,0.29697,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,HE,aupr,0.57698,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,EX,aupr,0.60579,placeholder
+E5,SAM 2,oracle:box:all,none,-1,DDR,SE,aupr,0.65371,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.01347,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.0432,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.00589,placeholder
+E5,SAM 2,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.23536,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.03547,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.16535,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.03682,placeholder
+E5,SAM 2,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.50229,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.1226,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.36368,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.15862,placeholder
+E5,SAM 2,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.63003,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.30244,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.60814,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.63809,placeholder
+E5,SAM 2,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.68624,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,MA,aupr,0.00928,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,HE,aupr,0.03056,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,EX,aupr,0.00525,placeholder
+E5,SAM 2,oracle:point:1,none,-1,IDRiD,SE,aupr,0.2257,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,MA,aupr,0.04967,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,HE,aupr,0.11184,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,EX,aupr,0.04219,placeholder
+E5,SAM 2,oracle:point:5,none,-1,IDRiD,SE,aupr,0.44231,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,MA,aupr,0.08862,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,HE,aupr,0.29528,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,EX,aupr,0.14068,placeholder
+E5,SAM 2,oracle:point:20,none,-1,IDRiD,SE,aupr,0.58587,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,MA,aupr,0.20225,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,HE,aupr,0.48521,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,EX,aupr,0.52314,placeholder
+E5,SAM 2,oracle:point:all,none,-1,IDRiD,SE,aupr,0.63063,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,MA,aupr,0.01482,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,HE,aupr,0.02139,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,EX,aupr,0.01161,placeholder
+E5,SAM 2,oracle:point:1,none,-1,DDR,SE,aupr,0.17221,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,MA,aupr,0.04618,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,HE,aupr,0.11419,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,EX,aupr,0.00625,placeholder
+E5,SAM 2,oracle:point:5,none,-1,DDR,SE,aupr,0.41453,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,MA,aupr,0.06365,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,HE,aupr,0.2675,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,EX,aupr,0.11219,placeholder
+E5,SAM 2,oracle:point:20,none,-1,DDR,SE,aupr,0.50926,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,MA,aupr,0.17998,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,HE,aupr,0.43664,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,EX,aupr,0.44156,placeholder
+E5,SAM 2,oracle:point:all,none,-1,DDR,SE,aupr,0.56033,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,MA,aupr,0.001,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,HE,aupr,0.03046,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,EX,aupr,0.00875,placeholder
+E5,SAM 2,oracle:point:1,none,-1,TJDR-std,SE,aupr,0.20764,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,MA,aupr,0.02634,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,HE,aupr,0.1281,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,EX,aupr,0.03212,placeholder
+E5,SAM 2,oracle:point:5,none,-1,TJDR-std,SE,aupr,0.41248,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,MA,aupr,0.06703,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,HE,aupr,0.27593,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,EX,aupr,0.11862,placeholder
+E5,SAM 2,oracle:point:20,none,-1,TJDR-std,SE,aupr,0.52671,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,MA,aupr,0.17621,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,HE,aupr,0.46041,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,EX,aupr,0.47486,placeholder
+E5,SAM 2,oracle:point:all,none,-1,TJDR-std,SE,aupr,0.5877,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,MA,aupr,0.001,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,HE,aupr,0.02975,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,EX,aupr,0.01726,placeholder
+E5,MedSAM,oracle:box:1,none,-1,IDRiD,SE,aupr,0.21785,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,MA,aupr,0.03879,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,HE,aupr,0.14402,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,EX,aupr,0.05577,placeholder
+E5,MedSAM,oracle:box:5,none,-1,IDRiD,SE,aupr,0.50856,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,MA,aupr,0.08537,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,HE,aupr,0.34892,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,EX,aupr,0.14835,placeholder
+E5,MedSAM,oracle:box:20,none,-1,IDRiD,SE,aupr,0.6356,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,MA,aupr,0.22839,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,HE,aupr,0.57001,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,EX,aupr,0.55842,placeholder
+E5,MedSAM,oracle:box:all,none,-1,IDRiD,SE,aupr,0.69994,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,MA,aupr,0.001,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,HE,aupr,0.0233,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,EX,aupr,0.01125,placeholder
+E5,MedSAM,oracle:box:1,none,-1,DDR,SE,aupr,0.20553,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,MA,aupr,0.02651,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,HE,aupr,0.12474,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,EX,aupr,0.04165,placeholder
+E5,MedSAM,oracle:box:5,none,-1,DDR,SE,aupr,0.44218,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,MA,aupr,0.07095,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,HE,aupr,0.30277,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,EX,aupr,0.13428,placeholder
+E5,MedSAM,oracle:box:20,none,-1,DDR,SE,aupr,0.53884,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,MA,aupr,0.19238,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,HE,aupr,0.52096,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,EX,aupr,0.50404,placeholder
+E5,MedSAM,oracle:box:all,none,-1,DDR,SE,aupr,0.62427,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,MA,aupr,0.001,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,HE,aupr,0.03752,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,EX,aupr,0.0019,placeholder
+E5,MedSAM,oracle:box:1,none,-1,TJDR-std,SE,aupr,0.21724,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,MA,aupr,0.02211,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,HE,aupr,0.13454,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,EX,aupr,0.04388,placeholder
+E5,MedSAM,oracle:box:5,none,-1,TJDR-std,SE,aupr,0.4606,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.08172,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.30985,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.11758,placeholder
+E5,MedSAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.592,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,MA,aupr,0.19481,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,HE,aupr,0.52391,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,EX,aupr,0.53484,placeholder
+E5,MedSAM,oracle:box:all,none,-1,TJDR-std,SE,aupr,0.64698,placeholder
