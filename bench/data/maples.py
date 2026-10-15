@@ -182,8 +182,9 @@ class MaplesDR:
             raise RuntimeError(f"MAPLES-DR official split moved: {len(train)} train, {len(test)} test (expected 138, 60)")
         if set(train) & set(test):
             raise RuntimeError("MAPLES-DR train and test lists overlap")
-        duplicates = set(self.record.get("duplicates") or {}) | set((self.record.get("duplicates") or {}).values())
-        if duplicates & (set(train) | set(test)):
+        # dataset_record.yaml: key is the image kept in the official 138, value is the extra copy already left out.
+        copies = set((self.record.get("duplicates") or {}).values())
+        if copies & (set(train) | set(test)):
             raise RuntimeError("a duplicated image is in the official lists")
         return {"train": train, "val": [], "test": test}
 

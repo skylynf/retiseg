@@ -152,6 +152,8 @@ def author_recipe(dataset):
 
 
 class _Cfg(dict):
+    """A dict the author code can read with attributes (backbone.type, hr_settings.hr_scale)."""
+
     def __getattr__(self, name):
         try:
             return self[name]
@@ -159,10 +161,23 @@ class _Cfg(dict):
             raise AttributeError(name) from exc
 
 
+def _as_cfg(cfg):
+    if isinstance(cfg, dict):
+        return _Cfg({key: _as_cfg(value) for key, value in cfg.items()})
+    if isinstance(cfg, list):
+        return [_as_cfg(value) for value in cfg]
+    if isinstance(cfg, tuple):
+        return tuple(_as_cfg(value) for value in cfg)
+    return cfg
+
+
 def _install_import_path():
     if not OFFICIAL.is_dir():
         raise FileNotFoundError(f"{OFFICIAL} is missing; git submodule update --init official_code/HRDecoder")
     official = str(OFFICIAL)
+    loaded = sys.modules.get("mmseg")
+    if loaded is not None and str(getattr(loaded, "__file__", "")).startswith(official + "/"):
+        return
     while official in sys.path:
         sys.path.remove(official)
     sys.path.insert(0, official)
@@ -179,13 +194,13 @@ def build_network(dataset="IDRiD"):
     _install_import_path()
     from mmseg.models import build_segmentor
 
-    cfg = _bn(author_model_dict(dataset))
+    cfg = _as_cfg(_bn(author_model_dict(dataset)))
     cfg["pretrained"] = None
     hr = dict(cfg["hr_settings"])
     hr["hr_scale"] = HR_SCALE
-    cfg["hr_settings"] = _Cfg(hr)
-    test_cfg = _Cfg(cfg.pop("test_cfg", {"mode": "whole"}))
-    train_cfg = _Cfg(cfg.pop("train_cfg", {}))
+    cfg["hr_settings"] = _as_cfg(hr)
+    test_cfg = cfg.pop("test_cfg", _Cfg({"mode": "whole"}))
+    train_cfg = cfg.pop("train_cfg", _Cfg({}))
     return build_segmentor(cfg, train_cfg=train_cfg, test_cfg=test_cfg)
 
 

@@ -18,7 +18,7 @@ import torch
 from torch import nn
 
 REPO = Path(__file__).resolve().parents[1]
-SCHEDULE_KEYS = ("power", "min_lr")
+SCHEDULE_KEYS = ("power", "min_lr", "warmup_iters", "warmup_ratio", "hr_scale_author", "crop_num", "scale_ratio", "divisible")
 LOSS_NAMES = ("bce_with_logits", "ce", "dice", "ce_dice", "bce_dice")
 OPTIMIZER_NAMES = ("adam", "adamw", "sgd")
 SCHEDULE_NAMES = ("none", "poly")

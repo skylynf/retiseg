@@ -32,7 +32,7 @@ stages:
   - name: fundus_seed0
     priority: 25
     kind: bs
-    enabled: false
+    enabled: true
     jobs: bench/configs/bs_jobs.yaml
     only: [HRDecoder, PMCNet, WSRFNet, CLC-Net, TC-Net]
     seed0_only: true

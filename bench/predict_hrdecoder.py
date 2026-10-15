@@ -63,17 +63,16 @@ DATASETS = {
 
 def build_author_network(dataset):
     """The author's segmentor exactly as configured for ``dataset`` (hr_scale, test_cfg), SyncBN -> BN."""
-    from bench.models.hrdecoder import _Cfg, _bn, _install_import_path, author_model_dict
+    from bench.models.hrdecoder import _Cfg, _as_cfg, _bn, _install_import_path, author_model_dict
 
     _install_import_path()
     from mmseg.models import build_segmentor
 
-    cfg = _bn(author_model_dict(dataset))
+    cfg = _as_cfg(_bn(author_model_dict(dataset)))
     cfg["pretrained"] = None
-    cfg["hr_settings"] = _Cfg(dict(cfg["hr_settings"]))
-    test_cfg = _Cfg(dict(cfg.pop("test_cfg", {"mode": "whole"})))
+    test_cfg = cfg.pop("test_cfg", _Cfg({"mode": "whole"}))
     test_cfg["compute_aupr"] = True
-    train_cfg = _Cfg(dict(cfg.pop("train_cfg", {})))
+    train_cfg = cfg.pop("train_cfg", _Cfg({}))
     network = build_segmentor(cfg, train_cfg=train_cfg, test_cfg=test_cfg)
     return network, {"hr_scale": list(cfg["hr_settings"]["hr_scale"]), "test_cfg": {k: (list(v) if isinstance(v, (tuple, list)) else v) for k, v in test_cfg.items()}}
 
@@ -82,7 +81,10 @@ def load_model(checkpoint_path, device, dataset="IDRiD"):
     import torch
 
     network, geometry = build_author_network(dataset)
-    checkpoint = torch.load(str(checkpoint_path), map_location="cpu", weights_only=False)
+    load_kwargs = {"map_location": "cpu"}
+    if "weights_only" in torch.load.__code__.co_varnames:
+        load_kwargs["weights_only"] = False
+    checkpoint = torch.load(str(checkpoint_path), **load_kwargs)
     state = checkpoint.get("state_dict", checkpoint)
     missing, unexpected = network.load_state_dict(state, strict=False)
     real_missing = [key for key in missing if not key.endswith("num_batches_tracked")]

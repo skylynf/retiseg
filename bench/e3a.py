@@ -204,7 +204,10 @@ def evaluate_set(source, test_name, variant, frozen, train_dir=None, val_pred_di
         raise FileNotFoundError(f"{directory} has no finished prediction (predicted.json)")
     proto = load_protocol(REPO / frozen["eval_protocol"])
     predicted = json.loads((directory / "predicted.json").read_text())
-    _ids, excluded = test_ids(test_name, frozen, [predicted["train_source"]])
+    # Multi-source runs store the joined label in train_source ("DDR+Retinal-Lesions") and the
+    # real names in train_sources. Exclusions are per source; the joined label matches none.
+    sources = predicted.get("train_sources") or [predicted["train_source"]]
+    _ids, excluded = test_ids(test_name, frozen, sources)
     use_val = val_pred_dir is not None and Path(val_pred_dir).is_dir()
     started = time.perf_counter()
     result = evaluate(

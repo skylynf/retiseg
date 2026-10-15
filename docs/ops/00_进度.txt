@@ -123,3 +123,74 @@ Luming 的决定落地（2026-10-14 晚，本机）
    可选的 CPU 补数：M2MRF、nnU-Net 种子 0 的内部测试 metrics_test.json 早于任意病灶指标，想让参考值齐全可按 17 第四节第 8 条用现有概率图只重评一次。
 3. CI：.github/workflows/tests.yml（push/PR；浅检出子模块；CPU torch + requirements-train + pandas/matplotlib；pytest bench/tests 去掉 test_h2former_forward.py）。21 第 2 条的六个数据用例加了 skipif（dataset/prepared/IDRiD、DDR 不在时跳过）。第一次运行的结果要看 Actions 页面；失败记 21。
 4. 协议锁文件：按决定等首个 E5 测试指标读出后由本机加（21 第 34 条 b 标已采纳、待时点）。
+
+按 17 第四节执行（2026-10-14 13:10 +0800，服务器，pull 到 47c0b7f）
+主机 ubuntu-SYS-421GE-TNRT，目录 /home/qurr/luming/retiseg/retiseg。GPU 0、1 仍是他人 vLLM。没有改 14、13、CHECKPOINT。
+MAPLES-DR：新读法原先把官方 138 张里保留的那两张（dataset_record.yaml 的 duplicates 键）也当成重复而拒绝打开。改成只拒绝已被排除的副本（值）之后，python bench/scripts/prepare_datasets.py export MAPLES-DR 写出 138/0/60。泄漏审计 runs/audit/leak_maples.json 已有：与 MAPLES-DR 有关的血管相关最高 0.343（阈值 0.5），by_training_source 六个训练源的 MAPLES-DR 名单都写成空列表。这五处 bench 改动已暂存，本机 git 2.25 的 commit 被注入的 --trailer 拒绝，尚未形成提交。
+HRDecoder 作者权重（CPU，第九节；当时没有空卡）：IDRiD 测试 27 张的作者 11 阈值 mAUPR 0.7134、mIoU 0.522，对上 README 的 71.34 / 52.20（runs/E1_hrdecoder/author_idrid_test.json）。DDR 测试还在写概率图（约 200/225）。项目协议的 metrics_idrid、metrics_ddr 还没有。
+nnU-Net 603/604 的 raw、预处理和 splits 已在，没有重做。算力审计和任意病灶补评这次没开：唯一空着的项目卡是 GPU 3，交给了队列。
+队列：RETISEG_GPUS=3 RETISEG_ALLOW_DIRTY=1，pid 291235，日志 runs/logs/20261014_130822_queue.log。启动前打印的待办是 e3a 260 项（其中 MAPLES-DR 53）、e5_seed0 16 项（bs_jobs 估计共 66.5 GPU 时）、factor_cheap 11、nnunet_e3b 2、factor_e3b_heavy 4、factor_e7_heavy 2。fundus_seed0、e5_infer_pool、e5_infer_test 仍关。GPU 2 是 nnU-Net IDRiD 补跑；GPU 4–7 是旧的 launch_factor（只盯这四张卡），新队列不会接管它们。第四节第 2 条的 pytest 启动时还在跑，结果补在下一行。
+
+值守开始（2026-10-14 13:25 +0800，到 2026-10-15 01:25 +0800）
+pytest 五份：58 通过、4 失败（test_e5_flow 的同信息对照项、test_launch_e5_infer 的计划条数 40 对 36、test_launch_queue 的排序夹进了 nnunet 项、e5_infer 阶段计划断言）。未改协议文件。日志 runs/logs/pytest_section4.log。
+HRDecoder 作者权重：DDR 作者函数 mAUPR 0.4924、mIoU 0.322，对上 README 的 49.24 / 32.24（runs/E1_hrdecoder/author_ddr_test.json）。IDRiD 项目协议 mAUPR 0.707（runs/E1_hrdecoder/metrics_idrid.json）。DDR 的项目协议评测还在跑。
+队列已在 GPU 3 上开始第一项：NN_default_idrid_fold0 的 MAPLES-DR（13:15，60 张里已过 51）。GPU 2 仍是 nnU-Net IDRiD rep2。GPU 4、5 的 U-Net 进程还占着显存，利用率 0，日志停在 epoch 380 和 epoch 60。旧启动器不杀。
+
+一小时检查（2026-10-14 14:27 +0800）
+HRDecoder 作者权重两库都结束。DDR 项目协议 mAUPR 0.461、任意病灶 AUPR 0.601，n=225，排除 0（runs/E1_hrdecoder/metrics_ddr.json，13:28）。作者函数此前已对上 README。
+MAPLES-DR 上 nnU-Net 四项已出数：IDRiD 默认 0.401、ResEnc-M 0.359；DDR 默认 0.445、ResEnc-M 0.466。GPU 3 在两项之间会空几分钟（队列重读时逐项查 conda 环境），下一项会自己接上。还在 E3a，没有碰到 E5 种子 0。
+GPU 2 的 IDRiD rep2 在 epoch 491/1000，约 33 秒一个 epoch，大约再要 4 到 5 小时。冒烟等它结束。
+GPU 4 的 TJDR U-Net 已于 13:52 退出码 0，旧启动器接上了 E4 U-Net DDR+Retinal-Lesions。GPU 5 的 DDR+全部 FGADR 到了 epoch 120，没有停住。旧启动器不杀。
+
+GPU 2 空出与 E5 冒烟（2026-10-14 22:24 +0800）
+nnU-Net IDRiD rep2 于 18:51 结束（runs/logs/unet_rest_gpu2.console 的 queue done idrid）。冒烟在 22:15 第一次启动时四个官方仓库都是空目录，八项立刻失败。已用 SSH 检出 SAMed e351840、SAM-Adapter 041277f、SAM2-UNet 01598e5、RETFound ae9a9ec，并在 retiseg 环境装了 hydra-core 1.3.7 和 icecream。22:24 重开的冒烟只占用 GPU 2：SAMed 仍因当时还没有 icecream 而失败；SAM-Adapter IDRiD 已在训练（显存约 39GB）。其余项排在同一张卡后面。SAMed 两项等这轮结束后再单独重跑。
+E3a 有一项在 FGADR 上反复失败：BF_e4_m2mrf_ddr_retles_seed0 的预测排除了 27 张（含 0050_3），评测却把训练源读成单个名字 DDR+Retinal-Lesions，排除名单对不上。bench/e3a.py 的 evaluate_set 已改为读 train_sources。22:22 的重试还在评测，没有再报缺文件。
+
+E5 冒烟第一轮结果（2026-10-14 22:40 +0800，只占 GPU 2，各 20 步）
+SAM-Adapter：IDRiD 47.9 秒、验证 mAUPR 0.013；DDR 147.2 秒、验证 mAUPR 0.002。训练过程中这张卡一度到约 39GB，日志没有写峰值显存。
+RETFound：IDRiD 25.9 秒、验证 mAUPR 0.018；DDR 136.9 秒、验证 mAUPR 0.002。权重 RETFound_mae_natureCFP.pth 载入 292 项、缺 0。
+SAMed：当时还没有 icecream，两项退出码 1。22:40 已在 GPU 2 上重开。
+SAM2-UNet：装上 hydra 之后按配方的 loader batch 12 前向，显存用到 37.9 GiB，再申请 324 MiB 时失败（CUDA 看到的是 40GB 卡）。六个 cell 加了 batch_size: 1，有效批仍是 12，累积倍数由训练代码记进偏差。22:40 和 SAMed 一起重跑。通过之前不开 fundus_seed0，也不开 E5 种子 0 全量。
+
+E5 冒烟补跑通过（2026-10-14 22:47 +0800，GPU 2，各 20 步，退出码 0）
+SAMed：IDRiD 28.1 秒，DDR 82.3 秒。SAM2-UNet（loader batch 1，有效批 12）：IDRiD 70.8 秒，DDR 107.2 秒。四个模型八项都已通过。种子 0 全量仍由 GPU 3 上的队列在 E3a 之后接，没有另开。
+专用模型冒烟已在 GPU 2 上开始，第一项是 HRDecoder IDRiD（环境 retiseg-hacdr）。通过之前不把 fundus_seed0 改成开。
+
+2026-10-15 06:02 +0800
+旧因素启动器只剩 E9 两项：GPU 5 上 DDR Dice 到 epoch 360，GPU 7 上 DDR CE 已跑约 5 小时。21 项名单里其余 U-Net 都已退出码 0。GPU 4、6 因此空着，旧启动器没有再往这两张卡派任务，也没有停它。
+E5 四个模型的冒烟此前都已通过。种子 0 全量于 06:01 开在 GPU 4 和 GPU 6（日志 runs/logs/20261015_060110_e5_seed0.log，16 项，表上约 66.5 GPU 小时）。先跑的是 DDR：GPU 6 SAM-Adapter（约 23 小时，显存约 39GB），GPU 4 RETFound（约 21 小时，权重载入 292、缺 0）。GPU 3 的队列仍在 E3a（HRNet DDR 种子 2 的 TJDR 超广角），不会和这两项抢同一目录。
+专用模型冒烟还在 GPU 2。HRDecoder IDRiD 退出码 1：warmup_iters 被传进了 SGD。已把 warmup_iters、warmup_ratio 并进 runtime.SCHEDULE_KEYS，学习率仍由 adjust_lr 读取。HRDecoder DDR 退出码 1：同一进程里第二次 build_network 重导入 mmseg，注册表报 scope mmseg exists。第二次若官方 mmseg 已在，不再删模块重导。这两项要等本轮冒烟结束后单独重跑，通过前 fundus_seed0 仍关。PMCNet 正在向 Hugging Face 要 tf_efficientnet_b0.in1k，本机没有 pretrained/tf_efficientnet_b0.in1k.safetensors，网络不可达。
+
+专用模型冒烟补跑（2026-10-15 06:41 +0800，只占 GPU 2，各 20 步）
+CLC-Net 退出码 0：IDRiD 25.6 秒，DDR 222.8 秒。批大小 16 放得下，没有改累积。TC-Net 退出码 0：IDRiD 13.6 秒，DDR 95.6 秒。
+HRDecoder 两处修复后退出码 0：IDRiD 12.6 秒，DDR 35.0 秒。warmup 和几何参数留在配方里，不再传给 SGD。DDR 第二次构建不再重导入 mmseg。
+WSRFNet 官方仓库已按 5557f9c 检出。缺 pywt，已在 retiseg 装 PyWavelets 1.8.0，并写进 cluster_env.sh。efficientnet-b1.pth 来自 GitHub release（31MB）。退出码 0：IDRiD 13.4 秒，DDR 38.7 秒。
+PMCNet 的 B0 权重从镜像下到 pretrained/tf_efficientnet_b0.in1k.safetensors（21MB）。huggingface.co 连接超时。退出码 0：IDRiD 4.3 秒，DDR 26.1 秒。
+十项都通过后，queue.yaml 的 fundus_seed0 已改为 enabled true。全量仍由队列在 E3a 和 E5 种子 0 之后接，没有另开。GPU 7 在 E9 CE 结束后另开了一条队列，正在做 E3a。GPU 2 冒烟结束后也另开了一条队列，只许用 GPU 2。
+
+2026-10-15 08:17 +0800，提交 47c0b7f。14、13、CHECKPOINT 未改。下列 mAUPR 是测试集精确值，四位小数；any 是任意病灶 AUPR。排除数都是 0。
+当时的卡：0、1 仍是 vLLM。GPU 4 RETFound DDR 种子 0（runs/BS_retfound_ddr_seed0，epoch 20，验证 mAUPR 0.4325，这不是测试集）。GPU 6 SAM-Adapter DDR 种子 0（runs/BS_sam_adapter_ddr_seed0，epoch 20，验证 mAUPR 0.5265，同样不是测试集）。两条都从 06:01 起，日志 runs/logs/20261015_060110_e5_seed0.log。GPU 5 空着。旧因素启动器已结束：E9 DDR CE 于 06:14 退出码 0，E9 DDR Dice 于 06:38 退出码 0，两项目录都还没有 metrics_test.json。GPU 2、3、7 三条队列都在做 E3a。08:16 起这三条同时打开了同一个目录 runs/E3a/BS_fct_idrid_seed1/FGADR（控制台三次 == start，还没有 == exit，还没有 metrics.json）。这个目录的数要等只剩一个进程写完再读。
+E9 两项的测试集评分还没落盘。今日新落盘的是 E3a，文件名都是 metrics.json：
+
+BF_e3b_m2mrf_fgadr_seed0：DDR 0.1965（any 0.2966，n 225）；DiaRetDB1 0.1762（any 0.2501，n 61）；MAPLES-DR 0.2510（any 0.3207，n 60）；TJDR_uwf__fov 0.2434（any 0.3441，n 58）；TJDR_std 0.4494（any 0.4289，n 55）；IDRiD 0.4366（any 0.5517，n 27）。
+BF_e3b_m2mrf_tjdr_std_seed0：DDR 0.2307（any 0.3290，n 225）；DiaRetDB1 0.1618（any 0.2177，n 61）；MAPLES-DR 0.2136（any 0.2833，n 60）；TJDR_uwf__fov 0.1447（any 0.2099，n 58）；IDRiD 0.3401（any 0.4979，n 27）。
+BF_e4_m2mrf_ddr_fgadr383_seed0：DiaRetDB1 0.1612（any 0.2028，n 61）；MAPLES-DR 0.3114（any 0.3740，n 60）；TJDR_std 0.4839（any 0.5720，n 55）；IDRiD 0.5563（any 0.6586，n 27）。
+BF_e4_m2mrf_ddr_fgadr_seed0：DiaRetDB1 0.1439（any 0.1861，n 61）；MAPLES-DR 0.2993（any 0.3504，n 60）；TJDR_std 0.4971（any 0.5730，n 55）；IDRiD 0.5537（any 0.6507，n 27）。
+BF_e4_m2mrf_ddr_retles_seed0：DiaRetDB1 0.1854（any 0.2372，n 61）；MAPLES-DR 0.2308（any 0.3381，n 60）；TJDR_std 0.3253（any 0.5054，n 55）；IDRiD 0.5149（any 0.6344，n 27）。
+BF_e4_m2mrf_retles_seed0：DDR 0.1043（any 0.1294，n 225）；DiaRetDB1 0.3697（any 0.5452，n 61）；MAPLES-DR 0.1568（any 0.2613，n 60）；TJDR_uwf__fov 0.0772（any 0.1106，n 58）；TJDR_std 0.1496（any 0.1903，n 55）；IDRiD 0.1668（any 0.1910，n 27）。
+BF_e8_m2mrf_ddr10_seed0：DiaRetDB1 0.1527（any 0.1980，n 61）；MAPLES-DR 0.2616（any 0.3497，n 60）；TJDR_std 0.4102（any 0.5370，n 55）；IDRiD 0.4733（any 0.6145，n 27）。
+BS_deeplabv3_ddr_seed1：TJDR_uwf 0.1064（any 0.0482，n 58）；TJDR_uwf__fov 0.1988（any 0.2494，n 58）；FGADR 0.2530（any 0.3665，n 553）。
+BS_deeplabv3_ddr_seed2：TJDR_uwf 0.1681（any 0.1767，n 58）；TJDR_uwf__fov 0.2046（any 0.3186，n 58）；FGADR 0.2708（any 0.3860，n 553）。
+BS_deeplabv3_idrid_seed1：FGADR 0.2370（any 0.3339，n 553）。
+BS_deeplabv3_idrid_seed2：FGADR 0.2230（any 0.3170，n 553）。
+BS_hacdr_ddr_seed1：TJDR_uwf 0.1900（any 0.2663，n 58）；TJDR_uwf__fov 0.1386（any 0.1421，n 58）。
+BS_hacdr_ddr_seed2：TJDR_uwf 0.2164（any 0.3541，n 58）；TJDR_uwf__fov 0.1516（any 0.2361，n 58）。
+BS_hrnet_ddr_seed1：TJDR_uwf 0.1915（any 0.2445，n 58）；TJDR_uwf__fov 0.2149（any 0.3485，n 58）。
+BS_hrnet_ddr_seed2：TJDR_uwf 0.1651（any 0.1811，n 58）；TJDR_uwf__fov 0.1280（any 0.1051，n 58）。
+BS_m2mrf_ddr_seed1：TJDR_uwf 0.1840（any 0.2655，n 58）；TJDR_uwf__fov 0.2086（any 0.3197，n 58）。
+BS_m2mrf_ddr_seed2：TJDR_uwf 0.1826（any 0.2583，n 58）；TJDR_uwf__fov 0.1877（any 0.2918，n 58）。
+BS_swin_unet_ddr_seed1：TJDR_uwf 0.1860（any 0.2879，n 58）；TJDR_uwf__fov 0.2238（any 0.3879，n 58）。
+BS_swin_unet_ddr_seed2：TJDR_uwf 0.1712（any 0.2360，n 58）；TJDR_uwf__fov 0.1894（any 0.2945，n 58）。
+BS_unet_ddr_seed1：TJDR_uwf 0.1666（any 0.2128，n 58）；TJDR_uwf__fov 0.2279（any 0.3579，n 58）。
+BS_unet_ddr_seed2：TJDR_uwf 0.1890（any 0.2662，n 58）；TJDR_uwf__fov 0.2228（any 0.3435，n 58）。
+目录都在 runs/E3a/<运行名>/<测试集>/metrics.json。上面没列出的测试集是这一项还没写出文件。

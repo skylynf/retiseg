@@ -7,3 +7,6 @@ split_test: test
 fov_diameter: 1440
 seed: 2
 num_workers: 4
+
+# Loader batch 12 does not fit a 40GB A100 (smoke 2026-10-14: 37.9 GiB allocated, 324 MiB short). Effective batch stays 12.
+batch_size: 1

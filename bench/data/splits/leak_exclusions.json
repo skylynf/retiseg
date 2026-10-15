@@ -18,7 +18,8 @@
    "TJDR_uwf": [],
    "FGADR": [],
    "Retinal-Lesions": [],
-   "DiaRetDB1": []
+   "DiaRetDB1": [],
+   "MAPLES-DR": []
   },
   "DDR": {
    "IDRiD": [],
@@ -27,7 +28,8 @@
    "TJDR_uwf": [],
    "FGADR": [],
    "Retinal-Lesions": [],
-   "DiaRetDB1": []
+   "DiaRetDB1": [],
+   "MAPLES-DR": []
   },
   "TJDR_std": {
    "IDRiD": [],
@@ -36,7 +38,8 @@
    "TJDR_uwf": [],
    "FGADR": [],
    "Retinal-Lesions": [],
-   "DiaRetDB1": []
+   "DiaRetDB1": [],
+   "MAPLES-DR": []
   },
   "TJDR_uwf": {
    "IDRiD": [],
@@ -48,7 +51,8 @@
    ],
    "FGADR": [],
    "Retinal-Lesions": [],
-   "DiaRetDB1": []
+   "DiaRetDB1": [],
+   "MAPLES-DR": []
   },
   "FGADR": {
    "IDRiD": [],
@@ -184,7 +188,8 @@
     "870_right",
     "9620_left"
    ],
-   "DiaRetDB1": []
+   "DiaRetDB1": [],
+   "MAPLES-DR": []
   },
   "Retinal-Lesions": {
    "IDRiD": [],
@@ -223,7 +228,8 @@
    "Retinal-Lesions": [
     "26076_left"
    ],
-   "DiaRetDB1": []
+   "DiaRetDB1": [],
+   "MAPLES-DR": []
   }
  },
  "counts": {

@@ -55,7 +55,7 @@ run_python() {
 }
 
 retiseg_ok() {
-  run_python retiseg -c 'import torch, torchvision, bench, timm, einops, cv2, yacs, hydra, icecream
+  run_python retiseg -c 'import torch, torchvision, bench, timm, einops, cv2, yacs, hydra, icecream, pywt
 version = torch.__version__.split("+")[0]
 if int(version.split(".")[0]) < 2:
     raise SystemExit("torch %s is not 2.x" % torch.__version__)
@@ -68,6 +68,7 @@ print("retiseg", torch.__version__, "cuda", cuda)'
 install_retiseg() {
   ensure_env retiseg 3.11
   write_repo_pth retiseg
+  run_python retiseg -c 'import pywt' 2>/dev/null || run_python retiseg -m pip install 'PyWavelets==1.8.0'
   if retiseg_ok; then
     echo "retiseg already imports torch 2.x, torchvision, and bench"
     return 0
