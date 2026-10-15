@@ -30,11 +30,11 @@
 \famchip{foundation}\; RETFound & MAE encoder + UPerNet & ViT-L & \cellcolor[HTML]{D8EDE2}\ph{\best{.28}} & \cellcolor[HTML]{99D5CC}\ph{\best{.59}} & \cellcolor[HTML]{68C1C2}\ph{\best{.77}} & \cellcolor[HTML]{97D4CB}\ph{\best{.60}} & \ph{\best{.56}} & \cellcolor[HTML]{EBF4EB}\ph{\best{.12}} & \cellcolor[HTML]{C6E6DA}\ph{\best{.38}} & \cellcolor[HTML]{B3DFD2}\ph{\best{.48}} & \cellcolor[HTML]{D4ECE0}\ph{\best{.30}} & \ph{\best{.32}} \\
 \midrule
 \famchip{fundus}\; M2MRF & reference, Table~\ref{tab:main} & -- & \ph{.45} & \ph{.63} & \ph{.87} & \ph{.68} & \ph{.66} & \ph{.15} & \ph{.41} & \ph{.53} & \ph{.39} & \ph{.37} \\
-\famchip{auto}\; nnU-Net & reference, Table~\ref{tab:main} & -- & \ph{.50} & \ph{.67} & \ph{.88} & \ph{.64} & \ph{.67} & \ph{.16} & \ph{.50} & \ph{.61} & \ph{.45} & \ph{.43} \\
+\famchip{auto}\; nnU-Net & reference, Table~\ref{tab:main} & -- & \ph{.50} & \ph{.67} & \ph{.87} & \ph{.62} & \ph{.66} & \ph{.16} & \ph{.50} & \ph{.61} & \ph{.45} & \ph{.43} \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize
-\item $^\ddagger$The zero-shot block is summarised by the any-lesion AUPR (union of the four classes against the pixelwise maximum of the maps); automatic masks carry no class, so their per-class cells are empty, and SAM~3's per-class cells are its own text prompts. The any-lesion AUPR of the references on the same test sets (IDRiD / DDR): M2MRF -- / --; nnU-Net -- / 0.57 (-- where the run predates the metric).
+\item $^\ddagger$The zero-shot block is summarised by the any-lesion AUPR (union of the four classes against the pixelwise maximum of the maps); automatic masks carry no class, so their per-class cells are empty, and SAM~3's per-class cells are its own text prompts. The any-lesion AUPR of the references on the same test sets (IDRiD / DDR): M2MRF -- / --; nnU-Net 0.78 / 0.57 (-- where the run predates the metric).
 \item $^\dagger$Each automatic mask is assigned the class it overlaps most in the ground truth, an upper bound for class-agnostic proposals. Scores of automatic masks use the predicted IoU.
 \phnote
 \end{tablenotes}

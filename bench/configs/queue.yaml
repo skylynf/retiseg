@@ -26,6 +26,17 @@ stages:
     seed0_only: true
     drop_maps: [FGADR, Retinal-Lesions]
 
+  # 1a. Scoring of the factor cells the old launch_factor trained without evaluating (its process ran the
+  #     2026-10-12 code, before the evaluate step was added): 13 U-Net / M2MRF cells of E3b/E4/E7/E8/E9 had
+  #     best.pt and timing.json but no metrics_test.json in the 2026-10-15 pack. Prediction + evaluation only,
+  #     about half an hour each; their E3a sources appear once metrics_test.json exists. Empty once scored.
+  - name: factor_score
+    priority: 12
+    kind: factor
+    score_only: true
+    models: [U-Net, M2MRF]
+    max_concurrent: 1
+
   # 1b. E5 inference pool (docs/ops/17 section 7): IDRiD and DDR validation, 22 items, one card.
   #     ON once the inference smoke has passed, runs/E5 is clean and the launcher runs this code;
   #     the selections (`--select`, committed into e5_frozen.yaml) then unlock e5_infer_test below.

@@ -10,11 +10,11 @@
 \midrule
 \grouprow{5}{Annotation granularity of the training set (E4) --- mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}
 \quad DDR \tier{fine} {\scriptsize\color{inkmuted}(ref.)} & \ph{.40} & \ph{.47} & -- & \ph{.44} \\
-\quad DDR + FGADR, 383 images \tier{fine}\tier{mixed} & \ph{.41} \up{\ph{.01}} & \ph{.49} \up{\ph{.02}} & -- & \cellcolor[HTML]{ECEDEC}\ph{.45} {\scriptsize \ph{+.01}} \\
-\quad DDR + FGADR \tier{fine}\tier{mixed} & \ph{.43} \up{\ph{.03}} & \ph{.50} \up{\ph{.03}} & -- & \cellcolor[HTML]{E4E8EC}\ph{.47} {\scriptsize \ph{+.03}} \\
-\quad DDR + Retinal-Lesions \tier{fine}\tier{coarse} & \ph{.35} \down{\ph{.05}} & \ph{.45} \down{\ph{.02}} & -- & \cellcolor[HTML]{EFE3DF}\ph{.40} {\scriptsize \ph{$$-$$.03}} \\
+\quad DDR + FGADR, 383 images \tier{fine}\tier{mixed} & \ph{.41} \up{\ph{.01}} & \ph{.56} \up{\ph{.08}} & -- & \cellcolor[HTML]{DFE6EC}\ph{.48} {\scriptsize \ph{+.05}} \\
+\quad DDR + FGADR \tier{fine}\tier{mixed} & \ph{.43} \up{\ph{.03}} & \ph{.55} \up{\ph{.08}} & -- & \cellcolor[HTML]{DAE3ED}\ph{.49} {\scriptsize \ph{+.06}} \\
+\quad DDR + Retinal-Lesions \tier{fine}\tier{coarse} & \ph{.35} \down{\ph{.05}} & \ph{.51} \up{\ph{.04}} & -- & \cellcolor[HTML]{F0EEEB}\ph{.43} {\scriptsize \ph{$$-$$.00}} \\
 \quad FGADR \tier{mixed} & \ph{.31} \down{\ph{.09}} & \ph{.38} \down{\ph{.09}} & -- & \cellcolor[HTML]{EDCDC8}\ph{.35} {\scriptsize \ph{$$-$$.09}} \\
-\quad Retinal-Lesions \tier{coarse} & \ph{.22} \down{\ph{.17}} & \ph{.28} \down{\ph{.19}} & -- & \cellcolor[HTML]{EBABA3}\ph{.25} {\scriptsize \ph{$$-$$.18}} \\
+\quad Retinal-Lesions \tier{coarse} & \ph{.22} \down{\ph{.17}} & \ph{.17} \down{\ph{.31}} & -- & \cellcolor[HTML]{E9948A}\ph{.20} {\scriptsize \ph{$$-$$.24}} \\
 \grouprow{5}{Input resolution, long side in pixels (E7) --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}
 \quad 512 & -- & \ph{.22} \down{\ph{.18}} & \ph{.25} \down{\ph{.06}} & \cellcolor[HTML]{ECC0BA}\ph{.24} {\scriptsize \ph{$$-$$.12}} \\
 \quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.41} & \ph{.31} & \ph{.36} \\
@@ -24,7 +24,7 @@
 \quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & \ph{.35} & \ph{.26} & \ph{.30} \\
 \quad native-resolution patches & -- & \ph{.40} \up{\ph{.06}} & \ph{.29} \up{\ph{.03}} & \cellcolor[HTML]{E0E7EC}\ph{.35} {\scriptsize \ph{+.04}} \\
 \grouprow{5}{Training amount (E8) --- mAUPR on DDR test; U-Net and M2MRF}
-\quad DDR, 10\% (38 images) & \ph{.17} \down{\ph{.15}} & \ph{.22} \down{\ph{.19}} & -- & \cellcolor[HTML]{EBAEA7}\ph{.19} {\scriptsize \ph{$$-$$.17}} \\
+\quad DDR, 10\% (38 images) & \ph{.17} \down{\ph{.15}} & \ph{.31} \down{\ph{.09}} & -- & \cellcolor[HTML]{ECC0BA}\ph{.24} {\scriptsize \ph{$$-$$.12}} \\
 \quad DDR, 50\% (192) & \ph{.29} \down{\ph{.04}} & \ph{.34} \down{\ph{.06}} & -- & \cellcolor[HTML]{EFDEDA}\ph{.32} {\scriptsize \ph{$$-$$.05}} \\
 \quad DDR, 100\% (383) {\scriptsize\color{inkmuted}(ref.)} & \ph{.32} & \ph{.40} & -- & \ph{.36} \\
 \quad + IDRiD + TJDR standard field (599) & \ph{.37} \up{\ph{.04}} & \ph{.44} \up{\ph{.03}} & -- & \cellcolor[HTML]{E2E7EC}\ph{.40} {\scriptsize \ph{+.04}} \\

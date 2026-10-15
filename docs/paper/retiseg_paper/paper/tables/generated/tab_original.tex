@@ -15,8 +15,8 @@
 M2MRF & IDRiD & .672 & .676 & .645 & .639 & \cellcolor[HTML]{C0E4D8}.408 & \cellcolor[HTML]{88CEC9}.653 & \cellcolor[HTML]{5BB9C0}.832 & \cellcolor[HTML]{85CDC8}.664 & \down{.036} & \ph{.283} \\
 M2MRF & DDR & .489 & .492 & .426 & .401 & \na & \na & \na & \na & \down{.091} & \ph{.322} \\
 \addlinespace[2pt]
-HRDecoder & IDRiD & \ph{.713} & \ph{.713} & \ph{.683} & \ph{.663} & \cellcolor[HTML]{B5E0D3}\ph{.470} & \cellcolor[HTML]{85CDC8}\ph{.666} & \cellcolor[HTML]{59B7BF}\ph{.844} & \cellcolor[HTML]{83CCC8}\ph{.674} & \down{\ph{.050}} & \ph{.258} \\
-HRDecoder & DDR & \ph{.492} & \ph{.492} & \ph{.442} & \ph{.422} & \cellcolor[HTML]{DFF0E5}\ph{.239} & \cellcolor[HTML]{B2DED2}\ph{.490} & \cellcolor[HTML]{9CD6CC}\ph{.574} & \cellcolor[HTML]{C5E6DA}\ph{.383} & \down{\ph{.071}} & \ph{.293} \\
+HRDecoder & IDRiD & \ph{.713} & .713 & .715 & .707 & \cellcolor[HTML]{B4DFD3}.475 & \cellcolor[HTML]{7CC9C6}.699 & \cellcolor[HTML]{51B0BD}.892 & \cellcolor[HTML]{6AC2C3}.763 & \down{.006} & .369 \\
+HRDecoder & DDR & \ph{.492} & .492 & .492 & .461 & \cellcolor[HTML]{E6F3E8}.172 & \cellcolor[HTML]{A1D8CE}.557 & \cellcolor[HTML]{8ED0CA}.629 & \cellcolor[HTML]{B2DED2}.486 & \down{.032} & .384 \\
 \addlinespace[2pt]
 WSRFNet & IDRiD & \ph{.690} & \ph{.661} & \ph{.662} & \ph{.642} & \cellcolor[HTML]{BDE3D6}\ph{.425} & \cellcolor[HTML]{83CCC8}\ph{.668} & \cellcolor[HTML]{5DBAC0}\ph{.828} & \cellcolor[HTML]{88CEC9}\ph{.648} & \down{\ph{.018}} & \ph{.283} \\
 WSRFNet & DDR & \ph{.500} & \ph{.491} & \ph{.433} & \ph{.413} & \cellcolor[HTML]{E1F1E6}\ph{.227} & \cellcolor[HTML]{B8E1D4}\ph{.457} & \cellcolor[HTML]{99D5CC}\ph{.593} & \cellcolor[HTML]{C6E6DA}\ph{.374} & \down{\ph{.078}} & \ph{.317} \\
@@ -38,7 +38,7 @@ HACDR-Net & DDR & \ph{.520} & \ph{.423}\sd{\ph{.013}} & \ph{3} & \down{\ph{.097}
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize
-\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on TJDR standard-field and ultra-widefield test sets. The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). HRDecoder: the released checkpoints (repository table 71.34, 49.24) through the authors' test pipeline (resize to $2880\times1920$ with sliding $1920$ windows on IDRiD, $2048\times2048$ whole image on DDR). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
+\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on the three fine-grained independent test sets (TJDR standard-field, TJDR ultra-widefield and MAPLES-DR). The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). HRDecoder: the released checkpoints (repository table 71.34, 49.24) through the authors' test pipeline (resize to $2880\times1920$ with sliding $1920$ windows on IDRiD, $2048\times2048$ whole image on DDR). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
 \phnote
 \end{tablenotes}
 \end{threeparttable}

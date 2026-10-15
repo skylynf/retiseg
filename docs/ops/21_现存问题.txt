@@ -373,3 +373,15 @@
    影响：CI 恒红，新失败看不出来。
    状态与决定：断言改为"轨 C 在第二层，或在第一层且 repo 指向存在的 reproductions/ 目录"（18 的规则）。装依赖一步在运行器上通过（CPU torch、requirements-train、pandas、matplotlib），31 个跳过是数据、权重、环境相关的用例，与预期一致。
    来源：Actions 运行 38671635404 的日志（用户贴出）。
+
+57  2026-10-15  4 级 → 已处理（2026-10-15，本机，queue.yaml 的 factor_score 阶段；服务器执行）
+   问题：10-15 包里 21 个影响因素格子有 13 个训完（console.log "trained in … == exit 0"，best.pt、timing.json 在）却没有 metrics_test.json：M2MRF 的 E7 512、E8 50%、细粒度合并，U-Net 的 E3b 2、E4 4、E8 3、E9 2。旧 launch_factor 进程从 10-12 跑到 10-15，用的是加评测步骤（10-13）之前的命令。
+   影响：图 7 / 表 7 的大半格子没有数，这些检查点也进不了 E3a（它只认有 metrics_test.json 的来源）。
+   状态与决定：queue.yaml 加 factor_score（优先级 12，kind factor，score_only，U-Net/M2MRF，一张卡）；launch_factor.plan 对有 best.pt 和 timing.json 的运行只做预测加评测（10-13 已有），每格约半小时；打完 E3a 自动接。
+   来源：10-15 包的 runs/BF_*。
+
+58  2026-10-15  3 级 → 记录（用户）
+   问题：服务器 runs/E1_m2mrf/ 没有两份作者检查点（fcn_hr48-M2MRF-C_40k_idrid.pth、_60k_ddr.pth，各 564 MB，在工作站 runs/E1_m2mrf/），launch_e3a 只在文件存在时才把 E1_m2mrf_idrid/ddr 列为来源，所以 M2MRF 作者权重一直没有独立测试（14 M5 待补项）。
+   影响：表 3a 的 M2MRF "Indep. fine" 列和图 3d 的 M2MRF 点为空。
+   状态与决定：用户 scp 两份 .pth 到服务器同一路径；之后 e3a 阶段自动排 16 项（八集合 × 两检查点）。
+   来源：10-15 包的 runs/E3a 来源名单与队列日志。

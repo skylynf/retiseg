@@ -52,13 +52,18 @@ def test_running_items_are_left_out_until_their_process_ends(tmp_path, monkeypat
     assert [i[2] for i in lq.gather(path, dry=True)] == ["shell:a"]
 
 
+def by_name_of(stages, name):
+    return next(s for s in stages if s["name"] == name)
+
+
 def test_queue_file_in_the_repository_loads_and_names_known_kinds():
     from bench.scripts import launch_queue as lq
 
     stages = lq.load_queue(REPO / "bench" / "configs" / "queue.yaml")
     names = [s["name"] for s in stages]
     # third edit, 2026-10-15: seed-0 E3a first, the inference pool ahead of the E5 training, seed-1/2 E3a behind the training
-    assert names[:5] == ["e3a", "e5_infer_pool", "e5_seed0", "fundus_seed0", "e5_infer_test"]
+    assert names[:6] == ["e3a", "factor_score", "e5_infer_pool", "e5_seed0", "fundus_seed0", "e5_infer_test"]
+    assert by_name_of(stages, "factor_score")["score_only"] and by_name_of(stages, "factor_score")["models"] == ["U-Net", "M2MRF"]
     assert names.index("factor_cheap") < names.index("nnunet_e3b") < names.index("factor_e3b_heavy") < names.index("factor_e7_heavy")
     assert names.index("factor_e7_heavy") < names.index("e3a_rest") < names.index("hrdecoder_rest") < names.index("e5_rest") < names.index("fundus_rest")
     assert all(s["kind"] in lq.PLANNERS for s in stages)

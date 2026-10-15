@@ -4,7 +4,7 @@
 一、当前状态（2026-10-15，本机；仓库 origin/main 7462bb1 = 服务器 10-14/10-15 的记录与修复，加本次提交）
 仓库：10-14 晚本机的两次写回已由用户以 df58f2d、47c0b7f 推上（内容相同）；服务器 7462bb1 带来 MAPLES-DR 读法修正、E3a 多来源排除名单、HRDecoder 调度键、SAM2-UNet 六个 cell 的 batch_size: 1、fundus_seed0 开、pywt。本次：launch_queue 的目录认领（claim.json）、四处读机器状态的测试改为临时根、MAPLES-DR 重复项语义的测试、queue.yaml 第三版、17 第四节换成今天的事。.github/workflows/tests.yml 还不在 origin（用户待放）。
 数据：MAPLES-DR 已在服务器导出（138/0/60）并审计（与五个训练源最高 0.343，名单为空）；e3a 在补它，nnU-Net 四项与 M2MRF 因素格子已出数（14 M10）。
-论文：results.csv 相对 10-14 包无新数（服务器新指标等下一包：HRDecoder E1、MAPLES-DR、M2MRF 因素格子的 E3a、种子 1/2 的 E3a）；14 M5 记了 HRDecoder E1（作者函数对上 README；本项目协议 IDRiD 0.707、DDR 0.461）、M10 记了 MAPLES-DR 首批与审计、备注 42（SAM2-UNet 批）、43（多来源排除名单）。
+论文：10-15 包（298 行指标，全部对齐）已 collect：268 份报告、13,224 行实测；九个监督模型 × 两源 × 八集合的种子 0 全齐，R4 两段、摘要与讨论改成实数的说法（14 M10）；HRDecoder E1 进表 3a（含独立测试）；表 3、表 5 实测行不再标占位色，表 5 加 MAPLES-DR 列；M2MRF 的 E3b/E4/E8 七格进表。未打分的 13 个因素格子见 21 第 57 条。
 服务器（10-15 08:17）：GPU 0、1 他人 vLLM；GPU 4 RETFound DDR 种子 0、GPU 6 SAM-Adapter DDR 种子 0（06:01 起，约 21、23 小时）；GPU 2、3、7 三条 launch_queue 都在做 E3a（同一分钟打开过同一目录，21 第 51 条）；GPU 5 空；旧 launch_factor 已结束（E9 两项待打分）。E5 四模型、专用五模型冒烟全过；E5 推理档冒烟未做；算力审计未做。
 队列（queue.yaml 第三版）：e3a 种子 0（≤2 卡）→ e5_infer_pool 15（关，冒烟后开，1 卡）→ e5_seed0 → fundus_seed0（开）→ e5_infer_test（关）→ factor_cheap → nnunet_e3b → factor_e3b_heavy / factor_e7_heavy → e3a_rest 58（种子 1、2）→ 种子 1、2 训练（关）→ e1r（关）。要求服务器收口成一条启动器 RETISEG_GPUS="2 3 4 5 6 7"（17 第四节第 1 条）。
 权重：公开的 SAM、SAM 2、MAE 和三份 gated 在 pretrained/；HRDecoder 两份、PMCNet 的 B0、WSRFNet 的 efficientnet-b1 已在；MedSAM、公开 DINOv2 没有。
@@ -102,6 +102,7 @@ Luming 2026-10-14 确认（本机代记，依据聊天里"全部按照你推荐�
   另确认：MAPLES-DR 只用官方测试 60 张；R4 定稿等 MAPLES-DR 测完。
   服务器据此可以在 E5 推理档冒烟后直接打开 e5_infer_pool（17 第七节）。
 待 Luming（2026-10-15 本机补）：
+  12. 把工作站 runs/E1_m2mrf/fcn_hr48-M2MRF-C_40k_idrid.pth 和 fcn_hr48-M2MRF-C_60k_ddr.pth（各 564 MB）scp 到服务器 /home/qurr/luming/retiseg/retiseg/runs/E1_m2mrf/，M2MRF 作者权重的独立测试才会排进 e3a（21 第 58 条）。
   9. .github/workflows/tests.yml 还没进仓库（origin 7462bb1 里没有）：把 10-14 晚发到对话里的文件放到仓库这个路径后提交，CI 才会跑。
   10. 本机、服务器三方的提交：本机写回的文件由用户提交推送（本次的清单在本节末尾的记录里）；服务器的 git 2.25 不认 --trailer（21 第 54 条），由服务器按 17 第四节第 9 条处理。
   11. 两条新决定（17 第十四节）按推荐执行，不同意时改 17：SAM2-UNet 的 loader 批取能放下的最大值（6/4/2，冒烟定）；E5 推理池提前到训练之前、一张卡。
@@ -227,3 +228,12 @@ CI 首次运行与服务器 10-15 上午的核对（2026-10-15，本机；pull �
 2. 服务器重跑后剩的一处测试失败（test_plan_before_the_selections… 的队列顺序）是测试又读了机器的图像数：真实数据下 FGADR 553 张的成本高于 TJDR_uwf 58 张的 4256 画布，顺序本身正确。测试的 autouse fixture 把图像数固定为占位值，另断言真实数量下 FGADR 在前。
 3. CI（.github/workflows/tests.yml 已由用户以 505cdbb 放进仓库）第一次运行：239 通过、31 跳过、1 失败，5 分 38 秒；失败的是 test_registry_cli 里"轨 C 必须第二层"的旧断言（18 把 CLC-Net、TC-Net 放进了第一层），改为 18 的规则（21 第 56 条）。装依赖一步通过，跳过的 31 个是数据、权重、环境相关的用例。
 写回：bench/tests/test_registry_cli.py、bench/tests/test_launch_e5_infer.py、docs/ops/00、21。
+
+10-15 包接入与 R4 改写（2026-10-15 下午，本机）
+1. 包 retiseg_runs_handoff_20261015（2075 个文件，快照 10-15 10:17）解入 runs/；collect_runs 268 份报告（10-14 包 124 份）、13,224 行实测；unaligned 为空；make、PDF 通过。
+2. 独立测试：九个监督模型 × IDRiD/DDR × 八个测试集的种子 0 全齐（runs/E3a 42 个来源 235 份 metrics.json）。关键结论改了：DDR 训练的模型在另两个像素级标注的常规视野来源上更高（IDRiD 0.525、TJDR_std 0.485，九个全高）、在 MAPLES-DR 持平（0.361），只在粗标注 / 区域标注 / 超广角上降 33–57%；IDRiD 训练的在其余七个来源全降 34–74%；54 对里 DDR 训练的检查点 43 对更高。名次：标注方式相同的集合 ρ 0.82–0.98，否则第一名是内部第三到第八。数字在 14 M10，R4 两段、讨论 Q2/Q3、摘要一句已改。
+3. HRDecoder 作者权重：内部与八个集合的独立测试全进表 3a / 图 3d（R2 加一句实数）；M2MRF 作者权重的独立测试没有——服务器没有 .pth（21 第 58 条，待用户拷）。
+4. 影响因素：21 个格子全部训完，只有 M2MRF 的 7 个有 metrics_test.json；13 个是旧 launch_factor（10-12 的代码）训的、没评测（21 第 57 条）。queue.yaml 加 factor_score 阶段（12，只打分，一张卡）；17 第四节第 11、12 条。
+5. 论文脚本：表 3、表 5 改为按行 / 按格判断占位（实测行不再标色，最好 / 次好只在实测行里排）；表 5 加 MAPLES-DR 列，Δ 改为细档三集平均；表 3a 的 Indep. fine 列改为实测标志（原来写死为占位）、注释改为三集。图 4 说明改"三个细档独立集"。
+6. 文档：14 M5、M9b、M10；13 进度总览与状态表；17 第三、四节；21 第 57、58 条；CHECKPOINT。
+写回：docs/paper/retiseg_paper/paper/{data/results.csv, generated/numbers.tex, tables/generated/*, figures/out/*.png, sections/{results,discussion,abstract_intro}.tex, scripts/make_tables.py}、runs/handoff_manifest_20261015.tsv、bench/configs/queue.yaml、bench/tests/test_launch_queue.py、docs/ops/{00,17,21}、docs/paper/{13,14}、docs/CHECKPOINT.md。runs/ 本身不进仓库。

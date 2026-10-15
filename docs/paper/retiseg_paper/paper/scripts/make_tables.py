@@ -282,7 +282,7 @@ def table_original():
             ind_v = np.nanmean([v for v, _ in ind])
             cells = [f"{model}", train, num(paper[0], sim=paper[1]), num(auth[0], sim=auth[1]), num(stored[0], sim=stored[1]), num(exact[0], sim=exact[1])]
             cells += [tint(v, 0, 0.9) + num(v, sim=s) for v, s in cls]
-            cells += [delta(exact[0] - auth[0], sim=exact[1] or auth[1]), num(ind_v, sim=True)]
+            cells += [delta(exact[0] - auth[0], sim=exact[1] or auth[1]), num(ind_v, sim=any(s for _v, s in ind))]
             rows.append(" & ".join(cells) + " \\\\")
         rows.append("\\addlinespace[2pt]")
     rows = rows[:-1]
@@ -335,7 +335,7 @@ def table_original():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on TJDR standard-field and ultra-widefield test sets. The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). HRDecoder: the released checkpoints (repository table 71.34, 49.24) through the authors' test pipeline (resize to $2880\times1920$ with sliding $1920$ windows on IDRiD, $2048\times2048$ whole image on DDR). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
+\item ``$\Delta$ metric'' is this protocol minus the authors' function on the same checkpoint. ``Indep.\ fine'' is the mean mAUPR on the three fine-grained independent test sets (TJDR standard-field, TJDR ultra-widefield and MAPLES-DR). The M2MRF paper reports the mean of three runs (67.24 on IDRiD, 48.94 on DDR), the repository the best run (67.55, 49.20). HRDecoder: the released checkpoints (repository table 71.34, 49.24) through the authors' test pipeline (resize to $2880\times1920$ with sliding $1920$ windows on IDRiD, $2048\times2048$ whole image on DDR). The first M2MRF rerun used an effective batch of 1 instead of the authors' 4.
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}
@@ -346,10 +346,15 @@ def table_original():
 
 # ------------------------------------------------------ Table 4 main results
 def table_main():
+    """Table 3. Simulated / measured is decided per (model, source): a measured row reads as a result while other rows
+    are still placeholders (2026-10-15), and best / second-best marks are taken among the measured rows of a column."""
     internal = D.internal()
     ms = D.mean_sd()
     dice = D.mean_sd("dice_valopt")
-    sim = D.simulated(D.main_runs())
+    runs = D.main_runs()
+    measured = {(m, t): not D.simulated(g) for (m, t), g in runs[runs.train_set == runs.test_set].groupby(["model", "train_set"])}
+    dice_runs = D.main_runs("dice_valopt")
+    dice_measured = {(m, t): not D.simulated(g) for (m, t), g in dice_runs[dice_runs.train_set == dice_runs.test_set].groupby(["model", "train_set"])}
     params = D.sel(experiment="E10", metric="params_m").set_index("model")
     cols = {}
     for train in D.TRAIN_MAIN:
@@ -359,10 +364,12 @@ def table_main():
         cols[train] = (tab, m, d)
     marks = {}
     for train, (tab, m, d) in cols.items():
+        keep = np.array([measured.get((model, train), False) for model in D.MAIN_MODELS])
+        keep_d = np.array([dice_measured.get((model, train), False) for model in D.MAIN_MODELS])
         for c in D.CLASSES:
-            marks[(train, c)] = rank_marks(tab[c].to_numpy())
-        marks[(train, "m")] = rank_marks(m["mean"].to_numpy())
-        marks[(train, "d")] = rank_marks(d["mean"].to_numpy())
+            marks[(train, c)] = rank_marks(np.where(keep, tab[c].to_numpy(), np.nan))
+        marks[(train, "m")] = rank_marks(np.where(keep, m["mean"].to_numpy(), np.nan))
+        marks[(train, "d")] = rank_marks(np.where(keep_d, d["mean"].to_numpy(), np.nan))
 
     def mk(key, i):
         b, s2 = marks[key]
@@ -378,11 +385,12 @@ def table_main():
             cells = [label, num(float(p["value"]), "{:.1f}", sim=p["source"] != "measured", strip=False)]
             for train in D.TRAIN_MAIN:
                 tab, m, d = cols[train]
+                sim = not measured.get((model, train), False)
                 for c in D.CLASSES:
                     v = tab.loc[model, c]
                     cells.append(tint(v, 0.0, 0.9) + num(v, sim=sim, mark=mk((train, c), i)))
                 cells.append(num(m.loc[model, "mean"], sim=sim, mark=mk((train, "m"), i)) + sd(m.loc[model, "sd"], sim))
-                cells.append(num(d.loc[model, "mean"], sim=sim, mark=mk((train, "d"), i)))
+                cells.append(num(d.loc[model, "mean"], sim=not dice_measured.get((model, train), False), mark=mk((train, "d"), i)))
             rows.append(" & ".join(cells) + " \\\\")
     body = "\n".join(rows)
     write(
@@ -413,18 +421,31 @@ def table_main():
 
 # ----------------------------------------------- Table 5 independent testing
 def table_independent():
-    sim = D.simulated(D.main_runs())
+    """Table 5. Simulated / measured is decided per cell (model, source, test set), so the rows measured so far read
+    as results while the rest of the table is still placeholder (2026-10-15: nine supervised models on all eight sets);
+    best / second-best marks are taken among the measured cells of a column only, so a placeholder row never earns one."""
+    runs = D.main_runs()
+    measured = {(m, t, s): not D.simulated(g) for (m, t, s), g in runs.groupby(["model", "train_set", "test_set"])}
+    auc_runs = D.main_runs("img_auc")
+    auc_measured = {(m, t): not D.simulated(g) for (m, t), g in auc_runs.groupby(["model", "train_set"])}
+    sim_all = D.simulated(runs)
     blocks = D.block_scores()
     fr = D.friedman(blocks)
     rank = dict(zip(blocks.index, fr["avg_rank"]))
-    auc = D.main_runs("img_auc").groupby(["model", "train_set"])["value"].mean().unstack("train_set")
+    auc = auc_runs.groupby(["model", "train_set"])["value"].mean().unstack("train_set")
     mats = {t: D.score_matrix(t) for t in D.TRAIN_MAIN}
-    pix = ["TJDR-std", "TJDR-uwf", "FGADR", "Retinal-Lesions"]
+    pix = ["TJDR-std", "TJDR-uwf", "MAPLES-DR", "FGADR", "Retinal-Lesions"]
+
+    def cell_sim(model, t, c):
+        return not measured.get((model, t, c), False)
+
     marks = {}
     for t in D.TRAIN_MAIN:
         for c in [t] + pix:
-            marks[(t, c)] = rank_marks(mats[t][c].to_numpy())
-        marks[(t, "auc")] = rank_marks(auc[t].reindex(D.MAIN_MODELS).to_numpy())
+            vals = [mats[t].loc[m, c] if not cell_sim(m, t, c) else np.nan for m in D.MAIN_MODELS]
+            marks[(t, c)] = rank_marks(vals)
+        vals = [auc.loc[m, t] if auc_measured.get((m, t), False) and m in auc.index else np.nan for m in D.MAIN_MODELS]
+        marks[(t, "auc")] = rank_marks(vals)
     marks["rank"] = rank_marks([rank[m] for m in D.MAIN_MODELS], higher=False)
 
     def mk(key, i):
@@ -433,36 +454,39 @@ def table_independent():
 
     rows = []
     for fam, models in grouped_models():
-        rows.append(f"\\grouprow{{16}}{{\\famchip{{{fam}}}\\; {FAMILY_TITLE[fam]}}}")
+        rows.append(f"\\grouprow{{18}}{{\\famchip{{{fam}}}\; {FAMILY_TITLE[fam]}}}")
         for model in models:
             i = D.MAIN_MODELS.index(model)
             cells = [model]
             for t in D.TRAIN_MAIN:
                 m = mats[t]
-                cells.append(num(m.loc[model, t], "{:.2f}", sim, mk((t, t), i)))
+                cells.append(num(m.loc[model, t], "{:.2f}", cell_sim(model, t, t), mk((t, t), i)))
                 for c in pix:
                     v = m.loc[model, c]
-                    cells.append(tint(v, 0.0, 0.7) + num(v, "{:.2f}", sim, mk((t, c), i)))
-                cells.append(num(auc.loc[model, t], "{:.2f}", sim, mk((t, "auc"), i)))
+                    cells.append(tint(v, 0.0, 0.7) + num(v, "{:.2f}", cell_sim(model, t, c), mk((t, c), i)))
+                a = auc.loc[model, t] if model in auc.index else np.nan
+                cells.append(num(a, "{:.2f}", not auc_measured.get((model, t), False), mk((t, "auc"), i)))
                 d = m.loc[model, D.FINE_INDEPENDENT].mean() - m.loc[model, t]
-                cells.append(div_tint(d, 0.5) + signed(d, sim))
-            cells.append(num(rank[model], "{:.2f}", sim, mk("rank", i), strip=False))
+                d_sim = cell_sim(model, t, t) or any(cell_sim(model, t, c) for c in D.FINE_INDEPENDENT)
+                cells.append(div_tint(d, 0.5) + signed(d, d_sim))
+            cells.append(num(rank[model], "{:.2f}", sim_all, mk("rank", i), strip=False))
             rows.append(" & ".join(cells) + " \\\\")
     body = "\n".join(rows)
-    hdr = " & ".join(["Int."] + ["Std", "UWF", "FGADR", "Ret.-L.", "DiaRet", "$\\Delta$"])
-    tiers = " & ".join(["\\tier{fine}", "\\tier{fine}", "\\tier{fine}", "\\tier{mixed}", "\\tier{coarse}", "\\tier{region}", ""])
+    hdr = " & ".join(["Int."] + ["Std", "UWF", "Maples", "FGADR", "Ret.-L.", "DiaRet", "$\\Delta$"])
+    tiers = " & ".join(["\\tier{fine}", "\\tier{fine}", "\\tier{fine}", "\\tier{fine}", "\\tier{mixed}", "\\tier{coarse}", "\\tier{region}", ""])
     write(
         "tab_independent",
         rf"""\begin{{table*}}[t]
-\centering\tablefont\setlength{{\tabcolsep}}{{3.3pt}}
-\caption{{\textbf{{Unified retraining (B-std): independent tests.}} The checkpoints of Table~\ref{{tab:main}} are applied without any adaptation to five test sets from sources never used for training. Values are mAUPR (mean of three seeds); the DiaRetDB1 column is the official image-level ROC AUC, averaged over the four lesion types, because its region-consensus ground truth biases pixel precision. $\Delta$ is the mean of the two fine-grained TJDR test sets minus the internal test. Average rank is over the seven test sets of Fig.~\ref{{fig:retrained}}e (Friedman $\chi^2$ = \ph{{{fr['statistic']:.1f}}}; Nemenyi critical difference \ph{{{fr['critical_difference']:.2f}}}).}}
+\centering\tablefont\setlength{{\tabcolsep}}{{3.0pt}}
+\caption{{\textbf{{Unified retraining (B-std): independent tests.}} The checkpoints of Table~\ref{{tab:main}} are applied without any adaptation to six test sets from sources never used for training. Values are mAUPR (mean of three seeds); the DiaRetDB1 column is the official image-level ROC AUC, averaged over the four lesion types, because its region-consensus ground truth biases pixel precision. $\Delta$ is the mean of the three fine-grained independent test sets (TJDR standard-field, TJDR ultra-widefield and MAPLES-DR) minus the internal test. Average rank is over the eight test sets of Fig.~\ref{{fig:retrained}}e (Friedman $\chi^2$ = \ph{{{fr['statistic']:.1f}}}; Nemenyi critical difference \ph{{{fr['critical_difference']:.2f}}}).}}
 \label{{tab:independent}}
+\begin{{adjustbox}}{{max width=\textwidth}}
 \begin{{threeparttable}}
-\begin{{tabular}}{{@{{}}l c cccc c c @{{\hspace{{8pt}}}} c cccc c c @{{\hspace{{8pt}}}} c@{{}}}}
+\begin{{tabular}}{{@{{}}l c ccccc c c @{{\hspace{{8pt}}}} c ccccc c c @{{\hspace{{8pt}}}} c@{{}}}}
 \toprule
- & \multicolumn{{7}}{{c}}{{\colh{{Trained on IDRiD}}}} & \multicolumn{{7}}{{c}}{{\colh{{Trained on DDR}}}} & \\
-\cmidrule(lr){{2-8}}\cmidrule(lr){{9-15}}
- & & \multicolumn{{2}}{{c}}{{TJDR}} & & & & & & \multicolumn{{2}}{{c}}{{TJDR}} & & & & & \colh{{Avg.}} \\
+ & \multicolumn{{8}}{{c}}{{\colh{{Trained on IDRiD}}}} & \multicolumn{{8}}{{c}}{{\colh{{Trained on DDR}}}} & \\
+\cmidrule(lr){{2-9}}\cmidrule(lr){{10-17}}
+ & & \multicolumn{{2}}{{c}}{{TJDR}} & & & & & & & \multicolumn{{2}}{{c}}{{TJDR}} & & & & & & \colh{{Avg.}} \\
 \colh{{Model}} & {hdr} & {hdr} & \colh{{rank}} \\
  & {tiers} & {tiers} & \\
 \midrule
@@ -470,10 +494,11 @@ def table_independent():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item Granularity of the test set: \tier{{fine}} fine \quad \tier{{mixed}} mixed \quad \tier{{coarse}} coarse \quad \tier{{region}} region consensus. Int., internal test (official test set of the training source). Std, standard field (35--50$^\circ$); UWF, ultra-widefield (133$^\circ$), predicted at native resolution with sliding windows. Retinal-Lesions excludes its grey-level 127 regions.
+\item Granularity of the test set: \tier{{fine}} fine \quad \tier{{mixed}} mixed \quad \tier{{coarse}} coarse \quad \tier{{region}} region consensus. Int., internal test (official test set of the training source). Std, standard field (35--50$^\circ$); UWF, ultra-widefield (133$^\circ$), predicted at native resolution with sliding windows; Maples, MAPLES-DR (official test split, 60 images). Retinal-Lesions excludes its grey-level 127 regions. Best and second-best are marked among the measured rows of a column.
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}
+\end{{adjustbox}}
 \end{{table*}}
 """,
     )
