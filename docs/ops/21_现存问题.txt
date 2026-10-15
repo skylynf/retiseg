@@ -187,7 +187,7 @@
    处理条件：权重到位后，服务器或有权重的机器上。
    来源：22 A4 确认方式、第四节第 3 条。
 
-29  2026-10-12  3 级 → a 已处理（2026-10-12，评审修复 14，提交 f5397da）；b 已处理（2026-10-14，Luming 同意，.github/workflows/tests.yml；首次运行结果待看）
+29  2026-10-12  3 级 → a 已处理（2026-10-12，评审修复 14，提交 f5397da）；b 已处理（2026-10-14，Luming 同意，.github/workflows/tests.yml；首次运行 2026-10-15：装依赖通过，一处旧断言失败，见第 56 条）
    问题：test_collect_runs.py 不在 bench/tests 里、依赖 pandas，写代码的机器上没人跑（A1 因此漏到评审才被发现）；分支推送没有任何自动测试。
    影响：同类回归只能靠人记得跑。
    状态与决定：待处理。a. test_collect_runs 改成 pytest 可收集、缺 pandas 时 skip；b. GitHub Actions 用 CPU 版 torch 在每次推送上跑 bench/tests 与 test_collect_runs。b 项需 Luming 同意仓库加工作流。
@@ -367,3 +367,9 @@
 
 53 补记（2026-10-15 09:33，服务器）
    批 6 在 GPU 5 上分配 37.51 GiB，还差 108 MiB。批 4 通过（IDRiD 50.3 秒，DDR 79.7 秒，各 20 步，退出码 0）。六个 cell 的 batch_size 定为 4，有效批仍是 12。种子 0 当时还没有 == start。
+
+56  2026-10-15  3 级 → 已处理（2026-10-15，本机）
+   问题：CI 第一次运行（505cdbb、77ef30f、9c176cf 三次都红）：239 通过、31 跳过、1 失败，5 分 38 秒。失败的是 test_registry_cli::test_model_registry_is_consistent 的旧规则"轨 C 的模型必须是第二层"；18（2026-10-14）把有 reproductions/ 重写并接到 B-std 的 CLC-Net、TC-Net 放进第一层时没有改这条断言。
+   影响：CI 恒红，新失败看不出来。
+   状态与决定：断言改为"轨 C 在第二层，或在第一层且 repo 指向存在的 reproductions/ 目录"（18 的规则）。装依赖一步在运行器上通过（CPU torch、requirements-train、pandas、matplotlib），31 个跳过是数据、权重、环境相关的用例，与预期一致。
+   来源：Actions 运行 38671635404 的日志（用户贴出）。

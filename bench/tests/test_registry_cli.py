@@ -40,7 +40,10 @@ def test_model_registry_is_consistent():
             if e["repo"]:
                 assert (REPO / e["repo"]).is_dir() or e["repo"].rstrip("/") in declared, e
             if "C" in e["tracks"]:
-                assert e["tier"] == 2, e
+                # track C (rewritten from the paper) stays in tier 2 unless the rewrite exists in reproductions/
+                # and is wired to B-std (CLC-Net, TC-Net; docs/paper/18, 2026-10-14)
+                rewritten = bool(e["repo"]) and e["repo"].startswith("reproductions/") and (REPO / e["repo"]).is_dir()
+                assert e["tier"] == 2 or (e["tier"] == 1 and rewritten), e
     assert len(names) == len(set(names))
 
 

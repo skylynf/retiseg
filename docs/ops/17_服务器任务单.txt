@@ -35,6 +35,7 @@
   写作节奏（本机）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3、表 6/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒。
 
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
+  进度（本机 10-15 中午核对服务器 9c176cf 的记录）：第 1、2、3、5、6 条已做完（一条队列 pid 938078；两个重叠目录已归档；SAM2-UNet 批 4；包 retiseg_runs_handoff_20261015.tar.gz 已打，等拷到本机；测试剩的一处已由本机改）。还要做：第 4 条（retiseg-sam3 等 conda 可达，有空卡再冒烟）、第 7 条、第 8 条（可选）。之后每天：打包（第 5 条）、00 记一行卡的去向。
   1. 启动器收口（先做，几分钟）：只杀启动器进程本身（kill -TERM <launch_queue 的 pid>，不要 pkill -f 匹配到子进程；杀完 nvidia-smi 确认各卡上的训练 / 推理进程还在），它们正在跑的项会自己跑完并写 == exit，训练项的打分由新启动器的 :score 项接。要杀的：GPU 3 的 pid 291235、GPU 2 和 GPU 7 后开的两条队列、06:01 另开的 e5_seed0 启动器（日志 runs/logs/20261015_060110_e5_seed0.log；GPU 4、6 上的两项继续跑，不动）。然后只开一个：
        RETISEG_GPUS="2 3 4 5 6 7" bash bench/scripts/server_run.sh queue
      4、6 两张卡被占时它等着，空出来就接；它跳过所有 console.log 里 == start 未闭合且 pid 还活着的目录。启动前 python bench/scripts/launch_queue.py 打印一遍计划，确认 e3a（种子 0）、e5_seed0 的待办里没有正在跑的两项。

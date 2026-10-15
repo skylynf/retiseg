@@ -31,12 +31,15 @@ def _filled(tmp_path):
 
 
 @pytest.fixture(autouse=True)
-def _no_reference_maps(tmp_path, monkeypatch):
+def _no_machine_state(tmp_path, monkeypatch):
     """The same-information references are planned only where runs/BS_m2mrf_<src>_seed0/prob_test and
-    runs/NN_default_<src>_fold0/prob_test exist (the server, 2026-10-14: 40 test items instead of 36).
-    Every test here starts from a root without them; test_same_information_references_appear_with_their_maps
-    creates them on purpose."""
+    runs/NN_default_<src>_fold0/prob_test exist (the server, 2026-10-14: 40 test items instead of 36), and
+    the queue order weighs each set by its image count, which the prepared data of the machine decides
+    (the server, 2026-10-15: FGADR's 553 images outrank TJDR_uwf's 58 on the 4256 canvas). Every test here
+    starts from a root without reference maps and with the 100-image placeholder count of a machine without
+    data; test_same_information_references_appear_with_their_maps creates the maps on purpose."""
     monkeypatch.setattr(launch, "_ROOT", tmp_path)
+    monkeypatch.setattr(launch, "n_images", lambda set_name, split: 100)
 
 
 def test_plan_before_the_selections_has_pool_runs_and_the_oracle_tier_only(tmp_path, monkeypatch):
@@ -56,11 +59,14 @@ def test_plan_before_the_selections_has_pool_runs_and_the_oracle_tier_only(tmp_p
     item = next(it for it in pool if it.label == "a_sam_vith_p64:DDR:val:main")
     assert item.argv == ["-m", "bench.e5.amg", "--model", "SAM", "--density", "64", "--set", "DDR", "--split", "val", "--variant", "main"]
     assert len(item.dirs) == 9 and item.log_dir in item.dirs and item.log_dir.name == "DDR-val"
-    # queue order: pool first, then the largest canvases (TJDR_uwf main at 4256) first
+    # queue order: pool first, then by cost = weight x images x canvas area; with equal image counts the
+    # largest canvas (TJDR_uwf main at 4256) comes first, with real counts a large set such as FGADR may
     ordered = launch.plan(frozen)
     assert [it.phase for it in ordered] == sorted(it.phase for it in ordered)
     first_test = next(it for it in ordered if it.phase == launch.TEST)
     assert first_test.set_name == "TJDR_uwf" and first_test.label.endswith(":main")
+    monkeypatch.setattr(launch, "n_images", lambda set_name, split: 553 if set_name == "FGADR" else 58)
+    assert next(it for it in launch.plan(frozen) if it.phase == launch.TEST).set_name == "FGADR"
     assert len(launch.missing_prompt_files(frozen)) == 2 + _n_targets(frozen)  # pool sets and every test (set, variant) pair
 
 

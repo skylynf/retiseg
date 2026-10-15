@@ -221,3 +221,9 @@ GPU 6 SAM-Adapter DDR epoch 60，验证 mAUPR 0.548。GPU 4 RETFound DDR epoch 6
 BS_hacdr_ddr_seed1 的 FGADR 在 09:20 被三个进程打开，两份几秒内退出码 1，09:23 又开了两份并在 09:26 停掉（退出码 143），留下的一份 09:31 退出码 0，写出 mAUPR 0.0998（any 0.175，n 553，排除 0）。中间有约三分钟重叠，这个数不采用。目录已移到 runs/archive/E3a_hacdr_ddr_seed1_FGADR_overlap/，e3a_rest 重做。
 回传包：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261015.tar.gz（15MB，2075 个文件，298 行指标，没有对不齐的排除名单）。名单 runs/handoff_manifest_20261015.tsv。上次的 manifest 不在，所以没有 --since。
 推理档冒烟还没跑：六张项目卡都在训练。official_code/sam3 已按 2345a4a 检出。retiseg-sam3 第一次安装因 conda 包缓存不可写失败，10:18 改到 /home/qurr/.conda/pkgs 后重开，随即因连不上 conda.anaconda.org（Errno 101）退出。日志 runs/logs/sam3_env3.log。网络恢复后再装；环境好了、有空卡再做 --limit 2。推理池仍关。算力审计等空卡。
+
+CI 首次运行与服务器 10-15 上午的核对（2026-10-15，本机；pull 到 9c176cf）
+1. 服务器按 17 第四节做完：一条队列（六张项目卡全在 E5 种子 0）；SAM2-UNet loader 批定为 4（批 6 差 108 MiB），种子 0 已在批 4 下开跑；两个被多进程写过的 E3a 目录移到 runs/archive/，e3a_rest 重做；回传包 retiseg_runs_handoff_20261015.tar.gz 在服务器（298 行指标，全部对齐），等拷到本机解入 runs/。未做：推理档冒烟（卡满、retiseg-sam3 连不上 conda）、算力审计。
+2. 服务器重跑后剩的一处测试失败（test_plan_before_the_selections… 的队列顺序）是测试又读了机器的图像数：真实数据下 FGADR 553 张的成本高于 TJDR_uwf 58 张的 4256 画布，顺序本身正确。测试的 autouse fixture 把图像数固定为占位值，另断言真实数量下 FGADR 在前。
+3. CI（.github/workflows/tests.yml 已由用户以 505cdbb 放进仓库）第一次运行：239 通过、31 跳过、1 失败，5 分 38 秒；失败的是 test_registry_cli 里"轨 C 必须第二层"的旧断言（18 把 CLC-Net、TC-Net 放进了第一层），改为 18 的规则（21 第 56 条）。装依赖一步通过，跳过的 31 个是数据、权重、环境相关的用例。
+写回：bench/tests/test_registry_cli.py、bench/tests/test_launch_e5_infer.py、docs/ops/00、21。
