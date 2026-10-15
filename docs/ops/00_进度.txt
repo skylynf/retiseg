@@ -209,3 +209,15 @@ BS_unet_ddr_seed2：TJDR_uwf 0.1890（any 0.2662，n 58）；TJDR_uwf__fov 0.222
 7. 14：M5 HRDecoder E1 一段与第三节关键数字；M10 MAPLES-DR 首批数与泄漏审计一段；备注 42、43。13 第三节状态改到 10-15。21 加第 51–55 条。CHECKPOINT 更新。
 8. 没有改：任何冻结文件、e5_frozen.yaml、论文正文与 results.csv（等下一包）。
 写回的文件：bench/scripts/launch_queue.py、bench/configs/queue.yaml、bench/tests/{test_launch_queue,test_launch_e5_infer,test_e5_flow}.py、docs/ops/{00,17,21}、docs/paper/{13,14}、docs/CHECKPOINT.md；.github/workflows/tests.yml 仍由用户放。
+
+2026-10-15 09:33 +0800，提交 505cdbb（第四节）。
+1. 四条启动器已停（291235、845546、853469、836374，以及它们留下的规划进程）。GPU 4 的 RETFound DDR 种子 0、GPU 6 的 SAM-Adapter DDR 种子 0 仍在，都到了 epoch 40。停启动器时 GPU 2 和 GPU 7 又各开了一份 BS_hacdr_ddr_seed1 的 FGADR，已把这两份后开的进程停掉，GPU 3 上先开的那份还在写。
+2. runs/E3a/BS_fct_idrid_seed1/FGADR 三个 == start 都已有 == exit（两个退出码 1，一个 0）。整个目录移到 runs/archive/E3a_fct_idrid_seed1_FGADR_3writers/。没有读里面的 metrics.json。e3a_rest 会重做。
+3. SAM2-UNet loader 批：批 6 在 GPU 5 上分配到 37.51 GiB，还差 108 MiB。批 4 通过，IDRiD 50.3 秒、DDR 79.7 秒，各 20 步，退出码 0。六个 cell 的 batch_size 定为 4，有效批仍是 12。种子 0 还没开跑。
+6. pytest 三份：24 通过、1 失败。test_launch_e5_infer.py 的 test_plan_before_the_selections_has_pool_runs_and_the_oracle_tier_only 要求测试阶段第一项是 TJDR_uwf 的 main，实际是 FGADR。日志 runs/logs/pytest_section4_20261015.log。未改协议。
+
+2026-10-15 10:18 +0800。一条队列（pid 938078，日志 runs/logs/20261015_093401_queue.log）已把空卡接上 E5 种子 0。验证 mAUPR 是训练中的验证，不是测试集。
+GPU 6 SAM-Adapter DDR epoch 60，验证 mAUPR 0.548。GPU 4 RETFound DDR epoch 60，验证 mAUPR 0.576。GPU 7 SAM-Adapter IDRiD epoch 100，验证 mAUPR 0.578。GPU 5 RETFound IDRiD epoch 100，验证 mAUPR 0.565。GPU 2 SAMed DDR epoch 20，验证 mAUPR 0.559。GPU 3 SAM2-UNet DDR 于 09:37 开始，loader 批 4，权重已载入 586 项，卡在跑。0、1 仍是 vLLM。
+BS_hacdr_ddr_seed1 的 FGADR 在 09:20 被三个进程打开，两份几秒内退出码 1，09:23 又开了两份并在 09:26 停掉（退出码 143），留下的一份 09:31 退出码 0，写出 mAUPR 0.0998（any 0.175，n 553，排除 0）。中间有约三分钟重叠，这个数不采用。目录已移到 runs/archive/E3a_hacdr_ddr_seed1_FGADR_overlap/，e3a_rest 重做。
+回传包：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261015.tar.gz（15MB，2075 个文件，298 行指标，没有对不齐的排除名单）。名单 runs/handoff_manifest_20261015.tsv。上次的 manifest 不在，所以没有 --since。
+推理档冒烟还没跑：六张项目卡都在训练。official_code/sam3 已按 2345a4a 检出。retiseg-sam3 第一次安装因 conda 包缓存不可写失败，10:18 改到 /home/qurr/.conda/pkgs 后重开，日志 runs/logs/sam3_env3.log。环境好了、有空卡再做 --limit 2。推理池仍关。算力审计等空卡。

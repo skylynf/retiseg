@@ -358,3 +358,12 @@
    影响：卡的顺序与 19 第四节"种子 0 的表先出"不一致。
    状态与决定：e3a 加 seed0_only: true，新加 e3a_rest（58，种子 1、2）排在训练之后；e5_infer_pool 改优先级 15（一张卡，约一天）。17 第三节、第十四节记录；Luming 不同意时改回。
    来源：00 的 2026-10-15 记录与 queue.yaml。
+
+52 补记（2026-10-15 09:33，服务器重跑）
+   test_launch_queue、test_e5_flow 通过。test_launch_e5_infer.py::test_plan_before_the_selections_has_pool_runs_and_the_oracle_tier_only 仍失败：测试阶段第一项的集合是 FGADR，断言要 TJDR_uwf 的 main。24 通过、1 失败，137 秒。日志 runs/logs/pytest_section4_20261015.log。未改协议文件。
+
+51 补记（2026-10-15 10:18，服务器）
+   BS_hacdr_ddr_seed1/FGADR 也有重叠写入：09:20 三个进程，两份马上退出码 1；09:23 又两份，09:26 停掉；留下的一份 09:31 退出码 0 并写出 mAUPR 0.0998。因中间重叠，该数不采用，目录移到 runs/archive/E3a_hacdr_ddr_seed1_FGADR_overlap/，由 e3a_rest 重做。
+
+53 补记（2026-10-15 09:33，服务器）
+   批 6 在 GPU 5 上分配 37.51 GiB，还差 108 MiB。批 4 通过（IDRiD 50.3 秒，DDR 79.7 秒，各 20 步，退出码 0）。六个 cell 的 batch_size 定为 4，有效批仍是 12。种子 0 当时还没有 == start。
