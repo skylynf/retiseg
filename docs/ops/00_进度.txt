@@ -237,3 +237,7 @@ CI 首次运行与服务器 10-15 上午的核对（2026-10-15，本机；pull �
 5. 论文脚本：表 3、表 5 改为按行 / 按格判断占位（实测行不再标色，最好 / 次好只在实测行里排）；表 5 加 MAPLES-DR 列，Δ 改为细档三集平均；表 3a 的 Indep. fine 列改为实测标志（原来写死为占位）、注释改为三集。图 4 说明改"三个细档独立集"。
 6. 文档：14 M5、M9b、M10；13 进度总览与状态表；17 第三、四节；21 第 57、58 条；CHECKPOINT。
 写回：docs/paper/retiseg_paper/paper/{data/results.csv, generated/numbers.tex, tables/generated/*, figures/out/*.png, sections/{results,discussion,abstract_intro}.tex, scripts/make_tables.py}、runs/handoff_manifest_20261015.tsv、bench/configs/queue.yaml、bench/tests/test_launch_queue.py、docs/ops/{00,17,21}、docs/paper/{13,14}、docs/CHECKPOINT.md。runs/ 本身不进仓库。
+
+2026-10-15 11:51 +0800，pull 到 e90f2cc。一条队列仍是 pid 938078，没有重启；queue.yaml 里新的 factor_score（优先级 12）会在下一张空卡重读文件时接上。六张项目卡利用率都在 97% 以上，控制台没有新的报错。验证 mAUPR 仍是训练中的验证。
+GPU 6 SAM-Adapter DDR：iter 29360/146800（epoch 80），按目前步速大约再要 23 小时，约 10-16 11:00。GPU 4 RETFound DDR：51120/255600（epoch 80），大约同样 10-16 11:00。GPU 5 RETFound IDRiD：22050/63000（epoch 350），大约 16:00。GPU 7 SAM-Adapter IDRiD：11100/37000（epoch 300），大约 17:00。GPU 2 SAMed DDR：14760/49200（epoch 120），大约 17:00。GPU 3 SAM2-UNet DDR：2800/28000（epoch 40，loader 批 4，有效批 12），大约 10-16 08:00。
+M2MRF 两份作者检查点已在 runs/E1_m2mrf/（11:48，各 538MB：fcn_hr48-M2MRF-C_40k_idrid.pth、fcn_hr48-M2MRF-C_60k_ddr.pth）。空卡后 e3a 会自己列入。retiseg-sam3 已装好：torch 2.11.0+cu128，能看到 8 张卡。推理档冒烟仍等空卡，推理池仍关。
