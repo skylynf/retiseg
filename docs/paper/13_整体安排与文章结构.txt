@@ -41,7 +41,7 @@ Q3 决定因素：标注粒度、训练来源、训练量、输入分辨率、�
 6. 影响因素的原则：每次只动一个因素，其余固定
    标注粒度（E4，测试固定在细像素集）；训练来源（E3b）；训练量（E8）；输入信息，仅图像对比图像加血管或加文本（E6）；模型族，通用、专用、关系或 Transformer、半监督、基础模型适配，族的名单在 03；基础模型的用法，零样本、几何提示、参数高效微调、全量微调分开报告（E5）；输入分辨率，至少一个较高分辨率对比一个论文常用的较小输入（E7）；损失，换损失时不换结构（E9）；计算代价（E10）。
 
-三、实验清单与当前状态（2026-10-14 更新，依据 04:51 回传包；数字在 14，服务器记录在 00）
+三、实验清单与当前状态（2026-10-15 更新，依据 2026-10-14 04:51 回传包与服务器 00 的 10-14/10-15 记录；数字在 14，服务器记录在 00）
 2026-10-11 范围精简：每个实验保留的范围以 16 第三节为准，本表的“内容”列是原规划；砍掉的部分进 16 第五节“未来工作”。要点：E2b 停；E1r 缩为 M2MRF IDRiD 3 种子、DDR 1 种子、HACDR-Net 各 1 种子；E2c 只做 DDR；E3b 种子 0；E4、E7、E8、E9 缩为 1 到 2 个代表模型 × 种子 0 × 最少档位；E5 的 c′、冻结版、augreg、三档学习率、PerSAM 砍；E6、轨 C、第二层、新数据集砍；E5 先种子 0，SAM2-UNet 和 RETFound 的种子 1、2 第二优先。剩余约 810 A100 时。
 
 编号   内容                                              回答  依赖                         状态
@@ -49,24 +49,24 @@ L1     原文数字抽取 reported_results.tsv：数据集、划分、 Q1    LED
        分辨率、视野、指标实现、数字来源与沿用关系                                        由 l1_build.py 从 meta/l1_raw/ 合成）；图 2b、c 已改为实数
 L2     复现漏斗：R0–R4 计数、作者回复率、失败原因       Q1    作者回信，截止 2026-10-31   等级已登记；索取信 10-03 已发
 E0     U-Net 流水线                                      —     —                            完成
-E1     作者权重：官方测试、独立测试                      Q1    独立测试库导出（12）         M2MRF 的 IDRiD、DDR 完成；独立测试在 e3a 队列；HRDecoder 权重已下载，作者流水线 bench/predict_hrdecoder.py 已写，等服务器冒烟（17 第九节）；WSRFNet 权重待作者回信
+E1     作者权重：官方测试、独立测试                      Q1    独立测试库导出（12）         M2MRF 的 IDRiD、DDR 完成；HRDecoder 2026-10-14 完成（作者函数对上 README；本项目协议 IDRiD 0.707、DDR 0.461，14 M5），包未到；两者的独立测试在 e3a 队列；WSRFNet 权重待作者回信
 E1r    作者配方重训：M2MRF bs4、HACDR-Net，各 3 种子     Q1    服务器                       M2MRF IDRiD 种子 0 有效批 4 已打分（作者函数 61.19，本项目 0.549）；种子 1、2 和 HACDR-Net、DDR 未开始
 E2     B-std 主表：7 个模型（无 H2Former）× IDRiD、DDR × 3 种子，42 个任务；2026-10-14 加专用 5 个（18）  Q2  预算已冻结（IDRiD 1000、DDR 400） 2026-10-13：HRNet、Swin-Unet、M2MRF、DeepLabv3、U-Net 整批 Dice、HACDR-Net 两库 3 种子都已打分；FCT DDR 只留种子 0。U-Net 整批 Dice 均值 IDRiD 0.644、DDR 0.371；HACDR-Net 均值 0.538、0.252（14 M7）。数在 data/results.csv
-       专用扩充：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net（18）  Q2  子模块与权重（用户）    2026-10-14 包装器已写（bench/models/{hrdecoder,pmcnet,wsrfnet,clcnet,tcnet}.py），任务表已生成；等服务器冒烟（17 第八节）。HRDecoder 的 E1 入口已写（17 第九节）
+       专用扩充：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net（18）  Q2  子模块与权重（用户）    2026-10-15 五个模型十项冒烟全过（HRDecoder 两处修复、WSRFNet 装 pywt、PMCNet 的 B0 权重走镜像），fundus_seed0 已开，排在 E3a 种子 0 与 E5 种子 0 之后
        nnU-Net（默认和 ResEnc-M）                        Q2    数据转换、固定划分           两种配置两库都有测试数：默认 IDRiD 0.671、DDR 0.432；ResEnc-M 0.631、0.428。默认 DDR 三次 0.432、0.427、0.434（均值 0.431，2026-10-14）；IDRiD 第一次重复在训
 E2b    B1 来源配方，种子 0，14 个任务（无 H2Former）     Q2    —                            10-12 09:08 按 16 停止；六个未完成的运行停在上次验证，进未来工作。已完成的运行作补充表
 E2c    小规模调参：每族一个模型，学习率 ×1/3、1、3       Q2    E2 种子 0                    DDR 四项 2026-10-12 训完，只留验证曲线（14 备注 17）；×1/3 时 HRNet 与 M2MRF 的验证名次对调，主表学习率未改
-E3a    独立测试：E1、E2 的全部检查点推理                 Q2    12 的导出、泄漏审计          2026-10-12 15:26 起在 GPU 3 跑种子 0。2026-10-14 04:51 主变体 done.json 63 份：B-std 七模型两库在 FGADR、Retinal-Lesions、TJDR_uwf 齐，nnU-Net 两库七集合齐；R4 第一段已写实数（14 M10）。TJDR_std、DiaRetDB1、交叉集对 B-std 模型还在队列。这次启动器不会中途纳入之后打分的来源
+E3a    独立测试：E1、E2 的全部检查点推理                 Q2    12 的导出、泄漏审计          2026-10-14 04:51 主变体 done.json 63 份：B-std 七模型两库在 FGADR、Retinal-Lesions、TJDR_uwf 齐，nnU-Net 两库七集合齐；R4 第一段已写实数（14 M10）。2026-10-14 起由 queue 的 e3a 阶段接（待办 260 项，含 MAPLES-DR 53），nnU-Net 四项与 M2MRF 因素格子在 MAPLES-DR 上已出数，种子 1、2 在 TJDR_uwf、FGADR 上大半出数（00 10-15 记录）；10-15 起种子 0 在前、种子 1/2 挪到 e3a_rest
 E3b    训练来源交叉效应：代表模型在 TJDR 常规、FGADR 上训 Q3    导出、预算探测（U-Net 修好前用 M2MRF） M2MRF 两个来源已打分：TJDR 标准内部测试 0.554，FGADR 完整测试集 0.349（同眼 106 张未去掉）。U-Net 和其余模型未开始；nnU-Net 的 E3b 已接线（17 第十一节第 2 条，等数据转换）
-E4     标注粒度：DDR、FGADR、Retinal-Lesions 及其组合    Q3    Retinal-Lesions 下载          M2MRF：DDR+FGADR 抽 383、全集在 DDR 测试集上 0.336、0.320。另两档已训完、概率图在、还没有 metrics_test.json。U-Net 未开始
-E5     基础模型四档：零样本、理想提示、参数高效微调、    Q2    权重申请（SAM 3、RETFound   训练档已写好。2026-10-13 公开权重和三份 gated（SAM 3、RETFound ×2）已在 pretrained/，sha256 在 e5_frozen.yaml；MedSAM 和 DINOv2 没有。训练未开始；
-       编码器加解码头（含 DINOv2 和 ImageNet 编码器对照）       两份）、接口                 推理档代码 2026-10-14 随 albert 分支并入 main（bench/e5，design/23、24，ops/25），Luming 2026-10-14 已确认 D1–D9 等全部登记，服务器冒烟后打开 e5_infer_pool（17 第七节）；范围按 16
+E4     标注粒度：DDR、FGADR、Retinal-Lesions 及其组合    Q3    Retinal-Lesions 下载          M2MRF：DDR+FGADR 抽 383、全集在 DDR 测试集上 0.336、0.320；四个格子的独立测试已在 E3a 出数（DDR+Retinal-Lesions 的 FGADR 评测因多来源排除名单的读法失败一次，已修，14 备注 43）。U-Net 的 E4 由旧 launch_factor 跑完（10-15），等打分
+E5     基础模型四档：零样本、理想提示、参数高效微调、    Q2    权重申请（SAM 3、RETFound   训练档：2026-10-14 四模型冒烟全过（SAM2-UNet 批 12 放不下，loader 批按 17 第四节第 3 条定，14 备注 42）；10-15 06:01 SAM-Adapter DDR、RETFound DDR 种子 0 开跑（约 23、21 小时），其余 14 项在 e5_seed0 阶段；MedSAM 和 DINOv2 权重没有。
+       编码器加解码头（含 DINOv2 和 ImageNet 编码器对照）       两份）、接口                 推理档代码 2026-10-14 随 albert 分支并入 main（bench/e5，design/23、24，ops/25），Luming 已确认 D1–D9 等全部登记；推理档冒烟未做（17 第四节第 4 条），通过后 e5_infer_pool 以优先级 15 一张卡先于训练跑池；范围按 16
 E6     输入加血管图                                      Q3    代表模型                     取消（16），未来工作
 E7     分辨率：长边 512、1024、1440、原分辨率块训练      Q3    代表模型                     M2MRF 长边 512 在训（2026-10-13 23:55 第 146800/293600 步，验证 0.496）。原分辨率和另一模型未开始
 E8     训练量：DDR 10–100%、DDR+IDRiD、细粒度合并、全部合并 Q3 E3b 的导出                   M2MRF：10% 已到预算、在写概率图（验证最好 0.479）；50% 第 12540/83600 步（验证 0.453）；细粒度合并第 8360/83600 步（验证 0.364）。U-Net 未开始。时间为 2026-10-13 23:55
-E9     损失：交叉熵、Dice、两者相加、bin loss            Q3    代表模型                     未开始，排在影响因素队列后面；主表整批 Dice 和 registered 逐图 Dice 已可作对照
+E9     损失：交叉熵、Dice、两者相加、bin loss            Q3    代表模型                     U-Net DDR 的 CE、Dice 两项 2026-10-15 训完（旧 launch_factor 的最后两项），打分由 factor_cheap 阶段接；主表整批 Dice 和 registered 逐图 Dice 已可作对照
 E10    计算代价：参数量、FLOPs、峰值显存、GPU 时、推理时间 —  environment.json 已记录大部分 随各实验累积
-审计   泄漏：感知哈希加特征相似度，库间、划分间、基础模型 —   导出                         七个库已做（2026-10-12，加血管特征）：IDRiD、DDR 与独立来源之间无近重复；FGADR 的 _3 批来自 Kaggle EyePACS（与 Retinal-Lesions 90 张同图），FGADR 内部同一只眼重复，TJDR 超广角官方划分有 2 对重复（见 00、14 备注 32–34）
+审计   泄漏：感知哈希加特征相似度，库间、划分间、基础模型 —   导出                         七个库已做（2026-10-12，加血管特征）：IDRiD、DDR 与独立来源之间无近重复；FGADR 的 _3 批来自 Kaggle EyePACS（与 Retinal-Lesions 90 张同图），FGADR 内部同一只眼重复，TJDR 超广角官方划分有 2 对重复（见 00、14 备注 32–34）；MAPLES-DR 2026-10-14 审过：与五个训练源最高 0.343，名单为空（14 M10）
        预训练集与测试集之间
 代表模型：U-Net、nnU-Net、M2MRF、SAM2-UNet、RETFound 加 UPerNet。
 

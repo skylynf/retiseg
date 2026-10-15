@@ -30,6 +30,15 @@ def _filled(tmp_path):
     return fz.load_frozen(path)
 
 
+@pytest.fixture(autouse=True)
+def _no_reference_maps(tmp_path, monkeypatch):
+    """The same-information references are planned only where runs/BS_m2mrf_<src>_seed0/prob_test and
+    runs/NN_default_<src>_fold0/prob_test exist (the server, 2026-10-14: 40 test items instead of 36).
+    Every test here starts from a root without them; test_same_information_references_appear_with_their_maps
+    creates them on purpose."""
+    monkeypatch.setattr(launch, "_ROOT", tmp_path)
+
+
 def test_plan_before_the_selections_has_pool_runs_and_the_oracle_tier_only(tmp_path, monkeypatch):
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
     frozen = fz.load_frozen()
@@ -53,6 +62,19 @@ def test_plan_before_the_selections_has_pool_runs_and_the_oracle_tier_only(tmp_p
     first_test = next(it for it in ordered if it.phase == launch.TEST)
     assert first_test.set_name == "TJDR_uwf" and first_test.label.endswith(":main")
     assert len(launch.missing_prompt_files(frozen)) == 2 + _n_targets(frozen)  # pool sets and every test (set, variant) pair
+
+
+def test_same_information_references_appear_with_their_maps(tmp_path, monkeypatch):
+    """One reference item per (model, internal test set) whose probability maps are on this machine, ungated."""
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    frozen = fz.load_frozen()
+    assert not [it for it in launch.discover(frozen) if "same_info" in " ".join(it.argv)]
+    for pred in ("runs/BS_m2mrf_idrid_seed0/prob_test", "runs/NN_default_ddr_fold0/prob_test"):
+        (tmp_path / pred).mkdir(parents=True)
+    refs = [it for it in launch.discover(frozen) if "bench.e5.same_info" in it.argv]
+    assert len(refs) == 2 and all(it.phase == launch.TEST and not it.gate_dirs and it.needs_prompts for it in refs)
+    assert sorted((it.set_name, it.argv[it.argv.index("--model") + 1]) for it in refs) == [("DDR", "nnU-Net"), ("IDRiD", "M2MRF")]
+    assert all(it.label.endswith(":test:main") for it in refs)
 
 
 def test_plan_after_the_selections_adds_the_zero_shot_tests_and_the_gated_assembly(tmp_path, monkeypatch):

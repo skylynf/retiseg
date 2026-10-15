@@ -56,6 +56,8 @@ def small_files(runs=_ROOT / "runs", max_bytes=8 << 20):
             continue
         if path.suffix.lower() not in SMALL and path.name not in MARKERS and path.suffix != "":
             continue
+        if path.name == "claim.json":
+            continue   # launch_queue's transient claim of a directory (one launcher's pid), meaningless off the server
         if path.suffix == "" and path.name.startswith(".") is False and path.name not in MARKERS:
             continue   # unnamed files: only dot-markers such as .prob_test_done
         if path.stat().st_size > max_bytes:

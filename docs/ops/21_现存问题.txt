@@ -328,3 +328,33 @@
    影响：零样本块的参考值不齐。
    状态与决定：可选：服务器用现有概率图只重评一次（17 第四节第 8 条，不改任何图和阈值）；不做也不影响其他数字。
    来源：2026-10-14 表 6 改版。
+
+51  2026-10-15  4 级 → 已处理（2026-10-15，本机，launch_queue 的 claim.json）
+   问题：服务器 10-15 08:16 三条 launch_queue（GPU 2、3、7 各一条）同一分钟打开了 runs/E3a/BS_fct_idrid_seed1/FGADR（console.log 三个 == start）。原因：规划只认 console.log 里的 == start，而 gather 对 260 项逐项解析 conda 环境要几分钟，几个启动器在这个窗口里各自规划到同一项。协作规则（17 第一节第 2 条）本来就是一台主机一个启动器。
+   影响：同一目录三个进程写预测与 metrics.json，数不能用；多耗两张卡的时间。
+   状态与决定：launch_queue 在开始一项前先在该目录 O_EXCL 写 claim.json（host、pid、label、time），写不进就跳过；pid 在本机已死的 claim 视为陈旧并接管，别的主机的 claim 保留（RETISEG_IGNORE_RUNNING=1 一律视为陈旧）；项结束后删自己的 claim。测试 test_a_directory_claimed_by_a_live_launcher_is_passed_over_and_a_stale_claim_is_taken。17 第四节第 1 条要求收口成一条启动器（RETISEG_GPUS="2 3 4 5 6 7"），第 2 条要求把被三个进程写过的目录移到 runs/archive/ 重做。nnunet 项的目录从 label 推出；没有 console.log 的 shell 项不加 claim。
+   来源：00 的 2026-10-15 08:17 记录。
+
+52  2026-10-15  3 级 → 已处理（2026-10-15，本机）
+   问题：服务器 10-14 的 pytest 四处失败（test_e5_flow 的同信息对照项、test_launch_e5_infer 计划 40 对 36、test_launch_queue 排序夹进 nnunet 项、e5_infer 阶段计划断言）都是测试读了这台机器的真实状态：launch_e5_infer._ROOT 下有 runs/BS_m2mrf_<库>_seed0/prob_test 与 runs/NN_default_<库>_fold0/prob_test 时同信息对照项进入计划（每库各 2 项，36 变 40，流程测试里还会去读真实概率图），nnunet_bridge.RAW 下有 Dataset604 时 nnunet 阶段可规划、排到 shell 项前面，e5_infer 阶段测试没把 OUT_ROOT 指向临时目录。
+   影响：没有数据的机器全绿、服务器红，CI 的信号不可靠。
+   状态与决定：四处测试都改为临时根（launch._ROOT、nnunet_bridge.RAW、out.OUT_ROOT 都 monkeypatch 到 tmp_path；test_launch_e5_infer 用 autouse fixture），另加 test_same_information_references_appear_with_their_maps 在临时根下正面验证同信息对照项的出现条件。服务器按 17 第四节第 6 条重跑三份。
+   来源：00 的 2026-10-14 13:25 记录。
+
+53  2026-10-15  5 级 → 待服务器执行（17 第四节第 3 条）
+   问题：SAM2-UNet 的 B-std 在 40GB 上 loader 批 12 差 324 MiB；服务器改为 batch_size: 1 累积 12。B-std 的规则是能放下的最大 loader 批（HRNet 2×6，M2MRF 2×2，14 备注 18），批 1 让 BatchNorm 一次只看一张图，是没有必要的偏差，而且六个 cell 的值在种子 0 开跑后不能再改。
+   影响：SAM2-UNet 两库三种子（表 3、主表 PEFT 行、E3b/E7 的重格子）的配方偏差大于必要。
+   状态与决定：在 SAM2-UNet 种子 0 开跑前（队列里排在 SAM-Adapter DDR、RETFound DDR 之后）以 6、4、2 依次冒烟定值并提交六个 cell；已开跑则杀掉重来（损失一个刚开始的运行）。记 14 备注 42。
+   来源：00 的 2026-10-14 22:40 记录。
+
+54  2026-10-15  3 级 → 记录（服务器）
+   问题：服务器的 git 2.25 不认 git commit --trailer（2.32 起才有），10-14 的服务器提交因注入的 --trailer 失败，改动在暂存区放了半天才由用户提交。
+   影响：服务器记录落后于实际状态，本机读到的 00 不完整。
+   状态与决定：17 第四节第 9 条：git commit -F <消息文件>，署名行写在正文；或 conda 升 git。不改仓库代码。
+   来源：00 的 2026-10-14 13:10 记录。
+
+55  2026-10-15  2 级 → 已处理（2026-10-15，本机，queue.yaml 第三版）
+   问题：队列第二版把种子 1、2 的 E3a 和种子 0 的混在同一阶段（计划 260 项里约半数是种子 1、2），两张卡要先跑完全部才让给训练；推理池（28）排在 E5 训练（20）之后，而训练 16 项要跑一周，表 6 要等一周才开始。
+   影响：卡的顺序与 19 第四节"种子 0 的表先出"不一致。
+   状态与决定：e3a 加 seed0_only: true，新加 e3a_rest（58，种子 1、2）排在训练之后；e5_infer_pool 改优先级 15（一张卡，约一天）。17 第三节、第十四节记录；Luming 不同意时改回。
+   来源：00 的 2026-10-15 记录与 queue.yaml。

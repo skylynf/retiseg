@@ -87,6 +87,7 @@ def test_the_documented_flow_from_smoke_to_collect(tmp_path, monkeypatch):
         splits = {"val": ["v0", "v1", "v2"], "test": ["t0", "t1"]} if name in ("IDRiD", "DDR") else {"test": ["t0", "t1"]}
         _toy_e5_source(prepared / name, name, splits)
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    monkeypatch.setattr(launch, "_ROOT", tmp_path)   # no B-std / nnU-Net maps here: the same-information references stay out of the flow
     monkeypatch.setattr(fz, "PROMPTS_DIR", tmp_path / "prompts")
     monkeypatch.setattr(fz, "FROZEN_PATH", tmp_path / "e5_frozen.yaml")
     monkeypatch.setattr(geo, "data_dir", lambda name: prepared / name)

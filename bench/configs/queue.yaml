@@ -10,15 +10,31 @@
 # Priorities on 2026-10-14, second edit (docs/ops/17 section 16: seed 0 of everything the
 # paper's tables need first, the inference tiers next, the expensive factor cells after,
 # seeds 1-2 last; multi-seed only adds error bars, so the writing starts on seed 0).
+# Third edit 2026-10-15 (docs/ops/17 section 4, after the server's first day): the E3a stage
+# keeps seed-0 sources only and the seed-1/2 sources move to e3a_rest behind the training
+# stages; the E5 inference pool (one card, about a day) moves ahead of the E5 training so
+# table 6 is not a week behind table 3. One launcher for all six project cards
+# (RETISEG_GPUS="2 3 4 5 6 7"): cards 4 and 6 join when their E5 seed-0 runs end.
 stages:
-  # 1. Independent tests of every finished checkpoint (R4, figure 6): inference only, short items.
-  #    Two cards at most, so training starts on the other cards today. MAPLES-DR joins by itself
-  #    once dataset/prepared/MAPLES-DR exists (17 section 16.2).
+  # 1. Independent tests of every finished seed-0 checkpoint (R4, figure 6): inference only, short items.
+  #    Two cards at most, so training runs on the other cards. MAPLES-DR joined by itself once
+  #    dataset/prepared/MAPLES-DR existed (2026-10-14). B-std seeds 1 and 2 are in e3a_rest.
   - name: e3a
     priority: 10
     kind: e3a
     max_concurrent: 2
+    seed0_only: true
     drop_maps: [FGADR, Retinal-Lesions]
+
+  # 1b. E5 inference pool (docs/ops/17 section 7): IDRiD and DDR validation, 22 items, one card.
+  #     ON once the inference smoke has passed, runs/E5 is clean and the launcher runs this code;
+  #     the selections (`--select`, committed into e5_frozen.yaml) then unlock e5_infer_test below.
+  - name: e5_infer_pool
+    priority: 15
+    kind: e5_infer
+    enabled: false
+    phase: pool
+    max_concurrent: 1
 
   # 2. E5 training tiers, seed 0 (R3, table 3): the longest runs, started first.
   - name: e5_seed0
@@ -28,7 +44,7 @@ stages:
     only: [SAMed, SAM-Adapter, SAM2-UNet, RETFound]   # MedSAM joins when pretrained/medsam_vit_b.pth exists
     seed0_only: true
 
-  # 3. Fundus-specific expansion, seed 0 (docs/paper/18; main table rows). Enable after the smoke (17 section 15.3).
+  # 3. Fundus-specific expansion, seed 0 (docs/paper/18; main table rows). ON since the smoke of 2026-10-15 (17 section 8).
   - name: fundus_seed0
     priority: 25
     kind: bs
@@ -37,21 +53,12 @@ stages:
     only: [HRDecoder, PMCNet, WSRFNet, CLC-Net, TC-Net]
     seed0_only: true
 
-  # 4. E5 inference tiers (docs/ops/17 section 6; docs/ops/25, the albert merge): zero-shot and
-  #    oracle-prompt rows of table 6. Inference only. The pool stage runs the validation pool (IDRiD and
-  #    DDR val): the grid {64, 128} x caps, the SAM 3 phrases and the oracle tier; then
-  #    `python -m bench.e5.amg --select` and `python -m bench.e5.sam3_text --select` fill e5_frozen.yaml
-  #    (committed), and only then does the test stage list anything. Each test item waits for its own
-  #    source's pool directories (gate). Decisions D1-D9 and the budget rule were confirmed on 2026-10-14
-  #    (docs/ops/00); the pool stage goes ON once the inference smoke has passed, runs/E5 is clean and the
-  #    launcher runs this code (docs/ops/17 section 7); the test stage once the selections are committed.
-  - name: e5_infer_pool
-    priority: 28
-    kind: e5_infer
-    enabled: false
-    phase: pool
-    max_concurrent: 1
-
+  # 4. E5 inference tiers on the test sets (docs/ops/17 section 7; docs/ops/25, the albert merge):
+  #    zero-shot and oracle-prompt rows of table 6. Lists nothing until `python -m bench.e5.amg --select`
+  #    and `python -m bench.e5.sam3_text --select` have filled e5_frozen.yaml (committed). Each test item
+  #    waits for its own source's pool directories (gate). Decisions D1-D9 and the budget rule were
+  #    confirmed on 2026-10-14 (docs/ops/00). ON once the selections are committed; max_concurrent is
+  #    revisited by the workstation after `launch_e5_infer.py --estimate` (the test tier is the large one).
   - name: e5_infer_test
     priority: 29
     kind: e5_infer
@@ -90,9 +97,17 @@ stages:
     experiment: E7
     models: [SAM2-UNet, RETFound]
 
-  # 8. Seeds 1 and 2 (error bars only; the text is written on seed 0). Enable in this order once
-  #    every seed-0 stage above has nothing pending: HRDecoder (the backbone-controlled comparison),
-  #    SAM2-UNet and RETFound, then the other fundus models.
+  # 8. Independent tests of the B-std seed-1/2 checkpoints (error bars of R4 / figure 6): behind every
+  #    training stage, so the two E3a cards go to training once the seed-0 sources are done.
+  - name: e3a_rest
+    priority: 58
+    kind: e3a
+    max_concurrent: 2
+    drop_maps: [FGADR, Retinal-Lesions]
+
+  # 9. Seeds 1 and 2 of the training (error bars only; the text is written on seed 0). Enable in this
+  #    order once every seed-0 stage above has nothing pending: HRDecoder (the backbone-controlled
+  #    comparison), SAM2-UNet and RETFound, then the other fundus models.
   - name: hrdecoder_rest
     priority: 60
     kind: bs

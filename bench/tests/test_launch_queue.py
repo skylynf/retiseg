@@ -15,8 +15,10 @@ def _queue(tmp_path, stages):
 
 def test_gather_orders_by_priority_skips_done_and_reports_unplannable_stages(tmp_path, monkeypatch):
     from bench.scripts import launch_queue as lq
+    from bench.scripts import nnunet_bridge
 
     monkeypatch.setattr(lq, "_ROOT", tmp_path)
+    monkeypatch.setattr(nnunet_bridge, "RAW", tmp_path / "nnunet" / "raw")   # the nn stage is unplannable here, whatever this machine holds
     done = tmp_path / "runs" / "x" / "done.json"
     done.parent.mkdir(parents=True)
     done.write_text("{}")
@@ -55,15 +57,17 @@ def test_queue_file_in_the_repository_loads_and_names_known_kinds():
 
     stages = lq.load_queue(REPO / "bench" / "configs" / "queue.yaml")
     names = [s["name"] for s in stages]
-    assert names[:5] == ["e3a", "e5_seed0", "fundus_seed0", "e5_infer_pool", "e5_infer_test"]
+    # third edit, 2026-10-15: seed-0 E3a first, the inference pool ahead of the E5 training, seed-1/2 E3a behind the training
+    assert names[:5] == ["e3a", "e5_infer_pool", "e5_seed0", "fundus_seed0", "e5_infer_test"]
     assert names.index("factor_cheap") < names.index("nnunet_e3b") < names.index("factor_e3b_heavy") < names.index("factor_e7_heavy")
-    assert names.index("factor_e7_heavy") < names.index("hrdecoder_rest") < names.index("e5_rest") < names.index("fundus_rest")
+    assert names.index("factor_e7_heavy") < names.index("e3a_rest") < names.index("hrdecoder_rest") < names.index("e5_rest") < names.index("fundus_rest")
     assert all(s["kind"] in lq.PLANNERS for s in stages)
     assert all(stages[i]["priority"] <= stages[i + 1]["priority"] for i in range(len(stages) - 1))
     by_name = {s["name"]: s for s in stages}
-    assert by_name["e3a"]["max_concurrent"] == 2 and by_name["factor_cheap"]["models"] == ["U-Net", "M2MRF"]
+    assert by_name["e3a"]["max_concurrent"] == 2 and by_name["e3a"]["seed0_only"] and not by_name["e3a_rest"].get("seed0_only")
+    assert by_name["factor_cheap"]["models"] == ["U-Net", "M2MRF"] and by_name["fundus_seed0"].get("enabled", True)
     assert by_name["factor_e3b_heavy"]["experiment"] == "E3b"
-    # the albert merge (docs/ops/25): one e5_infer kind, off until D1-D9 are confirmed
+    # the albert merge (docs/ops/25): one e5_infer kind; off until the inference smoke (pool) and the selections (test)
     assert by_name["e5_infer_pool"]["phase"] == "pool" and by_name["e5_infer_test"]["phase"] == "test"
     assert not by_name["e5_infer_pool"].get("enabled", True) and not by_name["e5_infer_test"].get("enabled", True)
 
@@ -117,10 +121,68 @@ def test_max_concurrent_hands_the_card_to_the_next_stage(tmp_path, monkeypatch):
 
     monkeypatch.setattr(lq, "_start", _start)
     monkeypatch.setattr(lq, "gpu_is_free", lambda gpu: True)
-    lq.run([0, 1], path, poll_seconds=0.01, idle_exit_minutes=0.002)
+    lq.run([0, 1], path, poll_seconds=0.01, idle_exit_minutes=0.02)
     first_two = started[:2]
     assert any("runs/c0/console.log" in c for c in first_two) and any("runs/o/console.log" in c for c in first_two)
     assert len(started) == 4
+
+
+def test_a_directory_claimed_by_a_live_launcher_is_passed_over_and_a_stale_claim_is_taken(tmp_path, monkeypatch):
+    """Two launchers on one host: claim.json is created atomically before the start, so the second one skips the
+    item (2026-10-15, three launchers in runs/E3a/BS_fct_idrid_seed1/FGADR). A claim of a dead pid is stale."""
+    import os
+    import socket
+    import subprocess
+
+    from bench.scripts import launch_queue as lq
+
+    monkeypatch.setattr(lq, "_ROOT", tmp_path)
+    monkeypatch.delenv("RETISEG_IGNORE_RUNNING", raising=False)
+    assert lq.claim_dir("e3a:BS_x:FGADR", "mkdir -p runs/E3a/BS_x/FGADR && { echo; } >> runs/E3a/BS_x/FGADR/console.log 2>&1") == Path("runs/E3a/BS_x/FGADR")
+    assert lq.claim_dir("nnunet:NN_default_fgadr_fold0", "bash bench/scripts/nnunet_run.sh FGADR default") == Path("runs/NN_default_fgadr_fold0")
+    assert lq.claim_dir("shell:x", "true") is None
+    # another live launcher on this host holds a: the claim fails; b is free
+    live = tmp_path / "runs" / "a" / lq.CLAIM
+    live.parent.mkdir(parents=True)
+    live.write_text(json.dumps({"label": "shell:a", "host": socket.gethostname(), "pid": os.getpid()}))
+    assert lq.claim("shell:a", Path("runs/a")) is False
+    assert lq.claim("shell:b", Path("runs/b")) is True and json.loads((tmp_path / "runs" / "b" / lq.CLAIM).read_text())["pid"] == os.getpid()
+    # a claim whose launcher died is stale and taken over; one from another host stands
+    dead = subprocess.Popen(["true"])
+    dead.wait()
+    (tmp_path / "runs" / "c").mkdir()
+    (tmp_path / "runs" / "c" / lq.CLAIM).write_text(json.dumps({"label": "shell:c", "host": socket.gethostname(), "pid": dead.pid}))
+    assert lq.claim("shell:c", Path("runs/c")) is True
+    (tmp_path / "runs" / "d").mkdir()
+    (tmp_path / "runs" / "d" / lq.CLAIM).write_text(json.dumps({"label": "shell:d", "host": "elsewhere", "pid": 1}))
+    assert lq.claim("shell:d", Path("runs/d")) is False
+    monkeypatch.setenv("RETISEG_IGNORE_RUNNING", "1")
+    assert lq.claim("shell:d", Path("runs/d")) is True
+    monkeypatch.delenv("RETISEG_IGNORE_RUNNING")
+    # through run(): the held item is passed over, the free one runs, and its claim is released afterwards
+    monkeypatch.setattr(lq, "python_argv", lambda env: ["python"])
+    path = _queue(tmp_path, [
+        {"name": "s", "priority": 1, "kind": "shell",
+         "items": [{"label": "a", "command": "true", "done": "runs/a/done.json"}, {"label": "e", "command": "true", "done": "runs/e/done.json"}]},
+    ])
+    started = []
+
+    class _Proc:
+        def wait(self):
+            assert (tmp_path / "runs" / "e" / lq.CLAIM).is_file()   # claimed before the start
+            marker = tmp_path / "runs" / "e" / "done.json"
+            marker.write_text("{}")
+            return 0
+
+    def _start(command, gpu):
+        started.append(command)
+        return _Proc()
+
+    monkeypatch.setattr(lq, "_start", _start)
+    monkeypatch.setattr(lq, "gpu_is_free", lambda gpu: True)
+    lq.run([0], path, poll_seconds=0.01, idle_exit_minutes=0.02)
+    assert len(started) == 1 and "runs/e/console.log" in started[0]
+    assert not (tmp_path / "runs" / "e" / lq.CLAIM).exists() and live.is_file()
 
 
 def test_e3a_plan_leaves_out_test_sets_whose_prepared_directory_is_missing(tmp_path, monkeypatch):
@@ -171,6 +233,25 @@ def test_maples_case_mapping_and_ignore_layers():
         raise AssertionError("a mask of the wrong size must be refused")
 
 
+def test_maples_official_lists_keep_the_duplicate_key_and_refuse_its_copy():
+    """dataset_record.yaml maps the image kept in the official 138 (key) to the copy already left out (value);
+    the first reader refused the key too and could not open the dataset (server, 2026-10-14)."""
+    from bench.data import maples
+
+    reader = maples.MaplesDR.__new__(maples.MaplesDR)
+    train = [f"t{i}" for i in range(maples.EXPECTED["train"])]
+    test = [f"s{i}" for i in range(maples.EXPECTED["test"])]
+    reader.record = {"train": train, "test": test, "duplicates": {"t0": "copy_of_t0"}}
+    assert reader.splits() == {"train": train, "val": [], "test": test}
+    reader.record = {"train": train, "test": test, "duplicates": {"t0": "t1"}}
+    try:
+        reader.splits()
+    except RuntimeError as exc:
+        assert "duplicated" in str(exc)
+    else:
+        raise AssertionError("a left-out copy inside the official lists must be refused")
+
+
 def test_maples_annotation_is_placed_in_the_roi_box_at_messidor_resolution(tmp_path):
     """The package's resize=False geometry: 1500 x 1500 label -> nearest resize to the ROI box -> pasted on the canvas."""
     import numpy as np
@@ -209,8 +290,12 @@ def test_e5_infer_stage_plans_the_pool_through_launch_e5_infer(tmp_path, monkeyp
     from bench.scripts import launch_e5_infer as le
     from bench.scripts import launch_queue as lq
 
+    from bench.e5 import outputs as out
+
     for name in ("IDRiD", "DDR"):   # the pool sets are on this machine, the other test sets are not
         (tmp_path / "prepared" / name).mkdir(parents=True)
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")   # not this machine's runs/E5
+    monkeypatch.setattr(le, "_ROOT", tmp_path)   # no B-std / nnU-Net reference maps -> no same-information items
     monkeypatch.setattr(geo, "data_dir", lambda name: tmp_path / "prepared" / name)
     monkeypatch.setattr(le, "missing_prompt_files", lambda frozen, items=None: [])
     monkeypatch.setattr(le.Item, "running", lambda self: None)

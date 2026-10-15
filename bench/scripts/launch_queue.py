@@ -28,13 +28,25 @@ missing environment) is reported and skipped, never fatal. A stage may set
 max_concurrent (how many of its items this launcher runs at once; the next
 stage gets the card when the cap is reached) and max_items. --submit needs
 RETISEG_GPUS; the launcher never touches other cards.
+
+One launcher per host is the rule (docs/ops/17 section 1). When there are
+several anyway, each claims an item's directory (claim.json, created
+atomically) before starting it: the "== start" line only appears once the
+process runs, and a second launcher reading the queue in between would start
+the same item (2026-10-15: three launchers opened
+runs/E3a/BS_fct_idrid_seed1/FGADR at the same minute). A claim whose launcher
+is dead on this host is stale and taken over; one from another host stands
+until RETISEG_IGNORE_RUNNING=1, like an open "== start".
 """
 
 import argparse
 import contextlib
 import io
+import json
 import os
+import re
 import shlex
+import socket
 import sys
 import threading
 import time
@@ -46,9 +58,76 @@ if str(_ROOT) not in sys.path:
 
 import yaml
 
-from bench.scripts.launch_b1 import _DIST_VARS, _start, gpu_is_free, in_progress, python_argv
+from bench.scripts.launch_b1 import _DIST_VARS, _pid_alive, _start, gpu_is_free, in_progress, python_argv
 
 QUEUE = _ROOT / "bench" / "configs" / "queue.yaml"
+CLAIM = "claim.json"
+_LOG_RE = re.compile(r">> *'?([^'\s]+)/console\.log'?")
+
+
+def claim_dir(label, command):
+    """The directory a queue item writes its console.log to, or None when the command keeps no log of its own."""
+    match = _LOG_RE.search(command)
+    if match:
+        return Path(match.group(1))
+    if label.startswith("nnunet:"):   # nnunet_run.sh writes runs/<name>/console.log itself
+        return Path("runs") / label.split(":", 1)[1]
+    return None
+
+
+def claim(label, run_dir):
+    """Hold ``run_dir`` for this launcher: True when claim.json is now ours.
+
+    The file is created with O_EXCL, so of two launchers reading the queue at the
+    same time only one gets the item. A claim whose pid is dead on this host is
+    replaced; one of a live pid, or of another host, is left alone (RETISEG_IGNORE_RUNNING=1
+    treats every claim as stale, as in_progress does for "== start" lines).
+    """
+    path = _ROOT / run_dir / CLAIM
+    path.parent.mkdir(parents=True, exist_ok=True)
+    record = json.dumps({"label": label, "host": socket.gethostname(), "pid": os.getpid(), "time": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    for _attempt in range(2):
+        try:
+            fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+        except FileExistsError:
+            if not _claim_is_stale(path):
+                return False
+            try:
+                path.unlink()
+            except FileNotFoundError:
+                pass
+            continue
+        with os.fdopen(fd, "w") as handle:
+            handle.write(record)
+        return True
+    return False
+
+
+def _claim_is_stale(path):
+    if os.environ.get("RETISEG_IGNORE_RUNNING") == "1":
+        return True
+    try:
+        record = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return True   # unreadable or half-written: nobody can hold it
+    if record.get("host") != socket.gethostname():
+        return False
+    pid = record.get("pid")
+    return not (isinstance(pid, int) and _pid_alive(pid))
+
+
+def release(run_dir):
+    """Drop this launcher's claim (another launcher's claim is left alone)."""
+    path = _ROOT / run_dir / CLAIM
+    try:
+        record = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return
+    if record.get("host") == socket.gethostname() and record.get("pid") == os.getpid():
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
 
 
 def load_queue(path=QUEUE):
@@ -292,9 +371,12 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
                     continue
                 if state != "open":
                     continue
+                run_dir = claim_dir(label, command)
+                if run_dir is not None and not claim(label, run_dir):
+                    continue   # another launcher holds it; its markers hide the item once it runs
                 taken.add(label)
                 running[label] = stage
-                return stage, label, command
+                return stage, label, command, run_dir
         return None
 
     def _worker(gpu):
@@ -312,7 +394,7 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
                 time.sleep(poll_seconds)
                 continue
             idle_since[gpu] = None
-            stage, label, command = item
+            stage, label, command, run_dir = item
             print(f"gpu {gpu} <- {stage} {label}", flush=True)
             process = _start(command, gpu)
             code = process.wait()
@@ -320,6 +402,8 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
                 with lock:
                     errors.append(f"gpu {gpu} exited {code}: {label}")
                 print(f"gpu {gpu}: {label} exited {code}", flush=True)
+            if run_dir is not None:
+                release(run_dir)
             with lock:
                 taken.discard(label)   # the stage's own done/running rules decide whether it comes back
                 running.pop(label, None)

@@ -1,12 +1,14 @@
 服务器任务单（第二版）
 第一版建立 2026-10-12；本版 2026-10-14 重写（本机，依据 albert 分支并入 main 后的仓库 0491603 与 MAPLES-DR 数据到位）；同日晚 Luming 确认了 E5 推理档的全部登记（00「待用户 Luming 处理」下的确认行），本文件不再有等用户决定的前提。写给在服务器上执行的 agent。范围以 docs/paper/16 为准，做法以 05、12、15、18、19 为准，命令以 11 和 bench/scripts/server_run.sh 为准。
 第一版的全文（第零–十七节，含 10-13、10-14 的历次更新）原样归档在 docs/ops/archive/17_服务器任务单_v1_20261012-20261014.txt；其他文档里引用的"17 第 N 节"若在本文件找不到，按归档版读，对照表在文末。已完成的条目不再重复列出，只留还要做的。
+2026-10-15 更新（本机，读过服务器 7462bb1 的记录之后）：第三节的队列改为第三版（种子 0 的 E3a 在前、推理池提前、种子 1/2 的 E3a 在 e3a_rest）；第四节换成今天要做的事（只开一个启动器、FCT 目录重做、SAM2-UNet 的 loader 批、推理档冒烟、打包）；第六节第 2 条加 SAM2-UNet 的批；第九、十节已完成的部分只留一句。
 
 一、协作规则（不变，2026-10-14 定）
   1. 服务器只执行仓库 HEAD 里的本文件；聊天里的话与 HEAD 不一致时停下，等下一次 pull。每做完一项在 docs/ops/00_进度.txt 第三节追加一行（日期、提交号、卡、目录、刚落盘的指标文件名和 mAUPR）；14、13、CHECKPOINT、论文由本机在 collect_runs 之后改。
   2. 一个启动器、一份队列文件：bench/scripts/launch_queue.py 读 bench/configs/queue.yaml，优先级写在文件里，每次有空卡就重读；改顺序只改文件并提交，不杀进程。正在跑的旧启动器（launch_e3a、launch_factor、nnunet 脚本）让它们自然结束，新启动器跳过它们正在跑的目录（console.log 的 == start / == exit）。
        RETISEG_GPUS="<卡>" bash bench/scripts/server_run.sh queue      # 或 python bench/scripts/launch_queue.py 只打印计划
      新阶段类型（e5_infer）要求用含该代码的提交重启启动器；旧进程只会把它报成 unknown kind 并跳过。
+     "一个"是指同一台主机上只有一个 launch_queue 进程，把所有要用的卡都写进 RETISEG_GPUS（被占的卡它会等，空出来就接）；几张卡各开一个启动器会同时规划同一项（2026-10-15 三个启动器同一分钟打开了 runs/E3a/BS_fct_idrid_seed1/FGADR）。2026-10-15 起启动器在开始一项之前先在目录里原子地写 claim.json（第二个启动器写不进就跳过），这只是兜底，不改变一台主机一个启动器的规则。
   3. 评测在训练结束时直接带冻结的排除名单写出 metrics_test.json（launch_factor.evaluate_argv、nnunet_run.sh、bench.e3a 都已如此）。excluded_ids 没对齐的指标：不写进 14，pack_handoff.py 不打包，collect_runs.py 拒收。
   4. CPU 步骤都是可单条重跑的命令（bench.e5 各模块的命令行、launch_factor.py --score-only 打印的 evaluate、nnunet_bridge.py 的 convert/splits/info、prepare_datasets.py export），不写总脚本。
   5. 本机写回后由用户提交推送；服务器 pull 到的提交号写进 00 的状态行。
@@ -17,32 +19,36 @@
   另附：dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json（第十节）、runs/E5/selection_*.json（第七节）。
   本机收到后：解入 runs/，python docs/paper/retiseg_paper/paper/scripts/collect_runs.py，make -C docs/paper/retiseg_paper/paper。
 
-三、队列与顺序（bench/configs/queue.yaml 第二版；理由在 docs/paper/19 第四节）
+三、队列与顺序（bench/configs/queue.yaml 第三版，2026-10-15；理由在 docs/paper/19 第四节）
   优先级  阶段               开关                 前提 / 开的条件
-  10      e3a                开（最多两张卡）     所有已打分来源；MAPLES-DR 导出并审计后自动加入
-  20      e5_seed0           开                   SAMed、SAM-Adapter、SAM2-UNet、RETFound 种子 0；先过第六节第 1 条的冒烟；MedSAM 等权重
-  25      fundus_seed0       关                   第八节冒烟通过后改 enabled: true
-  28      e5_infer_pool      关                   第七节：推理档冒烟通过、runs/E5 清空、retiseg-sam3 建好、启动器已用含 e5_infer 的提交重启后改 enabled: true（决定已全部确认）
-  29      e5_infer_test      关                   池跑完、两处 selected 写回并提交后
-  32      factor_cheap       开                   U-Net、M2MRF 的影响因素格子（旧 launch_factor 在接，本阶段只捡漏）
-  40      nnunet_e3b         开                   第十一节第 2 条的数据准备好后自动可规划
+  10      e3a                开（最多两张卡）     已打分来源里的种子 0（BS 种子 0、B1、BF_*、NN_*、E1_*）；seed0_only: true
+  15      e5_infer_pool      关（一张卡）         第七节：推理档冒烟通过、runs/E5 清空、启动器已用含本版的提交重启后改 enabled: true。22 项约一天，提前到训练之前，表 6 不必等一周
+  20      e5_seed0           开                   SAMed、SAM-Adapter、SAM2-UNet、RETFound 种子 0（冒烟 2026-10-14 已过；SAM-Adapter DDR、RETFound DDR 已在 GPU 6、4 上跑）；SAM2-UNet 开跑前先做第四节第 3 条；MedSAM 等权重
+  25      fundus_seed0       开                   2026-10-15 冒烟十项全过后服务器已改开
+  29      e5_infer_test      关                   池跑完、两处 selected 写回并提交后改开；max_concurrent 由本机按 --estimate 再定
+  32      factor_cheap       开                   U-Net、M2MRF 的影响因素格子（旧 launch_factor 已结束，E9 两项的打分由本阶段接）
+  40      nnunet_e3b         开                   603/604 的 raw、预处理、splits 已在，自动可规划
   45/55   factor_e3b_heavy / factor_e7_heavy  开   SAM2-UNet、RETFound 的 E3b 四格、E7 两格；排在前面的都排空后才轮到
+  58      e3a_rest           开（最多两张卡）     B-std 种子 1、2 的独立测试（只给误差棒），排在训练之后
   60/70/75 hrdecoder_rest / e5_rest / fundus_rest  关  种子 1、2；按此顺序在种子 0 阶段无待办后逐个打开
   90      e1r                关                   第十二节
   写作节奏（本机）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3、表 6/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒。
 
-四、现在就做（pull 到含本节的提交后；CPU 为主）
-  1. git pull；00 第三节记提交号。pull 会删掉仓库里的 runs/E5/prompts/（旧格式，原文 git show 3d00468:runs/E5/prompts/<文件>）和误提交的 retiseg_runs_handoff_20261012.tar.gz（工作区里的 tar.gz 保留为未跟踪文件，不用处理）。
-  2. 测试（retiseg 环境）：pytest bench/tests/test_e5_infer.py bench/tests/test_e5_flow.py bench/tests/test_launch_e5_infer.py bench/tests/test_launch_queue.py bench/tests/test_docs_paths.py -q；retiseg-sam3 建好后（bash bench/scripts/cluster_env.sh sam3）再跑 bench/tests/test_e5_contract.py。失败的记 00，不改协议文件。
-  3. MAPLES-DR 导出与泄漏审计：第十节。
-  4. HRDecoder 作者权重冒烟与内部测试：第九节（一张卡，约 1 小时）。
-  5. nnU-Net E3b 的数据准备：第十一节第 2 条（CPU）。
-  6. 算力审计（权重在盘上的模型）：python bench/scripts/cost_audit.py --repeat 5，输出 docs/paper/retiseg_paper/paper/data/cost_audit.tsv，回传。
-  7. 若 launch_queue 还没起：RETISEG_GPUS="<空卡>" bash bench/scripts/server_run.sh queue。已在跑的让它自然读到新文件。
+四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
+  1. 启动器收口（先做，几分钟）：只杀启动器进程本身（kill -TERM <launch_queue 的 pid>，不要 pkill -f 匹配到子进程；杀完 nvidia-smi 确认各卡上的训练 / 推理进程还在），它们正在跑的项会自己跑完并写 == exit，训练项的打分由新启动器的 :score 项接。要杀的：GPU 3 的 pid 291235、GPU 2 和 GPU 7 后开的两条队列、06:01 另开的 e5_seed0 启动器（日志 runs/logs/20261015_060110_e5_seed0.log；GPU 4、6 上的两项继续跑，不动）。然后只开一个：
+       RETISEG_GPUS="2 3 4 5 6 7" bash bench/scripts/server_run.sh queue
+     4、6 两张卡被占时它等着，空出来就接；它跳过所有 console.log 里 == start 未闭合且 pid 还活着的目录。启动前 python bench/scripts/launch_queue.py 打印一遍计划，确认 e3a（种子 0）、e5_seed0 的待办里没有正在跑的两项。
+  2. runs/E3a/BS_fct_idrid_seed1/FGADR：三个进程同时写过。等 console.log 里三个 == start 都有对应的 == exit（或三个 pid 都不在了），整个目录移到 runs/archive/E3a_fct_idrid_seed1_FGADR_3writers/，让队列（e3a_rest 阶段，种子 1）重做；不要读里面的 metrics.json。00 记一笔。
+  3. SAM2-UNet 的 loader 批（在它的种子 0 开跑之前；e5_seed0 里排在 SAM-Adapter DDR、RETFound DDR 之后，所以有窗口）：批 12 在 40GB 上差 324 MiB，服务器改成了 batch_size: 1 累积 12；B-std 的规则是"能放下的最大 loader 批，再累积到有效批"（HRNet 批 2 累积 6，M2MRF 批 2 累积 2，14 M7 与备注 18），BatchNorm 一次只看 1 张是没有必要的偏差。做法：把六个 bench/configs/cells/bs_sam2_unet_*.yaml 的 batch_size 改成 6，E5_MODELS=SAM2-UNet bash bench/scripts/server_run.sh e5-smoke（GPU 5，20 步）；放不下改 4，再放不下改 2；用通过的那个值把六个文件一起提交（注释写清实测显存）。训练代码会把累积倍数自动记进 run_params.json 的 deviations。若队列已经把 SAM2-UNet 种子 0 开起来了（console.log 有 == start），就先杀掉该项的进程、删掉它的 runs/BS_sam2_unet_* 目录再做本条——它刚开始，损失小于一个 BatchNorm 批 1 的整轮。
+  4. E5 推理档冒烟（GPU 5，第七节第 1–2 条）：retiseg-sam3 建好后跑 --pool-only --limit 2，记耗时、显存、n_prompts_box_uncontained 和 --estimate；通过后按第七节第 3 条清空 runs/E5、把 e5_infer_pool 改 enabled: true 提交、重启启动器（仍是同一条，RETISEG_GPUS 不变）。
+  5. 打包回传（CPU）：python bench/scripts/pack_handoff.py --since runs/handoff_manifest_20261014.tsv（没有上次 manifest 就不带 --since），加上 dataset/prepared/MAPLES-DR/report.json 和 runs/audit/leak_maples.json。本机要据此把 HRDecoder E1、MAPLES-DR 的 nnU-Net 四项、M2MRF 因素格子的 E3a、种子 1/2 的 E3a 进 results.csv。之后每天一包。
+  6. 测试（retiseg 环境）：pytest bench/tests/test_launch_queue.py bench/tests/test_launch_e5_infer.py bench/tests/test_e5_flow.py -q。2026-10-14 的四处失败是测试读了这台机器的 runs/（同信息对照的概率图目录）和 dataset/nnunet/raw，本机已改成全部走临时目录（21 第 52 条）；再失败记 00 和 21。
+  7. 仍未做的：算力审计 python bench/scripts/cost_audit.py --repeat 5（权重在盘上的模型，一张卡几十分钟；输出 docs/paper/retiseg_paper/paper/data/cost_audit.tsv）；可选的任意病灶补评（下一条）。
   8. 可选（CPU，十几分钟一条；表 6 的参考任意病灶 AUPR 要用）：M2MRF、nnU-Net 两库种子 0 的内部测试 metrics_test.json 早于任意病灶指标，用现有概率图只重评一次，不改图、不改阈值：
        python -m bench.eval.cli evaluate --data dataset/prepared/IDRiD --split test --pred runs/BS_m2mrf_idrid_seed0/prob_test --val-pred runs/BS_m2mrf_idrid_seed0/prob_val --out runs/BS_m2mrf_idrid_seed0/metrics_test
      DDR 同理（runs/BS_m2mrf_ddr_seed0）；nnU-Net 的 NN_default_idrid_fold0、NN_default_ddr_fold0 用 nnunet_run.sh 里那条 evaluate（带各自的 --exclude，IDRiD/DDR 为空）。重评后 mAUPR 必须与原文件一致（只多出 any_lesion 一节），不一致就停下记 00。
-  9. E5 推理档：第七节（决定已确认，冒烟后直接开池）。
+  9. 提交：这台机器的 git 2.25 不认 --trailer（2026-10-14 的提交因此没形成）。用 git commit -F <消息文件> 直接提交，署名行写在消息正文里；或 conda install -c conda-forge git 升到 2.4x。
+  10. 卡的去向（供核对，不用手排）：E3a 种子 0 两张；推理池一张（冒烟通过后）；其余给 e5_seed0 → fundus_seed0 → factor_cheap → nnunet_e3b → 重格子；0、1 仍是他人的 vLLM，不碰。
 
 五、E3a 独立测试
   由 queue 的 e3a 阶段接（max_concurrent 2）；手动等价命令 RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e3a --drop-maps FGADR,Retinal-Lesions。对象：全部已打分的检查点（B-std 各模型各种子、nnU-Net 两配置及 rep、BF_e3b/e4/e8、E1 作者权重 M2MRF 与 HRDecoder）。尺度、阈值、排除名单都在 bench/configs/e3a_frozen.yaml 和 14 备注 33、35、36，不改。prepared 目录不在的集合（MAPLES-DR 导出前）启动器自动跳过。
@@ -50,7 +56,7 @@
 
 六、E5 训练档（权重：公开的 SAM、SAM 2、MAE 和三份 gated 已在 pretrained/，sha256 在 bench/configs/e5_frozen.yaml；MedSAM、公开 DINOv2 仍缺）
   1. 冒烟（若还没做）：E5_MODELS=SAMed,SAM-Adapter,SAM2-UNet,RETFound bash bench/scripts/server_run.sh e5-smoke（每模型 200 步加一次验证，记步时和峰值显存到 00；实测步时写回 bench/scripts/make_bs_jobs.py 的 EST_HOURS 并重生成 bs_jobs.yaml 提交）。SAM-Adapter ViT-H 批 1 加重计算仍放不下 40GB 时退 ViT-L（15 第六节 2f），写进偏差。
-  2. 种子 0 由 queue 的 e5_seed0 阶段接（DDR 长任务先排）。SAM2-UNet、MedSAM 种子 0 结束时看逐类验证曲线，某类停在先验水平就按 15 第十六节第 4 条处理，处理后重跑该模型种子 0。MedSAM 权重到了再单独补（E5_MODELS=MedSAM 冒烟后它自动进 e5_seed0 阶段的 only 列表——需本机改 queue.yaml）。
+  2. 种子 0 由 queue 的 e5_seed0 阶段接（DDR 长任务先排）。冒烟（2026-10-14，各 20 步，GPU 2）：SAM-Adapter IDRiD 47.9 s / DDR 147.2 s，显存约 39GB；RETFound 25.9 / 136.9 s；SAMed 28.1 / 82.3 s；SAM2-UNet 批 12 差 324 MiB 放不下，loader 批按第四节第 3 条定（能放下的最大值，累积到有效批 12）。SAM2-UNet、MedSAM 种子 0 结束时看逐类验证曲线，某类停在先验水平就按 15 第十六节第 4 条处理，处理后重跑该模型种子 0。MedSAM 权重到了再单独补（E5_MODELS=MedSAM 冒烟后它自动进 e5_seed0 阶段的 only 列表——需本机改 queue.yaml）。
   3. 之后（不进队列，手动）：TF32 核对 launch_extra.py --experiment E5tf32；编码器对照 launch_extra.py --experiment E5enc --only e5enc_*_ddr_seed0_lr1（MAE-IN1k、RETFound-DINOv2、DINOv2 三个 ×1）。
   4. 种子 1、2：queue 的 e5_rest 阶段，等种子 0 阶段全部无待办后打开。
 
@@ -59,7 +65,7 @@
   0′. 清理：runs/E5 下若有旧目录（冒烟留下的）移到 runs/archive/，00 记一笔。新提示文件写在 runs/E5_prompts/，由启动器在第一项开始前在 CPU 上生成（launch_queue 的 e5_infer 阶段或 launch_e5_infer.py --submit 都会做）。
   1. 环境：bash bench/scripts/cluster_env.sh sam3 建 retiseg-sam3；权重 sam_vit_h、sam_vit_b、sam2.1_hiera_large、medsam_vit_b（缺）、sam3.pt 放 pretrained/。
   2. 冒烟：RETISEG_GPUS="2" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2，看 runs/E5/a|b/<来源>/<集>-val/predicted.json 的每窗 / 每提示耗时和显存，b 档的 n_prompts_box_uncontained（正常 0 或个位数）；python bench/scripts/launch_e5_infer.py --estimate 给全量 GPU 时，写进 00。冒烟写的 done.json 不算完成，全量会重做；冒烟的池运行不喂给选择和阈值。
-  3. 池运行：清空 runs/E5（冒烟目录移走），重启 launch_queue，把 queue.yaml 的 e5_infer_pool 改 enabled: true 并提交（22 项：a 档两模型 × 两密度、SAM 3 三个序号、b 档四个模型种类，各在 IDRiD 验证 10 张和 DDR 验证 149 张上）。手动等价：RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh e5-infer --pool-only（二者不要同时开）。
+  3. 池运行：清空 runs/E5（冒烟目录移走），把 queue.yaml 的 e5_infer_pool 改 enabled: true 并提交，重启那一条 launch_queue（22 项：a 档两模型 × 两密度、SAM 3 三个序号、b 档四个模型种类，各在 IDRiD 验证 10 张和 DDR 验证 149 张上；优先级 15，一张卡）。手动等价：RETISEG_GPUS="5" bash bench/scripts/server_run.sh e5-infer --pool-only（二者不要同时开）。
   4. 选择并写回 e5_frozen.yaml：a 档 python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限；记录写 runs/E5/selection_grid.json）；SAM 3 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select（selection_sam3.json）。把打印的 yaml 粘进 zero_shot.grid.selected / zero_shot.sam3.selected，提交，00 记一笔。某模型 128 当选时预算规则让它的 TJDR_uwf 主变体不跑（本机 collect 以 fov 变体顶替并记 canvas_long_side；用户可否决）。
   5. 测试集：e5_infer_test 改 enabled: true 并提交（手动等价 server_run.sh e5-infer --test-only --drop-maps FGADR,Retinal-Lesions）。每个测试项以本来源的池目录为闸门；SAM 3 的 a_sam3_selected 由闸门项自动拼装；同信息对照在 runs/BS_m2mrf_<库>_seed0/prob_test 和 runs/NN_default_<库>_fold0/prob_test 存在时自动加入；MAPLES-DR 在 dataset/prepared/MAPLES-DR 出现后自动进计划。测试目录记所选面积上限 / 措辞（run_params.json），选择重做后旧目录报错，手动移走并在 00 记原因。
   6. 回传 runs/E5/ 的 json 与 selection_*.json；runs/E5_prompts/ 不回传。
@@ -74,22 +80,11 @@
   3. 冒烟：python bench/scripts/launch_b1.py --jobs bench/configs/bs_jobs.yaml --submit --smoke --only HRDecoder,PMCNet,WSRFNet,CLC-Net,TC-Net（20 步 + 一次验证）。记每步耗时、显存、实际步数到 00；改 make_bs_jobs.py 的 EST_HOURS 并重生成任务表提交。CLC-Net 显存放不下批 16 时按 B-std 规则累积（cell 里 batch_size），记偏差。
   4. 队列：queue.yaml 的 fundus_seed0 改 enabled: true 提交。种子 1、2 在 hrdecoder_rest、fundus_rest 阶段，最后打开。
 
-九、HRDecoder 作者权重（E1；权重已由用户下载，命名 pretrained/hrdecoder_idrid.pth、hrdecoder_ddr.pth，sha256 由用户回填 bench/configs/e3a_frozen.yaml 的条目注释）
-  retiseg-hacdr 环境（先过第八节第 1 条的 mmseg 导入核对）：
-    python -m bench.predict_hrdecoder --dataset idrid --limit 2       # 冒烟：检查点键全部对上、4 通道、尺寸等于原图
-    python -m bench.predict_hrdecoder --dataset idrid ； --dataset ddr  # 内部测试，写 runs/E1_hrdecoder/（author_<库>_test.json 是作者 11 阈值指标）
-    python -m bench.eval.cli evaluate --data dataset/prepared/IDRiD --split test --pred runs/E1_hrdecoder/prob_test --out runs/E1_hrdecoder/metrics_idrid
-    python -m bench.eval.cli evaluate --data dataset/prepared/DDR --split test --pred runs/E1_hrdecoder/ddr_prob_test --out runs/E1_hrdecoder/metrics_ddr
-  核对：README 表 IDRiD mAUPR 71.34 / DDR 49.24 与 author_<库>_test.json 的 mAUPR 相差应在 0.5 个点以内；差得多先查 image_scale 的宽高顺序（mmseg 是 (w, h)）和 test_cfg。独立测试不用手排：权重文件在，launch_e3a 把 E1_hrdecoder_idrid/ddr 列为第一档来源（retiseg-hacdr 环境），queue 的 e3a 阶段自动接。回传 runs/E1_hrdecoder/ 的 json。
+九、HRDecoder 作者权重（E1）——2026-10-14 已完成
+  作者函数对上 README（IDRiD mAUPR 0.7134 / mIoU 0.522，DDR 0.4924 / 0.322）；本项目协议 IDRiD 0.707、DDR 0.461（任意病灶 0.601）。文件在 runs/E1_hrdecoder/（author_<库>_test.json、metrics_idrid.json、metrics_ddr.json），下一包回传。独立测试由 e3a 阶段把 E1_hrdecoder_idrid/ddr 当来源自动接（权重文件在就列入第一档，retiseg-hacdr 环境；python bench/scripts/launch_queue.py 的计划里应能看到 e3a:E1_hrdecoder_idrid:<集>）。
 
-十、MAPLES-DR（第八个独立测试集，docs/paper/19 第二节；数据已在服务器 dataset/ 下：dataset/maples-dr/（解开的 figshare 附加数据：dataset_record.yaml、MESSIDOR-ROIs.csv、annotations/）、dataset/messidor/（MAPLES-DR 用到的 200 张 MESSIDOR tif，平铺）、dataset/messidor-manifest.tsv）
-  读法不需要 maples_dr 包，也不需要网络：bench/data/maples.py 直接读上面的文件，tif 平铺、Base*/ 目录或 Base*.zip 都认。
-  1. 导出（CPU，198 张，几分钟）：python bench/scripts/prepare_datasets.py export MAPLES-DR → dataset/prepared/MAPLES-DR/（images、masks、ignore、masks_ext、fov、report.json）。本机已在两张图上端到端核对过（掩码放回位置与包的 resize=False 一致，视野框与 ROI 框差 2 像素内）。
-  2. 泄漏审计（读任何指标前）：
-       python bench/scripts/leak_audit.py --min-vessel 0.3 --data dataset/prepared/IDRiD dataset/prepared/DDR dataset/prepared/TJDR_std dataset/prepared/FGADR dataset/prepared/RetinalLesions dataset/prepared/MAPLES-DR --out runs/audit/leak_maples
-     结果记 00；按训练源把名单（预期为空）写进 bench/data/splits/leak_exclusions.json 的 by_training_source.<源>.MAPLES-DR，提交。
-  3. 之后不用手排：prepared 目录出现后，queue 的 e3a 阶段对每个已完成来源补跑 MAPLES-DR（60 张，每个来源几分钟），E5 推理档的测试项也自动带上它。
-  4. 回传：dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json。本机据 report.json 核对表 1 的行（论文侧的第八列已加好，占位等实数）。
+十、MAPLES-DR——2026-10-14 已导出并审计
+  dataset/prepared/MAPLES-DR 138/0/60；泄漏审计 runs/audit/leak_maples.json：与六个训练源的血管相关最高 0.343（阈值 0.5），by_training_source.<源>.MAPLES-DR 六处都是空列表（已提交）。读法里 dataset_record.yaml 的 duplicates 键是保留在官方 138 里的图、值是已剔除的副本，服务器已改对，本机加了测试锁住。e3a 阶段已在补 MAPLES-DR（nnU-Net 四项已出数）。回传 report.json 和 leak_maples.json（第四节第 5 条）。
 
 十一、影响因素实验与 nnU-Net E3b
   1. U-Net、M2MRF 的格子：旧 launch_factor 在接，queue 的 factor_cheap 阶段捡漏；训完的运行 e3a 自动发现（BF_e3b_*、BF_e4_*、BF_e8_*）；以 FGADR 训练的运行内部测试自动带 106 张同眼排除，没带的会被排成只评测。SAM2-UNet、RETFound 的 E3b/E7 格子在 factor_e3b_heavy / factor_e7_heavy 阶段。
@@ -105,11 +100,12 @@
 十二、E1r 剩余（最低优先，queue 的 e1r 阶段，items 由本机填）
   M2MRF IDRiD 种子 1、2（bench/train_m2mrf.py --config bench/configs/e1r_m2mrf_idrid_seed0.yaml 改 seed，各约 16 GPU 时，打分同种子 0）；M2MRF DDR 一个种子（需一份 e1r_m2mrf_ddr_seed0.yaml，按作者 DDR 配置写、核对后记 14 M6）；HACDR-Net 两库各一个种子（需从 bench/scripts/train_hacdr_b1.py 改出 E1r 版本）。算力不够时第一个砍。
 
-十三、回传清单（下一包）
-  runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*、runs/E3a/、runs/BS_*（新种子）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
+十三、回传清单（下一包，第四节第 5 条）
+  runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*（含 E9 两项打分后的 metrics_test.json）、runs/E3a/、runs/BS_*（新种子、E5 与专用模型的 run_params.json 和验证曲线）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
 
 十四、用户决定（2026-10-14 晚已全部定下，00「待用户 Luming 处理」下的确认行）
-  D1–D9 确认；评审修复 6、7、16 确认；预算规则保留（a）；表 6/图 5 呈现已改；CI 已加（.github/workflows/tests.yml，push 后看 Actions 页面，失败记 21）；协议 sha256 锁文件在读出首个 E5 测试指标后由本机加；MAPLES-DR 只用官方测试 60 张。服务器不再有需要等待的决定。
+  D1–D9 确认；评审修复 6、7、16 确认；预算规则保留（a）；表 6/图 5 呈现已改；CI 已加（.github/workflows/tests.yml，push 后看 Actions 页面，失败记 21）；协议 sha256 锁文件在读出首个 E5 测试指标后由本机加；MAPLES-DR 只用官方测试 60 张。
+  2026-10-15 新增两条，服务器按本文件执行，Luming 不同意时改本文件：SAM2-UNet 的 loader 批取能放下的最大值（第四节第 3 条）；推理池提前到训练之前（第三节）。
 
 附：第一版章节 → 本版
   一 回传格式 → 二；二 现在就做（10-12）→ 已完成，归档；三 E3a → 五；四 E5 权重 → 六的括号；五 E5 训练档 → 六；六 E5 推理档 → 七；七 E1r → 十二；八 nnU-Net 补跑 → 十一.3；九 本机代码 → 已完成，归档（九.4 算力审计 → 四.6）；十 顺序（10-12）→ 三；十一 影响因素 → 十一.1；十二 10-13 更新 → 已完成，归档；十三 10-14 更新 → 三、十一.2；十四 协作规则 → 一；十五 专用模型 → 八；十六 10-14 第二次更新 → 三、九、十；十七 albert 合并 → 四.1–2、七。
