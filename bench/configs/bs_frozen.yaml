@@ -79,3 +79,19 @@ recipe_revisions:
     loss_params: {smooth: 1.0e-5, batch_dice: true}
     reason: "rare-class collapse of the per-image Dice (smooth 1) under patch training; batch Dice, smooth 1e-5 (14 note 21)"
     date: "2026-10-12"
+  # SAM2-UNet, 2026-10-17 (docs/paper/14 note 44; the rule bound to the U-Net
+  # decision on 2026-10-12, docs/design/15 section 16 item 4): the author's
+  # structure loss computes its weighted IoU term per image and class with
+  # smoothing 1, the same mechanism; under B-std on DDR the seed-0 validation
+  # AUPR of MA stayed at 0.02-0.04 and SE at 0.05-0.10 from the first to the
+  # last evaluation (history.jsonl), the two classes with the most empty
+  # patches, while HE and EX trained normally. The IoU term is pooled over the
+  # batch per class (bench/models/sam2_unet.py structure_loss batch_iou); BCE
+  # and deep supervision unchanged. Both sources' seed 0 are rerun; the
+  # collapsed runs stay as "registered recipe". The decision follows the
+  # validation curves; the test number of the registered run (0.210) had been
+  # read by the time it was taken and is disclosed like the U-Net one.
+  SAM2-UNet:
+    loss_params: {batch_iou: true}
+    reason: "rare-class collapse of the per-image weighted IoU (smooth 1) under patch training on DDR; IoU pooled over the batch (14 note 44)"
+    date: "2026-10-17"

@@ -385,3 +385,15 @@
    影响：表 3a 的 M2MRF "Indep. fine" 列和图 3d 的 M2MRF 点为空。
    状态与决定：用户 scp 两份 .pth 到服务器同一路径；之后 e3a 阶段自动排 16 项（八集合 × 两检查点）。
    来源：10-15 包的 runs/E3a 来源名单与队列日志。
+
+59  2026-10-16  4 级 → 已处理（服务器 10-17 改 bench/predict.py；本机 10-17 给启动器加失败暂停）
+   问题：HRDecoder 两库种子 0 的打分在 retiseg-hacdr（torch 1.10）下失败：bench/predict.py 把 weights_only=False 直接传给 torch.load，1.10 不认识；队列对失败的项立刻重排，一夜重试约 1,200 次（IDRiD 286、DDR 911），GPU 2、3、5 被占在队列前面，CLC-Net 打分、nnU-Net FGADR、重格子都排不到。
+   影响：三张卡空转十几个小时。
+   状态与决定：服务器改为 runtime.load_trusted（已在 183a8b5）；launch_queue 加失败暂停：同一项连续退出非零后按 10、30、60、180、360 分钟递增暂停（retry_delay，测试 test_a_failing_item_is_not_restarted_before_its_retry_delay），成功一次即清零；暂停只在本启动器进程内有效，重启后重来。
+   来源：00 的 2026-10-17 11:27 记录。
+
+60  2026-10-17  5 级 → 已处理（2026-10-17，本机，collect_runs 的 E5_TRAINED 映射，整表重生成）
+   问题：E5 训练档的 BS_ 运行（samed、sam_adapter、sam2_unet、retfound）被 collect_runs 键成 E2 / bstd，而占位表的键是 E5 / peft、encoder_decoder；retfound 的 cell slug 还不在 SLUG 里。第一次 collect 后同一模型下实测与占位并存，表 3 的种子均值把一份实测和三份占位平均。
+   影响：若不发现，表 3、表 5、Friedman 的数都错。
+   状态与决定：collect_runs 加 E5_TRAINED 映射与 "retfound" slug；按 README 的整表重生成（build_placeholder --force → collect_literature → collect_runs），实测 23,850 行。14 备注 45。
+   来源：10-17 包第一次 collect 的核对。

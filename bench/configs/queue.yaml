@@ -38,12 +38,14 @@ stages:
     max_concurrent: 1
 
   # 1b. E5 inference pool (docs/ops/17 section 7): IDRiD and DDR validation, 22 items, one card.
-  #     ON once the inference smoke has passed, runs/E5 is clean and the launcher runs this code;
-  #     the selections (`--select`, committed into e5_frozen.yaml) then unlock e5_infer_test below.
+  #     ON since 2026-10-17 (17 section 4 item 13): retiseg-sam3 exists, runs/E5 is empty, and no card ever
+  #     frees for a separate smoke while the queue fills them, so the first pool items are the smoke; an item
+  #     that fails is paused by the launcher's retry delay and recorded in 00, not looped on. The selections
+  #     (`--select`, committed into e5_frozen.yaml) then unlock e5_infer_test below.
   - name: e5_infer_pool
     priority: 15
     kind: e5_infer
-    enabled: false
+    enabled: true
     phase: pool
     max_concurrent: 1
 

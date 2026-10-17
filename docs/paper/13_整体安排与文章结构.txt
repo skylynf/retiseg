@@ -42,12 +42,12 @@ Q3 决定因素：标注粒度、训练来源、训练量、输入分辨率、�
    标注粒度（E4，测试固定在细像素集）；训练来源（E3b）；训练量（E8）；输入信息，仅图像对比图像加血管或加文本（E6）；模型族，通用、专用、关系或 Transformer、半监督、基础模型适配，族的名单在 03；基础模型的用法，零样本、几何提示、参数高效微调、全量微调分开报告（E5）；输入分辨率，至少一个较高分辨率对比一个论文常用的较小输入（E7）；损失，换损失时不换结构（E9）；计算代价（E10）。
 
 三、实验清单与当前状态（2026-10-15 更新，依据 2026-10-14 04:51 回传包与服务器 00 的 10-14/10-15 记录；数字在 14，服务器记录在 00）
-进度总览（2026-10-15 下午，10-15 包已进表；"完成"指测试指标已落盘，"进包"指已进 results.csv）：
-  Q1 复现：E1 作者权重 M2MRF、HRDecoder 两库都完成并进表；HRDecoder 的独立测试八集合全齐（14 M10），M2MRF 的等用户把 .pth 拷到服务器（21 第 58 条）。E1r 只有 M2MRF IDRiD 种子 0（bs4），其余最低优先。L1 完成，L2 等作者回信（10-31）。约七成。
-  Q2 主表（19 行）：B-std 七模型三种子与 nnU-Net 两配置 9 行完成并进包；E5 训练档 4 行种子 0 六项在跑（SAMed IDRiD、SAM2-UNet IDRiD 未开，MedSAM 缺权重）；专用模型 5 行冒烟过、种子 0 排在 E5 之后未开。约五成；种子 0 全齐预计 10-17 前后。
-  Q2 独立测试（R4、图 6）：10-15 包 42 个来源 235 份 metrics.json 进表——九个监督模型 × 两源 × 八集合种子 0 全齐，R4 两段已写成实数（14 M10），表 5 加 MAPLES-DR 列；缺的是 E5 训练档、专用模型、种子 1/2 的一部分和 M2MRF 作者权重。约七成。
-  Q2 基础模型推理档（表 6、R3）：未开始——冒烟要等 retiseg-sam3 环境（服务器连不上 conda）和空卡；池一天、测试档数百 GPU 时（--estimate 后定）。零成。
-  Q3 影响因素（图 7）：21 个 U-Net / M2MRF 格子全部训完，但只有 M2MRF 的 7 个有打分（E3b 2、E4 4、E8 10%）并进表，其余 13 个旧启动器没评测（21 第 57 条，队列的 factor_score 阶段补，约 7 GPU 时）；nnU-Net E3b 2 格排队；SAM2-UNet/RETFound 的 6 个重格子排在最后（约 155 GPU 时）。约四成。
+进度总览（2026-10-17，10-17 包已进表；"完成"指测试指标已落盘，"进包"指已进 results.csv）：
+  Q1 复现：E1 作者权重 M2MRF、HRDecoder 两库完成并进表，两者的独立测试八集合全齐（14 M10、M5）。E1r 只有 M2MRF IDRiD 种子 0（bs4），其余最低优先。L1 完成，L2 等作者回信（10-31）。约七成。
+  Q2 主表（19 行）：16 行有种子 0 并进包——B-std 七模型三种子、nnU-Net 两配置、E5 训练档 4 行（SAMed 0.717 / 0.469 与 RETFound 0.708 / 0.466 在两库都高于 HRNet；SAM2-UNet DDR 塌缩，按登记规则改整批 IoU 重跑两库）、专用模型 TC-Net、PMCNet、WSRFNet；HRDecoder 两库与 CLC-Net IDRiD 训完等打分，CLC-Net DDR 在训；MedSAM 缺权重。约八成。
+  Q2 独立测试（R4、图 6）：10-17 包 69 个来源 433 份 metrics.json 进表——九个监督模型、四个 E5 训练档、三个新专用模型 × 两源 × 八集合种子 0 全齐，两个作者权重模型全齐；R4 两段实数（14 M10、M9）。缺 HRDecoder、CLC-Net、SAM2-UNet 重跑、种子 1/2 的一部分。约八成。
+  Q2 基础模型推理档（表 6、R3）：retiseg-sam3 已装好；池阶段 10-17 起开（一张卡，前几项即冒烟），测试档等选择写回。零成。
+  Q3 影响因素（图 7）：21 个 U-Net / M2MRF 格子全部打分进表（14 M9b 有第一眼）；E7 M2MRF 原分辨率在训；nnU-Net E3b：TJDR_std 在训、FGADR 排队；SAM2-UNet（配方修订后）/RETFound 的 6 个重格子排在最后（约 155 GPU 时）。约六成。
   E10 算力：environment.json 随各实验记录；cost_audit.py 未跑。泄漏审计八库完成。
   论文：方法、表 1、图 2 实数；R4 第一段实数；其余结果段按占位写好结构，等种子 0。
 2026-10-11 范围精简：每个实验保留的范围以 16 第三节为准，本表的“内容”列是原规划；砍掉的部分进 16 第五节“未来工作”。要点：E2b 停；E1r 缩为 M2MRF IDRiD 3 种子、DDR 1 种子、HACDR-Net 各 1 种子；E2c 只做 DDR；E3b 种子 0；E4、E7、E8、E9 缩为 1 到 2 个代表模型 × 种子 0 × 最少档位；E5 的 c′、冻结版、augreg、三档学习率、PerSAM 砍；E6、轨 C、第二层、新数据集砍；E5 先种子 0，SAM2-UNet 和 RETFound 的种子 1、2 第二优先。剩余约 810 A100 时。
@@ -59,8 +59,8 @@ L2     复现漏斗：R0–R4 计数、作者回复率、失败原因       Q1  
 E0     U-Net 流水线                                      —     —                            完成
 E1     作者权重：官方测试、独立测试                      Q1    独立测试库导出（12）         M2MRF 的 IDRiD、DDR 完成；HRDecoder 2026-10-14 完成（作者函数对上 README；本项目协议 IDRiD 0.707、DDR 0.461，14 M5），包未到；两者的独立测试在 e3a 队列；WSRFNet 权重待作者回信
 E1r    作者配方重训：M2MRF bs4、HACDR-Net，各 3 种子     Q1    服务器                       M2MRF IDRiD 种子 0 有效批 4 已打分（作者函数 61.19，本项目 0.549）；种子 1、2 和 HACDR-Net、DDR 未开始
-E2     B-std 主表：7 个模型（无 H2Former）× IDRiD、DDR × 3 种子，42 个任务；2026-10-14 加专用 5 个（18）  Q2  预算已冻结（IDRiD 1000、DDR 400） 2026-10-13：HRNet、Swin-Unet、M2MRF、DeepLabv3、U-Net 整批 Dice、HACDR-Net 两库 3 种子都已打分；FCT DDR 只留种子 0。U-Net 整批 Dice 均值 IDRiD 0.644、DDR 0.371；HACDR-Net 均值 0.538、0.252（14 M7）。数在 data/results.csv
-       专用扩充：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net（18）  Q2  子模块与权重（用户）    2026-10-15 五个模型十项冒烟全过（HRDecoder 两处修复、WSRFNet 装 pywt、PMCNet 的 B0 权重走镜像），fundus_seed0 已开，排在 E3a 种子 0 与 E5 种子 0 之后
+E2     B-std 主表：7 个模型（无 H2Former）× IDRiD、DDR × 3 种子，42 个任务；2026-10-14 加专用 5 个（18）  Q2  预算已冻结（IDRiD 1000、DDR 400） 2026-10-17：E5 训练档四模型两库种子 0 出数（14 M9；SAM2-UNet DDR 塌缩重跑，备注 44）。2026-10-13：HRNet、Swin-Unet、M2MRF、DeepLabv3、U-Net 整批 Dice、HACDR-Net 两库 3 种子都已打分；FCT DDR 只留种子 0。U-Net 整批 Dice 均值 IDRiD 0.644、DDR 0.371；HACDR-Net 均值 0.538、0.252（14 M7）。数在 data/results.csv
+       专用扩充：HRDecoder、PMCNet、WSRFNet、CLC-Net、TC-Net（18）  Q2  子模块与权重（用户）    2026-10-17：TC-Net 0.653 / 0.361、PMCNet 0.652 / 0.312、WSRFNet 0.582 / 0.234 进表（含独立测试）；HRDecoder 两库训完、打分修复后在打（21 第 59 条）；CLC-Net IDRiD 等打分、DDR 在训
        nnU-Net（默认和 ResEnc-M）                        Q2    数据转换、固定划分           两种配置两库都有测试数：默认 IDRiD 0.671、DDR 0.432；ResEnc-M 0.631、0.428。默认 DDR 三次 0.432、0.427、0.434（均值 0.431，2026-10-14）；IDRiD 第一次重复在训
 E2b    B1 来源配方，种子 0，14 个任务（无 H2Former）     Q2    —                            10-12 09:08 按 16 停止；六个未完成的运行停在上次验证，进未来工作。已完成的运行作补充表
 E2c    小规模调参：每族一个模型，学习率 ×1/3、1、3       Q2    E2 种子 0                    DDR 四项 2026-10-12 训完，只留验证曲线（14 备注 17）；×1/3 时 HRNet 与 M2MRF 的验证名次对调，主表学习率未改

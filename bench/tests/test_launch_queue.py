@@ -17,7 +17,10 @@ def test_gather_orders_by_priority_skips_done_and_reports_unplannable_stages(tmp
     from bench.scripts import launch_queue as lq
     from bench.scripts import nnunet_bridge
 
+    from bench.scripts import launch_b1
+
     monkeypatch.setattr(lq, "_ROOT", tmp_path)
+    monkeypatch.setattr(launch_b1, "_ROOT", tmp_path)   # in_progress reads console.log under launch_b1._ROOT (a packed NN_ run would look live)
     monkeypatch.setattr(nnunet_bridge, "RAW", tmp_path / "nnunet" / "raw")   # the nn stage is unplannable here, whatever this machine holds
     done = tmp_path / "runs" / "x" / "done.json"
     done.parent.mkdir(parents=True)
@@ -74,7 +77,7 @@ def test_queue_file_in_the_repository_loads_and_names_known_kinds():
     assert by_name["factor_e3b_heavy"]["experiment"] == "E3b"
     # the albert merge (docs/ops/25): one e5_infer kind; off until the inference smoke (pool) and the selections (test)
     assert by_name["e5_infer_pool"]["phase"] == "pool" and by_name["e5_infer_test"]["phase"] == "test"
-    assert not by_name["e5_infer_pool"].get("enabled", True) and not by_name["e5_infer_test"].get("enabled", True)
+    assert by_name["e5_infer_pool"].get("enabled", True) and not by_name["e5_infer_test"].get("enabled", True)   # pool on since 2026-10-17
 
 
 def test_factor_models_filter_keeps_the_cheap_cells_apart(monkeypatch):
@@ -188,6 +191,44 @@ def test_a_directory_claimed_by_a_live_launcher_is_passed_over_and_a_stale_claim
     lq.run([0], path, poll_seconds=0.01, idle_exit_minutes=0.02)
     assert len(started) == 1 and "runs/e/console.log" in started[0]
     assert not (tmp_path / "runs" / "e" / lq.CLAIM).exists() and live.is_file()
+
+
+def test_a_failing_item_is_not_restarted_before_its_retry_delay(tmp_path, monkeypatch):
+    """2026-10-16: HRDecoder's scoring failed in seconds about 1,200 times in a night. An item that exits
+    non-zero waits 10 min, then 30, 60, 180 and 360, before this launcher takes it again; the next item runs."""
+    from bench.scripts import launch_queue as lq
+
+    assert [lq.retry_delay(n) / 60 for n in (1, 2, 3, 4, 5, 9)] == [10, 30, 60, 180, 360, 360]
+    monkeypatch.setattr(lq, "_ROOT", tmp_path)
+    monkeypatch.setattr(lq, "python_argv", lambda env: ["python"])
+    path = _queue(tmp_path, [
+        {"name": "s", "priority": 1, "kind": "shell",
+         "items": [{"label": "bad", "command": "false", "done": "runs/bad/done.json"}, {"label": "good", "command": "true", "done": "runs/good/done.json"}]},
+    ])
+    started = []
+
+    class _Proc:
+        def __init__(self, label):
+            self.label = label
+
+        def wait(self):
+            if self.label == "bad":
+                return 1
+            marker = tmp_path / "runs" / "good" / "done.json"
+            marker.write_text("{}")
+            return 0
+
+    def _start(command, gpu):
+        import re
+
+        label = re.search(r"runs/([a-z]+)/console\.log", command).group(1)
+        started.append(label)
+        return _Proc(label)
+
+    monkeypatch.setattr(lq, "_start", _start)
+    monkeypatch.setattr(lq, "gpu_is_free", lambda gpu: True)
+    lq.run([0], path, poll_seconds=0.01, idle_exit_minutes=0.02)
+    assert started == ["bad", "good"]   # bad once, then the card moved on; not bad again within the pause
 
 
 def test_e3a_plan_leaves_out_test_sets_whose_prepared_directory_is_missing(tmp_path, monkeypatch):

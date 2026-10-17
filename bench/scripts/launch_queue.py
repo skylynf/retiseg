@@ -338,16 +338,30 @@ def gather(path=QUEUE, dry=False, report=None):
     return out
 
 
+RETRY_MINUTES = (10, 30, 60, 180, 360)
+
+
+def retry_delay(count):
+    """Seconds an item that exited non-zero ``count`` times in a row waits before this launcher starts it
+    again: 10, 30, 60, 180 minutes, then six hours (2026-10-16: a scoring item that failed in seconds was
+    restarted about 1,200 times in a night and held three cards in front of the rest of the queue)."""
+    return 60 * RETRY_MINUTES[min(max(int(count), 1), len(RETRY_MINUTES)) - 1]
+
+
 def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
     """One worker per card; a free card reads the queue again and takes the first item nobody holds.
 
     A stage's ``max_concurrent`` caps how many of its items this launcher runs
     at once (E3a keeps two cards, the rest go to training); items of a stage at
-    its cap are passed over for the next stage, not waited for.
+    its cap are passed over for the next stage, not waited for. An item whose
+    process exits non-zero is passed over for retry_delay(count) before this
+    launcher starts it again (the stage's own markers still decide whether it
+    is listed at all).
     """
     lock = threading.Lock()
     taken = set()
     running = {}   # label -> stage of the items this launcher has on a card
+    failures = {}  # label -> (count, time of the last non-zero exit): retried after a growing pause
     errors = []
     idle_since = {gpu: None for gpu in gpus}
 
@@ -361,6 +375,8 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
             for _priority, stage, label, command, gate in items:
                 if label in taken:
                     continue
+                if label in failures and time.time() < failures[label][1] + retry_delay(failures[label][0]):
+                    continue   # it failed a moment ago; the queue goes on to the next item instead of looping on it
                 cap = caps.get(stage)
                 if cap and sum(1 for held in running.values() if held == stage) >= int(cap):
                     continue
@@ -400,8 +416,13 @@ def run(gpus, path=QUEUE, poll_seconds=60, idle_exit_minutes=None):
             code = process.wait()
             if code != 0:
                 with lock:
-                    errors.append(f"gpu {gpu} exited {code}: {label}")
-                print(f"gpu {gpu}: {label} exited {code}", flush=True)
+                    count = failures.get(label, (0, 0.0))[0] + 1
+                    failures[label] = (count, time.time())
+                    errors.append(f"gpu {gpu} exited {code}: {label} (failure {count})")
+                print(f"gpu {gpu}: {label} exited {code} (failure {count}; not retried for {retry_delay(count) / 60:.0f} min)", flush=True)
+            else:
+                with lock:
+                    failures.pop(label, None)
             if run_dir is not None:
                 release(run_dir)
             with lock:

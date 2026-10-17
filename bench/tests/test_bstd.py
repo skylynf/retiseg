@@ -299,13 +299,28 @@ def test_recipe_revision_merges_loss_params_and_is_recorded():
         bstd.budget(declared, "IDRiD", frozen, 64 * 64 * 10, (32, 32), model_name="tiny")
 
 
+def test_frozen_sam2_unet_revision_pools_the_iou_over_the_batch():
+    """2026-10-17 (14 note 44): the per-image weighted IoU of SAM2-UNet collapsed MA and SE on DDR like the
+    U-Net Dice did; the revision switches loss_params batch_iou on and leaves everything else to the author recipe."""
+    revision = bstd.revision_for("SAM2-UNet", FROZEN)
+    assert revision["loss_params"] == {"batch_iou": True} and revision["date"] == "2026-10-17"
+    try:
+        from bench.models.sam2_unet import SAM2UNet
+    except Exception:  # the official sam2 package is not importable here; the recipe is what matters
+        return
+    declared = SAM2UNet.__new__(SAM2UNet).author_recipe("DDR")
+    resolved, deviations, *_ = bstd.budget(declared, "DDR", FROZEN, 10**8, (960, 960), model_name="SAM2-UNet")
+    assert resolved.loss_params == {"batch_iou": True}
+    assert any("recipe revision 2026-10-17" in item for item in deviations)
+
+
 def test_frozen_u_net_revision_is_the_batch_dice_of_the_diagnostic():
     from bench.models.unet import UNet
 
     revision = bstd.revision_for("U-Net", FROZEN)
     diagnostic = yaml.safe_load((REPO / "bench/configs/cells/bs_diag_unet_batchdice_ddr_seed0.yaml").read_text())
     assert revision["loss_params"] == diagnostic["diagnostic_loss_params"] == {"smooth": 1e-5, "batch_dice": True}
-    assert set(FROZEN["recipe_revisions"]) == {"U-Net"}
+    assert set(FROZEN["recipe_revisions"]) == {"U-Net", "SAM2-UNet"}
     declared = UNet().author_recipe("DDR")
     resolved, deviations, *_ = bstd.budget(declared, "DDR", FROZEN, 10**8, (960, 960), model_name="U-Net")
     assert resolved.loss == "bce_dice" and resolved.loss_params == {"smooth": 1e-5, "batch_dice": True}

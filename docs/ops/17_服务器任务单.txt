@@ -23,7 +23,7 @@
   优先级  阶段               开关                 前提 / 开的条件
   10      e3a                开（最多两张卡）     已打分来源里的种子 0（BS 种子 0、B1、BF_*、NN_*、E1_*）；seed0_only: true
   12      factor_score       开（一张卡）         旧 launch_factor 训完没打分的 13 个 U-Net / M2MRF 格子，只预测加评测（第四节第 11 条）；打完即空
-  15      e5_infer_pool      关（一张卡）         第七节：推理档冒烟通过、runs/E5 清空、启动器已用含本版的提交重启后改 enabled: true。22 项约一天，提前到训练之前，表 6 不必等一周
+  15      e5_infer_pool      开（一张卡）         10-17 起开（第四节第 14 条）：前几项即冒烟；22 项约一天，提前到训练之前，表 6 不必等一周
   20      e5_seed0           开                   SAMed、SAM-Adapter、SAM2-UNet、RETFound 种子 0（冒烟 2026-10-14 已过；SAM-Adapter DDR、RETFound DDR 已在 GPU 6、4 上跑）；SAM2-UNet 开跑前先做第四节第 3 条；MedSAM 等权重
   25      fundus_seed0       开                   2026-10-15 冒烟十项全过后服务器已改开
   29      e5_infer_test      关                   池跑完、两处 selected 写回并提交后改开；max_concurrent 由本机按 --estimate 再定
@@ -36,7 +36,13 @@
   写作节奏（本机）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3、表 6/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒。
 
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
-  进度（本机 10-15 下午，10-15 包已 collect）：新加第 11 条。第 1、2、3、5、6 条已做完（一条队列 pid 938078；两个重叠目录已归档；SAM2-UNet 批 4；包 retiseg_runs_handoff_20261015.tar.gz 已打，等拷到本机；测试剩的一处已由本机改）。还要做：第 4 条（retiseg-sam3 等 conda 可达，有空卡再冒烟）、第 7 条、第 8 条（可选）。之后每天：打包（第 5 条）、00 记一行卡的去向。
+  进度（本机 10-16/17，10-17 包已 collect）：第 1–3、5、6、11、12 条已完成（M2MRF 的 .pth 已在服务器，e3a 已跑完它的独立测试；13 个格子已打分）。新加第 13–15 条，第 13 条先做。
+  13. SAM2-UNet 配方修订（登记规则的执行，docs/paper/14 备注 44；bs_frozen.yaml 已追加 recipe_revisions.SAM2-UNet: loss_params {batch_iou: true}）：DDR 种子 0 的 MA、SE 验证 AUPR 整个训练都停在 0.02–0.04、0.05–0.10（history.jsonl），与 U-Net 同一机制。做法：pull 到含本条的提交后，
+       mv runs/BS_sam2_unet_ddr_seed0 runs/BS_sam2_unet_ddr_seed0_registered ；mv runs/BS_sam2_unet_idrid_seed0 runs/BS_sam2_unet_idrid_seed0_registered
+       mv runs/E3a/BS_sam2_unet_ddr_seed0 runs/E3a/BS_sam2_unet_ddr_seed0_registered ；mv runs/E3a/BS_sam2_unet_idrid_seed0 runs/E3a/BS_sam2_unet_idrid_seed0_registered
+     （两个库都重跑：规则是该模型全部种子；E3a 目录一起改名，队列才不会对旧检查点重测，collect 对 _registered 的 E3a 不读）。之后 e5_seed0 阶段自动重排两项（loader 批仍是 4）；新 run 的 recipe.json 的 deviations 里应有 "recipe revision 2026-10-17"，第一次验证后看 MA/SE 曲线是否离开先验水平，记 00。factor_e3b_heavy / factor_e7_heavy 的 SAM2-UNet 格子要在这次 pull 之后才能开（它们读同一份 bs_frozen.yaml）；若已有 SAM2-UNet 的 BF_ 目录在跑，杀掉删目录重排。
+  14. 推理池：queue.yaml 的 e5_infer_pool 已改 enabled: true（优先级 15，一张卡）。卡一直被队列占满，单独的冒烟做不成，池的前几项就是冒烟：第一个 a 档项和第一个 b 档项写出 predicted.json 后，python bench/scripts/launch_e5_infer.py --estimate 和每窗 / 每提示耗时、显存记 00；项失败时启动器会按 10/30/60/180/360 分钟递增暂停它（不再反复重启），把 console.log 的报错贴进 00，本机修。pull 前 runs/E5 若有东西先移到 runs/archive/。
+  15. 启动器重启一次（pull 到含本条的提交后）：杀 pid 938078 再开同一条（RETISEG_GPUS="2 3 4 5 6 7"）。原因：claim.json、失败暂停和 factor_score 都在新代码里，旧进程没有失败暂停——HRDecoder 打分昨晚重试了约 1,200 次。正在跑的项不受影响。
   1. 启动器收口（先做，几分钟）：只杀启动器进程本身（kill -TERM <launch_queue 的 pid>，不要 pkill -f 匹配到子进程；杀完 nvidia-smi 确认各卡上的训练 / 推理进程还在），它们正在跑的项会自己跑完并写 == exit，训练项的打分由新启动器的 :score 项接。要杀的：GPU 3 的 pid 291235、GPU 2 和 GPU 7 后开的两条队列、06:01 另开的 e5_seed0 启动器（日志 runs/logs/20261015_060110_e5_seed0.log；GPU 4、6 上的两项继续跑，不动）。然后只开一个：
        RETISEG_GPUS="2 3 4 5 6 7" bash bench/scripts/server_run.sh queue
      4、6 两张卡被占时它等着，空出来就接；它跳过所有 console.log 里 == start 未闭合且 pid 还活着的目录。启动前 python bench/scripts/launch_queue.py 打印一遍计划，确认 e3a（种子 0）、e5_seed0 的待办里没有正在跑的两项。
@@ -60,7 +66,7 @@
 
 六、E5 训练档（权重：公开的 SAM、SAM 2、MAE 和三份 gated 已在 pretrained/，sha256 在 bench/configs/e5_frozen.yaml；MedSAM、公开 DINOv2 仍缺）
   1. 冒烟（若还没做）：E5_MODELS=SAMed,SAM-Adapter,SAM2-UNet,RETFound bash bench/scripts/server_run.sh e5-smoke（每模型 200 步加一次验证，记步时和峰值显存到 00；实测步时写回 bench/scripts/make_bs_jobs.py 的 EST_HOURS 并重生成 bs_jobs.yaml 提交）。SAM-Adapter ViT-H 批 1 加重计算仍放不下 40GB 时退 ViT-L（15 第六节 2f），写进偏差。
-  2. 种子 0 由 queue 的 e5_seed0 阶段接（DDR 长任务先排）。冒烟（2026-10-14，各 20 步，GPU 2）：SAM-Adapter IDRiD 47.9 s / DDR 147.2 s，显存约 39GB；RETFound 25.9 / 136.9 s；SAMed 28.1 / 82.3 s；SAM2-UNet 批 12 差 324 MiB 放不下，loader 批按第四节第 3 条定（能放下的最大值，累积到有效批 12）。SAM2-UNet、MedSAM 种子 0 结束时看逐类验证曲线，某类停在先验水平就按 15 第十六节第 4 条处理，处理后重跑该模型种子 0。MedSAM 权重到了再单独补（E5_MODELS=MedSAM 冒烟后它自动进 e5_seed0 阶段的 only 列表——需本机改 queue.yaml）。
+  2. 种子 0 由 queue 的 e5_seed0 阶段接（DDR 长任务先排）。10-16 四模型八项已出测试分（14 M9）；SAM2-UNet DDR 塌缩，按第四节第 13 条重跑两库。冒烟（2026-10-14，各 20 步，GPU 2）：SAM-Adapter IDRiD 47.9 s / DDR 147.2 s，显存约 39GB；RETFound 25.9 / 136.9 s；SAMed 28.1 / 82.3 s；SAM2-UNet 批 12 差 324 MiB 放不下，loader 批按第四节第 3 条定（能放下的最大值，累积到有效批 12）。SAM2-UNet、MedSAM 种子 0 结束时看逐类验证曲线，某类停在先验水平就按 15 第十六节第 4 条处理，处理后重跑该模型种子 0。MedSAM 权重到了再单独补（E5_MODELS=MedSAM 冒烟后它自动进 e5_seed0 阶段的 only 列表——需本机改 queue.yaml）。
   3. 之后（不进队列，手动）：TF32 核对 launch_extra.py --experiment E5tf32；编码器对照 launch_extra.py --experiment E5enc --only e5enc_*_ddr_seed0_lr1（MAE-IN1k、RETFound-DINOv2、DINOv2 三个 ×1）。
   4. 种子 1、2：queue 的 e5_rest 阶段，等种子 0 阶段全部无待办后打开。
 
@@ -68,8 +74,8 @@
   0. 前提已满足：Luming 2026-10-14 确认了 D1–D9、评审修复 6/7/16 与预算规则（a：128 当选时该模型的 TJDR_uwf 只跑 fov 变体）。协议文件按现状执行，不再等任何决定；第一次池运行把登记定死，之后 e5_frozen.yaml 只增不改。
   0′. 清理：runs/E5 下若有旧目录（冒烟留下的）移到 runs/archive/，00 记一笔。新提示文件写在 runs/E5_prompts/，由启动器在第一项开始前在 CPU 上生成（launch_queue 的 e5_infer 阶段或 launch_e5_infer.py --submit 都会做）。
   1. 环境：bash bench/scripts/cluster_env.sh sam3 建 retiseg-sam3；权重 sam_vit_h、sam_vit_b、sam2.1_hiera_large、medsam_vit_b（缺）、sam3.pt 放 pretrained/。
-  2. 冒烟：RETISEG_GPUS="2" bash bench/scripts/server_run.sh e5-infer --pool-only --limit 2，看 runs/E5/a|b/<来源>/<集>-val/predicted.json 的每窗 / 每提示耗时和显存，b 档的 n_prompts_box_uncontained（正常 0 或个位数）；python bench/scripts/launch_e5_infer.py --estimate 给全量 GPU 时，写进 00。冒烟写的 done.json 不算完成，全量会重做；冒烟的池运行不喂给选择和阈值。
-  3. 池运行：清空 runs/E5（冒烟目录移走），把 queue.yaml 的 e5_infer_pool 改 enabled: true 并提交，重启那一条 launch_queue（22 项：a 档两模型 × 两密度、SAM 3 三个序号、b 档四个模型种类，各在 IDRiD 验证 10 张和 DDR 验证 149 张上；优先级 15，一张卡）。手动等价：RETISEG_GPUS="5" bash bench/scripts/server_run.sh e5-infer --pool-only（二者不要同时开）。
+  2. 冒烟：10-17 起由池的前几项代替（第四节第 14 条；卡一直被队列占满，单独的 --limit 2 做不成）。看 runs/E5/a|b/<来源>/<集>-val/predicted.json 的每窗 / 每提示耗时和显存，b 档的 n_prompts_box_uncontained（正常 0 或个位数）；python bench/scripts/launch_e5_infer.py --estimate 给全量 GPU 时，写进 00。
+  3. 池运行：queue.yaml 的 e5_infer_pool 已开（10-17）；pull 前 runs/E5 若有旧目录先移走，重启那一条 launch_queue（22 项：a 档两模型 × 两密度、SAM 3 三个序号、b 档四个模型种类，各在 IDRiD 验证 10 张和 DDR 验证 149 张上；优先级 15，一张卡）。手动等价：RETISEG_GPUS="5" bash bench/scripts/server_run.sh e5-infer --pool-only（二者不要同时开）。
   4. 选择并写回 e5_frozen.yaml：a 档 python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限；记录写 runs/E5/selection_grid.json）；SAM 3 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select（selection_sam3.json）。把打印的 yaml 粘进 zero_shot.grid.selected / zero_shot.sam3.selected，提交，00 记一笔。某模型 128 当选时预算规则让它的 TJDR_uwf 主变体不跑（本机 collect 以 fov 变体顶替并记 canvas_long_side；用户可否决）。
   5. 测试集：e5_infer_test 改 enabled: true 并提交（手动等价 server_run.sh e5-infer --test-only --drop-maps FGADR,Retinal-Lesions）。每个测试项以本来源的池目录为闸门；SAM 3 的 a_sam3_selected 由闸门项自动拼装；同信息对照在 runs/BS_m2mrf_<库>_seed0/prob_test 和 runs/NN_default_<库>_fold0/prob_test 存在时自动加入；MAPLES-DR 在 dataset/prepared/MAPLES-DR 出现后自动进计划。测试目录记所选面积上限 / 措辞（run_params.json），选择重做后旧目录报错，手动移走并在 00 记原因。
   6. 回传 runs/E5/ 的 json 与 selection_*.json；runs/E5_prompts/ 不回传。

@@ -73,7 +73,31 @@ SLUG = {  # bench/scripts/launch_b1.py::_SLUG -> names used in the paper
     "medsam": "MedSAM (full FT)",
     "vit_upernet": "RETFound + UPerNet",
     "retfound_upernet": "RETFound + UPerNet",
+    "retfound": "RETFound + UPerNet",   # launch_b1's cell slug (bs_retfound_<lib>_seed<k>)
 }
+# The E5 training tiers are B-std runs (BS_ directories) that the paper keys as experiment E5 with the
+# tier as the variant (build_placeholder.foundation_trained; data.MAIN_VARIANTS), not as E2 / bstd.
+E5_TRAINED = {
+    "SAMed": ("E5", "peft"),
+    "SAM-Adapter": ("E5", "peft"),
+    "SAM2-UNet": ("E5", "peft"),
+    "MedSAM (full FT)": ("E5", "encoder_decoder"),
+    "RETFound + UPerNet": ("E5", "encoder_decoder"),
+}
+
+
+def run_key(m):
+    """(experiment, variant, model, train, seed) of a BS_/B1_ run directory match."""
+    experiment, variant = EXPERIMENT[m.group(1)]
+    model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
+    if experiment == "E2" and model in E5_TRAINED:
+        experiment, variant = E5_TRAINED[model]
+    if m["registered"]:
+        # runs of a recipe that was later revised (bs_frozen.yaml recipe_revisions): kept as a
+        # separate variant for the supplementary table; the U-Net DDR seed 0 is also the
+        # "CE + per-image Dice" row of E9.
+        variant = "registered"
+    return experiment, variant, model, train, seed
 DATASET = {"idrid": "IDRiD", "ddr": "DDR"}
 TESTSET = {  # suffix of metrics_<suffix>.json -> test set name
     "test": None,  # the training source itself
@@ -227,15 +251,9 @@ def collect(runs_dir):
     for run in runs:
         m = RUN.match(run.name)
         if m and m["slug"] in SLUG:
-            experiment, variant = EXPERIMENT[m.group(1)]
-            model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
-            if m["registered"]:
-                # runs of a recipe that was later revised (bs_frozen.yaml recipe_revisions): kept as a
-                # separate variant for the supplementary table; the U-Net DDR seed 0 is also the
-                # "CE + per-image Dice" row of E9.
-                variant = "registered"
+            experiment, variant, model, train, seed = run_key(m)
             env = run / "environment.json"
-            if experiment == "E2" and seed == 0 and variant == "bstd" and env.exists():
+            if experiment in ("E2", "E5") and seed == 0 and variant != "registered" and env.exists():
                 rows += rows_from_environment(json.loads(env.read_text()), model, train)
                 if train == "DDR" and model in ("HRNet-W48", "M2MRF"):
                     v = best_val_maupr(run)
@@ -329,8 +347,7 @@ def collect_e3a(runs_dir):
         nn = NN.match(src.name)
         au = E1_AUTHOR.match(src.name)
         if m and m["slug"] in SLUG and not m["registered"]:
-            experiment, variant = EXPERIMENT[m.group(1)]
-            model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
+            experiment, variant, model, train, seed = run_key(m)
         elif nn:
             experiment, variant, model, train, seed = nn_key(nn)
         elif au and au["slug"] in SLUG:
