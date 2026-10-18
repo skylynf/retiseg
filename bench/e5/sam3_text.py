@@ -78,20 +78,35 @@ def selected_source():
     return out.source_name(TIER, MODEL, SELECTED)
 
 
-class Sam3Scorer:
-    """Sam3Processor behind a two-call interface: set_image(PIL) once per window, score(phrase) per class."""
+def official_precision(device_type):
+    """The numeric context the official image examples run the whole model in: bfloat16 autocast on CUDA
+    (examples/sam3_image_batched_inference.ipynb enters torch.autocast("cuda", dtype=torch.bfloat16) for the
+    notebook; the processor's own methods only add inference_mode). sam3.perflib.fused.addmm_act emits bfloat16
+    whatever the context, so without autocast the next float32 linear (vitdet.Mlp fc2) refuses its input
+    (2026-10-18, docs/ops/21 item 61). On the CPU autocast stays off, as in the official code."""
+    import torch
 
-    def __init__(self, processor):
+    return torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=(str(device_type) == "cuda"))
+
+
+class Sam3Scorer:
+    """Sam3Processor behind a two-call interface: set_image(PIL) once per window, score(phrase) per class.
+    Both calls run under official_precision (bfloat16 autocast on CUDA)."""
+
+    def __init__(self, processor, device_type="cuda"):
         self.processor = processor
+        self.device_type = str(device_type)
         self.state = None
 
     def set_image(self, image):
         if not isinstance(image, Image.Image):
             raise TypeError("SAM 3 takes a PIL image (set_image misreads the size of a numpy array, design/15 section 5.4)")
-        self.state = self.processor.set_image(image)
+        with official_precision(self.device_type):
+            self.state = self.processor.set_image(image)
 
     def score(self, phrase):
-        state = self.processor.set_text_prompt(prompt=phrase, state=self.state)
+        with official_precision(self.device_type):
+            state = self.processor.set_text_prompt(prompt=phrase, state=self.state)
         masks, scores = state["masks_logits"], state["scores"]  # (N, 1, H, W) probabilities, (N,)
         if scores.numel() == 0:
             return np.zeros((state["original_height"], state["original_width"]), dtype=np.float32)
@@ -127,11 +142,15 @@ def check_placed(model, device_type):
 def _keep_linear_dtype():
     """sam3.perflib.fused.addmm_act returns bfloat16 into a float32 fc2 (vitdet.Mlp).
 
-    The fused kernel stays bfloat16. The result is cast back to that linear's
+    Under official_precision (bfloat16 autocast, the official path) fc2 takes the
+    bfloat16 input itself and this does nothing. Outside autocast (the CPU, or a
+    caller that bypasses Sam3Scorer) the result is cast back to that linear's
     weight dtype, which is what the next float32 layer (vitdet.py fc2) expects.
     vitdet binds the function at import, so both names are replaced. official_code
-    is not edited.
+    is not edited. (Server, 2026-10-18; narrowed to the non-autocast case 2026-10-18.)
     """
+    import torch
+
     import sam3.model.vitdet as vitdet
     import sam3.perflib.fused as fused
 
@@ -139,6 +158,8 @@ def _keep_linear_dtype():
 
     def addmm_act(activation, linear, mat1):
         y = raw(activation, linear, mat1)
+        if torch.is_autocast_enabled():
+            return y
         dtype = linear.weight.dtype
         return y if y.dtype == dtype else y.to(dtype)
 
@@ -167,9 +188,10 @@ def build_scorer(frozen, device=None, window=None):
         "resolution": resolution,
         "confidence_threshold": float(sam3["confidence_threshold"]),
         "pixel_score": sam3["pixel_score"],
+        "precision": "bfloat16 autocast on cuda (official examples); float32 on cpu" if builder_device == "cuda" else "float32",
         "license": "SAM License (official_code/sam3/README.md)",
     }
-    return Sam3Scorer(processor), record
+    return Sam3Scorer(processor, builder_device), record
 
 
 def window_scores(scorer, cv, window, boxes, phrases):

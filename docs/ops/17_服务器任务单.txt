@@ -36,7 +36,10 @@
   写作节奏（本机）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3、表 6/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒。
 
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
-  进度（本机 10-16/17，10-17 包已 collect）：第 1–3、5、6、11、12 条已完成（M2MRF 的 .pth 已在服务器，e3a 已跑完它的独立测试；13 个格子已打分）。新加第 13–15 条，第 13 条先做。
+  进度（本机 10-18，pull 到 39b6a3d）：第 13–15 条已做完（SAM2-UNet 修订后 IDRiD 0.664、DDR 0.360，两库独立测试也齐；一条队列 pid 465242；池在 GPU 7 跑 SAM 2 密度 64）。服务器 10-18 的四处修复本机核过：factor.py 与 fresh_signature 的 margin 对（CLC-Net 门修好）、E3b 两个 SAM2-UNet cell 批 4 对、MedSAM 无权重时跳过对；SAM 3 的 bfloat16 转换改成官方的 autocast（第 16 条）。新加第 16–18 条。
+  16. SAM 3（pull 到含本条的提交后再让它的项跑）：官方示例把整个推理放在 torch.autocast("cuda", bfloat16) 里，fused fc1 的 bfloat16 输出因此不会撞上 float32 的 fc2；bench/e5/sam3_text.py 的 Sam3Scorer 现在在 CUDA 上进同样的 autocast，服务器 10-18 的转回 float32 只在 autocast 关着时生效（21 第 61 条）。若池里已有 a_sam3_ph* 目录是在 pull 之前写出的（run 记录里没有 precision 字段），移到 runs/archive/ 让队列重跑。
+  17. HRDecoder 种子 0 的核对（21 第 62 条，CPU，几分钟）：IDRiD 0.648 / DDR 0.296 低得反常。把 runs/BS_hrdecoder_{idrid,ddr}_seed0/ 的 history.jsonl 里逐类验证 AUPR 的首末两行、recipe.json 的 deviations 整段、metrics_test.json 的 per_class 四个 aupr 贴进 00；不要重跑、不要改包装器，本机判断。
+  18. 打包：CLC-Net 两库打分写出、池的第一个 a 档项（SAM 2 密度 64 DDR）和第一个 b 档项写出 predicted.json 之后，python bench/scripts/pack_handoff.py --since runs/handoff_manifest_20261017.tsv；--estimate 的输出和每窗 / 每提示耗时、显存一起记 00。之后每天一包。
   13. SAM2-UNet 配方修订（登记规则的执行，docs/paper/14 备注 44；bs_frozen.yaml 已追加 recipe_revisions.SAM2-UNet: loss_params {batch_iou: true}）：DDR 种子 0 的 MA、SE 验证 AUPR 整个训练都停在 0.02–0.04、0.05–0.10（history.jsonl），与 U-Net 同一机制。做法：pull 到含本条的提交后，
        mv runs/BS_sam2_unet_ddr_seed0 runs/BS_sam2_unet_ddr_seed0_registered ；mv runs/BS_sam2_unet_idrid_seed0 runs/BS_sam2_unet_idrid_seed0_registered
        mv runs/E3a/BS_sam2_unet_ddr_seed0 runs/E3a/BS_sam2_unet_ddr_seed0_registered ；mv runs/E3a/BS_sam2_unet_idrid_seed0 runs/E3a/BS_sam2_unet_idrid_seed0_registered
@@ -79,6 +82,7 @@
   4. 选择并写回 e5_frozen.yaml：a 档 python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限；记录写 runs/E5/selection_grid.json）；SAM 3 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select（selection_sam3.json）。把打印的 yaml 粘进 zero_shot.grid.selected / zero_shot.sam3.selected，提交，00 记一笔。某模型 128 当选时预算规则让它的 TJDR_uwf 主变体不跑（本机 collect 以 fov 变体顶替并记 canvas_long_side；用户可否决）。
   5. 测试集：e5_infer_test 改 enabled: true 并提交（手动等价 server_run.sh e5-infer --test-only --drop-maps FGADR,Retinal-Lesions）。每个测试项以本来源的池目录为闸门；SAM 3 的 a_sam3_selected 由闸门项自动拼装；同信息对照在 runs/BS_m2mrf_<库>_seed0/prob_test 和 runs/NN_default_<库>_fold0/prob_test 存在时自动加入；MAPLES-DR 在 dataset/prepared/MAPLES-DR 出现后自动进计划。测试目录记所选面积上限 / 措辞（run_params.json），选择重做后旧目录报错，手动移走并在 00 记原因。
   6. 回传 runs/E5/ 的 json 与 selection_*.json；runs/E5_prompts/ 不回传。
+  精度：SAM 3 在 CUDA 上整段 bfloat16 autocast（官方示例的用法，21 第 61 条）；SAM、SAM 2 按各自官方默认。
   算力粗估：a 档 64 点/边约 45 GPU 时/模型、128 约 150，b 档约 12，SAM 3 三个序号约 3 × 单模型；冒烟后按 --estimate 重估。
 
 八、专用模型扩充（docs/paper/18；HRDecoder、PMCNet、WSRFNet 轨 B，CLC-Net、TC-Net 轨 C）

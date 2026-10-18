@@ -1233,6 +1233,48 @@ def test_sam3_device_is_passed_as_the_string_the_official_builder_compares_with(
         sam3_text.check_placed(model, "cuda")
 
 
+def test_sam3_scorer_runs_under_the_official_bfloat16_autocast_on_cuda_only(monkeypatch):
+    """2026-10-18 (docs/ops/21 item 61): the official image examples run SAM 3 under bfloat16 autocast; the
+    fused fc1 kernel emits bfloat16 regardless, so set_image and score must enter that context on CUDA and
+    leave it off on the CPU."""
+    import torch
+    from PIL import Image
+
+    from bench.e5 import sam3_text
+
+    entered = []
+
+    class _Ctx:
+        def __init__(self, **kw):
+            self.kw = kw
+
+        def __enter__(self):
+            entered.append(self.kw)
+
+        def __exit__(self, *exc):
+            return False
+
+    monkeypatch.setattr(torch, "autocast", lambda **kw: _Ctx(**kw))
+
+    class _Processor:
+        def set_image(self, image):
+            return {"image": image}
+
+        def set_text_prompt(self, prompt, state):
+            class _S:
+                numel = lambda self: 0
+
+            return {"masks_logits": None, "scores": _S(), "original_height": 4, "original_width": 5}
+
+    for device_type, enabled in (("cuda", True), ("cpu", False)):
+        entered.clear()
+        scorer = sam3_text.Sam3Scorer(_Processor(), device_type)
+        scorer.set_image(Image.new("RGB", (5, 4)))
+        prob = scorer.score("red dot")
+        assert prob.shape == (4, 5) and not prob.any()
+        assert len(entered) == 2 and all(kw["device_type"] == "cuda" and kw["dtype"] == torch.bfloat16 and kw["enabled"] is enabled for kw in entered)
+
+
 # ---- review fix 6 (B5): the decoders receive inclusive pixel indices ---------------------------------
 
 

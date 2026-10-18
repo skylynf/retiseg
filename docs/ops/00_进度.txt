@@ -1,11 +1,11 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-10-17，本机；仓库 origin/main 183a8b5 = 服务器到 10-17 11:30 的记录，加本次提交）
+一、当前状态（2026-10-18，本机；仓库 origin/main 39b6a3d = 用户的合并 eb2691e + 服务器 10-18 的修复，加本次提交）
 仓库：服务器 10-15–10-17 的四个提交（HRDecoder 打分的 torch 1.10 修复、记录）已 pull；本次：bs_frozen.yaml 追加 SAM2-UNet 配方修订（备注 44）、launch_queue 失败暂停、collect_runs 的 E5 训练档键（备注 45）、queue.yaml 开推理池、17 第四节第 13–15 条。
 数据：八个测试集齐；MAPLES-DR 在表。
 论文：10-17 包（526 行指标，全部对齐）整表重生成后 collect：470 份报告、23,850 行实测。主表 19 行里 16 行有种子 0：SAMed 0.717 / 0.469、RETFound+UPerNet 0.708 / 0.466 在两库都高于 HRNet（0.700 / 0.447）；SAM2-UNet DDR 塌缩（MA 0.023、SE 0.022）；TC-Net、PMCNet、WSRFNet 在通用网络之下。R4 内部段与独立段、方法的塌缩段、讨论 Q2 已按实数改；13 个因素格子、M2MRF 作者权重的独立测试进表（14 M9b、M5）。
-服务器（10-17 11:30）：一条队列 pid 938078；六张卡：CLC-Net DDR、M2MRF E7 原分辨率、nnU-Net TJDR_std 在训，HRDecoder 两库打分（修复后）；retiseg-sam3 已装好；推理池本次改开（前几项即冒烟）。待服务器：SAM2-UNet 两库改名重跑（17 第四节第 13 条）、重启启动器（第 15 条）。
+服务器（10-18 11:55）：一条队列 pid 465242（卡 2–7）；RETFound 四个重格子在训，CLC-Net DDR 在打分，推理池在 GPU 7 跑 SAM 2 密度 64；SAM2-UNet 修订后两库种子 0 与独立测试已出（0.664 / 0.360）；HRDecoder 种子 0 0.648 / 0.296 待核（21 第 62 条）；nnU-Net E3b 两格、M2MRF 原分辨率已出。这些数等下一包进表。待服务器：pull 后 SAM 3 项才可跑（autocast，17 第四节第 16 条）、HRDecoder 核对材料（第 17 条）、打包（第 18 条）。
 队列（queue.yaml 第三版 + 10-17）：e3a 种子 0（≤2 卡）→ factor_score 12 → e5_infer_pool 15（开，1 卡）→ e5_seed0（SAM2-UNet 两库重排）→ fundus_seed0 → e5_infer_test（关，等选择）→ factor_cheap → nnunet_e3b → 重格子 → e3a_rest → 种子 1、2（关）→ e1r（关）。
 权重：公开的 SAM、SAM 2、MAE 和三份 gated 在 pretrained/；M2MRF 作者检查点已在服务器 runs/E1_m2mrf；MedSAM、公开 DINOv2 没有。
 文献：L1 完成（30 篇、3403 个数字）；作者回信截止 10-31；HRDecoder 的 L1 抽取待做（PDF 已在 literature/papers/）。
@@ -19,6 +19,7 @@
 2026-10-11  B-std 种子 0 全部出数（HRNet 两库第一）；HACDR 打分修复（torch 1.10 的 weights_only）。用户决定：种子 1、2 暂缓。启动 E1r bs4（A100）、U-Net 整批 Dice 诊断、nnU-Net 两种配置、B1 补位。泄漏审计 IDRiD/DDR：无近重复。E5 设计写成 15。范围精简写成 16（剩余约 5500 A100 时压到约 810）；L1 原文数字抽取完成。
 2026-10-12  nnU-Net 默认 0.671 / 0.432，ResEnc-M 0.631 / 0.428。U-Net 整批 Dice 诊断验证 0.569 / 0.544；用户决定主表 U-Net 采用整批 Dice（bs_frozen.yaml recipe_revisions，原运行改名 *_registered）；E5 五项待定按建议（TF32、natureCFP、按代码、塌缩同 U-Net 规则、编码器对照后按 16 缩减）；以 FGADR 等训练时评测去重（leak_exclusions.json）。独立测试接线（e3a_frozen.yaml、bench/e3a.py）；全库泄漏审计（FGADR _3 批来自 EyePACS，与 Retinal-Lesions 90 张同图；FGADR 内部同眼重复；TJDR_uwf 跨划分重复 2 对）；E2c 接线；E5 训练档五个包装器接线。服务器 09:08：停 B1；E1r bs4 打分 61.19 / 0.549；U-Net 两库种子 0 重跑；E2c 只排 DDR。本机：快照接入论文、R3/R4 改写、17 任务单。
 2026-10-14  Luming 确认 E5 推理档的全部登记（D1–D9、评审修复 6/7/16、预算规则 a）、表 6/图 5 的呈现方式、加 CI、协议锁文件（E5 首个测试指标后）、MAPLES-DR 官方测试 60 张；细节在第三节前的待办清单下。
+2026-10-18  本机：SAM 3 推理按官方示例在 CUDA 上整段 bfloat16 autocast（服务器的 float32 转换只留给非 autocast 路径，21 第 61 条）；服务器 10-18 的其余三处修复（margin、E3b cell 批 4、MedSAM 跳过）核过采用。
 2026-10-17  本机：SAM2-UNet 的 DDR 种子 0 稀有类塌缩，按 10-12 与 U-Net 绑定的登记规则改整批 IoU、两库重跑（14 备注 44，bs_frozen.yaml 只增）；推理池直接开（池的前几项即冒烟）；启动器加失败暂停。E5 训练档在 results.csv 里的键改为 E5 / peft、encoder_decoder（备注 45）。
 2026-10-15  本机（服务器记录之后）：队列第三版（种子 0 的 E3a 在前、推理池提前到训练之前、种子 1/2 的 E3a 挪到训练之后）；SAM2-UNet 的 loader 批按"能放下的最大值"在种子 0 开跑前冒烟定下（服务器先改的批 1 不采用）；launch_queue 加目录认领。两条新决定写在 17 第十四节，Luming 不同意时改 17。
 2026-10-14  albert 分支并入 main（Liuyc05）：E5 推理档用 albert 按 16 写的实现，main 10-13 的实现与 runs/E5/prompts/、area_cap 244004 弃用（未解码、未读测试指标）；队列里推理档改为 e5_infer_pool / e5_infer_test，关着等 Luming 确认 D1–D9；评审修复 16（框装进窗口、选择一致性）。记录 docs/ops/25。
@@ -278,3 +279,10 @@ DDR 训练的外部测试都是退出码 0：IDRiD 0.557，TJDR 标准 0.507，M
 CLC-Net 的打分门关着，不是 SAM2 的配方修订改了它。fresh_signature 没有把 output_margin 传进预算，边距 128 的 256 中心被算成整块 512，步数大约变成四分之一（IDRiD 已训完 73000，门里看成 19000；DDR 293600 看成 73600）。训练没有重跑。门已按 run_bstd 的 margin 对齐，两份 recipe 现在对得上。11:55 GPU 4 开始 DDR 的 --score-only，控制台已在写图像编号。IDRiD 排在这一项后面。
 SAM2-UNet 的两个 E3b cell 没有 batch_size，07:54 按配方的 12 分配到 37.90 GiB，还差 324 MiB，history 是空的。两个 cell 写成 batch_size 4，有效批仍是 12。空目录留着，队列用 --resume 重开。factor.py 的预算同样补上 margin；正在跑的 RETFound 与 SAM2 的 margin 是 0，步数不变。
 启动器只停了 pid 214766。四份 RETFound 都还在。新的一条队列是 pid 465242（conda 464953），日志 runs/logs/20261018_114731_queue.log，卡仍是 2 到 7。GPU 7 上 SAM 2 密度 64 的 DDR 验证池已写出第 1/149 张（20 个掩膜）。密度 128 在装 iopath 之前失败一次，暂停 10 分钟后再试。推理池的 --estimate 等这份 predicted.json。没有提交，没有再打包。
+
+服务器 10-18 修复的核对与 SAM 3 精度（2026-10-18，本机；pull 到 39b6a3d）
+1. 核对服务器 39b6a3d：launch_b1.fresh_signature 与 factor.py 补 margin——与 run_bstd 的调用一致，CLC-Net 的门因此对上（21 第 63 条）；E3b 两个 SAM2-UNet cell 批 4——与 B-std cell 相同（14 备注 42）；launch_e5_infer 在 MedSAM 权重不在时跳过它的项——对；predict.py 的 load_trusted 已在上一轮。SAM 3 的 _keep_linear_dtype 能跑但不是官方数值路径：官方示例整段 bfloat16 autocast，改为 Sam3Scorer 在 CUDA 上进 autocast，转换只在 autocast 关着时生效（21 第 61 条，14 M9 推理档数值路径，test_e5_infer 加用例）。
+2. 结果（服务器记录，下一包进表）：SAM2-UNet 修订后 IDRiD 0.664、DDR 0.360（MA 0.153、SE 0.278，验证 MA / SE 离开先验水平），独立测试七集合齐；HRDecoder 种子 0 IDRiD 0.648、DDR 0.296，反常，21 第 62 条待核；nnU-Net E3b TJDR_std 0.636、FGADR 0.449；M2MRF E7 原分辨率 0.312。记 14 备注 44、M7、M9b。
+3. 推理池 10-18 开跑（GPU 7，SAM 2 密度 64 DDR 验证池）；密度 128 因缺 iopath 失败一次后按失败暂停 10 分钟重试（暂停生效）。
+4. 17 第四节加第 16–18 条（SAM 3 项等含 autocast 的提交；HRDecoder 核对材料；打包时点）。13 总览与状态改到 10-18。没有新包，results.csv 与论文正文未动。
+写回：bench/e5/sam3_text.py、bench/tests/test_e5_infer.py、docs/ops/{00,17,21}、docs/paper/{13,14}、docs/CHECKPOINT.md。

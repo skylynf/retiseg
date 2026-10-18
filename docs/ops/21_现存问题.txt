@@ -341,7 +341,7 @@
    状态与决定：四处测试都改为临时根（launch._ROOT、nnunet_bridge.RAW、out.OUT_ROOT 都 monkeypatch 到 tmp_path；test_launch_e5_infer 用 autouse fixture），另加 test_same_information_references_appear_with_their_maps 在临时根下正面验证同信息对照项的出现条件。服务器按 17 第四节第 6 条重跑三份。
    来源：00 的 2026-10-14 13:25 记录。
 
-53  2026-10-15  5 级 → 待服务器执行（17 第四节第 3 条）
+53  2026-10-15  5 级 → 已处理（服务器 10-15 定批 4；10-18 两个 E3b cell 同样写成批 4）
    问题：SAM2-UNet 的 B-std 在 40GB 上 loader 批 12 差 324 MiB；服务器改为 batch_size: 1 累积 12。B-std 的规则是能放下的最大 loader 批（HRNet 2×6，M2MRF 2×2，14 备注 18），批 1 让 BatchNorm 一次只看一张图，是没有必要的偏差，而且六个 cell 的值在种子 0 开跑后不能再改。
    影响：SAM2-UNet 两库三种子（表 3、主表 PEFT 行、E3b/E7 的重格子）的配方偏差大于必要。
    状态与决定：在 SAM2-UNet 种子 0 开跑前（队列里排在 SAM-Adapter DDR、RETFound DDR 之后）以 6、4、2 依次冒烟定值并提交六个 cell；已开跑则杀掉重来（损失一个刚开始的运行）。记 14 备注 42。
@@ -397,3 +397,21 @@
    影响：若不发现，表 3、表 5、Friedman 的数都错。
    状态与决定：collect_runs 加 E5_TRAINED 映射与 "retfound" slug；按 README 的整表重生成（build_placeholder --force → collect_literature → collect_runs），实测 23,850 行。14 备注 45。
    来源：10-17 包第一次 collect 的核对。
+
+61  2026-10-18  5 级 → 已处理（2026-10-18，本机，bench/e5/sam3_text.py 的 official_precision）
+   问题：SAM 3 的 fused fc1（sam3.perflib.fused.addmm_act）无论上下文都输出 bfloat16，官方示例（examples/sam3_image_batched_inference.ipynb 等）把整个推理放在 torch.autocast("cuda", bfloat16) 里，所以下一层 float32 的 fc2 不会报错；albert 的 Sam3Scorer 没有进 autocast，服务器 10-18 的办法是把 fc1 的输出转回 float32（_keep_linear_dtype）——能跑，但数值路径与官方不同（除 fc1 外全程 float32），也更慢更占显存。
+   影响：SAM 3 零样本的数字与官方用法不完全同一数值路径；GPU 项还没排到，没有产生结果。
+   状态与决定：Sam3Scorer 的 set_image / score 在 CUDA 上进 torch.autocast(bfloat16)（official_precision），CPU 上不开；服务器的转换保留但只在 autocast 关着时生效（CPU、绕过 Scorer 的调用）。run 记录加 precision 字段。测试 test_sam3_scorer_runs_under_the_official_bfloat16_autocast_on_cuda_only。服务器 pull 到含本条的提交后 SAM 3 的项才可以跑（17 第四节第 16 条）；若已有 SAM 3 项在 float32 路径下写出了目录，移到 runs/archive/ 重跑。
+   来源：00 的 2026-10-18 11:55 记录；官方仓库 examples/ 与 sam3/model/sam3_image_processor.py（只有 inference_mode，没有 autocast）。
+
+62  2026-10-18  5 级 → 待核（下一包）
+   问题：HRDecoder 的 B-std 种子 0 测试 mAUPR IDRiD 0.6475、DDR 0.2960，低于同骨干的 HRNet-W48（0.700 / 0.447）和 M2MRF（0.657 / 0.369），也远低于它自己的发布检查点在本项目协议下的 0.707 / 0.461。DDR 上的 0.296 太低，先不解释。
+   影响：18 的"同骨干三行"对比与主表 HRDecoder 行。
+   状态与决定：下一包到了看 history.jsonl 的逐类验证曲线、metrics_test.json 的逐类数和 recipe.json 的偏差；对照 bench/models/hrdecoder.py 的 hr_scale / 裁块 / 损失权重与作者配置。在查清前主表的 HRDecoder 行照实测写，正文不下结论；若是包装器的错，按 18 的披露规则记录并重跑。
+   来源：00 的 2026-10-17 12:20 记录。
+
+63  2026-10-18  4 级 → 已处理（服务器 10-18，launch_b1.fresh_signature 与 factor.py 的 margin）
+   问题：launch_b1.fresh_signature 没有把 card.output_margin 传进 bstd.budget，CLC-Net（边距 128）的门把 256 中心当成整块 512，步数算成四分之一（IDRiD 73000 看成 19000），训完的种子 0 被拒绝打分；factor.py 的预算同样漏了 margin（正在跑的 RETFound、SAM2-UNet 边距 0，不受影响）。
+   影响：CLC-Net 两库的打分晚了一天；没有运行的步数错（run_bstd 本来就带 margin）。
+   状态与决定：服务器两处都加了 margin，门与 recipe 对上，CLC-Net DDR 10-18 11:55 开始打分。本机核对：改法与 run_bstd 的调用一致。
+   来源：00 的 2026-10-18 11:55 记录。
