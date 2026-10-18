@@ -262,3 +262,19 @@ M2MRF 作者权重独立测试（10-15 16:49 前，各七个外部集，退出�
 5. 论文：R4 内部段加基础模型与专用模型一段（HRNet 的"最高"限定为按发布初始化训练的网络），独立段加一段；方法的稀有类塌缩段改写为两次修订与登记规则；讨论 Q2 一句。表 3 / 表 5 自动带上新行（实测行不标色）。
 6. 文档：14 M7、M9、M9b、M5、M10、备注 44、45；13 总览与状态表；17 第三、四、六、七节；21 第 59、60 条；CHECKPOINT。
 写回：bench/configs/{bs_frozen,queue}.yaml、bench/scripts/launch_queue.py、bench/tests/{test_bstd,test_launch_queue}.py、docs/paper/retiseg_paper/paper/{scripts/collect_runs.py, data/results.csv, generated/numbers.tex, tables/generated/*, figures/out/*, sections/{results,methods,discussion}.tex, main.pdf}、docs/ops/{00,17,21}、docs/paper/{13,14}、docs/CHECKPOINT.md。
+
+2026-10-17 12:20 +0800，pull 到 eb2691e，按第四节第 13–15 条做完。
+13. 四个目录已改名：runs/BS_sam2_unet_{idrid,ddr}_seed0 与 runs/E3a/BS_sam2_unet_{idrid,ddr}_seed0 都加上 _registered。没有 SAM2-UNet 的 BF_ 目录在跑，没有删训练。runs/E5 不存在，不用归档。
+14. e5_infer_pool 在拉下来的 queue.yaml 里已是 enabled: true。池还没开跑，因为六张项目卡都有进程。
+15. 只停了启动器 pid 938078（conda 包装 938065 随之退出）。正在跑的六项都还在：GPU 2 RETFound 的 E3b TJDR 标准（刚载入权重）、GPU 3 nnU-Net FGADR、GPU 4 HRDecoder IDRiD 的独立测试 TJDR 超广角、GPU 5 同一来源的 DDR、GPU 6 M2MRF 原分辨率、GPU 7 CLC-Net DDR。新的一条队列是 pid 214766，日志 runs/logs/20261017_122044_queue.log，RETISEG_GPUS="2 3 4 5 6 7"。空卡后先接独立测试和因素补评，再接推理池（一张卡），然后才重排 SAM2-UNet 两个库的种子 0。
+HRDecoder 种子 0 测试 mAUPR 已写出：IDRiD 0.6475（n=27，排除 0，11:34），DDR 0.2960（n=225，排除 0，11:45）。SAM2-UNet 新 run 的第一次验证还没到，MA/SE 曲线以后再记。推理池的 --estimate 等第一项 predicted.json。
+
+2026-10-18 11:55 +0800，提交 eb2691e。只追加本段。四份 RETFound 训练没有停。
+SAM2-UNet 修订后的种子 0（第四节第 13 条）。测试 mAUPR：IDRiD 0.6644（n=27，排除 0；MA 0.439，HE 0.670，EX 0.871，SE 0.678），登记旧 run 0.6363。DDR 0.3604（n=225，排除 0；MA 0.153，HE 0.493，EX 0.518，SE 0.278），登记旧 run 0.2095。验证（不是测试）：IDRiD 第 50 epoch mAUPR 0.542、MA 0.501、SE 0.465，第 1000 epoch 0.585、MA 0.514、SE 0.387。DDR 第 20 epoch 0.540、MA 0.281、SE 0.581，第 400 epoch 0.465、MA 0.312、SE 0.200。DDR 上的 MA/SE 离开了登记 run 的 0.02–0.10。
+DDR 训练的外部测试都是退出码 0：IDRiD 0.557，TJDR 标准 0.507，MAPLES-DR 0.398，DiaRetDB1 0.267，FGADR 0.247（n=553，excluded_ids 为空），Retinal-Lesions 0.231，TJDR 超广角 0.204（fov 变体 0.228）。IDRiD 训练的外部：TJDR 标准 0.530，MAPLES-DR 0.366，DDR 0.329，FGADR 0.253，TJDR 超广角 0.231（fov 0.249），DiaRetDB1 0.220，Retinal-Lesions 0.186。
+10-17 包之后另有的测试 mAUPR：M2MRF 原分辨率 E7（BF_e7_m2mrf_ddr_native_seed0）0.3117（n=225，排除 0）。nnU-Net TJDR 标准 0.6363（n=55，排除 0），FGADR 0.4494（n=447，排除 106）。HRDecoder 两个库在上一段。
+四份 RETFound 仍在训练。下面是验证 mAUPR，不是测试：TJDR 标准 epoch 80、51120/255600、0.564；FGADR epoch 120、76680/255600、0.446；E7 边长 512 epoch 120、76680/255600、0.571；E7 原分辨率 epoch 60、38340/255600、0.543。
+三处故障。推理池：official_code/sam2 与 segment-anything 是空目录，已按 gitlink 检出（2b90b9f、dca509f），不进提交。SAM 2 构建还缺 iopath，已装进 retiseg（0.1.10），没有改 torch。MedSAM 的 pth 仍不在，计划里跳过，不再每六小时占一张卡。SAM 3 的 fused.addmm_act 把激活留在 bfloat16，下一层 fc2 的权重是 float；在 bench/e5/sam3_text.py 里把结果转回该线性层的权重类型，没有改 official_code。CPU 上的 Mlp 前向已返回 float32。SAM 3 的 GPU 项还没排到。
+CLC-Net 的打分门关着，不是 SAM2 的配方修订改了它。fresh_signature 没有把 output_margin 传进预算，边距 128 的 256 中心被算成整块 512，步数大约变成四分之一（IDRiD 已训完 73000，门里看成 19000；DDR 293600 看成 73600）。训练没有重跑。门已按 run_bstd 的 margin 对齐，两份 recipe 现在对得上。11:55 GPU 4 开始 DDR 的 --score-only，控制台已在写图像编号。IDRiD 排在这一项后面。
+SAM2-UNet 的两个 E3b cell 没有 batch_size，07:54 按配方的 12 分配到 37.90 GiB，还差 324 MiB，history 是空的。两个 cell 写成 batch_size 4，有效批仍是 12。空目录留着，队列用 --resume 重开。factor.py 的预算同样补上 margin；正在跑的 RETFound 与 SAM2 的 margin 是 0，步数不变。
+启动器只停了 pid 214766。四份 RETFound 都还在。新的一条队列是 pid 465242（conda 464953），日志 runs/logs/20261018_114731_queue.log，卡仍是 2 到 7。GPU 7 上 SAM 2 密度 64 的 DDR 验证池已写出第 1/149 张（20 个掩膜）。密度 128 在装 iopath 之前失败一次，暂停 10 分钟后再试。推理池的 --estimate 等这份 predicted.json。没有提交，没有再打包。

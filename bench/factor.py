@@ -157,7 +157,10 @@ def run_cell(config_path, config, model, declared, run_dir, predict_fn, diagnost
     source = build_sources(config, mean, std)
     val_split = PreparedSource(_abs(config["dataset"]), config["split_val"], diameter, mean, std)
     pixels = reference_pixels(ref, frozen)
-    resolved, deviations, per_epoch, samples, eval_every = bstd.budget(declared, ref, frozen, pixels, patch, 1, model_name=card.name)
+    margin = int(getattr(card, "output_margin", 0) or 0)
+    resolved, deviations, per_epoch, samples, eval_every = bstd.budget(
+        declared, ref, frozen, pixels, patch, 1, model_name=card.name, margin=margin
+    )
     deviations = [
         f"BF {config['factor']}: trained on {source.describe()}; budget is the {ref} B-std amount "
         f"({frozen['equivalent_epochs'][ref]} equivalent epochs of {pixels} canvas pixels at diameter {frozen['fov_diameter']}); "

@@ -124,6 +124,28 @@ def check_placed(model, device_type):
         raise RuntimeError(f"SAM 3 was built on {placed}, not on {device_type}; the official builder moves the model only for device == 'cuda'")
 
 
+def _keep_linear_dtype():
+    """sam3.perflib.fused.addmm_act returns bfloat16 into a float32 fc2 (vitdet.Mlp).
+
+    The fused kernel stays bfloat16. The result is cast back to that linear's
+    weight dtype, which is what the next float32 layer (vitdet.py fc2) expects.
+    vitdet binds the function at import, so both names are replaced. official_code
+    is not edited.
+    """
+    import sam3.model.vitdet as vitdet
+    import sam3.perflib.fused as fused
+
+    raw = fused.addmm_act
+
+    def addmm_act(activation, linear, mat1):
+        y = raw(activation, linear, mat1)
+        dtype = linear.weight.dtype
+        return y if y.dtype == dtype else y.to(dtype)
+
+    fused.addmm_act = addmm_act
+    vitdet.addmm_act = addmm_act
+
+
 def build_scorer(frozen, device=None, window=None):
     """The official model and processor at the registered confidence threshold; returns (scorer, record)."""
     device, builder_device = sam3_device(device)
@@ -134,6 +156,7 @@ def build_scorer(frozen, device=None, window=None):
         from sam3.model.sam3_image_processor import Sam3Processor
         from sam3.model_builder import build_sam3_image_model
 
+        _keep_linear_dtype()
         model = build_sam3_image_model(checkpoint_path=str(checkpoint), load_from_HF=False, device=builder_device)
         check_placed(model, builder_device)
         processor = Sam3Processor(model, resolution=resolution, device=builder_device, confidence_threshold=float(sam3["confidence_threshold"]))

@@ -11,6 +11,10 @@ train:
 budget_reference: DDR
 seed: 0
 num_workers: 4
+
+# Loader batch 12 does not fit a 40GB A100 (the B-std smoke, and this cell on 2026-10-18:
+# 37.90 GiB allocated, 324 MiB short, history empty). Batch 4 fits. Effective batch stays 12.
+batch_size: 4
 paper:
   experiment: E3b
   variant: bstd

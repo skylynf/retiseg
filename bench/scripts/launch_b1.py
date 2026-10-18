@@ -871,8 +871,12 @@ def fresh_signature(job, config):
         dataset_dir = _ROOT / config["dataset"]
         ids = load_split(dataset_dir, config["split_train"])
         pixels = bstd.canvas_pixels(dataset_dir, ids, int(config["fov_diameter"]))
+        # Same supervised-pixel margin as bench.bstd.run_bstd. Omitting it makes a
+        # centre-supervised card (CLC-Net, output_margin 128) look like a different
+        # budget: the gate then refuses a finished seed 0 (2026-10-18, 73000 vs 19000).
+        margin = int(getattr(card, "output_margin", 0) or 0)
         resolved, _deviations, _per_epoch, n_train, _eval_every = bstd.budget(
-            declared, job["dataset"], frozen, pixels, patch, model_name=job["model"]
+            declared, job["dataset"], frozen, pixels, patch, model_name=job["model"], margin=margin
         )
     else:
         resolved, _deviations, _per_epoch = resolve_recipe(declared, config, n_train)

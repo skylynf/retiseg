@@ -325,6 +325,26 @@ def gate_for(item, producers=None, limit=None):
     return gate
 
 
+def _weight_ready(item):
+    """MedSAM joins the queue only once pretrained/medsam_vit_b.pth is on this machine.
+
+    A missing file used to fail the item, and the launcher then retried it every
+    six hours on a project card. The message is printed once per plan() call.
+    """
+    if "--model" not in item.argv:
+        return True
+    model = item.argv[item.argv.index("--model") + 1]
+    if model != "MedSAM":
+        return True
+    path = _ROOT / "pretrained" / "medsam_vit_b.pth"
+    if path.is_file():
+        return True
+    if not getattr(_weight_ready, "announced", False):
+        print(f"skip MedSAM: {path.name} is not on this machine; those items join once the file is there", flush=True)
+        _weight_ready.announced = True
+    return False
+
+
 def plan(frozen, only=(), pool_only=False, test_only=False, limit=None):
     """The items to run, in queue order, with done and running ones left out.
 
@@ -334,6 +354,7 @@ def plan(frozen, only=(), pool_only=False, test_only=False, limit=None):
     pool runs -> selections -> --test-only, and the test assembly needs its thresholds.
     """
     chosen = []
+    _weight_ready.announced = False
     for item in discover(frozen):
         source = item.label.split(":", 1)[0]
         if only and source not in only:
@@ -342,6 +363,8 @@ def plan(frozen, only=(), pool_only=False, test_only=False, limit=None):
             continue
         if item.done(limit):
             print(f"skip {item.label}: done", flush=True)
+            continue
+        if not _weight_ready(item):
             continue
         running = item.running()
         if running is not None:
