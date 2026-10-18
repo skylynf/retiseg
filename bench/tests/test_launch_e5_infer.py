@@ -237,6 +237,20 @@ def test_test_only_keeps_the_pool_assembly_and_gates_close_when_nothing_will_pro
     assert launch.gate_for(box, producers)() == "open"
 
 
+def test_plan_leaves_medsam_out_until_its_weight_file_exists(tmp_path, monkeypatch):
+    """A missing medsam_vit_b.pth must not enter the queue (it used to fail and hold a card for six hours)."""
+    monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
+    monkeypatch.setattr(launch, "_ROOT", tmp_path)
+    frozen = fz.load_frozen()
+    without = {it.label for it in launch.plan(frozen, pool_only=True)}
+    assert not any("medsam" in label for label in without)
+    weight = tmp_path / "pretrained" / "medsam_vit_b.pth"
+    weight.parent.mkdir()
+    weight.write_bytes(b"")
+    with_file = {it.label for it in launch.plan(frozen, pool_only=True)}
+    assert {"b_medsam_vitb_box:DDR:val:main", "b_medsam_vitb_box:IDRiD:val:main"} <= with_file
+
+
 # ---- review fix 4 (A2): one writer per directory in the SAM 3 chain -----------------------------------
 
 
@@ -248,7 +262,7 @@ def test_sam3_phrase_items_leave_assembly_and_map_removal_to_the_gated_item(tmp_
     assert "--no-assemble" in phrase.argv and not phrase.owns_drop and assembly.owns_drop
     assert "--drop-maps" not in launch.command(phrase, py_argv=["python"], drop_maps=("FGADR",))
     assert "--drop-maps FGADR" in launch.command(assembly, py_argv=["python"], drop_maps=("FGADR",))
-    other = next(it for it in items if it.label == "b_medsam_vitb_box:FGADR:test:main")
+    other = next(it for it in items if it.label == "b_sam_vitb_box:FGADR:test:main")
     assert "--drop-maps FGADR" in launch.command(other, py_argv=["python"], drop_maps=("FGADR",))  # every other item drops its own
     assert all("--no-assemble" in it.argv for it in items if it.label.startswith("a_sam3_ph"))
 

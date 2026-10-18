@@ -88,6 +88,9 @@ def test_the_documented_flow_from_smoke_to_collect(tmp_path, monkeypatch):
         _toy_e5_source(prepared / name, name, splits)
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
     monkeypatch.setattr(launch, "_ROOT", tmp_path)   # no B-std / nnU-Net maps here: the same-information references stay out of the flow
+    # plan() leaves MedSAM out until this file exists; the documented 22-item flow includes it
+    (tmp_path / "pretrained").mkdir()
+    (tmp_path / "pretrained" / "medsam_vit_b.pth").write_bytes(b"")
     monkeypatch.setattr(fz, "PROMPTS_DIR", tmp_path / "prompts")
     monkeypatch.setattr(fz, "FROZEN_PATH", tmp_path / "e5_frozen.yaml")
     monkeypatch.setattr(geo, "data_dir", lambda name: prepared / name)
