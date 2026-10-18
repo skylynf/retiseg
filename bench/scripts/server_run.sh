@@ -7,7 +7,11 @@
 #   bash bench/scripts/server_run.sh cache      1440 canvas caches
 #   bash bench/scripts/server_run.sh smoke      B1 and B-std smoke, 20 steps each
 #   bash bench/scripts/server_run.sh resmoke M2MRF,H2Former   smoke of the named models only
-#   bash bench/scripts/server_run.sh probe      B-std budget probe, 4 jobs
+#   bash bench/scripts/server_run.sh probe      B-std budget probe, 4 jobs (train and validation only, budget_probe: 2)
+#   PROBE_GPUS="5" PROBE_CELLS="bs_probe_hrnet_ddr_seed0 bs_probe_hrdecoder_idrid_seed0 bs_probe_hrdecoder_ddr_seed0" \
+#       bash bench/scripts/server_run.sh probe  the two-times-budget sensitivity runs of docs/paper/26 (N1b); one card,
+#                                               cells run one after another; score each finished run afterwards with
+#                                               python bench/train.py --config <cell> --run-dir runs/BSprobe_<cell#bs_probe_> --score-only
 #   bash bench/scripts/server_run.sh e1r        M2MRF author retrain, effective batch 4
 #   bash bench/scripts/server_run.sh b1-seed0   B1 seed 0, train and validation
 #   bash bench/scripts/server_run.sh bs-seed0   B-std seed 0, after the budget is fixed
@@ -165,16 +169,25 @@ stage_cache() {
 stage_probe() {
   require_clean
   local gpus=(${PROBE_GPUS:-0 1 2 3})
-  local cells=(bs_probe_unet_idrid_seed0 bs_probe_unet_ddr_seed0 bs_probe_m2mrf_idrid_seed0 bs_probe_m2mrf_ddr_seed0)
-  local i cell script run
+  # PROBE_CELLS overrides the cell list (docs/paper/26 N1b: bs_probe_hrnet_ddr_seed0 and the two HRDecoder probes).
+  # With fewer cards than cells, the cells beyond the card count queue up behind the last card, one after another.
+  local cells=(${PROBE_CELLS:-bs_probe_unet_idrid_seed0 bs_probe_unet_ddr_seed0 bs_probe_m2mrf_idrid_seed0 bs_probe_m2mrf_ddr_seed0})
+  local i cell script run env gpu chain
+  declare -A chains=()
   for i in "${!cells[@]}"; do
     cell="${cells[$i]}"
     script=bench/train.py
+    env=retiseg
     [[ "$cell" == *m2mrf* ]] && script=bench/scripts/train_m2mrf_b1.py
+    [[ "$cell" == *hrdecoder* ]] && env=retiseg-hacdr   # HRDecoder's mmseg fork lives in the HACDR environment (launch_b1._BINDING)
     run="runs/BSprobe_${cell#bs_probe_}"
     mkdir -p "$run"
-    CUDA_VISIBLE_DEVICES="${gpus[$i]}" background "probe_${cell#bs_probe_}" bash -c \
-      "$(pick_tool) run -n retiseg --no-capture-output python $script --config bench/configs/cells/$cell.yaml --run-dir $run --diagnostic --resume >> $run/console.log 2>&1"
+    gpu="${gpus[$(( i % ${#gpus[@]} ))]}"
+    chain="$(pick_tool) run -n $env --no-capture-output python $script --config bench/configs/cells/$cell.yaml --run-dir $run --diagnostic --resume >> $run/console.log 2>&1"
+    chains[$gpu]="${chains[$gpu]:+${chains[$gpu]}; }$chain"
+  done
+  for gpu in "${!chains[@]}"; do
+    CUDA_VISIBLE_DEVICES="$gpu" background "probe_gpu${gpu}" bash -c "${chains[$gpu]}"
   done
   echo "when they finish: bash bench/scripts/server_run.sh curves 'BSprobe_*'"
 }

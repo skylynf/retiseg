@@ -404,7 +404,7 @@
    状态与决定：Sam3Scorer 的 set_image / score 在 CUDA 上进 torch.autocast(bfloat16)（official_precision），CPU 上不开；服务器的转换保留但只在 autocast 关着时生效（CPU、绕过 Scorer 的调用）。run 记录加 precision 字段。测试 test_sam3_scorer_runs_under_the_official_bfloat16_autocast_on_cuda_only。服务器 pull 到含本条的提交后 SAM 3 的项才可以跑（17 第四节第 16 条）；若已有 SAM 3 项在 float32 路径下写出了目录，移到 runs/archive/ 重跑。
    来源：00 的 2026-10-18 11:55 记录；官方仓库 examples/ 与 sam3/model/sam3_image_processor.py（只有 inference_mode，没有 autocast）。
 
-62  2026-10-18  5 级 → 待核（下一包）
+62  2026-10-18  5 级 → 已核（2026-10-19，本机；归因实验 26 N1，措辞规则 14 备注 46）
    问题：HRDecoder 的 B-std 种子 0 测试 mAUPR IDRiD 0.6475、DDR 0.2960，低于同骨干的 HRNet-W48（0.700 / 0.447）和 M2MRF（0.657 / 0.369），也远低于它自己的发布检查点在本项目协议下的 0.707 / 0.461。DDR 上的 0.296 太低，先不解释。
    影响：18 的"同骨干三行"对比与主表 HRDecoder 行。
    状态与决定：下一包到了看 history.jsonl 的逐类验证曲线、metrics_test.json 的逐类数和 recipe.json 的偏差；对照 bench/models/hrdecoder.py 的 hr_scale / 裁块 / 损失权重与作者配置。在查清前主表的 HRDecoder 行照实测写，正文不下结论；若是包装器的错，按 18 的披露规则记录并重跑。
@@ -415,3 +415,31 @@
    影响：CLC-Net 两库的打分晚了一天；没有运行的步数错（run_bstd 本来就带 margin）。
    状态与决定：服务器两处都加了 margin，门与 recipe 对上，CLC-Net DDR 10-18 11:55 开始打分。本机核对：改法与 run_bstd 的调用一致。
    来源：00 的 2026-10-18 11:55 记录。
+
+64  2026-10-19  2 级
+   问题：FGADR、Retinal-Lesions 的独立测试一直带 --drop-maps，单模型概率图没有留；26 N2 的集成在这两个集合上算不出来。
+   影响：表 5 集成块缺两列，或要在服务器重推理 19 个模型 × 两源 × 两集合（约 20 GPU 时）。
+   状态与决定：按 17 第四节第 23 条在服务器重推理、内存累加、只落盘集成指标（许可不变）；其余六个集合本机用已落盘的图。
+   处理条件：bench/scripts/ensemble.py 写好并在服务器跑完。
+   来源：26 N2；bench/configs/queue.yaml 的 drop_maps。
+
+65  2026-10-19  3 级
+   问题：两倍预算的探测运行（budget_probe: 2）按设计是 --diagnostic（不读测试集），26 N1b 需要它们的测试分；train.py 的 _score_existing 没有检查 probe，预计 --score-only 能对训完的探测打分，但没有在真实运行上验过。
+   影响：第 19 条可能在打分一步停住。
+   状态与决定：先按 17 第四节第 19 条做；被拦住时报错贴 00，本机改 train.py（允许 BSprobe_ 的 score-only，并在 recipe.json 记"事后打分"）。
+   处理条件：第一个探测训完。
+   来源：26 N1b；bench/train.py、bench/bstd.py。
+
+66  2026-10-19  2 级
+   问题：Refined IDRiD（zenodo 17615903）v1 只有 Train.tar，可能不含官方测试 27 张；新版本 18676805 未核对。
+   影响：26 N4 的"同一批预测换一版标注"只有测试图有修订标注时才成立。
+   状态与决定：用户下载新版本后本机核对；只有训练图就改报标注差异统计（14 备注 49）。
+   处理条件：数据到位。
+   来源：26 N4；zenodo 记录页。
+
+67  2026-10-19  1 级
+   问题：仓库已公开，docs/ 里有服务器路径（/home/qurr/luming/…）、合作者邮箱（18 第五节的作者索取邮箱）、hf-mirror 等内部信息；根 README 已不写这些。
+   影响：无功能影响；是否清理由用户决定。
+   状态与决定：保留，交用户决定。
+   处理条件：用户指示。
+   来源：2026-10-19 仓库整理。

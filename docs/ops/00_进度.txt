@@ -1,14 +1,15 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-10-18，本机；仓库 origin/main 39b6a3d = 用户的合并 eb2691e + 服务器 10-18 的修复，加本次提交）
-仓库：服务器 10-15–10-17 的四个提交（HRDecoder 打分的 torch 1.10 修复、记录）已 pull；本次：bs_frozen.yaml 追加 SAM2-UNet 配方修订（备注 44）、launch_queue 失败暂停、collect_runs 的 E5 训练档键（备注 45）、queue.yaml 开推理池、17 第四节第 13–15 条。
+一、当前状态（2026-10-19，本机；仓库 origin/main 5d1fb72 = 服务器 10-19 的打包记录，加本次写回）
+仓库：10-19 回传包（快照 10-19 03:29，提交 746362d，703 行指标全部对齐）已解入 runs/ 并进表；本次写回：results.csv 与全部表、图、numbers.tex、main.pdf 重生成；docs 按 26 增补（13、14、16、17、19、21、26、CHECKPOINT、README.txt）；queue.yaml 第四版；三个两倍预算 cell；server_run.sh probe 阶段认 PROBE_CELLS；根 README 重写（仓库公开用）。
 数据：八个测试集齐；MAPLES-DR 在表。
-论文：10-17 包（526 行指标，全部对齐）整表重生成后 collect：470 份报告、23,850 行实测。主表 19 行里 16 行有种子 0：SAMed 0.717 / 0.469、RETFound+UPerNet 0.708 / 0.466 在两库都高于 HRNet（0.700 / 0.447）；SAM2-UNet DDR 塌缩（MA 0.023、SE 0.022）；TC-Net、PMCNet、WSRFNet 在通用网络之下。R4 内部段与独立段、方法的塌缩段、讨论 Q2 已按实数改；13 个因素格子、M2MRF 作者权重的独立测试进表（14 M9b、M5）。
-服务器（10-18 11:55）：一条队列 pid 465242（卡 2–7）；RETFound 四个重格子在训，CLC-Net DDR 在打分，推理池在 GPU 7 跑 SAM 2 密度 64；SAM2-UNet 修订后两库种子 0 与独立测试已出（0.664 / 0.360）；HRDecoder 种子 0 0.648 / 0.296 待核（21 第 62 条）；nnU-Net E3b 两格、M2MRF 原分辨率已出。这些数等下一包进表。待服务器：pull 后 SAM 3 项才可跑（autocast，17 第四节第 16 条）、HRDecoder 核对材料（第 17 条）、打包（第 18 条）。
-队列（queue.yaml 第三版 + 10-17）：e3a 种子 0（≤2 卡）→ factor_score 12 → e5_infer_pool 15（开，1 卡）→ e5_seed0（SAM2-UNet 两库重排）→ fundus_seed0 → e5_infer_test（关，等选择）→ factor_cheap → nnunet_e3b → 重格子 → e3a_rest → 种子 1、2（关）→ e1r（关）。
-权重：公开的 SAM、SAM 2、MAE 和三份 gated 在 pretrained/；M2MRF 作者检查点已在服务器 runs/E1_m2mrf；MedSAM、公开 DINOv2 没有。
-文献：L1 完成（30 篇、3403 个数字）；作者回信截止 10-31；HRDecoder 的 L1 抽取待做（PDF 已在 literature/papers/）。
+论文：611 份报告、30,601 行实测（10-17 包为 470 份、23,850 行）。主表 19 行里 18 行有种子 0（只缺 MedSAM）：新进 HRDecoder 0.647 / 0.296（反常，包装器核对无误，归因实验 26 N1）、CLC-Net 0.661 / 0.414（DDR 上专用一族最高）、SAM2-UNet 修订后 0.664 / 0.360；SAMed 0.717 / 0.469 与 RETFound 0.708 / 0.466 仍是两库最高。独立测试 18 模型 × 两源 × 八集合齐，表 5 平均名次 SAMed 1.38、HRNet 3.50、RETFound 3.63（Friedman χ² 106.3，临界差 9.90，前 12 不可分）。a 档 DDR 验证池六组网格与 SAM 3 三句出数（任意病灶 AUPR ≤0.09）。nnU-Net E3b 两格、M2MRF 原分辨率进表。R3 的同骨干段、R4 的专用网络一句已按实数改（results.tex）。
+服务器（10-19 03:26）：一条队列 pid 465242（卡 2–7）；RETFound 四个重格子在训（E3b 两源 epoch 140/220，E7 512 epoch 220、原分辨率 epoch 140），SAM2-UNet E3b TJDR_std 在训、FGADR 等重开；推理池在 GPU 7（SAM 密度 64 DDR 验证在写，之后 IDRiD 验证池、b 档）；--estimate 对 a 档剩余约 0.9 GPU 时。待服务器：17 第四节第 19–24 条（两倍预算探测、HRDecoder E1r 等代码、权重到位后的补跑、集成重推理、打包）。
+队列（queue.yaml 第四版）：e3a 种子 0 → factor_score → 推理池 → e5_seed0 → fundus_seed0 → 测试档（关）→ 因素 → nnunet_e3b → 重格子 → e3a_rest → hrdecoder_rest（关，等 N1）→ e5_rest（开，只 SAMed、RETFound）→ e5_rest2、fundus_rest、e1r（关）。
+权重：公开的 SAM、SAM 2、MAE 和三份 gated 在 pretrained/；M2MRF 作者检查点在 runs/E1_m2mrf；MedSAM、公开 DINOv2 没有（用户下载）。
+文献：L1 完成（30 篇、3403 个数字）；作者回信截止 10-31；HRDecoder 的 L1 抽取待做。
+用户待办：本机写回的文件由用户提交推送（本次清单在第三节末尾的记录里；仓库已是公开的）；下载 MedSAM、DINOv2 权重与 Refined IDRiD；与三名医生约 T3 的会议（26 第四节）。
 
 二、决定日志（日期、决定、依据；细节在 archive）
 2026-09-30  文献检索冻结日（06）。
@@ -19,6 +20,7 @@
 2026-10-11  B-std 种子 0 全部出数（HRNet 两库第一）；HACDR 打分修复（torch 1.10 的 weights_only）。用户决定：种子 1、2 暂缓。启动 E1r bs4（A100）、U-Net 整批 Dice 诊断、nnU-Net 两种配置、B1 补位。泄漏审计 IDRiD/DDR：无近重复。E5 设计写成 15。范围精简写成 16（剩余约 5500 A100 时压到约 810）；L1 原文数字抽取完成。
 2026-10-12  nnU-Net 默认 0.671 / 0.432，ResEnc-M 0.631 / 0.428。U-Net 整批 Dice 诊断验证 0.569 / 0.544；用户决定主表 U-Net 采用整批 Dice（bs_frozen.yaml recipe_revisions，原运行改名 *_registered）；E5 五项待定按建议（TF32、natureCFP、按代码、塌缩同 U-Net 规则、编码器对照后按 16 缩减）；以 FGADR 等训练时评测去重（leak_exclusions.json）。独立测试接线（e3a_frozen.yaml、bench/e3a.py）；全库泄漏审计（FGADR _3 批来自 EyePACS，与 Retinal-Lesions 90 张同图；FGADR 内部同眼重复；TJDR_uwf 跨划分重复 2 对）；E2c 接线；E5 训练档五个包装器接线。服务器 09:08：停 B1；E1r bs4 打分 61.19 / 0.549；U-Net 两库种子 0 重跑；E2c 只排 DDR。本机：快照接入论文、R3/R4 改写、17 任务单。
 2026-10-14  Luming 确认 E5 推理档的全部登记（D1–D9、评审修复 6/7/16、预算规则 a）、表 6/图 5 的呈现方式、加 CI、协议锁文件（E5 首个测试指标后）、MAPLES-DR 官方测试 60 张；细节在第三节前的待办清单下。
+2026-10-19  用户决定：26（高层评估与补充实验）的第二、三节按本机判断纳入计划；临床资源为三名眼科医生、每人 3 小时（26 第四节据此改写）；仓库公开，根 README 不写论文内容。本机据此：SAMed、RETFound 种子 1、2 改为不砍（queue 的 e5_rest 只限这两个并打开）；HRDecoder 的 E1r IDRiD、两倍预算（HRNet DDR、HRDecoder 两库）不砍；集成、人类参照、临床端点、Refined IDRiD、校准、功效曲线登记进 14 M15–M17 与备注 46–49；HRDecoder 的措辞规则（14 备注 46）；排期与先砍顺序按 26 第八节。
 2026-10-18  本机：SAM 3 推理按官方示例在 CUDA 上整段 bfloat16 autocast（服务器的 float32 转换只留给非 autocast 路径，21 第 61 条）；服务器 10-18 的其余三处修复（margin、E3b cell 批 4、MedSAM 跳过）核过采用。
 2026-10-17  本机：SAM2-UNet 的 DDR 种子 0 稀有类塌缩，按 10-12 与 U-Net 绑定的登记规则改整批 IoU、两库重跑（14 备注 44，bs_frozen.yaml 只增）；推理池直接开（池的前几项即冒烟）；启动器加失败暂停。E5 训练档在 results.csv 里的键改为 E5 / peft、encoder_decoder（备注 45）。
 2026-10-15  本机（服务器记录之后）：队列第三版（种子 0 的 E3a 在前、推理池提前到训练之前、种子 1/2 的 E3a 挪到训练之后）；SAM2-UNet 的 loader 批按"能放下的最大值"在种子 0 开跑前冒烟定下（服务器先改的批 1 不采用）；launch_queue 加目录认领。两条新决定写在 17 第十四节，Luming 不同意时改 17。
@@ -301,3 +303,11 @@ CLC-Net 种子 0 测试 mAUPR：IDRiD 0.6608（n=27，排除 0；MA 0.4365，HE 
 还在训练，下面是验证：RETFound TJDR 标准 epoch 140、89460/255600、0.537；FGADR epoch 220、140580/255600、0.450；E7 边长 512 epoch 220、140580/255600、0.561；E7 原分辨率 epoch 140、89460/255600、0.611。SAM2-UNet E3b TJDR 标准批大小 4、有效批 12，epoch 300、21000/28000，验证 mAUPR 0.337；这一格的验证从 0.00 到 0.33 来回跳。FGADR 那一格仍是 07:54 溢出的退出码 1，批大小 4 的重开还没轮到。
 HRDecoder 的逐类验证和测试数在上一段（第 17 条），本包里有 history.jsonl、recipe.json、metrics_test.json。SAM2-UNet 修订后的测试与独立测试在 10-18 11:55 那一段。nnU-Net E3b 与 M2MRF 原分辨率也在那一段。
 回传包 /home/qurr/luming/retiseg/retiseg_runs_handoff_20261019.tar.gz，35 MB，3753 个文件，703 行指标，0 个未对齐被排除。清单 runs/handoff_manifest_20261019.tsv。没有 npz、pt、pth、png。包内的本段是打包前一刻的文本，文件数以本句为准。
+
+10-19 包接入、26 的计划并入、仓库公开整理（2026-10-19，本机；pull 到 5d1fb72）
+1. 包 retiseg_runs_handoff_20261019（3753 个文件，快照 10-19 03:29，703 行指标全部对齐，相对 10-17 清单新增 196 份）解入 runs/；collect_runs 611 份报告、30,601 行实测；make 全部重建通过（27 页）。新进表的：CLC-Net 两库种子 0 与独立测试、HRDecoder B-std 两库与独立测试、SAM2-UNet 修订后两库与独立测试（登记运行以 registered 留表）、nnU-Net E3b 两格与其独立测试、M2MRF E7 原分辨率、a 档 DDR 验证池（SAM/SAM 2 六组、SAM 3 三句）、B-std 种子 1/2 的一批 E3a、表 3a 的 HRDecoder 逐类。数字在 14 M5、M7、M9、M9b、M10。
+2. 结果里要注意的三处：HRDecoder B-std 0.647 / 0.296 远低于其发布检查点在本协议下的 0.707 / 0.461，包装器核对无误（服务器 10-18 12:30 记录），差距的候选原因是画布分辨率与训练像素量，归因实验是 26 的 N1，措辞规则在 14 备注 46；CLC-Net（轨 C）0.414 是专用一族在 DDR 上的最高，R4 原来"新加专用网络低于除 FCT 外所有通用网络"一句只对 TC-Net、PMCNet、WSRFNet 成立，已改；a 档零样本在验证池上任意病灶 AUPR 都 ≤0.09，SAM 3 的三句措辞相差一个数量级。
+3. 论文正文：results.tex 的 R3 同骨干段与 CLC-Net 一句从 simtext 改为实数，R4 的 SAM2-UNet 一句按修订后写，R3 加一句"发布的 HRDecoder 检查点在本协议下与主表最高者相当但训练条件不可比"；discussion.tex 的 Q2 加一句条件。其余结论性文字未动。
+4. 26 并入计划：13 第三节"26 增补"块、第五节结构增补、第四节排期指向；14 M15（集成）、M16（人类参照）、M17（临床端点）、备注 46–49；16 第十节；17 第三节队列表、第四节第 19–24 条、第十二、十三节；19 第六节；26 第四节按三人各 3 小时改写、第十节状态。queue.yaml 第四版（e5_rest 只限 SAMed、RETFound 并打开、优先级 61；e5_rest2 关；test_launch_queue 加断言）；bs_probe_hrnet_ddr_seed0、bs_probe_hrdecoder_{idrid,ddr}_seed0 三个 cell；server_run.sh 的 probe 阶段认 PROBE_CELLS 并按 cell 选环境（bash -n 通过；本机无 torch，test_launch_queue 里不依赖 torch 的 11 个用例通过）。
+5. 仓库公开整理：根 README.md 重写为基准的用法说明（范围、目录、环境、数据导出、训练与评测入口、冻结文件、许可），不写论文内容；.gitignore 核过（dataset/、runs/、pretrained/、*.tar.gz、.venv* 都已在，未改）；仓库没有 LICENSE 文件，README 的许可一节留了待加（21 第 67 条一并记内部信息的事）。docs/ 里的服务器路径、邮箱等内部信息未改，由用户决定是否保留。
+写回：docs/paper/retiseg_paper/paper/{data/results.csv, generated/numbers.tex, tables/generated/*, figures/out/*, sections/{results,discussion}.tex, main.pdf}、docs/ops/{00,17,21}、docs/paper/{13,14,16,19,26}、docs/CHECKPOINT.md、docs/README.txt、bench/configs/queue.yaml、bench/configs/cells/bs_probe_{hrnet_ddr,hrdecoder_idrid,hrdecoder_ddr}_seed0.yaml、bench/scripts/server_run.sh、bench/tests/{test_launch_queue,test_docs_paths}.py（后者把待写的三个入口登记为 PRODUCED_LATER）、README.md。runs/ 本身不进仓库；用户本机把包解到 runs/（包顶层目录里除 runs/ 还有 docs/ops/00 的服务器版本与 summary/，不要整包覆盖到仓库根：mkdir -p /tmp/h19 && tar -xzf retiseg_runs_handoff_20261019.tar.gz -C /tmp/h19 && cp -a /tmp/h19/retiseg_runs_handoff_20261019/runs/. runs/）。云端这次是在同样解出的 runs/ 上跑的 collect，本机解入后 results.csv 不用再 collect。

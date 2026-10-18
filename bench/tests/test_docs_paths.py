@@ -25,6 +25,10 @@ LIVE_DOCS = [
 PRIVATE = ("docs/notes(albert)/",)
 PRODUCED_LATER = {
     "docs/paper/retiseg_paper/paper/data/cost_audit.tsv",  # written by bench/scripts/cost_audit.py on the server (17 section 1)
+    # docs/paper/26 (2026-10-19): entry points the workstation still has to write; 17 section 4 items 20 and 23 name them
+    "bench/train_hrdecoder.py",                        # HRDecoder author-recipe retraining (E1r), after bench/train_m2mrf.py
+    "bench/configs/e1r_hrdecoder_idrid_seed0.yaml",    # its cell
+    "bench/scripts/ensemble.py",                       # the ensemble of probability maps (14 M15)
 }
 PATH = re.compile(r"(?<![\w/])((?:docs|bench|literature|official_code)/[\w\-./()一-鿿]+?\.(?:txt|md|py|yaml|yml|json|sh|tsv|tex|csv))")
 
