@@ -1,10 +1,43 @@
-# retiseg
+<p align="center">
+  <img src="docs/assets/readme/banner.jpg" alt="retiseg — a unified benchmark for pixel-level segmentation of diabetic retinopathy lesions" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://github.com/skylynf/retiseg/actions/workflows/tests.yml"><img src="https://github.com/skylynf/retiseg/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.11"></a>
+  <a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.x"></a>
+  <img src="https://img.shields.io/badge/lesions-MA%20·%20HE%20·%20EX%20·%20SE-1A2332?style=flat-square" alt="MA, HE, EX, SE">
+</p>
 
 A unified benchmark for pixel-level segmentation of diabetic retinopathy lesions in colour fundus photographs: microaneurysms (MA), hemorrhages (HE), hard exudates (EX) and soft exudates / cotton-wool spots (SE).
 
 One protocol covers data preparation, frozen splits, training amount, augmentation, checkpoint selection, inference geometry and evaluation, so that general segmentation networks, the self-configuring nnU-Net, fundus-specific networks and adapted segmentation foundation models can be compared on the same images with the same metric, inside the training source and on independent sources that were never used for training.
 
+## Contents
+
+<table>
+  <tr>
+    <td align="center" width="12.5%"><a href="#what-is-in-the-benchmark"><img src="docs/assets/readme/icons/benchmark.png" width="44" alt=""><br><b>Benchmark</b></a></td>
+    <td align="center" width="12.5%"><a href="#repository-layout"><img src="docs/assets/readme/icons/layout.png" width="44" alt=""><br><b>Layout</b></a></td>
+    <td align="center" width="12.5%"><a href="#setup"><img src="docs/assets/readme/icons/setup.png" width="44" alt=""><br><b>Setup</b></a></td>
+    <td align="center" width="12.5%"><a href="#data"><img src="docs/assets/readme/icons/data.png" width="44" alt=""><br><b>Data</b></a></td>
+    <td align="center" width="12.5%"><a href="#training-and-evaluation"><img src="docs/assets/readme/icons/train.png" width="44" alt=""><br><b>Training</b></a></td>
+    <td align="center" width="12.5%"><a href="#tests"><img src="docs/assets/readme/icons/tests.png" width="44" alt=""><br><b>Tests</b></a></td>
+    <td align="center" width="12.5%"><a href="#documentation"><img src="docs/assets/readme/icons/docs.png" width="44" alt=""><br><b>Docs</b></a></td>
+    <td align="center" width="12.5%"><a href="#licence"><img src="docs/assets/readme/icons/licence.png" width="44" alt=""><br><b>Licence</b></a></td>
+  </tr>
+</table>
+
 ## What is in the benchmark
+
+<table>
+  <tr>
+    <td align="center" width="25%"><b>8</b><br><sub>test sets</sub></td>
+    <td align="center" width="25%"><b>5,121</b><br><sub>images</sub></td>
+    <td align="center" width="25%"><b>39</b><br><sub>registered variants</sub></td>
+    <td align="center" width="25%"><b>19</b><br><sub>comparison rows</sub></td>
+  </tr>
+</table>
 
 | | |
 |---|---|
@@ -19,7 +52,66 @@ Every model writes one 16-bit probability map per image at the original resoluti
 
 ## Repository layout
 
-```
+<table>
+  <tr>
+    <td width="78" align="center"><img src="docs/assets/readme/mark.png" width="64" alt="retiseg"></td>
+    <td>The protocol, the model wrappers and the records are in git. Images, training runs and weights are not. Authors' code is pinned in <a href="official_code"><code>official_code/</code></a> and is never modified.</td>
+  </tr>
+</table>
+
+<br>
+
+<table>
+  <tr>
+    <td colspan="4"><img src="docs/assets/readme/icons/layout.png" width="22" align="absmiddle" alt=""> &nbsp; <b><a href="bench">bench/</a></b> &nbsp; <sub>the benchmark</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><a href="bench/data"><img src="docs/assets/readme/icons/data.png" width="52" alt=""></a><br><b><a href="bench/data">data/</a></b><br><sub>Readers, FOV masks,<br>canvas cache, frozen splits</sub></td>
+    <td align="center" width="25%"><a href="bench/models"><img src="docs/assets/readme/icons/models.png" width="52" alt=""></a><br><b><a href="bench/models">models/</a></b><br><sub>One wrapper per model,<br>and the author recipe</sub></td>
+    <td align="center" width="25%"><a href="bench/configs"><img src="docs/assets/readme/icons/configs.png" width="52" alt=""></a><br><b><a href="bench/configs">configs/</a></b><br><sub>Registry, frozen protocols,<br>job tables, one YAML per run</sub></td>
+    <td align="center" width="25%"><a href="bench/eval"><img src="docs/assets/readme/icons/eval.png" width="52" alt=""></a><br><b><a href="bench/eval">eval/</a></b><br><sub>Pixel, lesion-level and<br>image-level metrics</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="bench/e5"><img src="docs/assets/readme/icons/foundation.png" width="52" alt=""></a><br><b><a href="bench/e5">e5/</a></b><br><sub>Foundation-model tiers:<br>masks, text, oracle prompts</sub></td>
+    <td align="center"><a href="bench/scripts"><img src="docs/assets/readme/icons/scripts.png" width="52" alt=""></a><br><b><a href="bench/scripts">scripts/</a></b><br><sub>Launchers, export,<br>leak audit, handoff</sub></td>
+    <td align="center"><a href="bench/tests"><img src="docs/assets/readme/icons/tests.png" width="52" alt=""></a><br><b><a href="bench/tests">tests/</a></b><br><sub>pytest, on CPU,<br>on every push</sub></td>
+    <td align="center"><a href="bench/train.py"><img src="docs/assets/readme/icons/train.png" width="52" alt=""></a><br><b><a href="bench/train.py">train.py</a></b><br><sub><a href="bench/bstd.py">bstd.py</a> · <a href="bench/factor.py">factor.py</a><br><a href="bench/e3a.py">e3a.py</a> — retrain, factors, tests</sub></td>
+  </tr>
+</table>
+
+<br>
+
+<table>
+  <tr>
+    <td colspan="4"><img src="docs/assets/readme/icons/official.png" width="22" align="absmiddle" alt=""> &nbsp; <b>Code and records</b></td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><a href="official_code"><img src="docs/assets/readme/icons/official.png" width="52" alt=""></a><br><b><a href="official_code">official_code/</a></b><br><sub>34 pinned submodules,<br>never modified</sub></td>
+    <td align="center" width="25%"><a href="reproductions"><img src="docs/assets/readme/icons/reproductions.png" width="52" alt=""></a><br><b><a href="reproductions">reproductions/</a></b><br><sub>CLC-Net and TC-Net,<br>where no code was released</sub></td>
+    <td align="center" width="25%"><a href="literature"><img src="docs/assets/readme/icons/literature.png" width="52" alt=""></a><br><b><a href="literature">literature/</a></b><br><sub>Ledger, search, screening,<br>extracted reported numbers</sub></td>
+    <td align="center" width="25%"><a href="docs"><img src="docs/assets/readme/icons/docs.png" width="52" alt=""></a><br><b><a href="docs">docs/</a></b><br><sub>Design, operations, writing.<br>Index in <a href="docs/README.txt">docs/README.txt</a></sub></td>
+  </tr>
+</table>
+
+<br>
+
+<table>
+  <tr>
+    <td colspan="3"><img src="docs/assets/readme/icons/weights.png" width="22" align="absmiddle" alt=""> &nbsp; <b>Kept off git</b></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><img src="docs/assets/readme/icons/dataset.png" width="52" alt=""><br><b>dataset/</b><br><sub>Original releases and<br><code>dataset/prepared/</code></sub></td>
+    <td align="center" width="33%"><img src="docs/assets/readme/icons/runs.png" width="52" alt=""><br><b>runs/</b><br><sub>Training outputs,<br>maps and metrics</sub></td>
+    <td align="center" width="34%"><img src="docs/assets/readme/icons/weights.png" width="52" alt=""><br><b>pretrained/</b><br><sub>ImageNet backbones and<br>foundation-model weights</sub></td>
+  </tr>
+</table>
+
+The datasets have to be obtained from their authors. Some licences (FGADR, Retinal-Lesions) forbid redistribution of images, masks or derived data, so only split lists and code are published for them.
+
+<details>
+<summary>Plain tree</summary>
+
+```text
 bench/                  the benchmark
   data/                 readers for each release, FOV masks, canvas cache, frozen split lists (data/splits/)
   models/               one wrapper per model: builds the network from official_code/ or reproductions/, declares the author recipe
@@ -37,7 +129,7 @@ literature/             the literature ledger, search and screening records, ext
 docs/                   project notes in Chinese (design, operations log, writing); docs/README.txt is the index
 ```
 
-Not in git: `dataset/` (original releases and the exported `dataset/prepared/` directories), `runs/` (training outputs), `pretrained/` (ImageNet and foundation-model weights). The datasets have to be obtained from their authors; some licences (FGADR, Retinal-Lesions) forbid redistribution of images, masks or derived data, so only split lists and code are published for them.
+</details>
 
 ## Setup
 
