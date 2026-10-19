@@ -78,6 +78,9 @@ def test_queue_file_in_the_repository_loads_and_names_known_kinds():
     # the albert merge (docs/ops/25): one e5_infer kind; off until the inference smoke (pool) and the selections (test)
     assert by_name["e5_infer_pool"]["phase"] == "pool" and by_name["e5_infer_test"]["phase"] == "test"
     assert by_name["e5_infer_pool"].get("enabled", True) and not by_name["e5_infer_test"].get("enabled", True)   # pool on since 2026-10-17
+    # fourth edit, 2026-10-19 (docs/paper/26): SAMed and RETFound seeds are not cut any more; the other E5 seeds wait in e5_rest2
+    assert by_name["e5_rest"]["only"] == ["SAMed", "RETFound"] and by_name["e5_rest"].get("enabled", True)
+    assert by_name["e5_rest2"]["only"] == ["SAM2-UNet", "SAM-Adapter"] and not by_name["e5_rest2"].get("enabled", True)
 
 
 def test_factor_models_filter_keeps_the_cheap_cells_apart(monkeypatch):

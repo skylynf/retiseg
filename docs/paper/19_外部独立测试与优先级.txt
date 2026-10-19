@@ -62,3 +62,14 @@
 五、状态
   2026-10-14：本文件写成；代码（maples.py、prepare_maples、predict_hrdecoder.py、e3a author 分发、launch_e3a 缺目录跳过、launch_queue max_concurrent 与 factor models 过滤、collect_e1、表 3a）见 00 当天记录；queue.yaml 第二版已提交。等：MESSIDOR 原图（用户申请）、服务器 pull 后按 17 第十六节执行。
   2026-10-14 晚：MAPLES-DR 数据到位（服务器与本机），读法改为不依赖包并核对；论文侧第八列已加；albert 分支并入后 E5 推理档阶段改为 e5_infer_pool/test（关）；17 重写为第二版，服务器按 17 第四节起步。
+
+六、2026-10-19 修订：按 26 增补后的优先级与里程碑（与 16 第十节、17 第四节第 19–24 条、13 第三节"26 增补"同次写）
+  1. 顺序（bench/configs/queue.yaml 第四版）：10 e3a → 12 factor_score → 15 e5_infer_pool → 20 e5_seed0 → 25 fundus_seed0 → 29 e5_infer_test（关，等选择）→ 32 factor_cheap → 40 nnunet_e3b → 45/55 重格子 → 58 e3a_rest → 60 hrdecoder_rest（关，等 N1）→ 61 e5_rest（开：只 SAMed、RETFound 的种子 1、2）→ 70 e5_rest2（关）→ 75 fundus_rest（关）→ 90 e1r（关；HRDecoder IDRiD 一次进这里或手动）。队列之外：两倍预算探测在一张拿出来的卡上顺序跑（17 第四节第 19 条）。
+  2. 写作里程碑（新增部分；原有的照旧）：
+     现在（10-19 包）：主表与表 5 除 MedSAM 外全实数；R3 的同骨干段、CLC-Net 一句按实数改；R4 的"新加专用网络低于通用网络"一句改为只对三个模型成立。
+     CPU 项（11-15 前，不等服务器）：N2 集成（六个集合）、N3a DiaRetDB1 留一、N5a/b 分层与图像级、N6 校准、N7 功效曲线 → 表 5 集成块、图 4e 参照点、新小节"从病灶分割到临床端点"的 a/b 面板、ED4 面板。
+     两倍预算与 HRDecoder E1r（约 10 天）：R4 的同骨干段与讨论 Q3 的分辨率段定稿；主表措辞按 14 备注 46。
+     SAMed、RETFound 种子 1、2（e5_rest，约 5 天）：主表前两行的 s.d.；摘要与讨论 Q2 的"两个适配的基础模型高于 HRNet"加误差棒后定稿。
+     医生（11 月内，三人各 3 小时）：T3 规则 → N5c 端点面板；T1 裁定 → R6 一段与讨论"真值是变量"；T2 点标记 → 图 7c 医生两行、摘要一句。
+     Refined IDRiD（数据到位后 1 天）：R6 一段、扩展数据一图。
+  3. 不砍、可砍：按 16 第十节。

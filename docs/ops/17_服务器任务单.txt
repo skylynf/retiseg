@@ -31,12 +31,25 @@
   40      nnunet_e3b         开                   603/604 的 raw、预处理、splits 已在，自动可规划
   45/55   factor_e3b_heavy / factor_e7_heavy  开   SAM2-UNet、RETFound 的 E3b 四格、E7 两格；排在前面的都排空后才轮到
   58      e3a_rest           开（最多两张卡）     B-std 种子 1、2 的独立测试（只给误差棒），排在训练之后
-  60/70/75 hrdecoder_rest / e5_rest / fundus_rest  关  种子 1、2；按此顺序在种子 0 阶段无待办后逐个打开
+  60      hrdecoder_rest     关                   HRDecoder 种子 1、2；等 26 的 N1 把 B-std 与发布权重的差距归因后再开（14 备注 46）
+  61      e5_rest            开（2026-10-19）     SAMed、RETFound+UPerNet 的种子 1、2（26 第二节第 2 条：头条结论的两行改为不砍）；排在 e3a_rest 之后，其余卡在种子 0 阶段排空后自动接
+  70/75   e5_rest2 / fundus_rest  关              SAM2-UNet、SAM-Adapter 与四个专用模型的种子 1、2；第二优先，最后打开
   90      e1r                关                   第十二节
   写作节奏（本机）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3、表 6/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒。
 
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
-  进度（本机 10-18，pull 到 39b6a3d）：第 13–15 条已做完（SAM2-UNet 修订后 IDRiD 0.664、DDR 0.360，两库独立测试也齐；一条队列 pid 465242；池在 GPU 7 跑 SAM 2 密度 64）。服务器 10-18 的四处修复本机核过：factor.py 与 fresh_signature 的 margin 对（CLC-Net 门修好）、E3b 两个 SAM2-UNet cell 批 4 对、MedSAM 无权重时跳过对；SAM 3 的 bfloat16 转换改成官方的 autocast（第 16 条）。新加第 16–18 条。
+  进度（本机 10-19，pull 到 5d1fb72，10-19 包已进表：611 份报告、30,601 行实测，CLC-Net、HRDecoder、SAM2-UNet 修订版、nnU-Net E3b、M2MRF 原分辨率、a 档 DDR 验证池都在 results.csv）：第 16–18 条已做完。第 17 条的核对本机读过：包装器参数与作者配置对得上、四类都有输出，差距的归因交给第 19–21 条（26 的 N1）。新加第 19–24 条，按序号做；第 19 条要从 RETISEG_GPUS 里拿出一张卡，启动器重启一次。
+  19. 两倍预算敏感性（26 N1b；14 备注 22、46；只进补充表）：三个 cell 已在仓库——bs_probe_hrnet_ddr_seed0、bs_probe_hrdecoder_idrid_seed0、bs_probe_hrdecoder_ddr_seed0（budget_probe: 2，其余与主表 cell 相同）。做法：杀掉启动器，用 RETISEG_GPUS="2 3 4 5 6" 重开同一条队列，GPU 7 给探测：
+       PROBE_GPUS="7" PROBE_CELLS="bs_probe_hrnet_ddr_seed0 bs_probe_hrdecoder_idrid_seed0 bs_probe_hrdecoder_ddr_seed0" bash bench/scripts/server_run.sh probe
+     三个 cell 在这张卡上顺序跑（HRDecoder 自动用 retiseg-hacdr 环境；server_run.sh 的 probe 阶段 10-19 起认 PROBE_CELLS），各约 40、26、52 GPU 时。每个训完（diagnostic.json 出现）后打分：
+       python bench/train.py --config bench/configs/cells/bs_probe_hrnet_ddr_seed0.yaml --run-dir runs/BSprobe_hrnet_ddr_seed0 --score-only   # retiseg
+       python bench/train.py --config bench/configs/cells/bs_probe_hrdecoder_<库>_seed0.yaml --run-dir runs/BSprobe_hrdecoder_<库>_seed0 --score-only   # retiseg-hacdr
+     若 --score-only 被 budget_probe 拦住（train.py 的 _score_existing 不检查 probe，预计能过），把报错贴 00，本机改。BSprobe_ 目录 e3a 不接、collect 不读（本机手工进补充表）；00 记 mAUPR 与验证最高点的位置。探测跑完把 GPU 7 还给队列（再重启一次）。
+  20. HRDecoder 作者配方重训 E1r IDRiD（26 N1a；入口 bench/train_hrdecoder.py 与 bench/configs/e1r_hrdecoder_idrid_seed0.yaml 由本机写，仿 train_m2mrf.py / e1r_m2mrf_idrid_seed0.yaml：作者 config 的 2880×1920 缩放、1920 裁、hr_scale 960、crop_num 2、20k 步、SGD 0.01 poly10warm、4 卡各 1 改单卡累积 4、SyncBN 改 BN，取最后一步）：代码 pull 到后 queue.yaml 的 e1r 阶段 items 由本机填，或手动在探测那张卡上跑；作者函数（11 阈值）与本协议各评一次，写 runs/E1r_hrdecoder_idrid_seed0/。约 30 GPU 时。
+  21. HRDecoder 的 2880 画布（26 N1c，第二优先）：等本机放开 factor.py 的 E7 限制（模型表加 HRDecoder、画布加 2880，块 1920）后以 BF_e7_hrdecoder_idrid_2880_seed0 进 factor 阶段；本条只是占位，代码到了再做。
+  22. 权重（用户下载后服务器核对 sha256 并记 00）：MedSAM medsam_vit_b.pth 到位后 E5_MODELS=MedSAM 冒烟，e5_seed0 自动接它的两库种子 0，推理池的 b 档 MedSAM 项不再跳过；公开 DINOv2 ViT-L（timm vit_large_patch14_dinov2.lvd142m）到位后 launch_extra.py --experiment E5enc --only e5enc_vitup_dinov2_ddr_seed0_lr1（与 MAE-IN1k、RETFound-DINOv2 一起，第六节第 3 条），再补一格 DINOv2 + UPerNet 的 IDRiD（cell 待本机写，第二优先）。
+  23. 集成的重推理（26 N2；等本机的 bench/scripts/ensemble.py）：FGADR、Retinal-Lesions 两个集合没有留单模型概率图，脚本到了在 e3a 的卡上按来源重推理、内存累加、只落盘集成的 metrics.json（不写单模型的图，许可不变）；其余六个集合由本机在工作站上用已落盘的图算。约 20 GPU 时。
+  24. 打包：第 19 条的第一个探测、e5_rest 的第一个种子出数后各打一包（--since runs/handoff_manifest_20261019.tsv）；BSprobe_* 与 runs/E1r_hrdecoder_* 的小文件要在包里（pack_handoff 按后缀收，应自动在）。之后仍是每天一包。
   16. SAM 3（pull 到含本条的提交后再让它的项跑）：官方示例把整个推理放在 torch.autocast("cuda", bfloat16) 里，fused fc1 的 bfloat16 输出因此不会撞上 float32 的 fc2；bench/e5/sam3_text.py 的 Sam3Scorer 现在在 CUDA 上进同样的 autocast，服务器 10-18 的转回 float32 只在 autocast 关着时生效（21 第 61 条）。若池里已有 a_sam3_ph* 目录是在 pull 之前写出的（run 记录里没有 precision 字段），移到 runs/archive/ 让队列重跑。
   17. HRDecoder 种子 0 的核对（21 第 62 条，CPU，几分钟）：IDRiD 0.648 / DDR 0.296 低得反常。把 runs/BS_hrdecoder_{idrid,ddr}_seed0/ 的 history.jsonl 里逐类验证 AUPR 的首末两行、recipe.json 的 deviations 整段、metrics_test.json 的 per_class 四个 aupr 贴进 00；不要重跑、不要改包装器，本机判断。
   18. 打包：CLC-Net 两库打分写出、池的第一个 a 档项（SAM 2 密度 64 DDR）和第一个 b 档项写出 predicted.json 之后，python bench/scripts/pack_handoff.py --since runs/handoff_manifest_20261017.tsv；--estimate 的输出和每窗 / 每提示耗时、显存一起记 00。之后每天一包。
@@ -112,10 +125,11 @@
   4. 回传：runs/BF_*/、runs/NN_*/ 的小文件和 runs/E3a/ 对应目录。
 
 十二、E1r 剩余（最低优先，queue 的 e1r 阶段，items 由本机填）
+  HRDecoder IDRiD 一次（不砍，第四节第 20 条）；HRDecoder DDR 一次（第三优先，约 80 GPU 时，作者 2048 整图、40k 步）。
   M2MRF IDRiD 种子 1、2（bench/train_m2mrf.py --config bench/configs/e1r_m2mrf_idrid_seed0.yaml 改 seed，各约 16 GPU 时，打分同种子 0）；M2MRF DDR 一个种子（需一份 e1r_m2mrf_ddr_seed0.yaml，按作者 DDR 配置写、核对后记 14 M6）；HACDR-Net 两库各一个种子（需从 bench/scripts/train_hacdr_b1.py 改出 E1r 版本）。算力不够时第一个砍。
 
-十三、回传清单（下一包，第四节第 5 条）
-  runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*（含 E9 两项打分后的 metrics_test.json）、runs/E3a/、runs/BS_*（新种子、E5 与专用模型的 run_params.json 和验证曲线）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
+十三、回传清单（下一包，第四节第 5、24 条）
+  runs/BSprobe_*（两倍预算，第四节第 19 条）、runs/E1r_hrdecoder_*（第 20 条）、runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*（含 E9 两项打分后的 metrics_test.json）、runs/E3a/、runs/BS_*（新种子、E5 与专用模型的 run_params.json 和验证曲线）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
 
 十四、用户决定（2026-10-14 晚已全部定下，00「待用户 Luming 处理」下的确认行）
   D1–D9 确认；评审修复 6、7、16 确认；预算规则保留（a）；表 6/图 5 呈现已改；CI 已加（.github/workflows/tests.yml，push 后看 Actions 页面，失败记 21）；协议 sha256 锁文件在读出首个 E5 测试指标后由本机加；MAPLES-DR 只用官方测试 60 张。

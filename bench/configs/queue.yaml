@@ -10,6 +10,9 @@
 # Priorities on 2026-10-14, second edit (docs/ops/17 section 16: seed 0 of everything the
 # paper's tables need first, the inference tiers next, the expensive factor cells after,
 # seeds 1-2 last; multi-seed only adds error bars, so the writing starts on seed 0).
+# Fourth edit 2026-10-19 (docs/paper/26, docs/ops/17 section 4 items 19-24): e5_rest is on and limited to
+# SAMed and RETFound at priority 61; SAM2-UNet and SAM-Adapter seeds are e5_rest2 (off). The two-times-budget
+# probes of 26 N1b run outside the queue on one card taken out of RETISEG_GPUS (server_run.sh probe).
 # Third edit 2026-10-15 (docs/ops/17 section 4, after the server's first day): the E3a stage
 # keeps seed-0 sources only and the seed-1/2 sources move to e3a_rest behind the training
 # stages; the E5 inference pool (one card, about a day) moves ahead of the E5 training so
@@ -121,6 +124,8 @@ stages:
   # 9. Seeds 1 and 2 of the training (error bars only; the text is written on seed 0). Enable in this
   #    order once every seed-0 stage above has nothing pending: HRDecoder (the backbone-controlled
   #    comparison), SAM2-UNet and RETFound, then the other fundus models.
+  #     HRDecoder's seeds wait for the N1 case study (docs/paper/26; 14 note 46): until the B-std gap to its released
+  #     checkpoint is attributed, more seeds of the same configuration add little.
   - name: hrdecoder_rest
     priority: 60
     kind: bs
@@ -128,12 +133,23 @@ stages:
     jobs: bench/configs/bs_jobs.yaml
     only: [HRDecoder]
 
+  # 9a. Seeds 1 and 2 of SAMed and RETFound + UPerNet (docs/paper/26 section 2 item 2, 2026-10-19): these two rows carry
+  #     the headline comparison against HRNet-W48 on a single seed, so their seeds moved from "second priority" to
+  #     "not cut". ON; behind e3a_rest (two cards at most) so the other cards start these long runs as soon as every seed-0 stage is empty.
   - name: e5_rest
+    priority: 61
+    kind: bs
+    enabled: true
+    jobs: bench/configs/bs_jobs.yaml
+    only: [SAMed, RETFound]
+
+  # 9b. Seeds 1 and 2 of SAM2-UNet (revised recipe) and SAM-Adapter: second priority, as before (16 section 8).
+  - name: e5_rest2
     priority: 70
     kind: bs
     enabled: false
     jobs: bench/configs/bs_jobs.yaml
-    only: [SAM2-UNet, RETFound]
+    only: [SAM2-UNet, SAM-Adapter]
 
   - name: fundus_rest
     priority: 75
