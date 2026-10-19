@@ -301,3 +301,12 @@ CLC-Net 种子 0 测试 mAUPR：IDRiD 0.6608（n=27，排除 0；MA 0.4365，HE 
 还在训练，下面是验证：RETFound TJDR 标准 epoch 140、89460/255600、0.537；FGADR epoch 220、140580/255600、0.450；E7 边长 512 epoch 220、140580/255600、0.561；E7 原分辨率 epoch 140、89460/255600、0.611。SAM2-UNet E3b TJDR 标准批大小 4、有效批 12，epoch 300、21000/28000，验证 mAUPR 0.337；这一格的验证从 0.00 到 0.33 来回跳。FGADR 那一格仍是 07:54 溢出的退出码 1，批大小 4 的重开还没轮到。
 HRDecoder 的逐类验证和测试数在上一段（第 17 条），本包里有 history.jsonl、recipe.json、metrics_test.json。SAM2-UNet 修订后的测试与独立测试在 10-18 11:55 那一段。nnU-Net E3b 与 M2MRF 原分辨率也在那一段。
 回传包 /home/qurr/luming/retiseg/retiseg_runs_handoff_20261019.tar.gz，35 MB，3753 个文件，703 行指标，0 个未对齐被排除。清单 runs/handoff_manifest_20261019.tsv。没有 npz、pt、pth、png。包内的本段是打包前一刻的文本，文件数以本句为准。
+
+2026-10-20 07:25 +0800，提交 5d1fb72。用户要求按现有结果记进度并打包，选择交给本机决定。没有跑 --select，没有改 e5_frozen.yaml，e5_infer_test 仍关。一条队列仍是 pid 465242。验证 mAUPR 不是测试。开着的阶段这时都没有待领的项，所以 GPU 4、5、6、7 是空的；GPU 2、3 仍在训练。0 号和 1 号是别人的 vLLM。
+SAM2-UNet E3b TJDR 标准，测试 2026-10-19 07:26 退出码 0：mAUPR 0.4081（n=55，排除 0；MA 0.0556，HE 0.7528，EX 0.7216，SE 0.1024）。外部测试都是退出码 0：IDRiD 0.3208（n=27），DDR 0.2240（n=225），MAPLES-DR 0.1923（n=60），FGADR 0.1535（n=553，excluded_ids 为空），TJDR 超广角 fov 0.1231（n=58），DiaRetDB1 0.1173（n=61），Retinal-Lesions 0.0884（n=478）。这一训练源的超广角只跑 fov 变体。目录 runs/E3a/BF_e3b_sam2_unet_tjdr_std_seed0/。
+SAM2-UNet E3b FGADR，批大小 4、有效批 12，测试 2026-10-20 00:38 退出码 0：mAUPR 0.3880（n=447，排除 106；MA 0.1221，HE 0.6295，EX 0.6749，SE 0.1256）。外部测试都是退出码 0：TJDR 标准 0.4605（n=55），IDRiD 0.4142（n=27），MAPLES-DR 0.3427（n=60），DiaRetDB1 0.2696（n=61），DDR 0.2689（n=225），TJDR 超广角 fov 0.2308（n=58），Retinal-Lesions 0.2104（n=459，排除 19）。
+RETFound E3b FGADR，测试 2026-10-20 06:24 退出码 0：mAUPR 0.4574（n=447，排除 106；MA 0.1176，HE 0.6510，EX 0.6909，SE 0.3703）。外部测试都是退出码 0：IDRiD 0.5409（n=27），TJDR 标准 0.4610（n=55），MAPLES-DR 0.3697（n=60），DiaRetDB1 0.3274（n=61），Retinal-Lesions 0.3232（n=459，排除 19），DDR 0.2913（n=225），TJDR 超广角 fov 0.2843（n=58）。
+RETFound E7 边长 512，测试 2026-10-20 02:24 退出码 0：mAUPR 0.4004（n=225，排除 0；MA 0.0924，HE 0.3462，EX 0.6282，SE 0.5349）。E7 改画布，协议不做跨数据集测试，没有 E3a 目录。
+推理池验证项 22 个里 20 个已完成，剩下 2 个是 MedSAM，这台机器没有 medsam_vit_b.pth。zero_shot.grid.selected 和 zero_shot.sam3.selected 仍是空的。测试阶段因此列不出项。种子 1、2 的训练阶段仍关。e3a 与 e3a_rest 这时也没有待领项。
+还在训练，下面是验证：RETFound TJDR 标准 epoch 220、140580/255600、0.5505（02:41 的记录）。RETFound E7 原分辨率 epoch 280、178920/255600、0.6315（06:56）。
+回传包 /home/qurr/luming/retiseg/retiseg_runs_handoff_20261020.tar.gz，43 MB，4478 个文件，902 行指标，0 个未对齐被排除。清单 runs/handoff_manifest_20261020.tsv。没有 npz、pt、pth、png。相对 10-19 清单打包。包内的本段是打包前一刻的文本，文件数以本句为准。
