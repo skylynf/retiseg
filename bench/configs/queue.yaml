@@ -114,14 +114,14 @@ stages:
     models: [SAM2-UNet, RETFound]
 
   # 7b. The HRDecoder case study at its author canvas (docs/paper/26 N1c; 14 note 46): one E7 cell on IDRiD,
-  #     canvas 2880, window 1920, the IDRiD equivalent epochs, retiseg-hacdr, about 52 h on one card. Enable
-  #     once the two-times-budget probes (17 section 4 item 19) and E1r HRDecoder (item 20) have been read.
+  #     canvas 2880, window 1920, the IDRiD equivalent epochs, retiseg-hacdr, about 52 h on one card. ON since
+  #     2026-10-21 (workstation decision after E1r 0.674 and the IDRiD probe 0.615: the canvas is the remaining
+  #     explanation, and this is the longest job left, so it starts at the next free card).
   - name: factor_hrdecoder_2880
     priority: 56
     kind: factor
     experiment: E7
     models: [HRDecoder]
-    enabled: false
 
   # 8. Independent tests of the B-std seed-1/2 checkpoints (error bars of R4 / figure 6): behind every
   #    training stage, so the two E3a cards go to training once the seed-0 sources are done.

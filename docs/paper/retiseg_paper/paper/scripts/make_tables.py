@@ -96,7 +96,11 @@ def signed(v, sim=True, fmt="{:+.2f}"):
     """Signed difference in ink, for cells whose shading already carries the direction."""
     if not np.isfinite(v):
         return "\\na"
-    t = fmt.format(v).replace("-0.", "$-$.").replace("+0.", "+.").replace("-", "$-$")
+    t = fmt.format(v)
+    sign, body = t[0], t[1:]
+    if body.startswith("0."):
+        body = body[1:]
+    t = ("$-$" if sign == "-" else sign) + body          # one math minus; the old chain re-replaced its own "-" into "$$-$$"
     return f"\\ph{{{t}}}" if sim else t
 
 
@@ -286,18 +290,27 @@ def table_original():
             rows.append(" & ".join(cells) + " \\\\")
         rows.append("\\addlinespace[2pt]")
     rows = rows[:-1]
-    # author recipe
+    # author recipe: one row per (model, source) that has rows; the class-mean rows only, measured seeds averaged,
+    # placeholder seeds shown as placeholder (2026-10-21: the block used to average the per-class rows as if they were seeds)
     rec = []
-    for model in ("M2MRF", "HACDR-Net"):
+    for model in ("M2MRF", "HACDR-Net", "HRDecoder"):
         for train in D.TRAIN_MAIN:
+            a = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr_author_impl", cls="mean")
+            x = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr", cls="mean")
+            if not len(a):
+                continue
             p = D.sel(experiment="E1r", model=model, variant="paper", train_set=train, metric="aupr_author_impl")
-            a = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr_author_impl")
-            x = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr")
-            pv = float(p["value"].iloc[0])
+            pv, p_sim = (float(p["value"].iloc[0]), D.simulated(p)) if len(p) else e1(model, "paper", train, "aupr_author_impl")
+            a_sim, x_sim = D.simulated(a), D.simulated(x)
+            a_use = a if a_sim else a[a.source == "measured"]
+            x_use = x if x_sim else x[x.source == "measured"]
+            seeds = a_use["seed"].nunique()
+            a_sd = sd(a_use["value"].std(), a_sim) if seeds > 1 else ""
+            x_sd = sd(x_use["value"].std(), x_sim) if seeds > 1 else ""
             rec.append(
                 " & ".join(
-                    [model, train, num(pv, sim=D.simulated(p)), num(a["value"].mean()) + sd(a["value"].std()), "\\ph{3}",
-                     delta(a["value"].mean() - pv), num(x["value"].mean()) + sd(x["value"].std())]
+                    [model, train, num(pv, sim=p_sim), num(a_use["value"].mean(), sim=a_sim) + a_sd, (f"\\ph{{{seeds}}}" if a_sim else str(seeds)),
+                     delta(a_use["value"].mean() - pv, sim=a_sim or p_sim), num(x_use["value"].mean(), sim=x_sim) + x_sd]
                 )
                 + " \\\\"
             )

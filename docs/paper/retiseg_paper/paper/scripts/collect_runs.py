@@ -17,6 +17,7 @@ Reads the files that bench.eval.cli evaluate writes (bench/eval/evaluate.py):
     runs/ENS/<train>/<composition>/<set>/metrics.json + done.json   ensembles of probability maps (bench/scripts/ensemble.py, 14 M15)
     runs/HUMAN/DiaRetDB1/expert_<e>/metrics.json                 leave-one-expert-out human reference (bench/scripts/diaretdb1_experts.py, 14 M16a)
     runs/CLIN/strata/<run>/<set>/strata.json                     results by DR grade (bench/scripts/clinical_strata.py, 14 M17a)
+    runs/REFINED/<run>/{refined,original}/metrics.json           Refined IDRiD labels vs the official ones (bench/scripts/refined_idrid.py, 14 note 49)
     data/cost_measured.tsv                                     E10 numbers recorded by hand (docs/ops/00)
     data/cost_audit.tsv                                         E10 numbers from bench/scripts/cost_audit.py
 
@@ -367,7 +368,37 @@ def source_key(runs_dir, name):
     if name.startswith("BF_") and factor_key(Path(runs_dir) / name) is not None:
         experiment, model, variant, train, seed, _test = factor_key(Path(runs_dir) / name)
         return experiment, variant, model, train, seed
+    r = E1R.match(name)
+    if r and r["slug"] in SLUG:
+        return "E1r", "author_recipe", SLUG[r["slug"]], DATASET[r["dataset"]], int(r["seed"])
     return None
+
+
+def collect_refined(runs_dir):
+    """runs/REFINED/<run>/{refined,original}/metrics.json (bench/scripts/refined_idrid.py; docs/paper/14 note 49): the
+    same IDRiD-trained checkpoint's maps, cropped and resized to the Refined IDRiD geometry, scored against the refined
+    labels (variant refined_labels) and against the official labels through the same geometry (original_labels_1024).
+    Experiment REF, the run's own model / train_set / seed, test set IDRiD-refined."""
+    rows, seen = [], []
+    root = Path(runs_dir) / "REFINED"
+    if not root.is_dir():
+        return pd.DataFrame(rows), seen
+    for run_dir in sorted(p for p in root.iterdir() if p.is_dir()):
+        key = source_key(runs_dir, run_dir.name)
+        if key is None:
+            continue
+        _experiment, base_variant, model, train, seed = key
+        for sub, variant in (("refined", "refined_labels"), ("original", "original_labels_1024")):
+            path = run_dir / sub / "metrics.json"
+            if not path.exists():
+                continue
+            report = load_report(path)
+            if report is None:
+                continue
+            label = f"{variant}:{base_variant}" if base_variant not in ("bstd", "peft", "encoder_decoder", "full_ft") else variant
+            rows += rows_from_report(report, "REF", label, model, train, seed, "IDRiD-refined")
+            seen.append((f"REFINED/{run_dir.name}", f"{sub}/metrics.json", report.get("summary", {}).get("mAUPR")))
+    return pd.DataFrame(rows), seen
 
 
 def collect_clin(runs_dir):
@@ -725,6 +756,10 @@ def main():
     if len(clin):
         new = pd.concat([new, clin], ignore_index=True)
         seen += seen_clin
+    refined, seen_refined = collect_refined(args.runs)
+    if len(refined):
+        new = pd.concat([new, refined], ignore_index=True)
+        seen += seen_refined
     sheets = [collect_sheet(PAPER / "data" / f) for f in ("cost_measured.tsv", "cost_audit.tsv")]
     sheet = pd.concat([x for x in sheets if len(x)], ignore_index=True) if any(len(x) for x in sheets) else pd.DataFrame()
     new = pd.concat([sheet, new], ignore_index=True) if len(new) else sheet

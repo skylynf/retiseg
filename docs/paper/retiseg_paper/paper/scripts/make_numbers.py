@@ -122,11 +122,22 @@ def original():
     first = D.sel(experiment="E1r", model="M2MRF", variant="bs1_first_run", cls="mean")
     put("e1r.first.fn", f3(float(first[first.metric == "aupr_author_impl"]["value"].iloc[0])), False)
     put("e1r.first.exact", f3(float(first[first.metric == "aupr"]["value"].iloc[0])), False)
-    for model in ("M2MRF", "HACDR-Net"):
+    for model in ("M2MRF", "HACDR-Net", "HRDecoder"):
         for train in D.TRAIN_MAIN:
-            p = D.sel(experiment="E1r", model=model, variant="paper", train_set=train, metric="aupr_author_impl")["value"].iloc[0]
-            r = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr_author_impl")["value"]
-            put(f"e1r.{model}.{train}.delta", f"{r.mean() - p:+.3f}".replace("-", "−"), True)
+            pr = D.sel(experiment="E1r", model=model, variant="paper", train_set=train, metric="aupr_author_impl")
+            if not len(pr):
+                pr = D.sel(experiment="E1", model=model, variant="paper", train_set=train, test_set=train, metric="aupr_author_impl", cls="mean")
+            rr = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr_author_impl", cls="mean")
+            if not len(pr) or not len(rr):
+                continue
+            sim_r = D.simulated(rr) or D.simulated(pr)
+            r = rr if sim_r else rr[rr.source == "measured"]
+            p = float(pr["value"].iloc[0])
+            put(f"e1r.{model}.{train}.delta", f"{r['value'].mean() - p:+.3f}".replace("-", "−"), sim_r)
+            put(f"e1r.{model}.{train}.fn", f3(r["value"].mean()), D.simulated(rr))
+            xx = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr", cls="mean")
+            xx = xx if D.simulated(xx) else xx[xx.source == "measured"]
+            put(f"e1r.{model}.{train}.exact", f3(xx["value"].mean()), D.simulated(xx))
 
 
 def retrained():

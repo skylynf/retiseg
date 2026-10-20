@@ -38,6 +38,24 @@
   写作节奏（本机）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3、表 6/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒。
 
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
+  进度（本机 10-21，pull 到 add8484，10-21 包已进表：1,267 份报告、50,786 行实测；E1r HRDecoder、集成 96 份、留一专家 4 份、分层 355 份、E8 源内测试都在 results.csv）。10-21 的决定与新条目是第 31–36 条；按 31 → 32 → 33 → 34 的顺序做，35、36 随后。队列收口仍按 10-24/25：到 10-25 还要的卡时约 215（E5 测试档 ~20、MedSAM 种子 0 ~30、SAMed 种子 ~19、编码器对照 66、2880 画布 52、探测收尾 ~10、各自的 e3a ~15），六张卡两天多；最长的单任务是 2880（52 时）和编码器三格（各 22 时），所以 2880 已在 queue.yaml 里打开、编码器三格一到空卡就开（第 32、34 条）。
+  31. MedSAM（第 22 条的冒烟失败：ModuleNotFoundError segment_anything，是 official_code/MedSAM 子模块没有检出，权重已在）：
+       git submodule update --init official_code/MedSAM      # 锁定 d71e8a1；GitHub 连不上就从本机 rsync 这个目录
+       E5_MODELS=MedSAM bash bench/scripts/server_run.sh e5-smoke
+     冒烟通过后把 MedSAM 加进 queue.yaml 的 e5_seed0 的 only（服务器自己改、提交），队列接它的两库种子 0（各约 15 GPU 时）；推理池的 b 档 MedSAM 项会在 2–5 有空卡时自己接上。冒烟仍失败就把报错贴 00，种子 0 不开。
+  32. 编码器对照（16 第三节 E5d2 的 C1、C2；DINOv2 权重 pretrained/vit_large_patch14_dinov2.lvd142m.safetensors 已到位，bench/models/vit_upernet.py 直接读这个文件名）：三格一起开，各约 22 GPU 时，手动、不进队列（launch_extra 按 RETISEG_GPUS 每卡一个进程，最长的先）：
+       RETISEG_GPUS="<三张空卡>" $(conda) run -n retiseg --no-capture-output python bench/scripts/launch_extra.py --submit --experiment E5enc --only e5enc_vitup_mae_ddr_seed0_lr1,e5enc_vitup_rfdinov2_ddr_seed0_lr1,e5enc_vitup_dinov2_ddr_seed0_lr1
+     （server_run.sh extra 不接 --only，所以直接调 launch_extra；放到 nohup/setsid 里。）空卡不够三张就先开两格，第三格随后。训完各自按 launch_extra 的流程打内部测试；两个 TJDR 集合要 e3a：`python -m bench.e3a run --run runs/E5enc_<格> --sets TJDR_std,TJDR_uwf`。三格的内部与 TJDR 数贴 00。
+  33. Refined IDRiD（26 N4，14 备注 49；代码已到 bench/scripts/refined_idrid.py，CPU）。发布是每图一张 1024×1024 灰度标注（论文表 2：背景 0、VH 4、视网膜 8、黄斑 16、血管 24、视盘 32、EX 63、IRMA 96、HE 127、NV 166、CWS 191、MA 255；一像素一类），图是视网膜区域裁剪后不保比例缩到 1024。先核几何，再做标注，最后打分：
+       python bench/scripts/refined_idrid.py check   --root dataset/incoming/RefinedIDRiD      # 对 27 张测试图找出复现发布图的裁剪框（本项目 FOV 框 + 0–32 像素边距），逐图 NCC；全部 ≥0.97 才接受，写 dataset/prepared/RefinedIDRiD_geometry.json
+       python bench/scripts/refined_idrid.py prepare --root dataset/incoming/RefinedIDRiD      # 写 dataset/prepared/RefinedIDRiD（修订标注）与 RefinedIDRiD_original（官方标注过同一几何），label_difference.json 是标注差异统计
+       python bench/scripts/refined_idrid.py score                                              # IDRiD 训练的主表种子 0、nnU-Net、E1、E1r 的 prob_test 过同一几何后对两套标注各评一次 → runs/REFINED/<run>/{refined,original}/metrics.json
+     check 的逐图 NCC 与接受与否贴 00；不接受（有图 <0.97）就停在 check，把最差几张的 NCC 和边距贴 00，本机再看（可能是他们裁的不是 FOV 框）。Train.tar 的 54 张暂不用。
+  34. 2880 画布（第 21 条）：queue.yaml 的 factor_hrdecoder_2880 已由本机打开（优先级 56，下一张空卡就接，retiseg-hacdr，约 52 GPU 时）。本机的判断：E1r 作者配方 0.674、1440 画布两倍预算 0.615（IDRiD），画布是剩下的解释，这格把它单独量出来；它是最长的单任务，所以不等 HRDecoder DDR 探测。显存不够时 cell 加 batch_size: 2 并记 00。
+  35. 探测打分：bench/train.py --score-only 只写概率图（评测一向由启动器的 score 阶段做，探测不走启动器），所以照服务器 10-20 的做法补一条 evaluate：
+       python -m bench.eval.cli evaluate --data dataset/prepared/<库> --split test --pred runs/BSprobe_<cell>/prob_test --val-pred runs/BSprobe_<cell>/prob_val --out runs/BSprobe_<cell>/metrics_test
+     HRNet DDR、HRDecoder DDR 两个探测训完各做一次；三个探测的测试 mAUPR 与验证最高点贴 00（IDRiD 的 0.6153 已记）。
+  36. 打包：第 31 条冒烟、第 33 条 check、第 32 条首格出数后各打一包（--since runs/handoff_manifest_20261021.tsv）；runs/REFINED/、runs/E5enc_*、dataset/prepared/RefinedIDRiD_geometry.json、RefinedIDRiD/label_difference.json 要在包里（pack_handoff 只收 runs/ 下的小文件——geometry.json 与 label_difference.json 请复制到 runs/REFINED/ 一份）。
   进度（本机 10-20，pull 到 99f9b88，10-20 包已进表：807 份报告、39,258 行实测；RETFound E3b FGADR、E7 512，SAM2-UNet E3b 两格，推理池 20 项都在 results.csv）：服务器 10-20 07:25 记录四张卡（4–7）空着、推理池只剩 MedSAM、选择没跑。第 25–28 条是现在就做的，顺序：25（CPU，几分钟）→ 26 → 27 → 28；第 19 条的探测卡现在不用从队列里拿（卡本来就空）。
   25. ［已完成，服务器 2026-10-20 08:20，提交 fa0f4a8 / d77cf60；结果在 00 第三节与 14 M9、M9b］ 推理档的选择（第七节第 4 条；"选择交给本机决定"的答复：规则是预登记的，没有需要决定的事，照规则跑）：python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限）与 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select；把打印的 yaml 粘进 e5_frozen.yaml 的 zero_shot.grid.selected / zero_shot.sam3.selected，runs/E5/selection_*.json 进下一包，00 记一笔（本机按验证池的 metrics.json 预计：SAM、SAM 2.1 都是密度 128、上限 0.5%，SAM 3 措辞 2；若 --select 的结果不同，以它为准）。128 当选时预算规则生效：该模型的 TJDR_uwf 只跑 fov 变体（Luming 2026-10-14 已定，不再问）。提交（git commit -F）。
   26. ［已完成，服务器 2026-10-20 08:20，提交 fa0f4a8 / d77cf60；结果在 00 第三节与 14 M9、M9b］ 打开测试阶段：queue.yaml 的 e5_infer_test 改 enabled: true 并提交；max_concurrent 先改 2（四张空卡里两张给它，两张给 e5_rest 的 SAMed/RETFound 种子与第 19 条的探测）。启动器重读文件就会接；MedSAM 的项自动跳过。a 档每模型约 50 GPU 时（14 M9 的估算），b 档与 SAM 3 远小于此；每天一包。
@@ -46,15 +64,15 @@
        python -m bench.predict --config /tmp/e8_unet_fine_tjdr.yaml --checkpoint runs/BF_e8_unet_fine_seed0/best.pt --pred-dir runs/BF_e8_unet_fine_seed0/insource_TJDR_std/prob --split test
        python -m bench.eval.cli evaluate --data dataset/prepared/TJDR_std --split test --pred runs/BF_e8_unet_fine_seed0/insource_TJDR_std/prob --out runs/BF_e8_unet_fine_seed0/insource_TJDR_std/metrics
      M2MRF 走 bench/scripts/predict_m2mrf_b1.py（参数同理）。IDRiD 同理（dataset/prepared/IDRiD，官方测试 27 张）。四个目录的 metrics_test.json 的 mAUPR 记 00。
-  29. DiaRetDB1 留一专家参照（26 N3a，14 M16a；CPU 十几分钟，读 dataset/prepared/DiaRetDB1 的 experts 层，不读任何模型输出）：
+  29. ［已完成 10-21 10:01；四人 mAUPR 0.15–0.28、图像级 AUC 0.87–0.93，14 M16a］ DiaRetDB1 留一专家参照（26 N3a，14 M16a；CPU 十几分钟，读 dataset/prepared/DiaRetDB1 的 experts 层，不读任何模型输出）：
        python bench/scripts/diaretdb1_experts.py
      写 runs/HUMAN/DiaRetDB1/expert_01…04/metrics.json 与 summary.json（回传包按 .json 自动收；truth/、prob/ 的 png 不收）。把 summary.json 里 across_experts 的 mAUPR、mAUC_image_max 四行贴 00。
-  30. 按 DR 分级分层（26 N5a，14 M17a；CPU 几分钟，只读 metrics.npz）：
+  30. ［已完成 10-21 11:51（DDR 分卷到位后 --force 重跑）；366 份］ 按 DR 分级分层（26 N5a，14 M17a；CPU 几分钟，只读 metrics.npz）：
        python bench/scripts/clinical_strata.py grades    # 读 prepared 的 export_cases.jsonl 与 DDR 发布包的 DR_grading/*.txt → runs/CLIN/grades.json；DDR 分级文件读不到时把报错贴 00
        python bench/scripts/clinical_strata.py strata    # 每个已完成的 E3a 集合与分级集合上的内部测试 → runs/CLIN/strata/<run>/<集合>/strata.json
        python bench/scripts/clinical_strata.py summary   # runs/CLIN/strata_summary.json，打印一张表
      三个输出目录都是 .json，回传包自动收。
-  28. ［进行中：08:28 起 GPU 6（hrnet_ddr → hrdecoder_ddr）、GPU 7（hrdecoder_idrid），日志 runs/logs/20261020_082826_probe_gpu*.log］ 第 19 条的两倍预算探测现在就开（卡空着）：PROBE_GPUS="6 7" 两张卡，三个 cell 分两条链；训完各自 --score-only。e5_rest（SAMed、RETFound 种子 1、2）由队列在另外两张卡上接；核对 nvidia-smi 后把卡的去向记 00。
+  28. ［IDRiD 探测已出：测试 0.6153；HRNet DDR 探测训完在打分；HRDecoder DDR 探测在训（10-21 06:41 epoch 100/800）；打分见第 35 条］ 第 19 条的两倍预算探测现在就开（卡空着）：PROBE_GPUS="6 7" 两张卡，三个 cell 分两条链；训完各自 --score-only。e5_rest（SAMed、RETFound 种子 1、2）由队列在另外两张卡上接；核对 nvidia-smi 后把卡的去向记 00。
   进度（本机 10-19，pull 到 5d1fb72，10-19 包已进表：611 份报告、30,601 行实测，CLC-Net、HRDecoder、SAM2-UNet 修订版、nnU-Net E3b、M2MRF 原分辨率、a 档 DDR 验证池都在 results.csv）：第 16–18 条已做完。第 17 条的核对本机读过：包装器参数与作者配置对得上、四类都有输出，差距的归因交给第 19–21 条（26 的 N1）。新加第 19–24 条，按序号做；第 19 条要从 RETISEG_GPUS 里拿出一张卡，启动器重启一次。
   19. 两倍预算敏感性（26 N1b；14 备注 22、46；只进补充表）：三个 cell 已在仓库——bs_probe_hrnet_ddr_seed0、bs_probe_hrdecoder_idrid_seed0、bs_probe_hrdecoder_ddr_seed0（budget_probe: 2，其余与主表 cell 相同）。做法：杀掉启动器，用 RETISEG_GPUS="2 3 4 5 6" 重开同一条队列，GPU 7 给探测：
        PROBE_GPUS="7" PROBE_CELLS="bs_probe_hrnet_ddr_seed0 bs_probe_hrdecoder_idrid_seed0 bs_probe_hrdecoder_ddr_seed0" bash bench/scripts/server_run.sh probe
@@ -62,12 +80,12 @@
        python bench/train.py --config bench/configs/cells/bs_probe_hrnet_ddr_seed0.yaml --run-dir runs/BSprobe_hrnet_ddr_seed0 --score-only   # retiseg
        python bench/train.py --config bench/configs/cells/bs_probe_hrdecoder_<库>_seed0.yaml --run-dir runs/BSprobe_hrdecoder_<库>_seed0 --score-only   # retiseg-hacdr
      若 --score-only 被 budget_probe 拦住（train.py 的 _score_existing 不检查 probe，预计能过），把报错贴 00，本机改。BSprobe_ 目录 e3a 不接、collect 不读（本机手工进补充表）；00 记 mAUPR 与验证最高点的位置。探测跑完把 GPU 7 还给队列（再重启一次）。
-  20. HRDecoder 作者配方重训 E1r IDRiD（26 N1a；代码已到：bench/train_hrdecoder.py、bench/configs/e1r_hrdecoder_idrid_seed0.yaml，14 备注 46）。在探测那张卡上跑，一条命令串起训练（retiseg-hacdr）、每 2000 步检查点的作者指标与最后一步的本协议打分：
+  20. ［已完成，10-21 03:36：本协议 0.6736，作者指标最后一步 0.6718 / mIoU 0.4786，测试集选最优只多 0.002；14 备注 46］ HRDecoder 作者配方重训 E1r IDRiD（26 N1a；代码已到：bench/train_hrdecoder.py、bench/configs/e1r_hrdecoder_idrid_seed0.yaml，14 备注 46）。在探测那张卡上跑，一条命令串起训练（retiseg-hacdr）、每 2000 步检查点的作者指标与最后一步的本协议打分：
        E1R_GPU=7 bash bench/scripts/server_run.sh e1r-hrdecoder
      写 runs/E1r_hrdecoder_idrid_seed0_bs4/（collect 认 _bs4 后缀）：history.jsonl、run_params.json、iter_2000…20000.pt、author_idrid_test.json（最后一步）、selection_on_test.json（作者规则"测试集上挑 mIoU 最优"会得到哪一步、差多少）、prob_test/、metrics_test.json。单进程 4 图约需 30–40 GB 显存；放不下时加 E1R_EXTRA="--micro-batch 2"（梯度累积到 4，BN 看 2 张，run_params.json 记下）或 "--checkpoint-backbone"。中断后同一命令从 last.pt 续。约 30 GPU 时。每步耗时与显存记 00。
-  21. HRDecoder 的 2880 画布（26 N1c，第二优先；代码已到：bench/configs/cells/e7_hrdecoder_idrid_2880_seed0.yaml，factor.py 的 patch / budget_mode 键，queue.yaml 的 factor_hrdecoder_2880 阶段默认 enabled: false）：第 19 条探测与第 20 条 E1r 读完、本机决定后把该阶段 enabled 改 true 重启队列即可（retiseg-hacdr，约 52 GPU 时，4 倍像素每步；显存不够时 cell 加 batch_size: 2 并记 00）。E7 的检查点按规则不做独立测试。
-  22. 权重（用户下载后服务器核对 sha256 并记 00）：MedSAM medsam_vit_b.pth 到位后 E5_MODELS=MedSAM 冒烟，e5_seed0 自动接它的两库种子 0，推理池的 b 档 MedSAM 项不再跳过；公开 DINOv2 ViT-L（timm vit_large_patch14_dinov2.lvd142m）到位后 launch_extra.py --experiment E5enc --only e5enc_vitup_dinov2_ddr_seed0_lr1（与 MAE-IN1k、RETFound-DINOv2 一起，第六节第 3 条），再补一格 DINOv2 + UPerNet 的 IDRiD（cell 待本机写，第二优先）。
-  23. 集成（26 N2；代码已到 bench/scripts/ensemble.py，规则 14 M15）。先出成员表（CPU，nnU-Net 一行要在 prob_val 上评一次）：
+  21. ［10-21 已打开，见第 34 条］ HRDecoder 的 2880 画布（26 N1c，第二优先；代码已到：bench/configs/cells/e7_hrdecoder_idrid_2880_seed0.yaml，factor.py 的 patch / budget_mode 键，queue.yaml 的 factor_hrdecoder_2880 阶段默认 enabled: false）：第 19 条探测与第 20 条 E1r 读完、本机决定后把该阶段 enabled 改 true 重启队列即可（retiseg-hacdr，约 52 GPU 时，4 倍像素每步；显存不够时 cell 加 batch_size: 2 并记 00）。E7 的检查点按规则不做独立测试。
+  22. ［权重都已到位（10-20 11:27 MedSAM，10:05 DINOv2）；MedSAM 冒烟因子模块缺失失败 → 第 31 条；DINOv2 → 第 32 条］ 权重（用户下载后服务器核对 sha256 并记 00）：MedSAM medsam_vit_b.pth 到位后 E5_MODELS=MedSAM 冒烟，e5_seed0 自动接它的两库种子 0，推理池的 b 档 MedSAM 项不再跳过；公开 DINOv2 ViT-L（timm vit_large_patch14_dinov2.lvd142m）到位后 launch_extra.py --experiment E5enc --only e5enc_vitup_dinov2_ddr_seed0_lr1（与 MAE-IN1k、RETFound-DINOv2 一起，第六节第 3 条），再补一格 DINOv2 + UPerNet 的 IDRiD（cell 待本机写，第二优先）。
+  23. ［六个集合 × 八个组合 × 两源 96 份已出（10-21 包）；FGADR、Retinal-Lesions 的成员重推理仍待空卡——排在第 31–34 条之后］ 集成（26 N2；代码已到 bench/scripts/ensemble.py，规则 14 M15）。先出成员表（CPU，nnU-Net 一行要在 prob_val 上评一次）：
        python bench/scripts/ensemble.py members --train DDR ；python bench/scripts/ensemble.py members --train IDRiD
      再按组合算（CPU，逐像素平均 + 本协议评测；六个集合用已落盘的图）：
        python bench/scripts/ensemble.py plan --train DDR ；python bench/scripts/ensemble.py run --train DDR --composition top3   # all / top5 / 1perfam / fam:general / fam:auto / fam:fundus / fam:foundation 同

@@ -491,3 +491,31 @@
    状态与决定：待本机改为 monkeypatch 一个临时 runs 根；本次未改。
    处理条件：下次碰测试文件时。
    来源：2026-10-20 云端跑 test_launch_queue。
+
+75  2026-10-21  3 级 → 已处理（2026-10-21，本机）
+   问题：make_tables.signed() 把负差值写成 "$$-$$.31"（10-12 起；先换 "-0." 为 "$-$." 再把 "-" 又换一次），表 5、表 7 的负 Δ 进了 display math，编译不报错但排版错。
+   影响：只有 LaTeX 输出；数字无关。
+   状态与决定：改为一次替换，表已重生成（14 备注 53）。
+   处理条件：无。
+   来源：10-21 核对表 5 集成块。
+
+76  2026-10-21  2 级 → 已处理（2026-10-21，本机）
+   问题：表 3b（E1r）把逐类行当成种子平均：对 M2MRF IDRiD 显示 ".612 ± .154"（.154 是四个类的标准差），且 HRDecoder 行缺。
+   影响：表 3b。
+   状态与决定：只取 cls=mean 的实测种子，种子数按实测行计，HRDecoder 行加入；make_numbers 的 e1r.* 同样按数据标占位。
+   处理条件：无。
+   来源：10-21 读 E1r HRDecoder 进表。
+
+77  2026-10-21  2 级
+   问题：MedSAM 冒烟失败：ModuleNotFoundError segment_anything——official_code/MedSAM 子模块在服务器没有检出（权重已到）。
+   影响：主表第 19 行、推理池 b 档 MedSAM 项。
+   状态与决定：服务器 `git submodule update --init official_code/MedSAM` 后重做冒烟（17 第四节第 31 条）；通过后服务器把 MedSAM 写进 e5_seed0 的 only。
+   处理条件：第 31 条。
+   来源：服务器 10-21 06:41 记录。
+
+78  2026-10-21  2 级
+   问题：我在 10-20 写的三处代码由服务器修正：diaretdb1_experts 读不到全零专家图（prepare 不落盘全零 png）、ensemble.members_table 把整份 members.json 读成表、train_hrdecoder 在作者构造函数弹出 crop_num 之前读几何。修正已在 add8484。
+   影响：无（三处都在运行前修好）。
+   状态与决定：记下以便复盘：prepare 对全零 raw 层不落盘是既有约定，新读者要照顾；写缓存文件时读写口径要一致。
+   处理条件：无。
+   来源：服务器 10-20/21 的 00 记录。
