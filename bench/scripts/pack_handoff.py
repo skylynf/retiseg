@@ -1,6 +1,7 @@
 """Pack the server's small result files for the workstation (docs/ops/17 section 1).
 
     python bench/scripts/pack_handoff.py                      # -> retiseg_runs_handoff_<date>.tar.gz next to the repo
+                                                              #    a later pack the same day is retiseg_runs_handoff_<date>_v2.tar.gz
     python bench/scripts/pack_handoff.py --since runs/handoff_manifest_20261014.tsv   # "new since" against an earlier pack
     python bench/scripts/pack_handoff.py --list                # what would go in, nothing written
 
@@ -162,6 +163,23 @@ def read_manifest(path):
     return out
 
 
+def archive_path(directory, stamp):
+    """The first pack of a day keeps the date name. A later pack the same day is ``_v2``, ``_v3``, ..."""
+    plain = directory / f"retiseg_runs_handoff_{stamp}.tar.gz"
+    taken = []
+    if plain.is_file():
+        taken.append(1)
+    for path in directory.glob(f"retiseg_runs_handoff_{stamp}_v*.tar.gz"):
+        suffix = path.name[: -len(".tar.gz")].rsplit("_v", 1)[-1]
+        if suffix.isdigit():
+            taken.append(int(suffix))
+    if not taken:
+        return plain, plain.name[: -len(".tar.gz")]
+    version = max(taken) + 1
+    name = f"retiseg_runs_handoff_{stamp}_v{version}"
+    return directory / f"{name}.tar.gz", name
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", help="tar.gz path (default: ../retiseg_runs_handoff_<date>.tar.gz)")
@@ -181,8 +199,11 @@ def main(argv=None):
         for row in unaligned:
             print(f"  unaligned: {row['metrics']} ({row['exclusions_aligned']})")
         return
-    name = f"retiseg_runs_handoff_{stamp}"
-    out = Path(args.out) if args.out else _ROOT.parent / f"{name}.tar.gz"
+    if args.out:
+        out = Path(args.out)
+        name = out.name[: -len(".tar.gz")] if out.name.endswith(".tar.gz") else out.name
+    else:
+        out, name = archive_path(_ROOT.parent, stamp)
     manifest = [(str(rel), (_ROOT / rel).stat().st_size, sha256_of(_ROOT / rel)) for rel in files]
     work = _ROOT / "runs" / "logs" / "handoff" / name
     work.mkdir(parents=True, exist_ok=True)

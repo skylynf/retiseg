@@ -376,3 +376,10 @@ e5_infer_test 改为开，max_concurrent 2。08:06 时四张空卡已经被 e5_r
 4. 服务器修正了我 10-20 的三处（21 第 78 条），已在 add8484。
 5. 计划（17 第四节第 31–36 条）：31 MedSAM 子模块 + 冒烟 → 种子 0；32 编码器对照三格；33 Refined IDRiD 三步；34 2880 已开；35 探测打分；36 打包。到 10-25 约 215 GPU 时，六张卡两天多；最长单任务 2880（52 时）与编码器三格（各 22 时），先开。
 写回：bench/{configs/queue.yaml, scripts/refined_idrid.py, tests/test_refined_idrid.py, tests/test_launch_queue.py}、docs/paper/retiseg_paper/paper/{data/results.csv, scripts/{collect_runs.py, make_tables.py, make_numbers.py}, sections/{results,discussion}.tex, generated/numbers.tex, tables/generated/*, figures/out/*, main.pdf}、docs/paper/{13,14,26}、docs/ops/{00,17,21}、docs/CHECKPOINT.md。runs/ 本身不进仓库。
+
+2026-10-21 07:34 +0800，pull 到 6c6d375。按第 31–36 条做。
+第 31 条：official_code/MedSAM 检出到锁定的 d71e8a1，segment_anything 能导入并建出 Sam。冒烟还没开：2–7 都有进程（GPU 7 是队列的 SAM 2 密度 128、FGADR 测试）。空出一张卡后再跑 E5_MODELS=MedSAM 的 20 步。种子 0 仍不进 e5_seed0 的 only。
+第 33 条停在 check，不接受。Test.tar 解到 dataset/incoming/RefinedIDRiD/extracted。27 张测试图的最高 NCC 都低于 0.97：最差 IDRiD_57 margin 32、框 [0, 2848, 72, 3939]、NCC 0.6867；其次 IDRiD_61 0.7344（margin 32）、IDRiD_75 0.7371（32）、IDRiD_68 0.7420（32）、IDRiD_56 0.7438（32）。最好的是 IDRiD_78 0.8230（margin 16）。用过的边距是 1、2、8、16、32。文件 dataset/prepared/RefinedIDRiD_geometry.json，副本 runs/REFINED/RefinedIDRiD_geometry.json。没有跑 prepare 和 score。
+第 35 条 HRNet DDR 探测：验证最高 0.6267（epoch 660）。测试 mAUPR 0.4686（n=225，排除 0），文件 runs/BSprobe_hrnet_ddr_seed0/metrics_test.json。HRDecoder DDR 探测仍在 GPU 6（07:31 为 epoch 140/800，验证 0.4972），训完由原等待进程打分。
+第 34 条：factor_hrdecoder_2880 已开。07:11 的启动器（pid 88417，卡 2 3 4 5 7）每次空卡重读 queue.yaml，不用再重启。当前空卡先被推理测试接走。第 32 条编码器三格还没有空卡，没开。
+第 36 条：当天第二包不覆盖 06:42 那一份，改名为 /home/qurr/luming/retiseg/retiseg_runs_handoff_20261021_v2.tar.gz（50 MB，5179 个文件，1011 行指标，0 个未对齐）。清单仍是 runs/handoff_manifest_20261021.tsv。
