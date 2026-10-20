@@ -39,14 +39,22 @@
 
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
   进度（本机 10-20，pull 到 99f9b88，10-20 包已进表：807 份报告、39,258 行实测；RETFound E3b FGADR、E7 512，SAM2-UNet E3b 两格，推理池 20 项都在 results.csv）：服务器 10-20 07:25 记录四张卡（4–7）空着、推理池只剩 MedSAM、选择没跑。第 25–28 条是现在就做的，顺序：25（CPU，几分钟）→ 26 → 27 → 28；第 19 条的探测卡现在不用从队列里拿（卡本来就空）。
-  25. 推理档的选择（第七节第 4 条；"选择交给本机决定"的答复：规则是预登记的，没有需要决定的事，照规则跑）：python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限）与 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select；把打印的 yaml 粘进 e5_frozen.yaml 的 zero_shot.grid.selected / zero_shot.sam3.selected，runs/E5/selection_*.json 进下一包，00 记一笔（本机按验证池的 metrics.json 预计：SAM、SAM 2.1 都是密度 128、上限 0.5%，SAM 3 措辞 2；若 --select 的结果不同，以它为准）。128 当选时预算规则生效：该模型的 TJDR_uwf 只跑 fov 变体（Luming 2026-10-14 已定，不再问）。提交（git commit -F）。
-  26. 打开测试阶段：queue.yaml 的 e5_infer_test 改 enabled: true 并提交；max_concurrent 先改 2（四张空卡里两张给它，两张给 e5_rest 的 SAMed/RETFound 种子与第 19 条的探测）。启动器重读文件就会接；MedSAM 的项自动跳过。a 档每模型约 50 GPU 时（14 M9 的估算），b 档与 SAM 3 远小于此；每天一包。
-  27. E8 细粒度合并运行的源内测试（CPU/GPU 几十分钟；14 M9b）：runs/BF_e8_unet_fine_seed0 与 runs/BF_e8_m2mrf_fine_seed0 在 TJDR_std 与 IDRiD 的测试划分上预测并评测（这两个源进了训练，e3a 按规则不测；这里要的是"源内"的数，目录名写 runs/BF_e8_<模型>_fine_seed0/insource_<集>/metrics.json，collect 暂不读，本机手工进 14）：
+  25. ［已完成，服务器 2026-10-20 08:20，提交 fa0f4a8 / d77cf60；结果在 00 第三节与 14 M9、M9b］ 推理档的选择（第七节第 4 条；"选择交给本机决定"的答复：规则是预登记的，没有需要决定的事，照规则跑）：python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限）与 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select；把打印的 yaml 粘进 e5_frozen.yaml 的 zero_shot.grid.selected / zero_shot.sam3.selected，runs/E5/selection_*.json 进下一包，00 记一笔（本机按验证池的 metrics.json 预计：SAM、SAM 2.1 都是密度 128、上限 0.5%，SAM 3 措辞 2；若 --select 的结果不同，以它为准）。128 当选时预算规则生效：该模型的 TJDR_uwf 只跑 fov 变体（Luming 2026-10-14 已定，不再问）。提交（git commit -F）。
+  26. ［已完成，服务器 2026-10-20 08:20，提交 fa0f4a8 / d77cf60；结果在 00 第三节与 14 M9、M9b］ 打开测试阶段：queue.yaml 的 e5_infer_test 改 enabled: true 并提交；max_concurrent 先改 2（四张空卡里两张给它，两张给 e5_rest 的 SAMed/RETFound 种子与第 19 条的探测）。启动器重读文件就会接；MedSAM 的项自动跳过。a 档每模型约 50 GPU 时（14 M9 的估算），b 档与 SAM 3 远小于此；每天一包。
+  27. ［已完成，服务器 2026-10-20 08:20，提交 fa0f4a8 / d77cf60；结果在 00 第三节与 14 M9、M9b］ E8 细粒度合并运行的源内测试（CPU/GPU 几十分钟；14 M9b）：runs/BF_e8_unet_fine_seed0 与 runs/BF_e8_m2mrf_fine_seed0 在 TJDR_std 与 IDRiD 的测试划分上预测并评测（这两个源进了训练，e3a 按规则不测；这里要的是"源内"的数，目录名写 runs/BF_e8_<模型>_fine_seed0/insource_<集>/metrics.json，collect 暂不读，本机手工进 14）：
        把 runs/BF_e8_unet_fine_seed0/config.yaml 复制到 /tmp/e8_unet_fine_tjdr.yaml，只把 dataset 改成 dataset/prepared/TJDR_std（predict.py 只读 model、dataset、fov_diameter 与推理几何），然后
        python -m bench.predict --config /tmp/e8_unet_fine_tjdr.yaml --checkpoint runs/BF_e8_unet_fine_seed0/best.pt --pred-dir runs/BF_e8_unet_fine_seed0/insource_TJDR_std/prob --split test
        python -m bench.eval.cli evaluate --data dataset/prepared/TJDR_std --split test --pred runs/BF_e8_unet_fine_seed0/insource_TJDR_std/prob --out runs/BF_e8_unet_fine_seed0/insource_TJDR_std/metrics
      M2MRF 走 bench/scripts/predict_m2mrf_b1.py（参数同理）。IDRiD 同理（dataset/prepared/IDRiD，官方测试 27 张）。四个目录的 metrics_test.json 的 mAUPR 记 00。
-  28. 第 19 条的两倍预算探测现在就开（卡空着）：PROBE_GPUS="6 7" 两张卡，三个 cell 分两条链；训完各自 --score-only。e5_rest（SAMed、RETFound 种子 1、2）由队列在另外两张卡上接；核对 nvidia-smi 后把卡的去向记 00。
+  29. DiaRetDB1 留一专家参照（26 N3a，14 M16a；CPU 十几分钟，读 dataset/prepared/DiaRetDB1 的 experts 层，不读任何模型输出）：
+       python bench/scripts/diaretdb1_experts.py
+     写 runs/HUMAN/DiaRetDB1/expert_01…04/metrics.json 与 summary.json（回传包按 .json 自动收；truth/、prob/ 的 png 不收）。把 summary.json 里 across_experts 的 mAUPR、mAUC_image_max 四行贴 00。
+  30. 按 DR 分级分层（26 N5a，14 M17a；CPU 几分钟，只读 metrics.npz）：
+       python bench/scripts/clinical_strata.py grades    # 读 prepared 的 export_cases.jsonl 与 DDR 发布包的 DR_grading/*.txt → runs/CLIN/grades.json；DDR 分级文件读不到时把报错贴 00
+       python bench/scripts/clinical_strata.py strata    # 每个已完成的 E3a 集合与分级集合上的内部测试 → runs/CLIN/strata/<run>/<集合>/strata.json
+       python bench/scripts/clinical_strata.py summary   # runs/CLIN/strata_summary.json，打印一张表
+     三个输出目录都是 .json，回传包自动收。
+  28. ［进行中：08:28 起 GPU 6（hrnet_ddr → hrdecoder_ddr）、GPU 7（hrdecoder_idrid），日志 runs/logs/20261020_082826_probe_gpu*.log］ 第 19 条的两倍预算探测现在就开（卡空着）：PROBE_GPUS="6 7" 两张卡，三个 cell 分两条链；训完各自 --score-only。e5_rest（SAMed、RETFound 种子 1、2）由队列在另外两张卡上接；核对 nvidia-smi 后把卡的去向记 00。
   进度（本机 10-19，pull 到 5d1fb72，10-19 包已进表：611 份报告、30,601 行实测，CLC-Net、HRDecoder、SAM2-UNet 修订版、nnU-Net E3b、M2MRF 原分辨率、a 档 DDR 验证池都在 results.csv）：第 16–18 条已做完。第 17 条的核对本机读过：包装器参数与作者配置对得上、四类都有输出，差距的归因交给第 19–21 条（26 的 N1）。新加第 19–24 条，按序号做；第 19 条要从 RETISEG_GPUS 里拿出一张卡，启动器重启一次。
   19. 两倍预算敏感性（26 N1b；14 备注 22、46；只进补充表）：三个 cell 已在仓库——bs_probe_hrnet_ddr_seed0、bs_probe_hrdecoder_idrid_seed0、bs_probe_hrdecoder_ddr_seed0（budget_probe: 2，其余与主表 cell 相同）。做法：杀掉启动器，用 RETISEG_GPUS="2 3 4 5 6" 重开同一条队列，GPU 7 给探测：
        PROBE_GPUS="7" PROBE_CELLS="bs_probe_hrnet_ddr_seed0 bs_probe_hrdecoder_idrid_seed0 bs_probe_hrdecoder_ddr_seed0" bash bench/scripts/server_run.sh probe
@@ -54,10 +62,16 @@
        python bench/train.py --config bench/configs/cells/bs_probe_hrnet_ddr_seed0.yaml --run-dir runs/BSprobe_hrnet_ddr_seed0 --score-only   # retiseg
        python bench/train.py --config bench/configs/cells/bs_probe_hrdecoder_<库>_seed0.yaml --run-dir runs/BSprobe_hrdecoder_<库>_seed0 --score-only   # retiseg-hacdr
      若 --score-only 被 budget_probe 拦住（train.py 的 _score_existing 不检查 probe，预计能过），把报错贴 00，本机改。BSprobe_ 目录 e3a 不接、collect 不读（本机手工进补充表）；00 记 mAUPR 与验证最高点的位置。探测跑完把 GPU 7 还给队列（再重启一次）。
-  20. HRDecoder 作者配方重训 E1r IDRiD（26 N1a；入口 bench/train_hrdecoder.py 与 bench/configs/e1r_hrdecoder_idrid_seed0.yaml 由本机写，仿 train_m2mrf.py / e1r_m2mrf_idrid_seed0.yaml：作者 config 的 2880×1920 缩放、1920 裁、hr_scale 960、crop_num 2、20k 步、SGD 0.01 poly10warm、4 卡各 1 改单卡累积 4、SyncBN 改 BN，取最后一步）：代码 pull 到后 queue.yaml 的 e1r 阶段 items 由本机填，或手动在探测那张卡上跑；作者函数（11 阈值）与本协议各评一次，写 runs/E1r_hrdecoder_idrid_seed0/。约 30 GPU 时。
-  21. HRDecoder 的 2880 画布（26 N1c，第二优先）：等本机放开 factor.py 的 E7 限制（模型表加 HRDecoder、画布加 2880，块 1920）后以 BF_e7_hrdecoder_idrid_2880_seed0 进 factor 阶段；本条只是占位，代码到了再做。
+  20. HRDecoder 作者配方重训 E1r IDRiD（26 N1a；代码已到：bench/train_hrdecoder.py、bench/configs/e1r_hrdecoder_idrid_seed0.yaml，14 备注 46）。在探测那张卡上跑，一条命令串起训练（retiseg-hacdr）、每 2000 步检查点的作者指标与最后一步的本协议打分：
+       E1R_GPU=7 bash bench/scripts/server_run.sh e1r-hrdecoder
+     写 runs/E1r_hrdecoder_idrid_seed0_bs4/（collect 认 _bs4 后缀）：history.jsonl、run_params.json、iter_2000…20000.pt、author_idrid_test.json（最后一步）、selection_on_test.json（作者规则"测试集上挑 mIoU 最优"会得到哪一步、差多少）、prob_test/、metrics_test.json。单进程 4 图约需 30–40 GB 显存；放不下时加 E1R_EXTRA="--micro-batch 2"（梯度累积到 4，BN 看 2 张，run_params.json 记下）或 "--checkpoint-backbone"。中断后同一命令从 last.pt 续。约 30 GPU 时。每步耗时与显存记 00。
+  21. HRDecoder 的 2880 画布（26 N1c，第二优先；代码已到：bench/configs/cells/e7_hrdecoder_idrid_2880_seed0.yaml，factor.py 的 patch / budget_mode 键，queue.yaml 的 factor_hrdecoder_2880 阶段默认 enabled: false）：第 19 条探测与第 20 条 E1r 读完、本机决定后把该阶段 enabled 改 true 重启队列即可（retiseg-hacdr，约 52 GPU 时，4 倍像素每步；显存不够时 cell 加 batch_size: 2 并记 00）。E7 的检查点按规则不做独立测试。
   22. 权重（用户下载后服务器核对 sha256 并记 00）：MedSAM medsam_vit_b.pth 到位后 E5_MODELS=MedSAM 冒烟，e5_seed0 自动接它的两库种子 0，推理池的 b 档 MedSAM 项不再跳过；公开 DINOv2 ViT-L（timm vit_large_patch14_dinov2.lvd142m）到位后 launch_extra.py --experiment E5enc --only e5enc_vitup_dinov2_ddr_seed0_lr1（与 MAE-IN1k、RETFound-DINOv2 一起，第六节第 3 条），再补一格 DINOv2 + UPerNet 的 IDRiD（cell 待本机写，第二优先）。
-  23. 集成的重推理（26 N2；等本机的 bench/scripts/ensemble.py）：FGADR、Retinal-Lesions 两个集合没有留单模型概率图，脚本到了在 e3a 的卡上按来源重推理、内存累加、只落盘集成的 metrics.json（不写单模型的图，许可不变）；其余六个集合由本机在工作站上用已落盘的图算。约 20 GPU 时。
+  23. 集成（26 N2；代码已到 bench/scripts/ensemble.py，规则 14 M15）。先出成员表（CPU，nnU-Net 一行要在 prob_val 上评一次）：
+       python bench/scripts/ensemble.py members --train DDR ；python bench/scripts/ensemble.py members --train IDRiD
+     再按组合算（CPU，逐像素平均 + 本协议评测；六个集合用已落盘的图）：
+       python bench/scripts/ensemble.py plan --train DDR ；python bench/scripts/ensemble.py run --train DDR --composition top3   # all / top5 / 1perfam / fam:general / fam:auto / fam:fundus / fam:foundation 同
+     FGADR、Retinal-Lesions 两个集合的单模型概率图当初 --drop-maps 删了：对每个成员先 `python -m bench.e3a run --run runs/<成员> --sets FGADR,Retinal-Lesions --regenerate-maps`（只重推理、不重评；e3a 的卡），集成在这两个集合上用 `run --train DDR --composition all,top3,top5,1perfam,fam:general,fam:auto,fam:fundus,fam:foundation --sets FGADR,Retinal-Lesions --drop-maps`（集成自己的图算完即删），然后手工 rm 成员的 runs/E3a/<成员>/{FGADR,Retinal-Lesions}/prob_test（许可不变，done.json 已记 maps_dropped）。输出 runs/ENS/<训练源>/<组合>/<集合>/metrics.json + done.json，members.json 一起回传，本机抄进 14 M15。约 20 GPU 时 + CPU 数小时。
   24. 打包：第 19 条的第一个探测、e5_rest 的第一个种子出数后各打一包（--since runs/handoff_manifest_20261019.tsv）；BSprobe_* 与 runs/E1r_hrdecoder_* 的小文件要在包里（pack_handoff 按后缀收，应自动在）。之后仍是每天一包。
   16. SAM 3（pull 到含本条的提交后再让它的项跑）：官方示例把整个推理放在 torch.autocast("cuda", bfloat16) 里，fused fc1 的 bfloat16 输出因此不会撞上 float32 的 fc2；bench/e5/sam3_text.py 的 Sam3Scorer 现在在 CUDA 上进同样的 autocast，服务器 10-18 的转回 float32 只在 autocast 关着时生效（21 第 61 条）。若池里已有 a_sam3_ph* 目录是在 pull 之前写出的（run 记录里没有 precision 字段），移到 runs/archive/ 让队列重跑。
   17. HRDecoder 种子 0 的核对（21 第 62 条，CPU，几分钟）：IDRiD 0.648 / DDR 0.296 低得反常。把 runs/BS_hrdecoder_{idrid,ddr}_seed0/ 的 history.jsonl 里逐类验证 AUPR 的首末两行、recipe.json 的 deviations 整段、metrics_test.json 的 per_class 四个 aupr 贴进 00；不要重跑、不要改包装器，本机判断。
@@ -138,7 +152,7 @@
   M2MRF IDRiD 种子 1、2（bench/train_m2mrf.py --config bench/configs/e1r_m2mrf_idrid_seed0.yaml 改 seed，各约 16 GPU 时，打分同种子 0）；M2MRF DDR 一个种子（需一份 e1r_m2mrf_ddr_seed0.yaml，按作者 DDR 配置写、核对后记 14 M6）；HACDR-Net 两库各一个种子（需从 bench/scripts/train_hacdr_b1.py 改出 E1r 版本）。算力不够时第一个砍。
 
 十三、回传清单（下一包，第四节第 5、24 条）
-  runs/E5/selection_*.json 与测试阶段的目录（第 25、26 条）、runs/BF_e8_*_fine_seed0/insource_*（第 27 条）、runs/BSprobe_*（两倍预算，第四节第 19 条）、runs/E1r_hrdecoder_*（第 20 条）、runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*（含 E9 两项打分后的 metrics_test.json）、runs/E3a/、runs/BS_*（新种子、E5 与专用模型的 run_params.json 和验证曲线）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
+  runs/E5/selection_*.json 与测试阶段的目录（第 25、26 条）、runs/BF_e8_*_fine_seed0/insource_*（第 27 条）、runs/BSprobe_*（两倍预算，第四节第 19 条）、runs/E1r_hrdecoder_idrid_seed0_bs4（第 20 条，含 selection_on_test.json、run_params.json）、runs/ENS/（第 23 条，含 members.json）、runs/HUMAN/（第 29 条）、runs/CLIN/（第 30 条）、runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*（含 E9 两项打分后的 metrics_test.json）、runs/E3a/、runs/BS_*（新种子、E5 与专用模型的 run_params.json 和验证曲线）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
 
 十四、用户决定（2026-10-14 晚已全部定下，00「待用户 Luming 处理」下的确认行）
   D1–D9 确认；评审修复 6、7、16 确认；预算规则保留（a）；表 6/图 5 呈现已改；CI 已加（.github/workflows/tests.yml，push 后看 Actions 页面，失败记 21）；协议 sha256 锁文件在读出首个 E5 测试指标后由本机加；MAPLES-DR 只用官方测试 60 张。

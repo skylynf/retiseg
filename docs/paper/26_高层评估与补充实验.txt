@@ -33,7 +33,7 @@ N1 HRDecoder 案例研究（Q1、Q3）
     d. 包装器核对（17 第四节第 17 条，先于 a–c）：hr_scale、crop_num、hr_loss_weight、裁块尺度比例、类别置换、BinaryLoss 平滑，逐项对照作者 config；逐类验证曲线（history.jsonl）看 DDR 的 0.296 是否某一类塌缩。
     a. E1r：作者配方原样重训 IDRiD（official_code/HRDecoder 的 config；4 卡各 1 改单卡累积 4、SyncBN 改 BN，其余不动；取最后一步，不挑检查点），作者函数与本协议各报一次。回答"作者代码能否复现作者权重"，与 M2MRF 的 E1r 并列，Q1 的 R4 样本从 1 个变成 2 个。约 30 A100 时。DDR 版本（约 80）排第三优先。
     b. B-std 两倍预算（IDRiD、DDR）：只改 budget（第二节第 4 条的同一运行）。约 26 + 52。
-    c. B-std 2880 画布（IDRiD）：画布长边 2880（作者几何），hr_scale 1440、训练块 1920、推理窗口 1920 重叠 0.5；等效 epoch 数不变（M7 的定义：画布像素 ×4，块像素 ×4，步数不变，每步代价 ×4）。注意这与 E7"原分辨率块、块像素总量不变"的口径不同：E7 固定的是块像素总量，c 固定的是等效 epoch；两种口径都写进方法，c 用等效 epoch 口径是因为要回答"把作者的几何还给它"。约 52 A100 时。DDR 视 a、b 的结果再定。
+    c. B-std 2880 画布（IDRiD）：画布长边 2880（作者几何），训练块 1920、hr_scale 960（作者的骨干 / 裁块比 0.5；2026-10-20 更正，原写 1440 是笔误）、推理窗口 1920 重叠 0.5；等效 epoch 数不变（M7 的定义：画布像素 ×4，块像素 ×4，步数不变，每步代价 ×4）。注意这与 E7"原分辨率块、块像素总量不变"的口径不同：E7 固定的是块像素总量，c 固定的是等效 epoch；两种口径都写进方法，c 用等效 epoch 口径是因为要回答"把作者的几何还给它"。约 52 A100 时。DDR 视 a、b 的结果再定。
   预登记：a–c 的结果都进补充表；主表 HRDecoder 行仍是 B-std 1440 种子 0，不换；正文按 a–c 写归因，不改主表的排序与检验。
   落点：R3 加一段"同骨干三行与作者配方"；图 4 的同骨干小面板加 a–c 三个点；讨论 Q3 的分辨率段引用。
 
@@ -124,3 +124,4 @@ T6（这次不做）新的外部测试集：若将来有与八个来源都不同
 十、状态
   2026-10-18：本文件写成，等 Luming 确认。
   2026-10-19：Luming 授权按本机判断把第二、三节纳入计划，并给出医生资源（三人各 3 小时）。已同步：13 第三节"26 增补"块与第五节、14 M15–M17 与备注 46–49、16 第十节、17 第四节第 19–24 条与第三节队列表、19 第六节、queue.yaml 第四版（e5_rest 只限 SAMed、RETFound 并打开，e5_rest2 关）、三个两倍预算 cell、server_run.sh 的 probe 阶段认 PROBE_CELLS。第四节按三人各 3 小时改写。仍等 Luming：MedSAM、DINOv2 权重与 Refined IDRiD 的下载；与医生约 T3 的时间；是否尝试 Nature Methods。
+  2026-10-20：本机代码全部到位——bench/scripts/ensemble.py（N2，成员按检查点选择时的验证 mAUPR 排序，集成自己的验证图选阈值）、bench/train_hrdecoder.py + e1r_hrdecoder_idrid_seed0.yaml（N1a；读作者配置时发现其 runner 在测试集上挑检查点，14 备注 46）、e7_hrdecoder_idrid_2880_seed0 cell 与 factor.py 的 patch / budget_mode（N1c）、bench/scripts/diaretdb1_experts.py（N3a）、bench/scripts/clinical_strata.py（N5a，从 metrics.npz 分层）；collect_runs 认 ENS / HUMAN / CLIN，表 5 加集成块与人类参照块。服务器命令在 17 第四节第 20、21、23、29、30 条。T1–T3 的材料按 Luming 指示等医生联系好再做。写作：R4 独立测试段、R6、R7、R8、讨论 Q3 与方法的因素段已按实测数写成实数（14 备注 51、52）；N6、N7 未写。

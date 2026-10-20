@@ -96,7 +96,12 @@ def predict(config_path, checkpoint, pred_dir, split):
     pred_dir = Path(pred_dir)
     assert_not_finished_run(pred_dir)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = build_model(config["model"]).to(device)
+    model = build_model(config["model"])
+    if config.get("experiment") == "BF":
+        from bench.factor import apply_cell_geometry
+
+        apply_cell_geometry(model, config)   # the E7 case study's patch key (26 N1c)
+    model = model.to(device)
     apply_matmul_precision(model, config)
     state = load_trusted(checkpoint, map_location=device)
     if "model_name" in state and state["model_name"] != model.card.name:

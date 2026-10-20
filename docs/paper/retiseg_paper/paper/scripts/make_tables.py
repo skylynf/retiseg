@@ -420,6 +420,70 @@ def table_main():
 
 
 # ----------------------------------------------- Table 5 independent testing
+ENSEMBLE_ORDER = ["E-top3", "E-top5", "E-1perfam", "E-all", "E-fam:general", "E-fam:auto", "E-fam:fundus", "E-fam:foundation"]
+
+
+def ensemble_rows(pix):
+    """The ensemble block of Table 5 (docs/paper/14 M15; bench/scripts/ensemble.py): measured rows only, no rank
+    (ensembles are a reference, not part of the Friedman test); empty until collect_runs has read runs/ENS."""
+    df = D.sel(experiment="ENS", variant="ensemble", metric="aupr")
+    if df.empty:
+        return []
+    df = df[df["cls"].isin(D.CLASSES)]
+    score = df.groupby(["model", "train_set", "test_set"])["value"].mean()
+    auc = D.sel(experiment="ENS", variant="ensemble", metric="img_auc")
+    auc = auc.groupby(["model", "train_set"])["value"].mean() if not auc.empty else None
+    rows = [r"\grouprow{18}{Ensembles of the rows above (pixelwise mean of the probability maps; members chosen on validation data)}"]
+    for model in [m for m in ENSEMBLE_ORDER if m in score.index.get_level_values(0)]:
+        cells = [model.replace("fam:", "fam.\\,")]
+        for t in D.TRAIN_MAIN:
+            def v(c):
+                return score.get((model, t, c), np.nan)
+            cells.append(num(v(t), "{:.2f}", np.isnan(v(t))))
+            for c in pix:
+                cells.append(tint(v(c), 0.0, 0.7) + num(v(c), "{:.2f}", np.isnan(v(c))))
+            a = auc.get((model, t), np.nan) if auc is not None else np.nan
+            cells.append(num(a, "{:.2f}", np.isnan(a)))
+            fine = [v(c) for c in D.FINE_INDEPENDENT]
+            d = np.nanmean(fine) - v(t) if not np.isnan(v(t)) and not all(np.isnan(fine)) else np.nan
+            cells.append((div_tint(d, 0.5) if not np.isnan(d) else "") + (signed(d, False) if not np.isnan(d) else "--"))
+        cells.append("--")
+        rows.append(" & ".join(cells) + " \\\\")
+    return rows
+
+
+def human_rows():
+    """The human-reference block of Table 5 (docs/paper/14 M16a; bench/scripts/diaretdb1_experts.py): each DiaRetDB1
+    expert scored against the consensus of the other three with the protocol. Only the DiaRetDB1 column (image-level
+    AUC, as the model rows) applies; the experts trained on nothing, so the value stands under both training blocks.
+    Nothing is ranked against them; empty until collect_runs has read runs/HUMAN."""
+    df = D.sel(experiment="HUMAN", variant="leave_one_expert_out", metric="img_auc")
+    if df.empty:
+        return []
+    df = df[df["cls"].isin(D.CLASSES)]
+    auc = df.groupby("model")["value"].mean()
+    if auc.empty:
+        return []
+    rows = [r"\grouprow{18}{Human reference: one DiaRetDB1 expert against the consensus of the other three (leave-one-expert-out; no training source, same value under both blocks)}"]
+    for model in sorted(auc.index):
+        cells = [model]
+        for _t in D.TRAIN_MAIN:
+            cells += ["--"] * 6
+            cells.append(num(auc[model], "{:.2f}", False))
+            cells.append("--")
+        cells.append("--")
+        rows.append(" & ".join(cells) + " \\\\")
+    if len(auc) > 1:
+        cells = ["Expert range"]
+        for _t in D.TRAIN_MAIN:
+            cells += ["--"] * 6
+            cells.append(f"{num(auc.min(), '{:.2f}', False)}--{num(auc.max(), '{:.2f}', False)}")
+            cells.append("--")
+        cells.append("--")
+        rows.append(" & ".join(cells) + " \\\\")
+    return rows
+
+
 def table_independent():
     """Table 5. Simulated / measured is decided per cell (model, source, test set), so the rows measured so far read
     as results while the rest of the table is still placeholder (2026-10-15: nine supervised models on all eight sets);
@@ -428,7 +492,6 @@ def table_independent():
     measured = {(m, t, s): not D.simulated(g) for (m, t, s), g in runs.groupby(["model", "train_set", "test_set"])}
     auc_runs = D.main_runs("img_auc")
     auc_measured = {(m, t): not D.simulated(g) for (m, t), g in auc_runs.groupby(["model", "train_set"])}
-    sim_all = D.simulated(runs)
     blocks = D.block_scores()
     fr = D.friedman(blocks)
     rank = dict(zip(blocks.index, fr["avg_rank"]))
@@ -446,7 +509,7 @@ def table_independent():
             marks[(t, c)] = rank_marks(vals)
         vals = [auc.loc[m, t] if auc_measured.get((m, t), False) and m in auc.index else np.nan for m in D.MAIN_MODELS]
         marks[(t, "auc")] = rank_marks(vals)
-    marks["rank"] = rank_marks([rank[m] for m in D.MAIN_MODELS], higher=False)
+    marks["rank"] = rank_marks([rank.get(m, np.nan) for m in D.MAIN_MODELS], higher=False)
 
     def mk(key, i):
         b, s2 = marks[key]
@@ -469,8 +532,10 @@ def table_independent():
                 d = m.loc[model, D.FINE_INDEPENDENT].mean() - m.loc[model, t]
                 d_sim = cell_sim(model, t, t) or any(cell_sim(model, t, c) for c in D.FINE_INDEPENDENT)
                 cells.append(div_tint(d, 0.5) + signed(d, d_sim))
-            cells.append(num(rank[model], "{:.2f}", sim_all, mk("rank", i), strip=False))
+            cells.append(num(rank.get(model, np.nan), "{:.2f}", model not in rank, mk("rank", i), strip=False))
             rows.append(" & ".join(cells) + " \\\\")
+    rows += ensemble_rows(pix)
+    rows += human_rows()
     body = "\n".join(rows)
     hdr = " & ".join(["Int."] + ["Std", "UWF", "Maples", "FGADR", "Ret.-L.", "DiaRet", "$\\Delta$"])
     tiers = " & ".join(["\\tier{fine}", "\\tier{fine}", "\\tier{fine}", "\\tier{fine}", "\\tier{mixed}", "\\tier{coarse}", "\\tier{region}", ""])

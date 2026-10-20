@@ -77,7 +77,10 @@ def test_queue_file_in_the_repository_loads_and_names_known_kinds():
     assert by_name["factor_e3b_heavy"]["experiment"] == "E3b"
     # the albert merge (docs/ops/25): one e5_infer kind; off until the inference smoke (pool) and the selections (test)
     assert by_name["e5_infer_pool"]["phase"] == "pool" and by_name["e5_infer_test"]["phase"] == "test"
-    assert by_name["e5_infer_pool"].get("enabled", True) and not by_name["e5_infer_test"].get("enabled", True)   # pool on since 2026-10-17
+    assert by_name["e5_infer_pool"].get("enabled", True) and by_name["e5_infer_test"].get("enabled", True)   # pool on since 2026-10-17, test on since 2026-10-20 (after the selection)
+    assert by_name["e5_infer_test"]["max_concurrent"] == 2
+    # the HRDecoder case study at its author canvas (docs/paper/26 N1c) waits for the probes and E1r: off until then
+    assert by_name["factor_hrdecoder_2880"]["models"] == ["HRDecoder"] and not by_name["factor_hrdecoder_2880"].get("enabled", True)
     # fourth edit, 2026-10-19 (docs/paper/26): SAMed and RETFound seeds are not cut any more; the other E5 seeds wait in e5_rest2
     assert by_name["e5_rest"]["only"] == ["SAMed", "RETFound"] and by_name["e5_rest"].get("enabled", True)
     assert by_name["e5_rest2"]["only"] == ["SAM2-UNet", "SAM-Adapter"] and not by_name["e5_rest2"].get("enabled", True)

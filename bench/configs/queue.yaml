@@ -78,9 +78,9 @@ stages:
   - name: e5_infer_test
     priority: 29
     kind: e5_infer
-    enabled: false
+    enabled: true
     phase: test
-    max_concurrent: 1
+    max_concurrent: 2
     drop_maps: [FGADR, Retinal-Lesions]
 
   # 5. Factor cells that need no new weights (R5, figure 7): U-Net and M2MRF rows of E3b/E4/E8/E9 and
@@ -112,6 +112,16 @@ stages:
     kind: factor
     experiment: E7
     models: [SAM2-UNet, RETFound]
+
+  # 7b. The HRDecoder case study at its author canvas (docs/paper/26 N1c; 14 note 46): one E7 cell on IDRiD,
+  #     canvas 2880, window 1920, the IDRiD equivalent epochs, retiseg-hacdr, about 52 h on one card. Enable
+  #     once the two-times-budget probes (17 section 4 item 19) and E1r HRDecoder (item 20) have been read.
+  - name: factor_hrdecoder_2880
+    priority: 56
+    kind: factor
+    experiment: E7
+    models: [HRDecoder]
+    enabled: false
 
   # 8. Independent tests of the B-std seed-1/2 checkpoints (error bars of R4 / figure 6): behind every
   #    training stage, so the two E3a cards go to training once the seed-0 sources are done.

@@ -6,7 +6,9 @@ geometry, evaluation) and changes exactly one thing:
 
     E3b  the training source (TJDR_std or FGADR instead of IDRiD/DDR)
     E4   the training set (DDR plus mixed or coarse labels; Retinal-Lesions alone)
-    E7   the canvas (long side 512, or 0 = native resolution, instead of 1440)
+    E7   the canvas (long side 512, or 0 = native resolution, instead of 1440); the HRDecoder
+         case study (docs/paper/26 N1c) is an E7 cell at the author's 2880 canvas with
+         ``patch: 1920`` and ``budget_mode: equivalent_epochs``
     E8   the amount of DDR (a frozen subset) or the fine-grained sources merged
     E9   the loss terms of U-Net (loss_override: loss name and loss_params)
 
@@ -32,6 +34,10 @@ Cell keys (bench/scripts/make_factor_jobs.py writes them):
       - {dataset: dataset/prepared/FGADR, split: train, subset: bench/data/splits/subsets/FGADR_train_383.json}
     budget_reference: DDR
     loss_override: {loss: dice, loss_params: {batch_dice: true, smooth: 1.0e-5}}   # E9 only: the loss term(s) of the recipe
+    patch: 1920                            # E7 case study only: a wrapper with a fixed window (HRDecoder.set_patch) trains and
+                                           # infers at this window instead of its B-std one
+    budget_mode: equivalent_epochs         # E7 case study only: the reference's equivalent epochs counted at THIS canvas
+                                           # (default patch_pixels: the reference's pixels at the frozen diameter)
     seed: 0
     num_workers: 4
     paper: {experiment: E4, variant: "DDR + FGADR (383)", train_set: "DDR + FGADR (383)"}
@@ -62,14 +68,30 @@ FACTORS = ("E3b", "E4", "E7", "E8", "E9")
 FACTOR_MODELS = {
     "E3b": ("U-Net", "M2MRF", "SAM2-UNet", "RETFound"),  # nnU-Net runs through its own bridge
     "E4": ("U-Net", "M2MRF"),
-    "E7": ("M2MRF", "RETFound"),
+    "E7": ("M2MRF", "RETFound", "HRDecoder"),   # HRDecoder only in the 2880 case study (26 N1c)
     "E8": ("U-Net", "M2MRF"),
     "E9": ("U-Net",),
 }
 
 
+AUTHOR_CANVAS = {"HRDecoder": 2880}       # the author's IDRiD canvas long side (official_code/HRDecoder: 2880 x 1920)
+BUDGET_MODES = ("patch_pixels", "equivalent_epochs")
+
+
 def is_factor(config):
     return config.get("experiment") == "BF"
+
+
+def apply_cell_geometry(model, config):
+    """A cell's ``patch`` key (E7 case study) rebuilds a fixed-window wrapper at that window before training,
+    scoring or an independent test, so every reader of the checkpoint sees the same geometry."""
+    patch = config.get("patch") if isinstance(config, dict) else None
+    if not patch:
+        return model
+    if not hasattr(model, "set_patch"):
+        raise ValueError(f"{config.get('model')} has no set_patch; the patch key is for wrappers with a fixed window")
+    model.set_patch(int(patch))
+    return model
 
 
 def assert_factor_cell(config, frozen):
@@ -92,8 +114,20 @@ def assert_factor_cell(config, frozen):
     diameter = int(config["fov_diameter"])
     if config["factor"] != "E7" and diameter != int(frozen["fov_diameter"]):
         raise ValueError(f"only E7 changes fov_diameter; {config['factor']} keeps {frozen['fov_diameter']}")
-    if config["factor"] == "E7" and diameter not in (0, 512, int(frozen["fov_diameter"])):
+    canvases = {0, 512, int(frozen["fov_diameter"])}
+    if config.get("model") == "HRDecoder":
+        canvases.add(AUTHOR_CANVAS["HRDecoder"])
+    if config["factor"] == "E7" and diameter not in canvases:
         raise ValueError(f"E7 canvases are 512, {frozen['fov_diameter']} or 0 (native), got {diameter}")
+    if config.get("model") == "HRDecoder" and (config["factor"] != "E7" or diameter != AUTHOR_CANVAS["HRDecoder"]):
+        raise ValueError("HRDecoder is a factor model only in the E7 case study at its author canvas (26 N1c)")
+    if config.get("patch") is not None and config["factor"] != "E7":
+        raise ValueError("patch is the E7 case study only")
+    mode = config.get("budget_mode", "patch_pixels")
+    if mode not in BUDGET_MODES:
+        raise ValueError(f"budget_mode is one of {BUDGET_MODES}, got {mode}")
+    if mode == "equivalent_epochs" and config["factor"] != "E7":
+        raise ValueError("budget_mode equivalent_epochs is the E7 case study only")
     if config.get("loss_override") and config["factor"] != "E9":
         raise ValueError("loss_override is the E9 factor only")
     if config.get("loss_override") and set(config["loss_override"]) - {"loss", "loss_params"}:
@@ -117,11 +151,11 @@ def inference_for(config, card, frozen=None):
     return {"window": window, "overlap": float(frozen["window_overlap"]), "batch": int(getattr(card, "window_batch", 8))}
 
 
-def reference_pixels(ref, frozen):
-    """Canvas pixels of the reference source's training split at the frozen diameter."""
+def reference_pixels(ref, frozen, diameter=None):
+    """Canvas pixels of the reference source's training split at the frozen diameter (or at ``diameter``)."""
     root = REPO / "dataset" / "prepared" / ref
     ids = load_split(root, frozen["splits"][ref]["train"])
-    return bstd.canvas_pixels(root, ids, int(frozen["fov_diameter"]))
+    return bstd.canvas_pixels(root, ids, int(frozen["fov_diameter"]) if diameter is None else int(diameter))
 
 
 def _abs(path):
@@ -156,7 +190,8 @@ def run_cell(config_path, config, model, declared, run_dir, predict_fn, diagnost
     mean, std = card.normalization["mean"], card.normalization["std"]
     source = build_sources(config, mean, std)
     val_split = PreparedSource(_abs(config["dataset"]), config["split_val"], diameter, mean, std)
-    pixels = reference_pixels(ref, frozen)
+    budget_mode = config.get("budget_mode", "patch_pixels")
+    pixels = reference_pixels(ref, frozen, diameter if budget_mode == "equivalent_epochs" else None)
     margin = int(getattr(card, "output_margin", 0) or 0)
     resolved, deviations, per_epoch, samples, eval_every = bstd.budget(
         declared, ref, frozen, pixels, patch, 1, model_name=card.name, margin=margin
@@ -168,6 +203,11 @@ def run_cell(config_path, config, model, declared, run_dir, predict_fn, diagnost
     ] + deviations
     if diameter != int(frozen["fov_diameter"]):
         deviations.append(f"E7 canvas: long side {diameter if diameter else 'native (no resize)'} instead of {frozen['fov_diameter']}; patch {patch[0]}x{patch[1]}")
+    if budget_mode == "equivalent_epochs":
+        deviations.append(f"budget_mode equivalent_epochs: the {ref} equivalent epochs counted at canvas {diameter} ({pixels} pixels), "
+                          f"the same step count as the B-std run with {patch[0]}x{patch[1]} patches (26 N1c), not the E7 fixed-patch-pixel rule")
+    if config.get("patch"):
+        deviations.append(f"patch {config['patch']}: the wrapper's fixed window rebuilt at the cell's patch (set_patch); inference windows follow")
     if has_ignore(source):
         deviations.append("ignore regions of the training sources are background in the training target; evaluation leaves them out (14 note 38)")
     override = config.get("loss_override")
@@ -195,6 +235,8 @@ def run_cell(config_path, config, model, declared, run_dir, predict_fn, diagnost
         "evaluation": {"dataset": prepared_name(_abs(config["dataset"])), "val": config["split_val"], "test": config["split_test"]},
         "fov_diameter": diameter,
         "budget_reference": ref,
+        "budget_mode": budget_mode,
+        "patch": config.get("patch"),
         "loss_override": override or None,
         "paper": config["paper"],
     }
@@ -235,11 +277,11 @@ def train_cell(config_path, config, run_dir, predict_fn, diagnostic=False, score
         missing = [name for name in ("best.pt", "last.pt", "recipe.json") if not (run_dir / name).is_file()]
         if missing:
             raise FileNotFoundError(f"{run_dir} is missing {missing}; the run has not finished")
-        model = build_model(config["model"])
+        model = apply_cell_geometry(build_model(config["model"]), config)
         score_run(config_path, run_dir, model.author_recipe(config["budget_reference"]), predict_fn)
         return 0.0
     set_seed(config["seed"])
-    model = build_model(config["model"])
+    model = apply_cell_geometry(build_model(config["model"]), config)
     declared = model.author_recipe(config["budget_reference"])
 
     def _pretrained():

@@ -150,43 +150,51 @@ def retrained():
             put(f"bstd.{train}.{cls}.best", f2(tab[cls].max()), sim)
             put(f"bstd.{train}.{cls}.median", f2(tab[cls].median()), sim)
         put(f"bstd.{train}.unet.SE", f2(tab.loc["U-Net", "SE"]), sim)
-        m = D.score_matrix(train)
+        # paired tests and correlations over the measured models only (a placeholder model would enter the pairs)
+        measured_models = D.measured_models()
+        m = D.score_matrix(train, models=measured_models)
+        part = D.simulated(D.main_runs()[D.main_runs().model.isin(measured_models)])
         for test in ("TJDR-std", "TJDR-uwf", "FGADR", "Retinal-Lesions"):
             d = m[test] - m[train]
-            put(f"indep.{train}.{test}.drop", f2(-d.mean()), sim)
-            put(f"indep.{train}.{test}.p", "< 0.001" if sps.wilcoxon(m[train], m[test]).pvalue < 0.001 else f"= {sps.wilcoxon(m[train], m[test]).pvalue:.3f}", sim)
-        put(f"indep.{train}.ndrop", int((m[D.FINE_INDEPENDENT].mean(axis=1) < m[train]).sum()), sim)
+            put(f"indep.{train}.{test}.drop", f2(-d.mean()), part)
+            put(f"indep.{train}.{test}.p", "< 0.001" if sps.wilcoxon(m[train], m[test]).pvalue < 0.001 else f"= {sps.wilcoxon(m[train], m[test]).pvalue:.3f}", part)
+        put(f"indep.{train}.ndrop", int((m[D.FINE_INDEPENDENT].mean(axis=1) < m[train]).sum()), part)
         rho = sps.spearmanr(m[train], m[D.FINE_INDEPENDENT].mean(axis=1)).statistic
-        put(f"indep.{train}.rho", f2(rho), sim)
+        put(f"indep.{train}.rho", f2(rho), part)
         top_int = m[train].idxmax()
         top_ind = m[D.FINE_INDEPENDENT].mean(axis=1).idxmax()
-        put(f"indep.{train}.top.model", top_ind, sim)
-        put(f"indep.{train}.top.value", f2(m.loc[top_ind, D.FINE_INDEPENDENT].mean()), sim)
-        put(f"indep.{train}.sametop", "the same model" if top_int == top_ind else "a different model", sim)
-    blocks = D.block_scores()
+        put(f"indep.{train}.top.model", top_ind, part)
+        put(f"indep.{train}.top.value", f2(m.loc[top_ind, D.FINE_INDEPENDENT].mean()), part)
+        put(f"indep.{train}.sametop", "the same model" if top_int == top_ind else "a different model", part)
+    blocks = D.block_scores()          # measured models only (data.measured_models)
     fr = D.friedman(blocks)
     rank = np.array(fr["avg_rank"])
     order = np.argsort(rank)
-    put("cd.chi2", f"{fr['statistic']:.1f}", sim)
-    put("cd.p", "< 0.001" if fr["p"] < 0.001 else f"= {fr['p']:.3f}", sim)
-    put("cd.value", f2(fr["critical_difference"]), sim)
-    put("cd.first.model", blocks.index[order[0]], sim)
-    put("cd.first.rank", f2(rank[order[0]]), sim)
-    put("cd.last.model", blocks.index[order[-1]], sim)
-    put("cd.last.rank", f2(rank[order[-1]]), sim)
-    put("cd.ntop", int((rank - rank.min() <= fr["critical_difference"]).sum()), sim)
-    fam = ms.assign(family=ms["model"].map(D.FAMILY_OF))
+    put("n.ranked", len(blocks), False)
+    part = D.simulated(D.main_runs()[D.main_runs().model.isin(list(blocks.index))])
+    put("cd.chi2", f"{fr['statistic']:.1f}", part)
+    put("cd.p", "< 0.001" if fr["p"] < 0.001 else f"= {fr['p']:.3f}", part)
+    put("cd.value", f2(fr["critical_difference"]), part)
+    put("cd.first.model", blocks.index[order[0]], part)
+    put("cd.first.rank", f2(rank[order[0]]), part)
+    put("cd.last.model", blocks.index[order[-1]], part)
+    put("cd.last.rank", f2(rank[order[-1]]), part)
+    put("cd.ntop", int((rank - rank.min() <= fr["critical_difference"]).sum()), part)
+    fam = ms[ms.model.isin(list(blocks.index))].assign(family=ms["model"].map(D.FAMILY_OF))
     ind = fam[fam.test_set.isin(D.FINE_INDEPENDENT)].groupby("family")["mean"].mean()
     inn = fam[fam.train_set == fam.test_set].groupby("family")["mean"].mean()
     for f in ("general", "auto", "fundus", "foundation"):
-        put(f"family.{f}.internal", f2(inn[f]), sim)
-        put(f"family.{f}.independent", f2(ind[f]), sim)
-    pub = D.sel(experiment="L1", variant="published_idrid", metric="reported_maupr").set_index("model")["value"]
+        put(f"family.{f}.internal", f2(inn[f]), part)
+        put(f"family.{f}.independent", f2(ind[f]), part)
+    pub_rows = D.sel(experiment="L1", variant="published_idrid", metric="reported_maupr")
+    pub_rows = pub_rows[pub_rows.model.isin(measured_models)]      # a published number is paired with a measured retraining only
+    pub = pub_rows.set_index("model")["value"]
     ret = D.score_matrix("IDRiD", models=list(pub.index))["IDRiD"]
     tau = D.bstats.kendall_tau(pub.to_numpy(), ret.to_numpy())
-    put("tau.published", f2(tau["tau"]), True)
-    put("tau.published.p", f2(tau["p"]), True)
-    put("tau.published.n", len(pub), True)
+    pub_sim = D.simulated(pub_rows) or len(pub) < 3
+    put("tau.published", f2(tau["tau"]), pub_sim)
+    put("tau.published.p", f2(tau["p"]), pub_sim)
+    put("tau.published.n", len(pub), pub_sim)
     exact = D.score_matrix("IDRiD")["IDRiD"]
     eleven = D.score_matrix("IDRiD", metric="aupr_11pt")["IDRiD"]
     put("impl.mean", f3((eleven - exact).mean()), sim)
@@ -271,46 +279,58 @@ def foundation():
     put("fm.enc.imagenet.ind", f2(ind["ImageNet-sup. ViT-L"]), True)
 
 
+def _measured(df):
+    """(measured rows, whether any placeholder row was left out): factor means are taken over measured cells only,
+    and the key is marked as placeholder while a cell of its selection is still missing."""
+    keep = df[df["source"] == "measured"]
+    return keep, len(keep) < len(df)
+
+
 def factors():
     import pandas as pd
 
-    a = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, metric="aupr", model=D.REPRESENTATIVE)
+    a = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, metric="aupr", model=D.REPRESENTATIVE, seed=0)
     b = D.sel(experiment="E3b", metric="aupr", model=D.REPRESENTATIVE)
-    g = pd.concat([a, b]).groupby(["model", "train_set", "test_set"])["value"].mean().groupby(["train_set", "test_set"]).mean().unstack("test_set")
     trains = ["IDRiD", "DDR", "TJDR-std", "FGADR"]
-    A = g.loc[trains, trains].to_numpy()
+    square, square_sim = _measured(pd.concat([a, b]).query("test_set in @trains"))
+    g = square.groupby(["model", "train_set", "test_set"])["value"].mean().groupby(["train_set", "test_set"]).mean().unstack("test_set")
+    A = g.reindex(index=trains, columns=trains).to_numpy()
     off = A - np.diag(A)[None, :]
-    put("cross.mean", f2(-off[~np.eye(4, dtype=bool)].mean()), True)
-    put("cross.max", f2(-off.min()), True)
-    put("cross.fgadr.fine", f2(-(off[3, :3]).mean()), True)
-    e4 = D.sel(experiment="E4", metric="aupr", test_set="IDRiD").groupby("variant")["value"].mean()
+    put("cross.mean", f2(-np.nanmean(off[~np.eye(4, dtype=bool)])), square_sim)
+    put("cross.max", f2(-np.nanmin(off)), square_sim)
+    put("cross.fgadr.fine", f2(-np.nanmean(off[3, :3])), square_sim)
+    e4_rows, e4_sim = _measured(D.sel(experiment="E4", metric="aupr", test_set="IDRiD"))
+    e4 = e4_rows.groupby("variant")["value"].mean()
     for cfg, tag in (("DDR + FGADR", "fgadr"), ("DDR + Retinal-Lesions", "retles"), ("DDR + FGADR (383)", "fgadr383"), ("Retinal-Lesions", "retlesonly"), ("FGADR", "fgadronly")):
-        put(f"e4.{tag}", f"{e4[cfg] - e4['DDR']:+.2f}".replace("-", "−"), True)
-    put("e4.ref", f2(e4["DDR"]), True)
-    e7 = D.sel(experiment="E7", test_set="DDR")
-    m = e7[e7.metric == "aupr"].groupby("variant")["value"].mean()
-    s = e7[e7.metric == "lesion_recall_small"].groupby("variant")["value"].mean()
-    put("e7.aupr.512", f2(m["res:512"]), True)
-    put("e7.aupr.1440", f2(m["res:1440"]), True)
-    put("e7.aupr.native", f2(m["res:native patches"]), True)
-    put("e7.small.512", f2(s["res:512"]), True)
-    put("e7.small.1440", f2(s["res:1440"]), True)
-    e8 = D.sel(experiment="E8", metric="aupr").groupby(["test_set", "variant"])["value"].mean()
-    put("e8.ddr.10", f2(e8[("DDR", "size:DDR 10%")]), True)
-    put("e8.ddr.50", f2(e8[("DDR", "size:DDR 50%")]), True)
-    put("e8.ddr.100", f2(e8[("DDR", "size:DDR 100%")]), True)
-    put("e8.ddr.all", f2(e8[("DDR", "size:fine merged")]), True)
-    put("e8.tjdr.100", f2(e8[("TJDR-std", "size:DDR 100%")]), True)
-    put("e8.tjdr.fine", f2(e8[("TJDR-std", "size:fine merged")]), True)
-    e9 = D.sel(experiment="E9", metric="aupr").groupby("variant")["value"].mean()
+        put(f"e4.{tag}", f"{e4[cfg] - e4['DDR']:+.2f}".replace("-", "−") if cfg in e4 and "DDR" in e4 else "n/a", e4_sim or cfg not in e4)
+    put("e4.ref", f2(e4["DDR"]) if "DDR" in e4 else "n/a", e4_sim)
+    e7_rows, e7_sim = _measured(D.sel(experiment="E7", test_set="DDR"))
+    m = e7_rows[e7_rows.metric == "aupr"].groupby("variant")["value"].mean()
+    s = e7_rows[e7_rows.metric == "lesion_recall_small"].groupby("variant")["value"].mean()
+    for key, series, variant in (("e7.aupr.512", m, "res:512"), ("e7.aupr.1440", m, "res:1440"), ("e7.aupr.native", m, "res:native patches"),
+                                 ("e7.small.512", s, "res:512"), ("e7.small.1440", s, "res:1440")):
+        put(key, f2(series[variant]) if variant in series else "n/a", e7_sim or variant not in series)
+    e8_rows, e8_sim = _measured(D.sel(experiment="E8", metric="aupr"))
+    e8 = e8_rows.groupby(["test_set", "variant"])["value"].mean()
+    for key, index in (("e8.ddr.10", ("DDR", "size:DDR 10%")), ("e8.ddr.50", ("DDR", "size:DDR 50%")), ("e8.ddr.100", ("DDR", "size:DDR 100%")),
+                       ("e8.ddr.all", ("DDR", "size:fine merged")), ("e8.tjdr.100", ("TJDR-std", "size:DDR 100%")), ("e8.tjdr.fine", ("TJDR-std", "size:fine merged"))):
+        put(key, f2(e8[index]) if index in e8.index else "n/a", e8_sim or index not in e8.index)
+    e9_rows, e9_sim = _measured(D.sel(experiment="E9", metric="aupr"))
+    e9 = e9_rows.groupby("variant")["value"].mean()
     e9 = e9[e9.index != "loss:CE + per-image Dice"]  # the collapsed registered recipe is reported separately
-    put("e9.range", f2(e9.max() - e9.min()), True)
-    cost = D.sel(experiment="E10", metric="train_gpu_h", train_set="IDRiD")
+    put("e9.range", f2(e9.max() - e9.min()), e9_sim)
+    cost, cost_sim = _measured(D.sel(experiment="E10", metric="train_gpu_h", train_set="IDRiD"))
     c = cost.set_index("model")["value"]
-    put("cost.min.model", c.idxmin(), D.simulated(cost))
-    put("cost.min", f"{c.min():.1f}", D.simulated(cost))
-    put("cost.max.model", c.idxmax(), D.simulated(cost))
-    put("cost.max", f"{c.max():.0f}", D.simulated(cost))
+    put("cost.min.model", c.idxmin(), cost_sim)
+    put("cost.min", f"{c.min():.1f}", cost_sim)
+    put("cost.max.model", c.idxmax(), cost_sim)
+    put("cost.max", f"{c.max():.0f}", cost_sim)
+    cost_ddr, _ = _measured(D.sel(experiment="E10", metric="train_gpu_h", train_set="DDR"))
+    cd_ = cost_ddr.set_index("model")["value"]
+    put("cost.ddr.max", f"{cd_.max():.0f}", cost_sim)
+    put("cost.ddr.max.model", cd_.idxmax(), cost_sim)
+    both = c.index.intersection(cd_.index)
+    put("cost.ddr.ratio", f"{(cd_[both] / c[both]).median():.1f}", cost_sim)
 
 
 def main():

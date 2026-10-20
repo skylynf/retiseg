@@ -457,9 +457,37 @@
    处理条件：无。
    来源：10-20 包 runs/BF_e3b_sam2_unet_tjdr_std_seed0/history.jsonl。
 
-70  2026-10-20  2 级
+70  2026-10-20  2 级 → 已处理（2026-10-20，服务器第 27 条出数；14 M9b、R7 已按四个数写回；collect_runs 读 insource_<集>）
    问题：E8 细粒度合并（IDRiD + DDR + TJDR_std）运行没有 TJDR_std、IDRiD 测试划分上的评测：这两个源进了训练，e3a 按规则跳过；results.tex R7 里"加进来的源在自己的测试集上提高"一句的宏 e8.tjdr.fine 是占位。
    影响：R7 的一句话、图 7e 的 TJDR_std 面板。
    状态与决定：服务器按 17 第四节第 27 条做源内测试（目录 insource_<集>，collect 不读，本机手工进 14）；拿不到就删那句。
    处理条件：第 27 条跑完。
    来源：10-20 包进表后核对 E8 的测试集。
+
+71  2026-10-20  4 级 → 已处理（2026-10-20，本机，retifig.data.measured_models）
+   问题：MedSAM 一行在 results.csv 里是占位值，但名次统计（data.block_scores → Friedman、临界差、平均名次）、make_numbers 的配对检验与族均值、图 4e/f 都对 19 个模型算，所以 14 M10 记的 χ² 106.3 / 108.8、临界差 9.90、FCT 名次 19.00、Kendall τ −0.02（n=10）都掺了模拟行；表 5 的 Avg. rank 列同样。
+   影响：R4 第二段、表 5、图 4e/f、摘要的 "top 12"（结论没变：仍是前 12 不可分）。
+   状态与决定：block_scores 默认只取实测模型（measured_models），图 4/7 行序先实测后未实测，make_numbers 的 indep.*、cd.*、family.*、tau.* 只对实测模型算；更正后 χ² 102.1、临界差 9.31、τ −0.22（n=9）记 14 M10 与备注 51。
+   处理条件：无（MedSAM 出数后自动并入）。
+   来源：写 R4 时核对 numbers.tex 的 cd.last.rank = 19.00。
+
+72  2026-10-20  3 级 → 已处理（2026-10-20，本机，make_numbers._measured）
+   问题：因素实验与代价的 \rn 键（cross.*、e4.*、e7.*、e8.*、e9.*、cost.*、tau.*）在 make_numbers 里被硬标为占位（put(..., True)），与数据无关；e7.aupr.native 还把 RETFound 的占位行平均进去。
+   影响：numbers.tex 里这些键永远带 \ph 标记；R7 的 "native" 均值错。
+   状态与决定：按选区是否含占位行决定标记，均值只对实测格算，缺格的键打 "n/a" 并标占位；图 6b/c/d、7d/e 同样只画实测格。
+   处理条件：无。
+   来源：同上。
+
+73  2026-10-20  2 级
+   问题：14 M9b 几处写的 U-Net DDR 种子 0 内部 mAUPR "0.371" 与 results.csv 的 0.378（runs/BS_unet_ddr_seed0/metrics_test.json）不一致；三种子均值 0.370。
+   影响：E8 "100%"、E9 "CE + 整批 Dice" 的参照值与差值（表 7 已按 collect 的 0.378 算，正文 R7 按 0.378 写）。
+   状态与决定：以 results.csv 为准，14 M9b 加注；不改旧记录。
+   处理条件：无。
+   来源：写 R7 时核对。
+
+74  2026-10-20  3 级
+   问题：bench/tests/test_launch_queue.py::test_factor_models_filter_keeps_the_cheap_cells_apart 在带 runs/ 的工作区里失败——它用 launch_factor.plan 真读 runs/<cell>/metrics_test.json，cheap 的 cell 都已完成时 plan 为空（与第 52 条同类：测试读机器状态）。
+   影响：本机 / 云端跑全套测试时红一项；CI（无 runs/）不受影响。
+   状态与决定：待本机改为 monkeypatch 一个临时 runs 根；本次未改。
+   处理条件：下次碰测试文件时。
+   来源：2026-10-20 云端跑 test_launch_queue。

@@ -24,6 +24,22 @@ EXPECTED_GRADING = {"train": 6835, "valid": 2733, "test": 4105}
 LABEL_DIR = {"train": "label", "test": "label", "valid": "segmentation label"}
 
 
+def parse_grading_text(text):
+    """'<file> <grade>' lines of DR_grading/<split>.txt -> {stem: grade}; grade 5 (ungradable) is dropped."""
+    grades = {}
+    for line in text.splitlines():
+        parts = line.split()
+        if len(parts) < 2:
+            continue
+        try:
+            grade = int(parts[-1])
+        except ValueError:
+            continue
+        if grade in (0, 1, 2, 3, 4):
+            grades[PurePosixPath(parts[0]).stem] = grade
+    return grades
+
+
 class _Parts:
     def __init__(self, paths):
         self.paths = [Path(p) for p in paths]
@@ -141,6 +157,18 @@ class DdrRelease:
     def grading_count(self, split):
         prefix = f"DDR-dataset/DR_grading/{split}/"
         return sum(n.startswith(prefix) and not n.endswith("/") for n in self.names())
+
+    def grades(self, split):
+        """{image stem: DR grade 0-4} of the official DR_grading/<split>.txt list; grade 5 (ungradable) is left out.
+        The segmentation images carry the same names, so a lookup by stem gives each test image its grade
+        (docs/paper/26 N5a; bench/scripts/clinical_strata.py)."""
+        if split not in SPLITS:
+            raise KeyError(split)
+        suffix = f"DR_grading/{split}.txt"
+        members = [n for n in self.names() if n.endswith(suffix)]
+        if len(members) != 1:
+            raise FileNotFoundError(f"expected one {suffix} in the DDR release, found {members}")
+        return parse_grading_text(self._archive().read(members[0]).decode("utf-8", "replace"))
 
     def _archive(self):
         if self._zip is None:

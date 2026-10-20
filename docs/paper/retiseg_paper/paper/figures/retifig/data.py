@@ -147,15 +147,34 @@ def score_matrix(train, metric="aupr", models=None):
     return t.loc[models or MAIN_MODELS, TESTS]
 
 
+def measured_models(models=None):
+    """The main-table models whose unified-retraining rows are all measured. A model still waiting for its weights
+    (MedSAM until 2026-10) has placeholder rows only; it must not enter the rank tests, the paired tests or the
+    family means (2026-10-20: the Friedman statistic had been computed over 19 models including that placeholder)."""
+    models = models or MAIN_MODELS
+    runs = main_runs()
+    return [m for m in models if len(runs[runs.model == m]) and not simulated(runs[runs.model == m])]
+
+
+def ranked_models():
+    """Models ordered by their average rank over the test-set blocks (measured models), then the unmeasured ones."""
+    blocks = block_scores()
+    fr = friedman(blocks)
+    order = np.argsort(np.array(fr["avg_rank"]))
+    ranked = [blocks.index[i] for i in order]
+    return ranked + [m for m in MAIN_MODELS if m not in ranked], blocks, fr
+
+
 def block_scores(models=None):
     """model x 7 test-set blocks for the Friedman test and the critical-difference diagram.
 
     Internal blocks use the checkpoint trained on that source. Independent
     blocks average the IDRiD-trained and DDR-trained checkpoints. DiaRetDB1
     uses the official image-level ROC AUC (ranks are computed within a block,
-    so blocks need not share a metric). See STRUCTURE.md, section 5.
+    so blocks need not share a metric). See STRUCTURE.md, section 5. Without
+    ``models`` the blocks hold the measured models only (measured_models).
     """
-    models = models or MAIN_MODELS
+    models = models or measured_models()
     a, b = score_matrix("IDRiD", models=models), score_matrix("DDR", models=models)
     out = pd.DataFrame(index=models, columns=TESTS, dtype=float)
     out["IDRiD"], out["DDR"] = a["IDRiD"], b["DDR"]

@@ -131,6 +131,27 @@ def check_e5(runs):
     print(f"ok: {len(new)} E5 rows from {len(seen)} inference-tier directories")
 
 
+def check_insource(runs, report_path):
+    """runs/BF_<cell>/insource_<set>/metrics.json (17 section 4 item 27) becomes a row of the cell's variant on that set."""
+    import yaml
+
+    cell = runs / "BF_e8_unet_fine_seed0"
+    (cell / "insource_TJDR_std").mkdir(parents=True)
+    (cell / "config.yaml").write_text(yaml.safe_dump({
+        "experiment": "BF", "factor": "E8", "model": "U-Net", "dataset": "dataset/prepared/DDR", "seed": 0,
+        "train": [{"dataset": "dataset/prepared/IDRiD", "split": "train"}, {"dataset": "dataset/prepared/DDR", "split": "train"}, {"dataset": "dataset/prepared/TJDR_std", "split": "train"}],
+        "paper": {"experiment": "E8", "variant": "size:fine merged", "train_set": "DDR"}}))
+    shutil.copyfile(report_path, cell / "metrics_test.json")
+    shutil.copyfile(report_path, cell / "insource_TJDR_std" / "metrics.json")
+    new, seen = collect_runs.collect(runs)
+    names = sorted(n for r, n, _ in seen if r == "BF_e8_unet_fine_seed0")
+    assert names == ["insource_TJDR_std/metrics.json", "metrics_test.json"], names
+    inside = new[(new.experiment == "E8") & (new.variant == "size:fine merged") & (new.test_set == "TJDR-std")]
+    assert len(inside) and (inside.model == "U-Net").all() and (inside.train_set == "DDR").all()
+    shutil.rmtree(cell)
+    print("ok: an in-source test of a merged-source cell is read as that variant on its own set")
+
+
 def check_references():
     """The factor blocks' reference rows are copies of the measured main-table / E3b rows (docs/ops/21 item 68)."""
     cols = ["experiment", "model", "variant", "train_set", "seed", "test_set", "cls", "metric", "value", "source"]
@@ -206,6 +227,7 @@ def main():
         assert collect_runs.nn_key(collect_runs.NN.match("NN_default_fgadr_fold0")) == ("E3b", "bstd", "nnU-Net", "FGADR", 0)
         assert collect_runs.nn_key(collect_runs.NN.match("NN_resencm_tjdr_std_fold0")) == ("E3b", "bstd", "nnU-Net ResEnc-M", "TJDR-std", 0)
         print(f"ok: {len(new)} rows from one report replaced {replaced} placeholder rows; nothing else changed")
+        check_insource(tmp / "runs", run / "metrics_test.json")
         check_e5(tmp / "runs")
         check_references()
     finally:

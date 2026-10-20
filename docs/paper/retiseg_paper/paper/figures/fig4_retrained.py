@@ -23,11 +23,7 @@ ROW = 3.05  # mm per model row
 
 
 def order_models():
-    blocks = D.block_scores()
-    fr = D.friedman(blocks)
-    rank = np.array(fr["avg_rank"])
-    order = np.argsort(rank)
-    return [blocks.index[i] for i in order], blocks, fr
+    return D.ranked_models()   # measured models by average rank, then the unmeasured ones (placeholder rows)
 
 
 def panel_a(fig, models, fams, top):
@@ -172,7 +168,8 @@ def panel_e(fig, blocks, fr, top):
 
 
 def panel_f(fig, top):
-    pub = D.sel(experiment="L1", variant="published_idrid", metric="reported_maupr").set_index("model")["value"]
+    pub = D.sel(experiment="L1", variant="published_idrid", metric="reported_maupr")
+    pub = pub[pub.model.isin(D.measured_models())].set_index("model")["value"]   # a published number pairs with a measured retraining only
     ret = D.score_matrix("IDRiD", models=list(pub.index))["IDRiD"]
     ra = sps.rankdata(-pub.to_numpy())
     rb = sps.rankdata(-ret.to_numpy())

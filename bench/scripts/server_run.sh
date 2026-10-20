@@ -13,6 +13,9 @@
 #                                               cells run one after another; score each finished run afterwards with
 #                                               python bench/train.py --config <cell> --run-dir runs/BSprobe_<cell#bs_probe_> --score-only
 #   bash bench/scripts/server_run.sh e1r        M2MRF author retrain, effective batch 4
+#   E1R_GPU=7 bash bench/scripts/server_run.sh e1r-hrdecoder
+#                                               HRDecoder author retrain (retiseg-hacdr), author metric of every
+#                                               2000-step checkpoint, protocol score of the last step (26 N1a)
 #   bash bench/scripts/server_run.sh b1-seed0   B1 seed 0, train and validation
 #   bash bench/scripts/server_run.sh bs-seed0   B-std seed 0, after the budget is fixed
 #                                               (RETISEG_DATASETS=IDRiD submits one dataset)
@@ -204,6 +207,22 @@ stage_e1r() {
     python bench/train_m2mrf.py --run-dir "$run" ${resume[@]+"${resume[@]}"}
 }
 
+stage_e1r_hrdecoder() {
+  # HRDecoder author recipe on one card (docs/paper/26 N1a; 17 section 4 item 20): train in the HACDR environment
+  # (the author's mmseg fork), score the last step and every 2000-step checkpoint with the author metric there,
+  # then the protocol in the retiseg environment. Re-running resumes from last.pt.
+  require_clean
+  local run=runs/E1r_hrdecoder_idrid_seed0_bs4
+  local cfg=bench/configs/e1r_hrdecoder_idrid_seed0.yaml
+  local tool
+  tool="$(pick_tool)"
+  mkdir -p "$run"
+  CUDA_VISIBLE_DEVICES="${E1R_GPU:-7}" background e1r_hrdecoder bash -c "\
+$tool run -n retiseg-hacdr --no-capture-output python bench/train_hrdecoder.py train --config $cfg --run-dir $run ${E1R_EXTRA:-} && \
+$tool run -n retiseg-hacdr --no-capture-output python bench/train_hrdecoder.py score --config $cfg --run-dir $run --all-checkpoints && \
+$tool run -n retiseg --no-capture-output python -m bench.eval.cli evaluate --data dataset/prepared/IDRiD --split test --pred $run/prob_test --out $run/metrics_test"
+}
+
 stage="${1:-}"
 case "$stage" in
   env) stage_env ;;
@@ -220,6 +239,7 @@ $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --job
 $tool run -n retiseg --no-capture-output python bench/scripts/launch_b1.py --jobs $BS_JOBS --submit --smoke --only $2" ;;
   probe) stage_probe ;;
   e1r) stage_e1r ;;
+  e1r-hrdecoder) stage_e1r_hrdecoder ;;
   b1-seed0) require_clean; launch b1_seed0 --submit --seed0 ;;
   b1-score0) require_clean; launch b1_score0 --submit --score-seed0 ;;
   bs-seed0) require_clean; launch "bs_seed0${RETISEG_DATASETS:+_${RETISEG_DATASETS//,/_}}" --jobs "$BS_JOBS" --submit --seed0 \

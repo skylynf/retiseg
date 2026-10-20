@@ -1,0 +1,19 @@
+experiment: BF
+factor: E7
+model: HRDecoder
+dataset: dataset/prepared/IDRiD
+split_val: val
+split_test: test
+fov_diameter: 2880
+train:
+- dataset: dataset/prepared/IDRiD
+  split: train
+budget_reference: IDRiD
+seed: 0
+num_workers: 4
+paper:
+  experiment: E7
+  variant: res:2880 (author canvas, equivalent epochs)
+  train_set: IDRiD
+patch: 1920
+budget_mode: equivalent_epochs

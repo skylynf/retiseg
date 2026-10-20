@@ -272,6 +272,10 @@ def load_run_model(config, checkpoint, device):
         from bench.models.registry import build_model
 
         model = build_model(name)
+        if config.get("experiment") == "BF":
+            from bench.factor import apply_cell_geometry
+
+            apply_cell_geometry(model, config)   # the E7 case study's patch key (26 N1c)
         if name == "HACDR-Net":
             from bench.scripts.predict_hacdr_b1 import _check_channels
 
@@ -290,7 +294,18 @@ def load_run_model(config, checkpoint, device):
     return model
 
 
-def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()):
+def dropped_maps(source, test_name, variant):
+    """A finished set whose prob_test was removed after scoring (--drop-maps); its done.json says so."""
+    directory = out_dir(source, test_name, variant)
+    if not is_done(source, test_name, variant) or (directory / "prob_test").is_dir():
+        return False
+    return bool(json.loads((directory / "done.json").read_text()).get("maps_dropped"))
+
+
+def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=(), regenerate_maps=False):
+    """``regenerate_maps`` re-predicts the sets whose maps were dropped after scoring (for the ensembles of
+    bench/scripts/ensemble.py, docs/paper/14 M15): the maps are written back under the finished directory,
+    predicted.json, metrics and done.json stay as they are, nothing is re-scored."""
     import torch
 
     from bench.predict import predict_image
@@ -305,7 +320,13 @@ def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()
     train_names = train_sources_of(config)
     train_name = scale_source_of(config)  # None: per-degree sets are skipped, only their fov variant runs
     source = run_dir.name
-    pending = [(t, v) for t, v in targets(train_names, frozen, sets) if not is_done(source, t, v)]
+    if regenerate_maps:
+        pending = [(t, v) for t, v in targets(train_names, frozen, sets) if v == MAIN and dropped_maps(source, t, v)]
+        if not pending:
+            print(f"{source}: no finished set with dropped maps among the requested sets", flush=True)
+            return
+    else:
+        pending = [(t, v) for t, v in targets(train_names, frozen, sets) if not is_done(source, t, v)]
     if train_name is None:
         pending = [(t, v) for t, v in pending if not (t in frozen.get("per_degree_sets", ()) and v == MAIN)]
     if not pending:
@@ -317,7 +338,7 @@ def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()
     env = environment()
     for test_name, variant in pending:
         directory = out_dir(source, test_name, variant)
-        if not (directory / "predicted.json").is_file():
+        if regenerate_maps or not (directory / "predicted.json").is_file():
             if model is None:
                 model = load_run_model(config, checkpoint, device)
             long_side = target_long_side(test_name, variant, train_name, frozen["canvas_reference"], frozen)
@@ -330,6 +351,9 @@ def run_source(run_dir, sets=None, device=None, predict_only=False, drop_maps=()
                     predict_image(model, data_dir, image_id, long_side, directory / "prob_test", device, inference)
                     if index % 50 == 0:
                         print(f"{source} {set_dirname(test_name, variant)} {index + 1}/{len(ids)}", flush=True)
+            if regenerate_maps:
+                print(f"{source} {set_dirname(test_name, variant)}: maps regenerated ({len(ids)} images); metrics unchanged", flush=True)
+                continue
             _write_predicted(
                 directory,
                 {
@@ -526,6 +550,7 @@ def main(argv=None):
     r.add_argument("--device")
     r.add_argument("--predict-only", action="store_true")
     r.add_argument("--drop-maps", help="comma-separated test sets whose maps are removed after evaluation")
+    r.add_argument("--regenerate-maps", action="store_true", help="re-predict finished sets whose maps were dropped; no re-scoring (ensembles)")
     a = sub.add_parser("author")
     a.add_argument("--model", required=True)
     a.add_argument("--train", required=True, choices=["IDRiD", "DDR"])
@@ -541,7 +566,7 @@ def main(argv=None):
     if args.command == "plan":
         _plan(args)
     elif args.command == "run":
-        run_source(args.run, _sets(args.sets), args.device, args.predict_only, _sets(args.drop_maps) or ())
+        run_source(args.run, _sets(args.sets), args.device, args.predict_only, _sets(args.drop_maps) or (), regenerate_maps=args.regenerate_maps)
     elif args.command == "author":
         run_author(args.model, args.train, _sets(args.sets), args.device, args.predict_only, _sets(args.drop_maps) or ())
     else:

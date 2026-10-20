@@ -108,6 +108,43 @@ def test_assert_factor_cell_rejects_the_wrong_shapes():
     with pytest.raises(ValueError, match="budget_reference"):
         factor.assert_factor_cell(_cell(None, budget_reference="TJDR_std"), frozen)
     factor.assert_factor_cell(_cell(None, factor="E7", fov_diameter=0), frozen)
+    # the HRDecoder case study (26 N1c): only E7 at the author's canvas, with the patch and the epoch budget keys
+    study = _cell(None, factor="E7", model="HRDecoder", dataset="dataset/prepared/IDRiD", fov_diameter=2880, patch=1920,
+                  budget_mode="equivalent_epochs", train=[{"dataset": "dataset/prepared/IDRiD", "split": "train"}], budget_reference="IDRiD",
+                  paper={"experiment": "E7", "variant": "res:2880", "train_set": "IDRiD"})
+    factor.assert_factor_cell(study, frozen)
+    with pytest.raises(ValueError, match="author canvas"):
+        factor.assert_factor_cell(dict(study, fov_diameter=1440), frozen)
+    with pytest.raises(ValueError, match="E7 canvases"):
+        factor.assert_factor_cell(_cell(None, factor="E7", fov_diameter=2880), frozen)
+    with pytest.raises(ValueError, match="patch is"):
+        factor.assert_factor_cell(_cell(None, patch=1920), frozen)
+    with pytest.raises(ValueError, match="equivalent_epochs is"):
+        factor.assert_factor_cell(_cell(None, budget_mode="equivalent_epochs"), frozen)
+    with pytest.raises(ValueError, match="budget_mode is one of"):
+        factor.assert_factor_cell(dict(study, budget_mode="steps"), frozen)
+
+
+def test_apply_cell_geometry_rebuilds_a_fixed_window_wrapper_only_when_the_cell_asks():
+    pytest.importorskip("torch")
+    from bench import factor
+
+    class Fixed:
+        def __init__(self):
+            self.patch = 960
+
+        def set_patch(self, patch):
+            self.patch = patch
+
+    class Fully:
+        pass
+
+    fixed = factor.apply_cell_geometry(Fixed(), {"model": "HRDecoder", "patch": 1920})
+    assert fixed.patch == 1920
+    assert factor.apply_cell_geometry(Fixed(), {"model": "HRDecoder"}).patch == 960
+    assert factor.apply_cell_geometry(Fully(), {"model": "U-Net"}) is not None
+    with pytest.raises(ValueError, match="set_patch"):
+        factor.apply_cell_geometry(Fully(), {"model": "U-Net", "patch": 1920})
 
 
 def test_factor_jobs_cover_the_scope_of_16(tmp_path, monkeypatch):
@@ -120,14 +157,20 @@ def test_factor_jobs_cover_the_scope_of_16(tmp_path, monkeypatch):
     by = {}
     for job in jobs:
         by.setdefault(job["experiment"], []).append(job)
-    assert {k: len(v) for k, v in by.items()} == {"E3b": 8, "E4": 8, "E7": 4, "E8": 6, "E9": 2}
-    assert len({job["name"] for job in jobs}) == 28 and all(job["run_dir"].startswith("runs/BF_") for job in jobs)
+    assert {k: len(v) for k, v in by.items()} == {"E3b": 8, "E4": 8, "E7": 5, "E8": 6, "E9": 2}
+    assert len({job["name"] for job in jobs}) == 29 and all(job["run_dir"].startswith("runs/BF_") for job in jobs)
     for job in jobs:
         cell = yaml.safe_load((tmp_path / "cells" / f"{job['name']}.yaml").read_text())
-        assert cell["experiment"] == "BF" and cell["budget_reference"] == "DDR" and cell["seed"] == 0
+        assert cell["experiment"] == "BF" and cell["seed"] == 0
+        assert cell["budget_reference"] == ("IDRiD" if job["model"] == "HRDecoder" else "DDR")
         assert cell["paper"]["experiment"] == job["experiment"]
         if job["experiment"] != "E7":
             assert cell["fov_diameter"] == 1440
+    # the HRDecoder case study (26 N1c) is the one cell with the author's canvas, the author's window and the epoch budget
+    study = yaml.safe_load((tmp_path / "cells" / "e7_hrdecoder_idrid_2880_seed0.yaml").read_text())
+    assert study["fov_diameter"] == 2880 and study["patch"] == 1920 and study["budget_mode"] == "equivalent_epochs"
+    assert [job["env"] for job in jobs if job["model"] == "HRDecoder"] == ["retiseg-hacdr"]
+    assert all("patch" not in yaml.safe_load((tmp_path / "cells" / f"{job['name']}.yaml").read_text()) for job in jobs if job["model"] != "HRDecoder")
     e9 = {job["name"]: yaml.safe_load((tmp_path / "cells" / f"{job['name']}.yaml").read_text()) for job in by["E9"]}
     assert e9["e9_unet_ddr_ce_seed0"]["loss_override"] == {"loss": "bce_with_logits", "loss_params": {}}
     assert e9["e9_unet_ddr_dice_seed0"]["loss_override"]["loss_params"]["batch_dice"] is True

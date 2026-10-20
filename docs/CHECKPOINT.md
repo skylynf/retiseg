@@ -1,4 +1,4 @@
-# retiseg 检查点（2026-10-20，10-20 回传包进表、因素表参照行修正之后）
+# retiseg 检查点（2026-10-20，26 的代码到位、R4/R6/R7/R8 写成实数之后）
 
 给下一次会话或其他 agent 的最小上下文。细节都在仓库里，按下面的路径读；本文件只说"在哪、什么状态、怎么接着做"。
 
@@ -8,7 +8,7 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 ## 先读哪些文件（按顺序）
 1. `docs/ops/00_进度.txt` —— 当前状态、决定日志、待用户决定的清单、最近的服务器记录（旧记录在 `docs/ops/archive/`）。
 2. `docs/paper/26_高层评估与补充实验.txt` —— 当前计划的增补部分（风险、新实验 N1–N8 与预登记规则、医生 T1–T3、排期与先砍顺序）；`docs/ops/17_服务器任务单.txt` —— 规则、回传格式、队列顺序、服务器还要做的事（第四节第 19–24 条是 26 的服务器部分）；`docs/paper/16_范围精简.txt` —— 实验范围（第十节是 26 的增补）；`docs/paper/19` 第六节 —— 优先级与写作里程碑。
-3. `docs/paper/13` 第三节状态表（末尾"26 增补"块）；`docs/paper/14` 论文里要用的数字和方法（M1–M17、备注 1–49）。
+3. `docs/paper/13` 第三节状态表（末尾"26 增补"块）；`docs/paper/14` 论文里要用的数字和方法（M1–M17、备注 1–52）。
 4. E5 推理档：`docs/ops/25_albert合并记录.txt`、`docs/design/23`、`24`（D1–D9 的依据在 24 第十七节）。
 5. 论文源：`docs/paper/retiseg_paper/paper/`（`STRUCTURE.md` 图表清单；`README.md` 哪些是实数）。
 
@@ -17,10 +17,11 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 - 独立测试（14 M10）：18 模型 × 两源 × 八集合种子 0 全齐，两个作者权重模型、nnU-Net E3b 两检查点全齐。表 5 平均名次 SAMed 1.38、HRNet 3.50、RETFound 3.63；Friedman χ² 106.3，临界差 9.90，前 12 不可分。结论不变：性能取决于测试集的标注方式与视野。
 - 推理档（14 M9）：验证池 22 项里 20 项完成（缺 MedSAM）：零样本两池都接近零，框提示 k=全部 0.77–0.78，点提示 ≤0.04。服务器还要跑 --select（预计两模型 128 / 0.5%，SAM 3 措辞 2）、写回 e5_frozen.yaml、打开 e5_infer_test（17 第四节第 25、26 条）。
 - 影响因素（14 M9b）：28 格里 26 格进表（RETFound 的 E3b TJDR_std、E7 原分辨率在训）；SAM2-UNet 在 TJDR_std 的格 MA/SE 塌缩，照报（21 第 69 条）；E8 细粒度合并缺源内测试（17 第四节第 27 条）。表 7 修正后的差值在 14 M9b。R5 文字未写。
-- 26 增补的状态：预登记已写进 14（M15 集成、M16 人类参照、M17 临床端点、备注 46–49）；queue.yaml 第四版（e5_rest 只限 SAMed、RETFound 并打开）；两倍预算的三个 cell 在仓库（`bs_probe_hrnet_ddr_seed0`、`bs_probe_hrdecoder_{idrid,ddr}_seed0`），服务器按 17 第四节第 19 条跑；HRDecoder E1r 入口、集成脚本、factor.py 的 2880 画布、T1/T2 的材料待本机写。
+- 26 增补的状态：预登记已写进 14（M15 集成、M16 人类参照、M17 临床端点、备注 46–52）；代码全部到位——`bench/train_hrdecoder.py`（E1r，`server_run.sh e1r-hrdecoder`；作者 runner 在测试集上挑检查点，备注 46）、`bench/configs/cells/e7_hrdecoder_idrid_2880_seed0.yaml`（N1c，队列阶段 `factor_hrdecoder_2880` 默认关）、`bench/scripts/ensemble.py`（成员按检查点选择的验证 mAUPR 排序）、`bench/scripts/diaretdb1_experts.py`（N3a）、`bench/scripts/clinical_strata.py`（N5a，从 metrics.npz 分层）；服务器命令在 17 第四节第 19–21、23、25–30 条；collect_runs 认 ENS / HUMAN / CLIN。T1/T2 材料等医生联系好再做。
+- 名次统计（表 5、图 4e/f、R4 第二段）2026-10-20 起只算实测模型：Friedman χ² 102.1、临界差 9.31、前 12 不可分（此前的 106.3 / 9.90 掺了 MedSAM 占位行，21 第 71 条）；R6/R7/R8、讨论 Q3、方法的因素段已是实数，仍是 simtext 的只有 L1/E1 段、R3 的 N1 一句、R5、B1 一句和摘要。
 - 医生：三名眼科医生，每人 3 小时（26 第四节：T3 规则会议 0.5 小时 → T1 错误裁定 1.5 小时 → T2 点标记 1 小时）。T3 先于一切。
-- 服务器（10-20 07:25）：GPU 4–7 空着；e5_rest 已开；现在就做 17 第四节第 25–28 条。
-- 用户待办：提交推送本机写回；下载 MedSAM、DINOv2 权重与 Refined IDRiD；与医生约 T3。
+- 服务器（10-20 08:28，d77cf60）：推理档选择已写回 e5_frozen.yaml（两模型 128 / 0.5%，SAM 3 第三句；从此只增不改），e5_infer_test 已开，E8 细粒度合并的源内测试已出（14 M9b），两倍预算探测在 GPU 6、7 上跑；下一步按 17 第四节第 20、23、29、30 条。
+- 用户待办：提交推送本机写回；下载 MedSAM、DINOv2 权重与 Refined IDRiD；与医生约 T3。服务器下一步：17 第四节第 25–28 条，然后第 20（E1r HRDecoder）、23（集成）、29（DiaRetDB1 留一）、30（分级）条；第 21 条等第 19、20 条读完再开。
 
 ## 数据流（结果 → 论文）
 服务器 `python bench/scripts/pack_handoff.py` 打包 `runs/` 小文件 → 本机解到仓库 `runs/`（包顶层还有 docs/ops/00 的服务器版本，不要整包覆盖到仓库根）→ `python docs/paper/retiseg_paper/paper/scripts/collect_runs.py`（认 BS/B1/*_registered/NN_*/E1r/E2c/BF_*/E1_<slug>/runs/E3a/runs/E5；排除名单不对齐的报告拒收；BSprobe_ 不读）→ `make -C docs/paper/retiseg_paper/paper`。`collect_literature.py` 写 L1 行。整表重生成只在有 `runs/` 的机器上：`build_placeholder.py --force` → `collect_literature.py` → `collect_runs.py` → make。

@@ -1,0 +1,60 @@
+# One retrain of HRDecoder on the official IDRiD training images (01-54)
+# with the author's recipe (docs/paper/26 N1a; docs/ops/17 section 4 item 20).
+# Settings are the author's configs/lesion/hrdecoder_fcn_hr48_idrid_2880x1920-slide.py
+# with its _base_ files (bench/models/hrdecoder.py reads the same files;
+# bench/train_hrdecoder.py checks this file against them before training).
+# This is not B-std: canvas, crop, augmentation, loss and schedule are theirs.
+# The author config carries seed 2 for four processes; one process cannot
+# replay that data order, so seed 0 here is one draw of the recipe.
+experiment: E1r
+model: HRDecoder
+dataset: IDRiD
+train_ids: official_train
+pretrained: runs/E1_m2mrf/hrnetv2_w48-d2186c55.pth
+pretrained_source: open-mmlab://msra/hrnetv2_w48
+# BinaryLoss dice (smooth 1e-5) on the fused map + hr_loss_weight x the same on
+# crop_num random hr crops of a random scale in scale_ratio x hr_scale (forward_train).
+loss: binary_dice
+smooth: 1.0e-5
+hr_scale: [960, 960]
+scale_ratio: [0.75, 1.25]
+crop_num: 2
+hr_loss_weight: 0.1
+lr_loss_weight: 0
+divisible: 8
+optimizer: sgd
+lr: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+# poly10warm.py (from DAFormer): linear warmup from warmup_ratio over warmup_iters,
+# then (1 - iter/max_iters)^power down to min_lr; mmcv applies the warmup factor to
+# the poly value of the same iteration.
+schedule: poly10warm
+power: 1.0
+min_lr: 0.0
+warmup_iters: 1500
+warmup_ratio: 1.0e-6
+iterations: 20000
+# samples_per_gpu 1 and README launches 4 GPUs with SyncBN: one process stacks
+# the 4 images so BatchNorm sees the same count. micro_batch < batch_size
+# accumulates gradients instead (BN then sees fewer images; recorded in run_params.json).
+batch_size: 4
+micro_batch: 4
+# Author train pipeline (hr_idrid_2880x1920-slide.py): Resize to 2880x1920 with
+# ratio_range, RandomCrop 1920 (cat_max_ratio 0.75), horizontal flip 0.5, rotate
+# +-45 degrees always, Normalize, Pad to 1920. No PhotoMetricDistortion.
+image_scale: [2880, 1920]
+crop_size: [1920, 1920]
+ratio_range: [0.5, 2.0]
+flip_prob: 0.5
+rotate_prob: 1.0
+rotate_degree: [-45, 45]
+# The author's runner saves every 1000 iterations keeping one, evaluates every 2000
+# on the test split and keeps the best mIoU (evaluation.save_best). E1r reports the
+# last step (checkpoint_selection: last, the project rule); every 2000-step
+# checkpoint is kept so `score --all-checkpoints` can show what that test-split
+# selection would have returned (docs/paper/14 note 46).
+save_every: 2000
+checkpoint_selection: last
+seed: 0
+author_seed: 2

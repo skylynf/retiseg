@@ -25,8 +25,12 @@ def matrix(model=None):
     df = __import__("pandas").concat([a, b])
     if model:
         df = df[df.model == model]
+    # measured cells only: a cell still in training (or one the protocol does not score, such as the ultra-widefield set
+    # for sources whose field is unknown) stays empty instead of carrying a placeholder into the mean
+    sim = D.simulated(df)
+    df = df[df.source == "measured"]
     g = df.groupby(["model", "train_set", "test_set"])["value"].mean().groupby(["train_set", "test_set"]).mean().unstack("test_set")
-    return g.loc[TRAINS, D.TESTS], D.simulated(df)
+    return g.reindex(index=TRAINS, columns=D.TESTS), sim
 
 
 CODE = {"IDRiD": "I", "DDR": "D", "TJDR-std": "Ts", "TJDR-uwf": "Tu", "MAPLES-DR": "M", "FGADR": "F", "Retinal-Lesions": "R", "DiaRetDB1": "Dr"}
@@ -82,7 +86,9 @@ def panel_b(fig, top):
         ax.add_patch(__import__("matplotlib").patches.Rectangle((j + 0.04, i + 0.05), 0.92, 0.9, fill=False, ec=S.INK, lw=0.9, zorder=6))
     tier_ticks(ax, D.TESTS)
     ax.set_ylabel("Training source")
-    S.text_mm(fig, "Test set (mAUPR, mean of five representative models)", 92, top - 5.2, fontsize=5.6, color=S.INK2)
+    S.text_mm(fig, "Test set (mAUPR, mean of the measured representative models)", 92, top - 5.2, fontsize=5.6, color=S.INK2)
+    if sim:
+        S.tag_simulated(ax, loc="tr", dy=0.3, text="one cell pending")
     P.colorbar(fig, S.rect_mm(fig, 92, top + 33, 22, 1.5), S.CMAP_SEQ, 0, 0.7, "mAUPR", ticks=[0, 0.35, 0.7])
     return M, sim
 
@@ -97,7 +103,6 @@ def panel_c(fig, top, M):
     tier_ticks(ax, tests)
     S.text_mm(fig, "Δ against in-source training", 149, top - 5.2, fontsize=5.6, color=S.INK2)
     P.colorbar(fig, S.rect_mm(fig, 149, top + 33, 22, 1.5), S.CMAP_DIV, -0.5, 0.5, "Δ mAUPR", ticks=[-0.5, 0, 0.5])
-    S.tag_simulated(ax, loc="tr", dy=0.3)
 
 
 def panel_d(fig, top):
@@ -112,7 +117,6 @@ def panel_d(fig, top):
         ax.text(0.07, 1.14, model, transform=ax.transAxes, fontsize=5.8, va="bottom")
         ax.scatter([0.02], [1.2], transform=ax.transAxes, s=10, marker=st["marker"], color=st["color"], clip_on=False)
         x += 31.3
-    S.tag_simulated(ax, loc="br", dy=-0.42)
     S.text_mm(fig, "I, IDRiD · D, DDR · Ts, TJDR-std · Tu, TJDR-uwf · M, MAPLES-DR · F, FGADR · R, Retinal-Lesions · Dr, DiaRetDB1", 22, top + 17.5, fontsize=4.9, color=S.INK2)
 
 
@@ -143,7 +147,8 @@ def panel_e(fig, top):
         ax.set_ylabel(f"mAUPR on {test} test")
         ax.set_title(f"Tested on {test} (fine labels, never used for training)", fontsize=6.0, loc="left")
         S.light_grid(ax)
-    S.tag_simulated(ax, loc="br")
+    if D.simulated(r):
+        S.tag_simulated(ax, loc="br")
     S.rep_legend(fig, loc="upper left", bbox=tuple(S.rect_mm(fig, 60, top - 11.5, 1, 1)[:2]))
 
 

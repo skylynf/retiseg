@@ -189,15 +189,20 @@ def _install_import_path():
         np.float = np.float64
 
 
-def build_network(dataset="IDRiD"):
-    """The author's HRDecoder segmentor, SyncBN -> BN, no pretrained download, B-std hr_scale."""
+def hr_scale_for(patch):
+    """hr_scale of a fixed window: the author's backbone/crop ratio (960 on 1920 -> 480 on 960, 960 on 1920)."""
+    return (int(patch * BACKBONE_RATIO), int(patch * BACKBONE_RATIO))
+
+
+def build_network(dataset="IDRiD", patch=PATCH):
+    """The author's HRDecoder segmentor, SyncBN -> BN, no pretrained download, hr_scale for ``patch`` (B-std: 960)."""
     _install_import_path()
     from mmseg.models import build_segmentor
 
     cfg = _as_cfg(_bn(author_model_dict(dataset)))
     cfg["pretrained"] = None
     hr = dict(cfg["hr_settings"])
-    hr["hr_scale"] = HR_SCALE
+    hr["hr_scale"] = hr_scale_for(patch)
     cfg["hr_settings"] = _as_cfg(hr)
     test_cfg = cfg.pop("test_cfg", _Cfg({"mode": "whole"}))
     train_cfg = cfg.pop("train_cfg", _Cfg({}))
@@ -251,10 +256,11 @@ class HRDecoder(SegmentationWrapper, nn.Module):
         self.import_error = None
         self._aux = None
         self._dataset = "IDRiD"
+        self._patch = PATCH
         if not construct:
             return
         try:
-            self.network = build_network(self._dataset)
+            self.network = build_network(self._dataset, self._patch)
         except Exception as exc:  # the recipe stays readable without mmcv (launch_b1's gate)
             self.import_error = f"{type(exc).__name__}: {exc}"
 
@@ -269,9 +275,24 @@ class HRDecoder(SegmentationWrapper, nn.Module):
         mean, std = author_norm(dataset)
         self.card = replace(type(self).card, normalization={"mean": [v / 255.0 for v in mean], "std": [v / 255.0 for v in std]})
         if self.network is not None and dataset != self._dataset:
-            self.network = build_network(dataset)   # crop_num differs between the two configs
+            self.network = build_network(dataset, self._patch)   # crop_num differs between the two configs
         self._dataset = dataset
         return recipe
+
+    def set_patch(self, patch):
+        """E7 case study (docs/paper/26 N1c): the author's window on the author's canvas. The fixed window becomes
+        ``patch`` x ``patch`` (card.forward_size: training patch and inference window) and the network's hr_scale
+        follows the author's ratio (1920 -> 960, the released IDRiD geometry). No parameter depends on hr_scale."""
+        from dataclasses import replace
+
+        patch = int(patch)
+        if patch <= 0 or patch % 32:
+            raise ValueError(f"patch must be a positive multiple of 32, got {patch}")
+        self._patch = patch
+        self.card = replace(self.card, forward_size=(patch, patch))
+        if self.network is not None:
+            self.network.hr_scale = hr_scale_for(patch)
+        return self.card.forward_size
 
     def load_pretrained(self):
         """ImageNet HRNet-W48 into the backbone (the file bench.pretrained names for the HRNet and M2MRF rows)."""

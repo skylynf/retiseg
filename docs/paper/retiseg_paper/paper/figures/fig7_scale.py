@@ -102,21 +102,29 @@ def panel_c(fig, top, models, fams):
         S.text_mm(fig, f"Trained on {train}", x, top - 8.3, fontsize=6.2, fontweight="bold")
         S.text_mm(fig, "recall by lesion size", x, top - 5.4, fontsize=5.0, color=S.INK2)
         x += 31
-    S.tag_simulated(ax2, loc="br", dy=-0.085)
+    if D.simulated(D.main_runs("lesion_recall_small")):
+        S.tag_simulated(ax2, loc="br", dy=-0.085, text="MedSAM row simulated")
 
 
 def lines(ax, exp, levels, test, metric="aupr", prefix=""):
+    """One line per representative model over ``levels``; a level whose rows are still placeholders is left out
+    (the line is drawn through the measured levels only), and the panel is tagged when that happens."""
     r = D.sel(experiment=exp, metric=metric, test_set=test)
+    sim = D.simulated(r)
+    r = r[r.source == "measured"]
     per_seed = r.groupby(["model", "variant", "seed"])["value"].mean()
     mean = per_seed.groupby(["model", "variant"]).mean()
     sd = per_seed.groupby(["model", "variant"]).std()
     present = [m for m in S.REP_STYLE if m in mean.index.get_level_values(0)]
     for model in present:
         st = S.REP_STYLE[model]
-        y = [mean[(model, prefix + lv)] for lv in levels]
-        e = [sd[(model, prefix + lv)] for lv in levels]
+        xs = [i for i, lv in enumerate(levels) if (model, prefix + lv) in mean.index]
+        y = [mean[(model, prefix + levels[i])] for i in xs]
+        e = [sd[(model, prefix + levels[i])] for i in xs]
         e = None if all(np.isnan(v) for v in e) else e  # one seed: no error bar
-        ax.errorbar(range(len(levels)), y, yerr=e, color=st["color"], marker=st["marker"], ls=st["ls"], lw=1.0, ms=3.6, mec=S.PAPER, mew=0.4, elinewidth=0.5, capsize=0, zorder=3)
+        ax.errorbar(xs, y, yerr=e, color=st["color"], marker=st["marker"], ls=st["ls"], lw=1.0, ms=3.6, mec=S.PAPER, mew=0.4, elinewidth=0.5, capsize=0, zorder=3)
+    if sim:
+        S.tag_simulated(ax, loc="br", text="pending")
     return present
 
 
@@ -136,7 +144,6 @@ def panel_d(fig, top):
         S.light_grid(ax)
     ax.text(1, 0.585, "B-std", ha="center", va="top", fontsize=4.9, color=S.INK2)
     S.text_mm(fig, "Long side of the training and inference canvas (pixels)", 139, top + 37, ha="center", fontsize=6.2)
-    S.tag_simulated(ax, loc="br")
 
 
 def panel_e(fig, top):
@@ -158,16 +165,15 @@ def panel_e(fig, top):
             ax.text(1.0, 0.67, "fraction of the DDR training set", ha="center", va="top", fontsize=4.8, color=S.INK2)
             ax.text(3.0, 0.67, "fine sources\nmerged", ha="center", va="top", fontsize=4.8, color=S.INK2, linespacing=1.1)
         S.light_grid(ax)
-    S.tag_simulated(ax, loc="br")
     S.text_mm(fig, "Second line: number of training images. Every setting uses the same number of image passes; U-Net and M2MRF, seed 0.", 16, top + 37, fontsize=4.9, color=S.INK2)
 
 
 def main():
-    blocks = D.block_scores()
-    order = np.argsort(D.friedman(blocks)["avg_rank"])
-    models = [blocks.index[i] for i in order]
+    models, _blocks, _fr = D.ranked_models()
     fams = [D.FAMILY_OF[m] for m in models]
-    fig = S.figure(181)
+    c_bottom = 78 + ROW * len(models)          # panel c grows with the number of main-table rows (19 since 2026-10)
+    e_label, e_top = c_bottom + 6, c_bottom + 16
+    fig = S.figure(e_top + 43)
     S.label_mm(fig, "a", 2, 2)
     S.text_mm(fig, "Lesion size by class", 8, 2.6, fontsize=6.8, fontweight="bold")
     panel_a(fig, 11)
@@ -181,9 +187,9 @@ def main():
     S.text_mm(fig, "Input resolution", 100, 61.6, fontsize=6.8, fontweight="bold")
     panel_d(fig, 78)
     S.rep_legend(fig, loc="upper left", bbox=tuple(S.rect_mm(fig, 98, 67.5, 1, 1)[:2]), ncol=3)
-    S.label_mm(fig, "e", 2, 128)
-    S.text_mm(fig, "Training amount and merged sources", 8, 128.6, fontsize=6.8, fontweight="bold")
-    panel_e(fig, 138)
+    S.label_mm(fig, "e", 2, e_label)
+    S.text_mm(fig, "Training amount and merged sources", 8, e_label + 0.6, fontsize=6.8, fontweight="bold")
+    panel_e(fig, e_top)
     S.save(fig, "fig7_scale")
 
 

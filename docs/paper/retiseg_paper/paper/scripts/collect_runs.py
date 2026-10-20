@@ -12,8 +12,12 @@ Reads the files that bench.eval.cli evaluate writes (bench/eval/evaluate.py):
     runs/E2c_<slug>_<dataset>_seed0_<lr1o3|lr3>/history.jsonl       learning-rate check (best validation mAUPR; needs timing.json)
     runs/E3a/<source>/<set>/metrics.json + done.json               independent tests (bench/e3a.py), main variant only
     runs/BF_<cell>/metrics_test.json                               factor cells (bench/factor.py); the row key is the cell's paper block
+    runs/BF_<cell>/insource_<set>/metrics.json                     in-source tests of a merged-source cell (17 section 4 item 27)
     runs/E5/<tier>/<source>/<set>[__variant]/metrics.json + done.json   E5 inference tiers (bench/e5), main canvas variant only
-    data/cost_measured.tsv                                      E10 numbers recorded by hand (docs/ops/00)
+    runs/ENS/<train>/<composition>/<set>/metrics.json + done.json   ensembles of probability maps (bench/scripts/ensemble.py, 14 M15)
+    runs/HUMAN/DiaRetDB1/expert_<e>/metrics.json                 leave-one-expert-out human reference (bench/scripts/diaretdb1_experts.py, 14 M16a)
+    runs/CLIN/strata/<run>/<set>/strata.json                     results by DR grade (bench/scripts/clinical_strata.py, 14 M17a)
+    data/cost_measured.tsv                                     E10 numbers recorded by hand (docs/ops/00)
     data/cost_audit.tsv                                         E10 numbers from bench/scripts/cost_audit.py
 
 A row is replaced only when its key (experiment, model, variant, train_set,
@@ -317,6 +321,19 @@ def collect(runs_dir):
                 continue
             rows += rows_from_report(report, experiment, variant, model, train, seed, test)
             seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
+            # in-source tests of a multi-source cell (docs/ops/17 section 4 item 27): runs/BF_<cell>/insource_<set>/metrics.json,
+            # the test split of a source that was merged into the training set; e3a does not score it, so it is a
+            # row of the same variant with that set as test_set (figure 7e marks these as in-source)
+            for inside in sorted(run.glob("insource_*")):
+                set_name = inside.name[len("insource_"):]
+                inner = inside / "metrics.json"
+                if set_name not in E3A_SET or not inner.exists():
+                    continue
+                report = load_report(inner)
+                if report is None:
+                    continue
+                rows += rows_from_report(report, experiment, variant, model, train, seed, E3A_SET[set_name])
+                seen.append((run.name, f"{inside.name}/metrics.json", report.get("summary", {}).get("mAUPR")))
             continue
         m = E2C.match(run.name)
         if m and m["slug"] in SLUG:
@@ -334,6 +351,61 @@ def collect(runs_dir):
 GROUP = ["experiment", "model", "variant", "train_set", "test_set"]
 
 
+def source_key(runs_dir, name):
+    """(experiment, variant, model, train_set, seed) of a run directory name, or None when it is not one the paper
+    reads: B-std / registered-free BS runs, nnU-Net, E1_<model>_<train> author weights, BF cells."""
+    m = RUN.match(name)
+    nn = NN.match(name)
+    au = E1_AUTHOR.match(name)
+    if m and m["slug"] in SLUG and not m["registered"]:
+        return run_key(m)
+    if nn:
+        return nn_key(nn)
+    if au and au["slug"] in SLUG:
+        # the E1 table's key for the released weights under this protocol (build_placeholder.original_models)
+        return "E1", "this_protocol", SLUG[au["slug"]], DATASET[au["dataset"]], -1
+    if name.startswith("BF_") and factor_key(Path(runs_dir) / name) is not None:
+        experiment, model, variant, train, seed, _test = factor_key(Path(runs_dir) / name)
+        return experiment, variant, model, train, seed
+    return None
+
+
+def collect_clin(runs_dir):
+    """runs/CLIN/strata/<run>/<set>/strata.json (bench/scripts/clinical_strata.py; docs/paper/14 M17a): the two DR-grade
+    strata of a finished test. Experiment CLIN, variant "grade:0-1" / "grade:2-4", the run's own model / train_set /
+    seed, metrics aupr and img_auc per class plus the stratum's image count (metric n_images, cls mean)."""
+    rows, seen = [], []
+    root = Path(runs_dir) / "CLIN" / "strata"
+    if not root.is_dir():
+        return pd.DataFrame(rows), seen
+    for run_dir in sorted(p for p in root.iterdir() if p.is_dir()):
+        key = source_key(runs_dir, run_dir.name)
+        if key is None:
+            continue
+        experiment, _variant, model, train, seed = key
+        for setdir in sorted(p for p in run_dir.iterdir() if p.is_dir()):
+            path = setdir / "strata.json"
+            if setdir.name not in E3A_SET or not path.exists():
+                continue
+            result = json.loads(path.read_text())
+            test = E3A_SET[setdir.name]
+            for name, label in (("grade_0_1", "grade:0-1"), ("grade_2_4", "grade:2-4")):
+                stratum = result["strata"].get(name) or {}
+                if not stratum.get("n_images"):
+                    continue
+                base = dict(experiment="CLIN", model=model, variant=label, train_set=train, seed=seed, test_set=test, source="measured")
+                rows.append(dict(base, cls="mean", metric="n_images", value=float(stratum["n_images"])))
+                for cls, entry in stratum.get("per_class", {}).items():
+                    for metric in ("aupr", "img_auc"):
+                        if entry.get(metric) is not None:
+                            rows.append(dict(base, cls=cls, metric=metric, value=float(entry[metric])))
+                for metric, key_name in (("aupr", "mAUPR"), ("img_auc", "mean_img_auc")):
+                    if (stratum.get("summary") or {}).get(key_name) is not None:
+                        rows.append(dict(base, cls="mean", metric=metric, value=float(stratum["summary"][key_name])))
+            seen.append((f"CLIN/{run_dir.name}", setdir.name, (result["strata"].get("grade_2_4") or {}).get("summary", {}).get("mAUPR")))
+    return pd.DataFrame(rows), seen
+
+
 def collect_e3a(runs_dir):
     """runs/E3a/<source>/<set>[__variant]/metrics.json (bench/e3a.py). The main variant only; __fov and
     other sensitivity variants go to the supplement later. Sources are B-std/nnU-Net run names or
@@ -343,20 +415,10 @@ def collect_e3a(runs_dir):
     if not root.is_dir():
         return pd.DataFrame(rows), seen
     for src in sorted(root.iterdir()):
-        m = RUN.match(src.name)
-        nn = NN.match(src.name)
-        au = E1_AUTHOR.match(src.name)
-        if m and m["slug"] in SLUG and not m["registered"]:
-            experiment, variant, model, train, seed = run_key(m)
-        elif nn:
-            experiment, variant, model, train, seed = nn_key(nn)
-        elif au and au["slug"] in SLUG:
-            # the E1 table's key for the released weights under this protocol (build_placeholder.original_models)
-            experiment, variant, model, train, seed = "E1", "this_protocol", SLUG[au["slug"]], DATASET[au["dataset"]], -1
-        elif src.name.startswith("BF_") and factor_key(Path(runs_dir) / src.name) is not None:
-            experiment, model, variant, train, seed, _test = factor_key(Path(runs_dir) / src.name)
-        else:
+        key = source_key(runs_dir, src.name)
+        if key is None:
             continue
+        experiment, variant, model, train, seed = key
         for setdir in sorted(src.iterdir()):
             if "__" in setdir.name or setdir.name not in E3A_SET or not (setdir / "done.json").exists():
                 continue
@@ -368,6 +430,58 @@ def collect_e3a(runs_dir):
                 continue
             rows += rows_from_report(report, experiment, variant, model, train, seed, E3A_SET[setdir.name])
             seen.append((f"E3a/{src.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
+    return pd.DataFrame(rows), seen
+
+
+ENS_LABEL = {"all": "E-all", "top3": "E-top3", "top5": "E-top5", "1perfam": "E-1perfam", "fam_general": "E-fam:general",
+             "fam_auto": "E-fam:auto", "fam_fundus": "E-fam:fundus", "fam_foundation": "E-fam:foundation"}
+
+
+def collect_ens(runs_dir):
+    """runs/ENS/<train>/<composition>/<set>/metrics.json + done.json (bench/scripts/ensemble.py; docs/paper/14 M15):
+    experiment ENS, model E-<composition>, variant ensemble, seed 0. The sets are named as in e3a_frozen.yaml;
+    the internal test is the training source's own name. No placeholder row exists for these: they are added."""
+    rows, seen = [], []
+    root = Path(runs_dir) / "ENS"
+    if not root.is_dir():
+        return pd.DataFrame(rows), seen
+    for train_dir in sorted(root.iterdir()):
+        if train_dir.name not in ("IDRiD", "DDR"):
+            continue
+        for comp in sorted(p for p in train_dir.iterdir() if p.is_dir()):
+            label = ENS_LABEL.get(comp.name)
+            if label is None:
+                continue
+            for setdir in sorted(p for p in comp.iterdir() if p.is_dir()):
+                if setdir.name not in E3A_SET or not (setdir / "done.json").exists() or not (setdir / "metrics.json").exists():
+                    continue
+                report = load_report(setdir / "metrics.json")
+                if report is None:
+                    continue
+                rows += rows_from_report(report, "ENS", "ensemble", label, train_dir.name, 0, E3A_SET[setdir.name])
+                seen.append((f"ENS/{train_dir.name}/{comp.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
+    return pd.DataFrame(rows), seen
+
+
+def collect_human(runs_dir):
+    """runs/HUMAN/DiaRetDB1/expert_<e>/metrics.json (bench/scripts/diaretdb1_experts.py; docs/paper/14 M16a): the
+    held-out expert against the other three, scored with the protocol. Experiment HUMAN, model "Expert <e>", variant
+    leave_one_expert_out, train_set "DiaRetDB1 experts", seed 0, test set DiaRetDB1. make_tables draws the four as a
+    band next to the DiaRetDB1 column; nothing is ranked against them."""
+    rows, seen = [], []
+    root = Path(runs_dir) / "HUMAN" / "DiaRetDB1"
+    if not root.is_dir():
+        return pd.DataFrame(rows), seen
+    for expert_dir in sorted(p for p in root.glob("expert_*") if p.is_dir()):
+        path = expert_dir / "metrics.json"
+        if not path.exists():
+            continue
+        report = load_report(path)
+        if report is None or report.get("human_reference", {}).get("held_out_expert") is None:
+            continue
+        expert = report["human_reference"]["held_out_expert"]
+        rows += rows_from_report(report, "HUMAN", "leave_one_expert_out", f"Expert {expert}", "DiaRetDB1 experts", 0, "DiaRetDB1")
+        seen.append((f"HUMAN/DiaRetDB1/{expert_dir.name}", path.name, report.get("summary", {}).get("mAUPR")))
     return pd.DataFrame(rows), seen
 
 
@@ -599,6 +713,18 @@ def main():
     if len(e1):
         new = pd.concat([new, e1], ignore_index=True)
         seen += seen_e1
+    ensembles, seen_ens = collect_ens(args.runs)
+    if len(ensembles):
+        new = pd.concat([new, ensembles], ignore_index=True)
+        seen += seen_ens
+    human, seen_human = collect_human(args.runs)
+    if len(human):
+        new = pd.concat([new, human], ignore_index=True)
+        seen += seen_human
+    clin, seen_clin = collect_clin(args.runs)
+    if len(clin):
+        new = pd.concat([new, clin], ignore_index=True)
+        seen += seen_clin
     sheets = [collect_sheet(PAPER / "data" / f) for f in ("cost_measured.tsv", "cost_audit.tsv")]
     sheet = pd.concat([x for x in sheets if len(x)], ignore_index=True) if any(len(x) for x in sheets) else pd.DataFrame()
     new = pd.concat([sheet, new], ignore_index=True) if len(new) else sheet
