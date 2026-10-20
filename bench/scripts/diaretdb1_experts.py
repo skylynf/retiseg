@@ -57,11 +57,19 @@ def confidence_values():
 
 
 def read_levels(prepared, cls, image_id):
-    """{expert: level map 0-3} of one class from the packed experts layer that prepare_diaretdb1 wrote."""
+    """{expert: level map 0-3} of one class from the packed experts layer that prepare_diaretdb1 wrote.
+
+    prepare.py omits a class png when the packed map is all zeros (no expert marked that class).
+    That is the same as four level-0 maps, so a missing png is read as zeros at the FOV size.
+    """
     path = Path(prepared) / "experts" / cls / f"{image_id}.png"
-    if not path.is_file():
+    if path.is_file():
+        return unpack_levels(np.asarray(Image.open(path)))
+    fov = Path(prepared) / "fov" / f"{image_id}.png"
+    if not fov.is_file():
         raise FileNotFoundError(f"{path}: prepare_datasets.py wrote no experts layer for DiaRetDB1")
-    return unpack_levels(np.asarray(Image.open(path)))
+    shape = np.asarray(Image.open(fov)).shape[:2]
+    return {expert: np.zeros(shape, dtype=np.uint8) for expert in EXPERTS}
 
 
 def expert_map(levels, expert, values=None):

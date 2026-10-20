@@ -219,8 +219,14 @@ def build_training_network(dataset, pretrained):
     test_cfg = cfg.pop("test_cfg", _Cfg({"mode": "whole"}))
     test_cfg["compute_aupr"] = True
     train_cfg = cfg.pop("train_cfg", _Cfg({}))
+    # HRDecoder._init_hr_settings pops crop_num and scale_ratio out of this dict, so read them first.
+    hr = cfg["hr_settings"]
+    geometry = {"hr_scale": list(hr["hr_scale"]), "crop_num": int(hr["crop_num"]),
+                "test_cfg": {k: (list(v) if isinstance(v, (tuple, list)) else v) for k, v in test_cfg.items()}}
     network = build_segmentor(cfg, train_cfg=train_cfg, test_cfg=test_cfg)
     network.init_weights()                       # backbone <- file; conv_seg Normal(0, 0.01) as the author's runner
+    if int(network.crop_num) != geometry["crop_num"]:
+        raise RuntimeError(f"crop_num {network.crop_num} is not the author value {geometry['crop_num']}")
     state = _torch_load(pretrained)
     state = state.get("state_dict", state)
     backbone = network.backbone.state_dict()
@@ -228,8 +234,6 @@ def build_training_network(dataset, pretrained):
     print(f"pretrained tensors copied into backbone: {copied}/{len(backbone)} (file has {len(state)})", flush=True)
     if copied == 0:
         raise RuntimeError(f"{pretrained} matched no backbone tensor")
-    geometry = {"hr_scale": list(cfg["hr_settings"]["hr_scale"]), "crop_num": int(cfg["hr_settings"]["crop_num"]),
-                "test_cfg": {k: (list(v) if isinstance(v, (tuple, list)) else v) for k, v in test_cfg.items()}}
     return network, geometry
 
 

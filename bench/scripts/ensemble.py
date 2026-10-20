@@ -144,8 +144,12 @@ def members_table(train, frozen=None, proto=None, runs_root=None, force=False):
 
         proto = load_protocol(REPO / frozen["eval_protocol"])
     path = ens_root(runs_root) / train / "members.json"
-    table = json.loads(path.read_text()) if path.is_file() and not force else {}
-    changed = False
+    # The file is {"train", "rule", "members": {name: row}}. An earlier read treated that whole
+    # object as the table and wrote it back nested; keep only rows that actually have a score.
+    blob = json.loads(path.read_text()) if path.is_file() and not force else {}
+    stored = blob.get("members", {}) if isinstance(blob, dict) else {}
+    table = {k: v for k, v in stored.items() if isinstance(v, dict) and "val_maupr" in v}
+    changed = bool(stored) and set(stored) != set(table)
     for name, family, run_dir in member_runs(train, runs_root):
         if name in table and table[name].get("run") == run_dir.name:
             continue
