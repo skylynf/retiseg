@@ -1,15 +1,15 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-10-19，本机；仓库 origin/main 5d1fb72 = 服务器 10-19 的打包记录，加本次写回）
-仓库：10-19 回传包（快照 10-19 03:29，提交 746362d，703 行指标全部对齐）已解入 runs/ 并进表；本次写回：results.csv 与全部表、图、numbers.tex、main.pdf 重生成；docs 按 26 增补（13、14、16、17、19、21、26、CHECKPOINT、README.txt）；queue.yaml 第四版；三个两倍预算 cell；server_run.sh probe 阶段认 PROBE_CELLS；根 README 重写（仓库公开用）。
-数据：八个测试集齐；MAPLES-DR 在表。
-论文：611 份报告、30,601 行实测（10-17 包为 470 份、23,850 行）。主表 19 行里 18 行有种子 0（只缺 MedSAM）：新进 HRDecoder 0.647 / 0.296（反常，包装器核对无误，归因实验 26 N1）、CLC-Net 0.661 / 0.414（DDR 上专用一族最高）、SAM2-UNet 修订后 0.664 / 0.360；SAMed 0.717 / 0.469 与 RETFound 0.708 / 0.466 仍是两库最高。独立测试 18 模型 × 两源 × 八集合齐，表 5 平均名次 SAMed 1.38、HRNet 3.50、RETFound 3.63（Friedman χ² 106.3，临界差 9.90，前 12 不可分）。a 档 DDR 验证池六组网格与 SAM 3 三句出数（任意病灶 AUPR ≤0.09）。nnU-Net E3b 两格、M2MRF 原分辨率进表。R3 的同骨干段、R4 的专用网络一句已按实数改（results.tex）。
-服务器（10-19 03:26）：一条队列 pid 465242（卡 2–7）；RETFound 四个重格子在训（E3b 两源 epoch 140/220，E7 512 epoch 220、原分辨率 epoch 140），SAM2-UNet E3b TJDR_std 在训、FGADR 等重开；推理池在 GPU 7（SAM 密度 64 DDR 验证在写，之后 IDRiD 验证池、b 档）；--estimate 对 a 档剩余约 0.9 GPU 时。待服务器：17 第四节第 19–24 条（两倍预算探测、HRDecoder E1r 等代码、权重到位后的补跑、集成重推理、打包）。
-队列（queue.yaml 第四版）：e3a 种子 0 → factor_score → 推理池 → e5_seed0 → fundus_seed0 → 测试档（关）→ 因素 → nnunet_e3b → 重格子 → e3a_rest → hrdecoder_rest（关，等 N1）→ e5_rest（开，只 SAMed、RETFound）→ e5_rest2、fundus_rest、e1r（关）。
-权重：公开的 SAM、SAM 2、MAE 和三份 gated 在 pretrained/；M2MRF 作者检查点在 runs/E1_m2mrf；MedSAM、公开 DINOv2 没有（用户下载）。
-文献：L1 完成（30 篇、3403 个数字）；作者回信截止 10-31；HRDecoder 的 L1 抽取待做。
-用户待办：本机写回的文件由用户提交推送（本次清单在第三节末尾的记录里；仓库已是公开的）；下载 MedSAM、DINOv2 权重与 Refined IDRiD；与三名医生约 T3 的会议（26 第四节）。
+一、当前状态（2026-10-20，本机；仓库 origin/main 99f9b88 = 服务器 10-20 的打包记录并入本机 10-19 的写回，加本次写回）
+仓库：10-20 回传包（快照 10-20 07:25，提交 5d1fb72，902 行指标全部对齐，相对 10-19 新增 199 份）已解入 runs/ 并进表；本次写回：results.csv（807 份报告、39,258 行实测；因素表参照行从主表复制，21 第 68 条）与全部表、图、numbers.tex、main.pdf；docs/paper/14（M9 推理池、M9b 因素、备注 50）、13、17（第四节第 25–28 条）、21（68–70）、CHECKPOINT；collect_runs.derive_references。
+数据：八个测试集齐。
+论文：主表 19 行里 18 行有种子 0（缺 MedSAM）；独立测试齐；因素 28 格里 26 格进表（RETFound 的 E3b TJDR_std、E7 原分辨率在训）；推理池 20/22 完成（缺 MedSAM），选择待服务器跑；表 7 修正参照后的数在 14 M9b。
+服务器（10-20 07:25）：GPU 4–7 空着（开着的阶段没有待领项），GPU 2、3 在训 RETFound 的两格；推理池只剩 MedSAM；--select 没跑、e5_infer_test 仍关；e5_rest（SAMed、RETFound 种子 1、2）随 99f9b88 打开，空卡重读文件后会接。现在就做：17 第四节第 25（选择）、26（开测试阶段）、27（E8 细粒度合并的源内测试）、28（两倍预算探测直接用空卡）条。
+队列（queue.yaml 第四版）：不变。
+权重：MedSAM、公开 DINOv2 没有（用户下载）。
+文献：L1 完成；作者回信截止 10-31；HRDecoder 的 L1 抽取待做。
+用户待办：提交推送本机写回；下载 MedSAM、DINOv2 权重与 Refined IDRiD；与三名医生约 T3；HRDecoder E1r 入口、集成脚本、factor.py 的 2880 画布、T1/T2 材料由本机接着写（26 第九节）。
 
 二、决定日志（日期、决定、依据；细节在 archive）
 2026-09-30  文献检索冻结日（06）。
@@ -20,6 +20,7 @@
 2026-10-11  B-std 种子 0 全部出数（HRNet 两库第一）；HACDR 打分修复（torch 1.10 的 weights_only）。用户决定：种子 1、2 暂缓。启动 E1r bs4（A100）、U-Net 整批 Dice 诊断、nnU-Net 两种配置、B1 补位。泄漏审计 IDRiD/DDR：无近重复。E5 设计写成 15。范围精简写成 16（剩余约 5500 A100 时压到约 810）；L1 原文数字抽取完成。
 2026-10-12  nnU-Net 默认 0.671 / 0.432，ResEnc-M 0.631 / 0.428。U-Net 整批 Dice 诊断验证 0.569 / 0.544；用户决定主表 U-Net 采用整批 Dice（bs_frozen.yaml recipe_revisions，原运行改名 *_registered）；E5 五项待定按建议（TF32、natureCFP、按代码、塌缩同 U-Net 规则、编码器对照后按 16 缩减）；以 FGADR 等训练时评测去重（leak_exclusions.json）。独立测试接线（e3a_frozen.yaml、bench/e3a.py）；全库泄漏审计（FGADR _3 批来自 EyePACS，与 Retinal-Lesions 90 张同图；FGADR 内部同眼重复；TJDR_uwf 跨划分重复 2 对）；E2c 接线；E5 训练档五个包装器接线。服务器 09:08：停 B1；E1r bs4 打分 61.19 / 0.549；U-Net 两库种子 0 重跑；E2c 只排 DDR。本机：快照接入论文、R3/R4 改写、17 任务单。
 2026-10-14  Luming 确认 E5 推理档的全部登记（D1–D9、评审修复 6/7/16、预算规则 a）、表 6/图 5 的呈现方式、加 CI、协议锁文件（E5 首个测试指标后）、MAPLES-DR 官方测试 60 张；细节在第三节前的待办清单下。
+2026-10-20  本机：推理档的选择按预登记规则在服务器执行（服务器把"选择"交给本机，本机的答复是没有要决定的事，17 第四节第 25 条）；128 当选时预算规则照 10-14 的决定生效。因素表的参照行改为从主表复制（21 第 68 条）。SAM2-UNet 的 E3b TJDR_std 塌缩不再改配方，照报（21 第 69 条）。
 2026-10-19  用户决定：26（高层评估与补充实验）的第二、三节按本机判断纳入计划；临床资源为三名眼科医生、每人 3 小时（26 第四节据此改写）；仓库公开，根 README 不写论文内容。本机据此：SAMed、RETFound 种子 1、2 改为不砍（queue 的 e5_rest 只限这两个并打开）；HRDecoder 的 E1r IDRiD、两倍预算（HRNet DDR、HRDecoder 两库）不砍；集成、人类参照、临床端点、Refined IDRiD、校准、功效曲线登记进 14 M15–M17 与备注 46–49；HRDecoder 的措辞规则（14 备注 46）；排期与先砍顺序按 26 第八节。
 2026-10-18  本机：SAM 3 推理按官方示例在 CUDA 上整段 bfloat16 autocast（服务器的 float32 转换只留给非 autocast 路径，21 第 61 条）；服务器 10-18 的其余三处修复（margin、E3b cell 批 4、MedSAM 跳过）核过采用。
 2026-10-17  本机：SAM2-UNet 的 DDR 种子 0 稀有类塌缩，按 10-12 与 U-Net 绑定的登记规则改整批 IoU、两库重跑（14 备注 44，bs_frozen.yaml 只增）；推理池直接开（池的前几项即冒烟）；启动器加失败暂停。E5 训练档在 results.csv 里的键改为 E5 / peft、encoder_decoder（备注 45）。
@@ -321,3 +322,10 @@ RETFound E7 边长 512，测试 2026-10-20 02:24 退出码 0：mAUPR 0.4004（n=
 还在训练，下面是验证：RETFound TJDR 标准 epoch 220、140580/255600、0.5505（02:41 的记录）。RETFound E7 原分辨率 epoch 280、178920/255600、0.6315（06:56）。
 回传包 /home/qurr/luming/retiseg/retiseg_runs_handoff_20261020.tar.gz，43 MB，4478 个文件，902 行指标，0 个未对齐被排除。清单 runs/handoff_manifest_20261020.tsv。没有 npz、pt、pth、png。相对 10-19 清单打包。包内的本段是打包前一刻的文本，文件数以本句为准。
 合并本机 30618dd 时带上 queue.yaml 第四版：e5_rest（SAMed、RETFound 的种子 1 和 2）已打开。正在跑的启动器没有重启，空卡会按新文件领任务。
+
+10-20 包接入、因素参照行修正、推理池结果（2026-10-20，本机；pull 到 99f9b88）
+1. 包 retiseg_runs_handoff_20261020（4478 个文件，快照 10-20 07:25，902 行指标全部对齐）解入 runs/；collect_runs 807 份报告、39,258 行实测；make 全部重建通过（27 页）。新进表：RETFound E3b FGADR 0.457 与独立测试、E7 512 0.400；SAM2-UNet E3b FGADR 0.388、TJDR_std 0.408（MA/SE 塌缩）与独立测试；推理池 a 档 IDRiD 验证池六组与 SAM 3 三句、SAM 密度 64 的 DDR 池、b 档 SAM/SAM 2 框与 SAM 2 点的四档 k（两池）；B-std 种子 1/2 的一批 E3a。数字在 14 M9、M9b。
+2. 发现并修正：因素表的参照行一直是占位（21 第 68 条，14 备注 50）——collect_runs 加 derive_references，从实测种子 0 行复制 1,095 行；修正后表 7 的差值全部换了（例如 RETFound E7 512 由 "+0.09" 变为 −0.07，E4 加 FGADR 全集 U-Net +0.05 / M2MRF −0.02）。R5–R7 正文仍是 simtext，没有写过错的结论。
+3. 推理池：22 项里 20 项完成（缺 MedSAM）。零样本在两池都接近零（任意病灶 AUPR ≤0.26；SAM 3 措辞 2 明显高于另两句）；理想提示的框 k=全部 0.77–0.78（DDR 池），点提示 ≤0.04。按 metrics.json 预计 --select 两模型都选 128 / 0.5%、SAM 3 选措辞 2，预算规则生效；选择命令要在服务器跑（合并直方图读概率图）。写进 17 第四节第 25、26 条；测试阶段 a 档每模型约 50 GPU 时。
+4. 服务器 10-20 的状态：四张卡空着、e5_rest 已随合并打开。17 第四节加第 25–28 条（选择、开测试阶段、E8 细粒度合并的源内测试、探测用空卡）；21 加 68–70；13 总览与 E3b/E7 行；CHECKPOINT。
+写回：docs/paper/retiseg_paper/paper/{scripts/collect_runs.py, scripts/test_collect_runs.py, data/results.csv, generated/numbers.tex, tables/generated/*, figures/out/*, main.pdf}、docs/ops/{00,17,21}、docs/paper/{13,14}、docs/CHECKPOINT.md。runs/ 本身不进仓库（本机解包同 10-19 的做法）。

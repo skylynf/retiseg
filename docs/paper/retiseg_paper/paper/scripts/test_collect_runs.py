@@ -131,6 +131,34 @@ def check_e5(runs):
     print(f"ok: {len(new)} E5 rows from {len(seen)} inference-tier directories")
 
 
+def check_references():
+    """The factor blocks' reference rows are copies of the measured main-table / E3b rows (docs/ops/21 item 68)."""
+    cols = ["experiment", "model", "variant", "train_set", "seed", "test_set", "cls", "metric", "value", "source"]
+    rows = [
+        ("E2", "U-Net", "bstd", "DDR", 0, "DDR", "MA", "aupr", 0.15, "measured"),
+        ("E2", "U-Net", "bstd", "DDR", 0, "DDR", "MA", "lesion_recall_small", 0.25, "measured"),
+        ("E2", "U-Net", "bstd", "DDR", 1, "DDR", "MA", "aupr", 0.99, "measured"),          # seed 1 is not the reference
+        ("E2", "U-Net", "bstd", "DDR", 0, "IDRiD", "MA", "aupr", 0.40, "measured"),
+        ("E3b", "U-Net", "bstd", "FGADR", 0, "IDRiD", "MA", "aupr", 0.36, "measured"),
+        ("E8", "U-Net", "size:DDR 100%", "DDR", 0, "DDR", "MA", "aupr", 0.5, "placeholder"),
+        ("E8", "U-Net", "size:DDR 10%", "DDR", 0, "DDR", "MA", "aupr", 0.3, "measured"),
+        ("E4", "U-Net", "DDR", "DDR", 0, "IDRiD", "MA", "aupr", 0.5, "placeholder"),
+        ("E4", "U-Net", "FGADR", "FGADR", 0, "IDRiD", "MA", "aupr", 0.5, "placeholder"),
+        ("E7", "M2MRF", "res:1440", "DDR", 0, "DDR", "mean", "lesion_recall_small", 0.5, "placeholder"),  # no measured M2MRF: left alone
+    ]
+    table = pd.DataFrame(rows, columns=cols)
+    out, n = collect_runs.derive_references(table)
+    e8 = out[(out.experiment == "E8") & (out.variant == "size:DDR 100%")]
+    assert set(e8.metric) == {"aupr", "lesion_recall_small"} and (e8.source == "measured").all() and set(e8.seed) == {0}
+    assert float(e8[e8.metric == "aupr"].value.iloc[0]) == 0.15, "seed 0 of the main run, not seed 1"
+    assert float(out[(out.experiment == "E4") & (out.variant == "DDR")].value.iloc[0]) == 0.40
+    assert float(out[(out.experiment == "E4") & (out.variant == "FGADR")].value.iloc[0]) == 0.36
+    e7 = out[(out.experiment == "E7")]
+    assert len(e7) == 1 and e7.source.iloc[0] == "placeholder", "a reference without a measured source stays a placeholder"
+    assert n == 4 and float(out[(out.experiment == "E8") & (out.variant == "size:DDR 10%")].value.iloc[0]) == 0.3
+    print("ok: factor reference rows are copied from the measured seed-0 source rows")
+
+
 def main():
     tmp = Path(tempfile.mkdtemp())
     try:
@@ -179,6 +207,7 @@ def main():
         assert collect_runs.nn_key(collect_runs.NN.match("NN_resencm_tjdr_std_fold0")) == ("E3b", "bstd", "nnU-Net ResEnc-M", "TJDR-std", 0)
         print(f"ok: {len(new)} rows from one report replaced {replaced} placeholder rows; nothing else changed")
         check_e5(tmp / "runs")
+        check_references()
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

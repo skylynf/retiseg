@@ -38,6 +38,15 @@
   写作节奏（本机）：E3a 种子 0 补齐 → R4/图 6；E5 种子 0 + 推理档 → 表 3、表 6/R3；专用模型种子 0 → 主表 5 行；多种子最后，只换误差棒。
 
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
+  进度（本机 10-20，pull 到 99f9b88，10-20 包已进表：807 份报告、39,258 行实测；RETFound E3b FGADR、E7 512，SAM2-UNet E3b 两格，推理池 20 项都在 results.csv）：服务器 10-20 07:25 记录四张卡（4–7）空着、推理池只剩 MedSAM、选择没跑。第 25–28 条是现在就做的，顺序：25（CPU，几分钟）→ 26 → 27 → 28；第 19 条的探测卡现在不用从队列里拿（卡本来就空）。
+  25. 推理档的选择（第七节第 4 条；"选择交给本机决定"的答复：规则是预登记的，没有需要决定的事，照规则跑）：python -m bench.e5.amg --select（每模型一组，两池合并像素直方图的任意病灶 AUPR，并列取低密度再取大上限）与 conda run -n retiseg-sam3 python -m bench.e5.sam3_text --select；把打印的 yaml 粘进 e5_frozen.yaml 的 zero_shot.grid.selected / zero_shot.sam3.selected，runs/E5/selection_*.json 进下一包，00 记一笔（本机按验证池的 metrics.json 预计：SAM、SAM 2.1 都是密度 128、上限 0.5%，SAM 3 措辞 2；若 --select 的结果不同，以它为准）。128 当选时预算规则生效：该模型的 TJDR_uwf 只跑 fov 变体（Luming 2026-10-14 已定，不再问）。提交（git commit -F）。
+  26. 打开测试阶段：queue.yaml 的 e5_infer_test 改 enabled: true 并提交；max_concurrent 先改 2（四张空卡里两张给它，两张给 e5_rest 的 SAMed/RETFound 种子与第 19 条的探测）。启动器重读文件就会接；MedSAM 的项自动跳过。a 档每模型约 50 GPU 时（14 M9 的估算），b 档与 SAM 3 远小于此；每天一包。
+  27. E8 细粒度合并运行的源内测试（CPU/GPU 几十分钟；14 M9b）：runs/BF_e8_unet_fine_seed0 与 runs/BF_e8_m2mrf_fine_seed0 在 TJDR_std 与 IDRiD 的测试划分上预测并评测（这两个源进了训练，e3a 按规则不测；这里要的是"源内"的数，目录名写 runs/BF_e8_<模型>_fine_seed0/insource_<集>/metrics.json，collect 暂不读，本机手工进 14）：
+       把 runs/BF_e8_unet_fine_seed0/config.yaml 复制到 /tmp/e8_unet_fine_tjdr.yaml，只把 dataset 改成 dataset/prepared/TJDR_std（predict.py 只读 model、dataset、fov_diameter 与推理几何），然后
+       python -m bench.predict --config /tmp/e8_unet_fine_tjdr.yaml --checkpoint runs/BF_e8_unet_fine_seed0/best.pt --pred-dir runs/BF_e8_unet_fine_seed0/insource_TJDR_std/prob --split test
+       python -m bench.eval.cli evaluate --data dataset/prepared/TJDR_std --split test --pred runs/BF_e8_unet_fine_seed0/insource_TJDR_std/prob --out runs/BF_e8_unet_fine_seed0/insource_TJDR_std/metrics
+     M2MRF 走 bench/scripts/predict_m2mrf_b1.py（参数同理）。IDRiD 同理（dataset/prepared/IDRiD，官方测试 27 张）。四个目录的 metrics_test.json 的 mAUPR 记 00。
+  28. 第 19 条的两倍预算探测现在就开（卡空着）：PROBE_GPUS="6 7" 两张卡，三个 cell 分两条链；训完各自 --score-only。e5_rest（SAMed、RETFound 种子 1、2）由队列在另外两张卡上接；核对 nvidia-smi 后把卡的去向记 00。
   进度（本机 10-19，pull 到 5d1fb72，10-19 包已进表：611 份报告、30,601 行实测，CLC-Net、HRDecoder、SAM2-UNet 修订版、nnU-Net E3b、M2MRF 原分辨率、a 档 DDR 验证池都在 results.csv）：第 16–18 条已做完。第 17 条的核对本机读过：包装器参数与作者配置对得上、四类都有输出，差距的归因交给第 19–21 条（26 的 N1）。新加第 19–24 条，按序号做；第 19 条要从 RETISEG_GPUS 里拿出一张卡，启动器重启一次。
   19. 两倍预算敏感性（26 N1b；14 备注 22、46；只进补充表）：三个 cell 已在仓库——bs_probe_hrnet_ddr_seed0、bs_probe_hrdecoder_idrid_seed0、bs_probe_hrdecoder_ddr_seed0（budget_probe: 2，其余与主表 cell 相同）。做法：杀掉启动器，用 RETISEG_GPUS="2 3 4 5 6" 重开同一条队列，GPU 7 给探测：
        PROBE_GPUS="7" PROBE_CELLS="bs_probe_hrnet_ddr_seed0 bs_probe_hrdecoder_idrid_seed0 bs_probe_hrdecoder_ddr_seed0" bash bench/scripts/server_run.sh probe
@@ -129,7 +138,7 @@
   M2MRF IDRiD 种子 1、2（bench/train_m2mrf.py --config bench/configs/e1r_m2mrf_idrid_seed0.yaml 改 seed，各约 16 GPU 时，打分同种子 0）；M2MRF DDR 一个种子（需一份 e1r_m2mrf_ddr_seed0.yaml，按作者 DDR 配置写、核对后记 14 M6）；HACDR-Net 两库各一个种子（需从 bench/scripts/train_hacdr_b1.py 改出 E1r 版本）。算力不够时第一个砍。
 
 十三、回传清单（下一包，第四节第 5、24 条）
-  runs/BSprobe_*（两倍预算，第四节第 19 条）、runs/E1r_hrdecoder_*（第 20 条）、runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*（含 E9 两项打分后的 metrics_test.json）、runs/E3a/、runs/BS_*（新种子、E5 与专用模型的 run_params.json 和验证曲线）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
+  runs/E5/selection_*.json 与测试阶段的目录（第 25、26 条）、runs/BF_e8_*_fine_seed0/insource_*（第 27 条）、runs/BSprobe_*（两倍预算，第四节第 19 条）、runs/E1r_hrdecoder_*（第 20 条）、runs/E1_hrdecoder/、runs/E5/（含 selection_*.json）、runs/NN_*（含 tjdr_std、fgadr、rep）、runs/BF_*（含 E9 两项打分后的 metrics_test.json）、runs/E3a/、runs/BS_*（新种子、E5 与专用模型的 run_params.json 和验证曲线）、dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json；e5 与专用模型冒烟的每步耗时（00 里也记）。
 
 十四、用户决定（2026-10-14 晚已全部定下，00「待用户 Luming 处理」下的确认行）
   D1–D9 确认；评审修复 6、7、16 确认；预算规则保留（a）；表 6/图 5 呈现已改；CI 已加（.github/workflows/tests.yml，push 后看 Actions 页面，失败记 21）；协议 sha256 锁文件在读出首个 E5 测试指标后由本机加；MAPLES-DR 只用官方测试 60 张。

@@ -534,6 +534,52 @@ def merge(table, new):
     return merged[~stale].reset_index(drop=True), int(replace.sum()), added, int(stale.sum())
 
 
+# The reference row of each factor block is a main-table or E3b run, not a run of its own: E4 "DDR" and E7
+# "res:1440", E8 "size:DDR 100%", E9 "loss:CE + Dice" are the model's B-std DDR run (seed 0), E4 "FGADR" is its
+# E3b run trained on FGADR. build_placeholder writes them as placeholders; nothing under runs/ carries their key,
+# so they stayed simulated after every collect and every delta of table 7 / figures 6e, 7d, 7e was taken against
+# a simulated reference (noticed 2026-10-20 when RETFound's E7 512 row read "+0.09"). Copy them from the
+# measured source rows (same model, test set, class and metric; seed 0; the main variants of E2/E5, or E3b).
+REFERENCE_SOURCES = {  # (experiment, variant) -> (source experiments, source variants, source train_set)
+    ("E4", "DDR"): (["E2", "E5"], ["bstd", "peft", "encoder_decoder"], "DDR"),
+    ("E7", "res:1440"): (["E2", "E5"], ["bstd", "peft", "encoder_decoder"], "DDR"),
+    ("E8", "size:DDR 100%"): (["E2", "E5"], ["bstd", "peft", "encoder_decoder"], "DDR"),
+    ("E9", "loss:CE + Dice"): (["E2", "E5"], ["bstd", "peft", "encoder_decoder"], "DDR"),
+    ("E4", "FGADR"): (["E3b"], ["bstd"], "FGADR"),
+}
+
+
+def derive_references(table):
+    """Replace the factor blocks' placeholder reference rows by copies of the measured rows they stand for.
+
+    For every (experiment, variant, model, test set) of REFERENCE_SOURCES that still holds placeholder rows, the
+    placeholder rows are dropped and every measured seed-0 row of the source run on that test set (all classes
+    and metrics, so the reference carries the same per-class lesion-level rows as the other levels of the block)
+    is inserted under the factor's key. Returns (table, n_rows_inserted).
+    """
+    table = table.copy()
+    table["seed"] = table["seed"].astype(int)
+    inserted = []
+    drop = []
+    for (exp, variant), (src_exps, src_variants, src_train) in REFERENCE_SOURCES.items():
+        targets = table[(table.experiment == exp) & (table.variant == variant) & (table.source != "measured")]
+        if targets.empty:
+            continue
+        src = table[table.experiment.isin(src_exps) & table.variant.isin(src_variants) & (table.train_set == src_train)
+                    & (table.seed == 0) & (table.source == "measured")]
+        for (model, test), group in targets.groupby(["model", "test_set"]):
+            rows = src[(src.model == model) & (src.test_set == test)].drop_duplicates(subset=["cls", "metric"], keep="first")
+            if rows.empty:
+                continue
+            rows = rows.assign(experiment=exp, variant=variant, train_set=group.train_set.iloc[0], seed=0, source="measured")
+            inserted.append(rows)
+            drop.extend(group.index.tolist())
+    if not inserted:
+        return table, 0
+    table = pd.concat([table.drop(index=drop), *inserted], ignore_index=True)
+    return table, int(sum(len(r) for r in inserted))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", default=str(REPO / "runs"))
@@ -567,6 +613,8 @@ def main():
     table = pd.read_csv(args.csv, keep_default_na=False)
     merged, replaced, added, stale = merge(table, new)
     print(f"{len(seen)} reports, {len(new)} measured rows: {replaced} placeholder rows replaced, {added} rows with no placeholder counterpart added, {stale} placeholder seeds of measured groups dropped")
+    merged, filled = derive_references(merged)
+    print(f"{filled} factor reference rows copied from their main-table / E3b runs (seed 0, all classes and metrics)")
     left = merged[(merged.experiment.isin(["E2", "E2b"])) & (merged.source != "measured")]
     print(f"placeholder rows left in E2/E2b: {len(left)}")
     if not args.dry_run:
