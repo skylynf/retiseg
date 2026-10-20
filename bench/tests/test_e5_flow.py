@@ -97,7 +97,7 @@ def test_the_documented_flow_from_smoke_to_collect(tmp_path, monkeypatch):
     monkeypatch.setattr(geo, "long_side_for", lambda set_name, variant, frozen: LONG_SIDE)
     monkeypatch.setattr(geo, "window_size", lambda frozen, model: WINDOW)
     monkeypatch.setattr(fz, "pool_sets", lambda frozen: [("IDRiD", prepared / "IDRiD", "val"), ("DDR", prepared / "DDR", "val")])
-    (tmp_path / "e5_frozen.yaml").write_text(FROZEN.read_text())
+    (tmp_path / "e5_frozen.yaml").write_text(yaml.safe_dump(fz.unselected(yaml.safe_load(FROZEN.read_text())), sort_keys=False))   # the flow starts before the selections
     frozen = fz.load_frozen()
     runs = tmp_path / "runs" / "E5"
 

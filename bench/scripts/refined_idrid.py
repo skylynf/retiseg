@@ -8,8 +8,9 @@ gives one value per class: background 0, VH 4, retina 8, fovea 16, vessel 24, op
 NV 166, CWS 191, MA 255. One class per pixel, so refined lesions never overlap. Three CPU commands:
 
     check    find, for every official test image, the crop of the original that reproduces the released 1024 x 1024
-             image (the bounding box of this project's FOV mask with a margin of 0-32 pixels, resized to 1024 x 1024)
-             and report the normalized cross-correlation per image; accept the geometry only if every image matches
+             image: a search over the four crop edges starting from this project's FOV box, under two resize
+             hypotheses (stretch to 1024 x 1024, or pad to a square first), scored by normalized cross-correlation
+             at full resolution; the geometry is accepted only if every image reaches the threshold
     prepare  write dataset/prepared/RefinedIDRiD (refined labels at 1024: masks MA / HE / EX / SE, fov = the crop of
              this project's FOV; split test = the 27 official test images) and dataset/prepared/RefinedIDRiD_original
              (the official IDRiD masks taken through the same crop and resize), plus label-difference statistics
@@ -45,7 +46,6 @@ from bench.data.fov import crop_box  # noqa: E402
 SIZE = 1024
 VALUES = {"background": 0, "VH": 4, "retina": 8, "fovea": 16, "vessel": 24, "OD": 32, "EX": 63, "IRMA": 96, "HE": 127, "NV": 166, "CWS": 191, "MA": 255}
 CLASS_VALUE = {"MA": 255, "HE": 127, "EX": 63, "SE": 191}          # this project's four classes; CWS is SE
-MARGINS = (0, 1, 2, 4, 8, 16, 32)
 PREPARED_IDRID = REPO / "dataset" / "prepared" / "IDRiD"
 OUT_REFINED = REPO / "dataset" / "prepared" / "RefinedIDRiD"
 OUT_ORIGINAL = REPO / "dataset" / "prepared" / "RefinedIDRiD_original"
@@ -114,6 +114,28 @@ def crop_with_margin(fov, margin):
     return max(0, y0 - margin), min(h, y1 + margin), max(0, x0 - margin), min(w, x1 + margin)
 
 
+def square_pad(arr, fill=0):
+    """Centre ``arr`` on a square canvas of its longer side (the 'pad' hypothesis: pad, then resize uniformly)."""
+    h, w = arr.shape[:2]
+    side = max(h, w)
+    out = np.full((side, side) + tuple(arr.shape[2:]), fill, dtype=arr.dtype)
+    y, x = (side - h) // 2, (side - w) // 2
+    out[y:y + h, x:x + w] = arr
+    return out
+
+
+def transform(arr, box, hypothesis="stretch", size=SIZE, nearest=False):
+    """Crop ``box`` (y0, y1, x0, x1) and map it to size x size the way the release does under ``hypothesis``:
+    'stretch' resizes the crop without keeping the aspect ratio; 'pad' centres it on a square first."""
+    y0, y1, x0, x1 = box
+    crop = np.ascontiguousarray(arr[y0:y1, x0:x1])
+    if hypothesis == "pad":
+        crop = square_pad(crop)
+    elif hypothesis != "stretch":
+        raise ValueError(f"unknown hypothesis {hypothesis!r}")
+    return resize_gray(crop, size, nearest)
+
+
 def ncc(a, b):
     a = np.asarray(a, np.float64).ravel()
     b = np.asarray(b, np.float64).ravel()
@@ -123,20 +145,126 @@ def ncc(a, b):
     return float((a * b).sum() / denom) if denom > 0 else 0.0
 
 
-def match_geometry(original_rgb, fov, released_rgb, margins=MARGINS):
-    """The margin whose FOV-box crop, resized to 1024 x 1024, best reproduces the released image (grayscale NCC)."""
-    released = np.asarray(Image.fromarray(np.asarray(released_rgb)).convert("L"), np.float64)
+HYPOTHESES = ("stretch", "pad")
+SEARCH_SIZE = 256
+
+
+def _search_box(gray_small, released_small, box0, hypothesis, scale, shape):
+    """Coordinate descent on the four box edges (full-resolution units) that maximizes the NCC between the
+    transformed crop of the downscaled original and the downscaled release; steps 64, 16, 4, 1 pixels."""
+    H, W = shape
+
+    def score(box):
+        y0, y1, x0, x1 = [int(round(v / scale)) for v in box]
+        if y1 - y0 < 4 or x1 - x0 < 4:
+            return -1.0
+        return ncc(transform(gray_small, (y0, y1, x0, x1), hypothesis, size=SEARCH_SIZE), released_small)
+
+    limits = ((0, H - 1), (1, H), (0, W - 1), (1, W))
+    box = list(box0)
+    best = score(box)
+    for step in (64, 16, 4, 1):
+        moved = True
+        rounds = 0
+        while moved and rounds < 6:
+            moved = False
+            rounds += 1
+            for i in range(4):
+                lo, hi = limits[i]
+                candidates = []
+                for k in range(-8, 9):
+                    v = box[i] + k * step
+                    if lo <= v <= hi and v != box[i]:
+                        trial = list(box)
+                        trial[i] = v
+                        if (i in (0, 1) and trial[1] - trial[0] < 8) or (i in (2, 3) and trial[3] - trial[2] < 8):
+                            continue
+                        candidates.append((score(trial), v))
+                if candidates:
+                    sc, v = max(candidates)
+                    if sc > best + 1e-9:
+                        best, box[i], moved = sc, v, True
+    return [int(v) for v in box], best
+
+
+def _refine_full(gray, released, box, hypothesis, reach=4, rounds=3):
+    """Final coordinate descent at full resolution, one pixel at a time within +-reach per edge."""
+    H, W = gray.shape
+    limits = ((0, H - 1), (1, H), (0, W - 1), (1, W))
+    box = list(box)
+    best = ncc(transform(gray, box, hypothesis), released)
+    for _ in range(rounds):
+        moved = False
+        for i in range(4):
+            lo, hi = limits[i]
+            for v in range(box[i] - reach, box[i] + reach + 1):
+                if v == box[i] or not lo <= v <= hi:
+                    continue
+                trial = list(box)
+                trial[i] = v
+                if trial[1] - trial[0] < 8 or trial[3] - trial[2] < 8:
+                    continue
+                sc = ncc(transform(gray, trial, hypothesis), released)
+                if sc > best + 1e-9:
+                    best, box, moved = sc, trial, True
+        if not moved:
+            break
+    return [int(v) for v in box], best
+
+
+def match_geometry(original_rgb, fov, released_rgb):
+    """The crop box (and the resize hypothesis) that reproduces the released 1024 x 1024 image from the original.
+
+    Starts from this project's FOV box, searches the four edges by coordinate descent at a reduced scale under
+    both hypotheses (stretch: anisotropic resize of the crop; pad: square padding, then uniform resize), and
+    reports the full-resolution NCC of the winner next to that of the plain FOV-box stretch.
+    """
+    released = np.asarray(Image.fromarray(np.asarray(released_rgb)).convert("L"))
     if released.shape != (SIZE, SIZE):
         raise ValueError(f"released image is {released.shape}, expected {(SIZE, SIZE)}")
     gray = np.asarray(Image.fromarray(np.asarray(original_rgb)).convert("L"))
-    best = None
-    for margin in margins:
-        y0, y1, x0, x1 = crop_with_margin(fov, margin)
-        candidate = resize_gray(gray[y0:y1, x0:x1])
-        score = ncc(candidate, released)
-        if best is None or score > best["ncc"]:
-            best = {"margin": margin, "box": [y0, y1, x0, x1], "ncc": score}
-    return best
+    H, W = gray.shape
+    scale = max(1, int(round(max(H, W) / 1024)))
+    gray_small = np.asarray(Image.fromarray(gray).resize((max(1, W // scale), max(1, H // scale)), Image.BILINEAR)) if scale > 1 else gray
+    released_small = resize_gray(released, SEARCH_SIZE)
+    fov_box = list(crop_box(fov))
+    results = {}
+    for hypothesis in HYPOTHESES:
+        box, search_ncc = _search_box(gray_small, released_small, fov_box, hypothesis, scale, (H, W))
+        box, full = _refine_full(gray, released, box, hypothesis)
+        results[hypothesis] = {"box": box, "ncc": full, "ncc_search": search_ncc}
+    # the paper documents a plain resize; 'pad' wins only when it is clearly better (a square crop makes the two identical)
+    best_h = "stretch" if results["stretch"]["ncc"] >= results["pad"]["ncc"] - 0.005 else "pad"
+    return {
+        "hypothesis": best_h, "box": results[best_h]["box"], "ncc": results[best_h]["ncc"], "ncc_search": results[best_h]["ncc_search"],
+        "edge_ncc": edge_ncc(transform(gray, results[best_h]["box"], best_h), released),
+        "fov_box": fov_box, "fov_box_stretch_ncc": ncc(transform(gray, fov_box, "stretch"), released),
+        "alternatives": {h: {"box": r["box"], "ncc": r["ncc"]} for h, r in results.items() if h != best_h},
+    }
+
+
+def edge_ncc(a, b):
+    """NCC of Sobel gradient magnitudes: alignment evidence that survives a global or local contrast change
+    (a release that was contrast-enhanced keeps its edges where they were)."""
+    from scipy import ndimage
+
+    def edges(x):
+        x = np.asarray(x, np.float64)
+        return np.hypot(ndimage.sobel(x, axis=0), ndimage.sobel(x, axis=1))
+
+    return ncc(edges(a), edges(b))
+
+
+def label_extent(path):
+    """Bounding box of the non-background pixels of a released mask: tells whether the crop was the retina's box
+    (extent spans the frame) or something padded (bands of background)."""
+    arr = np.asarray(Image.open(path))
+    if arr.ndim == 3:
+        arr = arr[..., 0]
+    ys, xs = np.nonzero(arr)
+    if ys.size == 0:
+        return None
+    return [int(ys.min()), int(ys.max()) + 1, int(xs.min()), int(xs.max()) + 1]
 
 
 def check(root, prepared=PREPARED_IDRID, out=GEOMETRY, accept=0.97, log=print):
@@ -151,16 +279,17 @@ def check(root, prepared=PREPARED_IDRID, out=GEOMETRY, accept=0.97, log=print):
         best = match_geometry(original, fov, released)
         best["released_image"] = str(release[image_id]["image"])
         best["released_label"] = str(release[image_id]["label"])
+        best["label_extent"] = label_extent(release[image_id]["label"])
         result["images"][image_id] = best
         worst = min(worst, best["ncc"])
-        log(f"{image_id}: margin {best['margin']} box {best['box']} ncc {best['ncc']:.4f}")
+        log(f"{image_id}: {best['hypothesis']} box {best['box']} ncc {best['ncc']:.4f} edge ncc {best['edge_ncc']:.4f} "
+            f"(fov box {best['fov_box']} stretch ncc {best['fov_box_stretch_ncc']:.4f}; label extent {best['label_extent']})")
     result["worst_ncc"] = worst
     result["accepted"] = bool(worst >= accept)
-    margins = sorted({v["margin"] for v in result["images"].values()})
-    result["margins_used"] = margins
+    result["hypotheses_used"] = sorted({v["hypothesis"] for v in result["images"].values()})
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(json.dumps(result, indent=1) + "\n")
-    log(f"worst ncc {worst:.4f} -> {'accepted' if result['accepted'] else 'NOT accepted'}; margins {margins}; written {out}")
+    log(f"worst ncc {worst:.4f} -> {'accepted' if result['accepted'] else 'NOT accepted'}; hypotheses {result['hypotheses_used']}; written {out}")
     return result
 
 
@@ -188,9 +317,10 @@ def prepare(root, geometry=GEOMETRY, prepared=PREPARED_IDRID, out_refined=OUT_RE
     for out in (out_refined, out_original):
         Path(out).mkdir(parents=True, exist_ok=True)
     for image_id in ids:
-        y0, y1, x0, x1 = geo["images"][image_id]["box"]
+        entry = geo["images"][image_id]
+        box, hyp = entry["box"], entry.get("hypothesis", "stretch")
         fov = io.read_fov(prepared, image_id)
-        fov_1024 = resize_gray(fov[y0:y1, x0:x1].astype(np.uint8) * 255, nearest=True) > 0
+        fov_1024 = transform(fov.astype(np.uint8) * 255, box, hyp, nearest=True) > 0
         label = read_label(release[image_id]["label"])
         if str(release[image_id]["label"]) != geo["images"][image_id]["released_label"]:
             raise RuntimeError(f"{image_id}: the label file differs from the one recorded by check")
@@ -200,13 +330,13 @@ def prepare(root, geometry=GEOMETRY, prepared=PREPARED_IDRID, out_refined=OUT_RE
         for out in (out_refined, out_original):
             (Path(out) / "images").mkdir(parents=True, exist_ok=True)
             Image.open(release[image_id]["image"]).convert("RGB").save(Path(out) / "images" / f"{image_id}.png")
-        entry = {"retina_vs_fov_iou": None, "classes": {}}
+        entry = {"hypothesis": hyp, "box": box, "retina_vs_fov_iou": None, "classes": {}}
         retina = label != 0
         entry["retina_vs_fov_iou"] = float((retina & fov_1024).sum() / max(1, (retina | fov_1024).sum()))
         for cls, value in CLASS_VALUE.items():
             refined = label == value
             original = io.read_mask(prepared, cls, image_id, shape=fov.shape)
-            original_1024 = resize_gray(original[y0:y1, x0:x1].astype(np.uint8) * 255, nearest=True) > 0
+            original_1024 = transform(original.astype(np.uint8) * 255, box, hyp, nearest=True) > 0
             _write_mask(Path(out_refined) / "masks" / cls / f"{image_id}.png", refined)
             _write_mask(Path(out_original) / "masks" / cls / f"{image_id}.png", original_1024)
             inter = int((refined & original_1024).sum())
@@ -270,11 +400,11 @@ def score(runs_root=REPO / "runs", geometry=GEOMETRY, prepared=PREPARED_IDRID, o
             continue
         pred = out / "prob_test"
         for image_id in ids:
-            y0, y1, x0, x1 = geo["images"][image_id]["box"]
+            entry = geo["images"][image_id]
+            box, hyp = entry["box"], entry.get("hypothesis", "stretch")
             for cls in CLASS_VALUE:
                 q = io.read_prob_quantized(run / "prob_test", cls, image_id).astype(np.float32) / io.PROB_LEVELS
-                crop = q[y0:y1, x0:x1]
-                resized = np.asarray(Image.fromarray(crop).resize((SIZE, SIZE), Image.BILINEAR), np.float64)
+                resized = np.asarray(transform(q, box, hyp), np.float64)
                 io.write_prob(pred, cls, image_id, np.clip(resized, 0, 1))
         val_pred = run / "prob_val" if (run / "prob_val").is_dir() else None
         entry = {}

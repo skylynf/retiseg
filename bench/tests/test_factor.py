@@ -192,7 +192,7 @@ def test_run_cell_trains_on_two_toy_sources_and_scores(tmp_path, monkeypatch):
     frozen = dict(bstd.load_frozen(), fully_conv_patch=[16, 16], n_evals=2, equivalent_epochs={"IDRiD": 2, "DDR": 2}, recipe_revisions={})
     monkeypatch.setattr(bstd, "load_frozen", lambda path=None: frozen)
     # the reference amount: DDR train (3 toy canvases of 48x40) at the frozen diameter would be resized; count 3 x 16 x 16
-    monkeypatch.setattr(factor, "reference_pixels", lambda ref, fz: 3 * 16 * 16)
+    monkeypatch.setattr(factor, "reference_pixels", lambda ref, fz, diameter=None: 3 * 16 * 16)
 
     class Tiny(nn.Module, SegmentationWrapper):
         card = ModelCard(name="M2MRF", family="fundus_multiscale", track="B", repro_level="R0", source="test", pad_multiple=8)

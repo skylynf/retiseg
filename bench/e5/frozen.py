@@ -83,6 +83,18 @@ def is_pool_split(split):
     return split == POOL_SPLIT
 
 
+def unselected(frozen):
+    """A deep copy of ``frozen`` with both pool selections cleared: the state of the protocol before the selections
+    were written (2026-10-20). Tests of the pool-only flow use it; the file itself keeps the selections (append-only
+    after the first test metric)."""
+    import copy
+
+    doc = copy.deepcopy(frozen)
+    doc["zero_shot"]["grid"]["selected"] = {}
+    doc["zero_shot"]["sam3"]["selected"] = {}
+    return doc
+
+
 def grid_pairs(frozen):
     """Every registered (points_per_side, area_cap_fraction) pair, densities outer, caps inner."""
     grid = frozen["zero_shot"]["grid"]

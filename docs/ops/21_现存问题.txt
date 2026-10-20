@@ -519,3 +519,17 @@
    状态与决定：记下以便复盘：prepare 对全零 raw 层不落盘是既有约定，新读者要照顾；写缓存文件时读写口径要一致。
    处理条件：无。
    来源：服务器 10-20/21 的 00 记录。
+
+79  2026-10-21  3 级 → 已处理（2026-10-21，本机）
+   问题：CI 红：9 个用例。8 个是 bench/e5 的测试直接读 bench/configs/e5_frozen.yaml 并假定选择为空（第 52 条同类：测试读机器状态）；服务器 10-20 按规则写回选择后，这些"选择之前"的用例全部失效（plan 多出 a_sam3_selected 两项、assert_ready 不再抛错、sam3 的池运行自动拼装）。第 9 个是本机 10-20 给 factor.reference_pixels 加了第三个参数，test_factor 里 monkeypatch 的两参 lambda 没跟上。
+   影响：GitHub Actions 自 6c6d375 起红。
+   状态与决定：bench/e5/frozen.py 加 unselected()（深拷贝并清空两处 selected），"选择之前"的用例改用它；test_frozen_scope_matches_16 改为断言已写回的选择在登记网格 / 措辞表内；test_factor 的 lambda 加默认第三参。文件本身不动（只增不改）。
+   处理条件：无。
+   来源：用户贴的 CI 日志（2026-10-21）。
+
+80  2026-10-21  2 级
+   问题：Refined IDRiD 的几何核对第一次不接受：27 张的最高 NCC 0.69–0.82，且多在最大边距 32 处取到——发布的裁剪不是 FOV 框加小边距，或缩放方式不是整框拉伸（也可能图像经过对比度处理）。
+   影响：N4 停在 check；没有 prepare、score。
+   状态与决定：refined_idrid.py 改为四边坐标下降搜索 + stretch / pad 两种假设 + 边缘 NCC + 标注范围诊断（14 备注 54）；服务器重跑（17 第四节第 33 条）。
+   处理条件：重跑结果贴 00 后本机判断。
+   来源：服务器 10-21 07:34 记录、runs/REFINED/RefinedIDRiD_geometry.json。

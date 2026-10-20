@@ -11,9 +11,10 @@ from bench.common import io
 from bench.scripts import refined_idrid as ri
 
 
-def _disk(shape, cy, cx, r):
+def _disk(shape, cy, cx, r, rx=None):
+    """A disk, or an ellipse with horizontal radius ``rx`` (the toy FOV is wider than tall, like a fundus photograph)."""
     yy, xx = np.ogrid[: shape[0], : shape[1]]
-    return (yy - cy) ** 2 + (xx - cx) ** 2 <= r**2
+    return ((yy - cy) / r) ** 2 + ((xx - cx) / (rx or r)) ** 2 <= 1.0
 
 
 @pytest.fixture
@@ -28,8 +29,10 @@ def toy(tmp_path):
     ids = ["IDRiD_55", "IDRiD_56"]
     truth = {}
     for k, image_id in enumerate(ids):
-        fov = _disk(shape, 120, 160 + 10 * k, 100)
-        rgb = (rng.random((*shape, 3)) * 255).astype(np.uint8)
+        fov = _disk(shape, 120, 160 + 10 * k, 100, rx=145)
+        # a smooth texture with some fine detail (a fundus photograph is not white noise)
+        coarse = np.asarray(Image.fromarray((rng.random((24, 32, 3)) * 255).astype(np.uint8)).resize((shape[1], shape[0]), Image.BILINEAR), np.float64)
+        rgb = np.clip(coarse * 0.8 + rng.random((*shape, 3)) * 50, 0, 255).astype(np.uint8)
         rgb[~fov] = 0
         (prepared / "images").mkdir(parents=True, exist_ok=True)
         Image.fromarray(rgb).save(prepared / "images" / f"{image_id}.jpg", quality=95)
@@ -76,8 +79,13 @@ def test_check_recovers_the_margin_and_prepare_writes_both_label_sets(toy):
     tmp_path, prepared, root, ids, truth = toy
     geometry = tmp_path / "geometry.json"
     result = ri.check(root, prepared=prepared, out=geometry, log=lambda *_: None)
-    assert result["accepted"] and result["margins_used"] == [2], result
+    assert result["accepted"] and result["hypotheses_used"] == ["stretch"], {k: (v["hypothesis"], v["ncc"]) for k, v in result["images"].items()}
     assert all(v["ncc"] > 0.97 for v in result["images"].values())
+    for image_id in ids:
+        fov = np.asarray(Image.open(prepared / "fov" / f"{image_id}.png")) > 0
+        expected = ri.crop_with_margin(fov, 2)
+        assert max(abs(a - b) for a, b in zip(result["images"][image_id]["box"], expected)) <= 1, (result["images"][image_id]["box"], expected)
+        assert result["images"][image_id]["label_extent"] is not None
     out_r, out_o = tmp_path / "prep" / "RefinedIDRiD", tmp_path / "prep" / "RefinedIDRiD_original"
     report = ri.prepare(root, geometry=geometry, prepared=prepared, out_refined=out_r, out_original=out_o, log=lambda *_: None)
     assert report["n_images"] == 2 and (out_r / "masks" / "MA" / "IDRiD_55.png").is_file() and (out_o / "fov" / "IDRiD_56.png").is_file()
@@ -120,3 +128,17 @@ def test_score_moves_the_maps_through_the_geometry_and_scores_both_label_sets(to
     q = io.read_prob_quantized(tmp_path / "REFINED" / "BS_unet_idrid_seed0" / "prob_test", "HE", "IDRiD_55")
     assert q.shape == (1024, 1024)
     assert ri.score(runs, geometry=geometry, prepared=prepared, out_root=tmp_path / "REFINED", log=lambda *_: None, refined_dir=out_r, original_dir=out_o) == {}
+
+
+def test_match_geometry_tells_a_padded_release_from_a_stretched_one(toy):
+    """A release made by padding the crop to a square and resizing uniformly is recognised as 'pad', with its box."""
+    _tmp, prepared, _root, ids, _truth = toy
+    image_id = ids[0]
+    rgb = np.asarray(Image.open(prepared / "images" / f"{image_id}.jpg").convert("RGB"))
+    fov = np.asarray(Image.open(prepared / "fov" / f"{image_id}.png")) > 0
+    box = ri.crop_with_margin(fov, 6)
+    padded = ri.transform(rgb, box, "pad")
+    found = ri.match_geometry(rgb, fov, padded)
+    assert found["hypothesis"] == "pad" and found["ncc"] > 0.97, found
+    assert max(abs(a - b) for a, b in zip(found["box"], box)) <= 3, (found["box"], box)
+    assert found["fov_box_stretch_ncc"] < found["ncc"]

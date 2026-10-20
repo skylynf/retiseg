@@ -44,7 +44,7 @@ def _no_machine_state(tmp_path, monkeypatch):
 
 def test_plan_before_the_selections_has_pool_runs_and_the_oracle_tier_only(tmp_path, monkeypatch):
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
-    frozen = fz.load_frozen()
+    frozen = fz.unselected(fz.load_frozen())   # the file carries the selections since 2026-10-20; this test is the state before them
     items = launch.discover(frozen)
     pool = [it for it in items if it.phase == launch.POOL]
     test = [it for it in items if it.phase == launch.TEST]
@@ -118,7 +118,7 @@ def test_plan_after_the_selections_adds_the_zero_shot_tests_and_the_gated_assemb
 
 def test_done_running_filters_commands_and_only(tmp_path, monkeypatch):
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
-    frozen = fz.load_frozen()
+    frozen = fz.unselected(fz.load_frozen())   # before the selections: a_sam3_ph0 has its two pool items only
     item = next(it for it in launch.discover(frozen) if it.label == "b_sam_vitb_box:DDR:val:main")
     for path in item.dirs:
         path.mkdir(parents=True)

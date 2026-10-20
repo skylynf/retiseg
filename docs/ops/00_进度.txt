@@ -1,7 +1,7 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-10-21，本机；仓库 origin/main add8484 + 本次写回）
+一、当前状态（2026-10-21 第二次，本机；仓库 origin/main 62561cc + 本次写回）
 仓库：10-21 回传包（快照 10-21 06:42，提交 3fa0be9，1,008 行指标全部对齐，相对 10-19 新增 106 份）已解入 runs/ 并进表；本次写回：results.csv（1,267 份报告、50,786 行实测）与全部表、图、numbers.tex、main.pdf（30 页）。
 数据：八个测试集齐；DDR 分卷已回到服务器；Refined IDRiD 测试 27 张 + 训练 54 张在服务器 dataset/incoming/RefinedIDRiD（几何核对待做，17 第四节第 33 条）。
 论文：主表 19 行里 18 行有种子 0（缺 MedSAM，权重已到、子模块待检出）；独立测试齐；因素 28 格里 26 格进表（RETFound 两格 10-21 06:41 在 epoch 300/400、380/400）；E1r HRDecoder、两倍预算 IDRiD、集成 96 份、留一专家 4 份、分级分层 366 份、E8 源内测试都已进表；推理档测试阶段已开但还没有产出。仍是 simtext：R5（推理档测试）、R3 的 L1/E1 段、B1 一句、摘要。
@@ -10,6 +10,7 @@
 权重：MedSAM、公开 DINOv2 都在服务器（sha256 在 00 第三节 10-20 记录）。
 文献：L1 完成；作者回信截止 10-31；HRDecoder 的 L1 抽取待做。
 用户待办：提交推送本机写回；与三名医生约 T3。
+本机 10-21 第二次写回：CI 的 9 个红用例修好（21 第 79 条：e5 测试改用 frozen.unselected()，test_factor 的 lambda 跟上签名）；Refined IDRiD 几何核对改为四边搜索 + 两种缩放假设（21 第 80 条，17 第 33 条重跑）；v2 包（HRNet DDR 探测 0.4686、a_sam3_selected 池两份）进表。
 本机 10-21 写回：10-21 包进表；R3/R4/讨论按 N1、集成、人类参照写；表 3b 修正；17 第四节第 31–36 条（MedSAM 子模块、编码器对照三格、Refined IDRiD 三步、2880 已开、探测打分、打包）；bench/scripts/refined_idrid.py。
 
 二、决定日志（日期、决定、依据；细节在 archive）
@@ -383,3 +384,9 @@ e5_infer_test 改为开，max_concurrent 2。08:06 时四张空卡已经被 e5_r
 第 35 条 HRNet DDR 探测：验证最高 0.6267（epoch 660）。测试 mAUPR 0.4686（n=225，排除 0），文件 runs/BSprobe_hrnet_ddr_seed0/metrics_test.json。HRDecoder DDR 探测仍在 GPU 6（07:31 为 epoch 140/800，验证 0.4972），训完由原等待进程打分。
 第 34 条：factor_hrdecoder_2880 已开。07:11 的启动器（pid 88417，卡 2 3 4 5 7）每次空卡重读 queue.yaml，不用再重启。当前空卡先被推理测试接走。第 32 条编码器三格还没有空卡，没开。
 第 36 条：当天第二包不覆盖 06:42 那一份，改名为 /home/qurr/luming/retiseg/retiseg_runs_handoff_20261021_v2.tar.gz（50 MB，5179 个文件，1011 行指标，0 个未对齐）。清单仍是 runs/handoff_manifest_20261021.tsv。
+
+CI 修复、Refined IDRiD 几何改法、v2 包（2026-10-21，本机，第二次；pull 到 62561cc）
+1. CI 红的 9 个用例：8 个来自 bench/e5 的测试读实际 e5_frozen.yaml 并假定选择为空（第 52 条同类），服务器 10-20 写回选择后失效；bench/e5/frozen.py 加 unselected()，用例改用它，范围用例改为断言选择在登记网格内；第 9 个是 test_factor 的 monkeypatch lambda 没跟上 reference_pixels 的新参数。云端不能跑带 torch 的用例，按逻辑改好，CI 验证。
+2. Refined IDRiD：第一次 check 不接受（NCC 0.69–0.82，多在边距 32 处）。脚本改为四边坐标下降 + stretch / pad 两种假设 + 全分辨率细调 + 边缘 NCC + 标注非零范围诊断；prepare / score 按各图的假设与框做同一变换；玩具测试覆盖两种假设。服务器重跑（17 第四节第 33 条）。
+3. v2 包（快照 10-21 07:34，1,011 行指标）解入 runs/：HRNet DDR 两倍预算探测 0.4686（14 M9b，R4 加半句），a_sam3_selected 两个池集合（表 6 的池行）。make 全部重建通过。
+写回：bench/{e5/frozen.py, scripts/refined_idrid.py, tests/{test_e5_infer.py, test_launch_e5_infer.py, test_e5_flow.py, test_factor.py, test_refined_idrid.py}}、docs/paper/retiseg_paper/paper/{data/results.csv, sections/results.tex, generated/numbers.tex, tables/generated/*, figures/out/*, main.pdf}、docs/paper/14、docs/ops/{00,17,21}。

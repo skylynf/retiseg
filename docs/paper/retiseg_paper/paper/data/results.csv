@@ -42386,6 +42386,64 @@ E5,SAM 3,text:white fluffy patch,none,-1,IDRiD-val,SE,aupr_ci_hi,0.7430317207665
 E5,SAM 3,text:white fluffy patch,none,-1,IDRiD-val,SE,dice_fixed,0.0,measured
 E5,SAM 3,text:white fluffy patch,none,-1,IDRiD-val,SE,img_auc,0.76,measured
 E5,SAM 3,text:white fluffy patch,none,-1,IDRiD-val,SE,img_auc_top100,0.76,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,MA,aupr,0.0015093843075425638,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,MA,aupr_11pt,0.0022502108117922713,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,MA,aupr_ci_lo,0.0010717378153254381,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,MA,aupr_ci_hi,0.002170615201886721,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,MA,dice_fixed,0.002897701141208122,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,MA,img_auc,0.4447415329768271,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,MA,img_auc_top100,0.4434046345811052,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,HE,aupr,0.28574570778595526,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,HE,aupr_11pt,0.3295490785506824,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,HE,aupr_ci_lo,0.11234435874021222,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,HE,aupr_ci_hi,0.47738746548427974,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,HE,dice_fixed,0.13335920937933596,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,HE,img_auc,0.6626106194690264,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,HE,img_auc_top100,0.6623647984267453,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,EX,aupr,0.037282397025116945,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,EX,aupr_11pt,0.04323162594173898,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,EX,aupr_ci_lo,0.01826416973620721,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,EX,aupr_ci_hi,0.07538723583429308,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,EX,dice_fixed,0.0976990850748991,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,EX,img_auc,0.7518987341772151,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,EX,img_auc_top100,0.7517179023508136,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,SE,aupr,0.051074982834971264,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,SE,aupr_11pt,0.09423479660349543,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,SE,aupr_ci_lo,0.023411214751273664,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,SE,aupr_ci_hi,0.13826660971248467,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,SE,dice_fixed,0.0,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,SE,img_auc,0.5753045404208195,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,SE,img_auc_top100,0.5753045404208195,measured
+E5,SAM 3,text:selected,none,-1,DDR-val,any,aupr_any_lesion,0.09017230216828055,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,MA,aupr,0.0113461565402602,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,MA,aupr_11pt,0.01412977978552841,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,MA,aupr_ci_lo,0.0018313853694905638,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,MA,aupr_ci_hi,0.039949277619430706,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,MA,dice_fixed,0.0463584333240218,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,MA,img_auc,,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,MA,img_auc_top100,,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,HE,aupr,0.544101583269959,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,HE,aupr_11pt,0.6166073595205446,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,HE,aupr_ci_lo,0.18333930389153527,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,HE,aupr_ci_hi,0.64939751528303,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,HE,dice_fixed,0.009749100070850556,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,HE,img_auc,,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,HE,img_auc_top100,,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,EX,aupr,0.19499921422827765,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,EX,aupr_11pt,0.1885132417671963,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,EX,aupr_ci_lo,0.06495955989918892,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,EX,aupr_ci_hi,0.3410613124477817,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,EX,dice_fixed,0.19894966915638976,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,EX,img_auc,,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,EX,img_auc_top100,,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,SE,aupr,0.3227390126992695,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,SE,aupr_11pt,0.5013082059439832,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,SE,aupr_ci_lo,0.040726536608165095,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,SE,aupr_ci_hi,0.7430317207665659,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,SE,dice_fixed,0.0,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,SE,img_auc,0.76,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,SE,img_auc_top100,0.76,measured
+E5,SAM 3,text:selected,none,-1,IDRiD-val,any,aupr_any_lesion,0.2545297177681103,measured
 E5,SAM,zero_shot:auto_any_lesion:p128:nocap,none,-1,DDR-val,MA,aupr,0.0003856124182382687,measured
 E5,SAM,zero_shot:auto_any_lesion:p128:nocap,none,-1,DDR-val,MA,aupr_11pt,0.5001926043941213,measured
 E5,SAM,zero_shot:auto_any_lesion:p128:nocap,none,-1,DDR-val,MA,aupr_ci_lo,0.00031903606252789847,measured

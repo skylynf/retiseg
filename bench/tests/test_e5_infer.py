@@ -26,7 +26,10 @@ def test_frozen_scope_matches_16():
     assert grid["points_per_side"] == [64, 128]
     assert grid["area_cap_fraction"] == [0.005, 0.02, 1.0]
     assert grid["select_on"] == "validation_pool" and grid["select_by"] == "AUPR_any_lesion"
-    assert grid["selected"] == {}  # filled from the pool before any test run
+    # filled from the pool on 2026-10-20 (docs/ops/00): one pair per automatic-mask model, each inside the registered grid
+    assert set(grid["selected"]) <= {"SAM", "SAM 2"}
+    for pair in grid["selected"].values():
+        assert pair["points_per_side"] in grid["points_per_side"] and pair["area_cap_fraction"] in grid["area_cap_fraction"]
     for model in ("sam", "sam2"):
         assert "generator" not in frozen["zero_shot"][model]
         assert "points_per_side" not in frozen["zero_shot"][model]["generator_defaults"]
@@ -35,7 +38,9 @@ def test_frozen_scope_matches_16():
     pool = frozen["validation_pool"]
     assert pool["IDRiD"]["split"] == pool["DDR"]["split"] == "val"
     assert frozen["zero_shot"]["sam3"]["select_on"].startswith("validation_pool")
-    assert frozen["zero_shot"]["sam3"]["selected"] == {}
+    chosen = frozen["zero_shot"]["sam3"]["selected"] or {}
+    assert set(chosen) <= {"MA", "HE", "EX", "SE"}   # filled on 2026-10-20: one registered phrase per class
+    assert all(chosen[cls] in frozen["zero_shot"]["sam3"]["phrases"][cls] for cls in chosen)
     # D7: the TJDR_uwf canvas of the inference tiers
     uwf = frozen["geometry"]["G1"]["TJDR_uwf"]
     assert uwf["long_side"] == round(1440 * 133 / 45) == 4256
@@ -103,7 +108,7 @@ def test_assert_ready_gates_test_splits_on_the_pool_selections(tmp_path):
 
     from bench.e5 import frozen as fz
 
-    frozen = fz.load_frozen()
+    frozen = fz.unselected(fz.load_frozen())   # the protocol before the selections were written
     # the pool needs nothing filled; a test split needs both selections
     fz.assert_ready(frozen, "a", "val")
     with pytest.raises(ValueError, match="grid.selected is empty for SAM"):
@@ -687,7 +692,7 @@ def test_amg_test_run_needs_the_selection_uses_pool_thresholds_and_obeys_the_bud
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
     root = tmp_path / "prepared" / "DDR"
     _toy_e5_source(root, "DDR", {"val": ["v0"], "test": ["t0", "t1"]})
-    unfilled = fz.load_frozen()
+    unfilled = fz.unselected(fz.load_frozen())
     with pytest.raises(ValueError, match="grid.selected is empty"):
         amg.run("SAM", 64, "DDR", "test", generator=_FakeGenerator(), frozen=unfilled, data_dir=root, long_side=20, window=8)
     frozen = fz.load_frozen(_filled_frozen(tmp_path, 64, 0.02))
@@ -989,7 +994,7 @@ def test_sam3_phrase_runs_selection_and_assembly(tmp_path, monkeypatch):
     from bench.eval.evaluate import load_protocol
 
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
-    frozen = fz.load_frozen()
+    frozen = fz.unselected(fz.load_frozen())   # the pool part of the flow: nothing selected yet
     proto = load_protocol()
     root = tmp_path / "prepared" / "DDR"
     _toy_e5_source(root, "DDR", {"val": ["v0", "v1"], "test": ["t0", "t1"]})
@@ -1169,7 +1174,7 @@ def test_sam3_assembly_on_a_drop_maps_set_and_without_a_prepared_pool_assembly(t
     from bench.e5 import sam3_text
 
     monkeypatch.setattr(out, "OUT_ROOT", tmp_path / "runs" / "E5")
-    frozen = fz.load_frozen()
+    frozen = fz.unselected(fz.load_frozen())   # pool runs before any selection
     root = tmp_path / "prepared" / "FGADR"
     _toy_e5_source(root, "FGADR", {"val": ["v0"], "test": ["t0", "t1"]})
     pool = [("FGADR", root, "val")]
