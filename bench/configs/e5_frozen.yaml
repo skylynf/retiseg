@@ -82,7 +82,9 @@ zero_shot:
     select_on: validation_pool
     select_by: AUPR_any_lesion
     select_rule: "per model: the pair with the highest any-lesion AUPR on the pixel histograms pooled over both pool sets (python -m bench.e5.amg --select; the two sets are pooled by pixel, so DDR's 149 images outweigh IDRiD's 10); ties go to the lower density, then to the larger cap (registered 2026-10-12 before any pool run); the selection is written once (runs/E5/selection_grid.json) and --select refuses to run while selected is filled"
-    selected: {}                              # {SAM: {points_per_side, area_cap_fraction}, SAM 2: {...}} filled from the pool before any test run
+    selected:  # per model, chosen on the validation pool by pooled any-lesion AUPR (bench/e5/amg.py --select)
+      SAM: {points_per_side: 128, area_cap_fraction: 0.005}   # pool AUPR_any_lesion 0.0214; grid: p64 cap0.005 0.0203, p64 cap0.02 0.0145, p64 nocap 0.0116, p128 cap0.005 0.0214, p128 cap0.02 0.0149, p128 nocap 0.0119
+      SAM 2: {points_per_side: 128, area_cap_fraction: 0.005}   # pool AUPR_any_lesion 0.0255; grid: p64 cap0.005 0.0237, p64 cap0.02 0.0157, p64 nocap 0.0076, p128 cap0.005 0.0255, p128 cap0.02 0.0164, p128 nocap 0.0076
     budget_rule: "if 128 is selected for a model, that model's TJDR_uwf runs its fov variant (1440 canvas) only and its per-degree main variant is skipped (registered 2026-10-12; the user may overrule it in 00 once the pool result is in)"
   sam:
     checkpoint: sam_vit_h_4b8939.pth
@@ -112,7 +114,11 @@ zero_shot:
       EX: [hard exudate, yellow deposit, bright lesion]
       SE: [cotton wool spot, soft exudate, white fluffy patch]
     select_on: validation_pool (D2), AUPR per class
-    selected: {}                      # filled from the validation pool before any test run
+    selected:  # chosen on the validation pool by per-class AUPR (bench/e5/sam3_text.py --select)
+      MA: small red lesion   # index 2; pool AUPR per index 0.0006, 0.0010, 0.0028
+      HE: dark red patch   # index 2; pool AUPR per index 0.0111, 0.0086, 0.4004
+      EX: bright lesion   # index 2; pool AUPR per index 0.0046, 0.0021, 0.0542
+      SE: white fluffy patch   # index 2; pool AUPR per index 0.0016, 0.0019, 0.0603
 
 # b, oracle prompts from the test labels: an upper bound, never ranked with the trained rows.
 # D3-D6 (docs/paper/16 row E5b, 2026-10-12): SAM ViT-B boxes only, SAM 2.1 points and boxes, MedSAM boxes;

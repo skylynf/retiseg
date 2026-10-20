@@ -78,9 +78,9 @@ stages:
   - name: e5_infer_test
     priority: 29
     kind: e5_infer
-    enabled: false
+    enabled: true
     phase: test
-    max_concurrent: 1
+    max_concurrent: 2
     drop_maps: [FGADR, Retinal-Lesions]
 
   # 5. Factor cells that need no new weights (R5, figure 7): U-Net and M2MRF rows of E3b/E4/E8/E9 and

@@ -329,3 +329,8 @@ RETFound E7 边长 512，测试 2026-10-20 02:24 退出码 0：mAUPR 0.4004（n=
 3. 推理池：22 项里 20 项完成（缺 MedSAM）。零样本在两池都接近零（任意病灶 AUPR ≤0.26；SAM 3 措辞 2 明显高于另两句）；理想提示的框 k=全部 0.77–0.78（DDR 池），点提示 ≤0.04。按 metrics.json 预计 --select 两模型都选 128 / 0.5%、SAM 3 选措辞 2，预算规则生效；选择命令要在服务器跑（合并直方图读概率图）。写进 17 第四节第 25、26 条；测试阶段 a 档每模型约 50 GPU 时。
 4. 服务器 10-20 的状态：四张卡空着、e5_rest 已随合并打开。17 第四节加第 25–28 条（选择、开测试阶段、E8 细粒度合并的源内测试、探测用空卡）；21 加 68–70；13 总览与 E3b/E7 行；CHECKPOINT。
 写回：docs/paper/retiseg_paper/paper/{scripts/collect_runs.py, scripts/test_collect_runs.py, data/results.csv, generated/numbers.tex, tables/generated/*, figures/out/*, main.pdf}、docs/ops/{00,17,21}、docs/paper/{13,14}、docs/CHECKPOINT.md。runs/ 本身不进仓库（本机解包同 10-19 的做法）。
+
+2026-10-20 08:20 +0800，pull 到 1d64a13。按第四节第 25–28 条做。--select 的结果与本机按 metrics.json 的预计相同，以这次打印为准。记录在 runs/E5/selection_grid.json、runs/E5/selection_sam3.json。
+网格：SAM 密度 128、上限 0.005，两池合并任意病灶 AUPR 0.0214（六组：p64 0.005 为 0.0203，0.02 为 0.0145，无上限 0.0116；p128 0.005 为 0.0214，0.02 为 0.0149，无上限 0.0119）。SAM 2 密度 128、上限 0.005，0.0255（p64 0.005 为 0.0237，0.02 为 0.0157，无上限 0.0076；p128 0.005 为 0.0255，0.02 为 0.0164，无上限 0.0076）。两模型都是 128，预算规则生效：TJDR 超广角只跑 fov 变体。
+SAM 3 四类都是序号 2：MA small red lesion（0.0006 / 0.0010 / 0.0028），HE dark red patch（0.0111 / 0.0086 / 0.4004），EX bright lesion（0.0046 / 0.0021 / 0.0542），SE white fluffy patch（0.0016 / 0.0019 / 0.0603）。
+e5_infer_test 改为开，max_concurrent 2。08:06 时四张空卡已经被 e5_rest 占上（约 07:29 启动，都是 RETFound）：GPU 4 DDR 种子 1，GPU 5 DDR 种子 2，GPU 6 IDRiD 种子 1，GPU 7 IDRiD 种子 2。GPU 2、3 仍是 TJDR 标准与 E7 原分辨率。为按第 28 条把 6 和 7 留给源内测试然后给探测，启动器只停 pid 465242，子进程留着，新启动器的卡改为 2 3 4 5。GPU 6、7 上的 IDRiD 种子 1 和 2 停掉，目录还在，之后 --resume。DDR 两个种子继续。第 27 条先在 6（U-Net）和 7（M2MRF）上跑，评测写出的是 metrics.json（命令的 --out 前缀）。两张都结束后再开 PROBE_GPUS="6 7" 的三条链。
