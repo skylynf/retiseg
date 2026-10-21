@@ -57,7 +57,7 @@ stages:
     priority: 20
     kind: bs
     jobs: bench/configs/bs_jobs.yaml
-    only: [SAMed, SAM-Adapter, SAM2-UNet, RETFound]   # MedSAM joins when pretrained/medsam_vit_b.pth exists
+    only: [SAMed, SAM-Adapter, SAM2-UNet, RETFound, MedSAM]   # MedSAM added 2026-10-21 after the 20-step smoke (IDRiD 14.0 s, DDR 51.4 s, GPU 4, exit 0)
     seed0_only: true
 
   # 3. Fundus-specific expansion, seed 0 (docs/paper/18; main table rows). ON since the smoke of 2026-10-15 (17 section 8).

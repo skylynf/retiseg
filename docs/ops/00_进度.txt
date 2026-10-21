@@ -390,3 +390,40 @@ CI 修复、Refined IDRiD 几何改法、v2 包（2026-10-21，本机，第二�
 2. Refined IDRiD：第一次 check 不接受（NCC 0.69–0.82，多在边距 32 处）。脚本改为四边坐标下降 + stretch / pad 两种假设 + 全分辨率细调 + 边缘 NCC + 标注非零范围诊断；prepare / score 按各图的假设与框做同一变换；玩具测试覆盖两种假设。服务器重跑（17 第四节第 33 条）。
 3. v2 包（快照 10-21 07:34，1,011 行指标）解入 runs/：HRNet DDR 两倍预算探测 0.4686（14 M9b，R4 加半句），a_sam3_selected 两个池集合（表 6 的池行）。make 全部重建通过。
 写回：bench/{e5/frozen.py, scripts/refined_idrid.py, tests/{test_e5_infer.py, test_launch_e5_infer.py, test_e5_flow.py, test_factor.py, test_refined_idrid.py}}、docs/paper/retiseg_paper/paper/{data/results.csv, sections/results.tex, generated/numbers.tex, tables/generated/*, figures/out/*, main.pdf}、docs/paper/14、docs/ops/{00,17,21}。
+
+2026-10-21 09:03 +0800，pull 到 ee8217e。按第 31、33、36 条做完能做的；第 32、34 条仍没有空卡。
+第 31 条：MedSAM 20 步冒烟在 GPU 4 通过。IDRiD 14.0 秒、训练损失 0.9094、验证 mAUPR 0.0381，08:06 退出 0；DDR 51.4 秒、训练损失 0.6154、验证 mAUPR 0.0016，08:07 退出 0。两份都复制了 314 个预训练张量，诊断模式没有读测试集。已把 MedSAM 加进 queue.yaml 的 e5_seed0 only。启动器（pid 88417）重读后已接上：GPU 4 是 DDR 种子 0（08:38 起，runs/BS_medsam_ddr_seed0），GPU 5 是 IDRiD 种子 0（08:48 起，09:01 为 epoch 50/400，验证 0.4427，runs/BS_medsam_idrid_seed0）。这是训练中的验证，不是测试分。
+第 33 条：新搜索接受。27 张全是 pad，最差 NCC 0.9988（IDRiD_72），阈值 0.97。文件 dataset/prepared/RefinedIDRiD_geometry.json，副本 runs/REFINED/RefinedIDRiD_geometry.json。逐图（假设、框、NCC、边缘 NCC、标注非零范围）：
+IDRiD_55 pad [1, 2846, 275, 3686] 0.9989 / 0.9379 [84, 940, 0, 1024]
+IDRiD_56 pad [0, 2848, 274, 3688] 0.9992 / 0.9474 [85, 939, 0, 1024]
+IDRiD_57 pad [0, 2848, 104, 3905] 0.9993 / 0.9260 [127, 897, 0, 1024]
+IDRiD_58 pad [1, 2847, 274, 3686] 0.9993 / 0.9440 [85, 939, 0, 1024]
+IDRiD_59 pad [0, 2847, 275, 3688] 0.9995 / 0.9636 [84, 940, 0, 1024]
+IDRiD_60 pad [0, 2847, 273, 3686] 0.9995 / 0.9599 [84, 940, 0, 1024]
+IDRiD_61 pad [0, 2846, 276, 3688] 0.9994 / 0.9597 [84, 939, 0, 1024]
+IDRiD_62 pad [0, 2846, 267, 3690] 0.9993 / 0.9345 [85, 938, 0, 1024]
+IDRiD_63 pad [1, 2846, 278, 3689] 0.9994 / 0.9471 [84, 939, 0, 1024]
+IDRiD_64 pad [2, 2848, 276, 3688] 0.9992 / 0.9378 [84, 940, 0, 1024]
+IDRiD_65 pad [1, 2845, 104, 3905] 0.9996 / 0.9557 [128, 896, 0, 1024]
+IDRiD_66 pad [2, 2848, 273, 3685] 0.9995 / 0.9572 [84, 939, 0, 1024]
+IDRiD_67 pad [0, 2848, 271, 3685] 0.9992 / 0.9424 [85, 940, 0, 1024]
+IDRiD_68 pad [2, 2848, 270, 3682] 0.9994 / 0.9551 [84, 939, 0, 1024]
+IDRiD_69 pad [1, 2846, 271, 3682] 0.9991 / 0.9407 [84, 939, 0, 1024]
+IDRiD_70 pad [0, 2847, 271, 3684] 0.9995 / 0.9579 [84, 940, 0, 1024]
+IDRiD_71 pad [0, 2848, 272, 3686] 0.9993 / 0.9444 [84, 940, 0, 1024]
+IDRiD_72 pad [0, 2847, 271, 3684] 0.9988 / 0.9222 [84, 940, 0, 1024]
+IDRiD_73 pad [0, 2847, 273, 3686] 0.9994 / 0.9480 [84, 940, 0, 1024]
+IDRiD_74 pad [0, 2847, 272, 3685] 0.9993 / 0.9555 [84, 940, 0, 1024]
+IDRiD_75 pad [0, 2848, 272, 3686] 0.9989 / 0.9354 [84, 939, 0, 1024]
+IDRiD_76 pad [0, 2846, 271, 3680] 0.9991 / 0.9322 [82, 940, 0, 1024]
+IDRiD_77 pad [0, 2848, 272, 3686] 0.9992 / 0.9389 [84, 940, 0, 1024]
+IDRiD_78 pad [1, 2846, 273, 3684] 0.9990 / 0.9117 [84, 939, 0, 1024]
+IDRiD_79 pad [0, 2848, 270, 3681] 0.9989 / 0.9300 [83, 940, 0, 1024]
+IDRiD_80 pad [0, 2846, 283, 3692] 0.9989 / 0.9186 [83, 939, 0, 1024]
+IDRiD_81 pad [1, 2848, 272, 3685] 0.9990 / 0.9344 [85, 940, 0, 1024]
+stretch 对照最高只到 0.8219（IDRiD_78），所以 57、65 的竖向窗口（约 104–3905）和其余约 270–3686 都落在 pad。prepare 已写两套 1024 标注。视网膜与 FOV 的平均 IoU 0.9986。四类合并 IoU：MA 0.9445（28847→28886 像素，连通域都是 1083），HE 0.9842（311289→311524，532→532），EX 0.9604（320363→320160，3895→3882），SE 0.9926（53684→53597，38→38）。差异文件 dataset/prepared/RefinedIDRiD/label_difference.json，副本 runs/REFINED/label_difference.json。Train.tar 没有解。
+score 对 21 个 IDRiD 来源各评修订标注和同一几何下的官方标注。修订减同一几何官方（mAUPR）：CLC-Net 0.6587/−0.0013，DeepLabv3 0.5334/0，FCT 0.2612/−0.0001，HACDR 0.5614/−0.0014，HRDecoder 0.6487/−0.0007，HRNet 0.6970/−0.0017，M2MRF 0.6548/−0.0011，PMCNet 0.6494/−0.0012，RETFound 0.7073/−0.0013，SAM2-UNet 0.6646/−0.0012，SAM-Adapter 0.7069/−0.0007，SAMed 0.7154/−0.0012，Swin 0.6913/−0.0011，TC-Net 0.6526/−0.0011，U-Net 0.6526/−0.0009，WSRFNet 0.5872/−0.0010，E1 HRDecoder 0.7060/−0.0008，E1r HRDecoder 0.6716/−0.0008，E1r M2MRF 0.5626/+0.0001，nnU-Net 0.6684/−0.0008，ResEnc-M 0.6309/−0.0010。目录 runs/REFINED/<run>/{refined,original}/metrics.json。
+第 32 条编码器三格没开：2–7 都有进程。第 34 条 2880 仍由同一启动器在更高优先级之后接，没有手开。
+第 35 条：HRDecoder DDR 探测仍在 GPU 6（09:01 为 epoch 240/800，验证 0.4900），训完由原等待进程（pid 70398）打分。RETFound DDR 种子 1、2 训练已结束（08:12、08:52 退出 0）。测试 mAUPR 种子 1 是 0.4537、种子 2 是 0.4310（都是 n=225，排除 0），文件 runs/BS_retfound_ddr_seed1/metrics_test.json、runs/BS_retfound_ddr_seed2/metrics_test.json。空出的 GPU 4、5 给了上面的 MedSAM。
+09:03 的卡：GPU 2 RETFound TJDR 标准仍是 epoch 300/400（验证 0.5078）；GPU 3 RETFound DDR 原分辨率仍是 epoch 380/400（0.6268）；GPU 4、5 见上；GPU 6 见上；GPU 7 仍是 SAM 2 密度 128 的 FGADR 测试。GPU 0、1 仍是别人的 vLLM。
+第 36 条：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261021_v3.tar.gz（52 MB，5298 个文件，1063 行指标，0 个未对齐）。清单仍是 runs/handoff_manifest_20261021.tsv。v2 没有被覆盖。
