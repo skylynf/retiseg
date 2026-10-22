@@ -427,3 +427,26 @@ score 对 21 个 IDRiD 来源各评修订标注和同一几何下的官方标注
 第 35 条：HRDecoder DDR 探测仍在 GPU 6（09:01 为 epoch 240/800，验证 0.4900），训完由原等待进程（pid 70398）打分。RETFound DDR 种子 1、2 训练已结束（08:12、08:52 退出 0）。测试 mAUPR 种子 1 是 0.4537、种子 2 是 0.4310（都是 n=225，排除 0），文件 runs/BS_retfound_ddr_seed1/metrics_test.json、runs/BS_retfound_ddr_seed2/metrics_test.json。空出的 GPU 4、5 给了上面的 MedSAM。
 09:03 的卡：GPU 2 RETFound TJDR 标准仍是 epoch 300/400（验证 0.5078）；GPU 3 RETFound DDR 原分辨率仍是 epoch 380/400（0.6268）；GPU 4、5 见上；GPU 6 见上；GPU 7 仍是 SAM 2 密度 128 的 FGADR 测试。GPU 0、1 仍是别人的 vLLM。
 第 36 条：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261021_v3.tar.gz（52 MB，5298 个文件，1063 行指标，0 个未对齐）。清单仍是 runs/handoff_manifest_20261021.tsv。v2 没有被覆盖。
+
+2026-10-21 13:26 +0800。2880 不在服务器上改。第 34 条只允许显存不够时把 cell 的 batch_size 改成 2；这次在第一步前向就退出，不是显存。两次都是 20 秒内退出（12:46、13:17，GPU 5，退出码 1）：official_code/HRDecoder 的 get_crop_bbox 里 np.random.randint 的上界 ≤0。recipe.json 写明训练裁块仍是 B-std 的 960×960（83000 步），cell 里的 patch: 1920 只通过 set_patch 把网络的 hr_scale 设成 960。随机 scale_ratio (0.75, 1.25) 会把裁窗放到最多约 1200，大于 960 的图，边距被夹成 0，(margin+1)//8 变成 0。官方代码和 factor.py 都没改，阶段也没关。启动器把这次失败暂停 30 分钟，暂停期间继续接别的项；下次重试会同样失败，请本机决定训练裁块是不是应该用 1920。
+已出的测试分：MedSAM IDRiD 种子 0 是 0.5840（n=27，排除 0，11:51 退出 0），文件 runs/BS_medsam_idrid_seed0/metrics_test.json，验证最高 0.4427 在 epoch 50。RETFound DDR 原分辨率是 0.4492（n=225，排除 0，12:21 退出 0），最后一步验证 0.6275，文件 runs/BF_e7_retfound_ddr_native_seed0/metrics_test.json。
+仍在跑，没有空卡，编码器没开。GPU 4 MedSAM DDR 种子 0 是 epoch 160/400，验证 0.128，从 epoch 80 的 0.284 下降，SE 从 epoch 20 起停在 0.0017；按任务这是训完再看的曲线，没有停。GPU 6 探测 epoch 520/800，验证 0.530，大约 18:00 训完后由 pid 70398 打分，19:00 前后这张卡才空。GPU 2 RETFound TJDR 标准 epoch 320/400，验证 0.531。GPU 7 SAM 2 密度 128 的 FGADR 测试 201/553。GPU 3 SAM 3 措辞 1 的 FGADR 测试。GPU 5 是 RETFound DDR 种子 2 的 TJDR 超广角外部测试，同卡还有一个不属于本项目的进程（pid 226428，418 MiB），没有动。GPU 0、1 仍是别人的 vLLM。启动器仍是 pid 88417。
+
+2026-10-22 09:13 +0800。探测和 MedSAM DDR 已出分，编码器第一格在 GPU 6 上。2880 仍不改。
+第 35 条 HRDecoder DDR 两倍预算：17:55 打分完成。测试 mAUPR 0.3043（n=225，排除 0），验证最高 0.5577 在 epoch 760，最后一步 0.5485。文件 runs/BSprobe_hrdecoder_ddr_seed0/metrics_test.json。
+MedSAM DDR 种子 0：19:56 退出 0。测试 mAUPR 0.2653（n=225，排除 0），验证最高 0.2911 在 epoch 340，最后一步 0.1617。文件 runs/BS_medsam_ddr_seed0/metrics_test.json。MedSAM IDRiD 的验证最高补正为 0.4954（epoch 600），测试分仍是 0.5840。
+RETFound IDRiD 种子 2：测试 mAUPR 0.7001（n=27，排除 0），验证最高 0.6381 在 epoch 450。文件 runs/BS_retfound_idrid_seed2/metrics_test.json。
+SAM 2 密度 128 的 FGADR 测试 22:35 退出 0，mAUPR 0.0096（n=553，排除 0），文件 runs/E5/a/a_sam2_hieral21_p128/FGADR/metrics.json。
+第 32 条：GPU 6 在探测打分后空到 22:27，然后只在这张卡上开了编码器对照（不进启动器的 2、3、4、5、7）。MAE-IN1k 已开，pid 339506 的监督进程接着排 RETFound-DINOv2 和 DINOv2。09:13 MAE 是 epoch 160/400，验证 0.6511，还在升。约 16 小时后这一格结束，同一监督进程接下一格。
+09:13 的卡都有进程，没有再手开。GPU 2 RETFound TJDR 标准 epoch 380/400，验证 0.5191（最高 0.5864 在 epoch 200），数据进程仍满 CPU。GPU 3 SAM 密度 128 的 FGADR 测试 521/553。GPU 4 SAMed DDR 种子 2 epoch 280/400，验证 0.6137。GPU 5 SAMed IDRiD 种子 1 epoch 400/1000，验证 0.5934。GPU 7 SAM 2 密度 128 的 Retinal-Lesions 测试 281/478。GPU 0、1 仍是别人的 vLLM。启动器仍是 pid 88417。
+2880 最近一次仍是 get_crop_bbox 的上界 ≤0，03:06 退出 1。阶段没关，代码没改。
+
+2026-10-22 09:16 +0800，pull 仍是 3a43337。v3 包（10-21 09:03）之后新写出的测试 mAUPR，供本机进表。排除都是 0。内部测试：RETFound IDRiD 种子 1 是 0.6890（n=27，21:13），种子 2 是上面的 0.7001。SAMed DDR 种子 1 是 0.4815（n=225，06:49）。MedSAM DDR 测试逐类 AUPR：MA 0.0005、HE 0.4872、EX 0.5729、SE 0.0006，MA 和 SE 停在先验。
+外部测试（来源 → 集合 mAUPR）：
+MedSAM IDRiD 种子 0：DDR 0.3102，IDRiD 源内见上，TJDR 标准 0.3702，TJDR 超广角 0.1790（fov 0.1438），DiaRetDB1 0.2739，MAPLES-DR 0.3554，FGADR 0.2118，Retinal-Lesions 0.1810。
+MedSAM DDR 种子 0：IDRiD 0.3334，TJDR 标准 0.3171，TJDR 超广角 0.1396（fov 0.1230），DiaRetDB1 0.2322，MAPLES-DR 0.2614，FGADR 0.1674，Retinal-Lesions 0.1645。
+RETFound DDR 种子 1 / 种子 2：IDRiD 0.6349 / 0.6484，TJDR 标准 0.5796 / 0.5880，TJDR 超广角 0.1382 / 0.0932（fov 0.1615 / 0.1172），DiaRetDB1 0.2962 / 0.3244，MAPLES-DR 0.4502 / 0.4680，FGADR 0.2635 / 0.2633，Retinal-Lesions 0.2696 / 0.2705。源内测试仍是种子 1 的 0.4537、种子 2 的 0.4310。
+RETFound IDRiD 种子 1 / 种子 2：DDR 0.3230 / 0.3370，TJDR 标准 0.4324 / 0.4607，TJDR 超广角 0.2751 / 0.2321（fov 0.2954 / 0.2434），DiaRetDB1 0.3047 / 0.2969，MAPLES-DR 0.3972 / 0.4040，FGADR 0.2130 / 0.2411，Retinal-Lesions 0.2092 / 0.2123。
+SAMed DDR 种子 1：IDRiD 0.6406，TJDR 标准 0.5985，TJDR 超广角 0.2188（fov 0.2789），DiaRetDB1 0.3098，MAPLES-DR 0.4865，FGADR 0.2930，Retinal-Lesions 0.2858。
+E5 测试档：SAM 3 措辞 0/1/2 在 FGADR 是 0.0091 / 0.0110 / 0.1080，在 TJDR 超广角是 0.0153 / 0.0117 / 0.1848。SAM 2 密度 128 的 FGADR 主结果 0.0096，oracle class 0.0100，stability 0.0111。SAM 2 框提示 kall：FGADR 0.8251，TJDR 超广角 0.9215。点提示 kall：FGADR 0.0496，TJDR 超广角 0.2909。目录都在 runs/E5/ 与 runs/E3a/。
+第 36 条：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261022.tar.gz（56 MB，5634 个文件，1139 行指标，0 个未对齐）。清单 runs/handoff_manifest_20261022.tsv。v3 没有被覆盖。编码器第一格还没出测试分，这一包不含它的测试 mAUPR。
