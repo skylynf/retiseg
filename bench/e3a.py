@@ -276,6 +276,10 @@ def load_run_model(config, checkpoint, device):
             from bench.factor import apply_cell_geometry
 
             apply_cell_geometry(model, config)   # the E7 case study's patch key (26 N1c)
+        if name == "HRDecoder":
+            # the author's normalization differs between IDRiD and DDR; the run trained with its source's statistics
+            # (author_recipe binds them), the class card carries IDRiD's (docs/ops/21 #83, 2026-10-22)
+            model.author_recipe(config.get("budget_reference") or train_source_of(config))
         if name == "HACDR-Net":
             from bench.scripts.predict_hacdr_b1 import _check_channels
 

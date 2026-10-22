@@ -77,6 +77,8 @@ def num(v, fmt="{:.3f}", sim=True, mark=None, strip=True):
 
 
 def sd(v, sim=True):
+    if not np.isfinite(v):   # one seed so far: no s.d. (2026-10-22; the rows used to print "+-nan")
+        return ""
     s = f"{v:.3f}"[1:] if v < 1 else f"{v:.3f}"
     return f"\\sd{{\\ph{{{s}}}}}" if sim else f"\\sd{{{s}}}"
 
@@ -588,6 +590,10 @@ def table_foundation():
     test label and is summarised by the any-lesion AUPR; everything that reads the test labels (automatic masks
     classed by overlap, oracle prompts) is one 'upper bound' block; best / second-best are marked within a block."""
 
+    # simulated / measured is decided per cell (row, test set) from the rows a cell reads (2026-10-22, docs/paper/21 #81):
+    # ctx["cell"] names the cell being filled; e5 / any_lesion record whether its rows are all measured
+    ctx, sims = {}, {}
+
     def e5(model, variant, test, train=None):
         kw = dict(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr")
         if train:
@@ -596,6 +602,8 @@ def table_foundation():
         inference = r[r["seed"] == -1]  # one run per (model, variant, test set) in the inference tiers: never average two
         if len(inference) and int(inference.groupby("cls").size().max()) > 1:
             raise ValueError(f"E5 {model} {variant} {test}: more than one inference-tier row per class; a variant must name one run directory")
+        if "cell" in ctx:
+            sims[ctx["cell"]] = sims.get(ctx["cell"], False) or (not len(r)) or D.simulated(r)
         return r.groupby("cls")["value"].mean().reindex(D.CLASSES).to_numpy()
 
     def any_lesion(model, variant, test):
@@ -605,6 +613,8 @@ def table_foundation():
         if not len(r):
             raise ValueError(f"E5 {model} {variant} {test}: no aupr_any_lesion row in results.csv; regenerate the placeholder table "
                              "(python scripts/build_placeholder.py --force, then collect_runs.py and collect_literature.py) or collect the runs")
+        if "cell" in ctx:
+            sims[ctx["cell"]] = sims.get(ctx["cell"], False) or D.simulated(r)
         return float(r["value"].mean())
 
     blank = lambda t: np.full(4, np.nan)
@@ -636,8 +646,15 @@ def table_foundation():
     ]
     rows = []
     for title, kind, rs in spec:
-        vals = {k: np.array([r[3](k) for r in rs]) for k in ("IDRiD", "DDR")}
-        summ = {k: np.array([r[4](k) if r[4] is not None else float(np.nanmean(vals[k][i])) for i, r in enumerate(rs)]) for k in ("IDRiD", "DDR")}
+        vals, summ = {}, {}
+        for k in ("IDRiD", "DDR"):
+            col, scol = [], []
+            for i, r in enumerate(rs):
+                ctx["cell"] = (title, i, k)
+                col.append(r[3](k))
+                scol.append(r[4](k) if r[4] is not None else float(np.nanmean(col[-1])))
+            vals[k], summ[k] = np.array(col), np.array(scol)
+        ctx.pop("cell", None)
         marks = {}
         for k in vals:   # best and second-best within the block only (decided 2026-10-14); no mark where one row stands alone
             for j in range(4):
@@ -647,12 +664,13 @@ def table_foundation():
         for i, (name, how, backbone, *_fns) in enumerate(rs):
             cells = [f"\\famchip{{foundation}}\; {name}", how, backbone]
             for k in ("IDRiD", "DDR"):
+                sim = sims.get((title, i, k), True)
                 for j in range(4):
                     v = vals[k][i, j]
                     b, s2 = marks[(k, j)]
-                    cells.append(tint(v, 0, 0.9) + num(v, "{:.2f}", True, "best" if i == b else "second" if i == s2 else None) if np.isfinite(v) else "\\na")
+                    cells.append(tint(v, 0, 0.9) + num(v, "{:.2f}", sim, "best" if i == b else "second" if i == s2 else None) if np.isfinite(v) else "\\na")
                 b, s2 = marks[(k, "m")]
-                cells.append(num(summ[k][i], "{:.2f}", True, "best" if i == b else "second" if i == s2 else None))
+                cells.append(num(summ[k][i], "{:.2f}", sim, "best" if i == b else "second" if i == s2 else None))
             rows.append(" & ".join(cells) + " \\\\")
     ref = D.internal()
     rows.append("\\midrule")

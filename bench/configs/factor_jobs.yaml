@@ -211,7 +211,7 @@ jobs:
   config: bench/configs/cells/e7_hrdecoder_idrid_2880_seed0.yaml
   script: bench/train.py
   run_dir: runs/BF_e7_hrdecoder_idrid_2880_seed0
-  est_hours: 52.0
+  est_hours: 8.0
 - name: e8_unet_ddr10_seed0
   experiment: E8
   model: U-Net

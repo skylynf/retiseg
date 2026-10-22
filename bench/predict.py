@@ -101,6 +101,9 @@ def predict(config_path, checkpoint, pred_dir, split):
         from bench.factor import apply_cell_geometry
 
         apply_cell_geometry(model, config)   # the E7 case study's patch key (26 N1c)
+    if config["model"] == "HRDecoder":
+        # bind the training source's normalization (IDRiD and DDR differ in the author configs; docs/ops/21 #83)
+        model.author_recipe(config.get("budget_reference") or Path(config["dataset"]).name)
     model = model.to(device)
     apply_matmul_precision(model, config)
     state = load_trusted(checkpoint, map_location=device)

@@ -527,9 +527,38 @@
    处理条件：无。
    来源：用户贴的 CI 日志（2026-10-21）。
 
-80  2026-10-21  2 级
+80  2026-10-21  2 级 → 已处理（2026-10-21 服务器重跑接受：27 张全是 pad，最差 NCC 0.9988；结果在 14 备注 54）
    问题：Refined IDRiD 的几何核对第一次不接受：27 张的最高 NCC 0.69–0.82，且多在最大边距 32 处取到——发布的裁剪不是 FOV 框加小边距，或缩放方式不是整框拉伸（也可能图像经过对比度处理）。
    影响：N4 停在 check；没有 prepare、score。
    状态与决定：refined_idrid.py 改为四边坐标下降搜索 + stretch / pad 两种假设 + 边缘 NCC + 标注范围诊断（14 备注 54）；服务器重跑（17 第四节第 33 条）。
    处理条件：重跑结果贴 00 后本机判断。
    来源：服务器 10-21 07:34 记录、runs/REFINED/RefinedIDRiD_geometry.json。
+
+81  2026-10-22  4 级 → 已处理（2026-10-22，本机）
+   问题：表 6（基础模型四种用法）的每个格子都被硬标成占位（make_tables.table_foundation 的 num(..., True)），SAMed / SAM-Adapter / SAM2-UNet / RETFound 的 PEFT 与编码器行早已实测却仍灰显；主表单种子行的种子标准差打成 "±nan"（sd() 不处理 NaN），SAM-Adapter、SAM2-UNet、SAMed IDRiD、MedSAM 四行可见。
+   影响：只在 PDF 的显示；数值无误。
+   状态与决定：table_foundation 按每格读到的行是否实测决定占位标记（ctx/sims）；sd() 对 NaN 返回空串。
+   处理条件：无。
+   来源：10-22 包进表后核对表 6、表 3。
+
+82  2026-10-22  2 级 → 已处理（2026-10-22，本机；服务器按 17 第四节第 37 条重开）
+   问题：2880 画布 cell（26 N1c）两次在第一步前向退出：official_code/HRDecoder 的 get_crop_bbox 上界 ≤0。根因在包装器：HRDecoder.author_recipe 用 replace(type(self).card, ...) 从类卡重建卡片，把 set_patch 写进 card.forward_size 的 1920 窗口丢掉了；train_cell 先 apply_cell_geometry 再 author_recipe，于是预算按 960 块算（302725440 像素 / 960² → 329 块 / 83 步 / 83000 步，是登记步数 21000 的 4 倍），数据流给网络 960 的块，而 network.hr_scale 已是 960，随机 scale_ratio 1.25 的高分辨率裁窗 1200 放不进 960 的图。服务器 10-21 13:26 的读法（"训练裁块仍是 960"）正确。
+   影响：N1c 没开始；52 小时的估计也是按 83000 步算的。
+   状态与决定：author_recipe 保留 self._patch 的 forward_size；预算随之变为 83 块 1920×1920 / 21 步 / 21000 步（26 第二节 c 登记的"步数不变、每步代价 ×4"），make_factor_jobs 的估计改 8 小时（B-std IDRiD 训练 1.5 小时 ×4 加验证与打分）；test_train_hrdecoder、test_factor 各加一个用例锁住。服务器删掉失败目录后由同一阶段重接。
+   处理条件：无。
+   来源：runs/BF_e7_hrdecoder_idrid_2880_seed0/{recipe.json,console.log}，服务器 10-21 13:26、10-22 09:13 记录。
+
+83  2026-10-22  2 级 → 代码已改（2026-10-22，本机）；HRDecoder DDR 的 E3a 待服务器重跑（17 第四节第 38 条）
+   问题：HRDecoder 的作者归一化按库不同（IDRiD 均值 [116.5, 56.4, 16.3] / 标准差 [80.2, 41.2, 13.3]，DDR [81.2, 50.6, 21.2] / [76.3, 48.8, 21.6]，0–255）；训练与源内打分经 author_recipe 绑定训练库的值，但 bench/e3a.py 的 load_run_model 与 bench/predict.py 只 build_model，用的是类卡上的 IDRiD 值。于是 BS_hrdecoder_ddr_seed0 的八个独立测试（runs/E3a/BS_hrdecoder_ddr_seed0，含 fov 变体）是在错误归一化下推理的；IDRiD 训练的检查点、E1（走 predict_hrdecoder 的作者配置）、E1r、探测（train.py --score-only）都不受影响。M2MRF 同类问题早有 bind_normalization，HRDecoder 漏了。
+   影响：表 5 的 HRDecoder DDR 行与依赖它的派生量：DDR 源的 all、fam:fundus 两个集成在七个外部集合上（HRDecoder 是成员；top3/top5/1perfam 不含它）、runs/CLIN/strata/BS_hrdecoder_ddr_seed0、图 4d/e 的名次（HRDecoder 平均名次 13.75）。主表不受影响。
+   状态与决定：e3a.load_run_model 与 predict.predict 对 HRDecoder 调 author_recipe(训练源) 绑定归一化（与 82 的修正同时生效：author_recipe 保留 patch）。服务器把旧目录改名为 _idridnorm 留底（collect 不读），e3a 阶段自动重测；之后重算该 run 的分层与 DDR 源 all / fam:fundus 集成（17 第 38 条）。重测后进表再改 14 M10/M15 的数。
+   处理条件：重测结果到本机。
+   来源：核对 82 时读 bench/models/hrdecoder.py 与 bench/e3a.py。
+
+84  2026-10-22  2 级 → 已决定（2026-10-22，本机；bs_frozen.yaml 追加 recipe_revisions.MedSAM，服务器按 17 第 39 条改名重跑）
+   问题：MedSAM DDR 种子 0 的 MA、SE 验证 AUPR 从第 20 到第 400 epoch 都在先验水平（MA 0.000–0.004、SE 0.002；HE 0.60–0.66、EX 0.37–0.51 正常），测试 MA 0.0005、SE 0.0006、mAUPR 0.265；IDRiD 种子 0 没有塌缩（0.584，SE 0.357），但 SE 验证曲线在 0.003–0.239 间大幅摆动。这是 14 备注 30 预先登记的 MedSAM 风险（monai Dice 逐图逐类、分母平方、平滑 1e-5），处理与 U-Net 绑定（design/15 第十六节第 4 条）。
+   影响：主表 MedSAM 行、名次统计（19 个模型的 χ² 109.7、临界差 9.90 含塌缩的 run）、τ（n=10）、族均值。
+   状态与决定：按登记规则：Dice 改整批按类汇总（medsam.py 已有 batch_dice），BCE 不变，两库种子 0 从初始权重重跑（规则是该模型全部种子；IDRiD 一起重跑，主表一个模型一份配方），塌缩 run 改名 _registered 留在补充表；决定依据验证曲线，两库测试数（0.265、0.584）在决定时已读过，论文方法照 U-Net 写明（14 备注 55）。修订后的 run 仍塌缩则按实测报并写明"汇总方式不是原因"。
+   处理条件：修订 run 的验证曲线与测试数到本机。
+   来源：runs/BS_medsam_ddr_seed0/history.jsonl、metrics_test.json；服务器 10-21 13:26、10-22 09:13 记录。
+

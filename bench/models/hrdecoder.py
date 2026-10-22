@@ -273,7 +273,11 @@ class HRDecoder(SegmentationWrapper, nn.Module):
 
         recipe = author_recipe(dataset)
         mean, std = author_norm(dataset)
-        self.card = replace(type(self).card, normalization={"mean": [v / 255.0 for v in mean], "std": [v / 255.0 for v in std]})
+        # the card keeps the window of set_patch: until 2026-10-22 it was rebuilt from the class card, so a cell's
+        # patch (26 N1c) was lost between apply_cell_geometry and the budget, which then counted 960 patches
+        # while the network's hr_scale was 960 (docs/ops/21 #82)
+        self.card = replace(type(self).card, normalization={"mean": [v / 255.0 for v in mean], "std": [v / 255.0 for v in std]},
+                            forward_size=(self._patch, self._patch))
         if self.network is not None and dataset != self._dataset:
             self.network = build_network(dataset, self._patch)   # crop_num differs between the two configs
         self._dataset = dataset

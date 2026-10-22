@@ -113,11 +113,13 @@ def jobs():
             add(name, "E7", model, cell("E7", model, [src("DDR")], "DDR", {"experiment": "E7", "variant": f"res:{label}", "train_set": "DDR"}, fov=fov), DDR_HOURS[model] * factor_h)
     # E7 case study (docs/paper/26 N1c; 14 note 46): HRDecoder on IDRiD at the author's canvas 2880 with the author's
     # window 1920 (hr_scale 960) under the B-std protocol; the IDRiD equivalent epochs counted at this canvas, so the
-    # step count is the B-std IDRiD run's and each step costs 4x (about 4 x 13 h). Not an E7 row of the DDR block:
-    # the reference and the budget rule differ, and the paper block says so.
+    # step count is the B-std IDRiD run's (21,000) and each step costs 4x: the B-std run trained in 1.5 h
+    # (runs/BS_hrdecoder_idrid_seed0/timing.json), so about 6 h of training plus validation and scoring at 2880
+    # (estimate corrected 2026-10-22 from 52 h, which had counted 83,000 steps; docs/ops/21 #82). Not an E7 row of the
+    # DDR block: the reference and the budget rule differ, and the paper block says so.
     add("e7_hrdecoder_idrid_2880_seed0", "E7", "HRDecoder",
         cell("E7", "HRDecoder", [src("IDRiD")], "IDRiD", {"experiment": "E7", "variant": "res:2880 (author canvas, equivalent epochs)", "train_set": "IDRiD"},
-             fov=2880, reference="IDRiD", patch=1920, budget_mode="equivalent_epochs"), 52.0)
+             fov=2880, reference="IDRiD", patch=1920, budget_mode="equivalent_epochs"), 8.0)
     # E8: amount of DDR, and the fine-grained sources merged; same pixel budget in every row.
     e8 = [
         ("ddr10", [src("DDR", subset="DDR_train_10pct.json")], "size:DDR 10%"),

@@ -320,7 +320,7 @@ def test_frozen_u_net_revision_is_the_batch_dice_of_the_diagnostic():
     revision = bstd.revision_for("U-Net", FROZEN)
     diagnostic = yaml.safe_load((REPO / "bench/configs/cells/bs_diag_unet_batchdice_ddr_seed0.yaml").read_text())
     assert revision["loss_params"] == diagnostic["diagnostic_loss_params"] == {"smooth": 1e-5, "batch_dice": True}
-    assert set(FROZEN["recipe_revisions"]) == {"U-Net", "SAM2-UNet"}
+    assert set(FROZEN["recipe_revisions"]) == {"U-Net", "SAM2-UNet", "MedSAM"}
     declared = UNet().author_recipe("DDR")
     resolved, deviations, *_ = bstd.budget(declared, "DDR", FROZEN, 10**8, (960, 960), model_name="U-Net")
     assert resolved.loss == "bce_dice" and resolved.loss_params == {"smooth": 1e-5, "batch_dice": True}

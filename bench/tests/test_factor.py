@@ -260,3 +260,21 @@ def test_factor_evaluation_excludes_the_same_eye_images_of_the_training_sources(
         (run / "metrics_test.json").write_text(json.dumps({"excluded_ids": excluded}))
         assert not lf.needs_reevaluation(job)
 
+def test_the_2880_cell_budget_is_the_bstd_step_count_at_four_times_the_cost():
+    """26 N1c as registered: the IDRiD equivalent epochs counted at canvas 2880 (canvas pixels x4) with 1920 patches
+    (patch pixels x4) give the step count of the B-std IDRiD run; the run of 2026-10-21 counted 960 patches instead
+    (83,000 steps) because the wrapper lost its patch (docs/ops/21 #82)."""
+    pytest.importorskip("torch")
+    from bench import bstd
+    from bench.models.base import AuthorRecipe
+
+    recipe = AuthorRecipe(loss="dice", optimizer="sgd", lr=0.01, weight_decay=5e-4, schedule="poly", iterations=20000,
+                          batch_size=4, crop_size=(1920, 1920), pretrained="")
+    frozen = {"equivalent_epochs": {"IDRiD": 1000}, "n_evals": 20, "fov_diameter": 1440, "recipe_revisions": {}}
+    pixels_1440 = 75689280              # the IDRiD training split at the frozen diameter (runs/BS_hrdecoder_idrid_seed0/recipe.json)
+    pixels_2880 = 302725440             # the same split at canvas 2880 (runs/BF_e7_hrdecoder_idrid_2880_seed0/recipe.json)
+    bstd_run = bstd.budget(recipe, "IDRiD", frozen, pixels_1440, (960, 960))
+    cell = bstd.budget(recipe, "IDRiD", frozen, pixels_2880, (1920, 1920))
+    wrong = bstd.budget(recipe, "IDRiD", frozen, pixels_2880, (960, 960))
+    assert bstd_run[2] == cell[2] == 21 and bstd_run[0].iterations == cell[0].iterations == 21000
+    assert wrong[0].iterations == 83000

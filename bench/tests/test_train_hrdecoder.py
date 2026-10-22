@@ -52,3 +52,24 @@ def test_cell_agrees_with_the_author_configs():
     drifted = dict(config, iterations=40000)
     with pytest.raises(RuntimeError, match="iterations"):
         th.check_against_author(drifted)
+
+
+@pytest.mark.skipif(not (AUTHOR_CONFIGS / "hrdecoder_fcn_hr48_idrid_2880x1920-slide.py").is_file(), reason="official_code/HRDecoder is not checked out")
+def test_author_recipe_keeps_the_patch_of_set_patch_and_binds_the_source_normalization():
+    """The 2880 cell (26 N1c) died in get_crop_bbox on 2026-10-21: author_recipe rebuilt the card from the class card and
+    dropped the 1920 window of set_patch, so the budget counted 960 patches (docs/ops/21 #82). DDR's author
+    normalization differs from IDRiD's; the class card carries IDRiD's (21 #83)."""
+    pytest.importorskip("torch")
+    from bench.models.hrdecoder import PATCH, HRDecoder, hr_scale_for
+
+    model = HRDecoder(construct=False)
+    assert model.card.forward_size == (PATCH, PATCH)
+    model.set_patch(1920)
+    model.author_recipe("IDRiD")
+    assert model.card.forward_size == (1920, 1920) and hr_scale_for(1920) == (960, 960)
+    idrid = model.card.normalization
+    model.author_recipe("DDR")
+    assert model.card.forward_size == (1920, 1920)
+    assert model.card.normalization["mean"] != idrid["mean"], "DDR trains with its own author statistics"
+    assert model.card.normalization["mean"] == pytest.approx([81.205 / 255, 50.636 / 255, 21.216 / 255], abs=1e-6)
+    assert HRDecoder.card.normalization["mean"] == pytest.approx([116.513 / 255, 56.437 / 255, 16.309 / 255], abs=1e-6)

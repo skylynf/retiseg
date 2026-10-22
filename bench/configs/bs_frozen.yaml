@@ -95,3 +95,15 @@ recipe_revisions:
     loss_params: {batch_iou: true}
     reason: "rare-class collapse of the per-image weighted IoU (smooth 1) under patch training on DDR; IoU pooled over the batch (14 note 44)"
     date: "2026-10-17"
+  # MedSAM, 2026-10-22 (docs/paper/14 note 55; the same rule): the author's monai DiceLoss is
+  # per image and class; under B-std on DDR the seed-0 validation AUPR of MA stayed at
+  # 0.000-0.004 and SE at 0.002 from the first (epoch 20) to the last (400) evaluation while
+  # HE and EX trained (0.60-0.66, 0.37-0.51); test MA 0.0005, SE 0.0006, mAUPR 0.265. The
+  # Dice term is pooled over the batch per class (bench/models/medsam.py dice_loss
+  # batch_dice; BCE unchanged). Both sources' seed 0 are rerun; the collapsed runs stay as
+  # "registered recipe". The test numbers of the registered runs (DDR 0.265, IDRiD 0.584)
+  # had been read when the decision was taken and are disclosed like the U-Net ones.
+  MedSAM:
+    loss_params: {batch_dice: true}
+    reason: "rare-class collapse of the per-image Dice (monai, smooth 1e-5) under patch training on DDR; Dice pooled over the batch (14 note 55)"
+    date: "2026-10-22"

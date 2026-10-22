@@ -385,6 +385,10 @@ def collect_refined(runs_dir):
         return pd.DataFrame(rows), seen
     for run_dir in sorted(p for p in root.iterdir() if p.is_dir()):
         key = source_key(runs_dir, run_dir.name)
+        if key is None and re.match(r"^E1_[a-z0-9]+$", run_dir.name) and run_dir.name[3:] in SLUG:
+            # the released weights' IDRiD checkpoint (runs/E1_<slug>/ holds both checkpoints' scores; refined_idrid.py
+            # scores its prob_test maps, which are the IDRiD checkpoint's): the E1 key of the IDRiD column
+            key = ("E1", "this_protocol", SLUG[run_dir.name[3:]], "IDRiD", -1)
         if key is None:
             continue
         _experiment, base_variant, model, train, seed = key
@@ -396,6 +400,8 @@ def collect_refined(runs_dir):
             if report is None:
                 continue
             label = f"{variant}:{base_variant}" if base_variant not in ("bstd", "peft", "encoder_decoder", "full_ft") else variant
+            if base_variant == "this_protocol":
+                label = f"{variant}:author_weights"
             rows += rows_from_report(report, "REF", label, model, train, seed, "IDRiD-refined")
             seen.append((f"REFINED/{run_dir.name}", f"{sub}/metrics.json", report.get("summary", {}).get("mAUPR")))
     return pd.DataFrame(rows), seen
