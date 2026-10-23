@@ -1,4 +1,4 @@
-# retiseg 检查点（2026-10-23，10-23 回传包进表：2880、MedSAM 修订、HRDecoder DDR 重测、SAMed 三种子、编码器 C1 之后）
+# retiseg 检查点（2026-10-23 第二次：10-23 包进表，N8 参考模型与编码器 IDRiD 列已登记）
 
 给下一次会话或其他 agent 的最小上下文。细节都在仓库里，按下面的路径读；本文件只说"在哪、什么状态、怎么接着做"。
 
@@ -8,7 +8,7 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 ## 先读哪些文件（按顺序）
 1. `docs/ops/00_进度.txt` —— 当前状态、决定日志、待用户决定的清单、最近的服务器记录（旧记录在 `docs/ops/archive/`）。
 2. `docs/paper/26_高层评估与补充实验.txt` —— 当前计划的增补部分（风险、新实验 N1–N8 与预登记规则、医生 T1–T3、排期与先砍顺序）；`docs/ops/17_服务器任务单.txt` —— 规则、回传格式、队列顺序、服务器还要做的事（第四节第 19–24 条是 26 的服务器部分）；`docs/paper/16_范围精简.txt` —— 实验范围（第十节是 26 的增补）；`docs/paper/19` 第六节 —— 优先级与写作里程碑。
-3. `docs/paper/13` 第三节状态表（末尾"26 增补"块）；`docs/paper/14` 论文里要用的数字和方法（M1–M17、备注 1–57）。
+3. `docs/paper/13` 第三节状态表（末尾"26 增补"块）；`docs/paper/14` 论文里要用的数字和方法（M1–M17、备注 1–60）。
 4. E5 推理档：`docs/ops/25_albert合并记录.txt`、`docs/design/23`、`24`（D1–D9 的依据在 24 第十七节）。
 5. 论文源：`docs/paper/retiseg_paper/paper/`（`STRUCTURE.md` 图表清单；`README.md` 哪些是实数）。
 
@@ -20,7 +20,7 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 - Refined IDRiD（备注 54）、人类参照（M16a）、分层（M17a）：同 10-22；MedSAM 修订 run 已补评。
 - 推理档（14 M9）：测试阶段已出 DDR、FGADR、Retinal-Lesions、TJDR_uwf 的 a / b 档（DDR：零样本任意病灶 0.03，SAM 2 全框 0.756、全点 0.019）；IDRiD 未出，SAM 3 的 text:selected 拼装未出；R5 零样本段等它们。集成 FGADR / Retinal-Lesions 列等成员图重推（nnU-Net 四成员用新加的 nnunet_e3a.py --regenerate-maps，17 第 43 条）。
 - 论文：R3、R4（含 N1 全部、三种子、集成、人类参照）、R5 训练档段、R6（含 Refined IDRiD）、R7、R8、讨论 Q2/Q3、方法已是实数；仍是 simtext：R5 零样本段、L1/E1 段、B1 一句、摘要。待动：C2 句与讨论 Q2 的编码器一句、集成 FGADR / RL 列、R5 零样本段。
-- 下一步（17 第四节第 43–45 条）：nnU-Net 成员重推 → 两集合的集成；编码器格补 MAPLES-DR；推理档 IDRiD 按队列。本机：C2 进表后写 R5 结尾与讨论一句；IDRiD 测试档到后一次写成 R5 零样本段；N6、N7（CPU）仍未做；HRDecoder 的 L1 抽取待做。
+- 下一步（17 第四节第 43–49 条）：nnU-Net 成员重推 → 两集合的集成（HACDR 的 CUBLAS 报错先换 retiseg-hacdr 环境重试，21 第 87 条）；编码器格补 MAPLES-DR；推理档 IDRiD 按队列。10-25 收口后：RetiSeg-Ref 两格（14 备注 58；queue 的 ref_model 阶段改 enabled: true 即可，约 25 GPU 时）、编码器块 IDRiD 两格（备注 59，C2 之后）、FCT 修正配方最低优先（备注 60）。本机：ensemble.py 加按目录指定成员的入口（参考模型的集成）；C2 进表后写 R5 结尾与讨论一句；IDRiD 测试档到后一次写成 R5 零样本段；N6、N7（CPU）仍未做；HRDecoder 的 L1 抽取待做。
 - 医生：三名眼科医生，每人 3 小时（26 第四节）；T1–T3 材料等联系好再做。
 - 用户待办：提交推送本机写回；与医生约 T3。
 

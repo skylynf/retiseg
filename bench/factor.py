@@ -11,6 +11,8 @@ geometry, evaluation) and changes exactly one thing:
          ``patch: 1920`` and ``budget_mode: equivalent_epochs``
     E8   the amount of DDR (a frozen subset) or the fine-grained sources merged
     E9   the loss terms of U-Net (loss_override: loss name and loss_params)
+    REF  the reference model (docs/paper/26 section 5 item 2; 14 note 58): the two B-std models with the highest DDR
+         validation mAUPR, trained on IDRiD + DDR + TJDR_std merged at the DDR pixel budget (the E8 merged-cell rule)
 
 The training amount is the pixel budget of the reference B-std source
 (``budget_reference``, DDR for every cell of 16): the frozen equivalent epochs
@@ -63,14 +65,17 @@ from bench.data.bs_input import PatchTrain
 from bench.data.factor_input import MultiSource, PreparedSource, prepared_name
 from bench.runtime import REPO, apply_matmul_precision, micro_batch_and_deviations, write_environment, write_recipe
 
-FACTORS = ("E3b", "E4", "E7", "E8", "E9")
-# 16 section 3: the models each factor uses.
+FACTORS = ("E3b", "E4", "E7", "E8", "E9", "REF")
+# 16 section 3: the models each factor uses. REF is the reference model of docs/paper/26 section 5 item 2 (14 note 58):
+# the two B-std models with the highest DDR validation mAUPR, trained on the three fine-grained sources merged at the
+# DDR pixel budget (the E8 merged-cell rule).
 FACTOR_MODELS = {
     "E3b": ("U-Net", "M2MRF", "SAM2-UNet", "RETFound"),  # nnU-Net runs through its own bridge
     "E4": ("U-Net", "M2MRF"),
     "E7": ("M2MRF", "RETFound", "HRDecoder"),   # HRDecoder only in the 2880 case study (26 N1c)
     "E8": ("U-Net", "M2MRF"),
     "E9": ("U-Net",),
+    "REF": ("RETFound", "SAMed"),
 }
 
 
@@ -128,6 +133,8 @@ def assert_factor_cell(config, frozen):
         raise ValueError(f"budget_mode is one of {BUDGET_MODES}, got {mode}")
     if mode == "equivalent_epochs" and config["factor"] != "E7":
         raise ValueError("budget_mode equivalent_epochs is the E7 case study only")
+    if config["factor"] == "REF" and (len(config.get("train") or []) < 2 or config.get("budget_reference") != "DDR"):
+        raise ValueError("a REF cell merges several sources at the DDR pixel budget (26 section 5 item 2: the E8 merged-cell rule)")
     if config.get("loss_override") and config["factor"] != "E9":
         raise ValueError("loss_override is the E9 factor only")
     if config.get("loss_override") and set(config["loss_override"]) - {"loss", "loss_params"}:
@@ -206,6 +213,9 @@ def run_cell(config_path, config, model, declared, run_dir, predict_fn, diagnost
     if budget_mode == "equivalent_epochs":
         deviations.append(f"budget_mode equivalent_epochs: the {ref} equivalent epochs counted at canvas {diameter} ({pixels} pixels), "
                           f"the same step count as the B-std run with {patch[0]}x{patch[1]} patches (26 N1c), not the E7 fixed-patch-pixel rule")
+    if config["factor"] == "REF":
+        deviations.append("REF: the reference model of 26 section 5 item 2 (14 note 58); member chosen by DDR validation mAUPR among the B-std "
+                          "models before any merged run; the DDR pixel budget over the merged sources (the E8 merged-cell rule); not a ranked row")
     if config.get("patch"):
         deviations.append(f"patch {config['patch']}: the wrapper's fixed window rebuilt at the cell's patch (set_patch); inference windows follow")
     if has_ignore(source):

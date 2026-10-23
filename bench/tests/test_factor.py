@@ -123,6 +123,15 @@ def test_assert_factor_cell_rejects_the_wrong_shapes():
         factor.assert_factor_cell(_cell(None, budget_mode="equivalent_epochs"), frozen)
     with pytest.raises(ValueError, match="budget_mode is one of"):
         factor.assert_factor_cell(dict(study, budget_mode="steps"), frozen)
+    # the reference model (26 N8): merged sources, the budget counted on them, only its two members
+    merged = [{"dataset": f"dataset/prepared/{d}", "split": "train"} for d in ("IDRiD", "DDR", "TJDR_std")]
+    ref = _cell(None, factor="REF", model="SAMed", train=merged,
+                paper={"experiment": "N8", "variant": "reference:fine merged", "train_set": "IDRiD + DDR + TJDR-std"})
+    factor.assert_factor_cell(ref, frozen)
+    with pytest.raises(ValueError, match="REF uses"):
+        factor.assert_factor_cell(dict(ref, model="U-Net"), frozen)
+    with pytest.raises(ValueError, match="merges several sources"):
+        factor.assert_factor_cell(dict(ref, train=merged[:1]), frozen)
 
 
 def test_apply_cell_geometry_rebuilds_a_fixed_window_wrapper_only_when_the_cell_asks():
@@ -157,15 +166,21 @@ def test_factor_jobs_cover_the_scope_of_16(tmp_path, monkeypatch):
     by = {}
     for job in jobs:
         by.setdefault(job["experiment"], []).append(job)
-    assert {k: len(v) for k, v in by.items()} == {"E3b": 8, "E4": 8, "E7": 5, "E8": 6, "E9": 2}
-    assert len({job["name"] for job in jobs}) == 29 and all(job["run_dir"].startswith("runs/BF_") for job in jobs)
+    assert {k: len(v) for k, v in by.items()} == {"E3b": 8, "E4": 8, "E7": 5, "E8": 6, "E9": 2, "REF": 2}
+    assert len({job["name"] for job in jobs}) == 31 and all(job["run_dir"].startswith("runs/BF_") for job in jobs)
     for job in jobs:
         cell = yaml.safe_load((tmp_path / "cells" / f"{job['name']}.yaml").read_text())
         assert cell["experiment"] == "BF" and cell["seed"] == 0
         assert cell["budget_reference"] == ("IDRiD" if job["model"] == "HRDecoder" else "DDR")
-        assert cell["paper"]["experiment"] == job["experiment"]
+        assert cell["paper"]["experiment"] == ("N8" if job["experiment"] == "REF" else job["experiment"])
         if job["experiment"] != "E7":
             assert cell["fov_diameter"] == 1440
+        if job["experiment"] == "REF":
+            # 26 N8 / 14 note 58: the two members by the two-source validation rule, three fine sources merged, DDR
+            # recipe, equivalent epochs counted on the merged images, validation on DDR, not a ranked row
+            assert job["model"] in ("RETFound", "SAMed") and "budget_mode" not in cell
+            assert [Path(t["dataset"]).name for t in cell["train"]] == ["IDRiD", "DDR", "TJDR_std"]
+            assert cell["budget_reference"] == "DDR" and cell["paper"]["experiment"] == "N8"
     # the HRDecoder case study (26 N1c) is the one cell with the author's canvas, the author's window and the epoch budget
     study = yaml.safe_load((tmp_path / "cells" / "e7_hrdecoder_idrid_2880_seed0.yaml").read_text())
     assert study["fov_diameter"] == 2880 and study["patch"] == 1920 and study["budget_mode"] == "equivalent_epochs"

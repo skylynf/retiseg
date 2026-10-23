@@ -108,6 +108,11 @@ def e5_jobs():
             if factor != 1.0:
                 body["lr_scale"] = float(factor)
             jobs.append(_job(f"e5enc_{_SLUG[model]}_ddr_seed0_{tag}", "E5enc", model, "DDR", body, ENC_HOURS))
+    # IDRiD column of the encoder block (table 6 / figure 5d; docs/paper/14 note 59, decided 2026-10-23 after C1 on DDR):
+    # the two general encoders at the main-table learning rate, same head and recipe as BS_retfound_idrid_seed0;
+    # a supplementary row, never a main-table one (the 19 main-table rows are registered)
+    for model in ("ViT-UPerNet MAE-IN1k", "ViT-UPerNet DINOv2"):
+        jobs.append(_job(f"e5enc_{_SLUG[model]}_idrid_seed0_lr1", "E5enc", model, "IDRiD", cell(model, "IDRiD", 0), EST_HOURS["RETFound"][0]))
     return jobs
 
 

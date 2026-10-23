@@ -123,6 +123,16 @@ stages:
     experiment: E7
     models: [HRDecoder]
 
+  # 7b. Reference model (docs/paper/26 N8; 14 note 58): RETFound + UPerNet and SAMed on IDRiD + DDR + TJDR_std
+  #     merged (bench/configs/cells/ref_*; about 34 + 5 GPU hours). Registered 2026-10-23, OFF until the queue
+  #     close of 10-25 (the workstation turns it on; the ensemble of the pair follows through ensemble.py).
+  - name: ref_model
+    priority: 57
+    kind: factor
+    experiment: REF
+    models: [RETFound, SAMed]
+    enabled: false
+
   # 8. Independent tests of the B-std seed-1/2 checkpoints (error bars of R4 / figure 6): behind every
   #    training stage, so the two E3a cards go to training once the seed-0 sources are done.
   - name: e3a_rest

@@ -27,7 +27,7 @@
 #                                               cards still busy join when they free up
 #   RETISEG_GPUS="2 3" bash bench/scripts/server_run.sh b1-queue
 #                                               B1 seed 0 and its test maps only; waits for busy cards
-#   RETISEG_GPUS="4 5" bash bench/scripts/server_run.sh factor [E3b|E4|E7|E8|E9]   factor cells (bench/factor.py), train + internal test
+#   RETISEG_GPUS="4 5" bash bench/scripts/server_run.sh factor [E3b|E4|E7|E8|E9|REF]   factor cells (bench/factor.py), train + internal test
 #   NNUNET_GPU=4 bash bench/scripts/server_run.sh nnunet IDRiD|DDR|TJDR_std|FGADR default|resencm
 #                                               one nnU-Net job (bench/scripts/nnunet_run.sh); TJDR_std and FGADR are the
 #                                               E3b training sources (convert + plan_and_preprocess + splits once, see nnunet_run.sh)

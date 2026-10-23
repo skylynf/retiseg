@@ -1,4 +1,4 @@
-# Factor experiments E3b, E4, E7, E8, E9 (docs/paper/16 section 3). Written by bench/scripts/make_factor_jobs.py; edit that script.
+# Factor experiments E3b, E4, E7, E8, E9 (docs/paper/16 section 3) and the REF reference-model cells (26 N8). Written by bench/scripts/make_factor_jobs.py; edit that script.
 # Each job trains a bench/factor.py cell (B-std protocol, DDR budget and recipe, one factor changed, seed 0) and scores its
 # internal test; independent tests follow through bench/e3a.py. Start: RETISEG_GPUS="..." bash bench/scripts/server_run.sh factor [E3b|E4|E7|E8|E9]
 jobs:
@@ -272,6 +272,26 @@ jobs:
   script: bench/scripts/train_m2mrf_b1.py
   run_dir: runs/BF_e8_m2mrf_fine_seed0
   est_hours: 11.6
+- name: ref_retfound_fine_seed0
+  experiment: REF
+  model: RETFound
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/ref_retfound_fine_seed0.yaml
+  script: bench/train.py
+  run_dir: runs/BF_ref_retfound_fine_seed0
+  est_hours: 22.0
+- name: ref_samed_fine_seed0
+  experiment: REF
+  model: SAMed
+  dataset: DDR
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/ref_samed_fine_seed0.yaml
+  script: bench/train.py
+  run_dir: runs/BF_ref_samed_fine_seed0
+  est_hours: 3.0
 - name: e9_unet_ddr_ce_seed0
   experiment: E9
   model: U-Net

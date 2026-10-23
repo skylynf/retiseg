@@ -152,6 +152,26 @@ jobs:
   script: bench/train.py
   run_dir: runs/E5enc_vitup_augreg_ddr_seed0_lr3
   est_hours: 21.0
+- name: e5enc_vitup_mae_idrid_seed0_lr1
+  experiment: E5enc
+  model: ViT-UPerNet MAE-IN1k
+  dataset: IDRiD
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_mae_idrid_seed0_lr1.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_mae_idrid_seed0_lr1
+  est_hours: 5.5
+- name: e5enc_vitup_dinov2_idrid_seed0_lr1
+  experiment: E5enc
+  model: ViT-UPerNet DINOv2
+  dataset: IDRiD
+  seed: 0
+  env: retiseg
+  config: bench/configs/cells/e5enc_vitup_dinov2_idrid_seed0_lr1.yaml
+  script: bench/train.py
+  run_dir: runs/E5enc_vitup_dinov2_idrid_seed0_lr1
+  est_hours: 5.5
 - name: e2c_hrnet_idrid_seed0_lr1o3
   experiment: E2c
   model: HRNet

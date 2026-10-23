@@ -1,0 +1,21 @@
+experiment: BF
+factor: REF
+model: RETFound
+dataset: dataset/prepared/DDR
+split_val: val
+split_test: test
+fov_diameter: 1440
+train:
+- dataset: dataset/prepared/IDRiD
+  split: train
+- dataset: dataset/prepared/DDR
+  split: train
+- dataset: dataset/prepared/TJDR_std
+  split: train
+budget_reference: DDR
+seed: 0
+num_workers: 4
+paper:
+  experiment: N8
+  variant: reference:fine merged
+  train_set: IDRiD + DDR + TJDR-std

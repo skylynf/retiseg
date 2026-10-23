@@ -9,6 +9,7 @@ row of paper/data/results.csv that paper/scripts/collect_runs.py fills.
     E4   U-Net, M2MRF x {DDR+FGADR 383, DDR+FGADR, DDR+RetinalLesions, RetinalLesions}   8 cells
     E7   M2MRF, RETFound x {512, native}                                  4 cells
          + HRDecoder at its author canvas 2880 on IDRiD (26 N1c)          1 cell
+    REF  the reference model: RETFound + UPerNet and SAMed on IDRiD + DDR + TJDR_std merged (26 N8)   2 cells
     E8   U-Net, M2MRF x {DDR 10%, DDR 50%, fine merged}                   6 cells
     E9   U-Net x {CE, batch Dice}                                          2 cells
     29 cells. est_hours order the queue only (A100 hours; DDR B-std rates from docs/ops/00, E7 native and
@@ -31,13 +32,13 @@ JOBS = REPO / "bench" / "configs" / "factor_jobs.yaml"
 SUBSETS = "bench/data/splits/subsets"
 PREP = "dataset/prepared"
 # DDR seed-0 hours at the B-std budget (docs/ops/00; SAM2-UNet and RETFound from design/15 estimates).
-DDR_HOURS = {"U-Net": 6.0, "M2MRF": 11.6, "SAM2-UNet": 16.0, "RETFound": 22.0}
+DDR_HOURS = {"U-Net": 6.0, "M2MRF": 11.6, "SAM2-UNet": 16.0, "RETFound": 22.0, "SAMed": 3.0}
 SAM2_E3B_BATCH = """
 # Loader batch 12 does not fit a 40GB A100 (the B-std smoke, and this cell on 2026-10-18:
 # 37.90 GiB allocated, 324 MiB short, history empty). Batch 4 fits. Effective batch stays 12.
 batch_size: 4
 """
-HEADER = """# Factor experiments E3b, E4, E7, E8, E9 (docs/paper/16 section 3). Written by bench/scripts/make_factor_jobs.py; edit that script.
+HEADER = """# Factor experiments E3b, E4, E7, E8, E9 (docs/paper/16 section 3) and the REF reference-model cells (26 N8). Written by bench/scripts/make_factor_jobs.py; edit that script.
 # Each job trains a bench/factor.py cell (B-std protocol, DDR budget and recipe, one factor changed, seed 0) and scores its
 # internal test; independent tests follow through bench/e3a.py. Start: RETISEG_GPUS="..." bash bench/scripts/server_run.sh factor [E3b|E4|E7|E8|E9]
 """
@@ -130,6 +131,18 @@ def jobs():
         for tag, train, label in e8:
             name = f"e8_{_SLUG[model]}_{tag}_seed0"
             add(name, "E8", model, cell("E8", model, train, "DDR", {"experiment": "E8", "variant": label, "train_set": "DDR"}), DDR_HOURS[model])
+    # REF: the reference model of docs/paper/26 section 5 item 2 (14 note 58). Members by the registered rule, the
+    # two B-std models with the highest DDR validation mAUPR (the checkpoint-selection number, runs/ENS/DDR/members.json,
+    # written before any merged run; nnU-Net is not a B-std model): RETFound + UPerNet 0.6432 and SAMed 0.6319
+    # (Swin-Unet 0.6203 third). Trained on the three fine-grained sources merged with the DDR recipe at the DDR pixel
+    # budget (the E8 merged-cell rule), validation and thresholds on the DDR validation split as in those cells. The
+    # pair is averaged afterwards (bench/scripts/ensemble.py). Not a factor row and not ranked: experiment N8.
+    for model in ("RETFound", "SAMed"):
+        name = f"ref_{_SLUG[model]}_fine_seed0"
+        add(name, "REF", model,
+            cell("REF", model, [src("IDRiD"), src("DDR"), src("TJDR_std")], "DDR",
+                 {"experiment": "N8", "variant": "reference:fine merged", "train_set": "IDRiD + DDR + TJDR-std"}),
+            DDR_HOURS[model])
     # E9: U-Net loss terms, DDR. CE + batch Dice is the main table; CE + per-image Dice is the registered run.
     e9 = [
         ("ce", {"loss": "bce_with_logits", "loss_params": {}}, "loss:CE"),

@@ -576,3 +576,10 @@
    处理条件：无。
    来源：10-23 包进表。
 
+87  2026-10-23  3 级 → 待服务器核对（17 第四节第 46 条）
+   问题：第 23 条成员图重推（--regenerate-maps）里 HACDR-Net DDR 两次退出 1：modulated_deform_conv 的 CUBLAS_STATUS_NOT_SUPPORTED（10:31、10:46），官方代码没改。HACDR 原来的 E3a（runs/E3a/BS_hacdr_ddr_seed0/FGADR/predicted.json）是在 torch 1.10.0、A100-40GB 上跑通的，也就是 retiseg-hacdr 环境；成员重推的循环若在 retiseg（torch 2.x）环境里跑，mmcv 1.x 的 DCN 算子在新 cuBLAS 下会报这个错——最像的原因。
+   影响：FGADR、Retinal-Lesions 的集成缺 HACDR 成员，整列等它。
+   状态与决定：服务器在 retiseg-hacdr 里单独重推这一格（命令在 17 第 46 条）；若环境对了仍报错，贴 traceback 与 conda list 里 torch / mmcv 版本，本机再看。
+   处理条件：服务器反馈。
+   来源：服务器 10-23 10:42、10:45 记录。
+
