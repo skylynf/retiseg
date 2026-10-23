@@ -541,24 +541,38 @@
    处理条件：无。
    来源：10-22 包进表后核对表 6、表 3。
 
-82  2026-10-22  2 级 → 已处理（2026-10-22，本机；服务器按 17 第四节第 37 条重开）
+82  2026-10-22  2 级 → 已关闭（服务器 10-22 重跑成功：recipe 1920×1920 / 21000 步，测试 0.627，14 备注 46）
    问题：2880 画布 cell（26 N1c）两次在第一步前向退出：official_code/HRDecoder 的 get_crop_bbox 上界 ≤0。根因在包装器：HRDecoder.author_recipe 用 replace(type(self).card, ...) 从类卡重建卡片，把 set_patch 写进 card.forward_size 的 1920 窗口丢掉了；train_cell 先 apply_cell_geometry 再 author_recipe，于是预算按 960 块算（302725440 像素 / 960² → 329 块 / 83 步 / 83000 步，是登记步数 21000 的 4 倍），数据流给网络 960 的块，而 network.hr_scale 已是 960，随机 scale_ratio 1.25 的高分辨率裁窗 1200 放不进 960 的图。服务器 10-21 13:26 的读法（"训练裁块仍是 960"）正确。
    影响：N1c 没开始；52 小时的估计也是按 83000 步算的。
    状态与决定：author_recipe 保留 self._patch 的 forward_size；预算随之变为 83 块 1920×1920 / 21 步 / 21000 步（26 第二节 c 登记的"步数不变、每步代价 ×4"），make_factor_jobs 的估计改 8 小时（B-std IDRiD 训练 1.5 小时 ×4 加验证与打分）；test_train_hrdecoder、test_factor 各加一个用例锁住。服务器删掉失败目录后由同一阶段重接。
    处理条件：无。
    来源：runs/BF_e7_hrdecoder_idrid_2880_seed0/{recipe.json,console.log}，服务器 10-21 13:26、10-22 09:13 记录。
 
-83  2026-10-22  2 级 → 代码已改（2026-10-22，本机）；HRDecoder DDR 的 E3a 待服务器重跑（17 第四节第 38 条）
+83  2026-10-22  2 级 → 已关闭（服务器 10-22/23 重测八个集合、重算分层与 DDR 源 all / fam:fundus 集成；数在 14 M10、M15 的 2026-10-23 行，备注 57）
    问题：HRDecoder 的作者归一化按库不同（IDRiD 均值 [116.5, 56.4, 16.3] / 标准差 [80.2, 41.2, 13.3]，DDR [81.2, 50.6, 21.2] / [76.3, 48.8, 21.6]，0–255）；训练与源内打分经 author_recipe 绑定训练库的值，但 bench/e3a.py 的 load_run_model 与 bench/predict.py 只 build_model，用的是类卡上的 IDRiD 值。于是 BS_hrdecoder_ddr_seed0 的八个独立测试（runs/E3a/BS_hrdecoder_ddr_seed0，含 fov 变体）是在错误归一化下推理的；IDRiD 训练的检查点、E1（走 predict_hrdecoder 的作者配置）、E1r、探测（train.py --score-only）都不受影响。M2MRF 同类问题早有 bind_normalization，HRDecoder 漏了。
    影响：表 5 的 HRDecoder DDR 行与依赖它的派生量：DDR 源的 all、fam:fundus 两个集成在七个外部集合上（HRDecoder 是成员；top3/top5/1perfam 不含它）、runs/CLIN/strata/BS_hrdecoder_ddr_seed0、图 4d/e 的名次（HRDecoder 平均名次 13.75）。主表不受影响。
    状态与决定：e3a.load_run_model 与 predict.predict 对 HRDecoder 调 author_recipe(训练源) 绑定归一化（与 82 的修正同时生效：author_recipe 保留 patch）。服务器把旧目录改名为 _idridnorm 留底（collect 不读），e3a 阶段自动重测；之后重算该 run 的分层与 DDR 源 all / fam:fundus 集成（17 第 38 条）。重测后进表再改 14 M10/M15 的数。
    处理条件：重测结果到本机。
    来源：核对 82 时读 bench/models/hrdecoder.py 与 bench/e3a.py。
 
-84  2026-10-22  2 级 → 已决定（2026-10-22，本机；bs_frozen.yaml 追加 recipe_revisions.MedSAM，服务器按 17 第 39 条改名重跑）
+84  2026-10-22  2 级 → 已关闭（修订 run 10-22 出分：IDRiD 0.642、DDR 0.413，两类离开先验；14 备注 55）
    问题：MedSAM DDR 种子 0 的 MA、SE 验证 AUPR 从第 20 到第 400 epoch 都在先验水平（MA 0.000–0.004、SE 0.002；HE 0.60–0.66、EX 0.37–0.51 正常），测试 MA 0.0005、SE 0.0006、mAUPR 0.265；IDRiD 种子 0 没有塌缩（0.584，SE 0.357），但 SE 验证曲线在 0.003–0.239 间大幅摆动。这是 14 备注 30 预先登记的 MedSAM 风险（monai Dice 逐图逐类、分母平方、平滑 1e-5），处理与 U-Net 绑定（design/15 第十六节第 4 条）。
    影响：主表 MedSAM 行、名次统计（19 个模型的 χ² 109.7、临界差 9.90 含塌缩的 run）、τ（n=10）、族均值。
    状态与决定：按登记规则：Dice 改整批按类汇总（medsam.py 已有 batch_dice），BCE 不变，两库种子 0 从初始权重重跑（规则是该模型全部种子；IDRiD 一起重跑，主表一个模型一份配方），塌缩 run 改名 _registered 留在补充表；决定依据验证曲线，两库测试数（0.265、0.584）在决定时已读过，论文方法照 U-Net 写明（14 备注 55）。修订后的 run 仍塌缩则按实测报并写明"汇总方式不是原因"。
    处理条件：修订 run 的验证曲线与测试数到本机。
    来源：runs/BS_medsam_ddr_seed0/history.jsonl、metrics_test.json；服务器 10-21 13:26、10-22 09:13 记录。
+
+85  2026-10-23  3 级 → 已处理（2026-10-23，本机）
+   问题：FGADR、Retinal-Lesions 的集成要先重推成员的概率图（当初 --drop-maps 删了）；bench.e3a 有 --regenerate-maps，bench/scripts/nnunet_e3a.py 没有，四个 nnU-Net 成员（两库 × default / ResEnc-M）重推不了（服务器 10-23 08:34 记录）。
+   影响：这两个集合的 E-all、E-fam:auto、E-top3/5、E-1perfam 少 nnU-Net 成员，或者整列等待。
+   状态与决定：nnunet_e3a.py 加 --regenerate-maps，与 bench.e3a.run_source 同一语义（只对已完成且 done.json 记 maps_dropped 的集合重预测，不重评、不改 done.json）；服务器按 17 第四节第 43 条对四个成员各跑一次（nnU-Net 环境），之后再跑集成。
+   处理条件：无。
+   来源：服务器 10-23 08:34 记录。
+
+86  2026-10-23  4 级 → 已处理（2026-10-23，本机）
+   问题：编码器对照的运行目录（runs/E5enc_*）collect_runs 不认，MAE-IN1k 的内部与 TJDR 数没有进表；占位表里对照的名字还是登记前的 "ImageNet-sup. ViT-L"（augreg 已按 16 砍掉，实际对照是 MAE-IN1k）。
+   影响：图 5d、make_numbers 的 fm.enc.* 在 10-23 包之前全是占位。
+   状态与决定：collect_runs 加 E5ENC（E5enc_<vitup_mae|vitup_rfdinov2|vitup_dinov2|vitup_augreg>_<库>_seed<k>_lr<1|1o3|3>，lr1 为 encoder_control，其余 encoder_control:lr…）与 derive_encoder_reference（RETFound-MAE 行从主表 RETFound 复制）；占位名改为 MAE-IN1k ViT-L（build_placeholder、results.csv、图 5d、make_numbers）；retifig.data 加 encoder_table（独立均值只用四个编码器都实测的细档集合），图 5d 不画未实测的编码器、标 pending。
+   处理条件：无。
+   来源：10-23 包进表。
 

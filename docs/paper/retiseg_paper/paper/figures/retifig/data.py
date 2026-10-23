@@ -254,3 +254,27 @@ SEARCH_FLOW = [
     ("Priority list screened", 29, "27 DOIs · TJDR lead · 1 corrected DOI"),
     ("Newly included", 26, "24 methods · 2 datasets"),
 ]
+
+ENCODERS = ["RETFound-DINOv2", "RETFound-MAE", "DINOv2 ViT-L", "MAE-IN1k ViT-L"]   # figure 5d order; C1 = RM - MI, C2 = RD - DI
+
+
+def encoder_table(train="DDR"):
+    """The encoder comparison (16 section 3 E5d2): per encoder the internal mAUPR and the mean over the fine
+    independent sets, plus which sets the mean uses and whether any placeholder row entered.
+
+    The encoder cells are tested on TJDR only (17 section 4 item 32), so the independent mean is taken over the
+    FINE_INDEPENDENT sets measured for every encoder that has any measured independent row; while none is
+    measured the placeholder rows and all three sets are used (the panel is tagged simulated)."""
+    r = sel(experiment="E5", variant="encoder_control", metric="aupr", train_set=train)
+    g = r.groupby(["model", "test_set"])["value"].mean().unstack("test_set").reindex(ENCODERS)
+    measured = r[r.source == "measured"].groupby(["model", "test_set"]).size().unstack("test_set").reindex(ENCODERS).notna()
+    measured = measured.reindex(columns=g.columns, fill_value=False)
+    with_rows = [m for m in ENCODERS if measured.loc[m, FINE_INDEPENDENT].any()]
+    if with_rows:
+        sets = [t for t in FINE_INDEPENDENT if measured.loc[with_rows, t].all()]
+    else:
+        sets = list(FINE_INDEPENDENT)
+    internal = g.loc[ENCODERS, train]
+    indep = g.loc[ENCODERS, sets].mean(axis=1) if sets else internal * float("nan")
+    sim = {m: (not measured.loc[m, train]) or (not measured.loc[m, sets].all() if sets else True) for m in ENCODERS}
+    return {"internal": internal, "independent": indep, "sets": sets, "simulated": sim, "table": g, "measured": measured}

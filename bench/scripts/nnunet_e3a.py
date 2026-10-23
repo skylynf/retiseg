@@ -12,6 +12,7 @@ Evaluation and done.json are bench.e3a's.
 
     CUDA_VISIBLE_DEVICES=4 python bench/scripts/nnunet_e3a.py --train IDRiD --plan default [--sets TJDR_std]
     (--train TJDR_std or FGADR for the E3b sources; their same-eye exclusions come from leak_exclusions.json)
+    python bench/scripts/nnunet_e3a.py --train DDR --plan default --sets FGADR,Retinal-Lesions --regenerate-maps   # ensembles
 
 Runs in the retiseg-nnunet environment.
 """
@@ -103,7 +104,10 @@ def build_predictor(train, plan, device, settings=None):
     return predictor
 
 
-def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=True, drop_maps=()):
+def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=True, drop_maps=(), regenerate_maps=False):
+    """``regenerate_maps`` as bench.e3a.run_source: re-predict the finished sets whose maps were dropped after
+    scoring (the ensembles of bench/scripts/ensemble.py, docs/paper/14 M15); predicted.json, metrics and done.json
+    stay as they are and nothing is re-scored."""
     import torch
 
     frozen = e3a.load_frozen()
@@ -114,8 +118,14 @@ def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=
     # a training source without a frozen field of view (TJDR_std, FGADR; E3b) has no per-degree scale for the
     # ultra-widefield set: only its field-of-view variant runs, as bench.e3a does for the BF cells
     no_degrees = train not in frozen["train_field_degrees"]
-    pending = [(t, v) for t, v in e3a.targets([train], frozen, sets)
-               if not e3a.is_done(source, t, v) and not (no_degrees and t in frozen.get("per_degree_sets", ()) and v == e3a.MAIN)]
+    if regenerate_maps:
+        pending = [(t, v) for t, v in e3a.targets([train], frozen, sets) if v == e3a.MAIN and e3a.dropped_maps(source, t, v)]
+        if not pending:
+            print(f"{source}: no finished set with dropped maps among the requested sets", flush=True)
+            return
+    else:
+        pending = [(t, v) for t, v in e3a.targets([train], frozen, sets)
+                   if not e3a.is_done(source, t, v) and not (no_degrees and t in frozen.get("per_degree_sets", ()) and v == e3a.MAIN)]
     if not pending:
         print(f"{source}: every E3a set is done", flush=True)
         return
@@ -128,7 +138,7 @@ def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=
     env = e3a.environment()
     for test_name, variant in pending:
         directory = e3a.out_dir(source, test_name, variant)
-        if not (directory / "predicted.json").is_file():
+        if regenerate_maps or not (directory / "predicted.json").is_file():
             if predictor is None:
                 predictor = build_predictor(train, plan, device, settings)
             long_side = e3a.target_long_side(test_name, variant, train, reference, frozen)
@@ -146,6 +156,9 @@ def run(train, plan, sets=None, device_name=None, predict_only=False, on_device=
                     write_prob(directory / "prob_test", cls, image_id, plane)
                 if index % 50 == 0:
                     print(f"{source} {e3a.set_dirname(test_name, variant)} {index + 1}/{len(ids)}", flush=True)
+            if regenerate_maps:
+                print(f"{source} {e3a.set_dirname(test_name, variant)}: maps regenerated ({len(ids)} images); metrics unchanged", flush=True)
+                continue
             e3a._write_predicted(
                 directory,
                 {
@@ -182,10 +195,11 @@ def main(argv=None):
     parser.add_argument("--predict-only", action="store_true")
     parser.add_argument("--not-on-device", action="store_true", help="sum the windows on the CPU, as nnUNetv2_predict --not_on_device")
     parser.add_argument("--drop-maps", help="comma-separated test sets whose maps are removed after evaluation")
+    parser.add_argument("--regenerate-maps", action="store_true", help="re-predict finished sets whose maps were dropped; no re-scoring (ensembles)")
     args = parser.parse_args(argv)
     run(
         args.train, args.plan, e3a._sets(args.sets), args.device, args.predict_only,
-        on_device=not args.not_on_device, drop_maps=e3a._sets(args.drop_maps) or (),
+        on_device=not args.not_on_device, drop_maps=e3a._sets(args.drop_maps) or (), regenerate_maps=args.regenerate_maps,
     )
 
 

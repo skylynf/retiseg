@@ -424,7 +424,7 @@ def foundation(sim):
         "RETFound-MAE": (-0.28, -0.30, 0.20),
         "RETFound-DINOv2": (-0.20, -0.28, 0.24),
         "DINOv2 ViT-L": (-0.24, -0.30, 0.12),
-        "ImageNet-sup. ViT-L": (-0.42, -0.34, -0.02),
+        "MAE-IN1k ViT-L": (-0.42, -0.34, -0.02),   # the control of C1 (16 section 3); ImageNet-supervised went to future work
     }
     for model, (off, ma, robust) in enc.items():
         for train in TRAIN_MAIN:

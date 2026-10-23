@@ -7,6 +7,7 @@ Reads the files that bench.eval.cli evaluate writes (bench/eval/evaluate.py):
     runs/B1_<slug>_<dataset>_seed<k>/metrics_test.json          source recipe (E2b)
     runs/BS_<slug>_<dataset>_seed0/environment.json             E10: parameters, wall time
     runs/BS_<slug>_<dataset>_seed<k>_registered/metrics_test.json  retired recipe (variant "registered"; U-Net DDR seed 0 also E9)
+    runs/E5enc_<encoder>_ddr_seed0_lr1/metrics_test.json  encoder comparison (E5 / encoder_control; E3a sets under runs/E3a/E5enc_*)
     runs/NN_<default|resencm>_<dataset>_fold0/metrics_test.json    nnU-Net (E2, seed 0)
     runs/E1r_<slug>_<dataset>_seed<k>_bs4*/metrics_test.json       author recipe (E1r), plus author_*_test.json for the authors' metric
     runs/E2c_<slug>_<dataset>_seed0_<lr1o3|lr3>/history.jsonl       learning-rate check (best validation mAUPR; needs timing.json)
@@ -133,6 +134,18 @@ E2C = re.compile(r"^E2c_(?P<slug>[a-z0-9_]+?)_(?P<dataset>idrid|ddr)_seed0_(?P<l
 E2C_LEVEL = {"lr1o3": "1/3", "lr3": "3"}
 E3A_SET = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "Retinal-Lesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1", "MAPLES-DR": "MAPLES-DR"}
 E1_AUTHOR = re.compile(r"^E1_(?P<slug>[a-z0-9]+)_(?P<dataset>idrid|ddr)$")
+# Encoder comparison (16 section 3 E5d2, C1 / C2; bench/scripts/launch_extra.py --experiment E5enc): the same UPerNet
+# head, recipe and budget as the main-table RETFound row, one encoder per run; lr1 is the main-table learning rate.
+# RETFound-MAE itself is the main-table run (derive_encoder_reference copies it under the encoder_control key).
+E5ENC = re.compile(r"^E5enc_(?P<slug>vitup_mae|vitup_rfdinov2|vitup_dinov2|vitup_augreg)_(?P<dataset>idrid|ddr)_seed(?P<seed>\d+)_lr(?P<lr>1o3|1|3)$")
+ENCODER = {"vitup_mae": "MAE-IN1k ViT-L", "vitup_rfdinov2": "RETFound-DINOv2", "vitup_dinov2": "DINOv2 ViT-L", "vitup_augreg": "ImageNet-sup. ViT-L"}
+ENCODER_REFERENCE = "RETFound-MAE"     # the main-table RETFound + UPerNet run under the encoder_control key
+
+
+def encoder_key(m):
+    variant = "encoder_control" if m["lr"] == "1" else f"encoder_control:lr{m['lr']}"
+    return "E5", variant, ENCODER[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
+
 PREPARED = {"IDRiD": "IDRiD", "DDR": "DDR", "TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf", "FGADR": "FGADR", "RetinalLesions": "Retinal-Lesions", "DiaRetDB1": "DiaRetDB1", "MAPLES-DR": "MAPLES-DR"}
 MODEL_NAME = {"RETFound": "RETFound + UPerNet", "HRNet": "HRNet-W48", "MedSAM": "MedSAM (full FT)"}  # cell model name -> paper name
 
@@ -291,6 +304,16 @@ def collect(runs_dir):
                 rows += rows_from_report(report, experiment, variant, model, train, seed, test)
                 seen.append((run.name, path.name, report.get("summary", {}).get("mAUPR")))
             continue
+        m = E5ENC.match(run.name)
+        if m:
+            experiment, variant, model, train, seed = encoder_key(m)
+            test_json = run / "metrics_test.json"
+            if test_json.exists():
+                report = load_report(test_json)
+                if report is not None:
+                    rows += rows_from_report(report, experiment, variant, model, train, seed, train)
+                    seen.append((run.name, test_json.name, report.get("summary", {}).get("mAUPR")))
+            continue
         m = E1R.match(run.name)
         if m and m["slug"] in SLUG:
             model, train, seed = SLUG[m["slug"]], DATASET[m["dataset"]], int(m["seed"])
@@ -371,6 +394,9 @@ def source_key(runs_dir, name):
     r = E1R.match(name)
     if r and r["slug"] in SLUG:
         return "E1r", "author_recipe", SLUG[r["slug"]], DATASET[r["dataset"]], int(r["seed"])
+    e = E5ENC.match(name)
+    if e:
+        return encoder_key(e)
     return None
 
 
@@ -731,6 +757,30 @@ def derive_references(table):
     return table, int(sum(len(r) for r in inserted))
 
 
+def derive_encoder_reference(table):
+    """The RETFound-MAE row of the encoder comparison is the main-table RETFound + UPerNet run (E5 / encoder_decoder,
+    DDR, seed 0): its measured rows replace the placeholder rows under (E5, encoder_control, RETFound-MAE) per test set."""
+    table = table.copy()
+    table["seed"] = table["seed"].astype(int)
+    targets = table[(table.experiment == "E5") & (table.variant == "encoder_control") & (table.model == ENCODER_REFERENCE)
+                    & (table.train_set == "DDR") & (table.source != "measured")]
+    if targets.empty:
+        return table, 0
+    src = table[(table.experiment == "E5") & (table.variant == "encoder_decoder") & (table.model == "RETFound + UPerNet")
+                & (table.train_set == "DDR") & (table.seed == 0) & (table.source == "measured")]
+    inserted, drop = [], []
+    for test, group in targets.groupby("test_set"):
+        rows = src[src.test_set == test].drop_duplicates(subset=["cls", "metric"], keep="first")
+        if rows.empty:
+            continue
+        inserted.append(rows.assign(variant="encoder_control", model=ENCODER_REFERENCE, seed=0, source="measured"))
+        drop.extend(group.index.tolist())
+    if not inserted:
+        return table, 0
+    table = pd.concat([table.drop(index=drop), *inserted], ignore_index=True)
+    return table, int(sum(len(r) for r in inserted))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", default=str(REPO / "runs"))
@@ -782,6 +832,8 @@ def main():
     print(f"{len(seen)} reports, {len(new)} measured rows: {replaced} placeholder rows replaced, {added} rows with no placeholder counterpart added, {stale} placeholder seeds of measured groups dropped")
     merged, filled = derive_references(merged)
     print(f"{filled} factor reference rows copied from their main-table / E3b runs (seed 0, all classes and metrics)")
+    merged, filled = derive_encoder_reference(merged)
+    print(f"{filled} encoder-comparison reference rows copied from the main-table RETFound run")
     left = merged[(merged.experiment.isin(["E2", "E2b"])) & (merged.source != "measured")]
     print(f"placeholder rows left in E2/E2b: {len(left)}")
     if not args.dry_run:

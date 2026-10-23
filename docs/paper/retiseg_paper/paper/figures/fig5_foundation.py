@@ -184,20 +184,24 @@ def panel_c(fig, top):
 
 
 def panel_d(fig, top):
-    encs = ["RETFound-DINOv2", "RETFound-MAE", "DINOv2 ViT-L", "ImageNet-sup. ViT-L"]
-    note = ["ophthalmic, self-sup.", "ophthalmic, self-sup.", "natural images, self-sup.", "natural images, supervised"]
-    r = D.sel(experiment="E5", variant="encoder_control", metric="aupr", train_set="DDR")
-    g = r.groupby(["model", "test_set"])["value"].mean().unstack("test_set")
-    internal = g.loc[encs, "DDR"].to_numpy()
-    indep = g.loc[encs, D.FINE_INDEPENDENT].mean(axis=1).to_numpy()
+    encs = D.ENCODERS
+    note = ["ophthalmic, DINOv2", "ophthalmic, MAE", "natural images, DINOv2", "natural images, MAE"]
+    enc = D.encoder_table("DDR")
+    internal = enc["internal"].to_numpy()
+    # an encoder whose rows are still placeholders is drawn without values (the comparison is C1 / C2 of 16: one
+    # measured pair at a time, never a measured encoder against a simulated one)
+    indep = np.array([enc["independent"][m] if not enc["simulated"][m] else np.nan for m in encs])
+    internal = np.array([v if not enc["simulated"][m] else np.nan for v, m in zip(internal, encs)])
+    sets = ", ".join(s.replace("TJDR-", "TJDR ") for s in enc["sets"]) or "pending"
     ax = S.axes_mm(fig, 36, top, 44, 20)
-    P.dumbbell(ax, encs, [internal, indep], ["#3d3d3a", "#9085e9"], ["internal (DDR test)", "independent, fine (TJDR)"], markers=["o", "D"], xlim=(0.1, 0.64), size=18, fs=5.6)
+    P.dumbbell(ax, encs, [internal, indep], ["#3d3d3a", "#9085e9"], ["internal (DDR test)", f"independent, fine ({sets})"], markers=["o", "D"], xlim=(0.1, 0.84), size=18, fs=5.6)
     for i, t in enumerate(note):
-        ax.text(0.635, i, t, fontsize=4.7, color=S.MUTED, ha="right", va="center")
+        ax.text(0.835, i, t + ("" if not enc["simulated"][encs[i]] else " (pending)"), fontsize=4.7, color=S.MUTED, ha="right", va="center")
     ax.set_xlabel("mAUPR, same UPerNet head, trained on DDR")
     ax.legend(loc="lower left", bbox_to_anchor=(-0.02, 1.0), ncol=2, columnspacing=1.2, handletextpad=0.2, fontsize=5.4)
-    ax.set_xticks([0.1, 0.2, 0.3, 0.4])
-    S.tag_simulated(ax, loc="tr", dx=0.3, dy=-0.02)
+    ax.set_xticks([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
+    if any(enc["simulated"].values()):
+        S.tag_simulated(ax, loc="bl", dx=0.01, dy=0.02, text="pending" if not all(enc["simulated"].values()) else "simulated")
 
 
 def panel_e(fig, top):
@@ -238,11 +242,13 @@ def panel_e(fig, top):
     for xi, a in zip(x[-2:], ref_any):
         if a is not None:
             ax.scatter([xi - 0.19], [a], marker="D", s=11, color=S.PAPER, edgecolors=S.INK, linewidths=0.6, zorder=5)
-            ax.text(xi - 0.19 - 0.22, a, f"{a:.2f}", ha="right", va="center", fontsize=4.6, color=S.INK2)
+            ax.text(xi - 0.19, a + 0.02, f"{a:.2f}", ha="center", va="bottom", fontsize=4.6, color=S.INK2)
     ax.set_xticks(x)
     ax.set_xticklabels(cats, fontsize=4.9, linespacing=1.15)
-    ax.set_ylim(0, 0.6)
-    ax.set_yticks([0, 0.2, 0.4, 0.6])
+    top_v = float(np.nanmax(internal + indep))
+    ymax = 0.6 if top_v < 0.56 else 0.9   # the oracle-box bar on DDR reached 0.76 (2026-10-23)
+    ax.set_ylim(0, ymax)
+    ax.set_yticks([0, 0.2, 0.4, 0.6] + ([0.8] if ymax > 0.6 else []))
     ax.set_ylabel("mAUPR")
     ax.axvline(3.5, color=S.INK2, lw=0.5, ls=(0, (2, 2)))
     S.light_grid(ax)

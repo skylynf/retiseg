@@ -40,17 +40,23 @@
 四、现在就做（2026-10-15，pull 到含本节的提交后；按序号做，每做完一条记 00 第三节）
   进度（本机 10-21，pull 到 add8484，10-21 包已进表：1,267 份报告、50,786 行实测；E1r HRDecoder、集成 96 份、留一专家 4 份、分层 355 份、E8 源内测试都在 results.csv）。10-21 的决定与新条目是第 31–36 条；按 31 → 32 → 33 → 34 的顺序做，35、36 随后。队列收口仍按 10-24/25：到 10-25 还要的卡时约 215（E5 测试档 ~20、MedSAM 种子 0 ~30、SAMed 种子 ~19、编码器对照 66、2880 画布 52、探测收尾 ~10、各自的 e3a ~15），六张卡两天多；最长的单任务是 2880（52 时）和编码器三格（各 22 时），所以 2880 已在 queue.yaml 里打开、编码器三格一到空卡就开（第 32、34 条）。
   进度（本机 10-22，pull 到 e94ea60，10-22 包已进表：1,387 份报告、56,815 行实测；MedSAM 两库种子 0 与 E3a、RETFound 三种子、SAMed DDR 种子 1、三条探测、Refined IDRiD 21 个 run、E5 测试档的 FGADR / TJDR_uwf 都在 results.csv）。执行正常的部分：31、33、35、36 完成，32 的首格在跑，E5 测试档、SAMed 种子、e3a 都在队列里走。需要服务器动手的三件事是第 37–39 条（都在 pull 之后做；37、38 各几分钟，39 几分钟 + 队列自动重跑约 14 GPU 时），然后 40–42。队列收口仍按 10-25：编码器三格约 10-25 早晨收完是最长链；其余（2880 约 8 时、MedSAM 重跑约 14 时、HRDecoder DDR 的 e3a 约 2 时、E5 测试档剩余、SAMed 种子、e3a_rest）都在这之前。
-  37. 2880 画布重开（21 第 82 条；两次退出的根因是包装器 author_recipe 丢掉 set_patch 的窗口，预算按 960 块算成 83000 步，本机已改 bench/models/hrdecoder.py；官方代码没动）。pull 到含本条的提交后：
+  进度（本机 10-23，pull 到 234b379，10-23 包已进表：1,507 份报告、61,650 行实测；2880、MedSAM 修订两库、HRDecoder DDR 重测、SAMed 三种子、RETFound TJDR_std、MAE-IN1k 编码器、DDR 测试档的 a / b 档都在 results.csv）。第 37–39 条全部完成且结果正常；第 32 条首格出数。本次新条目 43–45（43 要先 pull：nnunet_e3a.py 的 --regenerate-maps 是新加的）。收口仍按 10-25：RETFound-DINOv2（GPU 6）与 DINOv2（GPU 2）约 10-24 晚上收完，其余都在前面。
+  43. nnU-Net 四个成员的 FGADR / Retinal-Lesions 概率图重推（第 23 条的缺口；bench/scripts/nnunet_e3a.py 本机加了 --regenerate-maps，语义同 bench.e3a：只对已完成且 maps_dropped 的集合重预测，不重评、不动 done.json）。retiseg-nnunet 环境，与 GPU 7 的 B-std 成员重推并行或排在其后：
+       for t in IDRiD DDR; do for p in default resencm; do python bench/scripts/nnunet_e3a.py --train $t --plan $p --sets FGADR,Retinal-Lesions --regenerate-maps; done; done
+     四个都完成、GPU 7 的 32 个成员也完成后，按第 23 条跑这两个集合的集成（两源 × 八个组合，--sets FGADR,Retinal-Lesions，集成之后按任务单删成员图），集成 mAUPR 贴 00。
+  44. 编码器对照的独立测试补 MAPLES-DR（60 张，几分钟）：图 5d 的"独立均值"用四个编码器都测过的细档集合，现在只有两个 TJDR；给每格补一次 `python -m bench.e3a run --run runs/E5enc_<格> --sets MAPLES-DR`（MAE 现在就能补；另两格训完打分后一起补）。三格的内部、TJDR_std、TJDR_uwf、MAPLES-DR 四个数贴 00。
+  45. 推理档测试阶段的 IDRiD 集合（27 张，各项都很快）与 DDR 上还缺的 SAM ViT-B 框、MedSAM 框、SAM 3 拼装（text:selected）：按启动器自己的顺序走即可，不用手开；IDRiD 全部出来后单独打一包，R5 零样本段等它。
+  37. ［已完成 10-22 22:58：1920×1920 / 21000 步，测试 0.627，10-23 包进表］ 2880 画布重开（21 第 82 条；两次退出的根因是包装器 author_recipe 丢掉 set_patch 的窗口，预算按 960 块算成 83000 步，本机已改 bench/models/hrdecoder.py；官方代码没动）。pull 到含本条的提交后：
        rm -rf runs/BF_e7_hrdecoder_idrid_2880_seed0        # 只有失败的 recipe.json / console.log，没有检查点；--resume 会读旧 recipe，所以必须删
      factor_hrdecoder_2880 阶段（优先级 56）在暂停期过后自动重接。核对新的 recipe.json：deviations 里应是 "83 patches of 1920x1920 per epoch, rounded up to 84 (21 steps of 4); 21000 steps in total"，crop_size [1920, 1920]，validation 每 1050 步。估计约 8 小时（B-std IDRiD 1.5 小时 ×4 加验证打分；make_factor_jobs 的 52 已改 8）。显存不够时仍只允许 cell 加 batch_size: 2 并记 00；再在 get_crop_bbox 退出就把 traceback 贴 00、阶段关掉。训完由同一阶段打分；测试 mAUPR 与验证曲线贴 00。
-  38. HRDecoder DDR 的独立测试重做（21 第 83 条；e3a / predict 对 HRDecoder 之前用了类卡上的 IDRiD 归一化，训练库 DDR 的值不同，本机已在 bench/e3a.py、bench/predict.py 绑定训练库的 author_recipe）：
+  38. ［已完成 10-23 08:32：八个集合重测、分层重算、五个集合的 all / fam:fundus 集成重算（MAPLES-DR 的 fam:fundus 还在算），10-23 包进表］ HRDecoder DDR 的独立测试重做（21 第 83 条；e3a / predict 对 HRDecoder 之前用了类卡上的 IDRiD 归一化，训练库 DDR 的值不同，本机已在 bench/e3a.py、bench/predict.py 绑定训练库的 author_recipe）：
        mv runs/E3a/BS_hrdecoder_ddr_seed0 runs/E3a/BS_hrdecoder_ddr_seed0_idridnorm      # 留底；collect 不读这个后缀
      e3a 阶段（优先级 10，seed0_only）看到目录缺失会自动重测八个集合（约 2 GPU 时，retiseg-hacdr；FGADR、Retinal-Lesions 仍 drop_maps）。重测完：
        rm -r runs/CLIN/strata/BS_hrdecoder_ddr_seed0 && python bench/scripts/clinical_strata.py strata && python bench/scripts/clinical_strata.py summary
        rm -r runs/ENS/DDR/all/{IDRiD,TJDR_std,TJDR_uwf,DiaRetDB1,MAPLES-DR} runs/ENS/DDR/fam_fundus/{IDRiD,TJDR_std,TJDR_uwf,DiaRetDB1,MAPLES-DR}
        python bench/scripts/ensemble.py run --train DDR --composition all,fam:fundus --sets IDRiD,TJDR_std,TJDR_uwf,DiaRetDB1,MAPLES-DR
      （DDR 内部测试的集成不动：源内概率图是 train.py 打分写的，归一化正确；FGADR、Retinal-Lesions 的集成仍等第 23 条的成员重推理，重推理时 HRDecoder DDR 走新代码。）新旧八个集合的 mAUPR 并排贴 00。
-  39. MedSAM 配方修订（登记规则的执行，14 备注 55、21 第 84 条；bs_frozen.yaml 已追加 recipe_revisions.MedSAM: loss_params {batch_dice: true}，与 SAM2-UNet 第 13 条同一流程）：DDR 种子 0 的 MA、SE 验证 AUPR 整个训练都在先验水平（history.jsonl），按规则两库种子 0 都从初始权重重跑、塌缩 run 留作 registered：
+  39. ［已完成 10-22：IDRiD 0.642、DDR 0.413，E3a、分层、Refined 都已补，10-23 包进表］ MedSAM 配方修订（登记规则的执行，14 备注 55、21 第 84 条；bs_frozen.yaml 已追加 recipe_revisions.MedSAM: loss_params {batch_dice: true}，与 SAM2-UNet 第 13 条同一流程）：DDR 种子 0 的 MA、SE 验证 AUPR 整个训练都在先验水平（history.jsonl），按规则两库种子 0 都从初始权重重跑、塌缩 run 留作 registered：
        mv runs/BS_medsam_ddr_seed0 runs/BS_medsam_ddr_seed0_registered ；mv runs/BS_medsam_idrid_seed0 runs/BS_medsam_idrid_seed0_registered
        mv runs/E3a/BS_medsam_ddr_seed0 runs/E3a/BS_medsam_ddr_seed0_registered ；mv runs/E3a/BS_medsam_idrid_seed0 runs/E3a/BS_medsam_idrid_seed0_registered
        rm -r runs/CLIN/strata/BS_medsam_ddr_seed0 runs/CLIN/strata/BS_medsam_idrid_seed0       # 分层可重算；registered 的 collect 不读
@@ -62,7 +68,7 @@
        git submodule update --init official_code/MedSAM      # 锁定 d71e8a1；GitHub 连不上就从本机 rsync 这个目录
        E5_MODELS=MedSAM bash bench/scripts/server_run.sh e5-smoke
      冒烟通过后把 MedSAM 加进 queue.yaml 的 e5_seed0 的 only（服务器自己改、提交），队列接它的两库种子 0（各约 15 GPU 时）；推理池的 b 档 MedSAM 项会在 2–5 有空卡时自己接上。冒烟仍失败就把报错贴 00，种子 0 不开。
-  32. ［进行中：MAE-IN1k 10-21 22:27 起在 GPU 6，监督进程 pid 339506 接 RETFound-DINOv2、DINOv2；每格约 27 小时，三格约 10-25 早晨收完］ 编码器对照（16 第三节 E5d2 的 C1、C2；DINOv2 权重 pretrained/vit_large_patch14_dinov2.lvd142m.safetensors 已到位，bench/models/vit_upernet.py 直接读这个文件名）：三格一起开，各约 22 GPU 时，手动、不进队列（launch_extra 按 RETISEG_GPUS 每卡一个进程，最长的先）：
+  32. ［MAE 已出：DDR 0.519、TJDR_std 0.634、TJDR_uwf 0.127（10-23 包进表）；RETFound-DINOv2 在 GPU 6、DINOv2 在 GPU 2］［进行中：MAE-IN1k 10-21 22:27 起在 GPU 6，监督进程 pid 339506 接 RETFound-DINOv2、DINOv2；每格约 27 小时，三格约 10-25 早晨收完］ 编码器对照（16 第三节 E5d2 的 C1、C2；DINOv2 权重 pretrained/vit_large_patch14_dinov2.lvd142m.safetensors 已到位，bench/models/vit_upernet.py 直接读这个文件名）：三格一起开，各约 22 GPU 时，手动、不进队列（launch_extra 按 RETISEG_GPUS 每卡一个进程，最长的先）：
        RETISEG_GPUS="<三张空卡>" $(conda) run -n retiseg --no-capture-output python bench/scripts/launch_extra.py --submit --experiment E5enc --only e5enc_vitup_mae_ddr_seed0_lr1,e5enc_vitup_rfdinov2_ddr_seed0_lr1,e5enc_vitup_dinov2_ddr_seed0_lr1
      （server_run.sh extra 不接 --only，所以直接调 launch_extra；放到 nohup/setsid 里。）空卡不够三张就先开两格，第三格随后。训完各自按 launch_extra 的流程打内部测试；两个 TJDR 集合要 e3a：`python -m bench.e3a run --run runs/E5enc_<格> --sets TJDR_std,TJDR_uwf`。三格的内部与 TJDR 数贴 00。
   33. ［已完成 10-21 09:03：27 张全 pad、最差 NCC 0.9988，prepare、score 都已出，10-22 包进表，14 备注 54］［第一次 check 10-21 07:34 不接受（最高 NCC 0.69–0.82，多数在边距 32 处）；脚本已改为四边搜索 + 两种缩放假设 + 边缘 NCC，pull 到后重跑 check（约 27 × 1 分钟 CPU），把每图的 hypothesis / box / ncc / edge_ncc / label_extent 和 worst_ncc 贴 00；接受后再 prepare、score。仍不接受就停，本机再看。］ Refined IDRiD（26 N4，14 备注 49；代码已到 bench/scripts/refined_idrid.py，CPU）。发布是每图一张 1024×1024 灰度标注（论文表 2：背景 0、VH 4、视网膜 8、黄斑 16、血管 24、视盘 32、EX 63、IRMA 96、HE 127、NV 166、CWS 191、MA 255；一像素一类），图是视网膜区域裁剪后不保比例缩到 1024。先核几何，再做标注，最后打分：

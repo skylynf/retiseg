@@ -287,13 +287,29 @@ def foundation():
     put("fm.peft.model", peft.idxmax(), True)
     put("fm.peft.value", f2(peft.max()), True)
     put("fm.ref.nnunet", f2(m.loc["nnU-Net", "DDR"]), True)
-    enc = D.sel(experiment="E5", variant="encoder_control", metric="aupr", train_set="DDR").groupby(["model", "test_set"])["value"].mean().unstack("test_set")
-    ind = enc[D.FINE_INDEPENDENT].mean(axis=1)
-    put("fm.enc.retfound.int", f2(enc.loc["RETFound-DINOv2", "DDR"]), True)
-    put("fm.enc.imagenet.int", f2(enc.loc["ImageNet-sup. ViT-L", "DDR"]), True)
-    put("fm.enc.retfound.ind", f2(ind["RETFound-DINOv2"]), True)
-    put("fm.enc.dinov2.ind", f2(ind["DINOv2 ViT-L"]), True)
-    put("fm.enc.imagenet.ind", f2(ind["ImageNet-sup. ViT-L"]), True)
+    # encoder comparison (16 section 3 E5d2; C1 = RETFound-MAE - MAE-IN1k, C2 = RETFound-DINOv2 - DINOv2): placeholder
+    # flags per encoder; a difference is flagged when either side is
+    enc = D.encoder_table("DDR")
+    key = {"RETFound-MAE": "rm", "MAE-IN1k ViT-L": "mi", "RETFound-DINOv2": "rd", "DINOv2 ViT-L": "di"}
+    for model, short in key.items():
+        put(f"fm.enc.{short}.int", f2(enc["internal"][model]), enc["simulated"][model])
+        put(f"fm.enc.{short}.ind", f2(enc["independent"][model]), enc["simulated"][model])
+        for t in ("TJDR-std", "TJDR-uwf"):
+            put(f"fm.enc.{short}.{t}", f2(enc["table"].loc[model, t]), not enc["measured"].loc[model, t])
+    for pair, (a, b) in {"c1": ("RETFound-MAE", "MAE-IN1k ViT-L"), "c2": ("RETFound-DINOv2", "DINOv2 ViT-L")}.items():
+        sim = enc["simulated"][a] or enc["simulated"][b]
+        put(f"fm.enc.{pair}.int", f3(enc["internal"][a] - enc["internal"][b]), sim)
+        put(f"fm.enc.{pair}.ind", f3(enc["independent"][a] - enc["independent"][b]), sim)
+        put(f"fm.enc.{pair}.int.abs", f3(abs(enc["internal"][a] - enc["internal"][b])), sim)
+        put(f"fm.enc.{pair}.std.abs", f3(abs(enc["table"].loc[a, "TJDR-std"] - enc["table"].loc[b, "TJDR-std"])), sim)
+    names = {"TJDR-std": "the standard-field TJDR set", "TJDR-uwf": "the ultra-widefield TJDR set", "MAPLES-DR": "MAPLES-DR"}
+    put("fm.enc.sets", " and ".join(names.get(t, t) for t in enc["sets"]) or "pending", not enc["sets"])
+    # the old keys keep working for the simtext of R5 until it is rewritten
+    put("fm.enc.retfound.int", f2(enc["internal"]["RETFound-DINOv2"]), enc["simulated"]["RETFound-DINOv2"])
+    put("fm.enc.imagenet.int", f2(enc["internal"]["MAE-IN1k ViT-L"]), enc["simulated"]["MAE-IN1k ViT-L"])
+    put("fm.enc.retfound.ind", f2(enc["independent"]["RETFound-DINOv2"]), enc["simulated"]["RETFound-DINOv2"])
+    put("fm.enc.dinov2.ind", f2(enc["independent"]["DINOv2 ViT-L"]), enc["simulated"]["DINOv2 ViT-L"])
+    put("fm.enc.imagenet.ind", f2(enc["independent"]["MAE-IN1k ViT-L"]), enc["simulated"]["MAE-IN1k ViT-L"])
 
 
 def refined():

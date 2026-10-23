@@ -37,7 +37,7 @@ scripts/collect_runs.py       读 runs/*/metrics_*.json，按键覆盖占位行
 
 模拟（蓝灰色数字、图上“simulated”角标、正文左侧竖线）：其余全部，包括 B-std 主表、独立测试、基础模型、影响因素、文献审计 L1、标注风格审计里除 IDRiD 以外的点、计算代价的大部分。生成模型只保证形状和量级合理，**不代表任何预期结论**。
 
-`collect_runs.py` 读入一份真实报告后，该报告覆盖的行变成 measured；一个面板只要还用到任何占位行，角标就保留。2026-10-20 起：名次统计（Friedman、临界差、配对检验、族均值、发表名次 τ）只对实测模型算（`retifig.data.measured_models`），未实测的模型（MedSAM）排在图 4/7 行序末尾并单独标记；图 6b–d、7d–e 与 make_numbers 的因素键只用实测格，缺格画 "–" / 标 pending，不再把占位值平均进去。2026-10-22 起：表 6 每格的占位标记按它读到的行是否实测决定（以前整表硬标占位），单种子行不再打 ±nan；`runs/REFINED/…`（Refined IDRiD 重评，experiment REF，含 `E1_<模型>` 的发布权重）也由 `collect_runs.py` 读入，make_numbers 给出 ref.*、cd.second/third、indep.*.nlower/gain 键。
+`collect_runs.py` 读入一份真实报告后，该报告覆盖的行变成 measured；一个面板只要还用到任何占位行，角标就保留。2026-10-20 起：名次统计（Friedman、临界差、配对检验、族均值、发表名次 τ）只对实测模型算（`retifig.data.measured_models`），未实测的模型（MedSAM）排在图 4/7 行序末尾并单独标记；图 6b–d、7d–e 与 make_numbers 的因素键只用实测格，缺格画 "–" / 标 pending，不再把占位值平均进去。2026-10-22 起：表 6 每格的占位标记按它读到的行是否实测决定（以前整表硬标占位），单种子行不再打 ±nan；`runs/REFINED/…`（Refined IDRiD 重评，experiment REF，含 `E1_<模型>` 的发布权重）也由 `collect_runs.py` 读入，make_numbers 给出 ref.*、cd.second/third、indep.*.nlower/gain 键。 2026-10-23 起：`runs/E5enc_<编码器>_ddr_seed0_lr1/`（编码器对照，E5 / encoder_control，RETFound-MAE 行从主表复制）也读入；占位里的对照名 ImageNet-sup. 改为 MAE-IN1k；图 5d 只画已实测的编码器。
 
 ## 服务器结果回来以后
 
