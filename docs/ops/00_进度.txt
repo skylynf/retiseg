@@ -493,3 +493,44 @@ fam:fundus 的 MAPLES-DR 在打包之后写完：mAUPR 0.4522（7 个成员，09
 内部测试 mAUPR 0.4902（n=225，排除 0；06:57 打分退出 0，07:02 评测退出 0），逐类 AUPR：MA 0.1845、HE 0.5076、EX 0.6573、SE 0.6113。文件 runs/E5enc_vitup_rfdinov2_ddr_seed0_lr1/metrics_test.json。验证最高仍是 0.6647（epoch 120），最后一步 0.6498。外部测试排除都是 0：TJDR 标准 0.6155（n=55），TJDR 超广角 0.1515（n=58），fov 0.1770（n=58），MAPLES-DR 0.4954（n=60）。E3a 07:36 退出 0。
 DINOv2 仍在 GPU 2。history 现在到 epoch 300，验证 0.6663；最高仍是 epoch 160 的 0.6755。没有 metrics_test.json，这一包不含它的测试分。FGADR / Retinal-Lesions 的集成仍未跑（HACDR 两库和 MedSAM DDR 的成员图缺失）。第 47–49 条没开。
 07:42 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261024.tar.gz（66 MB，6589 个文件，1360 行指标，0 个未对齐；相对 10-23 清单新增 119 行指标）。清单 runs/handoff_manifest_20261024.tsv。10-23 的包仍是 61 MB、09:58。包里有 RETFound-DINOv2 的内部测试和 TJDR、MAPLES-DR，以及第 45 条的 IDRiD 推理档。
+
+2026-10-24 12:19 +0800，pull 到 2517b55。第 47–49 条没开。启动器 pid 88417 还在，没有子进程。GPU 0、1 仍是别人的 vLLM。GPU 2 上 DINOv2（pid 654500）的 history 写到 epoch 360/400，验证 0.6671，最高仍是 epoch 160 的 0.6755。到这一行为止没有重复的 epoch。第 53 条等 console 出现退出 0 再打分（等待进程已挂上，打分用 GPU 2）。第 50 条的成员表重算和第 52 条的标注审计已开，做完再记。
+第 51 条：空卡 GPU 7，retiseg-hacdr，CUDA_LAUNCH_BLOCKING=1。torch 1.10.0、mmcv 1.6.2、CUDA 11.3。开跑前 nvidia-smi（12:16:29）：GPU 7 只有 Xorg，整卡 17MiB、利用率 0；GPU 0、1 是 vLLM 各 37565MiB；GPU 2 是 DINOv2 22979MiB、利用率 100%；GPU 3–6 都是 17MiB。两次都在第一张图的第一次前向里退出 1。进度行写在 predict_image 返回之后，所以没打出来。Retinal-Lesions 12:16:30–12:16:36，测试集 478 张，第一张 10037_left。FGADR 12:16:36–12:16:43，测试集 553 张，第一张 0017_2。两次结束后 GPU 7 回到 17MiB。官方代码没改。今天是 10-24，--without HACDR-Net 的兜底按任务单留到 10-25。all 与 fam:fundus 的这两个集合仍等成员图。完整 traceback 两集合同一条，日志 runs/logs/20261024_item51.log 第 107–154 行（FGADR 从第 201 行起，栈相同）：
+Traceback (most recent call last):
+  File "bench/e3a.py", line 581, in <module> → main()
+  File "bench/e3a.py", line 573, in main → run_source(...)
+  File "bench/e3a.py", line 355, in run_source → predict_image(...)
+  File "bench/predict.py", line 71, in predict_image → canvas_logits(...)
+  File "bench/infer.py", line 30, in canvas_logits → model(padded)
+  File "bench/models/hacdr.py", line 525, in forward → self.net.encode_decode(x, None)
+  File "official_code/HACDR-Net/mmseg/models/segmentors/encoder_decoder.py", line 75 → extract_feat
+  File "official_code/HACDR-Net/mmseg/models/segmentors/encoder_decoder.py", line 67 → self.backbone(img)
+  File "official_code/HACDR-Net/mmseg/models/backbones/hacdr.py", line 522 → blk(x, H, W)
+  File "official_code/HACDR-Net/mmseg/models/backbones/hacdr.py", line 379 → self.attn(self.norm1(x))
+  File "official_code/HACDR-Net/mmseg/models/backbones/hacdr.py", line 314 → self.spatial_gating_unit(x)
+  File "official_code/HACDR-Net/mmseg/models/backbones/hacdr.py", line 254 → attn = self.conv0(x)
+  File "mmcv/ops/modulated_deform_conv.py", line 255 → modulated_deform_conv2d
+  File "mmcv/ops/modulated_deform_conv.py", line 76 → ext_module.modulated_deform_conv_forward
+RuntimeError: CUDA error: CUBLAS_STATUS_NOT_SUPPORTED when calling `cublasSgemm( handle, opa, opb, m, n, k, &alpha, a, lda, b, ldb, &beta, c, ldc)`
+中间的 torch/nn/modules/module.py:1102 与 torch/autograd/grad_mode.py:28 是包装帧，日志里有原文。
+
+2026-10-24 12:25 +0800。第 52 条标注审计完成，文件 runs/audit/label_style.json。打印的每来源一行：
+IDRiD: 81 images; per-image mean and median relative diameter {'MA': (43.17, 0.005), 'HE': (23.46, 0.0132), 'EX': (143.73, 0.0048), 'SE': (1.85, 0.0307)}
+DDR: 757 images; per-image mean and median relative diameter {'MA': (13.71, 0.0043), 'HE': (16.56, 0.0087), 'EX': (31.25, 0.0045), 'SE': (1.71, 0.0191)}
+TJDR_std: 257 images; per-image mean and median relative diameter {'MA': (2.89, 0.008), 'HE': (4.64, 0.0178), 'EX': (4.4, 0.0126), 'SE': (0.84, 0.0311)}
+TJDR_uwf: 304 images; per-image mean and median relative diameter {'MA': (2.52, 0.0035), 'HE': (6.62, 0.0084), 'EX': (7.31, 0.004), 'SE': (0.94, 0.0153)}
+FGADR: 1842 images; per-image mean and median relative diameter {'MA': (6.1, 0.0078), 'HE': (20.61, 0.0117), 'EX': (28.72, 0.0076), 'SE': (1.13, 0.0321)}
+Retinal-Lesions: 1593 images; per-image mean and median relative diameter {'MA': (9.34, 0.0231), 'HE': (8.35, 0.0345), 'EX': (2.14, 0.0416), 'SE': (0.8, 0.0508)}
+DiaRetDB1: 89 images; per-image mean and median relative diameter {'MA': (2.06, 0.0062), 'HE': (4.52, 0.0293), 'EX': (1.54, 0.0406), 'SE': (0.3, 0.0431)}
+MAPLES-DR: 198 images; per-image mean and median relative diameter {'MA': (27.33, 0.0084), 'HE': (4.78, 0.0189), 'EX': (15.56, 0.0099), 'SE': (1.01, 0.0248)}
+wrote /home/qurr/luming/retiseg/retiseg/runs/audit/label_style.json
+
+2026-10-24 12:26 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261024_v2.tar.gz（67 MB，6595 个文件，1355 行指标，0 个未对齐）。对照今早的 runs/handoff_manifest_20261024.tsv（打包前已从今早副本还原）。07:42 的包没有被覆盖。label_style.json 在包里。summary/new_since.tsv 是空的：相对今早没有新增的指标文件。五份正在重算的 DDR all 在打包时已经删掉、新的 metrics 还没写上，所以这一包比今早少这五份。新数在第 50 条做完的下一包。
+
+2026-10-24 12:33 +0800。这一轮之后还在跑的，和接下来的顺序：
+第 50 条：members --force 12:22 退出 0。runs/ENS/DDR/members.json 是登记的 18 人，没有 MedSAM。--force 从空表重写，所以没有打出“剔除”那一行。all/prob_val/done.json 本来就是这 18 人（149 张验证图），阈值不用重做。五份 19 人的测试目录已删，正在重算。第一份 IDRiD 已出：mAUPR 0.6772（n=27，排除 0，18 个成员，614 秒），文件 runs/ENS/DDR/all/IDRiD/metrics.json。进程是 pid 1103403，接着 TJDR 标准、TJDR 超广角、DiaRetDB1、MAPLES-DR，然后 DDR 与 IDRiD 上的 top3、top5、1perfam、fam:general、fam:auto、fam:foundation，集合是 FGADR 和 Retinal-Lesions。按 IDRiD 这一份大约每张 23 秒，剩下四份大约一个半小时；FGADR、Retinal-Lesions 的六个组合会按这个速度跨过今晚。all 和 fam:fundus 的这两个集合仍等第 51 条，成员图先不删。
+第 51 条已记在上面。兜底 --without HACDR-Net 留到 10-25，今天没跑。
+第 52 条已完成，v2 包已写出。
+第 53 条：等 GPU 2 上 DINOv2（pid 654500）的 console 出现退出 0，再在同一张卡做 score-only、评测，并补 TJDR 标准、TJDR 超广角、MAPLES-DR。12:32 的 history 仍是 epoch 360/400，验证 0.6671，最高仍是 epoch 160 的 0.6755。到这一行为止没有重复的 epoch。按大约每小时 15 个 epoch，训练大约 15:00 结束，打分和外部测试再大约两小时。
+第 54 条：第 52 条的包就是上面的 v2。第 50 条做完、第 53 条出分后再各打一包，仍对照今早清单，同一天的下一包是 v3、v4。等待进程会在做完时把 mAUPR 和包的大小追加在本文件后面。
+第 47–49 条没开。启动器 pid 88417 还在，没有子进程。GPU 0、1 仍是别人的 vLLM。GPU 3–7 空着，不拿去开参考模型或编码器的 IDRiD 列。
