@@ -633,22 +633,6 @@ E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,MA,aupr,0.14922,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,HE,aupr,0.49262,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,EX,aupr,0.73504,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,0,IDRiD,SE,aupr,0.4621,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.13924,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,aupr,0.42565,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,aupr,0.52476,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,aupr,0.33201,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr,0.1023,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr,0.42661,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr,0.59353,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr,0.3265,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.03274,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.20199,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.28827,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.15319,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.08731,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.38138,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.49404,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.29007,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,MA,aupr,0.04814,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,HE,aupr,0.31626,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,0,FGADR,EX,aupr,0.41384,placeholder
@@ -665,22 +649,6 @@ E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,MA,aupr,0.1469,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,HE,aupr,0.46353,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,EX,aupr,0.71693,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,1,IDRiD,SE,aupr,0.43025,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,MA,aupr,0.13938,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,HE,aupr,0.3986,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,EX,aupr,0.50026,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,DDR,SE,aupr,0.32049,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,MA,aupr,0.10118,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,HE,aupr,0.41273,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,EX,aupr,0.55911,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-std,SE,aupr,0.32533,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,MA,aupr,0.03318,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,HE,aupr,0.19821,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,EX,aupr,0.28489,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,TJDR-uwf,SE,aupr,0.15122,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,MA,aupr,0.0822,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,HE,aupr,0.35769,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,EX,aupr,0.48658,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,1,MAPLES-DR,SE,aupr,0.28622,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,MA,aupr,0.04215,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,HE,aupr,0.3184,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,1,FGADR,EX,aupr,0.40131,placeholder
@@ -697,22 +665,6 @@ E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,MA,aupr,0.14939,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,HE,aupr,0.49079,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,EX,aupr,0.73191,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,IDRiD,SE,aupr,0.45694,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,MA,aupr,0.13727,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,HE,aupr,0.40355,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,EX,aupr,0.52333,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,DDR,SE,aupr,0.3357,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,MA,aupr,0.10243,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,HE,aupr,0.43583,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,EX,aupr,0.59122,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-std,SE,aupr,0.34539,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,MA,aupr,0.03324,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,HE,aupr,0.21388,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,EX,aupr,0.29195,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,TJDR-uwf,SE,aupr,0.1568,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,MA,aupr,0.08616,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,HE,aupr,0.37554,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,EX,aupr,0.51356,placeholder
-E5,DINOv2 ViT-L,encoder_control,DDR,2,MAPLES-DR,SE,aupr,0.29488,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,MA,aupr,0.04366,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,HE,aupr,0.32083,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,FGADR,EX,aupr,0.42692,placeholder
@@ -880,70 +832,6 @@ E10,nnU-Net ResEnc-M,,,-1,,,infer_s_per_image,2.6,placeholder
 L2,funnel,reproduced within 0.02 mAUPR,,-1,,,n_models,1.0,placeholder
 L2,funnel,authors contacted,,-1,,,n_models,14.0,placeholder
 L2,funnel,authors replied,,-1,,,n_models,3.0,placeholder
-audit,labels,,IDRiD,-1,,MA,lesions_per_image,43.88636,measured
-audit,labels,,IDRiD,-1,,MA,median_rel_diameter,0.0053,measured
-audit,labels,,IDRiD,-1,,HE,lesions_per_image,25.56818,measured
-audit,labels,,IDRiD,-1,,HE,median_rel_diameter,0.0133,measured
-audit,labels,,IDRiD,-1,,EX,lesions_per_image,142.47727,measured
-audit,labels,,IDRiD,-1,,EX,median_rel_diameter,0.005,measured
-audit,labels,,IDRiD,-1,,SE,lesions_per_image,1.95455,measured
-audit,labels,,IDRiD,-1,,SE,median_rel_diameter,0.0318,measured
-audit,labels,,DDR,-1,,MA,lesions_per_image,15.81512,placeholder
-audit,labels,,DDR,-1,,MA,median_rel_diameter,0.0044,placeholder
-audit,labels,,DDR,-1,,HE,lesions_per_image,11.98009,placeholder
-audit,labels,,DDR,-1,,HE,median_rel_diameter,0.0102,placeholder
-audit,labels,,DDR,-1,,EX,lesions_per_image,36.53971,placeholder
-audit,labels,,DDR,-1,,EX,median_rel_diameter,0.0047,placeholder
-audit,labels,,DDR,-1,,SE,lesions_per_image,1.92884,placeholder
-audit,labels,,DDR,-1,,SE,median_rel_diameter,0.019,placeholder
-audit,labels,,TJDR-std,-1,,MA,lesions_per_image,18.81226,placeholder
-audit,labels,,TJDR-std,-1,,MA,median_rel_diameter,0.005,placeholder
-audit,labels,,TJDR-std,-1,,HE,lesions_per_image,14.54275,placeholder
-audit,labels,,TJDR-std,-1,,HE,median_rel_diameter,0.012,placeholder
-audit,labels,,TJDR-std,-1,,EX,lesions_per_image,40.13241,placeholder
-audit,labels,,TJDR-std,-1,,EX,median_rel_diameter,0.0052,placeholder
-audit,labels,,TJDR-std,-1,,SE,lesions_per_image,2.3175,placeholder
-audit,labels,,TJDR-std,-1,,SE,median_rel_diameter,0.024,placeholder
-audit,labels,,TJDR-uwf,-1,,MA,lesions_per_image,25.02376,placeholder
-audit,labels,,TJDR-uwf,-1,,MA,median_rel_diameter,0.0026,placeholder
-audit,labels,,TJDR-uwf,-1,,HE,lesions_per_image,23.60353,placeholder
-audit,labels,,TJDR-uwf,-1,,HE,median_rel_diameter,0.0065,placeholder
-audit,labels,,TJDR-uwf,-1,,EX,lesions_per_image,55.03268,placeholder
-audit,labels,,TJDR-uwf,-1,,EX,median_rel_diameter,0.003,placeholder
-audit,labels,,TJDR-uwf,-1,,SE,lesions_per_image,3.61697,placeholder
-audit,labels,,TJDR-uwf,-1,,SE,median_rel_diameter,0.011,placeholder
-audit,labels,,MAPLES-DR,-1,,MA,lesions_per_image,13.55243,placeholder
-audit,labels,,MAPLES-DR,-1,,MA,median_rel_diameter,0.005,placeholder
-audit,labels,,MAPLES-DR,-1,,HE,lesions_per_image,8.57356,placeholder
-audit,labels,,MAPLES-DR,-1,,HE,median_rel_diameter,0.0125,placeholder
-audit,labels,,MAPLES-DR,-1,,EX,lesions_per_image,31.46492,placeholder
-audit,labels,,MAPLES-DR,-1,,EX,median_rel_diameter,0.005,placeholder
-audit,labels,,MAPLES-DR,-1,,SE,lesions_per_image,2.08037,placeholder
-audit,labels,,MAPLES-DR,-1,,SE,median_rel_diameter,0.025,placeholder
-audit,labels,,FGADR,-1,,MA,lesions_per_image,9.23614,placeholder
-audit,labels,,FGADR,-1,,MA,median_rel_diameter,0.0075,placeholder
-audit,labels,,FGADR,-1,,HE,lesions_per_image,6.28175,placeholder
-audit,labels,,FGADR,-1,,HE,median_rel_diameter,0.022,placeholder
-audit,labels,,FGADR,-1,,EX,lesions_per_image,10.7099,placeholder
-audit,labels,,FGADR,-1,,EX,median_rel_diameter,0.013,placeholder
-audit,labels,,FGADR,-1,,SE,lesions_per_image,1.67073,placeholder
-audit,labels,,FGADR,-1,,SE,median_rel_diameter,0.033,placeholder
-audit,labels,,Retinal-Lesions,-1,,MA,lesions_per_image,4.21064,placeholder
-audit,labels,,Retinal-Lesions,-1,,MA,median_rel_diameter,0.016,placeholder
-audit,labels,,Retinal-Lesions,-1,,HE,lesions_per_image,3.75898,placeholder
-audit,labels,,Retinal-Lesions,-1,,HE,median_rel_diameter,0.046,placeholder
-audit,labels,,Retinal-Lesions,-1,,EX,lesions_per_image,2.99466,placeholder
-audit,labels,,Retinal-Lesions,-1,,EX,median_rel_diameter,0.052,placeholder
-audit,labels,,Retinal-Lesions,-1,,SE,lesions_per_image,1.33095,placeholder
-audit,labels,,Retinal-Lesions,-1,,SE,median_rel_diameter,0.05,placeholder
-audit,labels,,DiaRetDB1,-1,,MA,lesions_per_image,4.89931,placeholder
-audit,labels,,DiaRetDB1,-1,,MA,median_rel_diameter,0.03,placeholder
-audit,labels,,DiaRetDB1,-1,,HE,lesions_per_image,4.37806,placeholder
-audit,labels,,DiaRetDB1,-1,,HE,median_rel_diameter,0.07,placeholder
-audit,labels,,DiaRetDB1,-1,,EX,lesions_per_image,2.69489,placeholder
-audit,labels,,DiaRetDB1,-1,,EX,median_rel_diameter,0.09,placeholder
-audit,labels,,DiaRetDB1,-1,,SE,lesions_per_image,1.22437,placeholder
-audit,labels,,DiaRetDB1,-1,,SE,median_rel_diameter,0.08,placeholder
 L1,papers,split:official,IDRiD,2019,,,n_papers,2.0,measured
 L1,papers,split:own split,IDRiD,2019,,,n_papers,0.0,measured
 L1,papers,split:not stated,IDRiD,2019,,,n_papers,0.0,measured
@@ -8303,6 +8191,59 @@ E2c,HRNet-W48,lr_x1/3,DDR,0,DDR-val,mean,aupr,0.5234943707345526,measured
 E2c,HRNet-W48,lr_x3,DDR,0,DDR-val,mean,aupr,0.6302769053460214,measured
 E2c,M2MRF,lr_x1/3,DDR,0,DDR-val,mean,aupr,0.5527041399601635,measured
 E2c,M2MRF,lr_x3,DDR,0,DDR-val,mean,aupr,0.5247166501921661,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.18322227502216054,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,aupr_11pt,0.18711052203961462,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,aupr_ci_lo,0.1384730151180069,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,aupr_ci_hi,0.2316237894123454,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,dice_fixed,0.1840619061751144,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,dice_valopt,0.27046779613169336,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,iou_valopt,0.15638205263062444,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,lesion_precision,0.28350730688935283,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,lesion_recall_small,0.6102941176470589,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,lesion_recall_medium,0.7598475222363406,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,lesion_recall_large,0.5,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,img_auc,0.6235228361545833,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,MA,img_auc_top100,0.6046790162887257,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,aupr,0.5719583159159836,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,aupr_11pt,0.5681031929340552,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,aupr_ci_lo,0.4627006788128417,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,aupr_ci_hi,0.6633182504532742,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,dice_fixed,0.5247493304571675,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,dice_valopt,0.5316417499126712,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,iou_valopt,0.3620654223048445,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,lesion_precision,0.7728674203494348,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,lesion_recall_small,0.12832057631697433,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,lesion_recall_medium,0.3398864132809087,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,lesion_recall_large,0.6759116589625064,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,img_auc,0.9366478217492518,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,HE,img_auc_top100,0.9376454938476887,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,aupr,0.6678112749460631,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,aupr_11pt,0.6742748277518926,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,aupr_ci_lo,0.598652418400059,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,aupr_ci_hi,0.7328964526003426,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,dice_fixed,0.5690835483025733,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,dice_valopt,0.602385256064254,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,iou_valopt,0.43100951723499276,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,lesion_precision,0.7333074534161491,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,lesion_recall_small,0.4347272341328805,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,lesion_recall_medium,0.8835274542429284,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,lesion_recall_large,0.9228215767634855,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,img_auc,0.9557071691574615,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,EX,img_auc_top100,0.9513753519601472,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,aupr,0.6179985333099748,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,aupr_11pt,0.6172650627897132,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,aupr_ci_lo,0.47555986593123467,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,aupr_ci_hi,0.7230675083143807,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,dice_fixed,0.5994252966982555,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,dice_valopt,0.58505370081449,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,iou_valopt,0.4134812050119968,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,lesion_precision,0.30578512396694213,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,lesion_recall_small,0.02,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,lesion_recall_medium,0.12121212121212122,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,lesion_recall_large,0.7709923664122137,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,img_auc,0.9194639604475672,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,img_auc_top100,0.9193338537600833,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,any,aupr_any_lesion,0.6176837734594753,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.20606314524357625,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,MA,aupr_11pt,0.21071569525281014,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,MA,aupr_ci_lo,0.1583144186693378,measured
@@ -41621,6 +41562,165 @@ E1,M2MRF,this_protocol,IDRiD,-1,TJDR-uwf,SE,dice_fixed,0.18462426607420562,measu
 E1,M2MRF,this_protocol,IDRiD,-1,TJDR-uwf,SE,img_auc,0.5523809523809524,measured
 E1,M2MRF,this_protocol,IDRiD,-1,TJDR-uwf,SE,img_auc_top100,0.5363095238095238,measured
 E1,M2MRF,this_protocol,IDRiD,-1,TJDR-uwf,any,aupr_any_lesion,0.06785739604531989,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.42529855478848905,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr_11pt,0.43892848077767577,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr_ci_lo,0.3445516345708271,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr_ci_hi,0.4907821779968878,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,dice_fixed,0.08617104002025426,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,dice_valopt,0.28884848858349,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,iou_valopt,0.1688035727148311,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,lesion_precision,0.7511467889908257,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,lesion_recall_small,0.5,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,lesion_recall_medium,0.5483870967741935,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,lesion_recall_large,0.5459459459459459,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,img_auc,0.8135593220338984,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,img_auc_top100,0.6440677966101694,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr,0.5229091257186259,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr_11pt,0.5478781718716874,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr_ci_lo,0.3113588083640214,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,aupr_ci_hi,0.6515012836230425,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,dice_fixed,0.4613035043546456,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,dice_valopt,0.4704593113711696,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,iou_valopt,0.3075820832153977,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,lesion_precision,0.5104166666666666,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,lesion_recall_small,,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,lesion_recall_medium,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,lesion_recall_large,0.4563106796116505,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,img_auc,0.7953281423804225,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,HE,img_auc_top100,0.7953281423804225,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr,0.7283443589541705,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr_11pt,0.6693813859921603,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr_ci_lo,0.5196114914111667,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,aupr_ci_hi,0.8098614529199871,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,dice_fixed,0.35262129119840124,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,dice_valopt,0.4174537370138151,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,iou_valopt,0.2637861191028318,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,lesion_precision,0.9099616858237548,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,lesion_recall_small,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,lesion_recall_medium,0.2525,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,lesion_recall_large,0.7142857142857143,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,img_auc,0.8364849833147943,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,EX,img_auc_top100,0.8331479421579533,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr,0.27396811762342704,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr_11pt,0.3161834157918904,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr_ci_lo,0.08269560327238866,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,aupr_ci_hi,0.4237504288015723,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,dice_fixed,0.2055647239352616,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,dice_valopt,0.2769727926613155,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,iou_valopt,0.16074777663500514,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,lesion_precision,0.5277777777777778,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,lesion_recall_small,,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,lesion_recall_medium,0.125,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.40476190476190477,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,img_auc,0.8320105820105821,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,SE,img_auc_top100,0.8386243386243386,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.6279506543235209,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr,0.3897994072318323,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr_11pt,0.38878652250977225,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr_ci_lo,0.2626245745603696,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,aupr_ci_hi,0.48226653767219074,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,dice_fixed,0.32046078865751,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,dice_valopt,0.4049876191010426,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,iou_valopt,0.2539087620578778,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,lesion_precision,0.29764453961456105,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,lesion_recall_small,0.65,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,lesion_recall_medium,0.9134615384615384,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,lesion_recall_large,0.967741935483871,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,img_auc,0.9242424242424242,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,MA,img_auc_top100,0.9269972451790633,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr,0.7912726490347654,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr_11pt,0.7844951757037264,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr_ci_lo,0.7084522252273536,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,aupr_ci_hi,0.8522110553787267,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,dice_fixed,0.6923129055260568,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,dice_valopt,0.6999605971969364,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,iou_valopt,0.5384149093386901,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,lesion_precision,0.7329545454545454,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,lesion_recall_small,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,lesion_recall_medium,0.12,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,lesion_recall_large,0.7,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,img_auc,0.9210526315789473,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,HE,img_auc_top100,0.9239766081871345,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr,0.6977770916117512,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr_11pt,0.6988271941092034,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr_ci_lo,0.5342063234338046,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,aupr_ci_hi,0.7871529158812124,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,dice_fixed,0.5972550106836709,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,dice_valopt,0.6329567521206553,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,iou_valopt,0.46301150538034774,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,lesion_precision,0.6146179401993356,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,lesion_recall_small,0.5833333333333334,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,lesion_recall_medium,0.8181818181818182,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,lesion_recall_large,0.8031496062992126,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,img_auc,0.9243697478991596,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,EX,img_auc_top100,0.9285714285714286,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr,0.5955924152713421,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr_11pt,0.6006731717440235,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr_ci_lo,0.23532147956054478,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,aupr_ci_hi,0.7694558320789365,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,dice_fixed,0.5699422919100119,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,dice_valopt,0.5866693141245556,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,iou_valopt,0.4150969903842151,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,lesion_precision,0.48214285714285715,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,lesion_recall_small,,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,lesion_recall_medium,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,lesion_recall_large,0.6578947368421053,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,img_auc,0.8333333333333334,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,SE,img_auc_top100,0.836996336996337,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-std,any,aupr_any_lesion,0.737797135444287,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr,0.09967323176575343,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr_11pt,0.1068898614898515,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr_ci_lo,0.05054227305389301,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,aupr_ci_hi,0.2213665830933016,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,dice_fixed,0.1253983923283035,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,dice_valopt,0.17390637159799635,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,iou_valopt,0.09523409363745498,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,lesion_precision,0.0847457627118644,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,lesion_recall_small,0.8095238095238095,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,lesion_recall_medium,0.375,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,lesion_recall_large,,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,img_auc,0.9333333333333332,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,MA,img_auc_top100,0.9596899224806201,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr,0.13349896040443152,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr_11pt,0.17715773617932107,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr_ci_lo,0.0581716637330951,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,aupr_ci_hi,0.2519397814548919,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,dice_fixed,0.1123306714037449,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,dice_valopt,0.10783428502836025,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,iou_valopt,0.05698987365383929,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,lesion_precision,0.1154649947753396,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,lesion_recall_small,0.65,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,lesion_recall_medium,0.9351851851851852,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,lesion_recall_large,0.9253731343283582,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,img_auc,0.816969696969697,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,HE,img_auc_top100,0.8145454545454546,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr,0.26488592227021013,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr_11pt,0.2905264398538941,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr_ci_lo,0.14842312503603966,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,aupr_ci_hi,0.391993930772346,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,dice_fixed,0.26393579084752383,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,dice_valopt,0.29200225002996966,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,iou_valopt,0.1709617299174389,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,lesion_precision,0.2561349693251534,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,lesion_recall_small,0.6782178217821783,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,lesion_recall_medium,0.7373737373737373,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,lesion_recall_large,0.5853658536585366,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,img_auc,0.717391304347826,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,EX,img_auc_top100,0.7373188405797101,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr,0.049675367847207524,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr_11pt,0.06277676674618132,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr_ci_lo,0.007593946844215982,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,aupr_ci_hi,0.17009903840663512,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,dice_fixed,0.128139433106865,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,dice_valopt,0.13177440961725945,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,iou_valopt,0.07053452767995916,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,lesion_precision,0.06752411575562701,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,lesion_recall_small,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,lesion_recall_medium,0.26666666666666666,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,lesion_recall_large,0.3157894736842105,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,img_auc,0.661904761904762,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,img_auc_top100,0.6690476190476191,measured
+E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,any,aupr_any_lesion,0.11212086873742472,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.40621669897364876,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr_11pt,0.43203144643812236,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr_ci_lo,0.32571531536356824,measured
@@ -55273,6 +55373,59 @@ ENS,E-1perfam,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measured
 ENS,E-1perfam,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.9786324786324786,measured
 ENS,E-1perfam,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9786324786324786,measured
 ENS,E-1perfam,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.47594603785523476,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,aupr,0.024862350373907542,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,aupr_11pt,0.060856691003841216,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,aupr_ci_lo,0.019976042744639124,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,aupr_ci_hi,0.028044389820993727,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,dice_fixed,0.054065222963771656,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,dice_valopt,0.06901354278426688,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,iou_valopt,0.03574004495286658,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,lesion_precision,0.16883583806716043,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,lesion_recall_small,0.7354838709677419,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,lesion_recall_medium,0.721881390593047,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,lesion_recall_large,0.6274271844660194,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,img_auc,0.6622543991162313,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,MA,img_auc_top100,0.6726307898682238,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,aupr,0.4142381064668134,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,aupr_11pt,0.4900031205233544,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,aupr_ci_lo,0.37001446667192883,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,aupr_ci_hi,0.4595474497743857,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,dice_fixed,0.31381564390990035,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,dice_valopt,0.4000073743474364,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,iou_valopt,0.250005761235488,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,lesion_precision,0.6002588306942753,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,lesion_recall_small,0.28363047001620745,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,lesion_recall_medium,0.3879817112998041,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,lesion_recall_large,0.7743522466382421,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,img_auc,0.9114414738440636,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,HE,img_auc_top100,0.9147983854853534,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,aupr,0.41943166715698765,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,aupr_11pt,0.48948959766836386,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,aupr_ci_lo,0.3584380365429665,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,aupr_ci_hi,0.4739734654083873,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,dice_fixed,0.404161257019506,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,dice_valopt,0.400212024986161,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,iou_valopt,0.25016566647383315,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,lesion_precision,0.7616536339940595,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,lesion_recall_small,0.4015047879616963,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,lesion_recall_medium,0.7304668889947594,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,lesion_recall_large,0.8025323275862069,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,img_auc,0.9145062202426663,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,EX,img_auc_top100,0.9232683151589617,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,aupr,0.26665147298696057,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,aupr_11pt,0.30731229083049005,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,aupr_ci_lo,0.21153487481637184,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,aupr_ci_hi,0.3272768958977718,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,dice_fixed,0.33611249706401897,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,dice_valopt,0.34570764779022856,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,iou_valopt,0.20897615063530883,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,lesion_precision,0.28023598820059,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,lesion_recall_medium,0.20930232558139536,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,lesion_recall_large,0.7318611987381703,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,img_auc,0.8327896931784331,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,SE,img_auc_top100,0.8350461721775394,measured
+ENS,E-1perfam,ensemble,DDR,0,FGADR,any,aupr_any_lesion,0.4033038024640675,measured
 ENS,E-1perfam,ensemble,DDR,0,IDRiD,MA,aupr,0.4603083252920669,measured
 ENS,E-1perfam,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.46423318610259917,measured
 ENS,E-1perfam,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.4241663562298929,measured
@@ -55379,6 +55532,59 @@ ENS,E-1perfam,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.4047619047619047
 ENS,E-1perfam,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.7341269841269841,measured
 ENS,E-1perfam,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.7433862433862434,measured
 ENS,E-1perfam,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.6238987574053751,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,aupr,0.11804025927139365,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.22002707289715132,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.08947876762559817,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.11477388047987866,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,dice_fixed,0.03444231289029828,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,dice_valopt,0.05162210937172115,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,iou_valopt,0.026494916422540066,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,lesion_precision,0.5592820884699057,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.22340425531914893,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.5943649373881932,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,img_auc,0.8695477655873696,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8432566229595934,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,aupr,0.28425084016121305,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.39196450710379116,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.21494028874513407,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.31771028500185683,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,dice_fixed,0.11715360325591187,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,dice_valopt,0.16299061271776438,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,iou_valopt,0.08872606413781092,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,lesion_precision,0.7205750224618149,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.17142857142857143,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.5703933747412008,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,img_auc,0.9397428926518564,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.9425198073636789,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,aupr,0.42540690771275697,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.49464563933544686,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.32662247887979434,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.46898054448050464,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,dice_fixed,0.1514341637474071,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,dice_valopt,0.14908182471705853,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,iou_valopt,0.08054479485257043,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,lesion_precision,0.8261755219826854,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.7193486590038314,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,img_auc,0.9135802469135802,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.9094299973732598,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,aupr,0.2841168215489053,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.33894219836806555,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.2354252996959803,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.3227037331062081,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,dice_fixed,0.2908621859069093,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,dice_valopt,0.3085588674636519,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,iou_valopt,0.18242365136347488,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,lesion_precision,0.3543307086614173,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.7840909090909091,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,img_auc,0.9038485528942115,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.9042955755156353,measured
+ENS,E-1perfam,ensemble,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.39127730912969716,measured
 ENS,E-1perfam,ensemble,DDR,0,TJDR-std,MA,aupr,0.4042435330988008,measured
 ENS,E-1perfam,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.40601420078136463,measured
 ENS,E-1perfam,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.2972282223781136,measured
@@ -55538,271 +55744,271 @@ ENS,E-all,ensemble,DDR,0,DDR,SE,lesion_recall_large,0.7633587786259542,measured
 ENS,E-all,ensemble,DDR,0,DDR,SE,img_auc,0.8579234972677595,measured
 ENS,E-all,ensemble,DDR,0,DDR,SE,img_auc_top100,0.8545407233931823,measured
 ENS,E-all,ensemble,DDR,0,DDR,any,aupr_any_lesion,0.6306118597698078,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr,0.055965459829564426,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr_11pt,0.05151045934472474,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr_ci_lo,0.028914562805628746,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr_ci_hi,0.08238895562915048,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,dice_fixed,0.12466977985323549,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,dice_valopt,0.09714370123678945,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,iou_valopt,0.0510515172900494,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,lesion_precision,0.06973180076628352,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr,0.0551048053378182,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr_11pt,0.05076065555035168,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr_ci_lo,0.028625364127560136,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,aupr_ci_hi,0.08105338974744489,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,dice_fixed,0.12403853938952311,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,dice_valopt,0.09867282169648009,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,iou_valopt,0.05189681335356601,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,lesion_precision,0.07054263565891473,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,lesion_recall_small,0.6363636363636364,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,lesion_recall_medium,0.9318181818181818,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,lesion_recall_large,1.0,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,img_auc,0.5619047619047619,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,img_auc_top100,0.7952380952380952,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr,0.468213476373198,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr_11pt,0.48745060097246684,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr_ci_lo,0.3632436566620567,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr_ci_hi,0.5513754504040008,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,dice_fixed,0.2611309666257351,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,dice_valopt,0.3779453902987472,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,iou_valopt,0.2330041097496443,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,lesion_precision,0.37920489296636084,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,img_auc,0.5380952380952381,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,MA,img_auc_top100,0.7857142857142857,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr,0.4637671284665673,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr_11pt,0.4864513995680495,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr_ci_lo,0.3595767920546262,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,aupr_ci_hi,0.5466472873595973,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,dice_fixed,0.2606460222143726,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,dice_valopt,0.37661467736471277,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,iou_valopt,0.23199339806358696,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,lesion_precision,0.3758793969849246,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,lesion_recall_small,0.1111111111111111,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,lesion_recall_medium,0.7777777777777778,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,lesion_recall_large,0.9928057553956835,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,img_auc,0.9883720930232558,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,img_auc_top100,0.9896640826873384,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr,0.501480990838914,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr_11pt,0.5280575572148123,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr_ci_lo,0.39379200468083275,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr_ci_hi,0.5463093976119437,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,dice_fixed,0.1793799720474368,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,dice_valopt,0.2010591467104914,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,iou_valopt,0.11176529030559205,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,lesion_precision,0.8099489795918368,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,img_auc,0.9870801033591732,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,HE,img_auc_top100,0.9883720930232558,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr,0.49498835132234664,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr_11pt,0.5331508217527037,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr_ci_lo,0.38285629328354776,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,aupr_ci_hi,0.5373883188652607,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,dice_fixed,0.17774399693020648,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,dice_valopt,0.1991444597219494,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,iou_valopt,0.11058325072048904,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,lesion_precision,0.8195679796696315,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,lesion_recall_small,0.2,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,lesion_recall_medium,0.7777777777777778,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,lesion_recall_large,0.9516129032258065,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,img_auc,0.978048780487805,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,img_auc_top100,0.975609756097561,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr,0.32662853170363254,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr_11pt,0.361026145013247,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr_ci_lo,0.12846613659740855,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr_ci_hi,0.44231620484819073,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,dice_fixed,0.34921322752755735,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,dice_valopt,0.3865933829076409,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,iou_valopt,0.2396131135276672,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,lesion_precision,0.30357142857142855,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,img_auc,0.976829268292683,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,EX,img_auc_top100,0.974390243902439,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr,0.3266306070669539,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr_11pt,0.3548291425580459,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr_ci_lo,0.12848703986110277,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,aupr_ci_hi,0.44243929675913496,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,dice_fixed,0.3567478464319898,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,dice_valopt,0.38647670977118187,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,iou_valopt,0.2395234776663029,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,lesion_precision,0.2698412698412698,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_small,1.0,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_medium,,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.967948717948718,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9700854700854701,measured
-ENS,E-all,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.48686879850176057,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr,0.4528283129070454,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.45893352936162474,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.41336772715785775,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_ci_hi,0.48977438506654036,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,dice_fixed,0.3237759532304518,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,dice_valopt,0.4749500991158455,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,iou_valopt,0.3114324972845092,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_precision,0.6931818181818182,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_recall_small,0.4065040650406504,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_recall_medium,0.699825479930192,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_recall_large,0.6,measured
+ENS,E-all,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.4762495765252802,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr,0.4533825933716109,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.46109909148517775,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.41503435226476637,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_ci_hi,0.48998843098478706,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,dice_fixed,0.3133160025899475,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,dice_valopt,0.47237245160963387,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,iou_valopt,0.30921964722838646,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_precision,0.7044392523364486,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_recall_small,0.40853658536585363,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_recall_medium,0.68760907504363,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,MA,lesion_recall_large,0.55,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,MA,img_auc,,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,MA,img_auc_top100,,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr,0.6930400253587556,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr_11pt,0.6700971469267736,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr_ci_lo,0.5886986298634502,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr_ci_hi,0.7611768140362032,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,dice_fixed,0.5444427162174402,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,dice_valopt,0.6527767546552077,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,iou_valopt,0.48453495507208516,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,lesion_precision,0.37986270022883295,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr,0.6880692516046485,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr_11pt,0.6651041914438419,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr_ci_lo,0.5830682122518773,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,aupr_ci_hi,0.7557640648839378,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,dice_fixed,0.5387059119788724,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,dice_valopt,0.6496713828690752,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,iou_valopt,0.4811209468769516,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,lesion_precision,0.38629518072289154,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,HE,lesion_recall_small,0.25,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,lesion_recall_medium,0.7058823529411765,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,HE,lesion_recall_large,0.941025641025641,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,lesion_recall_medium,0.6985294117647058,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,HE,lesion_recall_large,0.9461538461538461,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,HE,img_auc,,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,HE,img_auc_top100,,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr,0.8584659517177946,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr_11pt,0.8337320121595307,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr_ci_lo,0.7846402941654805,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr_ci_hi,0.8953371540390002,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,dice_fixed,0.7001749956779428,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,dice_valopt,0.7376133686951123,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,iou_valopt,0.5843006812680402,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_precision,0.9637964774951077,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_recall_small,0.19636720667648502,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_recall_medium,0.7346805736636245,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_recall_large,0.9412844036697248,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr,0.8575651192728597,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr_11pt,0.8332759089429556,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr_ci_lo,0.780138388216217,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,aupr_ci_hi,0.8951861778123414,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,dice_fixed,0.6973049955416216,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,dice_valopt,0.7351542532627326,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,iou_valopt,0.5812204809630737,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_precision,0.9650145772594753,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_recall_small,0.20029455081001474,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_recall_medium,0.7327249022164276,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,EX,lesion_recall_large,0.9376146788990826,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,EX,img_auc,,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,EX,img_auc_top100,,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr,0.7098815443655864,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr_11pt,0.706333068016508,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr_ci_lo,0.502285115865235,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr_ci_hi,0.8132833340959044,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,dice_fixed,0.6124922191098662,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,dice_valopt,0.637279797260376,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,iou_valopt,0.4676527110841854,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,SE,lesion_precision,0.4,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr,0.7098774435212597,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr_11pt,0.7105381144422179,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr_ci_lo,0.502326257515316,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,aupr_ci_hi,0.8133089806495805,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,dice_fixed,0.6210372517670194,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,dice_valopt,0.6363606759689353,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,iou_valopt,0.46666348260461177,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,SE,lesion_precision,0.39759036144578314,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,SE,lesion_recall_small,,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,SE,lesion_recall_medium,,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,SE,lesion_recall_large,0.8421052631578947,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,SE,img_auc,0.8131868131868132,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,SE,img_auc_top100,0.8076923076923077,measured
-ENS,E-all,ensemble,DDR,0,IDRiD,any,aupr_any_lesion,0.7918041512142711,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr,0.4311144304903532,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr_11pt,0.47319299074575155,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr_ci_lo,0.3454373573688073,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr_ci_hi,0.5045236671321172,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,dice_fixed,0.15973236745878752,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,dice_valopt,0.2773726062202983,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,iou_valopt,0.16101718062877277,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,lesion_precision,0.7986206896551724,measured
+ENS,E-all,ensemble,DDR,0,IDRiD,any,aupr_any_lesion,0.790353292125263,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr,0.4277194887588877,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr_11pt,0.47245005301337895,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr_ci_lo,0.34114555551905734,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,aupr_ci_hi,0.5016029373581887,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,dice_fixed,0.15950411079700183,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,dice_valopt,0.2757781528437414,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,iou_valopt,0.15994354398105992,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,lesion_precision,0.799721835883171,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,lesion_recall_small,0.0,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,lesion_recall_medium,0.47681451612903225,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,lesion_recall_medium,0.4747983870967742,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,lesion_recall_large,0.5351351351351351,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,img_auc,0.8813559322033898,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,img_auc,0.864406779661017,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,MA,img_auc_top100,0.7457627118644068,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr,0.5601749507631355,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr_11pt,0.5954608565177758,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr_ci_lo,0.34797023730437393,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr_ci_hi,0.6857615296136184,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,dice_fixed,0.47941358198056505,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,dice_valopt,0.5507677737942231,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,iou_valopt,0.38004107542942495,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,lesion_precision,0.2916666666666667,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr,0.5582627314945343,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr_11pt,0.5948493553753073,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr_ci_lo,0.3476493279085689,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,aupr_ci_hi,0.6838943567193791,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,dice_fixed,0.4770510290386242,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,dice_valopt,0.5487989857598877,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,iou_valopt,0.3781688273193866,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,lesion_precision,0.2951388888888889,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,lesion_recall_small,,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,lesion_recall_medium,0.2727272727272727,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,lesion_recall_large,0.7378640776699029,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,img_auc,0.8197997775305895,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,img_auc_top100,0.828698553948832,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr,0.7560403496020318,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr_11pt,0.6825577507277854,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr_ci_lo,0.5245188109163985,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr_ci_hi,0.8434640226135217,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,dice_fixed,0.3813131807277011,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,dice_valopt,0.42730701438508045,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,iou_valopt,0.27170402506628105,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,lesion_precision,0.9159090909090909,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,img_auc,0.8231368186874305,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,HE,img_auc_top100,0.8253615127919911,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr,0.7557663572729438,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr_11pt,0.6807413285488918,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr_ci_lo,0.5281480115263619,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,aupr_ci_hi,0.8402620298652924,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,dice_fixed,0.37635979484279397,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,dice_valopt,0.42203957382039575,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,iou_valopt,0.26745890886642487,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,lesion_precision,0.9223744292237442,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,lesion_recall_small,0.0,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,lesion_recall_medium,0.1825,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,lesion_recall_large,0.7071428571428572,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,img_auc,0.8320355951056729,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,img_auc_top100,0.8387096774193549,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr,0.2418437485526187,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr_11pt,0.2915248173049588,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr_ci_lo,0.0700308577025914,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr_ci_hi,0.38314811264657944,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,dice_fixed,0.1721132897603486,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,dice_valopt,0.2913567358301796,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,iou_valopt,0.1705193482688391,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,lesion_precision,0.4375,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,lesion_recall_medium,0.18,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,lesion_recall_large,0.6964285714285714,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,img_auc,0.8298109010011123,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,EX,img_auc_top100,0.8353726362625138,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr,0.24184939608191514,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr_11pt,0.2900514061731279,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr_ci_lo,0.0700644777141653,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,aupr_ci_hi,0.3832141313469179,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,dice_fixed,0.18311370818675093,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,dice_valopt,0.2942412600029717,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,iou_valopt,0.1724987555998009,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,lesion_precision,0.4117647058823529,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_small,,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_medium,0.0,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.4523809523809524,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.8108465608465608,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.8095238095238094,measured
-ENS,E-all,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.6247829851149307,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr,0.42955441601474337,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.4348864301750362,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.2940988972456955,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_ci_hi,0.5226924622413032,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,dice_fixed,0.4048135473401777,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,dice_valopt,0.478834027611855,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,iou_valopt,0.3147809222027972,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,lesion_precision,0.3957703927492447,measured
+ENS,E-all,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.615979867516582,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr,0.42820924133739235,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.4353627192142903,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.2917551829839655,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_ci_hi,0.5227737630535041,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,dice_fixed,0.4046911398505904,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,dice_valopt,0.4778166928217333,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,iou_valopt,0.3139022025589557,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,lesion_precision,0.3981762917933131,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,MA,lesion_recall_small,0.55,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,MA,lesion_recall_medium,0.8846153846153846,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,MA,lesion_recall_large,0.8709677419354839,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,img_auc,0.8953168044077137,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,MA,img_auc_top100,0.9022038567493115,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr,0.7959198967447847,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr_11pt,0.7882547907521913,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr_ci_lo,0.7175103727635512,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr_ci_hi,0.8510518448298188,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,dice_fixed,0.7009588182131302,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,dice_valopt,0.7036876161975959,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,iou_valopt,0.5428379956793336,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,lesion_precision,0.35826771653543305,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,img_auc,0.8939393939393941,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,MA,img_auc_top100,0.9022038567493114,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr,0.7916455929458044,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr_11pt,0.7852547451788828,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr_ci_lo,0.7124040543355483,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,aupr_ci_hi,0.8477916620460721,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,dice_fixed,0.6995397395599461,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,dice_valopt,0.7044942455846837,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,iou_valopt,0.5437986231891605,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,lesion_precision,0.3532818532818533,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,HE,lesion_recall_small,0.0,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,HE,lesion_recall_medium,0.84,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,lesion_recall_large,0.9166666666666666,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,img_auc,0.9049707602339182,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,HE,img_auc_top100,0.9093567251461989,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr,0.7552321813703129,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr_11pt,0.7319039118198519,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr_ci_lo,0.6789083301947286,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr_ci_hi,0.8061273884846474,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,dice_fixed,0.5817954025178474,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,dice_valopt,0.6201342208909462,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,iou_valopt,0.4494163347476825,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,lesion_precision,0.711340206185567,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,lesion_recall_large,0.9277777777777778,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,img_auc,0.9064327485380117,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,HE,img_auc_top100,0.9078947368421053,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr,0.7541377175593409,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr_11pt,0.7291176058444387,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr_ci_lo,0.6749244226452878,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,aupr_ci_hi,0.8051317353131113,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,dice_fixed,0.5763928234183192,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,dice_valopt,0.6141105908926437,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,iou_valopt,0.4431165913073749,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,lesion_precision,0.7314487632508834,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,EX,lesion_recall_small,0.8333333333333334,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,lesion_recall_medium,0.9545454545454546,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,lesion_recall_medium,0.9431818181818182,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,EX,lesion_recall_large,0.8346456692913385,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,EX,img_auc,0.9649859943977591,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,EX,img_auc_top100,0.9677871148459384,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr,0.5751996181291688,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr_11pt,0.5622747415302861,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr_ci_lo,0.28592383772241636,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr_ci_hi,0.7386455421672866,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,dice_fixed,0.475787146037246,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,dice_valopt,0.515652185374598,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,iou_valopt,0.3473930976916827,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,lesion_precision,0.3924050632911392,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,EX,img_auc_top100,0.969187675070028,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr,0.5751985046675135,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr_11pt,0.5646627836338527,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr_ci_lo,0.2859428229441954,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,aupr_ci_hi,0.7386690912339854,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,dice_fixed,0.4807309224639902,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,dice_valopt,0.5176394523736402,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,iou_valopt,0.34919942601178505,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,lesion_precision,0.40476190476190477,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,SE,lesion_recall_small,,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,SE,lesion_recall_medium,0.0,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,SE,lesion_recall_large,0.7894736842105263,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,SE,lesion_recall_large,0.8157894736842105,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,SE,img_auc,0.9084249084249084,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,SE,img_auc_top100,0.9084249084249084,measured
-ENS,E-all,ensemble,DDR,0,TJDR-std,any,aupr_any_lesion,0.7664455690421431,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr,0.14656140516009578,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr_11pt,0.15390848258336576,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr_ci_lo,0.06364483867777347,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr_ci_hi,0.31300991765340747,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,dice_fixed,0.22317878079776984,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,dice_valopt,0.23129503450377692,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,iou_valopt,0.13077084025649546,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,lesion_precision,0.14158163265306123,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,lesion_recall_small,0.9333333333333333,measured
+ENS,E-all,ensemble,DDR,0,TJDR-std,any,aupr_any_lesion,0.7639238724154729,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr,0.14529306818091287,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr_11pt,0.15645207021643157,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr_ci_lo,0.06386686468218117,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,aupr_ci_hi,0.3102646889121488,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,dice_fixed,0.2178276144994004,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,dice_valopt,0.2327922150221569,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,iou_valopt,0.13172883064516128,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,lesion_precision,0.1423027166882277,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,lesion_recall_small,0.9238095238095239,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,lesion_recall_medium,0.5,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,lesion_recall_large,,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,img_auc,0.9612403100775194,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,MA,img_auc_top100,0.965891472868217,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr,0.503537718492375,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr_11pt,0.5159087908316261,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr_ci_lo,0.3041411223869793,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr_ci_hi,0.6443361956521444,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,dice_fixed,0.5084066254610552,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,dice_valopt,0.42783187684176827,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,iou_valopt,0.27212857870589763,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,lesion_precision,0.1965918536990856,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,lesion_recall_small,0.9416666666666667,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr,0.4937378109378962,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr_11pt,0.5043208432439222,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr_ci_lo,0.29845939974426416,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,aupr_ci_hi,0.6363112960615692,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,dice_fixed,0.5033174224343675,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,dice_valopt,0.39566518732583345,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,iou_valopt,0.24662257790586964,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,lesion_precision,0.18975784041286226,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,lesion_recall_small,0.95,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,lesion_recall_medium,0.9953703703703703,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,lesion_recall_large,0.9626865671641791,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,img_auc,0.9490909090909091,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,img_auc_top100,0.9551515151515152,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr,0.3064150826937546,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr_11pt,0.3222140966337702,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr_ci_lo,0.20104389936644854,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr_ci_hi,0.42737485637570305,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,dice_fixed,0.26511183076326233,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,dice_valopt,0.2922935590971987,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,iou_valopt,0.17116147839945714,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_precision,0.323943661971831,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_recall_small,0.801980198019802,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_recall_medium,0.8282828282828283,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_recall_large,0.6829268292682927,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,img_auc,0.9454545454545454,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,HE,img_auc_top100,0.9503030303030303,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr,0.3052179701481782,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr_11pt,0.3231767398015268,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr_ci_lo,0.2008139847234325,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,aupr_ci_hi,0.425222569227977,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,dice_fixed,0.2624647106798553,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,dice_valopt,0.2900100943230531,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,iou_valopt,0.16959754754122044,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_precision,0.3363309352517986,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_recall_small,0.8118811881188119,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_recall_medium,0.8181818181818182,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,lesion_recall_large,0.6585365853658537,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,img_auc,0.7481884057971014,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,img_auc_top100,0.7518115942028986,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr,0.1207627743595343,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr_11pt,0.12472318490679644,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr_ci_lo,0.04079277691118474,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr_ci_hi,0.30063910431113233,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,dice_fixed,0.11749883959949606,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,dice_valopt,0.19455923348902368,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,iou_valopt,0.10776273422971964,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,lesion_precision,0.09125475285171103,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,EX,img_auc_top100,0.7536231884057971,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr,0.12076535088916603,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr_11pt,0.124996555004786,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr_ci_lo,0.04081130698746439,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,aupr_ci_hi,0.30066958109927305,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,dice_fixed,0.11860022614894362,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,dice_valopt,0.1937434143117527,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,iou_valopt,0.10726239884569315,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,lesion_precision,0.10320284697508897,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,lesion_recall_small,0.045454545454545456,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,lesion_recall_medium,0.8,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,lesion_recall_large,0.7368421052631579,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,img_auc,0.694047619047619,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,lesion_recall_large,0.7631578947368421,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,img_auc,0.6934523809523809,measured
 ENS,E-all,ensemble,DDR,0,TJDR-uwf,SE,img_auc_top100,0.694047619047619,measured
-ENS,E-all,ensemble,DDR,0,TJDR-uwf,any,aupr_any_lesion,0.4250584644015251,measured
+ENS,E-all,ensemble,DDR,0,TJDR-uwf,any,aupr_any_lesion,0.4150140579576236,measured
 ENS,E-fam:auto,ensemble,DDR,0,DDR,MA,aupr,0.1667546273083895,measured
 ENS,E-fam:auto,ensemble,DDR,0,DDR,MA,aupr_11pt,0.21754580318067257,measured
 ENS,E-fam:auto,ensemble,DDR,0,DDR,MA,aupr_ci_lo,0.11675267887678531,measured
@@ -55909,6 +56115,59 @@ ENS,E-fam:auto,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,0.928571428571428
 ENS,E-fam:auto,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.9807692307692308,measured
 ENS,E-fam:auto,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9829059829059829,measured
 ENS,E-fam:auto,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.4978924084230854,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,aupr,0.02072935366664194,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,aupr_11pt,0.024701123601843827,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,aupr_ci_lo,0.015269210390475286,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,aupr_ci_hi,0.022141010740294842,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,dice_fixed,0.05407500367745002,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,dice_valopt,0.07598056714190894,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,iou_valopt,0.03949054039908598,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,lesion_precision,0.16024754756731846,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,lesion_recall_small,0.7548387096774194,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,lesion_recall_medium,0.7418200408997955,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,lesion_recall_large,0.6529126213592233,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,img_auc,0.6097115915726348,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,MA,img_auc_top100,0.6696618795865225,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,aupr,0.4174409094125147,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,aupr_11pt,0.43503902092582036,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,aupr_ci_lo,0.34682752811937606,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,aupr_ci_hi,0.43633623807321087,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,dice_fixed,0.35016668108352683,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,dice_valopt,0.39917284502766803,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,iou_valopt,0.24935411908012464,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,lesion_precision,0.6176291263827193,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,lesion_recall_small,0.24311183144246354,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,lesion_recall_medium,0.2871761376006967,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,lesion_recall_large,0.7463102656608724,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,img_auc,0.9003716580745714,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,HE,img_auc_top100,0.9250089917276106,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,aupr,0.40436989243817223,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,aupr_11pt,0.4249342652163607,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,aupr_ci_lo,0.32137546952546103,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,aupr_ci_hi,0.4383922722853808,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,dice_fixed,0.4140966127344561,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,dice_valopt,0.41346702203373686,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,iou_valopt,0.2606104176691933,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,lesion_precision,0.7508234614273331,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,lesion_recall_small,0.3854309165526676,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,lesion_recall_medium,0.7591710338256312,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,lesion_recall_large,0.8442887931034483,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,img_auc,0.9063047150975272,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,EX,img_auc_top100,0.9237137152511136,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,aupr,0.25581807585050453,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,aupr_11pt,0.2852334235244223,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,aupr_ci_lo,0.19568143032812813,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,aupr_ci_hi,0.2884113389356037,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,dice_fixed,0.33858383701070766,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,dice_valopt,0.36316989977409025,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,iou_valopt,0.22187391331816708,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,lesion_precision,0.33271719038817005,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,lesion_recall_medium,0.20930232558139536,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,lesion_recall_large,0.7003154574132492,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,img_auc,0.8138367590110218,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,SE,img_auc_top100,0.8182231158772715,measured
+ENS,E-fam:auto,ensemble,DDR,0,FGADR,any,aupr_any_lesion,0.40095731530002043,measured
 ENS,E-fam:auto,ensemble,DDR,0,IDRiD,MA,aupr,0.37742860622353813,measured
 ENS,E-fam:auto,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.39042361290005156,measured
 ENS,E-fam:auto,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.2865523958242068,measured
@@ -56015,6 +56274,59 @@ ENS,E-fam:auto,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.452380952380952
 ENS,E-fam:auto,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.8604497354497354,measured
 ENS,E-fam:auto,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.865079365079365,measured
 ENS,E-fam:auto,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.630210454869448,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,aupr,0.06784957362477384,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.06479885845614268,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.03797217534808868,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.04774367850567595,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,dice_fixed,0.03285103948891606,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,dice_valopt,0.06841150290454198,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,iou_valopt,0.035417224221107546,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,lesion_precision,0.5279065773656191,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.22340425531914893,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.5923524150268337,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,img_auc,0.8314322986352689,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8302281241637677,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,aupr,0.24656123344569658,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.2394282363489159,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.14059634833586096,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.20188800404221766,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,dice_fixed,0.11891321555493922,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,dice_valopt,0.14141835919550577,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,iou_valopt,0.07608939854495296,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,lesion_precision,0.7461005199306759,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.08571428571428572,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.4358178053830228,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,img_auc,0.9307421935684325,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.9272370669566569,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,aupr,0.3410972722336472,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.32376891699438864,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.19370180062144873,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.29262082067691736,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,dice_fixed,0.14523847803458334,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,dice_valopt,0.14468663332223364,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,iou_valopt,0.07798501100723382,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,lesion_precision,0.8446153846153847,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.6848659003831418,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,img_auc,0.9091060327466947,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.9080728482619737,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,aupr,0.2510355469029601,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.25864947468573807,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.1917900026815254,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.2578550458584234,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,dice_fixed,0.28076554822554,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,dice_valopt,0.30719851701089784,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,iou_valopt,0.18147344511327768,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,lesion_precision,0.41882673942701226,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.7414772727272727,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,img_auc,0.9041084497671323,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.905387142381903,measured
+ENS,E-fam:auto,ensemble,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.32487446257800956,measured
 ENS,E-fam:auto,ensemble,DDR,0,TJDR-std,MA,aupr,0.3619294166507094,measured
 ENS,E-fam:auto,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.38583044337160793,measured
 ENS,E-fam:auto,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.22812217034247684,measured
@@ -56227,6 +56539,59 @@ ENS,E-fam:foundation,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measure
 ENS,E-fam:foundation,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.9615384615384616,measured
 ENS,E-fam:foundation,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9615384615384616,measured
 ENS,E-fam:foundation,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.497364712003555,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,aupr,0.02738075779080278,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,aupr_11pt,0.060443492600965223,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,aupr_ci_lo,0.02240031489145224,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,aupr_ci_hi,0.03129561831322778,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,dice_fixed,0.07042959209567758,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,dice_valopt,0.07162425541578098,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,iou_valopt,0.037142271477400284,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,lesion_precision,0.17561151079136691,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,lesion_recall_small,0.7763440860215054,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,lesion_recall_medium,0.75920245398773,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,lesion_recall_large,0.6201456310679612,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,img_auc,0.6800284068492071,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,MA,img_auc_top100,0.6876627475735815,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,aupr,0.43693279547525526,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,aupr_11pt,0.4828658582376051,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,aupr_ci_lo,0.3926050776794648,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,aupr_ci_hi,0.4808319420021586,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,dice_fixed,0.4000890270309701,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,dice_valopt,0.43565217782300364,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,iou_valopt,0.2784880521115414,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,lesion_precision,0.5886580895565299,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,lesion_recall_small,0.3581847649918963,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,lesion_recall_medium,0.41236664489440455,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,lesion_recall_large,0.8107576254509675,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,img_auc,0.9170962714302843,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,HE,img_auc_top100,0.9160971905846622,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,aupr,0.4382095058490022,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,aupr_11pt,0.49881773635553084,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,aupr_ci_lo,0.3794615697209855,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,aupr_ci_hi,0.4893079200906816,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,dice_fixed,0.4226674013484347,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,dice_valopt,0.4082147693230001,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,iou_valopt,0.2564509089893885,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,lesion_precision,0.7713118306196991,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,lesion_recall_small,0.42818057455540354,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,lesion_recall_medium,0.7753692234397332,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,lesion_recall_large,0.8313577586206896,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,img_auc,0.9179004761173402,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,EX,img_auc_top100,0.9265550606665643,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,aupr,0.30617909079171224,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,aupr_11pt,0.3330263990208485,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,aupr_ci_lo,0.2484417212919792,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,aupr_ci_hi,0.36880019484763493,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,dice_fixed,0.38274939799369123,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,dice_valopt,0.3781334775768737,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,iou_valopt,0.23314710079342954,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,lesion_precision,0.21751313485113835,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,lesion_recall_medium,0.2558139534883721,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,lesion_recall_large,0.832807570977918,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,img_auc,0.8484807864164433,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,SE,img_auc_top100,0.8519213583556747,measured
+ENS,E-fam:foundation,ensemble,DDR,0,FGADR,any,aupr_any_lesion,0.42424320175311964,measured
 ENS,E-fam:foundation,ensemble,DDR,0,IDRiD,MA,aupr,0.44016996070105796,measured
 ENS,E-fam:foundation,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.44202359382999495,measured
 ENS,E-fam:foundation,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.40157513880339485,measured
@@ -56333,6 +56698,59 @@ ENS,E-fam:foundation,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.333333333
 ENS,E-fam:foundation,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.8108465608465609,measured
 ENS,E-fam:foundation,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.8214285714285714,measured
 ENS,E-fam:foundation,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.6221131474123784,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,aupr,0.11786673837713245,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.21966871297091828,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.09417414092949326,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.12206306375284814,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,dice_fixed,0.05240674241244634,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,dice_valopt,0.05435371852665105,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,iou_valopt,0.027936074015206643,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,lesion_precision,0.5630037350108119,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.1595744680851064,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.5565742397137746,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,img_auc,0.8576063687449826,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8065962001605567,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,aupr,0.31104279562243886,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.3704072714989363,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.23644162380111067,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.35212310259111496,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,dice_fixed,0.13550543061241047,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,dice_valopt,0.16100194858000538,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,iou_valopt,0.08754873255884456,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,lesion_precision,0.746956746956747,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.17142857142857143,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.4886128364389234,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,img_auc,0.9382864688519497,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.9458404536274663,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,aupr,0.4098903148626685,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.4930209095178869,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.3010916130689721,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.44940671694909223,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,dice_fixed,0.1675606232006284,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,dice_valopt,0.1553465775683095,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,iou_valopt,0.08421450646459425,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,lesion_precision,0.8048900557925829,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.7346743295019157,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,img_auc,0.9131424568776814,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.9101129498292619,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,aupr,0.33865945617741006,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.3749279062133096,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.2776613424464203,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.3830085055856347,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,dice_fixed,0.33441458025137594,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,dice_valopt,0.35899367526580556,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,iou_valopt,0.21876434591070473,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,lesion_precision,0.36156351791530944,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.8323863636363636,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,img_auc,0.9031520292747837,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.9056678310046573,measured
+ENS,E-fam:foundation,ensemble,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.40679713055797373,measured
 ENS,E-fam:foundation,ensemble,DDR,0,TJDR-std,MA,aupr,0.45596694856975833,measured
 ENS,E-fam:foundation,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.45849540447167586,measured
 ENS,E-fam:foundation,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.319174861828185,measured
@@ -56863,6 +57281,59 @@ ENS,E-fam:general,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measured
 ENS,E-fam:general,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.9722222222222222,measured
 ENS,E-fam:general,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9743589743589743,measured
 ENS,E-fam:general,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.4803742473064989,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,aupr,0.024583543972701283,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,aupr_11pt,0.07326357054352992,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,aupr_ci_lo,0.020644493455229285,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,aupr_ci_hi,0.02841272864245788,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,dice_fixed,0.010582338794112987,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,dice_valopt,0.06538766613742811,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,iou_valopt,0.03379884692809625,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,lesion_precision,0.14641297973545317,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,lesion_recall_small,0.7354838709677419,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,lesion_recall_medium,0.679959100204499,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,lesion_recall_large,0.5800970873786407,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,img_auc,0.6558529945553538,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,MA,img_auc_top100,0.6636352876193483,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,aupr,0.4050904430975078,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,aupr_11pt,0.4394160131093276,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,aupr_ci_lo,0.36840924218965687,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,aupr_ci_hi,0.44748094483574075,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,dice_fixed,0.24458826275519924,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,dice_valopt,0.3972064142772867,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,iou_valopt,0.24782131511849229,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,lesion_precision,0.49799813158948353,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,lesion_recall_small,0.26580226904376014,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,lesion_recall_medium,0.3622904419769214,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,lesion_recall_large,0.7645129550672352,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,img_auc,0.9016205091315989,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,HE,img_auc_top100,0.9041881469048476,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,aupr,0.3843137242732142,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,aupr_11pt,0.4624211714402031,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,aupr_ci_lo,0.32447968392812576,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,aupr_ci_hi,0.4467482099979969,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,dice_fixed,0.31314905363965684,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,dice_valopt,0.40408123727680634,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,iou_valopt,0.25319662047666064,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,lesion_precision,0.7133656421374824,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,lesion_recall_small,0.32455540355677154,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,lesion_recall_medium,0.6867555979037637,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,lesion_recall_large,0.8041487068965517,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,img_auc,0.913039471663339,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,EX,img_auc_top100,0.9131009061588082,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,aupr,0.2589206340884238,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,aupr_11pt,0.30598576818124745,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,aupr_ci_lo,0.2086196123148028,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,aupr_ci_hi,0.3198104994568368,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,dice_fixed,0.24886199604427545,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,dice_valopt,0.34669177209176644,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,iou_valopt,0.20969578826230184,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,lesion_precision,0.25310630464795214,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,lesion_recall_small,0.6153846153846154,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,lesion_recall_medium,0.23255813953488372,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,lesion_recall_large,0.7365930599369085,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,img_auc,0.829542746499851,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,SE,img_auc_top100,0.8313821864760202,measured
+ENS,E-fam:general,ensemble,DDR,0,FGADR,any,aupr_any_lesion,0.38847663058453114,measured
 ENS,E-fam:general,ensemble,DDR,0,IDRiD,MA,aupr,0.4282260178294029,measured
 ENS,E-fam:general,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.44155700418676413,measured
 ENS,E-fam:general,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.39276617228140365,measured
@@ -56969,6 +57440,59 @@ ENS,E-fam:general,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.404761904761
 ENS,E-fam:general,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.7195767195767195,measured
 ENS,E-fam:general,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.7328042328042329,measured
 ENS,E-fam:general,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.6059687483881213,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,aupr,0.10982081503551107,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.2545771113947763,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.09080539737043271,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.11743864660439432,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,dice_fixed,0.003936728793563511,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,dice_valopt,0.0504962690729076,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,iou_valopt,0.025902114610929186,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,lesion_precision,0.5365509952439669,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.22340425531914893,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.5825134168157424,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,img_auc,0.8334058067968958,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8221166711265724,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,aupr,0.2796257081938338,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.3731447703414552,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.22505060260045567,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.33502299320076273,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,dice_fixed,0.08345886764858028,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,dice_valopt,0.16919155885972886,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,iou_valopt,0.09241357809905679,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,lesion_precision,0.6781386330586524,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.08571428571428572,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.49145962732919257,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,img_auc,0.9252077831287866,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.928674071772565,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,aupr,0.3908724260961324,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.4769910742882806,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.30368324430822496,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.46332805695770946,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,dice_fixed,0.1078688131036625,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,dice_valopt,0.15498566700122784,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,iou_valopt,0.08400241896729535,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,lesion_precision,0.802093620383172,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.685823754789272,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,img_auc,0.9015847999299536,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.8954207162244987,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,aupr,0.2843990710919448,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.3497873613126799,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.23123000172929192,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.33198861199103324,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,dice_fixed,0.2504573778690306,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,dice_valopt,0.3181203542587479,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,iou_valopt,0.18914573053088066,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,lesion_precision,0.31210855949895616,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.7784090909090909,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,img_auc,0.8957189787092481,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.8968729208250166,measured
+ENS,E-fam:general,ensemble,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.3691367228750166,measured
 ENS,E-fam:general,ensemble,DDR,0,TJDR-std,MA,aupr,0.4050908811120506,measured
 ENS,E-fam:general,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.41257921646413204,measured
 ENS,E-fam:general,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.25763088254337263,measured
@@ -57181,6 +57705,59 @@ ENS,E-top3,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measured
 ENS,E-top3,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.9743589743589743,measured
 ENS,E-top3,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9743589743589743,measured
 ENS,E-top3,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.5026439457429492,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,aupr,0.02711160664877351,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,aupr_11pt,0.06629119406187724,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,aupr_ci_lo,0.02242427885393632,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,aupr_ci_hi,0.030920276509721855,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,dice_fixed,0.05265121168417371,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,dice_valopt,0.07832907170963851,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,iou_valopt,0.040760918301097966,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,lesion_precision,0.13883795253313774,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,lesion_recall_small,0.7763440860215054,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,lesion_recall_medium,0.7965235173824131,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,lesion_recall_large,0.7087378640776699,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,img_auc,0.6736368657776376,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,MA,img_auc_top100,0.6924169494200269,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,aupr,0.4401529914640098,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,aupr_11pt,0.49342008079366007,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,aupr_ci_lo,0.3977852810437838,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,aupr_ci_hi,0.48365553378083187,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,dice_fixed,0.34687536396816726,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,dice_valopt,0.40556069815686974,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,iou_valopt,0.2543594464135776,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,lesion_precision,0.6425812529439472,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,lesion_recall_small,0.19286871961102106,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,lesion_recall_medium,0.24297844546048333,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,lesion_recall_large,0.7374549032469662,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,img_auc,0.9186448467409984,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,HE,img_auc_top100,0.9206130360068737,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,aupr,0.4424445169181337,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,aupr_11pt,0.5150029050793743,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,aupr_ci_lo,0.3827755397997714,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,aupr_ci_hi,0.4959517229925812,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,dice_fixed,0.40821847841967535,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,dice_valopt,0.43415500069536606,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,iou_valopt,0.2772656303070656,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,lesion_precision,0.7250945074494107,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,lesion_recall_small,0.46682626538987687,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,lesion_recall_medium,0.7926393520724154,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,lesion_recall_large,0.8607219827586207,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,img_auc,0.9180079864844111,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,EX,img_auc_top100,0.9237597911227153,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,aupr,0.2904999931567773,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,aupr_11pt,0.33340695071216575,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,aupr_ci_lo,0.23645193333171094,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,aupr_ci_hi,0.3506311523372822,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,dice_fixed,0.35117996888858105,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,dice_valopt,0.3482892463044602,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,iou_valopt,0.21086576177166452,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,lesion_precision,0.16129032258064516,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,lesion_recall_medium,0.23255813953488372,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,lesion_recall_large,0.8343848580441641,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,img_auc,0.8455689603812929,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,SE,img_auc_top100,0.8481977956508788,measured
+ENS,E-top3,ensemble,DDR,0,FGADR,any,aupr_any_lesion,0.432954319078929,measured
 ENS,E-top3,ensemble,DDR,0,IDRiD,MA,aupr,0.42821251098547736,measured
 ENS,E-top3,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.43557933431047374,measured
 ENS,E-top3,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.3859723512928932,measured
@@ -57287,6 +57864,59 @@ ENS,E-top3,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.47619047619047616,m
 ENS,E-top3,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.8386243386243387,measured
 ENS,E-top3,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.843915343915344,measured
 ENS,E-top3,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.6343412793744245,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,aupr,0.11423504440415184,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.23807635572511973,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.09279824367620357,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.11981915979888041,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,dice_fixed,0.02966280216702767,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,dice_valopt,0.06035659178886658,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,iou_valopt,0.031117364941080274,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,lesion_precision,0.5146787451769838,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.19148936170212766,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.5923524150268337,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,img_auc,0.8637610382659888,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8266323253947014,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,aupr,0.3229159467366769,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.39597192608747084,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.25025698265414054,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.37099385651250766,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,dice_fixed,0.10972611565883285,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,dice_valopt,0.13968201447721063,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,iou_valopt,0.0750850207137878,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,lesion_precision,0.7904031989336888,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.05714285714285714,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.40320910973084884,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,img_auc,0.9391214851638963,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.9412381544197609,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,aupr,0.4100263414362149,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.5109712953921061,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.3090506766286649,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.45109508990041236,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,dice_fixed,0.1455546284686965,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,dice_valopt,0.1667381428748709,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,iou_valopt,0.09095162386476806,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,lesion_precision,0.827414537006306,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.7174329501915708,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,img_auc,0.9092723929603362,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.9081866736713072,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,aupr,0.31733223280045936,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.3833260069256643,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.26131790831493534,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.35730322143757226,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,dice_fixed,0.27675190215533785,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,dice_valopt,0.33992476397532456,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,iou_valopt,0.20476467367185755,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,lesion_precision,0.36801752464403065,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.8238636363636364,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,img_auc,0.907996506986028,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.9077470059880239,measured
+ENS,E-top3,ensemble,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.41703349754796254,measured
 ENS,E-top3,ensemble,DDR,0,TJDR-std,MA,aupr,0.4409258817184218,measured
 ENS,E-top3,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.44486648593538747,measured
 ENS,E-top3,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.32494540615845674,measured
@@ -57499,6 +58129,59 @@ ENS,E-top5,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measured
 ENS,E-top5,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.9807692307692307,measured
 ENS,E-top5,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9807692307692307,measured
 ENS,E-top5,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.49386465781853933,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,aupr,0.027208740441208572,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,aupr_11pt,0.06383761253546241,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,aupr_ci_lo,0.022960751307215116,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,aupr_ci_hi,0.03150289678353236,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,dice_fixed,0.04819995164780013,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,dice_valopt,0.07354062688148341,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,iou_valopt,0.03817398275180712,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,lesion_precision,0.1568051038278709,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,lesion_recall_small,0.7548387096774194,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,lesion_recall_medium,0.7617586912065439,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,lesion_recall_large,0.6686893203883495,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,img_auc,0.6710427680896394,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,MA,img_auc_top100,0.6875641126805019,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,aupr,0.4366132499636361,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,aupr_11pt,0.49313407162742123,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,aupr_ci_lo,0.3935252809215357,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,aupr_ci_hi,0.48484936987253036,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,dice_fixed,0.3295211770802128,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,dice_valopt,0.4225100741665735,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,iou_valopt,0.26783693971506733,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,lesion_precision,0.5996139306683825,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,lesion_recall_small,0.24149108589951376,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,lesion_recall_medium,0.3041585020683649,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,lesion_recall_large,0.772876352902591,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,img_auc,0.9187747272509291,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,HE,img_auc_top100,0.9218319146385325,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,aupr,0.43769988917844277,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,aupr_11pt,0.5067234388588406,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,aupr_ci_lo,0.3804461732726467,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,aupr_ci_hi,0.49543628078760815,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,dice_fixed,0.39260938611805024,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,dice_valopt,0.42366515820159006,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,iou_valopt,0.2687659670823736,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,lesion_precision,0.7478578772992117,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,lesion_recall_small,0.45041039671682626,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,lesion_recall_medium,0.7802525011910434,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,lesion_recall_large,0.8485991379310345,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,img_auc,0.9235217324527722,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,EX,img_auc_top100,0.9248348947934265,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,aupr,0.2915144077085346,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,aupr_11pt,0.3314141039420446,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,aupr_ci_lo,0.23723783275663524,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,aupr_ci_hi,0.3548148683851184,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,dice_fixed,0.34969767508410166,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,dice_valopt,0.3624901391784527,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,iou_valopt,0.22136669088306404,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,lesion_precision,0.1869131455399061,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,lesion_recall_small,0.7692307692307693,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,lesion_recall_medium,0.2558139534883721,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,lesion_recall_large,0.8217665615141956,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,img_auc,0.8427837354781056,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,SE,img_auc_top100,0.8450848972296694,measured
+ENS,E-top5,ensemble,DDR,0,FGADR,any,aupr_any_lesion,0.4274693208641517,measured
 ENS,E-top5,ensemble,DDR,0,IDRiD,MA,aupr,0.44962338423774895,measured
 ENS,E-top5,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.4511336809492039,measured
 ENS,E-top5,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.41054015566651575,measured
@@ -57605,6 +58288,59 @@ ENS,E-top5,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.5,measured
 ENS,E-top5,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.7526455026455027,measured
 ENS,E-top5,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.7592592592592592,measured
 ENS,E-top5,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.6414762533923979,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,aupr,0.11702069465489136,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.23580082141196232,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.09741798918897722,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.12525901236291714,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,dice_fixed,0.026882395112562886,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,dice_valopt,0.05379831475158609,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,iou_valopt,0.027642723341244697,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,lesion_precision,0.5377443069750762,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.19148936170212766,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.5813953488372093,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,img_auc,0.8552983676746052,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8293082686647044,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,aupr,0.2990343065761849,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.3894819588642357,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.23843550616269268,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.3562843694068964,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,dice_fixed,0.10526516481947455,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,dice_valopt,0.1561248712601823,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,iou_valopt,0.08467214987973977,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,lesion_precision,0.7658114558472554,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.08571428571428572,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.432712215320911,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,img_auc,0.9392865465278858,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.9428887680596552,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,aupr,0.4226595372487665,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.5089149260669585,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.3362015466338303,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.4823182671641035,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,dice_fixed,0.14000316825729844,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,dice_valopt,0.16105355138901825,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,iou_valopt,0.08757925034231825,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,lesion_precision,0.8239258635214828,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.7193486590038314,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,img_auc,0.9112161807197268,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.9091323001488485,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,aupr,0.32190667530414635,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.38135275370816885,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.27133238443122676,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.36564152549761847,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,dice_fixed,0.2829526675832292,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,dice_valopt,0.339700807158325,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,iou_valopt,0.20460216364793396,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,lesion_precision,0.35844994617868675,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.8267045454545454,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,img_auc,0.9102524118429807,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.9104499334664005,measured
+ENS,E-top5,ensemble,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.39551117693367216,measured
 ENS,E-top5,ensemble,DDR,0,TJDR-std,MA,aupr,0.4412881684082945,measured
 ENS,E-top5,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.44460945124115175,measured
 ENS,E-top5,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.31605981472274597,measured
@@ -57817,6 +58553,59 @@ ENS,E-1perfam,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.92857142857142
 ENS,E-1perfam,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.9893162393162392,measured
 ENS,E-1perfam,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.9871794871794871,measured
 ENS,E-1perfam,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.4699024643351757,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,aupr,0.02198771156091575,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,aupr_11pt,0.039924315315796675,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,aupr_ci_lo,0.018228785382195547,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,aupr_ci_hi,0.024325250688085002,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,dice_fixed,0.043204911164821794,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,dice_valopt,0.06111335182002,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,iou_valopt,0.031519816734715614,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,lesion_precision,0.07563144117161522,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,lesion_recall_small,0.8279569892473119,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,lesion_recall_medium,0.8159509202453987,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,lesion_recall_large,0.7864077669902912,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,img_auc,0.6279491833030852,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,MA,img_auc_top100,0.6263512980351928,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,aupr,0.3867768592360768,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,aupr_11pt,0.41912656939710863,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,aupr_ci_lo,0.3407966361084675,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,aupr_ci_hi,0.43679548543610086,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,dice_fixed,0.3941491771299158,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,dice_valopt,0.3563733926211476,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,iou_valopt,0.21682138207136256,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,lesion_precision,0.10202077279087289,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,lesion_recall_small,0.7974068071312804,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,lesion_recall_medium,0.8462878293054649,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,lesion_recall_large,0.9452279435880616,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,img_auc,0.901150941134157,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,HE,img_auc_top100,0.9018502977260923,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,aupr,0.37205010435247976,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,aupr_11pt,0.4354007935761781,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,aupr_ci_lo,0.3184925355722373,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,aupr_ci_hi,0.4236608125114217,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,dice_fixed,0.37109880380608856,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,dice_valopt,0.4021038761997465,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,iou_valopt,0.2516458174035923,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,lesion_precision,0.44347220408340954,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,lesion_recall_small,0.8939808481532148,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9375893282515484,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,lesion_recall_large,0.9229525862068966,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,img_auc,0.9018276762402089,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,EX,img_auc_top100,0.9181231761634158,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,aupr,0.2422084165332697,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,aupr_11pt,0.2946557567772423,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,aupr_ci_lo,0.1867352965003004,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,aupr_ci_hi,0.30488739195923853,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,dice_fixed,0.26434670418755274,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,dice_valopt,0.3271399528385821,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,iou_valopt,0.1955572753343518,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,lesion_precision,0.36607142857142855,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,lesion_recall_small,0.7692307692307693,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,lesion_recall_medium,0.16279069767441862,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,lesion_recall_large,0.5362776025236593,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,img_auc,0.8242180518319928,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,SE,img_auc_top100,0.8257074769139112,measured
+ENS,E-1perfam,ensemble,IDRiD,0,FGADR,any,aupr_any_lesion,0.374461935098928,measured
 ENS,E-1perfam,ensemble,IDRiD,0,IDRiD,MA,aupr,0.5431089943182202,measured
 ENS,E-1perfam,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5407678237959053,measured
 ENS,E-1perfam,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.5046506746386914,measured
@@ -57923,6 +58712,59 @@ ENS,E-1perfam,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.38095238095238
 ENS,E-1perfam,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.716931216931217,measured
 ENS,E-1perfam,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.746031746031746,measured
 ENS,E-1perfam,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.6080948413469859,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr,0.08927582678496501,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.18106821019509534,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.07021126879052032,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.0888652947779321,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.04167831643403813,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.06010694370906732,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.03098466872395097,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.4700507614213198,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.425531914893617,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6779964221824687,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc,0.8674070109713673,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.8392761573454643,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr,0.31812708945532336,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.4210561058621682,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.2682501844041523,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.34140142232212795,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.1556907660262929,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.2785243868189756,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.1617939776122097,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.43583902809415337,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.2857142857142857,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.6099896480331263,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9124106726736056,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.9200714618611154,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr,0.3359965192287362,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.39446214198953294,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.24986773319132086,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.384439253343905,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.19255753992781274,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.21318999270024555,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.11931318485417508,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.5493336834504037,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.5,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.8955938697318008,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8813676560721478,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8823045267489713,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr,0.21172852861614982,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.23126478247267418,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.16245640083188365,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.25385811747343684,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.28417791194066283,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.2967878815831955,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.17425186115929606,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.2353909465020576,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.7386363636363636,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc,0.8133420658682635,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.8120217897538258,measured
+ENS,E-1perfam,ensemble,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.3323501583565823,measured
 ENS,E-1perfam,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.3640634660756299,measured
 ENS,E-1perfam,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.38238610580434057,measured
 ENS,E-1perfam,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.25040202270127326,measured
@@ -58453,6 +59295,59 @@ ENS,E-fam:auto,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.8571428571428
 ENS,E-fam:auto,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.9764957264957265,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.9743589743589743,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.40411182416160485,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,aupr,0.01918952075190973,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,aupr_11pt,0.023767055485085162,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,aupr_ci_lo,0.014394596836697264,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,aupr_ci_hi,0.020726962611425266,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,dice_fixed,0.056036793112972015,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,dice_valopt,0.07174132693976211,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,iou_valopt,0.03720524011745023,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,lesion_precision,0.12590697674418605,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,lesion_recall_small,0.8387096774193549,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,lesion_recall_medium,0.808282208588957,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,lesion_recall_large,0.6966019417475728,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,img_auc,0.6351100765406771,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,MA,img_auc_top100,0.6513256529629922,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,aupr,0.37992242434634915,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,aupr_11pt,0.37680616529832955,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,aupr_ci_lo,0.3009708912395927,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,aupr_ci_hi,0.3948709074706995,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,dice_fixed,0.32151614974205167,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,dice_valopt,0.4454027709734406,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,iou_valopt,0.2865068602060599,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,lesion_precision,0.3717470525187567,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,lesion_recall_small,0.4619124797406807,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,lesion_recall_medium,0.5186152841280209,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,lesion_recall_large,0.8189570350934733,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,img_auc,0.8802002158014627,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,HE,img_auc_top100,0.8894217320065541,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,aupr,0.358946782455963,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,aupr_11pt,0.3584369145280901,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,aupr_ci_lo,0.2887556095788906,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,aupr_ci_hi,0.3871242222797756,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,dice_fixed,0.39099466746605854,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,dice_valopt,0.3914007523324454,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,iou_valopt,0.24331775170227812,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,lesion_precision,0.4879060972914569,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,lesion_recall_small,0.9076607387140903,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9458075273939971,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,lesion_recall_large,0.9213362068965517,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,img_auc,0.8774381815389342,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,EX,img_auc_top100,0.9184149900168944,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,aupr,0.20985266202907418,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,aupr_11pt,0.2137121082386245,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,aupr_ci_lo,0.14740668985017508,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,aupr_ci_hi,0.24965528336505718,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,dice_fixed,0.23779495945679202,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,dice_valopt,0.24649850385991484,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,iou_valopt,0.14057501770173703,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,lesion_precision,0.5897435897435898,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,lesion_recall_small,0.38461538461538464,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,lesion_recall_medium,0.09302325581395349,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,lesion_recall_large,0.3864353312302839,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,img_auc,0.8270330652368187,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,SE,img_auc_top100,0.8282543938039917,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,FGADR,any,aupr_any_lesion,0.35579439330735907,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,IDRiD,MA,aupr,0.524500110846038,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5213209814839893,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.4521714330551822,measured
@@ -58559,6 +59454,59 @@ ENS,E-fam:auto,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.2619047619047
 ENS,E-fam:auto,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.7447089947089948,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7526455026455027,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.5717097081405637,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr,0.05148866942107416,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.046017287117796936,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.03821106590702223,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.04706527141342921,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.03916834756386148,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.06884987774023228,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.03565226594588434,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.4641082960755092,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.44680851063829785,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6862701252236136,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc,0.9030137811078405,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.8498795825528498,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr,0.25558492486994305,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.24352974182937434,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.17800961473444676,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.21888884014996474,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.14489741728572206,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.26455993004912715,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.15244544287640907,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.5178870877585243,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.14285714285714285,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.5825569358178054,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9296547304645021,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.9346162808761846,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr,0.2685746731755243,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.256867678750333,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.17621068215023797,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.2616380815981151,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.1878137603913281,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.18795786031753392,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.1037270912201141,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.5749938830437974,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.5,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.8946360153256705,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8750021889501794,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8754925137903861,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr,0.1326557502546808,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.15507445146048326,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.08758802919199903,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.1490760852848622,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.22965759295122826,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.2328762390490684,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.1317826426168092,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.26179775280898876,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.5823863636363636,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc,0.7846286593479707,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.7797737857618097,measured
+ENS,E-fam:auto,ensemble,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.26200697620400104,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.24467567455499079,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.27768641406256406,measured
 ENS,E-fam:auto,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.1604554373293838,measured
@@ -58771,6 +59719,59 @@ ENS,E-fam:foundation,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.8571428
 ENS,E-fam:foundation,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.985042735042735,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.985042735042735,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.4749959295519516,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,aupr,0.02752661783730031,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,aupr_11pt,0.05693124309944938,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,aupr_ci_lo,0.022736098842915657,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,aupr_ci_hi,0.03093990262777421,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,dice_fixed,0.06817305829450092,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,dice_valopt,0.07111164558751916,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,iou_valopt,0.03686664675269866,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,lesion_precision,0.13590194354917473,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,lesion_recall_small,0.8473118279569892,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,lesion_recall_medium,0.8266871165644172,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,lesion_recall_large,0.6990291262135923,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,img_auc,0.6748895289197506,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,MA,img_auc_top100,0.6720389805097451,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,aupr,0.4166132158295497,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,aupr_11pt,0.45439404464866684,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,aupr_ci_lo,0.3696657826097674,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,aupr_ci_hi,0.46661820336521737,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,dice_fixed,0.44857324915381985,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,dice_valopt,0.44206267422218415,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,iou_valopt,0.2837486893135961,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,lesion_precision,0.27934866321927604,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,lesion_recall_small,0.7439222042139384,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,lesion_recall_medium,0.75898105813194,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,lesion_recall_large,0.9178419153820925,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,img_auc,0.8833173480398033,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,HE,img_auc_top100,0.8829077248930985,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,aupr,0.4163899561542326,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,aupr_11pt,0.47329484806610705,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,aupr_ci_lo,0.3585780174646147,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,aupr_ci_hi,0.4722030621168041,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,dice_fixed,0.4437186304834145,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,dice_valopt,0.44588486162648744,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,iou_valopt,0.28690593805883413,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,lesion_precision,0.49038461538461536,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,lesion_recall_small,0.8402872777017784,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9312767984754645,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,lesion_recall_large,0.9253771551724138,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,img_auc,0.9132007372139456,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,EX,img_auc_top100,0.9216249424051606,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,aupr,0.3163438816207442,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,aupr_11pt,0.34518019823752155,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,aupr_ci_lo,0.2566118263367036,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,aupr_ci_hi,0.38124342956519247,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,dice_fixed,0.38540623170087634,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,dice_valopt,0.39419986403407664,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,iou_valopt,0.24548501099544182,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,lesion_precision,0.3042203985932005,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,lesion_recall_medium,0.18604651162790697,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,lesion_recall_large,0.7160883280757098,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,img_auc,0.8452785224903188,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,SE,img_auc_top100,0.847006255585344,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,FGADR,any,aupr_any_lesion,0.4089197751800013,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,IDRiD,MA,aupr,0.5253252954867184,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5230100275224128,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.4847105103708329,measured
@@ -58877,6 +59878,59 @@ ENS,E-fam:foundation,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.3571428
 ENS,E-fam:foundation,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.8359788359788359,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.8346560846560847,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.6012202741947827,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr,0.0904119327112133,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.1814948245616426,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.07111239148880213,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.08919011724602467,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.05903806692555394,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.0642500940038375,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.03319131970758048,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.48337261063105524,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.39361702127659576,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6788908765652951,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc,0.8651993577736152,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.8093055927214343,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr,0.33504394150461353,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.4219867263912982,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.28064402497181395,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.35834585450185075,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.18613342630149698,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.26739899752637014,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.154333858253923,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.5237177015040494,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.37142857142857144,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.6480331262939959,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9334511418362591,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.9316063383563773,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr,0.3454955539618981,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.391215419885778,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.2625087003651098,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.3996576760110009,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.22847954931680467,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.2317562046484265,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.13106575306961407,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.527753422809739,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.5,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.9090038314176245,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8879782856142193,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8889939584975045,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr,0.23086445298202726,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.24548930560229265,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.18037991261843578,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.27521449307601664,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.28873024890011134,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.28436408373917116,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.16574850237393793,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.19099756690997566,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.8011363636363636,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc,0.8218770791749834,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.8211493679308051,measured
+ENS,E-fam:foundation,ensemble,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.34444927514324564,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.4032350559702341,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.4327593470763541,measured
 ENS,E-fam:foundation,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.2763343256754808,measured
@@ -59407,6 +60461,59 @@ ENS,E-fam:general,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.8571428571
 ENS,E-fam:general,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.952991452991453,measured
 ENS,E-fam:general,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.9508547008547008,measured
 ENS,E-fam:general,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.45320695618271756,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,aupr,0.02390130707971911,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,aupr_11pt,0.06446323162935175,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,aupr_ci_lo,0.020699231747055798,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,aupr_ci_hi,0.02752368268211321,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,dice_fixed,0.015637627886522232,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,dice_valopt,0.05097631150174408,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,iou_valopt,0.02615479319341772,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,lesion_precision,0.11037263503035137,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,lesion_recall_small,0.7978494623655914,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,lesion_recall_medium,0.7295501022494888,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,lesion_recall_large,0.5800970873786407,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,img_auc,0.6123747336857887,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,MA,img_auc_top100,0.6194271285409926,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,aupr,0.36222350867225406,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,aupr_11pt,0.3853127208608778,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,aupr_ci_lo,0.31772385421715676,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,aupr_ci_hi,0.4108106807369034,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,dice_fixed,0.3308599998754253,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,dice_valopt,0.35523108864511327,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,iou_valopt,0.21597629076809938,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,lesion_precision,0.13845618197761386,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,lesion_recall_small,0.706645056726094,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,lesion_recall_medium,0.7600696712388417,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,lesion_recall_large,0.905706789111184,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,img_auc,0.8854653718578909,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,HE,img_auc_top100,0.8878032210366463,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,aupr,0.358583928652234,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,aupr_11pt,0.40110096919867494,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,aupr_ci_lo,0.3018755917382435,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,aupr_ci_hi,0.4222932746454297,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,dice_fixed,0.33626039969162486,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,dice_valopt,0.40549908511153565,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,iou_valopt,0.25431097676096376,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,lesion_precision,0.49123084632223013,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,lesion_recall_small,0.7903556771545828,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,lesion_recall_medium,0.8964983325393044,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,lesion_recall_large,0.8898168103448276,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,img_auc,0.905298725234219,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,EX,img_auc_top100,0.9040086008293657,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,aupr,0.23201077978338489,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,aupr_11pt,0.2477676596335407,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,aupr_ci_lo,0.18101024759122747,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,aupr_ci_hi,0.2925659734092375,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,dice_fixed,0.26244976961831706,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,dice_valopt,0.21304165453033322,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,iou_valopt,0.11922026893936323,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,lesion_precision,0.028120657238616856,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,lesion_recall_medium,0.3023255813953488,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,lesion_recall_large,0.7381703470031545,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,img_auc,0.833504617217754,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,SE,img_auc_top100,0.8375037235627047,measured
+ENS,E-fam:general,ensemble,IDRiD,0,FGADR,any,aupr_any_lesion,0.3451487337992954,measured
 ENS,E-fam:general,ensemble,IDRiD,0,IDRiD,MA,aupr,0.5036916421776276,measured
 ENS,E-fam:general,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5029992515304067,measured
 ENS,E-fam:general,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.4623452546375579,measured
@@ -59513,6 +60620,59 @@ ENS,E-fam:general,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.3809523809
 ENS,E-fam:general,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.7208994708994709,measured
 ENS,E-fam:general,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7301587301587301,measured
 ENS,E-fam:general,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.5487415148840911,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr,0.08167434641547333,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.21853234384522754,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.0706869912977609,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.08990231005371226,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.015460664615497777,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.059472998316884074,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.030647859197681954,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.46046395609877777,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.40425531914893614,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.682468694096601,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc,0.8346936044955847,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.827033716885202,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr,0.24715615290418566,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.39186246681622927,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.2140963460031081,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.27819782889172895,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.11930398079594326,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.23564726317178247,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.13356017663191677,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.5169281585466556,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.2,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.532608695652174,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc,0.8897001708870593,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.8881272331831602,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr,0.21853968411880867,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.2574240109545244,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.16587099174258066,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.276025895871382,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.16588619379548494,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.20298501357281573,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.11295677281823313,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.5623480886793842,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.3333333333333333,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.8745210727969349,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8606426757726995,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8657385517905611,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr,0.2267866375628103,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.2524471454769655,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.17815439186793489,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.2744826832120918,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.25582117532847876,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.26807104012890537,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.15478177589273498,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.1505811015664477,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.7755681818181818,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc,0.8159618263473054,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.814932634730539,measured
+ENS,E-fam:general,ensemble,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.2502815764654849,measured
 ENS,E-fam:general,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.3449204897693614,measured
 ENS,E-fam:general,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.34727240291787304,measured
 ENS,E-fam:general,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.22834896031301977,measured
@@ -59725,6 +60885,59 @@ ENS,E-top3,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.7142857142857143,
 ENS,E-top3,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.9893162393162394,measured
 ENS,E-top3,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.9893162393162392,measured
 ENS,E-top3,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.4868858807160223,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,aupr,0.02567517723132838,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,aupr_11pt,0.04946674513466085,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,aupr_ci_lo,0.021782468292843228,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,aupr_ci_hi,0.029168718120600828,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,dice_fixed,0.057111342606777374,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,dice_valopt,0.06967215643084264,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,iou_valopt,0.03609343182970386,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,lesion_precision,0.11077900242854474,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,lesion_recall_small,0.8344086021505376,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,lesion_recall_medium,0.8297546012269938,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,lesion_recall_large,0.7633495145631068,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,img_auc,0.6392527420500277,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,MA,img_auc_top100,0.637773218653831,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,aupr,0.38988517055421434,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,aupr_11pt,0.41813131850221974,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,aupr_ci_lo,0.3444750512467738,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,aupr_ci_hi,0.43928637880526034,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,dice_fixed,0.4109572511418185,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,dice_valopt,0.4048919849743287,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,iou_valopt,0.2538335844095251,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,lesion_precision,0.20683046182077683,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,lesion_recall_small,0.640194489465154,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,lesion_recall_medium,0.6762464620074026,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,lesion_recall_large,0.8965234503115775,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,img_auc,0.8825080925548495,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,HE,img_auc_top100,0.8835071734004716,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,aupr,0.3979685722512859,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,aupr_11pt,0.4505593815354497,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,aupr_ci_lo,0.3417272556780405,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,aupr_ci_hi,0.4551848397783166,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,dice_fixed,0.40686664284107005,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,dice_valopt,0.41956982076586974,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,iou_valopt,0.26547823894959505,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,lesion_precision,0.4888662064519595,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,lesion_recall_small,0.8392612859097127,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9230585993330157,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,lesion_recall_large,0.915948275862069,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,img_auc,0.9016126555060667,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,EX,img_auc_top100,0.9083397327599448,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,aupr,0.27659832196379286,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,aupr_11pt,0.3209062888654026,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,aupr_ci_lo,0.22052863699111136,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,aupr_ci_hi,0.34191797297040016,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,dice_fixed,0.32489320342804534,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,dice_valopt,0.29770882585731506,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,iou_valopt,0.17488713469201203,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,lesion_precision,0.4956140350877193,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,lesion_recall_small,0.6153846153846154,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,lesion_recall_medium,0.16279069767441862,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,lesion_recall_large,0.501577287066246,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,img_auc,0.8324545725350017,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,SE,img_auc_top100,0.8337503723562705,measured
+ENS,E-top3,ensemble,IDRiD,0,FGADR,any,aupr_any_lesion,0.3878160470369587,measured
 ENS,E-top3,ensemble,IDRiD,0,IDRiD,MA,aupr,0.5231321415009406,measured
 ENS,E-top3,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5205004323701121,measured
 ENS,E-top3,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.4831480686313652,measured
@@ -59831,6 +61044,59 @@ ENS,E-top3,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.14285714285714285
 ENS,E-top3,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.7367724867724867,measured
 ENS,E-top3,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7526455026455027,measured
 ENS,E-top3,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.6049463573560239,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr,0.09244625965763542,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.19887808560171316,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.07591272074041898,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.09509524685148817,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.04495836879890342,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.06095158367608555,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.03143376058223381,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.4661692171493613,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.3723404255319149,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6741949910554562,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc,0.8716885202033716,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.8337235750602088,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr,0.3342883738497525,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.4166748880628003,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.28736873690400433,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.36330657242161524,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.16572297752000992,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.2672530928664321,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.1542366584330201,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.5162364696086594,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.22857142857142856,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.5797101449275363,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9132942364455493,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.9167313966133291,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr,0.35582479115236265,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.4053526622042686,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.2759573651682361,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.4157647637536024,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.20416036888936145,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.2149157480510019,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.12039529664571949,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.5494667415099636,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.4166666666666667,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.8879310344827587,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8873391121618073,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8823045267489712,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr,0.22578916764887094,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.24458361541586715,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.17192726585313908,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.27453884226028985,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.2811147540983607,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.26913208117933674,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.1554896698083765,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.3310344827586207,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.6278409090909091,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc,0.8123336660013305,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.8145999667332002,measured
+ENS,E-top3,ensemble,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.35843363149169705,measured
 ENS,E-top3,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.39193576876201663,measured
 ENS,E-top3,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.41641144881069825,measured
 ENS,E-top3,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.26595609944167375,measured
@@ -60043,6 +61309,59 @@ ENS,E-top5,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.8571428571428571,
 ENS,E-top5,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.985042735042735,measured
 ENS,E-top5,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.985042735042735,measured
 ENS,E-top5,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.4680367385963416,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,aupr,0.02669343645730971,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,aupr_11pt,0.05448330166323596,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,aupr_ci_lo,0.022880178412543018,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,aupr_ci_hi,0.0307411351132557,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,dice_fixed,0.057461038887975435,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,dice_valopt,0.06618639300386969,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,iou_valopt,0.03422583891457856,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,lesion_precision,0.13506532213998312,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,lesion_recall_small,0.843010752688172,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,lesion_recall_medium,0.806237218813906,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,lesion_recall_large,0.6796116504854369,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,img_auc,0.6455259212499014,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,MA,img_auc_top100,0.6551921407717194,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,aupr,0.4148425016296752,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,aupr_11pt,0.44904639845659966,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,aupr_ci_lo,0.3698899194796828,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,aupr_ci_hi,0.46520947975744203,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,dice_fixed,0.43383691452585915,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,dice_valopt,0.4319805898319528,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,iou_valopt,0.2754944148208323,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,lesion_precision,0.24964809733985446,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,lesion_recall_small,0.7893030794165316,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,lesion_recall_medium,0.7916394513389942,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,lesion_recall_large,0.9283371597244998,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,img_auc,0.8978639651520602,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,HE,img_auc_top100,0.899712264716461,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,aupr,0.4058806867853089,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,aupr_11pt,0.4642788121456146,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,aupr_ci_lo,0.35023980642744884,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,aupr_ci_hi,0.46301883785593856,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,dice_fixed,0.42494511781596456,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,dice_valopt,0.4332009755891819,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,iou_valopt,0.27648790230264764,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,lesion_precision,0.4876266590552305,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,lesion_recall_small,0.8594391244870041,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9317532158170557,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,lesion_recall_large,0.9207974137931034,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,img_auc,0.9129396406082017,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,EX,img_auc_top100,0.9210873905698049,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,aupr,0.3125775405714561,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,aupr_11pt,0.34975086847575115,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,aupr_ci_lo,0.2553016435269171,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,aupr_ci_hi,0.37910829045699806,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,dice_fixed,0.3576675262194376,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,dice_valopt,0.3763635966720215,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,iou_valopt,0.23180288142134933,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,lesion_precision,0.4092093831450912,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,lesion_recall_medium,0.20930232558139536,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,lesion_recall_large,0.6419558359621451,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,img_auc,0.8398048853142688,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,SE,img_auc_top100,0.8409740840035747,measured
+ENS,E-top5,ensemble,IDRiD,0,FGADR,any,aupr_any_lesion,0.4040062634940561,measured
 ENS,E-top5,ensemble,IDRiD,0,IDRiD,MA,aupr,0.5302005482669995,measured
 ENS,E-top5,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5261769179860315,measured
 ENS,E-top5,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.49274936103002226,measured
@@ -60149,6 +61468,59 @@ ENS,E-top5,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.23809523809523808
 ENS,E-top5,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.7552910052910052,measured
 ENS,E-top5,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7619047619047619,measured
 ENS,E-top5,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.6061440989337391,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr,0.09017488213953403,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.20237617997747695,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.07659466707743916,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.09559328181765214,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.04915132985051174,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.0626576148894655,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.032342045149593206,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.4787729743722495,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.40425531914893614,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6786672629695886,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc,0.856168049237356,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.828070644902328,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr,0.3267863885511082,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.42221480902371655,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.27906068567499664,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.36134768792081495,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.1733458240261539,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.2751980489920003,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.1595534193541296,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.523755081300813,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.37142857142857144,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.6526915113871635,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9208676402050645,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.9249262078608048,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr,0.3288423850919308,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.3886501313131706,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.2559198139869685,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.3927083640943644,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.21282337954731,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.2218374646239215,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.12475657326623589,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.5474991376336668,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.4166666666666667,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.9099616858237548,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8869626127309342,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8894492601348394,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr,0.25724303627584233,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.2668238605706451,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.20231009436452282,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.31119767435213175,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.305761867417078,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.31430372207862795,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.18645335235965232,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.28846153846153844,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.7443181818181818,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc,0.8278339155023287,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.8264304723885563,measured
+ENS,E-top5,ensemble,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.3363001374542659,measured
 ENS,E-top5,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.3992904663752613,measured
 ENS,E-top5,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.41537789767800615,measured
 ENS,E-top5,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.27040301290062396,measured
@@ -69833,3 +71205,67 @@ REF,nnU-Net ResEnc-M,original_labels_1024,IDRiD,0,IDRiD-refined,SE,lesion_recall
 REF,nnU-Net ResEnc-M,original_labels_1024,IDRiD,0,IDRiD-refined,SE,img_auc,0.8626373626373627,measured
 REF,nnU-Net ResEnc-M,original_labels_1024,IDRiD,0,IDRiD-refined,SE,img_auc_top100,0.8626373626373626,measured
 REF,nnU-Net ResEnc-M,original_labels_1024,IDRiD,0,IDRiD-refined,any,aupr_any_lesion,0.7774652581915689,measured
+audit,labels,,IDRiD,-1,,MA,lesions_per_image,43.17283950617284,measured
+audit,labels,,IDRiD,-1,,MA,median_rel_diameter,0.005020099230508222,measured
+audit,labels,,IDRiD,-1,,HE,lesions_per_image,23.45679012345679,measured
+audit,labels,,IDRiD,-1,,HE,median_rel_diameter,0.013199180657749977,measured
+audit,labels,,IDRiD,-1,,EX,lesions_per_image,143.7283950617284,measured
+audit,labels,,IDRiD,-1,,EX,median_rel_diameter,0.004847725286204003,measured
+audit,labels,,IDRiD,-1,,SE,lesions_per_image,1.8518518518518519,measured
+audit,labels,,IDRiD,-1,,SE,median_rel_diameter,0.030717886072791405,measured
+audit,labels,,DDR,-1,,MA,lesions_per_image,13.712021136063408,measured
+audit,labels,,DDR,-1,,MA,median_rel_diameter,0.004304052767052178,measured
+audit,labels,,DDR,-1,,HE,lesions_per_image,16.562747688243064,measured
+audit,labels,,DDR,-1,,HE,median_rel_diameter,0.008739551840574268,measured
+audit,labels,,DDR,-1,,EX,lesions_per_image,31.253632760898284,measured
+audit,labels,,DDR,-1,,EX,median_rel_diameter,0.00453021752052727,measured
+audit,labels,,DDR,-1,,SE,lesions_per_image,1.7080581241743724,measured
+audit,labels,,DDR,-1,,SE,median_rel_diameter,0.019123599335614482,measured
+audit,labels,,TJDR-std,-1,,MA,lesions_per_image,2.88715953307393,measured
+audit,labels,,TJDR-std,-1,,MA,median_rel_diameter,0.00798816200436371,measured
+audit,labels,,TJDR-std,-1,,HE,lesions_per_image,4.638132295719845,measured
+audit,labels,,TJDR-std,-1,,HE,median_rel_diameter,0.017836432858045814,measured
+audit,labels,,TJDR-std,-1,,EX,lesions_per_image,4.396887159533074,measured
+audit,labels,,TJDR-std,-1,,EX,median_rel_diameter,0.012627306744109015,measured
+audit,labels,,TJDR-std,-1,,SE,lesions_per_image,0.8404669260700389,measured
+audit,labels,,TJDR-std,-1,,SE,median_rel_diameter,0.031067626136187874,measured
+audit,labels,,TJDR-uwf,-1,,MA,lesions_per_image,2.5164473684210527,measured
+audit,labels,,TJDR-uwf,-1,,MA,median_rel_diameter,0.003509029916962013,measured
+audit,labels,,TJDR-uwf,-1,,HE,lesions_per_image,6.618421052631579,measured
+audit,labels,,TJDR-uwf,-1,,HE,median_rel_diameter,0.008364773989204976,measured
+audit,labels,,TJDR-uwf,-1,,EX,lesions_per_image,7.309210526315789,measured
+audit,labels,,TJDR-uwf,-1,,EX,median_rel_diameter,0.003954896640028144,measured
+audit,labels,,TJDR-uwf,-1,,SE,lesions_per_image,0.944078947368421,measured
+audit,labels,,TJDR-uwf,-1,,SE,median_rel_diameter,0.015333535110041138,measured
+audit,labels,,FGADR,-1,,MA,lesions_per_image,6.099348534201955,measured
+audit,labels,,FGADR,-1,,MA,median_rel_diameter,0.00783535422936996,measured
+audit,labels,,FGADR,-1,,HE,lesions_per_image,20.606948968512487,measured
+audit,labels,,FGADR,-1,,HE,median_rel_diameter,0.011724196602576415,measured
+audit,labels,,FGADR,-1,,EX,lesions_per_image,28.71661237785016,measured
+audit,labels,,FGADR,-1,,EX,median_rel_diameter,0.007646361688621595,measured
+audit,labels,,FGADR,-1,,SE,lesions_per_image,1.1330076004343106,measured
+audit,labels,,FGADR,-1,,SE,median_rel_diameter,0.03208960985132547,measured
+audit,labels,,Retinal-Lesions,-1,,MA,lesions_per_image,9.336472065285625,measured
+audit,labels,,Retinal-Lesions,-1,,MA,median_rel_diameter,0.023084298865296476,measured
+audit,labels,,Retinal-Lesions,-1,,HE,lesions_per_image,8.352165725047081,measured
+audit,labels,,Retinal-Lesions,-1,,HE,median_rel_diameter,0.03446576785647521,measured
+audit,labels,,Retinal-Lesions,-1,,EX,lesions_per_image,2.144381669805399,measured
+audit,labels,,Retinal-Lesions,-1,,EX,median_rel_diameter,0.0415586033362714,measured
+audit,labels,,Retinal-Lesions,-1,,SE,lesions_per_image,0.7953546767106089,measured
+audit,labels,,Retinal-Lesions,-1,,SE,median_rel_diameter,0.05075046924079868,measured
+audit,labels,,DiaRetDB1,-1,,MA,lesions_per_image,2.056179775280899,measured
+audit,labels,,DiaRetDB1,-1,,MA,median_rel_diameter,0.006197554869273944,measured
+audit,labels,,DiaRetDB1,-1,,HE,lesions_per_image,4.51685393258427,measured
+audit,labels,,DiaRetDB1,-1,,HE,median_rel_diameter,0.029305881469395233,measured
+audit,labels,,DiaRetDB1,-1,,EX,lesions_per_image,1.5393258426966292,measured
+audit,labels,,DiaRetDB1,-1,,EX,median_rel_diameter,0.04056225680754283,measured
+audit,labels,,DiaRetDB1,-1,,SE,lesions_per_image,0.30337078651685395,measured
+audit,labels,,DiaRetDB1,-1,,SE,median_rel_diameter,0.04306238827548611,measured
+audit,labels,,MAPLES-DR,-1,,MA,lesions_per_image,27.333333333333332,measured
+audit,labels,,MAPLES-DR,-1,,MA,median_rel_diameter,0.008419185761634557,measured
+audit,labels,,MAPLES-DR,-1,,HE,lesions_per_image,4.777777777777778,measured
+audit,labels,,MAPLES-DR,-1,,HE,median_rel_diameter,0.01888753146052184,measured
+audit,labels,,MAPLES-DR,-1,,EX,lesions_per_image,15.555555555555555,measured
+audit,labels,,MAPLES-DR,-1,,EX,median_rel_diameter,0.009932946615431489,measured
+audit,labels,,MAPLES-DR,-1,,SE,lesions_per_image,1.005050505050505,measured
+audit,labels,,MAPLES-DR,-1,,SE,median_rel_diameter,0.024823455201431047,measured

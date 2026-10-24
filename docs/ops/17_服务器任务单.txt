@@ -43,6 +43,20 @@
   进度（本机 10-23，pull 到 234b379，10-23 包已进表：1,507 份报告、61,650 行实测；2880、MedSAM 修订两库、HRDecoder DDR 重测、SAMed 三种子、RETFound TJDR_std、MAE-IN1k 编码器、DDR 测试档的 a / b 档都在 results.csv）。第 37–39 条全部完成且结果正常；第 32 条首格出数。本次新条目 43–45（43 要先 pull：nnunet_e3a.py 的 --regenerate-maps 是新加的）。收口仍按 10-25：RETFound-DINOv2（GPU 6）与 DINOv2（GPU 2）约 10-24 晚上收完，其余都在前面。
   进度（本机 10-23 第二次，pull 到 d7a624f；没有新包，10-23 09:58 的包已进表）。服务器 10:42–10:46 的记录读过：第 43 条四个 nnU-Net 成员在 GPU 3 重推、B-std 成员在 GPU 7、MAE 的 MAPLES-DR 0.478 已出、fam:fundus 的 MAPLES-DR 0.452 在包外（下一包带上）；HACDR DDR 的重推两次 CUBLAS 报错（第 46 条）。本次登记了 10-25 收口之后的三件事（第 47–49 条，代码与 cell 都已到仓库，阶段默认关）。
   进度（本机 10-24，pull 到 fee1242，10-24 包已进表：1,617 份报告、67,174 行实测；RETFound-DINOv2、IDRiD 推理档全部、SAM ViT-B / MedSAM 框与 SAM 2 点在其余集合、fam:fundus 的 MAPLES-DR 都在 results.csv）。10-24 06:36 记录里的两个问题本机都处理了：DINOv2 被开两份（21 第 89 条，launch_extra / launch_factor 加取用时的门）；FGADR / Retinal-Lesions 集成卡住（HACDR 报错 → 第 51 条兜底；另外发现 10-23 重算的五份 DDR 源 all 是 19 人、不合登记 → 第 50 条重算，21 第 88 条）。新加的第 50–54 条都要先 pull。第 47–49 条仍等 10-25 收口。
+  进度（本机 10-24 第二次，pull 到 80f5d73，v4 包（17:38）已进表：1,653 份报告、68,722 行实测；DINOv2 格、18 人重算的五个集合、FGADR / Retinal-Lesions 上两源各六个组合、八源标注审计都在 results.csv）。12:19–17:38 的记录读过：第 50 条完成（成员表 18 人、无剔除行）、第 52 条完成、第 53 条出分且 history 无重复 epoch、第 51 条两集合同一条 traceback（栈在 mmcv DCN 的 cublasSgemm；分析在 21 第 87 条——代码路径与 10-13 / 10-17 的成功运行相同，剩下的解释只有 retiseg-hacdr 环境本身）。论文：R6 开头按审计实数重写、R5 的 C2 写成实数（DINOv2 0.510 / TJDR_std 0.619；C2 −0.020）、R4 集成一句改为 18 人数并加 FGADR / Retinal-Lesions、讨论 Q2 加编码器一句。本次新条目 55–58：55 是探针（十分钟，贴 00 即可，不修环境）；56 是 10-25 的兜底（CPU 约 4 小时，登记过的做法）；57 是收口后开参考模型与编码器 IDRiD 列（第 47、48 条的触发时点）；58 打包。
+  55. HACDR cuBLAS 探针（21 第 87 条；retiseg-hacdr，一张空卡，十分钟；只贴输出，不装、不卸任何包）：
+       python -c "import torch;print(torch.__version__,torch.version.cuda,torch.backends.cudnn.version());a=torch.randn(512,512,device='cuda');print('matmul',(a@a).sum().item())"
+       python -c "import torch,mmcv,os;from mmcv.ops import ModulatedDeformConv2dPack,get_compiling_cuda_version,get_compiler_version;print(mmcv.__file__,mmcv.__version__,get_compiling_cuda_version(),get_compiler_version());m=ModulatedDeformConv2dPack(8,8,3,padding=1).cuda();print('dcn',m(torch.randn(1,8,64,64,device='cuda')).sum().item())"
+       env | grep -i -E "cublas|cuda|LD_LIBRARY|NVIDIA" ；conda list | grep -i -E "cuda|cublas|torch|mmcv|mmseg"
+       ls -la --time-style=full-iso $(python -c "import mmcv,os;print(os.path.dirname(mmcv.__file__))")/_ext*.so $(python -c "import torch,os;print(os.path.dirname(torch.__file__))")/lib/libcublas* $CONDA_PREFIX/lib/libcublas* 2>/dev/null   # 修改时间：10-17 之后被换过没有（pip 轮子的 cuBLAS 在 torch/lib，conda 的在 $CONDA_PREFIX/lib）
+     DCN 单测通过时再加一条，分开检查点与环境：CUDA_LAUNCH_BLOCKING=1 python -m bench.e3a run --run runs/BS_hacdr_ddr_seed2 --sets FGADR --regenerate-maps（能跑就说明问题只在 seed0 的检查点；跑完 rm -r runs/E3a/BS_hacdr_ddr_seed2/FGADR/prob_test）。全部输出贴 00，本机决定修环境还是就用兜底。
+  56. 10-25 兜底（第 51 条登记的做法，不等第 55 条；CPU，按 10-24 六个组合的速度两源约 4 小时）：
+       for t in DDR IDRiD; do python bench/scripts/ensemble.py run --train $t --composition all,fam:fundus --sets FGADR,Retinal-Lesions --without HACDR-Net --drop-maps; done
+     done.json 会记 members_missing: [HACDR-Net]，collect 记成 ensemble:without 变体、表 5 加角标 p。四个 mAUPR 贴 00。跑完后成员图按第 23 条删（许可不变，done.json 已记 maps_dropped；HACDR 的两个集合本来就没有图）：
+       for d in runs/E3a/*/FGADR/prob_test runs/E3a/*/Retinal-Lesions/prob_test; do rm -r "$d"; done
+     第 55 条若之后把 HACDR 的图做出来了，再把这四份 --without 的目录删掉按原组合重算即可（登记的组合不变）。
+  57. 10-25 收口（第 56 条在 CPU 上跑起来、GPU 3–7 都空着之后，两件事同时开，共四张卡）：按第 47 条把 queue.yaml 的 ref_model 阶段改 enabled: true 并提交（启动器自动接；RETFound 约 22 时、SAMed 约 3 时，先后各占一张卡）；按第 48 条开两格 IDRiD 编码器（RETISEG_GPUS 给两张卡，各约 5.5 时）。第 49 条 FCT 仍不做。
+  58. 打包：第 55 条只贴 00、不打包；第 56 条四份集成出来后一包（--since runs/handoff_manifest_20261024.tsv；runs/ENS 的新目录要在包里）；第 57 条的两格编码器出分后一包，参考模型两格出分后一包。
   50. 集成（pull 之后，CPU，几分钟到半小时）：
        python bench/scripts/ensemble.py members --train DDR --force        # 成员表回到登记的 18 人（MedSAM 剔除，打印一行）
        rm -r runs/ENS/DDR/all/{IDRiD,TJDR_std,TJDR_uwf,DiaRetDB1,MAPLES-DR}

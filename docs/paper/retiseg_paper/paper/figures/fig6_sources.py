@@ -61,8 +61,11 @@ def panel_a(fig, top):
         ax.minorticks_off()
         ax.grid(color=S.GRID, lw=0.4, zorder=0)
         ax.set_title(f"{cls} · {S.LESION_NAME[cls].lower()}", fontsize=5.4, fontweight="bold", loc="left", pad=1.5)
-        if k == 3:
-            S.tag_simulated(ax, loc="tr", text="simulated except I (outlined)", dx=0.02, dy=-0.1)
+        if k == 3 and (src != "measured").any():
+            # the label-style audit (bench/scripts/label_style_audit.py, 2026-10-24) measured every source; the tag
+            # names the measured ones only while a placeholder row is left
+            done = sorted({CODE[d] for d in D.TESTS if src[(d, cls)] == "measured"})
+            S.tag_simulated(ax, loc="tr", text=f"simulated except {', '.join(done)} (outlined)", dx=0.02, dy=-0.1)
     S.text_mm(fig, "Lesions per image", 15 + 26, top + 48.5, ha="center", fontsize=6.2)
     S.text_mm(fig, "Median lesion diameter / FOV diameter", 3.5, top + 21, rotation=90, va="center", ha="center", fontsize=6.2)
     h = [Line2D([], [], marker="o", ls="", ms=3.6, color=S.TIER[t], label=S.TIER_LABEL[t]) for t in S.TIER]

@@ -1,4 +1,4 @@
-# retiseg 检查点（2026-10-24：10-24 包进表，R5 写成实数；集成成员固定 18 人，HACDR 兜底与标注审计脚本到位）
+# retiseg 检查点（2026-10-24 第二次：v4 包进表——编码器 C2 收齐、18 人集成重算、FGADR / RL 六组合、八源标注审计；R4 / R5 / R6 / 讨论按实数改；HACDR 的 CUBLAS 判为环境问题）
 
 给下一次会话或其他 agent 的最小上下文。细节都在仓库里，按下面的路径读；本文件只说"在哪、什么状态、怎么接着做"。
 
@@ -12,15 +12,15 @@ DR 眼底病灶分割（MA/HE/EX/SE）的 assessment 论文，体例照 Lu 2026 
 4. E5 推理档：`docs/ops/25_albert合并记录.txt`、`docs/design/23`、`24`（D1–D9 的依据在 24 第十七节）。
 5. 论文源：`docs/paper/retiseg_paper/paper/`（`STRUCTURE.md` 图表清单；`README.md` 哪些是实数）。
 
-## 现状（2026-10-24；仓库 origin/main fee1242 加本次写回）
-- 主表（14 M7、M9）：19 行全部实数；MedSAM 是修订配方（整批 Dice；0.642 / 0.413，备注 55），塌缩 run 以 _registered 留在补充表。SAMed、RETFound 三种子齐：DDR 列 SAMed 0.460 ± 0.027、RETFound 0.450 ± 0.018、HRNet 0.447 ± 0.009——种子 0 的"基础模型领先"在三种子下落在散布内，R4 与讨论已按此写。`data/results.csv` 1,507 份报告、61,650 行实测。
+## 现状（2026-10-24 第二次；仓库 origin/main 80f5d73 加本次写回）
+- 主表（14 M7、M9）：19 行全部实数；MedSAM 是修订配方（整批 Dice；0.642 / 0.413，备注 55），塌缩 run 以 _registered 留在补充表。SAMed、RETFound 三种子齐：DDR 列 SAMed 0.460 ± 0.027、RETFound 0.450 ± 0.018、HRNet 0.447 ± 0.009——种子 0 的"基础模型领先"在三种子下落在散布内，R4 与讨论已按此写。`data/results.csv` 1,653 份报告、68,722 行实测。
 - HRDecoder 案例 N1 收口（14 备注 46）：作者配方 0.674、两倍预算 0.615 / 0.304、作者画布（2880，等效 epoch）0.627、1440 主表 0.647——画布与训练量都不是解释，作者配方多出的 0.03–0.05 归于协议替换的增强（±45° 旋转、无光度扰动）、54 张全训无验证划分、报最后一步。主表行不换（预登记）。
 - 独立测试（14 M10）：19 模型 × 两源 × 八集合齐；HRDecoder DDR 已在正确归一化下重测（备注 57），DDR 源 all / fam:fundus 集成重算。名次统计（19 模型）：χ² 103.5、临界差 9.90、SAMed 1.38、HRNet 3.63、RETFound 5.00，前 12 不可分；正文全读 `\rn` 键。
-- 编码器对照（14 M9、备注 56；collect 读 runs/E5enc_*）：C1 出数——MAE-IN1k + UPerNet 0.519（DDR）/ 0.634（TJDR_std）高于 RETFound-MAE 0.466 / 0.589，且高于主表 DDR 列全部行（一个种子）；C2 一半——RETFound-DINOv2 0.490 / 0.616，DINOv2 在 GPU 2 训（被开过第二份，已停，21 第 89 条；训完核对 history 重复行，17 第 53 条）。R5、方法已写；图 5d 只画实测编码器。
+- 编码器对照（14 M9、备注 56；collect 读 runs/E5enc_*）：C1、C2 都收齐——MAE-IN1k + UPerNet 0.519（DDR）/ 0.634（TJDR_std）高于 RETFound-MAE 0.466 / 0.589；DINOv2 0.510 / 0.619 高于 RETFound-DINOv2 0.490 / 0.616（C2 −0.020，独立三集合均值 +0.006）。结论：同头同配方同预算、各一个种子下，视网膜预训练在两对里都没有加分；三个非 RETFound-MAE 的编码器高于主表 DDR 列全部行。R5、讨论 Q2、方法已按实数写；图 5d 四个编码器全实测。IDRiD 列（备注 59）10-25 收口后开。
 - Refined IDRiD（备注 54）、人类参照（M16a）、分层（M17a）：同 10-22；MedSAM 修订 run 已补评。
-- 推理档（14 M9）：测试阶段收齐，R5 全部实数——零样本任意病灶 ≤0.08（nnU-Net 同指标 0.78），SAM 3 选定措辞 0.40 / 0.18，理想框 SAM 0.86 / 0.77 对同信息参照 nnU-Net 0.86 / 0.71（框内勾画不输监督模型，差在找病灶），理想点 0.12 / 0.02。集成：成员固定为登记时的 18 人（21 第 88 条；10-23 的 19 人 DDR 源 all 由服务器重算，17 第 50 条，进表后换 R4 的五个数）；FGADR / Retinal-Lesions 的成员图齐了除 HACDR（DCN 报 CUBLAS，21 第 87 条）——不含它的六个组合先跑，all / fam:fundus 到 10-25 仍缺就 --without HACDR-Net 出数并加角标（17 第 51 条）。
-- 论文：R3、R4、R5、R6（含 Refined IDRiD）、R7、R8、讨论 Q2/Q3、方法已是实数；仍是 simtext：L1/E1 段、B1 一句、摘要。图 6a 七个来源仍是占位（标注审计脚本 bench/scripts/label_style_audit.py 已到，服务器跑完进表，21 第 90 条）。待动：C2 句与讨论 Q2 的编码器一句、集成 FGADR / RL 列与 DDR 源 all 的 18 人重算、R6 第一段按审计改写、N8 参考模型小节。
-- 下一步（17 第四节第 50–54 条，再 47–49）：nnU-Net 成员重推 → 两集合的集成（HACDR 的 CUBLAS 报错先换 retiseg-hacdr 环境重试，21 第 87 条）；编码器格补 MAPLES-DR；推理档 IDRiD 按队列。10-25 收口后：RetiSeg-Ref 两格（14 备注 58；queue 的 ref_model 阶段改 enabled: true 即可，约 25 GPU 时）、编码器块 IDRiD 两格（备注 59，C2 之后）、FCT 修正配方最低优先（备注 60）。本机：ensemble.py 加按目录指定成员的入口（参考模型的集成）；C2 进表后写 R5 结尾与讨论一句；IDRiD 测试档到后一次写成 R5 零样本段；N6、N7（CPU）仍未做；HRDecoder 的 L1 抽取待做。
+- 推理档（14 M9）：测试阶段收齐，R5 全部实数——零样本任意病灶 ≤0.08（nnU-Net 同指标 0.78），SAM 3 选定措辞 0.40 / 0.18，理想框 SAM 0.86 / 0.77 对同信息参照 nnU-Net 0.86 / 0.71（框内勾画不输监督模型，差在找病灶），理想点 0.12 / 0.02。集成（14 M15）：18 人重算完成（DDR 源 all 0.677 / 0.637 / 0.266 / 0.335 / 0.496，R4 已换）；FGADR / Retinal-Lesions 不含 HACDR 的六个组合两源出数（粗标注集合上集成只比最好单模型高 0.01–0.02，细档 0.02–0.06，R4 与讨论分两档写）；all / fam:fundus 在这两个集合等 HACDR——它的 DCN 在 cublasSgemm 报 CUBLAS_STATUS_NOT_SUPPORTED，代码路径、检查点、驱动都与 10-13 / 10-17 的成功运行相同，判为 retiseg-hacdr 环境问题（21 第 87 条）：服务器跑探针（17 第 55 条），10-25 按 --without HACDR-Net 出数并加角标（第 56 条）。
+- 论文：R3、R4、R5、R6（含 Refined IDRiD；第一段按八源标注审计实数写——细档每图几十个小连通域，粗标注 / 区域共识每图 1.5–8 个、EX 直径 8–9 倍，FGADR 居中；方法加 Annotation style 一段）、R7、R8、讨论 Q2/Q3、方法已是实数，图 6a 全实测；仍是 simtext：L1/E1 段、B1 一句、摘要。待动：FGADR / RL 的 all 与 fam:fundus（10-25 兜底后换数、表 5 角标 p）、N8 参考模型小节、编码器 IDRiD 列进补充表。
+- 下一步（17 第四节第 55–58 条，再 47–49）：服务器——HACDR cuBLAS 探针（55，只贴输出）；10-25 的 --without 兜底四份（56，CPU 约 4 小时）后删成员图；收口后同时开 RetiSeg-Ref 两格（47；queue 的 ref_model 阶段改 enabled: true）与编码器 IDRiD 两格（48）；FCT 修正配方最低优先（49）。本机——ensemble.py 加按目录指定成员的入口（参考模型两成员的集成，runs/ENS/REF/<集>，paper 键 N8 / reference:ensemble）；N8 小节；兜底出数后换 R4 的 all / fam:fundus 两列；N6、N7（CPU）仍未做；HRDecoder 的 L1 抽取待做；服务器 GPU 2–7 现在全空。
 - 医生：三名眼科医生，每人 3 小时（26 第四节）；T1–T3 材料等联系好再做。
 - 用户待办：提交推送本机写回；与医生约 T3。
 
