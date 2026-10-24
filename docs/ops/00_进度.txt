@@ -534,3 +534,49 @@ wrote /home/qurr/luming/retiseg/retiseg/runs/audit/label_style.json
 第 53 条：等 GPU 2 上 DINOv2（pid 654500）的 console 出现退出 0，再在同一张卡做 score-only、评测，并补 TJDR 标准、TJDR 超广角、MAPLES-DR。12:32 的 history 仍是 epoch 360/400，验证 0.6671，最高仍是 epoch 160 的 0.6755。到这一行为止没有重复的 epoch。按大约每小时 15 个 epoch，训练大约 15:00 结束，打分和外部测试再大约两小时。
 第 54 条：第 52 条的包就是上面的 v2。第 50 条做完、第 53 条出分后再各打一包，仍对照今早清单，同一天的下一包是 v3、v4。等待进程会在做完时把 mAUPR 和包的大小追加在本文件后面。
 第 47–49 条没开。启动器 pid 88417 还在，没有子进程。GPU 0、1 仍是别人的 vLLM。GPU 3–7 空着，不拿去开参考模型或编码器的 IDRiD 列。
+
+2026-10-24 17:37 +0800。第 50 条集成。members.json 现为 18 人，MedSAM 在表内：无。--force 从空表重写，剔除打印只在读到旧表时出现；这次的剔除行：无。
+DDR/all IDRiD mAUPR 0.6772 (18 members)
+DDR/all TJDR_std mAUPR 0.6373 (18 members)
+DDR/all TJDR_uwf mAUPR 0.2663 (18 members)
+DDR/all DiaRetDB1 mAUPR 0.3351 (18 members)
+DDR/all MAPLES-DR mAUPR 0.4959 (18 members)
+DDR/top3 FGADR mAUPR 0.3001 (3 members)
+DDR/top3 Retinal-Lesions mAUPR 0.2911 (3 members)
+DDR/top5 FGADR mAUPR 0.2983 (5 members)
+DDR/top5 Retinal-Lesions mAUPR 0.2902 (5 members)
+DDR/1perfam FGADR mAUPR 0.2813 (4 members)
+DDR/1perfam Retinal-Lesions mAUPR 0.2780 (4 members)
+DDR/fam:general FGADR mAUPR 0.2682 (5 members)
+DDR/fam:general Retinal-Lesions mAUPR 0.2662 (5 members)
+DDR/fam:auto FGADR mAUPR 0.2746 (2 members)
+DDR/fam:auto Retinal-Lesions mAUPR 0.2266 (2 members)
+DDR/fam:foundation FGADR mAUPR 0.3022 (4 members)
+DDR/fam:foundation Retinal-Lesions mAUPR 0.2944 (4 members)
+IDRiD/top3 FGADR mAUPR 0.2725 (3 members)
+IDRiD/top3 Retinal-Lesions mAUPR 0.2521 (3 members)
+IDRiD/top5 FGADR mAUPR 0.2900 (5 members)
+IDRiD/top5 Retinal-Lesions mAUPR 0.2508 (5 members)
+IDRiD/1perfam FGADR mAUPR 0.2558 (4 members)
+IDRiD/1perfam Retinal-Lesions mAUPR 0.2388 (4 members)
+IDRiD/fam:general FGADR mAUPR 0.2442 (5 members)
+IDRiD/fam:general Retinal-Lesions mAUPR 0.1935 (5 members)
+IDRiD/fam:auto FGADR mAUPR 0.2420 (2 members)
+IDRiD/fam:auto Retinal-Lesions mAUPR 0.1771 (2 members)
+IDRiD/fam:foundation FGADR mAUPR 0.2942 (4 members)
+IDRiD/fam:foundation Retinal-Lesions mAUPR 0.2505 (4 members)
+== members 2026-10-24T12:16:26+08:00
+== members exit 0 2026-10-24T12:22:48+08:00
+== all five 2026-10-24T12:22:48+08:00
+== all five exit 0 2026-10-24T13:11:44+08:00
+== six DDR 2026-10-24T13:11:44+08:00
+== six exit 0 DDR 2026-10-24T15:22:33+08:00
+== six IDRiD 2026-10-24T15:22:33+08:00
+== six exit 0 IDRiD 2026-10-24T17:36:53+08:00
+== item50 done 2026-10-24T17:36:53+08:00
+
+2026-10-24 17:38 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261024_v3.tar.gz（69 MB，6679 个文件，1389 行指标，0 个未对齐）。对照今早清单。ENS 新目录在包里。
+
+2026-10-24 17:38 +0800。第 53 条 DINOv2 出分。14:50 训练退出 0，用时 109089.3 秒。验证最高仍是 epoch 160 的 0.6755，最后一步 epoch 400 是 0.6659。history 从 epoch 20 到 400 共 20 行，没有重复的 epoch。内部测试 mAUPR 0.5102（n=225，排除 0），文件 runs/E5enc_vitup_dinov2_ddr_seed0_lr1/metrics_test.json。外部测试排除都是 0：TJDR 标准 0.6186（n=55），TJDR 超广角 0.1369（n=58），fov 0.2720（n=58），MAPLES-DR 0.4876（n=60）。E3a 15:58 退出 0。
+
+2026-10-24 17:38 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261024_v4.tar.gz（69 MB，6688 个文件，1389 行指标，0 个未对齐）。对照今早清单。DINOv2 的 metrics_test.json 在包里。07:42 的包没有被覆盖。
