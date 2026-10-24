@@ -441,12 +441,18 @@ ENSEMBLE_ORDER = ["E-top3", "E-top5", "E-1perfam", "E-all", "E-fam:general", "E-
 def ensemble_rows(pix):
     """The ensemble block of Table 5 (docs/paper/14 M15; bench/scripts/ensemble.py): measured rows only, no rank
     (ensembles are a reference, not part of the Friedman test); empty until collect_runs has read runs/ENS."""
-    df = D.sel(experiment="ENS", variant="ensemble", metric="aupr")
+    # variant "ensemble" is the registered composition; "ensemble:without <member>" a set on which a member's maps
+    # could not be produced (ensemble.py --without; 21 item 87): such a cell is marked with \partial
+    all_rows = D.sel(experiment="ENS", metric="aupr")
+    all_rows = all_rows[all_rows.variant.str.startswith("ensemble")]
+    df = all_rows
     if df.empty:
         return []
     df = df[df["cls"].isin(D.CLASSES)]
     score = df.groupby(["model", "train_set", "test_set"])["value"].mean()
-    auc = D.sel(experiment="ENS", variant="ensemble", metric="img_auc")
+    partial = {k for k, g in df.groupby(["model", "train_set", "test_set"]) if (g.variant != "ensemble").any()}
+    auc = D.sel(experiment="ENS", metric="img_auc")
+    auc = auc[auc.variant.str.startswith("ensemble")]
     auc = auc.groupby(["model", "train_set"])["value"].mean() if not auc.empty else None
     rows = [r"\grouprow{18}{Ensembles of the rows above (pixelwise mean of the probability maps; members chosen on validation data)}"]
     for model in [m for m in ENSEMBLE_ORDER if m in score.index.get_level_values(0)]:
@@ -454,9 +460,9 @@ def ensemble_rows(pix):
         for t in D.TRAIN_MAIN:
             def v(c):
                 return score.get((model, t, c), np.nan)
-            cells.append(num(v(t), "{:.2f}", np.isnan(v(t))))
+            cells.append(num(v(t), "{:.2f}", np.isnan(v(t))) + ("$^{\\rm p}$" if (model, t, t) in partial else ""))
             for c in pix:
-                cells.append(tint(v(c), 0.0, 0.7) + num(v(c), "{:.2f}", np.isnan(v(c))))
+                cells.append(tint(v(c), 0.0, 0.7) + num(v(c), "{:.2f}", np.isnan(v(c))) + ("$^{\\rm p}$" if (model, t, c) in partial else ""))
             a = auc.get((model, t), np.nan) if auc is not None else np.nan
             cells.append(num(a, "{:.2f}", np.isnan(a)))
             fine = [v(c) for c in D.FINE_INDEPENDENT]
@@ -574,7 +580,7 @@ def table_independent():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item Granularity of the test set: \tier{{fine}} fine \quad \tier{{mixed}} mixed \quad \tier{{coarse}} coarse \quad \tier{{region}} region consensus. Int., internal test (official test set of the training source). Std, standard field (35--50$^\circ$); UWF, ultra-widefield (133$^\circ$), predicted at native resolution with sliding windows; Maples, MAPLES-DR (official test split, 60 images). Retinal-Lesions excludes its grey-level 127 regions. Best and second-best are marked among the measured rows of a column.
+\item Granularity of the test set: \tier{{fine}} fine \quad \tier{{mixed}} mixed \quad \tier{{coarse}} coarse \quad \tier{{region}} region consensus. Int., internal test (official test set of the training source). Std, standard field (35--50$^\circ$); UWF, ultra-widefield (133$^\circ$), predicted at native resolution with sliding windows; Maples, MAPLES-DR (official test split, 60 images). Retinal-Lesions excludes its grey-level 127 regions. Best and second-best are marked among the measured rows of a column. $^{{\rm p}}$, ensemble computed without a registered member whose maps could not be produced on that set (named in the run's record).
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}

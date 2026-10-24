@@ -8,6 +8,7 @@ Reads the files that bench.eval.cli evaluate writes (bench/eval/evaluate.py):
     runs/BS_<slug>_<dataset>_seed0/environment.json             E10: parameters, wall time
     runs/BS_<slug>_<dataset>_seed<k>_registered/metrics_test.json  retired recipe (variant "registered"; U-Net DDR seed 0 also E9)
     runs/E5enc_<encoder>_ddr_seed0_lr1/metrics_test.json  encoder comparison (E5 / encoder_control; E3a sets under runs/E3a/E5enc_*)
+    runs/audit/label_style.json                                  annotation style per source (figure 6a; bench/scripts/label_style_audit.py)
     runs/NN_<default|resencm>_<dataset>_fold0/metrics_test.json    nnU-Net (E2, seed 0)
     runs/E1r_<slug>_<dataset>_seed<k>_bs4*/metrics_test.json       author recipe (E1r), plus author_*_test.json for the authors' metric
     runs/E2c_<slug>_<dataset>_seed0_<lr1o3|lr3>/history.jsonl       learning-rate check (best validation mAUPR; needs timing.json)
@@ -433,6 +434,28 @@ def collect_refined(runs_dir):
     return pd.DataFrame(rows), seen
 
 
+def collect_label_style(runs_dir):
+    """runs/audit/label_style.json (bench/scripts/label_style_audit.py): lesions per image and median relative lesion
+    diameter per source and class, the measured rows behind figure 6a (experiment audit, model labels, train_set the
+    source; they replace build_placeholder's placeholder rows, which were measured for IDRiD only)."""
+    rows, seen = [], []
+    path = Path(runs_dir) / "audit" / "label_style.json"
+    if not path.is_file():
+        return pd.DataFrame(rows), seen
+    doc = json.loads(path.read_text())
+    for name, src in doc.get("sources", {}).items():
+        train = E3A_SET.get(name, name)
+        for cls, item in src["per_class"].items():
+            if item.get("per_image_mean") is not None:
+                rows.append(dict(experiment="audit", model="labels", variant="", train_set=train, seed=-1, test_set="", cls=cls,
+                                 metric="lesions_per_image", value=float(item["per_image_mean"]), source="measured"))
+            if item.get("rel_diameter"):
+                rows.append(dict(experiment="audit", model="labels", variant="", train_set=train, seed=-1, test_set="", cls=cls,
+                                 metric="median_rel_diameter", value=float(item["rel_diameter"]["p50"]), source="measured"))
+        seen.append(("audit/label_style.json", name, None))
+    return pd.DataFrame(rows), seen
+
+
 def collect_clin(runs_dir):
     """runs/CLIN/strata/<run>/<set>/strata.json (bench/scripts/clinical_strata.py; docs/paper/14 M17a): the two DR-grade
     strata of a finished test. Experiment CLIN, variant "grade:0-1" / "grade:2-4", the run's own model / train_set /
@@ -521,7 +544,11 @@ def collect_ens(runs_dir):
                 report = load_report(setdir / "metrics.json")
                 if report is None:
                     continue
-                rows += rows_from_report(report, "ENS", "ensemble", label, train_dir.name, 0, E3A_SET[setdir.name])
+                done = json.loads((setdir / "done.json").read_text())
+                # a member left out on this set because its maps could not be produced (ensemble.py --without;
+                # docs/ops/21 item 87): the variant names the gap, so the table can mark the cell
+                variant = "ensemble" if not done.get("members_missing") else "ensemble:without " + ", ".join(done["members_missing"])
+                rows += rows_from_report(report, "ENS", variant, label, train_dir.name, 0, E3A_SET[setdir.name])
                 seen.append((f"ENS/{train_dir.name}/{comp.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
     return pd.DataFrame(rows), seen
 
@@ -816,6 +843,10 @@ def main():
     if len(refined):
         new = pd.concat([new, refined], ignore_index=True)
         seen += seen_refined
+    style, seen_style = collect_label_style(args.runs)
+    if len(style):
+        new = pd.concat([new, style], ignore_index=True)
+        seen += seen_style
     sheets = [collect_sheet(PAPER / "data" / f) for f in ("cost_measured.tsv", "cost_audit.tsv")]
     sheet = pd.concat([x for x in sheets if len(x)], ignore_index=True) if any(len(x) for x in sheets) else pd.DataFrame()
     new = pd.concat([sheet, new], ignore_index=True) if len(new) else sheet

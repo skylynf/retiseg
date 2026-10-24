@@ -29,7 +29,7 @@ if str(_ROOT) not in sys.path:
 
 import yaml
 
-from bench.scripts.launch_b1 import _DIST_VARS, in_progress, python_argv, run_queue
+from bench.scripts.launch_b1 import _DIST_VARS, in_progress, not_started_elsewhere, python_argv, run_queue
 
 JOBS = _ROOT / "bench" / "configs" / "factor_jobs.yaml"
 REQUIRED = ("name", "experiment", "model", "dataset", "seed", "env", "config", "script", "run_dir")
@@ -176,7 +176,8 @@ def main(argv=None):
     gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
     if not gpus:
         raise SystemExit("--submit needs RETISEG_GPUS")
-    errors = run_queue([(job["name"], command(job, score_only=job.get("_score_only", False))) for job in chosen], gpus, wait_free=True)
+    errors = run_queue([(job["name"], command(job, score_only=job.get("_score_only", False)),
+                         not_started_elsewhere(job["run_dir"]) if not job.get("_score_only") else None) for job in chosen], gpus, wait_free=True)
     if errors:
         raise SystemExit("\n".join(errors))
 

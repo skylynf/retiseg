@@ -3,7 +3,9 @@
 Each job runs `<script> --config <cell> --run-dir <run_dir> --diagnostic --resume`
 in its environment, one process per card in RETISEG_GPUS, longest first. A job
 whose run directory has diagnostic.json is finished and skipped, and so is one
-whose console.log shows a live process. Nothing here reads a test split.
+whose console.log shows a live process; the same two checks run again when a card
+takes an item, so a chain queued hours earlier never starts a cell another
+launcher has opened meanwhile. Nothing here reads a test split.
 
     python bench/scripts/launch_extra.py [--experiment E2c] [--only NAME,...]
     RETISEG_GPUS="2 3" python bench/scripts/launch_extra.py --submit --experiment E2c
@@ -21,7 +23,7 @@ if str(_ROOT) not in sys.path:
 
 import yaml
 
-from bench.scripts.launch_b1 import _DIST_VARS, in_progress, python_argv, run_queue
+from bench.scripts.launch_b1 import _DIST_VARS, in_progress, not_started_elsewhere, python_argv, run_queue
 
 JOBS = _ROOT / "bench" / "configs" / "extra_jobs.yaml"
 REQUIRED = ("name", "experiment", "model", "dataset", "seed", "env", "config", "script", "run_dir")
@@ -84,7 +86,9 @@ def main(argv=None):
     gpus = [int(gpu) for gpu in os.environ.get("RETISEG_GPUS", "").replace(",", " ").split()]
     if not gpus:
         raise SystemExit("--submit needs RETISEG_GPUS")
-    errors = run_queue([(job["name"], command(job)) for job in chosen], gpus, wait_free=True)
+    # each item re-checks its directory when a card takes it (21 item 89: a chain queued at launch must not start a
+    # cell that another launcher opened meanwhile)
+    errors = run_queue([(job["name"], command(job), not_started_elsewhere(job["run_dir"], "diagnostic.json")) for job in chosen], gpus, wait_free=True)
     if errors:
         raise SystemExit("\n".join(errors))
 

@@ -19,6 +19,12 @@ PROMPT_COLOR = {"SAM": "#2a78d6", "SAM 2": "#eb6834", "MedSAM": "#1baf7a"}
 ROW = 3.05
 
 
+def e5_simulated(**kw):
+    """True when the selection holds a placeholder row (or nothing): the panel keeps its tag until every row it draws is measured."""
+    r = D.sel(experiment="E5", metric="aupr", **kw)
+    return (not len(r)) or D.simulated(r)
+
+
 def e5(model, variant, test, train=None):
     kw = dict(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr")
     if train:
@@ -113,7 +119,7 @@ def panel_a(fig, top):
                 if start:
                     ax.plot([-1.86, 4.0], [start, start], transform=trans, color=S.PAPER, lw=1.6, clip_on=False)
                 start += n
-        else:
+        elif e5_simulated(test_set=test):
             S.tag_simulated(axb, loc="tr", dy=0.1)
         x += 43
     P.colorbar(fig, S.rect_mm(fig, 146, top + 2, 2.2, 14), S.CMAP_SEQ, 0, 0.9, "AUPR", ticks=[0, 0.3, 0.6, 0.9], orientation="vertical")
@@ -140,8 +146,8 @@ def panel_b(fig, top):
             ax.text(0.0, r + 0.02, "nnU-Net, trained", fontsize=4.8, color=S.INK2, va="bottom")
         ax.set_xticks(range(len(ks)))
         ax.set_xticklabels([str(k) for k in ks])
-        ax.set_ylim(0, 0.9)
-        ax.set_yticks([0, 0.3, 0.6, 0.9])
+        ax.set_ylim(0, 1.0)
+        ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
         if j:
             ax.set_yticklabels([])
         else:
@@ -150,7 +156,8 @@ def panel_b(fig, top):
         S.light_grid(ax)
         if j == 1:
             ax.set_xlabel("Oracle prompts per image and class")
-    S.tag_simulated(ax, loc="br")
+    if any(e5_simulated(model=m, variant=f"oracle:{k}:all", test_set="IDRiD") for m, k in (("SAM", "box"), ("SAM 2", "box"), ("SAM 2", "point"), ("MedSAM", "box"))):
+        S.tag_simulated(ax, loc="br")
     h = [Line2D([], [], color=PROMPT_COLOR[m], lw=1.2, label=m) for m in PROMPT_COLOR]
     h += [Line2D([], [], color=S.INK2, lw=1.0, marker="s", ms=3, label="box"), Line2D([], [], color=S.INK2, lw=1.0, ls=(0, (2.5, 1.5)), marker="o", ms=3, label="point")]
     fig.legend(handles=h, loc="upper left", bbox_to_anchor=S.rect_mm(fig, 40, top - 9.5, 1, 1)[:2], ncol=5, fontsize=5.5, columnspacing=1.2, handlelength=2.2)
@@ -174,13 +181,15 @@ def panel_c(fig, top):
     ax.set_yticks([p for p, _ in labels])
     ax.set_yticklabels([f"“{t}”" for _, t in labels], fontsize=4.9)
     ax.set_ylim(y - 0.3, -0.7)
-    ax.set_xlim(0, 0.4)
-    ax.set_xticks([0, 0.1, 0.2, 0.3, 0.4])
+    xmax = 0.4 if r["value"].max() < 0.38 else 0.5
+    ax.set_xlim(0, xmax)
+    ax.set_xticks([0, 0.1, 0.2, 0.3, 0.4] + ([0.5] if xmax > 0.4 else []))
     ax.set_xlabel("AUPR on IDRiD test, zero-shot")
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
     S.light_grid(ax, "x")
-    S.tag_simulated(ax, loc="br")
+    if D.simulated(r):
+        S.tag_simulated(ax, loc="br")
 
 
 def panel_d(fig, top):
@@ -192,7 +201,7 @@ def panel_d(fig, top):
     # measured pair at a time, never a measured encoder against a simulated one)
     indep = np.array([enc["independent"][m] if not enc["simulated"][m] else np.nan for m in encs])
     internal = np.array([v if not enc["simulated"][m] else np.nan for v, m in zip(internal, encs)])
-    sets = ", ".join(s.replace("TJDR-", "TJDR ") for s in enc["sets"]) or "pending"
+    sets = (f"{len(enc['sets'])} fine sets" if len(enc["sets"]) > 2 else ", ".join(s.replace("TJDR-", "TJDR ") for s in enc["sets"])) or "pending"
     ax = S.axes_mm(fig, 36, top, 44, 20)
     P.dumbbell(ax, encs, [internal, indep], ["#3d3d3a", "#9085e9"], ["internal (DDR test)", f"independent, fine ({sets})"], markers=["o", "D"], xlim=(0.1, 0.84), size=18, fs=5.6)
     for i, t in enumerate(note):
@@ -246,9 +255,9 @@ def panel_e(fig, top):
     ax.set_xticks(x)
     ax.set_xticklabels(cats, fontsize=4.9, linespacing=1.15)
     top_v = float(np.nanmax(internal + indep))
-    ymax = 0.6 if top_v < 0.56 else 0.9   # the oracle-box bar on DDR reached 0.76 (2026-10-23)
+    ymax = 0.6 if top_v < 0.56 else (0.9 if top_v < 0.84 else 1.0)   # the oracle-box bars reach 0.77 / 0.88 (2026-10-24)
     ax.set_ylim(0, ymax)
-    ax.set_yticks([0, 0.2, 0.4, 0.6] + ([0.8] if ymax > 0.6 else []))
+    ax.set_yticks([0, 0.2, 0.4, 0.6] + ([0.8] if ymax > 0.6 else []) + ([1.0] if ymax > 0.9 else []))
     ax.set_ylabel("mAUPR")
     ax.axvline(3.5, color=S.INK2, lw=0.5, ls=(0, (2, 2)))
     S.light_grid(ax)
@@ -256,7 +265,14 @@ def panel_e(fig, top):
     ax.legend(handles=[Patch(fc=S.INK2, label="DDR test (internal for trained models)"), Patch(fc=S.INK2, alpha=0.45, label="TJDR-std test (independent)"),
                        Line2D([], [], ls="", marker="D", ms=3.2, mfc=S.PAPER, mec=S.INK, label="ref. any-lesion AUPR (DDR)")],
               loc="lower left", bbox_to_anchor=(-0.02, 1.0), ncol=3, fontsize=4.8, columnspacing=0.8, handlelength=1.0, handletextpad=0.4)
-    S.tag_simulated(ax, loc="tl", dx=0.01, dy=-0.2)
+    # the tag follows the rows this panel draws: the selected wording, the all-box upper bound, and the main runs of
+    # the trained rows on the two test sets (the k curves of other sets stay placeholders by design, 16 row E5b)
+    drawn_sim = any(e5_simulated(variant=v, test_set=t) for v in ("text:selected", "oracle:box:all") for t in ("DDR", "TJDR-std"))
+    trained = D.main_runs()
+    trained = trained[trained.model.isin(["SAMed", "SAM-Adapter", "SAM2-UNet", "RETFound + UPerNet", "MedSAM (full FT)", "M2MRF", "nnU-Net"])
+                      & (trained.train_set == "DDR") & trained.test_set.isin(["DDR", "TJDR-std"])]
+    if drawn_sim or D.simulated(trained):
+        S.tag_simulated(ax, loc="tl", dx=0.01, dy=-0.2)
 
 
 def main():

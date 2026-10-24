@@ -25,6 +25,7 @@ Retinal-Lesions were run with --drop-maps, so their member maps have to be regen
     python bench/scripts/ensemble.py members --train DDR                  # rank table (runs/ENS/DDR/members.json)
     python bench/scripts/ensemble.py plan --train DDR --composition top3   # members and missing maps
     python bench/scripts/ensemble.py run --train DDR --composition top3 [--sets DDR,IDRiD,...] [--drop-maps]
+    python bench/scripts/ensemble.py run --train DDR --composition all,fam:fundus --sets FGADR,Retinal-Lesions --without HACDR-Net   # a member whose maps cannot be made (21 item 87); recorded in done.json
     python bench/scripts/ensemble.py run --train DDR --composition all,fam:general,fam:auto,fam:fundus,fam:foundation,top3,top5,1perfam
 
 Output: runs/ENS/<train>/<composition>/prob_val (the ensemble's validation maps, used for the val_opt
@@ -52,6 +53,10 @@ FAMILIES = ("general", "auto", "fundus", "foundation")
 
 # (paper name, family, run-directory template). The order is the tie-break order of the rank table and the
 # member order of every ensemble; it follows the main table (docs/paper/retiseg_paper/paper/figures/retifig/data.py).
+# The list is the one registered on 2026-10-19/20 (docs/paper/14 M15, note 47: compositions are fixed after
+# registration) and holds the 18 main-table rows scored at that time. MedSAM, scored on 2026-10-21 and revised on
+# 2026-10-22, is not a member; a members.json that lists it (the DDR recompute of 2026-10-23) is pruned on read
+# (docs/ops/21 item 88).
 MEMBERS = [
     ("U-Net", "general", "BS_unet_{t}_seed0"),
     ("DeepLabv3", "general", "BS_deeplabv3_{t}_seed0"),
@@ -70,9 +75,9 @@ MEMBERS = [
     ("SAMed", "foundation", "BS_samed_{t}_seed0"),
     ("SAM-Adapter", "foundation", "BS_sam_adapter_{t}_seed0"),
     ("SAM2-UNet", "foundation", "BS_sam2_unet_{t}_seed0"),
-    ("MedSAM (full FT)", "foundation", "BS_medsam_{t}_seed0"),
     ("RETFound + UPerNet", "foundation", "BS_retfound_{t}_seed0"),
 ]
+REGISTERED_MEMBERS = [name for name, _family, _template in MEMBERS]
 COMPOSITIONS = ("all", "top3", "top5", "1perfam") + tuple(f"fam:{f}" for f in FAMILIES)
 
 
@@ -148,7 +153,10 @@ def members_table(train, frozen=None, proto=None, runs_root=None, force=False):
     # object as the table and wrote it back nested; keep only rows that actually have a score.
     blob = json.loads(path.read_text()) if path.is_file() and not force else {}
     stored = blob.get("members", {}) if isinstance(blob, dict) else {}
-    table = {k: v for k, v in stored.items() if isinstance(v, dict) and "val_maupr" in v}
+    table = {k: v for k, v in stored.items() if isinstance(v, dict) and "val_maupr" in v and k in REGISTERED_MEMBERS}
+    dropped = sorted(k for k in stored if k not in table)
+    if dropped:
+        print(f"{train}: {dropped} left out of the member table (not in the registered list; 14 note 47)", flush=True)
     changed = bool(stored) and set(stored) != set(table)
     for name, family, run_dir in member_runs(train, runs_root):
         if name in table and table[name].get("run") == run_dir.name:
@@ -226,7 +234,12 @@ def missing_maps(member_dirs, ids, classes):
     return out
 
 
-def run(train, composition, sets=None, drop_maps=False, runs_root=None, e3a_root=None):
+def run(train, composition, sets=None, drop_maps=False, runs_root=None, e3a_root=None, without=()):
+    """``without``: members left out of this run on the named test sets only, when their maps cannot be produced
+    (HACDR-Net's deformable convolution failed when its FGADR / Retinal-Lesions maps were regenerated, docs/ops/21
+    item 87). The composition stays as registered: the member is dropped for these sets, done.json records
+    members_missing, and collect_runs marks the row (a 17-member E-all is reported as such, never as the full one).
+    The ensemble's validation maps keep every member, so the thresholds are those of the registered composition."""
     from bench.eval.evaluate import evaluate, load_protocol
 
     frozen = e3a.load_frozen()
@@ -234,6 +247,9 @@ def run(train, composition, sets=None, drop_maps=False, runs_root=None, e3a_root
     table = members_table(train, frozen, proto, runs_root)
     names = compose(composition, table)
     run_dirs = [runs_dir(runs_root) / table[n]["run"] for n in names]
+    without = [w for w in without if w in names]
+    if without and not sets:
+        raise ValueError("--without needs --sets: a member is left out on named test sets only, never on the whole composition")
     out = ensemble_dir(train, composition, runs_root)
     data_train = train_data_dir(train, frozen)
     classes = [c for c in proto["classes"] if c in io.load_meta(data_train)["classes"]]
@@ -257,7 +273,10 @@ def run(train, composition, sets=None, drop_maps=False, runs_root=None, e3a_root
             ids, excluded = io.load_split(data_train, frozen["split"]), []
         else:
             ids, excluded = e3a.test_ids(test_name, frozen, [train])
-        member_dirs = [map_dir(d, train, test_name, e3a_root) for d in run_dirs]
+        kept = [(n_, d) for n_, d in zip(names, run_dirs) if n_ not in without]
+        if len(kept) < 2:
+            raise ValueError(f"{test_name}: fewer than two members left after --without {without}")
+        member_dirs = [map_dir(d, train, test_name, e3a_root) for _, d in kept]
         missing = missing_maps(member_dirs, ids, classes)
         if missing:
             raise FileNotFoundError(f"{test_name}: member maps missing (regenerate with bench.e3a --regenerate-maps): {missing}")
@@ -269,17 +288,20 @@ def run(train, composition, sets=None, drop_maps=False, runs_root=None, e3a_root
         )
         done = {
             "experiment": "ENS", "composition": composition, "train_source": train, "train_sources": [train], "test_set": test_name,
-            "variant": e3a.MAIN, "members": names, "member_runs": [d.name for d in run_dirs], "rule": "pixelwise mean of 16-bit maps",
+            "variant": e3a.MAIN, "members": [n_ for n_, _ in kept], "member_runs": [d.name for _, d in kept], "rule": "pixelwise mean of 16-bit maps",
             "n_images": n, "excluded": excluded, "seconds": round(time.perf_counter() - started, 1),
             "summary": result["summary"], "maps_dropped": bool(drop_maps),
         }
+        if without:
+            done["members_missing"] = list(without)
+            done["members_registered"] = names
         (directory / "done.json").write_text(json.dumps(done, indent=1) + "\n")
         if drop_maps:
             import shutil
 
             shutil.rmtree(directory / "prob_test")
         results[test_name] = result["summary"]["mAUPR"]
-        print(f"{train}/{composition} {test_name} mAUPR {results[test_name]:.4f} ({len(names)} members)", flush=True)
+        print(f"{train}/{composition} {test_name} mAUPR {results[test_name]:.4f} ({len(kept)} members" + (f"; without {without}" if without else "") + ")", flush=True)
     return results
 
 
@@ -314,6 +336,7 @@ def main(argv=None):
         if command == "run":
             p.add_argument("--sets", default=None, help="comma-separated test sets (default: all of e3a_frozen.yaml)")
             p.add_argument("--drop-maps", action="store_true", help="remove the ensemble's prob_test after scoring")
+            p.add_argument("--without", default="", help="comma-separated members left out on the named --sets only (maps that cannot be produced; recorded in done.json)")
         if command == "members":
             p.add_argument("--force", action="store_true", help="recompute the validation table")
     args = parser.parse_args(argv)
@@ -325,8 +348,9 @@ def main(argv=None):
         plan(args.train, compositions, args.runs, args.e3a)
         return
     sets = e3a._sets(args.sets)
+    without = tuple(w.strip() for w in args.without.split(",") if w.strip())
     for composition in compositions:
-        run(args.train, composition, sets, args.drop_maps, args.runs, args.e3a)
+        run(args.train, composition, sets, args.drop_maps, args.runs, args.e3a, without=without)
 
 
 if __name__ == "__main__":

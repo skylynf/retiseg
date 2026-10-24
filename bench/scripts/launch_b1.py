@@ -604,6 +604,24 @@ def in_progress(run_dir):
     return start
 
 
+def not_started_elsewhere(run_dir, finished_file="metrics_test.json"):
+    """A gate for run_queue: "never" once the run directory is being written by another launcher or already holds
+    ``finished_file``, else "open". Planning skips such directories, but a queue made at launch time holds its
+    items for hours; on 2026-10-24 the E5enc chain started DINOv2 a second time, on another card, into a directory
+    another launcher had opened the day before (docs/ops/21 item 89). The gate is evaluated when a card takes
+    the item, so the queue sees what has happened since it was planned."""
+    directory = _ROOT / run_dir
+
+    def gate():
+        if (directory / finished_file).is_file():
+            return "never"
+        if in_progress(Path(run_dir)) is not None:
+            return "never"
+        return "open"
+
+    return gate
+
+
 def run_queue(commands, gpus, start=None, wait_free=False, poll_seconds=60):
     """Run (label, command[, gate]) items on a shared queue, one process per GPU at a time.
 
@@ -627,7 +645,8 @@ def run_queue(commands, gpus, start=None, wait_free=False, poll_seconds=60):
                 state = gate() if gate is not None else "open"
                 if state == "never":
                     pending.remove(item)
-                    errors.append(f"not started: {item[0]}: its gate closed (seed 0 missing, failed or stale)")
+                    errors.append(f"not started: {item[0]}: its gate closed (seed 0 missing, failed or stale, or the run directory "
+                                  f"was started or finished by another launcher since this queue was planned)")
                 elif state == "open":
                     pending.remove(item)
                     return item, False

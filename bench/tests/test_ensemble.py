@@ -111,6 +111,15 @@ def test_members_are_ranked_by_validation_maupr_and_compositions_follow_the_regi
         ens.compose("fam:fundus", table)                                              # no member: not an ensemble
     with pytest.raises(ValueError):
         ens.compose("top9", table)
+    # a model scored after the registration is not a member even when a run and a cached row exist (21 item 88)
+    assert "MedSAM (full FT)" not in ens.REGISTERED_MEMBERS and len(ens.REGISTERED_MEMBERS) == 18
+    path = runs / "ENS" / "DDR" / "members.json"
+    blob = json.loads(path.read_text())
+    blob["members"]["MedSAM (full FT)"] = {"family": "foundation", "run": "BS_medsam_ddr_seed0", "val_maupr": 0.9, "source": "x", "seconds": 0.0}
+    path.write_text(json.dumps(blob))
+    table = ens.members_table("DDR", runs_root=runs)
+    assert "MedSAM (full FT)" not in table and "MedSAM (full FT)" not in json.loads(path.read_text())["members"]
+    assert ens.compose("top3", table) == ["U-Net", "HRNet-W48", "nnU-Net"]
 
 
 def test_run_averages_the_maps_scores_both_sets_and_records_the_members(toy):

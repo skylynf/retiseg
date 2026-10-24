@@ -576,10 +576,32 @@
    处理条件：无。
    来源：10-23 包进表。
 
-87  2026-10-23  3 级 → 待服务器核对（17 第四节第 46 条）
+87  2026-10-23  3 级 → 环境假设已排除（服务器 10-23：HACDR 两库都在 torch 1.10.0 / mmcv 1.6.2 / CUDA 11.3 下报同一错，与原 E3a 相同环境）；待 traceback 定位，兜底方案已到代码（17 第四节第 51 条）
    问题：第 23 条成员图重推（--regenerate-maps）里 HACDR-Net DDR 两次退出 1：modulated_deform_conv 的 CUBLAS_STATUS_NOT_SUPPORTED（10:31、10:46），官方代码没改。HACDR 原来的 E3a（runs/E3a/BS_hacdr_ddr_seed0/FGADR/predicted.json）是在 torch 1.10.0、A100-40GB 上跑通的，也就是 retiseg-hacdr 环境；成员重推的循环若在 retiseg（torch 2.x）环境里跑，mmcv 1.x 的 DCN 算子在新 cuBLAS 下会报这个错——最像的原因。
    影响：FGADR、Retinal-Lesions 的集成缺 HACDR 成员，整列等它。
    状态与决定：服务器在 retiseg-hacdr 里单独重推这一格（命令在 17 第 46 条）；若环境对了仍报错，贴 traceback 与 conda list 里 torch / mmcv 版本，本机再看。
+   2026-10-24 本机：环境与原运行一致，所以不是环境；原 E3a（10-13，同代码路径 run_source → load_run_model → predict_image）能跑而现在不能，差别只可能在卡上的其他进程、失败发生的图（console 每 50 张一行，可定位区间）或两套集合在同一进程里连跑。要服务器的：完整 traceback、失败前最后一行进度、`nvidia-smi` 当时的占用；并试 CUDA_LAUNCH_BLOCKING=1 单独跑 --sets Retinal-Lesions 与 --sets FGADR。兜底：ensemble.py 加 --without（只对命名集合去掉该成员，done.json 记 members_missing，collect 记 variant ensemble:without …，表 5 加角标 p）——HACDR 到 10-25 仍不行就对 all、fam:fundus 的 FGADR / Retinal-Lesions 用它，论文写明。
    处理条件：服务器反馈。
-   来源：服务器 10-23 10:42、10:45 记录。
+   来源：服务器 10-23 10:42、10:45、10-24 06:36 记录。
+
+88  2026-10-24  2 级 → 已处理（2026-10-24，本机；服务器按 17 第四节第 50 条重算五个集合）
+   问题：ensemble.py 的 MEMBERS 列表含 MedSAM，成员表只看有没有 metrics_test.json；10-20 登记时 MedSAM 没有运行（18 人），10-22 修订 run 出分后，10-23 第 38 条重算 DDR 源 all 的五个外部集合时成员表自动收进 MedSAM，变成 19 人（服务器 10-23 09:40 记录"都是 19 个成员"），而 DDR 内部集合与 IDRiD 源的全部集成仍是 18 人。M15 / 备注 47 登记的是"组合登记后不增减"。
+   影响：runs/ENS/DDR/all/{IDRiD,TJDR_std,TJDR_uwf,DiaRetDB1,MAPLES-DR} 五份是 19 人集成，10-23 进表、进了 R4 的集成一句（0.679 / 0.639 / 0.269 / 0.338 / 0.497）；与 DDR 内部的 18 人 all 不同口径。fam:fundus 不含 MedSAM，不受影响。
+   状态与决定：ensemble.py 的 MEMBERS 去掉 MedSAM，REGISTERED_MEMBERS 固定 18 人，members_table 读到不在列表里的缓存行就剔除并重写 members.json；方法的集成段写明"18 行，MedSAM 不是成员"。服务器 pull 后 members --force 重建 DDR 成员表、删掉五份 19 人结果重算（CPU 几分钟）；进表后 R4 的五个数更新。
+   处理条件：无。
+   来源：服务器 10-23 09:40、10-24 06:36 记录。
+
+89  2026-10-24  3 级 → 已处理（2026-10-24，本机）
+   问题：编码器对照的 DINOv2 格被开了两份：10-23 08:32 服务器在 GPU 2 单独开了它（launch_extra --only 一格），10-21 开的三格链监督进程（pid 339506）在 RETFound-DINOv2 结束后（10-24 05:45）照它启动时排好的队列又在 GPU 6 上开了 DINOv2，从 epoch 260 的检查点续训并写出 epoch 280。launch_extra（和 launch_factor --submit）只在规划时查目录是否在跑，队列项取用时不再查；launch_queue 有目录认领所以没有这个问题。服务器 05:45 停掉了 GPU 6 的那份和监督进程，GPU 2 的原进程继续。
+   影响：runs/E5enc_vitup_dinov2_ddr_seed0_lr1 的 history.jsonl 可能有两行 epoch 280（续训按本项目的可复现规则逐位相同，所以两行应一致）；last.pt 被第二份写过一次，但 GPU 2 进程用的是内存里的状态，best.pt（epoch 160，0.6755）没被第二份碰（0.6733 < 0.6755）。训完要核对 history 的重复行（17 第 53 条）。
+   状态与决定：launch_b1 加 not_started_elsewhere 门（取用时再查 diagnostic.json / metrics_test.json 与 console.log 的活进程，"never" 即丢弃），launch_extra 与 launch_factor 的队列项都带这个门。
+   处理条件：DINOv2 训完后核对 history。
+   来源：服务器 10-24 06:36 记录。
+
+90  2026-10-24  3 级 → 代码已到（2026-10-24，本机；服务器按 17 第四节第 52 条跑）
+   问题：图 6a（各来源的标注风格：每图病灶数对相对直径）与 R6 开头一句所依据的 audit 行，只有 IDRiD 是实测（lesion_size_freeze 的训练集计数），其余七个来源是 build_placeholder 的占位数；R6 开头"细标注来源多而小、粗标注与区域共识少而大"是按占位写的。
+   影响：图 6a 七个点、R6 第一段。
+   状态与决定：bench/scripts/label_style_audit.py（CPU）：对八个来源 splits.json 里的每张图（去重）读 FOV 框与四类掩膜，8 连通域计数，相对直径 = 2 sqrt(面积/π) / FOV 框长边，去掉 ignore 区域；写 runs/audit/label_style.json；collect_runs 新增 collect_label_style 把 lesions_per_image / median_rel_diameter 写成 audit 行替换占位。测试 test_label_style_audit。
+   处理条件：服务器跑完进表。
+   来源：10-24 核对图 6a 的来源列。
 

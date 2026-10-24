@@ -256,6 +256,13 @@ def foundation():
         if train:
             kw["train_set"] = train
         return D.sel(**kw)["value"].mean()
+
+    def e5sim(model, variant, test, train=None):
+        kw = dict(experiment="E5", model=model, variant=variant, test_set=test, metric="aupr")
+        if train:
+            kw["train_set"] = train
+        r = D.sel(**kw)
+        return (not len(r)) or D.simulated(r)
     # the zero-shot block is summarised by the any-lesion AUPR (decided 2026-10-14): SAM / SAM 2 class-agnostic maps,
     # SAM 3 with the wording chosen on the validation pool (text:selected); nothing is picked on the test set
     def any_of(model, variant):
@@ -267,8 +274,9 @@ def foundation():
     put("fm.zero.value", f2(zs[best][0]), any(v[1] for v in zs.values()))
     # the upper bound of the automatic masks when each mask takes the class it overlaps most (reads the test labels)
     ub = {"SAM": e5("SAM", "zero_shot:auto_oracle_class", "IDRiD"), "SAM 2": e5("SAM 2", "zero_shot:auto_oracle_class", "IDRiD")}
-    put("fm.zero.ub.model", max(ub, key=ub.get), True)
-    put("fm.zero.ub.value", f2(max(ub.values())), True)
+    ub_sim = e5sim("SAM", "zero_shot:auto_oracle_class", "IDRiD") or e5sim("SAM 2", "zero_shot:auto_oracle_class", "IDRiD")
+    put("fm.zero.ub.model", max(ub, key=ub.get), ub_sim)
+    put("fm.zero.ub.value", f2(max(ub.values())), ub_sim)
     ref_any = D.reference_any_lesion("nnU-Net", "IDRiD")
     put("fm.any.ref.nnunet.IDRiD", "--" if ref_any is None else f2(ref_any), ref_any is None)
     # the class-agnostic main number of tier a: the protocol's merged any-lesion AUPR (cls "any"), measured only
@@ -277,16 +285,40 @@ def foundation():
             r = D.sel(experiment="E5", model=model, variant="zero_shot:auto_any_lesion", test_set=test, metric="aupr_any_lesion", cls="any")
             if len(r):
                 put(f"fm.any.{tag}.{test}", f2(r["value"].iloc[0]), D.simulated(r))
-    put("fm.oracle.all", f2(e5("SAM 2", "oracle:box:all", "IDRiD")), True)
-    put("fm.oracle.five", f2(e5("SAM 2", "oracle:box:5", "IDRiD")), True)
-    put("fm.oracle.twenty", f2(e5("SAM 2", "oracle:box:20", "IDRiD")), True)
-    w = D.sel(experiment="E5", model="SAM 3", test_set="IDRiD", metric="aupr").groupby("cls")["value"]
-    put("fm.wording.ratio", f"{(w.max() / w.min()).mean():.1f}", True)
+    for key, k in (("all", "all"), ("five", "5"), ("twenty", "20"), ("one", "1")):
+        put(f"fm.oracle.{key}", f2(e5("SAM 2", f"oracle:box:{k}", "IDRiD")), e5sim("SAM 2", f"oracle:box:{k}", "IDRiD"))
+    # every box (k = all) per model and test set, with the same-information references (the supervised models' own
+    # maps inside the union of the same boxes; bench/e5/same_info.py)
+    for model, tag in (("SAM", "sam"), ("SAM 2", "samtwo"), ("MedSAM", "medsam")):
+        for test in ("IDRiD", "DDR"):
+            put(f"fm.box.{tag}.{test}", f2(e5(model, "oracle:box:all", test)), e5sim(model, "oracle:box:all", test))
+    for model, tag in (("M2MRF", "m2mrf"), ("nnU-Net", "nnunet")):
+        for test in ("IDRiD", "DDR"):
+            put(f"fm.boxref.{tag}.{test}", f2(e5(model, "oracle_ref:box:all", test, test)), e5sim(model, "oracle_ref:box:all", test, test))
+    put("fm.point.all.IDRiD", f2(e5("SAM 2", "oracle:point:all", "IDRiD")), e5sim("SAM 2", "oracle:point:all", "IDRiD"))
+    put("fm.point.all.DDR", f2(e5("SAM 2", "oracle:point:all", "DDR")), e5sim("SAM 2", "oracle:point:all", "DDR"))
+    # SAM 3's selected wording per class on IDRiD, and the spread over the three wordings of the two classes that
+    # the prompts find at all (HE, EX); MA and SE stay below 0.03 under every wording
+    sel = D.sel(experiment="E5", model="SAM 3", variant="text:selected", test_set="IDRiD", metric="aupr")
+    for cls in D.CLASSES:
+        rows = sel[sel.cls == cls]
+        put(f"fm.sam3.{cls}.IDRiD", f2(rows["value"].mean()) if len(rows) else "--", (not len(rows)) or D.simulated(rows))
+    phr = D.sel(experiment="E5", model="SAM 3", test_set="IDRiD", metric="aupr")
+    phr = phr[phr.variant.str.startswith("text:") & (phr.variant != "text:selected")]
+    for cls in D.CLASSES:
+        rows = phr[phr.cls == cls]
+        if len(rows):
+            put(f"fm.sam3.{cls}.min", f2(rows["value"].min()), D.simulated(rows))
+            put(f"fm.sam3.{cls}.max", f2(rows["value"].max()), D.simulated(rows))
+    w = phr.groupby("cls")["value"]
+    put("fm.wording.ratio", f"{(w.max() / w.min()).mean():.1f}", (not len(phr)) or D.simulated(phr))
     m = D.score_matrix("DDR")
     peft = m.loc[["SAMed", "SAM-Adapter", "SAM2-UNet"], "DDR"]
-    put("fm.peft.model", peft.idxmax(), True)
-    put("fm.peft.value", f2(peft.max()), True)
-    put("fm.ref.nnunet", f2(m.loc["nnU-Net", "DDR"]), True)
+    peft_rows = D.main_runs()[D.main_runs().model.isin(["SAMed", "SAM-Adapter", "SAM2-UNet", "nnU-Net"]) & (D.main_runs().train_set == "DDR")]
+    put("fm.peft.model", peft.idxmax(), D.simulated(peft_rows))
+    put("fm.peft.value", f2(peft.max()), D.simulated(peft_rows))
+    put("fm.ref.nnunet", f2(m.loc["nnU-Net", "DDR"]), D.simulated(peft_rows))
+    names = {"TJDR-std": "the standard-field TJDR set", "TJDR-uwf": "the ultra-widefield TJDR set", "MAPLES-DR": "MAPLES-DR"}
     # encoder comparison (16 section 3 E5d2; C1 = RETFound-MAE - MAE-IN1k, C2 = RETFound-DINOv2 - DINOv2): placeholder
     # flags per encoder; a difference is flagged when either side is
     enc = D.encoder_table("DDR")
@@ -302,8 +334,8 @@ def foundation():
         put(f"fm.enc.{pair}.ind", f3(enc["independent"][a] - enc["independent"][b]), sim)
         put(f"fm.enc.{pair}.int.abs", f3(abs(enc["internal"][a] - enc["internal"][b])), sim)
         put(f"fm.enc.{pair}.std.abs", f3(abs(enc["table"].loc[a, "TJDR-std"] - enc["table"].loc[b, "TJDR-std"])), sim)
-    names = {"TJDR-std": "the standard-field TJDR set", "TJDR-uwf": "the ultra-widefield TJDR set", "MAPLES-DR": "MAPLES-DR"}
-    put("fm.enc.sets", " and ".join(names.get(t, t) for t in enc["sets"]) or "pending", not enc["sets"])
+    labels = [names.get(t, t) for t in enc["sets"]]
+    put("fm.enc.sets", (", ".join(labels[:-1]) + " and " + labels[-1] if len(labels) > 1 else (labels[0] if labels else "pending")), not enc["sets"])
     # the old keys keep working for the simtext of R5 until it is rewritten
     put("fm.enc.retfound.int", f2(enc["internal"]["RETFound-DINOv2"]), enc["simulated"]["RETFound-DINOv2"])
     put("fm.enc.imagenet.int", f2(enc["internal"]["MAE-IN1k ViT-L"]), enc["simulated"]["MAE-IN1k ViT-L"])
