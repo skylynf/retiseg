@@ -1,0 +1,177 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l c c c c c}
+\caption{\textbf{Results by DR grade (seed 0).} On the test sets that carry a DR grade per image, \mAUPR{} and image-level AUC recomputed within grades 0--1 and within grades 2--4 from the stored per-image histograms, with the thresholds of the full test; ungradable images enter neither stratum.}\label{stab:strata}\\
+\toprule
+Model & Trained on & \mAUPR{} 0--1 & \mAUPR{} 2--4 & Image AUC 0--1 & Image AUC 2--4 & $\Delta$ \mAUPR{} \\
+\midrule
+\endfirsthead
+\multicolumn{7}{l}{\textit{continued}}\\
+\toprule
+Model & Trained on & \mAUPR{} 0--1 & \mAUPR{} 2--4 & Image AUC 0--1 & Image AUC 2--4 & $\Delta$ \mAUPR{} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{7}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{7}{l}{\textbf{DDR: 20 images of grades 0--1, 203 of grades 2--4}}\\
+CLC-Net & DDR & .254 & .384 & .653 & .752 & +0.129 \\
+CLC-Net & IDRiD & .147 & .295 & .486 & .667 & +0.148 \\
+DeepLabv3 & DDR & .145 & .372 & \na & \na & +0.227 \\
+DeepLabv3 & IDRiD & .169 & .258 & .486 & .720 & +0.090 \\
+FCT & DDR & .001 & .177 & \na & \na & +0.176 \\
+FCT & IDRiD & .002 & .078 & .486 & .597 & +0.076 \\
+HACDR-Net & DDR & .210 & .268 & \na & \na & +0.058 \\
+HACDR-Net & IDRiD & .196 & .163 & .514 & .651 & $-$0.032 \\
+HRDecoder & DDR & .266 & .273 & .639 & .692 & +0.007 \\
+HRDecoder & IDRiD & .128 & .276 & .542 & .658 & +0.148 \\
+HRNet-W48 & DDR & .260 & .442 & \na & \na & +0.182 \\
+HRNet-W48 & IDRiD & .257 & .336 & .444 & .772 & +0.079 \\
+M2MRF & DDR & .209 & .349 & \na & \na & +0.140 \\
+M2MRF & IDRiD & .120 & .218 & .542 & .628 & +0.099 \\
+MedSAM (full FT) & DDR & .225 & .361 & .444 & .782 & +0.137 \\
+MedSAM (full FT) & IDRiD & .189 & .315 & .639 & .757 & +0.126 \\
+PMCNet & DDR & .213 & .302 & .611 & .750 & +0.089 \\
+PMCNet & IDRiD & .193 & .262 & .167 & .701 & +0.069 \\
+RETFound + UPerNet & DDR & .256 & .462 & .597 & .829 & +0.206 \\
+RETFound + UPerNet & IDRiD & .183 & .355 & .292 & .797 & +0.172 \\
+SAM2-UNet & DDR & .270 & .315 & .514 & .741 & +0.044 \\
+SAM2-UNet & IDRiD & .156 & .283 & .604 & .615 & +0.127 \\
+SAM-Adapter & DDR & .273 & .416 & .583 & .639 & +0.143 \\
+SAM-Adapter & IDRiD & .189 & .292 & .625 & .590 & +0.103 \\
+SAMed & DDR & .227 & .466 & .361 & .832 & +0.240 \\
+SAMed & IDRiD & .189 & .381 & .576 & .778 & +0.192 \\
+Swin-Unet & DDR & .251 & .431 & \na & \na & +0.179 \\
+Swin-Unet & IDRiD & .157 & .329 & .340 & .744 & +0.172 \\
+TC-Net & DDR & .185 & .360 & .417 & .761 & +0.176 \\
+TC-Net & IDRiD & .197 & .313 & .500 & .772 & +0.116 \\
+U-Net & DDR & .206 & .341 & .458 & .776 & +0.135 \\
+U-Net & IDRiD & .112 & .265 & .222 & .715 & +0.153 \\
+WSRFNet & DDR & .160 & .217 & .569 & .637 & +0.057 \\
+WSRFNet & IDRiD & .123 & .236 & .479 & .609 & +0.113 \\
+nnU-Net & DDR & .150 & .410 & \na & \na & +0.260 \\
+nnU-Net & IDRiD & .124 & .274 & .514 & .702 & +0.150 \\
+nnU-Net ResEnc-M & DDR & .151 & .403 & \na & \na & +0.252 \\
+nnU-Net ResEnc-M & IDRiD & .150 & .249 & .542 & .750 & +0.098 \\
+\multicolumn{7}{l}{\textbf{MAPLES: 56 images of grades 0--1, 4 of grades 2--4}}\\
+CLC-Net & DDR & .297 & .308 & .650 & .667 & +0.011 \\
+CLC-Net & IDRiD & .349 & .445 & .638 & 1.000 & +0.096 \\
+DeepLabv3 & DDR & .332 & .366 & .752 & 1.000 & +0.034 \\
+DeepLabv3 & IDRiD & .261 & .425 & .693 & 1.000 & +0.164 \\
+FCT & DDR & .127 & .186 & .470 & .333 & +0.060 \\
+FCT & IDRiD & .107 & .177 & .521 & 1.000 & +0.069 \\
+HACDR-Net & DDR & .290 & .371 & .613 & 1.000 & +0.081 \\
+HACDR-Net & IDRiD & .265 & .407 & .635 & 1.000 & +0.143 \\
+HRDecoder & DDR & .265 & .284 & .761 & .833 & +0.019 \\
+HRDecoder & IDRiD & .338 & .436 & .650 & 1.000 & +0.098 \\
+HRNet-W48 & DDR & .433 & .459 & .788 & .667 & +0.027 \\
+HRNet-W48 & IDRiD & .379 & .465 & .638 & 1.000 & +0.086 \\
+M2MRF & DDR & .292 & .329 & .690 & 1.000 & +0.037 \\
+M2MRF & IDRiD & .280 & .330 & .638 & 1.000 & +0.050 \\
+MedSAM (full FT) & DDR & .373 & .425 & .743 & .667 & +0.051 \\
+MedSAM (full FT) & IDRiD & .337 & .478 & .738 & 1.000 & +0.142 \\
+PMCNet & DDR & .370 & .434 & .735 & .667 & +0.064 \\
+PMCNet & IDRiD & .325 & .436 & .679 & 1.000 & +0.110 \\
+RETFound + UPerNet & DDR & .437 & .494 & .830 & .667 & +0.056 \\
+RETFound + UPerNet & IDRiD & .386 & .509 & .721 & .667 & +0.123 \\
+SAM2-UNet & DDR & .354 & .403 & .675 & .833 & +0.049 \\
+SAM2-UNet & IDRiD & .332 & .391 & .658 & .833 & +0.059 \\
+SAM-Adapter & DDR & .325 & .358 & .657 & .833 & +0.032 \\
+SAM-Adapter & IDRiD & .334 & .350 & .677 & 1.000 & +0.016 \\
+SAMed & DDR & .454 & .471 & .807 & 1.000 & +0.018 \\
+SAMed & IDRiD & .393 & .495 & .792 & 1.000 & +0.101 \\
+Swin-Unet & DDR & .435 & .548 & .770 & 1.000 & +0.113 \\
+Swin-Unet & IDRiD & .374 & .456 & .622 & .667 & +0.083 \\
+TC-Net & DDR & .324 & .432 & .735 & .667 & +0.108 \\
+TC-Net & IDRiD & .383 & .522 & .701 & 1.000 & +0.138 \\
+U-Net & DDR & .262 & .375 & .699 & 1.000 & +0.114 \\
+U-Net & IDRiD & .277 & .374 & .681 & 1.000 & +0.097 \\
+WSRFNet & DDR & .257 & .327 & .669 & .667 & +0.071 \\
+WSRFNet & IDRiD & .264 & .319 & .630 & .333 & +0.054 \\
+nnU-Net & DDR & .343 & .427 & .818 & 1.000 & +0.084 \\
+nnU-Net & IDRiD & .338 & .420 & .700 & 1.000 & +0.082 \\
+nnU-Net ResEnc-M & DDR & .375 & .423 & .797 & 1.000 & +0.048 \\
+nnU-Net ResEnc-M & IDRiD & .301 & .350 & .696 & .333 & +0.050 \\
+\multicolumn{7}{l}{\textbf{FGADR: 94 images of grades 0--1, 459 of grades 2--4}}\\
+CLC-Net & DDR & .059 & .166 & .560 & .747 & +0.107 \\
+CLC-Net & IDRiD & .016 & .172 & .633 & .698 & +0.156 \\
+DeepLabv3 & DDR & .056 & .236 & .762 & .753 & +0.179 \\
+DeepLabv3 & IDRiD & .055 & .222 & .661 & .762 & +0.167 \\
+FCT & DDR & .003 & .071 & .571 & .602 & +0.068 \\
+FCT & IDRiD & .002 & .052 & .577 & .634 & +0.050 \\
+HACDR-Net & DDR & .012 & .106 & .443 & .674 & +0.095 \\
+HACDR-Net & IDRiD & .005 & .038 & .501 & .573 & +0.032 \\
+HRDecoder & DDR & .021 & .188 & .707 & .727 & +0.168 \\
+HRDecoder & IDRiD & .024 & .199 & .650 & .715 & +0.176 \\
+HRNet-W48 & DDR & .046 & .274 & .775 & .814 & +0.229 \\
+HRNet-W48 & IDRiD & .036 & .256 & .759 & .802 & +0.220 \\
+M2MRF & DDR & .037 & .202 & .714 & .731 & +0.165 \\
+M2MRF & IDRiD & .002 & .084 & .581 & .599 & +0.082 \\
+MedSAM (full FT) & DDR & .074 & .231 & .768 & .803 & +0.157 \\
+MedSAM (full FT) & IDRiD & .031 & .270 & .635 & .759 & +0.238 \\
+PMCNet & DDR & .036 & .211 & .610 & .793 & +0.175 \\
+PMCNet & IDRiD & .027 & .216 & .730 & .752 & +0.189 \\
+RETFound + UPerNet & DDR & .061 & .268 & .700 & .814 & +0.207 \\
+RETFound + UPerNet & IDRiD & .017 & .240 & .719 & .773 & +0.222 \\
+SAM2-UNet & DDR & .028 & .222 & .712 & .754 & +0.195 \\
+SAM2-UNet & IDRiD & .037 & .235 & .734 & .759 & +0.198 \\
+SAM-Adapter & DDR & .035 & .242 & .687 & .669 & +0.207 \\
+SAM-Adapter & IDRiD & .014 & .221 & .564 & .620 & +0.207 \\
+SAMed & DDR & .067 & .295 & .770 & .832 & +0.228 \\
+SAMed & IDRiD & .053 & .289 & .745 & .800 & +0.236 \\
+Swin-Unet & DDR & .043 & .248 & .700 & .802 & +0.204 \\
+Swin-Unet & IDRiD & .017 & .204 & .590 & .726 & +0.187 \\
+TC-Net & DDR & .039 & .219 & .735 & .795 & +0.180 \\
+TC-Net & IDRiD & .020 & .221 & .640 & .782 & +0.201 \\
+U-Net & DDR & .019 & .170 & .690 & .761 & +0.151 \\
+U-Net & IDRiD & .003 & .144 & .576 & .700 & +0.141 \\
+WSRFNet & DDR & .016 & .062 & .652 & .639 & +0.046 \\
+WSRFNet & IDRiD & .016 & .187 & .642 & .651 & +0.170 \\
+nnU-Net & DDR & .046 & .249 & .728 & .773 & +0.203 \\
+nnU-Net & IDRiD & .036 & .222 & .673 & .784 & +0.186 \\
+nnU-Net ResEnc-M & DDR & .056 & .245 & .794 & .810 & +0.190 \\
+nnU-Net ResEnc-M & IDRiD & .027 & .189 & .615 & .773 & +0.162 \\
+\multicolumn{7}{l}{\textbf{Retinal-L.: 150 images of grades 0--1, 328 of grades 2--4}}\\
+CLC-Net & DDR & .057 & .125 & .762 & .807 & +0.068 \\
+CLC-Net & IDRiD & .029 & .168 & .807 & .768 & +0.139 \\
+DeepLabv3 & DDR & .097 & .273 & .730 & .798 & +0.176 \\
+DeepLabv3 & IDRiD & .051 & .286 & .695 & .746 & +0.236 \\
+FCT & DDR & .003 & .085 & .612 & .605 & +0.081 \\
+FCT & IDRiD & .002 & .035 & .529 & .570 & +0.033 \\
+HACDR-Net & DDR & .038 & .140 & .670 & .782 & +0.103 \\
+HACDR-Net & IDRiD & .012 & .086 & .684 & .662 & +0.074 \\
+HRDecoder & DDR & .050 & .116 & .849 & .793 & +0.066 \\
+HRDecoder & IDRiD & .030 & .130 & .767 & .760 & +0.100 \\
+HRNet-W48 & DDR & .112 & .264 & .792 & .846 & +0.152 \\
+HRNet-W48 & IDRiD & .061 & .217 & .780 & .814 & +0.156 \\
+M2MRF & DDR & .068 & .135 & .872 & .831 & +0.067 \\
+M2MRF & IDRiD & .023 & .115 & .744 & .727 & +0.092 \\
+MedSAM (full FT) & DDR & .058 & .225 & .834 & .839 & +0.167 \\
+MedSAM (full FT) & IDRiD & .042 & .240 & .790 & .786 & +0.197 \\
+PMCNet & DDR & .055 & .179 & .808 & .833 & +0.125 \\
+PMCNet & IDRiD & .039 & .185 & .740 & .754 & +0.146 \\
+RETFound + UPerNet & DDR & .121 & .248 & .826 & .856 & +0.127 \\
+RETFound + UPerNet & IDRiD & .040 & .221 & .774 & .833 & +0.182 \\
+SAM2-UNet & DDR & .081 & .194 & .807 & .777 & +0.113 \\
+SAM2-UNet & IDRiD & .034 & .168 & .754 & .730 & +0.134 \\
+SAM-Adapter & DDR & .074 & .169 & .789 & .730 & +0.094 \\
+SAM-Adapter & IDRiD & .020 & .170 & .612 & .694 & +0.151 \\
+SAMed & DDR & .125 & .281 & .828 & .864 & +0.155 \\
+SAMed & IDRiD & .055 & .268 & .795 & .806 & +0.213 \\
+Swin-Unet & DDR & .100 & .263 & .846 & .870 & +0.163 \\
+Swin-Unet & IDRiD & .052 & .247 & .810 & .822 & +0.195 \\
+TC-Net & DDR & .034 & .182 & .752 & .808 & +0.148 \\
+TC-Net & IDRiD & .026 & .193 & .768 & .805 & +0.167 \\
+U-Net & DDR & .069 & .123 & .850 & .840 & +0.054 \\
+U-Net & IDRiD & .028 & .126 & .778 & .761 & +0.098 \\
+WSRFNet & DDR & .032 & .070 & .705 & .708 & +0.037 \\
+WSRFNet & IDRiD & .036 & .124 & .756 & .695 & +0.087 \\
+nnU-Net & DDR & .073 & .165 & .858 & .837 & +0.092 \\
+nnU-Net & IDRiD & .028 & .161 & .835 & .797 & +0.132 \\
+nnU-Net ResEnc-M & DDR & .089 & .172 & .781 & .873 & +0.082 \\
+nnU-Net ResEnc-M & IDRiD & .020 & .126 & .798 & .821 & +0.106 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize Image-level AUC within a stratum is undefined when every image of the stratum carries the class or none does; such cells read 0 or 1 in the record and should be read with the stratum size.}

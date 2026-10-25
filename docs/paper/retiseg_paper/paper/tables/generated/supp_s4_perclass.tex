@@ -1,0 +1,328 @@
+\begin{landscape}
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l c c c c c c c c c}
+\caption{\textbf{Per-class AUPR of every main-table model on every test set (seed 0), with 95\% bootstrap intervals.} Exact pooled AUPR inside the field of view; the interval is the percentile interval of 2,000 bootstrap replicates over test images. Both training sources; the internal test is the row whose test set is the training source.}\label{stab:perclass}\\
+\toprule
+Model & Test set & MA & 95\% CI & HE & 95\% CI & EX & 95\% CI & SE & 95\% CI & \mAUPR{} \\
+\midrule
+\endfirsthead
+\multicolumn{11}{l}{\textit{continued}}\\
+\toprule
+Model & Test set & MA & 95\% CI & HE & 95\% CI & EX & 95\% CI & SE & 95\% CI & \mAUPR{} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{11}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{11}{l}{\textbf{Trained on IDRiD}}\\
+U-Net & IDRiD & .406 & \scriptsize .33--.44 & .622 & \scriptsize .57--.67 & .896 & \scriptsize .83--.92 & .707 & \scriptsize .45--.74 & .658 \\
+U-Net & DDR & .110 & \scriptsize .08--.14 & .377 & \scriptsize .31--.41 & .477 & \scriptsize .39--.53 & .199 & \scriptsize .05--.23 & .291 \\
+U-Net & TJDR std & .255 & \scriptsize .13--.30 & .626 & \scriptsize .51--.71 & .560 & \scriptsize .43--.65 & .235 & \scriptsize .05--.31 & .419 \\
+U-Net & TJDR UWF & .079 & \scriptsize .04--.13 & .411 & \scriptsize .24--.53 & .164 & \scriptsize .08--.27 & .180 & \scriptsize .07--.31 & .208 \\
+U-Net & MAPLES & .264 & \scriptsize .16--.29 & .328 & \scriptsize .16--.48 & .617 & \scriptsize .32--.73 & .035 & \scriptsize .00--.12 & .311 \\
+U-Net & FGADR & .010 & \scriptsize .01--.01 & .200 & \scriptsize .16--.24 & .255 & \scriptsize .21--.29 & .107 & \scriptsize .07--.13 & .143 \\
+U-Net & Retinal-L. & .044 & \scriptsize .03--.04 & .186 & \scriptsize .13--.18 & .208 & \scriptsize .13--.21 & .104 & \scriptsize .06--.12 & .136 \\
+U-Net & DiaRetDB1 & .036 & \scriptsize .02--.06 & .269 & \scriptsize .17--.33 & .285 & \scriptsize .18--.28 & .112 & \scriptsize .03--.19 & .176 \\
+DeepLabv3 & IDRiD & .090 & \scriptsize .07--.12 & .643 & \scriptsize .54--.69 & .734 & \scriptsize .62--.79 & .662 & \scriptsize .49--.76 & .532 \\
+DeepLabv3 & DDR & .042 & \scriptsize .03--.06 & .327 & \scriptsize .26--.40 & .511 & \scriptsize .43--.59 & .149 & \scriptsize .07--.24 & .257 \\
+DeepLabv3 & TJDR std & .133 & \scriptsize .07--.21 & .605 & \scriptsize .49--.69 & .585 & \scriptsize .32--.75 & .307 & \scriptsize .12--.52 & .407 \\
+DeepLabv3 & TJDR UWF & .058 & \scriptsize .02--.14 & .517 & \scriptsize .31--.63 & .320 & \scriptsize .18--.47 & .213 & \scriptsize .10--.39 & .277 \\
+DeepLabv3 & MAPLES & .160 & \scriptsize .12--.21 & .237 & \scriptsize .08--.43 & .661 & \scriptsize .41--.77 & .087 & \scriptsize .01--.21 & .286 \\
+DeepLabv3 & FGADR & .016 & \scriptsize .01--.02 & .334 & \scriptsize .30--.37 & .335 & \scriptsize .27--.40 & .183 & \scriptsize .14--.23 & .217 \\
+DeepLabv3 & Retinal-L. & .093 & \scriptsize .08--.10 & .349 & \scriptsize .31--.38 & .406 & \scriptsize .31--.50 & .195 & \scriptsize .15--.24 & .261 \\
+DeepLabv3 & DiaRetDB1 & .010 & \scriptsize .01--.02 & .510 & \scriptsize .41--.59 & .559 & \scriptsize .46--.61 & .209 & \scriptsize .03--.41 & .322 \\
+HRNet-W48 & IDRiD & .446 & \scriptsize .41--.48 & .684 & \scriptsize .63--.72 & .884 & \scriptsize .82--.91 & .783 & \scriptsize .59--.87 & .699 \\
+HRNet-W48 & DDR & .146 & \scriptsize .11--.19 & .438 & \scriptsize .38--.51 & .507 & \scriptsize .42--.58 & .254 & \scriptsize .12--.38 & .336 \\
+HRNet-W48 & TJDR std & .323 & \scriptsize .20--.42 & .706 & \scriptsize .60--.79 & .561 & \scriptsize .40--.69 & .283 & \scriptsize .11--.52 & .468 \\
+HRNet-W48 & TJDR UWF & .111 & \scriptsize .05--.20 & .480 & \scriptsize .28--.64 & .132 & \scriptsize .07--.25 & .296 & \scriptsize .13--.49 & .255 \\
+HRNet-W48 & MAPLES & .394 & \scriptsize .32--.47 & .492 & \scriptsize .30--.62 & .646 & \scriptsize .38--.78 & .078 & \scriptsize .01--.24 & .403 \\
+HRNet-W48 & FGADR & .025 & \scriptsize .02--.03 & .375 & \scriptsize .33--.42 & .362 & \scriptsize .30--.42 & .234 & \scriptsize .19--.29 & .249 \\
+HRNet-W48 & Retinal-L. & .070 & \scriptsize .06--.08 & .259 & \scriptsize .22--.30 & .262 & \scriptsize .20--.32 & .198 & \scriptsize .14--.25 & .197 \\
+HRNet-W48 & DiaRetDB1 & .039 & \scriptsize .02--.06 & .456 & \scriptsize .36--.54 & .382 & \scriptsize .27--.45 & .212 & \scriptsize .06--.34 & .272 \\
+Swin-Unet & IDRiD & .478 & \scriptsize .44--.51 & .709 & \scriptsize .65--.75 & .894 & \scriptsize .81--.93 & .685 & \scriptsize .42--.82 & .692 \\
+Swin-Unet & DDR & .132 & \scriptsize .10--.17 & .400 & \scriptsize .33--.48 & .559 & \scriptsize .49--.62 & .216 & \scriptsize .10--.34 & .327 \\
+Swin-Unet & TJDR std & .341 & \scriptsize .23--.43 & .495 & \scriptsize .38--.59 & .711 & \scriptsize .60--.80 & .347 & \scriptsize .16--.54 & .474 \\
+Swin-Unet & TJDR UWF & .090 & \scriptsize .04--.16 & .471 & \scriptsize .29--.57 & .145 & \scriptsize .07--.27 & .189 & \scriptsize .07--.35 & .224 \\
+Swin-Unet & MAPLES & .378 & \scriptsize .31--.44 & .454 & \scriptsize .26--.60 & .662 & \scriptsize .38--.79 & .120 & \scriptsize .03--.24 & .404 \\
+Swin-Unet & FGADR & .018 & \scriptsize .01--.02 & .300 & \scriptsize .26--.34 & .303 & \scriptsize .25--.35 & .173 & \scriptsize .12--.23 & .198 \\
+Swin-Unet & Retinal-L. & .083 & \scriptsize .07--.09 & .289 & \scriptsize .24--.32 & .359 & \scriptsize .27--.42 & .197 & \scriptsize .15--.24 & .232 \\
+Swin-Unet & DiaRetDB1 & .058 & \scriptsize .03--.08 & .459 & \scriptsize .37--.53 & .458 & \scriptsize .34--.51 & .237 & \scriptsize .07--.38 & .303 \\
+FCT & IDRiD & .077 & \scriptsize .06--.10 & .163 & \scriptsize .10--.23 & .684 & \scriptsize .57--.74 & .110 & \scriptsize .03--.26 & .259 \\
+FCT & DDR & .008 & \scriptsize .00--.01 & .067 & \scriptsize .05--.09 & .224 & \scriptsize .13--.32 & .004 & \scriptsize .00--.01 & .076 \\
+FCT & TJDR std & .000 & \scriptsize .00--.00 & .006 & \scriptsize .00--.01 & .004 & \scriptsize .00--.01 & .004 & \scriptsize .00--.01 & .004 \\
+FCT & TJDR UWF & .001 & \scriptsize .00--.00 & .020 & \scriptsize .01--.04 & .021 & \scriptsize .01--.05 & .006 & \scriptsize .00--.01 & .012 \\
+FCT & MAPLES & .020 & \scriptsize .01--.03 & .018 & \scriptsize .00--.05 & .465 & \scriptsize .15--.64 & .003 & \scriptsize .00--.01 & .126 \\
+FCT & FGADR & .005 & \scriptsize .00--.01 & .061 & \scriptsize .05--.07 & .112 & \scriptsize .08--.15 & .009 & \scriptsize .01--.01 & .046 \\
+FCT & Retinal-L. & .011 & \scriptsize .01--.01 & .037 & \scriptsize .03--.04 & .049 & \scriptsize .03--.07 & .007 & \scriptsize .01--.01 & .026 \\
+FCT & DiaRetDB1 & .004 & \scriptsize .00--.01 & .102 & \scriptsize .04--.17 & .275 & \scriptsize .15--.37 & .002 & \scriptsize .00--.01 & .096 \\
+nnU-Net & IDRiD & .499 & \scriptsize .42--.51 & .671 & \scriptsize .61--.72 & .876 & \scriptsize .79--.91 & .641 & \scriptsize .40--.79 & .671 \\
+nnU-Net & DDR & .122 & \scriptsize .08--.14 & .384 & \scriptsize .24--.45 & .481 & \scriptsize .37--.54 & .200 & \scriptsize .09--.27 & .297 \\
+nnU-Net & TJDR std & .210 & \scriptsize .13--.25 & .615 & \scriptsize .48--.70 & .490 & \scriptsize .32--.60 & .421 & \scriptsize .21--.64 & .434 \\
+nnU-Net & TJDR UWF & .088 & \scriptsize .03--.15 & .419 & \scriptsize .20--.59 & .169 & \scriptsize .08--.25 & .144 & \scriptsize .06--.26 & .205 \\
+nnU-Net & MAPLES & .314 & \scriptsize .19--.29 & .455 & \scriptsize .26--.56 & .682 & \scriptsize .37--.78 & .151 & \scriptsize .05--.28 & .401 \\
+nnU-Net & FGADR & .018 & \scriptsize .01--.02 & .370 & \scriptsize .29--.38 & .360 & \scriptsize .29--.38 & .201 & \scriptsize .14--.24 & .237 \\
+nnU-Net & Retinal-L. & .055 & \scriptsize .04--.04 & .283 & \scriptsize .19--.23 & .289 & \scriptsize .18--.27 & .146 & \scriptsize .09--.15 & .193 \\
+nnU-Net & DiaRetDB1 & .035 & \scriptsize .02--.05 & .437 & \scriptsize .30--.45 & .428 & \scriptsize .26--.36 & .171 & \scriptsize .05--.29 & .268 \\
+nnU-Net ResEnc-M & IDRiD & .449 & \scriptsize .36--.44 & .663 & \scriptsize .58--.68 & .878 & \scriptsize .79--.90 & .533 & \scriptsize .29--.68 & .631 \\
+nnU-Net ResEnc-M & DDR & .113 & \scriptsize .08--.12 & .337 & \scriptsize .21--.38 & .476 & \scriptsize .36--.53 & .165 & \scriptsize .07--.24 & .273 \\
+nnU-Net ResEnc-M & TJDR std & .217 & \scriptsize .12--.25 & .555 & \scriptsize .41--.61 & .526 & \scriptsize .36--.61 & .385 & \scriptsize .15--.58 & .421 \\
+nnU-Net ResEnc-M & TJDR UWF & .071 & \scriptsize .02--.13 & .421 & \scriptsize .18--.60 & .134 & \scriptsize .05--.22 & .143 & \scriptsize .06--.26 & .192 \\
+nnU-Net ResEnc-M & MAPLES & .269 & \scriptsize .17--.26 & .472 & \scriptsize .25--.57 & .677 & \scriptsize .34--.74 & .017 & \scriptsize .00--.08 & .359 \\
+nnU-Net ResEnc-M & FGADR & .017 & \scriptsize .01--.02 & .322 & \scriptsize .24--.33 & .332 & \scriptsize .26--.36 & .148 & \scriptsize .10--.18 & .205 \\
+nnU-Net ResEnc-M & Retinal-L. & .043 & \scriptsize .03--.04 & .192 & \scriptsize .14--.17 & .227 & \scriptsize .15--.23 & .086 & \scriptsize .05--.11 & .137 \\
+nnU-Net ResEnc-M & DiaRetDB1 & .035 & \scriptsize .02--.04 & .319 & \scriptsize .20--.33 & .321 & \scriptsize .21--.29 & .232 & \scriptsize .05--.31 & .227 \\
+M2MRF & IDRiD & .443 & \scriptsize .38--.46 & .615 & \scriptsize .55--.64 & .868 & \scriptsize .77--.89 & .675 & \scriptsize .47--.76 & .650 \\
+M2MRF & DDR & .106 & \scriptsize .08--.13 & .294 & \scriptsize .20--.36 & .410 & \scriptsize .31--.46 & .127 & \scriptsize .06--.20 & .234 \\
+M2MRF & TJDR std & .259 & \scriptsize .17--.31 & .482 & \scriptsize .33--.56 & .608 & \scriptsize .49--.69 & .286 & \scriptsize .07--.48 & .409 \\
+M2MRF & TJDR UWF & .038 & \scriptsize .01--.07 & .360 & \scriptsize .21--.44 & .035 & \scriptsize .01--.10 & .205 & \scriptsize .08--.29 & .160 \\
+M2MRF & MAPLES & .253 & \scriptsize .18--.29 & .400 & \scriptsize .21--.51 & .547 & \scriptsize .32--.65 & .044 & \scriptsize .00--.10 & .311 \\
+M2MRF & FGADR & .007 & \scriptsize .01--.01 & .082 & \scriptsize .06--.09 & .172 & \scriptsize .11--.22 & .083 & \scriptsize .05--.11 & .086 \\
+M2MRF & Retinal-L. & .044 & \scriptsize .04--.05 & .172 & \scriptsize .12--.17 & .185 & \scriptsize .11--.21 & .089 & \scriptsize .05--.11 & .122 \\
+M2MRF & DiaRetDB1 & .038 & \scriptsize .02--.05 & .354 & \scriptsize .23--.38 & .233 & \scriptsize .16--.23 & .165 & \scriptsize .03--.28 & .198 \\
+HACDR-Net & IDRiD & .359 & \scriptsize .31--.40 & .502 & \scriptsize .41--.61 & .827 & \scriptsize .74--.88 & .560 & \scriptsize .34--.68 & .562 \\
+HACDR-Net & DDR & .091 & \scriptsize .05--.14 & .244 & \scriptsize .17--.31 & .266 & \scriptsize .15--.45 & .060 & \scriptsize .01--.17 & .165 \\
+HACDR-Net & TJDR std & .378 & \scriptsize .19--.52 & .475 & \scriptsize .33--.59 & .641 & \scriptsize .55--.72 & .529 & \scriptsize .16--.76 & .506 \\
+HACDR-Net & TJDR UWF & .071 & \scriptsize .03--.19 & .267 & \scriptsize .15--.39 & .103 & \scriptsize .03--.23 & .058 & \scriptsize .01--.16 & .125 \\
+HACDR-Net & MAPLES & .280 & \scriptsize .21--.35 & .177 & \scriptsize .04--.41 & .579 & \scriptsize .27--.73 & .035 & \scriptsize .00--.15 & .268 \\
+HACDR-Net & FGADR & .015 & \scriptsize .01--.02 & .069 & \scriptsize .05--.09 & .044 & \scriptsize .03--.06 & .008 & \scriptsize .00--.02 & .034 \\
+HACDR-Net & Retinal-L. & .040 & \scriptsize .03--.04 & .064 & \scriptsize .04--.08 & .183 & \scriptsize .12--.21 & .022 & \scriptsize .01--.04 & .077 \\
+HACDR-Net & DiaRetDB1 & .044 & \scriptsize .02--.07 & .290 & \scriptsize .17--.42 & .383 & \scriptsize .22--.43 & .072 & \scriptsize .01--.17 & .197 \\
+HRDecoder & IDRiD & .410 & \scriptsize .36--.43 & .629 & \scriptsize .56--.66 & .823 & \scriptsize .70--.85 & .728 & \scriptsize .48--.81 & .647 \\
+HRDecoder & DDR & .110 & \scriptsize .08--.13 & .388 & \scriptsize .30--.44 & .530 & \scriptsize .44--.58 & .168 & \scriptsize .06--.22 & .299 \\
+HRDecoder & TJDR std & .236 & \scriptsize .14--.29 & .423 & \scriptsize .26--.54 & .593 & \scriptsize .43--.67 & .318 & \scriptsize .13--.46 & .393 \\
+HRDecoder & TJDR UWF & .107 & \scriptsize .04--.18 & .362 & \scriptsize .15--.46 & .157 & \scriptsize .08--.23 & .131 & \scriptsize .05--.31 & .189 \\
+HRDecoder & MAPLES & .326 & \scriptsize .24--.37 & .464 & \scriptsize .26--.59 & .597 & \scriptsize .33--.70 & .121 & \scriptsize .03--.23 & .377 \\
+HRDecoder & FGADR & .020 & \scriptsize .02--.02 & .323 & \scriptsize .27--.35 & .293 & \scriptsize .22--.34 & .179 & \scriptsize .13--.22 & .204 \\
+HRDecoder & Retinal-L. & .053 & \scriptsize .04--.05 & .180 & \scriptsize .14--.18 & .182 & \scriptsize .12--.20 & .116 & \scriptsize .07--.14 & .133 \\
+HRDecoder & DiaRetDB1 & .052 & \scriptsize .03--.07 & .340 & \scriptsize .24--.37 & .218 & \scriptsize .15--.23 & .217 & \scriptsize .06--.33 & .207 \\
+PMCNet & IDRiD & .418 & \scriptsize .36--.47 & .610 & \scriptsize .56--.67 & .883 & \scriptsize .80--.92 & .698 & \scriptsize .41--.82 & .652 \\
+PMCNet & DDR & .133 & \scriptsize .10--.17 & .324 & \scriptsize .22--.43 & .464 & \scriptsize .34--.57 & .135 & \scriptsize .04--.28 & .264 \\
+PMCNet & TJDR std & .372 & \scriptsize .22--.48 & .600 & \scriptsize .44--.71 & .506 & \scriptsize .39--.62 & .248 & \scriptsize .05--.43 & .432 \\
+PMCNet & TJDR UWF & .125 & \scriptsize .04--.21 & .431 & \scriptsize .23--.58 & .210 & \scriptsize .11--.35 & .254 & \scriptsize .13--.40 & .255 \\
+PMCNet & MAPLES & .344 & \scriptsize .25--.43 & .334 & \scriptsize .14--.50 & .616 & \scriptsize .35--.75 & .052 & \scriptsize .00--.16 & .337 \\
+PMCNet & FGADR & .023 & \scriptsize .02--.03 & .335 & \scriptsize .29--.38 & .355 & \scriptsize .31--.40 & .133 & \scriptsize .09--.18 & .212 \\
+PMCNet & Retinal-L. & .076 & \scriptsize .06--.07 & .213 & \scriptsize .16--.24 & .305 & \scriptsize .21--.32 & .129 & \scriptsize .08--.16 & .181 \\
+PMCNet & DiaRetDB1 & .033 & \scriptsize .02--.05 & .325 & \scriptsize .22--.41 & .396 & \scriptsize .27--.40 & .153 & \scriptsize .01--.27 & .227 \\
+WSRFNet & IDRiD & .388 & \scriptsize .33--.40 & .588 & \scriptsize .51--.61 & .849 & \scriptsize .70--.88 & .502 & \scriptsize .18--.65 & .582 \\
+WSRFNet & DDR & .087 & \scriptsize .06--.10 & .287 & \scriptsize .19--.34 & .473 & \scriptsize .38--.49 & .186 & \scriptsize .09--.27 & .258 \\
+WSRFNet & TJDR std & .198 & \scriptsize .12--.24 & .426 & \scriptsize .27--.51 & .539 & \scriptsize .40--.59 & .220 & \scriptsize .06--.43 & .346 \\
+WSRFNet & TJDR UWF & .061 & \scriptsize .03--.09 & .379 & \scriptsize .22--.48 & .116 & \scriptsize .04--.20 & .230 & \scriptsize .09--.32 & .196 \\
+WSRFNet & MAPLES & .245 & \scriptsize .18--.27 & .411 & \scriptsize .22--.51 & .544 & \scriptsize .29--.62 & .032 & \scriptsize .00--.10 & .308 \\
+WSRFNet & FGADR & .010 & \scriptsize .01--.01 & .300 & \scriptsize .25--.31 & .314 & \scriptsize .25--.34 & .162 & \scriptsize .11--.19 & .197 \\
+WSRFNet & Retinal-L. & .043 & \scriptsize .04--.04 & .141 & \scriptsize .11--.15 & .172 & \scriptsize .11--.20 & .148 & \scriptsize .10--.16 & .126 \\
+WSRFNet & DiaRetDB1 & .038 & \scriptsize .02--.05 & .264 & \scriptsize .19--.31 & .221 & \scriptsize .16--.23 & .120 & \scriptsize .02--.20 & .161 \\
+CLC-Net & IDRiD & .437 & \scriptsize .37--.46 & .683 & \scriptsize .59--.71 & .889 & \scriptsize .81--.92 & .634 & \scriptsize .40--.73 & .661 \\
+CLC-Net & DDR & .115 & \scriptsize .08--.14 & .439 & \scriptsize .36--.48 & .539 & \scriptsize .45--.57 & .154 & \scriptsize .06--.23 & .312 \\
+CLC-Net & TJDR std & .295 & \scriptsize .16--.38 & .631 & \scriptsize .50--.71 & .618 & \scriptsize .45--.73 & .292 & \scriptsize .12--.43 & .459 \\
+CLC-Net & TJDR UWF & .091 & \scriptsize .03--.16 & .466 & \scriptsize .25--.57 & .170 & \scriptsize .08--.26 & .105 & \scriptsize .04--.18 & .208 \\
+CLC-Net & MAPLES & .336 & \scriptsize .23--.37 & .477 & \scriptsize .28--.59 & .689 & \scriptsize .41--.78 & .065 & \scriptsize .01--.16 & .392 \\
+CLC-Net & FGADR & .007 & \scriptsize .01--.01 & .318 & \scriptsize .27--.35 & .288 & \scriptsize .24--.31 & .086 & \scriptsize .05--.11 & .175 \\
+CLC-Net & Retinal-L. & .060 & \scriptsize .04--.05 & .246 & \scriptsize .19--.26 & .348 & \scriptsize .20--.32 & .105 & \scriptsize .07--.12 & .190 \\
+CLC-Net & DiaRetDB1 & .044 & \scriptsize .02--.06 & .400 & \scriptsize .28--.48 & .444 & \scriptsize .25--.36 & .140 & \scriptsize .03--.23 & .257 \\
+TC-Net & IDRiD & .355 & \scriptsize .31--.40 & .650 & \scriptsize .59--.70 & .854 & \scriptsize .78--.89 & .754 & \scriptsize .57--.85 & .653 \\
+TC-Net & DDR & .119 & \scriptsize .09--.15 & .404 & \scriptsize .32--.49 & .572 & \scriptsize .50--.63 & .153 & \scriptsize .07--.25 & .312 \\
+TC-Net & TJDR std & .233 & \scriptsize .16--.31 & .605 & \scriptsize .50--.69 & .691 & \scriptsize .58--.77 & .398 & \scriptsize .15--.61 & .482 \\
+TC-Net & TJDR UWF & .124 & \scriptsize .07--.22 & .489 & \scriptsize .27--.61 & .017 & \scriptsize .01--.04 & .223 & \scriptsize .12--.34 & .213 \\
+TC-Net & MAPLES & .372 & \scriptsize .29--.46 & .453 & \scriptsize .27--.58 & .682 & \scriptsize .39--.81 & .143 & \scriptsize .03--.30 & .412 \\
+TC-Net & FGADR & .022 & \scriptsize .02--.02 & .366 & \scriptsize .32--.41 & .318 & \scriptsize .26--.37 & .144 & \scriptsize .11--.19 & .212 \\
+TC-Net & Retinal-L. & .080 & \scriptsize .07--.08 & .270 & \scriptsize .22--.30 & .237 & \scriptsize .16--.29 & .114 & \scriptsize .08--.15 & .175 \\
+TC-Net & DiaRetDB1 & .039 & \scriptsize .02--.06 & .433 & \scriptsize .34--.51 & .426 & \scriptsize .29--.48 & .218 & \scriptsize .09--.32 & .279 \\
+SAMed & IDRiD & .449 & \scriptsize .40--.50 & .736 & \scriptsize .67--.78 & .892 & \scriptsize .82--.92 & .790 & \scriptsize .61--.88 & .717 \\
+SAMed & DDR & .128 & \scriptsize .10--.16 & .443 & \scriptsize .37--.52 & .609 & \scriptsize .54--.67 & .339 & \scriptsize .18--.48 & .380 \\
+SAMed & TJDR std & .301 & \scriptsize .20--.38 & .669 & \scriptsize .53--.76 & .706 & \scriptsize .61--.79 & .559 & \scriptsize .25--.74 & .559 \\
+SAMed & TJDR UWF & .115 & \scriptsize .04--.19 & .470 & \scriptsize .24--.66 & .226 & \scriptsize .13--.36 & .158 & \scriptsize .05--.33 & .242 \\
+SAMed & MAPLES & .351 & \scriptsize .26--.44 & .471 & \scriptsize .30--.60 & .684 & \scriptsize .40--.80 & .136 & \scriptsize .04--.30 & .410 \\
+SAMed & FGADR & .025 & \scriptsize .02--.03 & .418 & \scriptsize .38--.46 & .409 & \scriptsize .36--.46 & .282 & \scriptsize .23--.34 & .283 \\
+SAMed & Retinal-L. & .083 & \scriptsize .07--.09 & .354 & \scriptsize .31--.38 & .362 & \scriptsize .28--.42 & .219 & \scriptsize .16--.26 & .255 \\
+SAMed & DiaRetDB1 & .055 & \scriptsize .03--.08 & .473 & \scriptsize .39--.54 & .455 & \scriptsize .35--.50 & .276 & \scriptsize .08--.45 & .315 \\
+SAM-Adapter & IDRiD & .451 & \scriptsize .39--.46 & .740 & \scriptsize .66--.78 & .882 & \scriptsize .79--.92 & .750 & \scriptsize .54--.82 & .706 \\
+SAM-Adapter & DDR & .117 & \scriptsize .08--.14 & .403 & \scriptsize .30--.46 & .560 & \scriptsize .47--.59 & .157 & \scriptsize .08--.23 & .309 \\
+SAM-Adapter & TJDR std & .256 & \scriptsize .14--.33 & .581 & \scriptsize .43--.69 & .563 & \scriptsize .40--.63 & .351 & \scriptsize .16--.55 & .438 \\
+SAM-Adapter & TJDR UWF & .067 & \scriptsize .02--.10 & .447 & \scriptsize .21--.58 & .125 & \scriptsize .05--.21 & .196 & \scriptsize .09--.32 & .209 \\
+SAM-Adapter & MAPLES & .292 & \scriptsize .19--.32 & .395 & \scriptsize .21--.50 & .605 & \scriptsize .31--.71 & .144 & \scriptsize .05--.27 & .359 \\
+SAM-Adapter & FGADR & .018 & \scriptsize .01--.02 & .355 & \scriptsize .29--.39 & .343 & \scriptsize .27--.39 & .166 & \scriptsize .12--.22 & .221 \\
+SAM-Adapter & Retinal-L. & .046 & \scriptsize .04--.04 & .246 & \scriptsize .17--.23 & .317 & \scriptsize .17--.32 & .142 & \scriptsize .10--.16 & .188 \\
+SAM-Adapter & DiaRetDB1 & .037 & \scriptsize .02--.06 & .449 & \scriptsize .30--.49 & .365 & \scriptsize .19--.32 & .130 & \scriptsize .03--.26 & .245 \\
+SAM2-UNet & IDRiD & .439 & \scriptsize .37--.45 & .670 & \scriptsize .59--.72 & .871 & \scriptsize .78--.90 & .678 & \scriptsize .43--.77 & .664 \\
+SAM2-UNet & DDR & .112 & \scriptsize .08--.13 & .448 & \scriptsize .38--.50 & .516 & \scriptsize .42--.56 & .239 & \scriptsize .05--.17 & .329 \\
+SAM2-UNet & TJDR std & .289 & \scriptsize .16--.35 & .680 & \scriptsize .58--.75 & .643 & \scriptsize .53--.69 & .510 & \scriptsize .14--.52 & .530 \\
+SAM2-UNet & TJDR UWF & .091 & \scriptsize .03--.14 & .482 & \scriptsize .30--.62 & .121 & \scriptsize .04--.23 & .230 & \scriptsize .06--.31 & .231 \\
+SAM2-UNet & MAPLES & .319 & \scriptsize .23--.37 & .404 & \scriptsize .21--.53 & .644 & \scriptsize .38--.75 & .097 & \scriptsize .01--.21 & .366 \\
+SAM2-UNet & FGADR & .016 & \scriptsize .01--.02 & .378 & \scriptsize .32--.40 & .377 & \scriptsize .30--.40 & .242 & \scriptsize .16--.24 & .253 \\
+SAM2-UNet & Retinal-L. & .063 & \scriptsize .05--.06 & .249 & \scriptsize .18--.25 & .274 & \scriptsize .18--.29 & .159 & \scriptsize .08--.15 & .186 \\
+SAM2-UNet & DiaRetDB1 & .037 & \scriptsize .02--.05 & .327 & \scriptsize .24--.39 & .319 & \scriptsize .23--.30 & .197 & \scriptsize .04--.30 & .220 \\
+MedSAM (full FT) & IDRiD & .373 & \scriptsize .33--.41 & .665 & \scriptsize .57--.73 & .855 & \scriptsize .77--.90 & .674 & \scriptsize .43--.83 & .642 \\
+MedSAM (full FT) & DDR & .144 & \scriptsize .11--.18 & .400 & \scriptsize .35--.46 & .555 & \scriptsize .49--.62 & .155 & \scriptsize .08--.25 & .314 \\
+MedSAM (full FT) & TJDR std & .224 & \scriptsize .17--.27 & .593 & \scriptsize .42--.71 & .600 & \scriptsize .47--.70 & .395 & \scriptsize .19--.57 & .453 \\
+MedSAM (full FT) & TJDR UWF & .119 & \scriptsize .05--.24 & .443 & \scriptsize .24--.57 & .213 & \scriptsize .12--.34 & .403 & \scriptsize .25--.55 & .295 \\
+MedSAM (full FT) & MAPLES & .331 & \scriptsize .27--.39 & .364 & \scriptsize .17--.52 & .650 & \scriptsize .38--.77 & .132 & \scriptsize .05--.25 & .369 \\
+MedSAM (full FT) & FGADR & .024 & \scriptsize .02--.03 & .367 & \scriptsize .33--.41 & .394 & \scriptsize .35--.44 & .254 & \scriptsize .20--.31 & .260 \\
+MedSAM (full FT) & Retinal-L. & .078 & \scriptsize .07--.08 & .260 & \scriptsize .22--.29 & .394 & \scriptsize .33--.45 & .125 & \scriptsize .10--.15 & .214 \\
+MedSAM (full FT) & DiaRetDB1 & .043 & \scriptsize .02--.07 & .417 & \scriptsize .30--.52 & .535 & \scriptsize .42--.60 & .131 & \scriptsize .03--.24 & .282 \\
+RETFound + UPerNet & IDRiD & .484 & \scriptsize .45--.52 & .718 & \scriptsize .66--.75 & .895 & \scriptsize .82--.93 & .734 & \scriptsize .50--.85 & .708 \\
+RETFound + UPerNet & DDR & .152 & \scriptsize .12--.19 & .413 & \scriptsize .32--.50 & .572 & \scriptsize .50--.63 & .278 & \scriptsize .13--.43 & .354 \\
+RETFound + UPerNet & TJDR std & .393 & \scriptsize .25--.49 & .582 & \scriptsize .46--.67 & .776 & \scriptsize .68--.86 & .070 & \scriptsize .02--.15 & .455 \\
+RETFound + UPerNet & TJDR UWF & .099 & \scriptsize .04--.18 & .494 & \scriptsize .28--.63 & .106 & \scriptsize .05--.27 & .311 & \scriptsize .15--.51 & .253 \\
+RETFound + UPerNet & MAPLES & .375 & \scriptsize .29--.45 & .503 & \scriptsize .30--.64 & .680 & \scriptsize .38--.81 & .092 & \scriptsize .03--.23 & .413 \\
+RETFound + UPerNet & FGADR & .023 & \scriptsize .02--.03 & .332 & \scriptsize .29--.38 & .357 & \scriptsize .29--.42 & .215 & \scriptsize .16--.28 & .232 \\
+RETFound + UPerNet & Retinal-L. & .081 & \scriptsize .06--.08 & .288 & \scriptsize .23--.32 & .299 & \scriptsize .22--.36 & .156 & \scriptsize .11--.20 & .206 \\
+RETFound + UPerNet & DiaRetDB1 & .039 & \scriptsize .02--.06 & .459 & \scriptsize .34--.56 & .474 & \scriptsize .29--.55 & .257 & \scriptsize .07--.40 & .307 \\
+\multicolumn{11}{l}{\textbf{Trained on DDR}}\\
+U-Net & IDRiD & .364 & \scriptsize .29--.36 & .541 & \scriptsize .43--.57 & .800 & \scriptsize .66--.78 & .483 & \scriptsize .26--.56 & .547 \\
+U-Net & DDR & .141 & \scriptsize .09--.16 & .410 & \scriptsize .28--.48 & .553 & \scriptsize .42--.59 & .410 & \scriptsize .23--.49 & .378 \\
+U-Net & TJDR std & .296 & \scriptsize .16--.34 & .676 & \scriptsize .55--.75 & .614 & \scriptsize .42--.65 & .392 & \scriptsize .13--.49 & .494 \\
+U-Net & TJDR UWF & .077 & \scriptsize .03--.21 & .262 & \scriptsize .11--.39 & .254 & \scriptsize .15--.32 & .067 & \scriptsize .01--.13 & .165 \\
+U-Net & MAPLES & .222 & \scriptsize .13--.25 & .462 & \scriptsize .24--.58 & .509 & \scriptsize .24--.50 & .125 & \scriptsize .01--.21 & .329 \\
+U-Net & FGADR & .013 & \scriptsize .01--.01 & .214 & \scriptsize .18--.24 & .292 & \scriptsize .23--.33 & .162 & \scriptsize .11--.19 & .170 \\
+U-Net & Retinal-L. & .039 & \scriptsize .03--.04 & .165 & \scriptsize .10--.16 & .167 & \scriptsize .10--.16 & .197 & \scriptsize .13--.21 & .142 \\
+U-Net & DiaRetDB1 & .039 & \scriptsize .02--.06 & .314 & \scriptsize .19--.34 & .268 & \scriptsize .12--.20 & .253 & \scriptsize .11--.31 & .219 \\
+DeepLabv3 & IDRiD & .052 & \scriptsize .04--.07 & .640 & \scriptsize .49--.72 & .708 & \scriptsize .58--.77 & .630 & \scriptsize .40--.75 & .507 \\
+DeepLabv3 & DDR & .036 & \scriptsize .02--.05 & .447 & \scriptsize .30--.61 & .614 & \scriptsize .54--.68 & .387 & \scriptsize .25--.50 & .371 \\
+DeepLabv3 & TJDR std & .172 & \scriptsize .08--.28 & .649 & \scriptsize .51--.75 & .724 & \scriptsize .64--.76 & .411 & \scriptsize .15--.61 & .489 \\
+DeepLabv3 & TJDR UWF & .071 & \scriptsize .03--.10 & .066 & \scriptsize .02--.20 & .296 & \scriptsize .17--.44 & .058 & \scriptsize .02--.18 & .123 \\
+DeepLabv3 & MAPLES & .143 & \scriptsize .10--.19 & .452 & \scriptsize .24--.58 & .641 & \scriptsize .41--.73 & .108 & \scriptsize .01--.24 & .336 \\
+DeepLabv3 & FGADR & .011 & \scriptsize .01--.01 & .339 & \scriptsize .30--.38 & .356 & \scriptsize .30--.41 & .224 & \scriptsize .18--.27 & .232 \\
+DeepLabv3 & Retinal-L. & .074 & \scriptsize .06--.08 & .316 & \scriptsize .25--.37 & .440 & \scriptsize .32--.52 & .253 & \scriptsize .19--.31 & .271 \\
+DeepLabv3 & DiaRetDB1 & .008 & \scriptsize .00--.01 & .495 & \scriptsize .40--.57 & .545 & \scriptsize .44--.59 & .241 & \scriptsize .03--.40 & .322 \\
+HRNet-W48 & IDRiD & .372 & \scriptsize .34--.40 & .694 & \scriptsize .58--.76 & .834 & \scriptsize .75--.88 & .679 & \scriptsize .42--.79 & .645 \\
+HRNet-W48 & DDR & .155 & \scriptsize .12--.20 & .477 & \scriptsize .39--.59 & .590 & \scriptsize .52--.67 & .550 & \scriptsize .42--.65 & .443 \\
+HRNet-W48 & TJDR std & .412 & \scriptsize .24--.53 & .788 & \scriptsize .71--.85 & .713 & \scriptsize .63--.76 & .581 & \scriptsize .25--.76 & .624 \\
+HRNet-W48 & TJDR UWF & .116 & \scriptsize .06--.24 & .120 & \scriptsize .04--.29 & .248 & \scriptsize .15--.36 & .107 & \scriptsize .02--.27 & .148 \\
+HRNet-W48 & MAPLES & .383 & \scriptsize .31--.45 & .500 & \scriptsize .28--.63 & .701 & \scriptsize .48--.79 & .220 & \scriptsize .05--.37 & .451 \\
+HRNet-W48 & FGADR & .026 & \scriptsize .02--.03 & .399 & \scriptsize .35--.45 & .394 & \scriptsize .34--.45 & .255 & \scriptsize .20--.32 & .269 \\
+HRNet-W48 & Retinal-L. & .083 & \scriptsize .07--.09 & .251 & \scriptsize .20--.31 & .339 & \scriptsize .27--.40 & .332 & \scriptsize .28--.38 & .251 \\
+HRNet-W48 & DiaRetDB1 & .034 & \scriptsize .02--.05 & .437 & \scriptsize .34--.53 & .432 & \scriptsize .32--.52 & .362 & \scriptsize .21--.46 & .316 \\
+Swin-Unet & IDRiD & .420 & \scriptsize .38--.46 & .625 & \scriptsize .52--.69 & .853 & \scriptsize .76--.89 & .615 & \scriptsize .41--.73 & .628 \\
+Swin-Unet & DDR & .174 & \scriptsize .13--.22 & .479 & \scriptsize .39--.58 & .650 & \scriptsize .59--.71 & .424 & \scriptsize .29--.53 & .432 \\
+Swin-Unet & TJDR std & .370 & \scriptsize .24--.45 & .676 & \scriptsize .56--.76 & .696 & \scriptsize .53--.79 & .438 & \scriptsize .13--.63 & .545 \\
+Swin-Unet & TJDR UWF & .107 & \scriptsize .05--.22 & .336 & \scriptsize .19--.47 & .271 & \scriptsize .18--.37 & .044 & \scriptsize .01--.14 & .189 \\
+Swin-Unet & MAPLES & .395 & \scriptsize .32--.46 & .509 & \scriptsize .31--.64 & .726 & \scriptsize .50--.81 & .200 & \scriptsize .06--.35 & .457 \\
+Swin-Unet & FGADR & .021 & \scriptsize .02--.02 & .349 & \scriptsize .31--.39 & .382 & \scriptsize .33--.44 & .216 & \scriptsize .17--.27 & .242 \\
+Swin-Unet & Retinal-L. & .113 & \scriptsize .09--.12 & .254 & \scriptsize .20--.30 & .418 & \scriptsize .33--.48 & .242 & \scriptsize .19--.29 & .257 \\
+Swin-Unet & DiaRetDB1 & .048 & \scriptsize .03--.07 & .381 & \scriptsize .28--.47 & .496 & \scriptsize .40--.55 & .255 & \scriptsize .14--.36 & .295 \\
+FCT & IDRiD & .005 & \scriptsize .00--.01 & .153 & \scriptsize .10--.21 & .679 & \scriptsize .56--.74 & .046 & \scriptsize .01--.13 & .221 \\
+FCT & DDR & .001 & \scriptsize .00--.00 & .163 & \scriptsize .11--.22 & .524 & \scriptsize .46--.58 & .014 & \scriptsize .01--.02 & .176 \\
+FCT & TJDR std & .001 & \scriptsize .00--.00 & .099 & \scriptsize .05--.15 & .596 & \scriptsize .43--.68 & .040 & \scriptsize .01--.11 & .184 \\
+FCT & TJDR UWF & .001 & \scriptsize .00--.00 & .055 & \scriptsize .02--.10 & .135 & \scriptsize .06--.24 & .009 & \scriptsize .00--.02 & .050 \\
+FCT & MAPLES & .004 & \scriptsize .00--.01 & .030 & \scriptsize .01--.08 & .510 & \scriptsize .21--.66 & .007 & \scriptsize .00--.02 & .138 \\
+FCT & FGADR & .004 & \scriptsize .00--.00 & .065 & \scriptsize .05--.08 & .182 & \scriptsize .14--.23 & .015 & \scriptsize .01--.02 & .067 \\
+FCT & Retinal-L. & .010 & \scriptsize .01--.01 & .057 & \scriptsize .04--.07 & .210 & \scriptsize .14--.28 & .018 & \scriptsize .01--.02 & .074 \\
+FCT & DiaRetDB1 & .000 & \scriptsize .00--.00 & .087 & \scriptsize .02--.17 & .270 & \scriptsize .16--.34 & .009 & \scriptsize .00--.02 & .092 \\
+nnU-Net & IDRiD & .334 & \scriptsize .24--.34 & .637 & \scriptsize .52--.71 & .810 & \scriptsize .71--.86 & .623 & \scriptsize .38--.71 & .601 \\
+nnU-Net & DDR & .154 & \scriptsize .11--.17 & .501 & \scriptsize .39--.57 & .614 & \scriptsize .51--.66 & .458 & \scriptsize .30--.56 & .432 \\
+nnU-Net & TJDR std & .309 & \scriptsize .17--.36 & .705 & \scriptsize .61--.75 & .635 & \scriptsize .45--.71 & .425 & \scriptsize .15--.61 & .518 \\
+nnU-Net & TJDR UWF & .111 & \scriptsize .03--.21 & .374 & \scriptsize .18--.54 & .157 & \scriptsize .07--.26 & .142 & \scriptsize .06--.27 & .196 \\
+nnU-Net & MAPLES & .372 & \scriptsize .18--.29 & .493 & \scriptsize .27--.58 & .717 & \scriptsize .38--.75 & .196 & \scriptsize .06--.29 & .445 \\
+nnU-Net & FGADR & .020 & \scriptsize .01--.02 & .396 & \scriptsize .33--.41 & .389 & \scriptsize .31--.42 & .232 & \scriptsize .18--.27 & .259 \\
+nnU-Net & Retinal-L. & .067 & \scriptsize .04--.05 & .232 & \scriptsize .14--.19 & .319 & \scriptsize .17--.28 & .224 & \scriptsize .17--.23 & .211 \\
+nnU-Net & DiaRetDB1 & .065 & \scriptsize .04--.09 & .462 & \scriptsize .31--.48 & .476 & \scriptsize .26--.39 & .295 & \scriptsize .10--.35 & .325 \\
+nnU-Net ResEnc-M & IDRiD & .349 & \scriptsize .26--.32 & .664 & \scriptsize .54--.72 & .832 & \scriptsize .73--.87 & .603 & \scriptsize .36--.67 & .612 \\
+nnU-Net ResEnc-M & DDR & .147 & \scriptsize .10--.16 & .481 & \scriptsize .37--.55 & .653 & \scriptsize .56--.70 & .432 & \scriptsize .28--.52 & .428 \\
+nnU-Net ResEnc-M & TJDR std & .320 & \scriptsize .19--.34 & .751 & \scriptsize .63--.81 & .673 & \scriptsize .48--.75 & .538 & \scriptsize .19--.69 & .571 \\
+nnU-Net ResEnc-M & TJDR UWF & .115 & \scriptsize .03--.21 & .317 & \scriptsize .17--.44 & .132 & \scriptsize .06--.24 & .112 & \scriptsize .02--.23 & .169 \\
+nnU-Net ResEnc-M & MAPLES & .341 & \scriptsize .16--.29 & .469 & \scriptsize .26--.58 & .762 & \scriptsize .42--.78 & .293 & \scriptsize .12--.37 & .466 \\
+nnU-Net ResEnc-M & FGADR & .018 & \scriptsize .01--.02 & .409 & \scriptsize .33--.41 & .401 & \scriptsize .31--.42 & .242 & \scriptsize .17--.27 & .268 \\
+nnU-Net ResEnc-M & Retinal-L. & .062 & \scriptsize .03--.04 & .269 & \scriptsize .13--.21 & .355 & \scriptsize .20--.29 & .257 & \scriptsize .18--.24 & .236 \\
+nnU-Net ResEnc-M & DiaRetDB1 & .062 & \scriptsize .03--.08 & .450 & \scriptsize .28--.44 & .475 & \scriptsize .27--.37 & .261 & \scriptsize .06--.32 & .312 \\
+M2MRF & IDRiD & .392 & \scriptsize .34--.40 & .555 & \scriptsize .45--.56 & .776 & \scriptsize .68--.78 & .563 & \scriptsize .35--.66 & .571 \\
+M2MRF & DDR & .148 & \scriptsize .10--.18 & .402 & \scriptsize .27--.48 & .547 & \scriptsize .46--.59 & .422 & \scriptsize .25--.49 & .380 \\
+M2MRF & TJDR std & .299 & \scriptsize .19--.35 & .696 & \scriptsize .58--.75 & .618 & \scriptsize .50--.68 & .412 & \scriptsize .14--.55 & .506 \\
+M2MRF & TJDR UWF & .093 & \scriptsize .04--.17 & .403 & \scriptsize .22--.51 & .209 & \scriptsize .11--.30 & .037 & \scriptsize .01--.10 & .186 \\
+M2MRF & MAPLES & .266 & \scriptsize .17--.30 & .437 & \scriptsize .24--.55 & .454 & \scriptsize .30--.50 & .138 & \scriptsize .02--.25 & .324 \\
+M2MRF & FGADR & .019 & \scriptsize .01--.02 & .310 & \scriptsize .24--.33 & .340 & \scriptsize .27--.38 & .181 & \scriptsize .13--.22 & .212 \\
+M2MRF & Retinal-L. & .050 & \scriptsize .04--.05 & .183 & \scriptsize .13--.17 & .174 & \scriptsize .12--.18 & .195 & \scriptsize .13--.22 & .150 \\
+M2MRF & DiaRetDB1 & .049 & \scriptsize .02--.07 & .218 & \scriptsize .15--.26 & .177 & \scriptsize .13--.18 & .247 & \scriptsize .14--.30 & .173 \\
+HACDR-Net & IDRiD & .225 & \scriptsize .18--.26 & .365 & \scriptsize .28--.47 & .789 & \scriptsize .67--.83 & .199 & \scriptsize .04--.44 & .395 \\
+HACDR-Net & DDR & .114 & \scriptsize .08--.16 & .309 & \scriptsize .22--.40 & .485 & \scriptsize .37--.58 & .168 & \scriptsize .08--.28 & .269 \\
+HACDR-Net & TJDR std & .356 & \scriptsize .21--.46 & .632 & \scriptsize .54--.71 & .553 & \scriptsize .45--.64 & .196 & \scriptsize .03--.39 & .434 \\
+HACDR-Net & TJDR UWF & .095 & \scriptsize .03--.20 & .385 & \scriptsize .20--.50 & .204 & \scriptsize .11--.32 & .130 & \scriptsize .04--.24 & .203 \\
+HACDR-Net & MAPLES & .224 & \scriptsize .15--.29 & .378 & \scriptsize .17--.54 & .512 & \scriptsize .22--.63 & .093 & \scriptsize .01--.22 & .302 \\
+HACDR-Net & FGADR & .021 & \scriptsize .02--.02 & .186 & \scriptsize .15--.22 & .134 & \scriptsize .10--.17 & .049 & \scriptsize .03--.07 & .098 \\
+HACDR-Net & Retinal-L. & .058 & \scriptsize .04--.06 & .163 & \scriptsize .12--.19 & .166 & \scriptsize .11--.19 & .138 & \scriptsize .10--.17 & .131 \\
+HACDR-Net & DiaRetDB1 & .016 & \scriptsize .01--.03 & .228 & \scriptsize .12--.32 & .319 & \scriptsize .15--.34 & .101 & \scriptsize .02--.19 & .166 \\
+HRDecoder & IDRiD & .357 & \scriptsize .31--.36 & .547 & \scriptsize .41--.57 & .714 & \scriptsize .60--.73 & .539 & \scriptsize .35--.60 & .539 \\
+HRDecoder & DDR & .124 & \scriptsize .08--.16 & .318 & \scriptsize .20--.40 & .496 & \scriptsize .40--.56 & .245 & \scriptsize .11--.33 & .296 \\
+HRDecoder & TJDR std & .334 & \scriptsize .19--.41 & .689 & \scriptsize .59--.75 & .614 & \scriptsize .51--.67 & .358 & \scriptsize .12--.51 & .499 \\
+HRDecoder & TJDR UWF & .119 & \scriptsize .05--.18 & .368 & \scriptsize .17--.53 & .180 & \scriptsize .09--.27 & .124 & \scriptsize .05--.23 & .198 \\
+HRDecoder & MAPLES & .231 & \scriptsize .14--.26 & .407 & \scriptsize .23--.50 & .427 & \scriptsize .22--.48 & .127 & \scriptsize .03--.22 & .298 \\
+HRDecoder & FGADR & .014 & \scriptsize .01--.02 & .267 & \scriptsize .21--.29 & .309 & \scriptsize .25--.35 & .183 & \scriptsize .14--.22 & .193 \\
+HRDecoder & Retinal-L. & .043 & \scriptsize .03--.04 & .126 & \scriptsize .08--.14 & .171 & \scriptsize .11--.17 & .168 & \scriptsize .13--.19 & .127 \\
+HRDecoder & DiaRetDB1 & .045 & \scriptsize .02--.06 & .275 & \scriptsize .17--.32 & .234 & \scriptsize .13--.19 & .203 & \scriptsize .08--.29 & .189 \\
+PMCNet & IDRiD & .348 & \scriptsize .31--.38 & .458 & \scriptsize .37--.51 & .758 & \scriptsize .68--.81 & .524 & \scriptsize .20--.71 & .522 \\
+PMCNet & DDR & .157 & \scriptsize .12--.20 & .346 & \scriptsize .23--.46 & .482 & \scriptsize .37--.58 & .262 & \scriptsize .14--.38 & .312 \\
+PMCNet & TJDR std & .406 & \scriptsize .25--.50 & .639 & \scriptsize .54--.72 & .476 & \scriptsize .33--.60 & .308 & \scriptsize .06--.49 & .457 \\
+PMCNet & TJDR UWF & .085 & \scriptsize .03--.19 & .427 & \scriptsize .23--.55 & .217 & \scriptsize .12--.32 & .091 & \scriptsize .03--.19 & .205 \\
+PMCNet & MAPLES & .371 & \scriptsize .28--.44 & .444 & \scriptsize .24--.59 & .627 & \scriptsize .34--.74 & .131 & \scriptsize .00--.28 & .393 \\
+PMCNet & FGADR & .021 & \scriptsize .02--.02 & .323 & \scriptsize .27--.37 & .339 & \scriptsize .29--.37 & .162 & \scriptsize .11--.21 & .211 \\
+PMCNet & Retinal-L. & .105 & \scriptsize .08--.10 & .236 & \scriptsize .19--.25 & .272 & \scriptsize .18--.26 & .128 & \scriptsize .09--.16 & .185 \\
+PMCNet & DiaRetDB1 & .036 & \scriptsize .02--.06 & .312 & \scriptsize .21--.40 & .366 & \scriptsize .23--.38 & .266 & \scriptsize .04--.42 & .245 \\
+WSRFNet & IDRiD & .319 & \scriptsize .24--.32 & .489 & \scriptsize .36--.51 & .673 & \scriptsize .53--.72 & .384 & \scriptsize .17--.49 & .466 \\
+WSRFNet & DDR & .088 & \scriptsize .05--.11 & .292 & \scriptsize .20--.37 & .422 & \scriptsize .31--.48 & .135 & \scriptsize .05--.21 & .234 \\
+WSRFNet & TJDR std & .173 & \scriptsize .08--.26 & .588 & \scriptsize .43--.64 & .433 & \scriptsize .23--.51 & .114 & \scriptsize .01--.20 & .327 \\
+WSRFNet & TJDR UWF & .038 & \scriptsize .01--.18 & .323 & \scriptsize .16--.39 & .155 & \scriptsize .06--.24 & .024 & \scriptsize .00--.08 & .135 \\
+WSRFNet & MAPLES & .264 & \scriptsize .17--.29 & .428 & \scriptsize .21--.53 & .436 & \scriptsize .26--.43 & .104 & \scriptsize .01--.18 & .308 \\
+WSRFNet & FGADR & .011 & \scriptsize .01--.01 & .158 & \scriptsize .12--.17 & .086 & \scriptsize .05--.09 & .020 & \scriptsize .01--.03 & .069 \\
+WSRFNet & Retinal-L. & .037 & \scriptsize .03--.04 & .085 & \scriptsize .05--.10 & .107 & \scriptsize .07--.12 & .062 & \scriptsize .03--.09 & .073 \\
+WSRFNet & DiaRetDB1 & .050 & \scriptsize .02--.07 & .215 & \scriptsize .15--.25 & .178 & \scriptsize .13--.19 & .158 & \scriptsize .08--.20 & .150 \\
+CLC-Net & IDRiD & .358 & \scriptsize .29--.37 & .614 & \scriptsize .47--.64 & .830 & \scriptsize .71--.86 & .570 & \scriptsize .25--.67 & .593 \\
+CLC-Net & DDR & .152 & \scriptsize .10--.18 & .466 & \scriptsize .34--.53 & .612 & \scriptsize .51--.64 & .428 & \scriptsize .25--.51 & .414 \\
+CLC-Net & TJDR std & .352 & \scriptsize .19--.42 & .666 & \scriptsize .55--.73 & .667 & \scriptsize .49--.73 & .296 & \scriptsize .09--.45 & .495 \\
+CLC-Net & TJDR UWF & .110 & \scriptsize .04--.21 & .137 & \scriptsize .02--.14 & .159 & \scriptsize .06--.28 & .095 & \scriptsize .02--.29 & .125 \\
+CLC-Net & MAPLES & .287 & \scriptsize .17--.31 & .475 & \scriptsize .26--.56 & .611 & \scriptsize .33--.61 & .030 & \scriptsize .00--.11 & .351 \\
+CLC-Net & FGADR & .011 & \scriptsize .01--.01 & .304 & \scriptsize .24--.32 & .305 & \scriptsize .22--.34 & .089 & \scriptsize .05--.11 & .177 \\
+CLC-Net & Retinal-L. & .048 & \scriptsize .04--.05 & .164 & \scriptsize .08--.16 & .222 & \scriptsize .12--.22 & .173 & \scriptsize .11--.20 & .152 \\
+CLC-Net & DiaRetDB1 & .040 & \scriptsize .02--.06 & .318 & \scriptsize .16--.38 & .260 & \scriptsize .16--.23 & .242 & \scriptsize .05--.31 & .215 \\
+TC-Net & IDRiD & .225 & \scriptsize .20--.25 & .593 & \scriptsize .47--.67 & .773 & \scriptsize .67--.82 & .636 & \scriptsize .38--.76 & .557 \\
+TC-Net & DDR & .112 & \scriptsize .08--.14 & .476 & \scriptsize .40--.54 & .607 & \scriptsize .55--.65 & .250 & \scriptsize .12--.39 & .361 \\
+TC-Net & TJDR std & .239 & \scriptsize .12--.34 & .598 & \scriptsize .50--.67 & .670 & \scriptsize .52--.75 & .355 & \scriptsize .09--.52 & .466 \\
+TC-Net & TJDR UWF & .100 & \scriptsize .04--.22 & .383 & \scriptsize .20--.53 & .234 & \scriptsize .14--.35 & .056 & \scriptsize .02--.17 & .193 \\
+TC-Net & MAPLES & .241 & \scriptsize .17--.30 & .469 & \scriptsize .24--.61 & .722 & \scriptsize .48--.81 & .027 & \scriptsize .00--.09 & .365 \\
+TC-Net & FGADR & .018 & \scriptsize .02--.02 & .334 & \scriptsize .30--.37 & .349 & \scriptsize .29--.40 & .156 & \scriptsize .12--.20 & .214 \\
+TC-Net & Retinal-L. & .056 & \scriptsize .04--.06 & .206 & \scriptsize .16--.24 & .314 & \scriptsize .22--.35 & .145 & \scriptsize .10--.19 & .180 \\
+TC-Net & DiaRetDB1 & .023 & \scriptsize .01--.04 & .475 & \scriptsize .37--.55 & .509 & \scriptsize .36--.53 & .188 & \scriptsize .05--.27 & .299 \\
+SAMed & IDRiD & .373 & \scriptsize .33--.42 & .653 & \scriptsize .52--.73 & .845 & \scriptsize .76--.89 & .696 & \scriptsize .49--.80 & .642 \\
+SAMed & DDR & .173 & \scriptsize .13--.22 & .574 & \scriptsize .52--.64 & .669 & \scriptsize .62--.72 & .460 & \scriptsize .30--.60 & .469 \\
+SAMed & TJDR std & .428 & \scriptsize .29--.51 & .743 & \scriptsize .65--.81 & .707 & \scriptsize .57--.79 & .570 & \scriptsize .26--.73 & .612 \\
+SAMed & TJDR UWF & .130 & \scriptsize .05--.28 & .450 & \scriptsize .23--.60 & .208 & \scriptsize .12--.32 & .043 & \scriptsize .01--.19 & .208 \\
+SAMed & MAPLES & .365 & \scriptsize .28--.44 & .515 & \scriptsize .30--.65 & .732 & \scriptsize .51--.82 & .227 & \scriptsize .07--.36 & .460 \\
+SAMed & FGADR & .027 & \scriptsize .02--.03 & .412 & \scriptsize .37--.45 & .442 & \scriptsize .39--.49 & .279 & \scriptsize .23--.34 & .290 \\
+SAMed & Retinal-L. & .109 & \scriptsize .09--.12 & .316 & \scriptsize .26--.37 & .384 & \scriptsize .30--.44 & .304 & \scriptsize .25--.35 & .278 \\
+SAMed & DiaRetDB1 & .047 & \scriptsize .02--.07 & .480 & \scriptsize .38--.56 & .468 & \scriptsize .37--.52 & .295 & \scriptsize .12--.43 & .322 \\
+SAM-Adapter & IDRiD & .411 & \scriptsize .34--.42 & .644 & \scriptsize .51--.74 & .804 & \scriptsize .71--.85 & .649 & \scriptsize .42--.73 & .627 \\
+SAM-Adapter & DDR & .147 & \scriptsize .10--.18 & .538 & \scriptsize .43--.62 & .592 & \scriptsize .51--.63 & .454 & \scriptsize .30--.56 & .433 \\
+SAM-Adapter & TJDR std & .358 & \scriptsize .22--.43 & .751 & \scriptsize .67--.82 & .625 & \scriptsize .51--.67 & .432 & \scriptsize .19--.64 & .542 \\
+SAM-Adapter & TJDR UWF & .111 & \scriptsize .04--.17 & .387 & \scriptsize .20--.56 & .193 & \scriptsize .09--.31 & .104 & \scriptsize .02--.23 & .199 \\
+SAM-Adapter & MAPLES & .277 & \scriptsize .18--.31 & .454 & \scriptsize .25--.57 & .570 & \scriptsize .30--.61 & .187 & \scriptsize .08--.30 & .372 \\
+SAM-Adapter & FGADR & .019 & \scriptsize .02--.02 & .384 & \scriptsize .32--.41 & .358 & \scriptsize .29--.41 & .219 & \scriptsize .17--.26 & .245 \\
+SAM-Adapter & Retinal-L. & .054 & \scriptsize .04--.05 & .217 & \scriptsize .13--.19 & .273 & \scriptsize .15--.31 & .228 & \scriptsize .18--.25 & .193 \\
+SAM-Adapter & DiaRetDB1 & .071 & \scriptsize .04--.10 & .461 & \scriptsize .28--.50 & .412 & \scriptsize .19--.33 & .221 & \scriptsize .05--.30 & .291 \\
+SAM2-UNet & IDRiD & .351 & \scriptsize .29--.36 & .524 & \scriptsize .43--.56 & .782 & \scriptsize .68--.81 & .572 & \scriptsize .23--.67 & .557 \\
+SAM2-UNet & DDR & .153 & \scriptsize .10--.18 & .493 & \scriptsize .36--.55 & .518 & \scriptsize .41--.56 & .278 & \scriptsize .11--.29 & .360 \\
+SAM2-UNet & TJDR std & .325 & \scriptsize .18--.37 & .647 & \scriptsize .55--.71 & .640 & \scriptsize .51--.69 & .416 & \scriptsize .11--.49 & .507 \\
+SAM2-UNet & TJDR UWF & .099 & \scriptsize .04--.18 & .382 & \scriptsize .20--.52 & .219 & \scriptsize .10--.30 & .118 & \scriptsize .03--.22 & .204 \\
+SAM2-UNet & MAPLES & .331 & \scriptsize .22--.38 & .442 & \scriptsize .23--.55 & .715 & \scriptsize .46--.76 & .104 & \scriptsize .01--.21 & .398 \\
+SAM2-UNet & FGADR & .017 & \scriptsize .01--.02 & .356 & \scriptsize .28--.37 & .374 & \scriptsize .29--.39 & .241 & \scriptsize .15--.24 & .247 \\
+SAM2-UNet & Retinal-L. & .084 & \scriptsize .06--.08 & .215 & \scriptsize .13--.20 & .322 & \scriptsize .21--.29 & .301 & \scriptsize .21--.31 & .231 \\
+SAM2-UNet & DiaRetDB1 & .040 & \scriptsize .02--.06 & .331 & \scriptsize .23--.35 & .409 & \scriptsize .27--.35 & .286 & \scriptsize .08--.44 & .267 \\
+MedSAM (full FT) & IDRiD & .331 & \scriptsize .29--.37 & .676 & \scriptsize .55--.76 & .806 & \scriptsize .72--.86 & .522 & \scriptsize .00--.20 & .584 \\
+MedSAM (full FT) & DDR & .136 & \scriptsize .10--.19 & .529 & \scriptsize .42--.64 & .626 & \scriptsize .57--.68 & .361 & \scriptsize .07--.23 & .413 \\
+MedSAM (full FT) & TJDR std & .347 & \scriptsize .24--.42 & .740 & \scriptsize .65--.81 & .686 & \scriptsize .57--.77 & .440 & \scriptsize .00--.14 & .553 \\
+MedSAM (full FT) & TJDR UWF & .129 & \scriptsize .05--.24 & .577 & \scriptsize .34--.70 & .225 & \scriptsize .14--.33 & .041 & \scriptsize .00--.00 & .243 \\
+MedSAM (full FT) & MAPLES & .369 & \scriptsize .29--.44 & .515 & \scriptsize .29--.65 & .687 & \scriptsize .43--.81 & .097 & \scriptsize .00--.00 & .417 \\
+MedSAM (full FT) & FGADR & .018 & \scriptsize .02--.02 & .419 & \scriptsize .38--.46 & .424 & \scriptsize .37--.48 & .209 & \scriptsize .03--.07 & .268 \\
+MedSAM (full FT) & Retinal-L. & .097 & \scriptsize .08--.10 & .359 & \scriptsize .29--.39 & .421 & \scriptsize .33--.48 & .174 & \scriptsize .01--.05 & .262 \\
+MedSAM (full FT) & DiaRetDB1 & .045 & \scriptsize .02--.07 & .462 & \scriptsize .36--.55 & .487 & \scriptsize .39--.55 & .141 & \scriptsize .00--.16 & .284 \\
+RETFound + UPerNet & IDRiD & .446 & \scriptsize .41--.48 & .681 & \scriptsize .57--.74 & .845 & \scriptsize .76--.88 & .603 & \scriptsize .33--.75 & .644 \\
+RETFound + UPerNet & DDR & .189 & \scriptsize .14--.24 & .491 & \scriptsize .39--.60 & .640 & \scriptsize .56--.71 & .546 & \scriptsize .38--.66 & .466 \\
+RETFound + UPerNet & TJDR std & .387 & \scriptsize .28--.46 & .733 & \scriptsize .65--.79 & .724 & \scriptsize .56--.81 & .513 & \scriptsize .17--.70 & .589 \\
+RETFound + UPerNet & TJDR UWF & .073 & \scriptsize .02--.17 & .064 & \scriptsize .02--.18 & .278 & \scriptsize .18--.39 & .030 & \scriptsize .01--.09 & .111 \\
+RETFound + UPerNet & MAPLES & .420 & \scriptsize .35--.47 & .531 & \scriptsize .30--.67 & .722 & \scriptsize .49--.81 & .166 & \scriptsize .03--.31 & .460 \\
+RETFound + UPerNet & FGADR & .023 & \scriptsize .02--.03 & .419 & \scriptsize .37--.45 & .406 & \scriptsize .34--.45 & .228 & \scriptsize .17--.29 & .269 \\
+RETFound + UPerNet & Retinal-L. & .107 & \scriptsize .08--.10 & .321 & \scriptsize .22--.35 & .419 & \scriptsize .30--.43 & .243 & \scriptsize .17--.29 & .273 \\
+RETFound + UPerNet & DiaRetDB1 & .043 & \scriptsize .02--.06 & .430 & \scriptsize .30--.52 & .477 & \scriptsize .33--.48 & .306 & \scriptsize .12--.42 & .314 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize TJDR UWF, ultra-widefield images predicted at native resolution with sliding windows. Retinal-L., Retinal-Lesions without its grey-level 127 regions. DiaRetDB1, pixel AUPR against the $\geq$ 0.75 expert consensus (the official image-level protocol is Supplementary Table~13).}
+\end{landscape}

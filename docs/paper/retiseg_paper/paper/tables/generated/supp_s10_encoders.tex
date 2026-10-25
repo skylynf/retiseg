@@ -1,0 +1,54 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l c c c c c}
+\caption{\textbf{Encoder comparison: four ViT-L encoders under one UPerNet head, recipe and pixel budget (seed 0).} Per-class AUPR on the internal test and on the three independent fine-grained sets. RETFound-MAE is the main-table RETFound run of the same source; the other three are the control cells. The pre-specified contrasts are RETFound-MAE minus MAE-IN1k and RETFound-DINOv2 minus DINOv2.}\label{stab:encoders}\\
+\toprule
+Encoder & Test set & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endfirsthead
+\multicolumn{7}{l}{\textit{continued}}\\
+\toprule
+Encoder & Test set & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{7}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{7}{l}{\textbf{Trained on IDRiD}}\\
+RETFound-DINOv2 & IDRiD & .502 & .759 & .900 & .683 & .711 \\
+RETFound-DINOv2 & TJDR std & .375 & .626 & .714 & .520 & .559 \\
+RETFound-DINOv2 & TJDR UWF & .092 & .484 & .211 & .104 & .223 \\
+RETFound-DINOv2 & MAPLES & .380 & .495 & .682 & .109 & .417 \\
+RETFound-MAE & IDRiD & .484 & .718 & .895 & .734 & .708 \\
+RETFound-MAE & TJDR std & .393 & .582 & .776 & .070 & .455 \\
+RETFound-MAE & TJDR UWF & .099 & .494 & .106 & .311 & .253 \\
+RETFound-MAE & MAPLES & .375 & .503 & .680 & .092 & .413 \\
+DINOv2 ViT-L & IDRiD & .515 & .765 & .905 & .772 & .739 \\
+DINOv2 ViT-L & TJDR std & .341 & .658 & .676 & .427 & .525 \\
+DINOv2 ViT-L & TJDR UWF & .102 & .557 & .239 & .091 & .247 \\
+DINOv2 ViT-L & MAPLES & .392 & .490 & .693 & .194 & .442 \\
+MAE-IN1k ViT-L & IDRiD & .493 & .744 & .900 & .778 & .729 \\
+MAE-IN1k ViT-L & TJDR std & .392 & .547 & .709 & .507 & .539 \\
+MAE-IN1k ViT-L & TJDR UWF & .099 & .586 & .244 & .147 & .269 \\
+MAE-IN1k ViT-L & MAPLES & .370 & .469 & .659 & .203 & .425 \\
+\multicolumn{7}{l}{\textbf{Trained on DDR}}\\
+RETFound-DINOv2 & DDR & .184 & .508 & .657 & .611 & .490 \\
+RETFound-DINOv2 & TJDR std & .354 & .786 & .716 & .607 & .616 \\
+RETFound-DINOv2 & TJDR UWF & .113 & .264 & .187 & .042 & .151 \\
+RETFound-DINOv2 & MAPLES & .422 & .522 & .731 & .307 & .495 \\
+RETFound-MAE & DDR & .189 & .491 & .640 & .546 & .466 \\
+RETFound-MAE & TJDR std & .387 & .733 & .724 & .513 & .589 \\
+RETFound-MAE & TJDR UWF & .073 & .064 & .278 & .030 & .111 \\
+RETFound-MAE & MAPLES & .420 & .531 & .722 & .166 & .460 \\
+DINOv2 ViT-L & DDR & .183 & .572 & .668 & .618 & .510 \\
+DINOv2 ViT-L & TJDR std & .390 & .791 & .698 & .596 & .619 \\
+DINOv2 ViT-L & TJDR UWF & .100 & .133 & .265 & .050 & .137 \\
+DINOv2 ViT-L & MAPLES & .425 & .523 & .728 & .274 & .488 \\
+MAE-IN1k ViT-L & DDR & .206 & .567 & .670 & .634 & .519 \\
+MAE-IN1k ViT-L & TJDR std & .422 & .788 & .717 & .611 & .634 \\
+MAE-IN1k ViT-L & TJDR UWF & .103 & .100 & .244 & .061 & .127 \\
+MAE-IN1k ViT-L & MAPLES & .406 & .515 & .726 & .265 & .478 \\
+\end{longtable}
+}

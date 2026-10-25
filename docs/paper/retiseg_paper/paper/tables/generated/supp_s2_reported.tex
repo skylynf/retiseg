@@ -1,0 +1,82 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l c c c c c c c}
+\caption{\textbf{One method, many reported values (L1).} Every method that appears with a mean AUPR on IDRiD or DDR in at least two papers of the ledger: the number of papers, the lowest and highest value, their spread, and how many of the values were produced by the reporting paper (rerun), carried from an earlier paper (copied) or cite a source outside the ledger (unverifiable).}\label{stab:reported}\\
+\toprule
+Method & Dataset & Papers & Min & Max & Spread & Rerun & Copied & Unverif. \\
+\midrule
+\endfirsthead
+\multicolumn{9}{l}{\textit{continued}}\\
+\toprule
+Method & Dataset & Papers & Min & Max & Spread & Rerun & Copied & Unverif. \\
+\midrule
+\endhead
+\midrule
+\multicolumn{9}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+AIMIA & IDRiD & 3 & .437 & .437 & .000 & 0 & 0 & 0 \\
+Attention U-Net & DDR & 2 & .198 & .389 & .191 & 2 & 0 & 0 \\
+Attention U-Net & IDRiD & 2 & .418 & .549 & .132 & 2 & 0 & 0 \\
+CASENet & DDR & 3 & .193 & .193 & .000 & 1 & 0 & 0 \\
+CASENet & IDRiD & 4 & .482 & .482 & .000 & 1 & 0 & 0 \\
+CE-Net & DDR & 2 & .309 & .504 & .195 & 2 & 0 & 0 \\
+CE-Net & IDRiD & 2 & .470 & .635 & .165 & 2 & 0 & 0 \\
+CIL & IDRiD & 3 & .535 & .535 & .000 & 0 & 0 & 0 \\
+DNL & DDR & 2 & .401 & .401 & .000 & 1 & 0 & 0 \\
+DNL & IDRiD & 2 & .591 & .591 & .000 & 1 & 0 & 0 \\
+Deep-multiscale (Guo2024) & DDR & 3 & .349 & .353 & .004 & 0 & 0 & 0 \\
+Deep-multiscale (Guo2024) & IDRiD & 2 & .710 & .710 & .000 & 0 & 0 & 0 \\
+DeepLabv3+ & DDR & 10 & .290 & .452 & .162 & 6 & 0 & 0 \\
+DeepLabv3+ & IDRiD & 11 & .483 & .666 & .183 & 6 & 0 & 0 \\
+DenseUNet & DDR & 2 & .336 & .483 & .147 & 1 & 0 & 0 \\
+DenseUNet & IDRiD & 2 & .564 & .651 & .087 & 1 & 0 & 0 \\
+EAD-Net & IDRiD & 2 & .549 & .549 & .000 & 0 & 0 & 0 \\
+FCRN & DDR & 2 & .096 & .096 & .000 & 1 & 0 & 0 \\
+FCRN & IDRiD & 3 & .455 & .455 & .000 & 1 & 0 & 0 \\
+FCT & DDR & 2 & .250 & .250 & .000 & 0 & 0 & 0 \\
+FCT & IDRiD & 2 & .431 & .431 & .000 & 0 & 0 & 0 \\
+HED & DDR & 6 & .191 & .430 & .239 & 2 & 0 & 0 \\
+HED & IDRiD & 7 & .366 & .639 & .274 & 2 & 0 & 0 \\
+HRNet & DDR & 4 & .452 & .483 & .031 & 3 & 0 & 0 \\
+HRNet & IDRiD & 4 & .649 & .689 & .040 & 3 & 0 & 0 \\
+HRNet+OCR & DDR & 2 & .452 & .474 & .022 & 0 & 0 & 0 \\
+HRNet+OCR & IDRiD & 2 & .649 & .660 & .011 & 0 & 0 & 0 \\
+L-Seg & DDR & 13 & .321 & .321 & .000 & 0 & 0 & 0 \\
+L-Seg & IDRiD & 14 & .399 & .661 & .262 & 0 & 0 & 0 \\
+M2MRF & DDR & 9 & .489 & .499 & .010 & 0 & 0 & 0 \\
+M2MRF & IDRiD & 9 & .583 & .672 & .089 & 0 & 0 & 0 \\
+MedLabs & IDRiD & 3 & .440 & .440 & .000 & 0 & 0 & 0 \\
+MedSAM & DDR & 2 & .193 & .193 & .000 & 0 & 0 & 0 \\
+MedSAM & IDRiD & 2 & .266 & .266 & .000 & 0 & 0 & 0 \\
+PMCNet & DDR & 4 & .364 & .364 & .000 & 0 & 0 & 0 \\
+PMCNet & IDRiD & 3 & .681 & .681 & .000 & 0 & 0 & 0 \\
+PSPNet & DDR & 4 & .177 & .392 & .215 & 3 & 0 & 0 \\
+PSPNet & IDRiD & 4 & .337 & .587 & .250 & 3 & 0 & 0 \\
+RILBP-YNet & IDRiD & 3 & .659 & .659 & .000 & 0 & 0 & 0 \\
+RTNet & DDR & 4 & .336 & .336 & .000 & 0 & 0 & 0 \\
+RTNet & IDRiD & 3 & .421 & .708 & .287 & 0 & 0 & 0 \\
+SAA & DDR & 4 & .366 & .410 & .044 & 0 & 0 & 0 \\
+SAA & IDRiD & 5 & .648 & .674 & .026 & 0 & 0 & 0 \\
+SAM & DDR & 2 & .003 & .003 & .000 & 0 & 0 & 0 \\
+SAM & IDRiD & 2 & .006 & .006 & .000 & 0 & 0 & 0 \\
+SAM-Adapter & DDR & 2 & .299 & .299 & .000 & 0 & 0 & 0 \\
+SAM-Adapter & IDRiD & 2 & .346 & .346 & .000 & 0 & 0 & 0 \\
+SAMed & DDR & 2 & .300 & .300 & .000 & 0 & 0 & 0 \\
+SAMed & IDRiD & 2 & .354 & .354 & .000 & 0 & 0 & 0 \\
+SDNU & IDRiD & 3 & .477 & .477 & .000 & 0 & 0 & 0 \\
+SOONER & IDRiD & 3 & .554 & .554 & .000 & 0 & 0 & 0 \\
+Swin (UPerNet) & DDR & 5 & .468 & .486 & .018 & 2 & 0 & 0 \\
+Swin (UPerNet) & IDRiD & 4 & .649 & .690 & .042 & 2 & 0 & 0 \\
+Twins-SVT-B & DDR & 2 & .461 & .461 & .000 & 1 & 0 & 0 \\
+Twins-SVT-B & IDRiD & 2 & .638 & .638 & .000 & 1 & 0 & 0 \\
+U-Net & DDR & 7 & .190 & .429 & .239 & 2 & 0 & 0 \\
+U-Net & IDRiD & 6 & .347 & .652 & .305 & 2 & 0 & 0 \\
+U-Net++ & DDR & 4 & .192 & .409 & .217 & 3 & 0 & 0 \\
+U-Net++ & IDRiD & 3 & .391 & .572 & .181 & 3 & 0 & 0 \\
+VRT & IDRiD & 8 & .647 & .647 & .000 & 0 & 0 & 0 \\
+iFLYTEK-MIG & IDRiD & 7 & .648 & .648 & .000 & 0 & 0 & 0 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize Values as printed, normalised to [0, 1]. The full extraction, one row per paper, baseline, dataset, class and metric, is literature/meta/reported\_results.tsv.}

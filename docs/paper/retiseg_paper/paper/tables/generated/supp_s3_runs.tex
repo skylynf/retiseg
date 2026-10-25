@@ -1,0 +1,59 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l r c c c c c c c}
+\caption{\textbf{Training amount, batch and selection of every main-table run (seed 0).} Steps are the shared pixel budget expressed in the model's patch size (Methods); the loader batch is the largest that fits a 40\,GB card and is accumulated to the recipe's effective batch; the selected checkpoint is the validation \mAUPR{} maximum over 20 evaluations. nnU-Net follows its own 1,000-epoch schedule and planning.}\label{stab:runs}\\
+\toprule
+Model & Source & Steps & Loader batch & Accum. & Eff. batch & Patch & LR & Best val.\ \mAUPR{} & GPU h \\
+\midrule
+\endfirsthead
+\multicolumn{10}{l}{\textit{continued}}\\
+\toprule
+Model & Source & Steps & Loader batch & Accum. & Eff. batch & Patch & LR & Best val.\ \mAUPR{} & GPU h \\
+\midrule
+\endhead
+\midrule
+\multicolumn{10}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+U-Net & IDRiD & 21,000 & 4 & 1 & 4 & 960$\times$960 & 0.0001 & 0.582 & 1.5 \\
+U-Net & DDR & 83,600 & 4 & 1 & 4 & 960$\times$960 & 0.0001 & 0.556 & 5.4 \\
+DeepLabv3 & IDRiD & 6,000 & 1 & 16 & 16 & 960$\times$960 & 0.007 & 0.428 & 3.6 \\
+DeepLabv3 & DDR & 21,200 & 1 & 16 & 16 & 960$\times$960 & 0.007 & 0.436 & 12.8 \\
+HRNet-W48 & IDRiD & 7,000 & 2 & 6 & 12 & 960$\times$960 & 0.01 & 0.618 & 2.6 \\
+HRNet-W48 & DDR & 28,000 & 2 & 6 & 12 & 960$\times$960 & 0.01 & 0.617 & 10.1 \\
+Swin-Unet & IDRiD & 63,000 & 24 & 1 & 24 & 224$\times$224 & 0.01 & 0.644 & 2.6 \\
+Swin-Unet & DDR & 255,600 & 24 & 1 & 24 & 224$\times$224 & 0.01 & 0.620 & 10.4 \\
+FCT & IDRiD & 129,000 & 4 & 1 & 4 & 384$\times$384 & 0.001 & 0.257 & 19.7 \\
+FCT & DDR & 521,600 & 4 & 1 & 4 & 384$\times$384 & 0.001 & 0.175 & 72.0 \\
+nnU-Net & IDRiD & \na & \na & \na & \na & \na & \na & \na & \na \\
+nnU-Net & DDR & \na & \na & \na & \na & \na & \na & \na & \na \\
+nnU-Net ResEnc-M & IDRiD & \na & \na & \na & \na & \na & \na & \na & \na \\
+nnU-Net ResEnc-M & DDR & \na & \na & \na & \na & \na & \na & \na & \na \\
+M2MRF & IDRiD & 21,000 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.541 & 3.0 \\
+M2MRF & DDR & 83,600 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.558 & 11.6 \\
+HACDR-Net & IDRiD & 83,000 & 1 & 1 & 1 & 960$\times$960 & 6e-05 & 0.518 & 5.9 \\
+HACDR-Net & DDR & 334,000 & 1 & 1 & 1 & 960$\times$960 & 6e-05 & 0.383 & 27.8 \\
+HRDecoder & IDRiD & 21,000 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.562 & 1.5 \\
+HRDecoder & DDR & 83,600 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.539 & 5.9 \\
+PMCNet & IDRiD & 83,000 & 1 & 1 & 1 & 960$\times$960 & 0.0001 & 0.544 & 1.8 \\
+PMCNet & DDR & 334,000 & 1 & 1 & 1 & 960$\times$960 & 0.0001 & 0.512 & 7.1 \\
+WSRFNet & IDRiD & 21,000 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.511 & 2.7 \\
+WSRFNet & DDR & 83,600 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.524 & 10.5 \\
+CLC-Net & IDRiD & 73,000 & 16 & 1 & 16 & 512$\times$512 & 0.0003 & 0.580 & 9.9 \\
+CLC-Net & DDR & 293,600 & 16 & 1 & 16 & 512$\times$512 & 0.0003 & 0.539 & 39.2 \\
+TC-Net & IDRiD & 73,000 & 4 & 1 & 4 & 512$\times$512 & 0.0005 & 0.570 & 6.0 \\
+TC-Net & DDR & 293,600 & 4 & 1 & 4 & 512$\times$512 & 0.0005 & 0.472 & 24.7 \\
+SAMed & IDRiD & 13,000 & 24 & 1 & 24 & 512$\times$512 & 0.005 & 0.637 & 2.1 \\
+SAMed & DDR & 49,200 & 24 & 1 & 24 & 512$\times$512 & 0.005 & 0.632 & 7.4 \\
+SAM-Adapter & IDRiD & 37,000 & 2 & 1 & 2 & 1024$\times$1024 & 0.0002 & 0.617 & 6.5 \\
+SAM-Adapter & DDR & 146,800 & 2 & 1 & 2 & 1024$\times$1024 & 0.0002 & 0.589 & 26.3 \\
+SAM2-UNet & IDRiD & 7,000 & 4 & 3 & 12 & 960$\times$960 & 0.001 & 0.629 & 4.1 \\
+SAM2-UNet & DDR & 28,000 & 4 & 3 & 12 & 960$\times$960 & 0.001 & 0.540 & 16.2 \\
+MedSAM (full FT) & IDRiD & 37,000 & 2 & 1 & 2 & 1024$\times$1024 & 0.0001 & 0.631 & 2.8 \\
+MedSAM (full FT) & DDR & 146,800 & 2 & 1 & 2 & 1024$\times$1024 & 0.0001 & 0.509 & 11.1 \\
+RETFound + UPerNet & IDRiD & 63,000 & 24 & 1 & 24 & 224$\times$224 & 0.00046875 & 0.645 & 6.1 \\
+RETFound + UPerNet & DDR & 255,600 & 24 & 1 & 24 & 224$\times$224 & 0.00046875 & 0.643 & 24.2 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize Every run's full recipe.json (deviations from the source recipe included) is in the repository's run records.}

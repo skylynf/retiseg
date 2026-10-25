@@ -1,0 +1,29 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l r}
+\caption{\textbf{Near-duplicate audit between training sources and test sets, and the images excluded.} Vessel signatures (green-channel black top-hat at 192 $\times$ 192 inside the field of view) are correlated between every train or validation image of a source and every test image; a test image at or above the pair's threshold is left out of that source's independent tests (default 0.5; 0.33 within FGADR, whose images are near-duplicates of each other at scale).}\label{stab:leaks}\\
+\toprule
+Training source & Test set & Excluded images \\
+\midrule
+\endfirsthead
+\multicolumn{3}{l}{\textit{continued}}\\
+\toprule
+Training source & Test set & Excluded images \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+TJDR\_uwf & TJDR\_uwf & 2 \\
+FGADR & FGADR & 106 \\
+FGADR & Retinal-Lesions & 19 \\
+Retinal-Lesions & FGADR & 27 \\
+Retinal-Lesions & Retinal-Lesions & 1 \\
+IDRiD & every test set & 0 \\
+DDR & every test set & 0 \\
+TJDR\_std & every test set & 0 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize Audit: bench/scripts/leak\_audit.py --min-vessel 0.3 (all seven prepared sources), 4923 images. Strongest pairs (vessel NCC): FGADR train:0224\_1 $\leftrightarrow$ FGADR 0271\_1 (1.00); FGADR train:0322\_1 $\leftrightarrow$ FGADR 0741\_1 (1.00); FGADR train:0526\_1 $\leftrightarrow$ FGADR 1597\_1 (1.00); FGADR train:0878\_1 $\leftrightarrow$ FGADR 0988\_1 (1.00); FGADR val:0553\_1 $\leftrightarrow$ FGADR 0995\_1 (1.00); TJDR\_uwf train:TJDR\_train\_092 $\leftrightarrow$ TJDR\_uwf TJDR\_test\_021 (1.00); TJDR\_uwf val:TJDR\_train\_101 $\leftrightarrow$ TJDR\_uwf TJDR\_test\_023 (1.00); Retinal-Lesions train:4428\_left $\leftrightarrow$ FGADR 0706\_3 (0.99); Retinal-Lesions val:31746\_right $\leftrightarrow$ FGADR 0466\_3 (0.98); Retinal-Lesions train:24235\_right $\leftrightarrow$ FGADR 0785\_3 (0.98); Retinal-Lesions train:658\_right $\leftrightarrow$ FGADR 0236\_3 (0.98); Retinal-Lesions train:15684\_right $\leftrightarrow$ FGADR 0627\_3 (0.98). The full lists are bench/data/splits/leak\_exclusions.json.}

@@ -1,0 +1,52 @@
+\begin{landscape}
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{p{34mm} c p{20mm} p{24mm} p{14mm} p{14mm} p{52mm} p{18mm} p{14mm} p{16mm} c}
+\caption{\textbf{Literature audit (L1): the experimental setup stated by each method paper in the ledger.} Split, input resolution, AUPR implementation and the provenance of baseline numbers as extracted from the paper's text and tables (literature/meta/paper\_audit.tsv in the repository holds the verbatim evidence for every cell).}\label{stab:literature}\\
+\toprule
+Paper & Year & Venue & Datasets & IDRiD split & DDR split & Input resolution & AUPR impl. & Pooling & Baselines & $n$ \\
+\midrule
+\endfirsthead
+\multicolumn{11}{l}{\textit{continued}}\\
+\toprule
+Paper & Year & Venue & Datasets & IDRiD split & DDR split & Input resolution & AUPR impl. & Pooling & Baselines & $n$ \\
+\midrule
+\endhead
+\midrule
+\multicolumn{11}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Guo2019 L-Seg & 2019 & Neurocomputing & IDRiD;e-ophtha;DDR & official & official & IDRiD and e-ophtha: 'resize each image and… & 11-threshold & not stated & rerun all & 4 \\
+Zhou2019 collaborative semi s… & 2019 & CVPR & IDRiD & official & NA & 640x640 (Fig. 2 shows 640*640*3 input / 640… & not stated & not stated & not stated & 5 \\
+Xiao2020 HEDNet cGAN & 2020 & arXiv (2007.138… & IDRiD & official & NA & original 4288 x 2848; training: 'we randoml… & exact & pooled ('… & rerun all & 2 \\
+Bo2022 SAA & 2022 & ISBI & IDRiD;DDR & official & official & IDRiD: 'resized images and their correspond… & not stated & not stated & not stated & 6 \\
+Guo2022 CARNet & 2022 & Complex \& Intel… & IDRiD;e-ophtha;DDR & official & official & 'all images are uniformly resized to 1024 x… & NA & not stated & rerun all & 8 \\
+Hasan2022 DRG-Net & 2022 & arXiv (2212.146… & IDRiD;FGADR & official & NA & 'For all experiments, the sizes of the inpu… & not stated & not stated & copied & 8 \\
+He2022 PMCNet & 2022 & arXiv (2205.157… & DDR;IDRiD;e-ophtha & official & official & IDRiD and E-ophtha: 'resized each image and… & not stated & not stated & rerun some & 11 \\
+Huang2022 RTNet & 2022 & IEEE Transactio… & IDRiD;DDR & official & official & training: large images random resized and c… & exact & not stated & rerun some & 7 \\
+Ali2023 LezioSeg & 2023 & Electronics (MD… & IDRiD;e-ophtha;DDR & official & official & training: each image split into 4 non-overl… & per-image mean & per-image & not stated & 11 \\
+Geetha2023 RILBP-YNet & 2023 & Biomedical Sign… & IDRiD;e-ophtha (plu… & official & NA & black border cropped by contour analysis, t… & 11-threshold & not stated & copied & 11 \\
+Liu2023 M2MRF & 2023 & Pattern Recogni… & DDR;IDRiD & official & official & DDR: downsample so long side = 1024, zero-p… & 11-threshold & pooled & rerun some & 12 \\
+Qiu2023 Learnable Ophthalmolo… & 2023 & arXiv & IDRiD & not stated & NA & not stated & NA & not stated & not stated & 1 \\
+Ullah2023 SSMD-UNet & 2023 & Sci Rep & FGADR;IDRiD & official & NA & 'bicubic interpolation to resize the images… & not stated & not stated & rerun some & 9 \\
+Wang2023 CLC-Net & 2023 & Neurocomputing & IDRiD;e-ophtha;DDR & official & official & no global resize: Otsu to remove non-tissue… & not stated & not stated & rerun some & 8 \\
+Wang2023 VTA hyperbolic & 2023 & Scientific Repo… & IDRiD;DDR & official & official & not stated (ViT patch size 16; model pre-tr… & not stated & not stated & rerun all & 4 \\
+Yin2023 DB-UNet & 2023 & IEEE Access & IDRiD;DDR;e-ophtha… & official & official & IDRiD: ROI 2560x3840 downscaled by t (t=2 f… & 11-threshold & not stated & rerun some & 8 \\
+Zhang2023 TC-Net & 2023 & Comput Biol Med & IDRiD;DDR;ISIC-2017 & not stated & own & all images resized to 512x512 & NA & not stated & not stated & 7 \\
+Bian2024 MLNet & 2024 & Algorithms (MDP… & DDR;DiaRetDB1;IDRiD & official & official & black borders cropped, images uniformly res… & not stated & not stated & rerun some & 7 \\
+Fu2024 LFRC-Net & 2024 & Applied Science… & IDRiD;DDR;Local ult… & official & official & IDRiD: cropping, zero-padding and resizing… & not stated & not stated & rerun some & 12 \\
+Guo2024 deep multiscale & 2024 & SSRN preprint (… & IDRiD;DDR;DiaRetDB1… & official & official & three input scales 384x384, 512x512, 1024x1… & not stated & pooled & not stated & 5 \\
+Li2024 TP-DRSeg & 2024 & MICCAI & IDRiD;DDR & not stated & not stated & resized to 1024x1024 ('We resize the input… & not stated & not stated & not stated & 8 \\
+Li2024 WSRFNet & 2024 & IJCAI & IDRiD;DDR & official & official & resized to 1440x960 (IDRiD) and 1024x1024 (… & 11-threshold & pooled & rerun some & 8 \\
+Playout2024 cross dataset gen… & 2024 & arXiv (ISBI-sty… & IDRiD;DDR;FGADR;Ret… & official & official & cropped to remove black background, resized… & 11-threshold & not stated & copied & 3 \\
+Xu2024 HACDR-Net & 2024 & AAAI & IDRiD;DDR & official & official & IDRiD resized to 1440x960 (following M2MRF)… & not stated & not stated & not stated & 13 \\
+Xu2024 MSAG & 2024 & Scientific Repo… & IDRiD;DDR & official & not stated & IDRiD: 4288x2848 cut into 54 blocks of 512x… & not stated & not stated & not stated & 9 \\
+Xu2024 PGAFT & 2024 & Sci Rep & IDRiD;DDR & official & official & 'both the larger color fundus images and va… & not stated & not stated & rerun all & 11 \\
+Chen2025 SAM2 DR & 2025 & ISBI & IDRiD;DDR & official & official & resized to 1024x1024 ('Input images are res… & not stated & not stated & not stated & 6 \\
+Guo2026 TVFNet & 2026 & Neural Comput A… & IDRiD;DDR;FGADR;e-o… & official & official & 'the fundus images were uniformly resized t… & not stated & not stated & rerun some & 18 \\
+Qi2026 TEDR-YNet & 2026 & IEEE Access & IDRiD;DDR;TJDR & official & own & images from all datasets were resized to 51… & not stated & not stated & rerun some & 10 \\
+Wang2026 CSIF & 2026 & Applied Soft Co… & DDR;IDRiD & official & official & DDR: long edge scaled to 1024 then zero-pad… & not stated & not stated & rerun some & 11 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize ``not stated'' means the paper gives no information. Baselines: how the comparison numbers were obtained (rerun, copied, mixed, not stated). $n$, number of compared methods.}
+\end{landscape}

@@ -38,9 +38,10 @@ def panel_a(fig, top):
     for t in ax.texts:
         if t.get_ha() == "right":
             t.set_x(-0.6)
-    # only the last stage is simulated
-    ax.text(0.14, 4.5, "simulated", fontsize=4.6, color="#9a5b00", style="italic", va="center",
-            bbox=dict(boxstyle="round,pad=0.22", fc="#fff3d6", ec="#e8c36a", lw=0.3)) if not S.FINAL else None
+    # the last stage is derived from the author-recipe reruns (collect_runs.derive_funnel); tagged only while placeholder
+    if D.simulated(rep) and not S.FINAL:
+        ax.text(0.14, 4.5, "simulated", fontsize=4.6, color="#9a5b00", style="italic", va="center",
+                bbox=dict(boxstyle="round,pad=0.22", fc="#fff3d6", ec="#e8c36a", lw=0.3))
 
 
 def stacked_row(ax, y, parts, colors, total_label):
@@ -117,7 +118,8 @@ def panel_c(fig, top):
     h = [Line2D([], [], marker="o", ls="", ms=3.2, color="#4f7ea8", label="reported in one paper"),
          Line2D([], [], marker="D", ls="", ms=3.4, color=S.FAMILY["fundus"], label="retrained here (B-std)")]
     ax.legend(handles=h, loc="lower left", bbox_to_anchor=(-0.4, 1.01), ncol=1, handletextpad=0.2, labelspacing=0.2, fontsize=5.4)
-    S.tag_simulated(ax, loc="tr", text="retrained values simulated")
+    if D.simulated(D.main_runs()):
+        S.tag_simulated(ax, loc="tr", text="retrained values simulated")
 
 
 def impl_table():
@@ -147,7 +149,8 @@ def panel_d(fig, top):
     ax.text(0.305, 2.5, "retrained,\nIDRiD test", fontsize=4.7, color=S.INK2, ha="left", va="center", linespacing=1.1)
     ax.set_xlabel("mAUPR")
     ax.legend(loc="lower left", bbox_to_anchor=(-0.6, 1.01), ncol=1, handletextpad=0.2, labelspacing=0.2, fontsize=5.4)
-    S.tag_simulated(ax, loc="br", text="rows 3–16 simulated")
+    if D.simulated(D.main_runs()) or D.simulated(D.main_runs("aupr_11pt")):
+        S.tag_simulated(ax, loc="br", text="retrained rows simulated")
 
 
 def panel_e(fig, top):
@@ -160,7 +163,8 @@ def panel_e(fig, top):
     P.bump(ax, names, ra, rb, cols, labels=("exact", "11-thr."), fs=4.9, lw=0.9)
     moved = int((ra != rb).sum())
     S.text_mm(fig, f"{moved} of {len(ra)} models change rank · Kendall τ = {tau['tau']:.2f}", 161.5, top + 54.5, ha="center", fontsize=5.0, color=S.INK2)
-    S.tag_simulated(ax, loc="tr", dx=1.2, dy=0.03)
+    if D.simulated(D.main_runs()) or D.simulated(D.main_runs("aupr_11pt")):
+        S.tag_simulated(ax, loc="tr", dx=1.2, dy=0.03)
 
 
 def main():

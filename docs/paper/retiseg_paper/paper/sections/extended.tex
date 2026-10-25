@@ -3,23 +3,23 @@
 \renewcommand{\figurename}{Extended Data Fig.}
 \setcounter{figure}{0}
 
-\noindent Nine Extended Data figures are planned (the comparison with the source recipes was withdrawn when that track was stopped before any run finished). Three of them need no images and are drawn below from the same data table as the main figures; the others are listed with their content and data source.
+\noindent Ten Extended Data figures were planned; two were withdrawn (the source-recipe track stopped before any run finished; the per-image distributions duplicate what the released histograms give). Four are drawn below from the same data table as the main figures; the two that need images are made on the workstation that holds the data.
 
 \begin{center}\small\sffamily
 \begin{tabular}{@{}l l l l@{}}
 \toprule
 \textbf{Extended Data Fig.} & \textbf{Content} & \textbf{Source} & \textbf{Status} \\
 \midrule
-1 & Example images and labels of each source; annotation style & prepared datasets; label audit & needs images \\
-2 & Field-of-view masks and canvas scale per source & FOV reports & needs images \\
-3 & Leakage audit: near-duplicates between sources and splits & hash and feature audit & audit not run \\
+1 & Example images and labels of each source; annotation style & prepared datasets; label audit & needs images (workstation) \\
+2 & Field-of-view masks and canvas scale per source & FOV reports & needs images (workstation) \\
+3 & Leakage audit: near-duplicates between sources and splits & vessel-signature audit & done; reported as Supplementary Table~15 \\
 4 & Sensitivity to the metric implementation (thresholds, FOV, overlap) & evaluation switches & with Fig.~\ref{fig:literature}d,e \\
-5 & Per-image distributions and threshold sensitivity & per-image histograms & after E2 \\
+5 & Per-image distributions and threshold sensitivity & per-image histograms & withdrawn (histograms stay in the repository) \\
 6 & (withdrawn; the source-recipe track was stopped before any run finished) & E2b & -- \\
 7 & Learning-rate sweep (DDR) & E2c & drawn \\
 8 & Loss with the architecture fixed (U-Net) & E9 & drawn \\
-9 & DiaRetDB1 official protocol; ultra-widefield at two scales & E3a & after E3a \\
-10 & Computational cost & E10 & drawn \\
+9 & DiaRetDB1 official protocol; ultra-widefield at two scales & E3a & drawn \\
+10 & Computational cost & E10 & drawn (cost audit pending) \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -38,26 +38,40 @@
 \caption{\textbf{Loss with the architecture fixed.} \textbf{a}, \mAUPR{} of U-Net on the DDR test set with cross-entropy, batch Dice, cross-entropy with batch Dice (the main-table recipe) and cross-entropy with a per-image Dice term (the registered recipe, which collapses on rare classes); seed 0. \textbf{b}, Per-class change in AUPR against cross-entropy.}
 \end{figure}
 
+\setcounter{figure}{8}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{\figfile{ed09_diaretdb1_uwf}}
+\caption{\textbf{DiaRetDB1 under its official protocol, and the ultra-widefield images at two inference scales.} \textbf{a}, Image-level ROC AUC per lesion class on DiaRetDB1 (the maximum probability inside the field of view against the presence of the class in the $\geq$ 0.75 expert consensus), every main-table model from both sources, seed 0; a value of 0.5 means every image of the test set is positive or negative for the class. \textbf{b}, \mAUPR{} on the ultra-widefield TJDR images predicted at native resolution with sliding windows (the main-table setting) and after resizing to the 1,440-pixel canvas.}
+\end{figure}
+
 \setcounter{figure}{9}
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{\figfile{ed10_cost}}
-\caption{\textbf{Computational cost.} \textbf{a}, \mAUPR{} on the IDRiD test set against the training time of one seed on IDRiD (40\,GB A100, one task per card); marker area, number of parameters. \textbf{b}, Parameters, trainable parameters under the unified protocol, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.}
+\caption{\textbf{Computational cost.} \textbf{a}, \mAUPR{} on the IDRiD test set against the training time of one seed on IDRiD (40\,GB A100, one task per card); marker area, number of parameters. \textbf{b}, Parameters, trainable parameters under the unified protocol and training time of one seed on each source; floating-point operations, peak memory and inference time join when the cost audit has run.}
 \end{figure}
 
 \clearpage
 \section{Supplementary information}
-\noindent\textbf{Supplementary tables.}
+\noindent\textbf{Supplementary tables} (separate document, generated from the same data table).
 \begin{enumerate}[leftmargin=*,label=\textbf{\arabic*}.,itemsep=1pt]
-\item Datasets: source, camera, field of view, resolution, annotation procedure, splits, licence; DiaRetDB1 positive-image counts against the original paper.
-\item Models: all \rn{n.models} registered variants with tier, code, weights, reproducibility level, tracks and environment.
-\item Reported numbers extracted from the literature (one row per paper, baseline, dataset, class and metric), with split, resolution, metric implementation and provenance.
-\item Recipe and deviations of every run.
-\item Per-class results of every model on every test set: AUPR with bootstrap interval, 11-threshold AUPR, Dice and intersection over union at both thresholds, lesion-level precision, recall and F1 by lesion size.
-\item Split lists.
+\item Literature audit: the setup stated by each method paper (split, resolution, AUPR implementation, baseline provenance).
+\item One method, many reported values: every method reported in at least two papers on IDRiD or DDR, with the spread and the provenance of the values.
+\item Training amount, batch and selection of every main-table run.
+\item Per-class AUPR with 95\% bootstrap intervals of every main-table model on every test set, both sources.
+\item Secondary metrics on the internal tests: 11-threshold AUPR, Dice, IoU, lesion-level precision and recall by lesion size, image-level AUC.
+\item Registered and revised recipes of the three models whose per-image loss term collapsed on rare classes.
+\item Every factor cell, per class and per test set.
 \item Computational cost.
-\item Refined IDRiD: the crop geometry recovered for each of the 27 test images, the label differences per class, and every IDRiD-trained model's per-class AUPR against the refined and the official labels through the same geometry.
-\item Encoder comparison: the four ViT-L encoders under the UPerNet head on DDR and the three available on IDRiD, per class, on the internal test and the three independent fine-grained sets; validation curves and the selected epoch of each cell.
-\item Ensembles: every registered composition from each training source on every test set, with its member list and, where a member was left out on a set, the members used; the reference model's two cells and their ensemble.
+\item Refined IDRiD: every IDRiD-trained model against the official and the refined labels, and the label differences.
+\item Encoder comparison on both training sources.
+\item Ensembles of every registered composition on every test set, and the reference model.
+\item Results by DR grade.
+\item Human reference on DiaRetDB1.
+\item Annotation style of every source: components per image and their size.
+\item Near-duplicate audit and the images excluded.
+\item Released checkpoints on every test set, per class.
+\item Foundation models without training on every test set.
 \end{enumerate}
-\noindent\textbf{Supplementary notes.} One note per model (source, reproducibility level, environment, changes, differences from the paper); the budget probe with every version of the rule; protocol details.
+\noindent\textbf{Supplementary notes.} Note 1, one entry per registered model variant (code used, reproducibility level, changes); Note 2, the training budget, the selection rule, the disclosed revisions and the scope changes; Note 3, the evaluation protocol. \textbf{Supplementary data.} Split lists and exclusions; the literature extraction; the results table with every run's recipe and environment record; probability maps where the licence allows.

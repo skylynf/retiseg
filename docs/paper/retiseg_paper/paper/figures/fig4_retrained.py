@@ -168,8 +168,10 @@ def panel_e(fig, blocks, fr, top):
 
 
 def panel_f(fig, top):
-    pub = D.sel(experiment="L1", variant="published_idrid", metric="reported_maupr")
-    pub = pub[pub.model.isin(D.measured_models())].set_index("model")["value"]   # a published number pairs with a measured retraining only
+    pub_rows = D.sel(experiment="L1", variant="published_idrid", metric="reported_maupr")
+    pub_rows = pub_rows[pub_rows.model.isin(D.measured_models())]   # a published number pairs with a measured retraining only
+    pub_sim = D.simulated(pub_rows)
+    pub = pub_rows.set_index("model")["value"]
     ret = D.score_matrix("IDRiD", models=list(pub.index))["IDRiD"]
     ra = sps.rankdata(-pub.to_numpy())
     rb = sps.rankdata(-ret.to_numpy())
@@ -179,7 +181,8 @@ def panel_f(fig, top):
     P.bump(ax, list(pub.index), ra, rb, cols, labels=("Published", "Retrained"))
     S.text_mm(fig, f"Rank on IDRiD (1 = best) · Kendall τ = {tau['tau']:.2f}, {P.p_text(tau['p'])}, n = {len(pub)}",
               148, top + 45.5, ha="center", fontsize=5.2, color=S.INK2)
-    S.tag_simulated(ax, loc="tr", dx=0.75, dy=0.1)
+    if pub_sim or D.simulated(D.main_runs()):
+        S.tag_simulated(ax, loc="tr", dx=0.75, dy=0.1)
 
 
 def main():

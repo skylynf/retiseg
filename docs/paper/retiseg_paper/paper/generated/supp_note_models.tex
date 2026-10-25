@@ -1,0 +1,54 @@
+\paragraph{General segmentation networks.}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item \textbf{U-Net} (tier 1, reproducibility R3, track B); no author repo; use a reference PyTorch implementation.
+\item \textbf{DeepLabv3} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/DeepLabv3plus}; registered name is DeepLabv3. torchvision deeplabv3\_resnet101 is ASPP plus bilinear upsampling, not the DeepLabv3+ decoder. The TensorFlow repo is the paper code and is not the B1 network..
+\item \textbf{HRNet} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/HRNet-Semantic-Segmentation}.
+\item \textbf{nnU-Net} (tier 1, reproducibility R4, track B); code: \texttt{official\_code/nnUNet}; shallow clone 2026-10-04; train entry nnunetv2/run/run\_training.py.
+\item \textbf{Swin-Unet} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/Swin-Unet}.
+\item \textbf{FCT} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/FCT}; official PyTorch port in PyTorch/main.py, not the TensorFlow entry. B1 adaptation widens the stem to 3 channels, assigns the four head channels to MA HE EX SE, and sets forward\_size 384..
+\item \textbf{H2Former} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/H2Former}; general medical segmentation model used on several organs. Not a DR-specific method. B1 uses idrid\_train.py for both IDRiD and DDR..
+\item \textbf{UNet++} (tier 2, reproducibility R3, track B); code: \texttt{official\_code/Nested-UNet}.
+\item \textbf{UPerNet} (tier 2, reproducibility R3, track B); code: \texttt{official\_code/UPerNet}.
+\end{itemize}
+\paragraph{Fundus-specific: multi-scale CNNs.}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item \textbf{M2MRF} (tier 1, reproducibility R4, track AB); code: \texttt{official\_code/M2MRF}; mmseg 0.8 / torch 1.6; weights on Google Drive; README: paper reports mean of 3 runs, code reports best.
+\item \textbf{HACDR-Net} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/HACDR-Net}; mmseg 0.30 / mmcv-full 1.6.2; no released weights found.
+\item \textbf{HRDecoder} (tier 1, reproducibility R4, track AB); code: \texttt{official\_code/HRDecoder}; added 2026-10-14 (docs/paper/18): MICCAI 2024, mmseg 0.16 / mmcv 1.7, HRNet-W48 backbone; weights on Google Drive (IDRiD 1tRBNqpbFwnNBGQBMw8UYL8sjJzWlI3O9, DDR 1CBTHOtxToHQ13H4SZIUBZTwX0zwmIduh); runs in the retiseg-hacdr environment.
+\item \textbf{WSRFNet} (tier 1, reproducibility R1, track AB); code: \texttt{official\_code/WSRFNet}; checked 2026-10-03: model.py + test.py, no train.py; weights by email to xuanli@stu.hit.edu.cn. 2026-10-14: tier 1, the training loop and the paper's loss are in bench/models/wsrfnet.py (docs/paper/18).
+\item \textbf{L-Seg} (tier 2, reproducibility R1, track C); code: \texttt{official\_code/L-Seg}; Caffe prototxt and loss layer.
+\item \textbf{SAA} (tier 2, reproducibility R0, track C); code: \texttt{official\_code/SAA}; official repo empty.
+\item \textbf{CARNet} (tier 3, reproducibility R0).
+\item \textbf{PMCNet} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/PMCNet}; train.py present; TF 1.13/Keras 2.3; no released weights; bundled data is one sample image. 2026-10-14: tier 1, rewritten layer by layer in PyTorch (bench/models/pmcnet.py, docs/paper/18); the released dataGenerator one-hot-encodes 3 classes against the 5-class head.
+\item \textbf{MLNet} (tier 3, reproducibility R0).
+\item \textbf{LezioSeg} (tier 3, reproducibility R0).
+\item \textbf{HEDNet-cGAN} (tier 3, reproducibility R0).
+\item \textbf{Guo2024} (tier 3, reproducibility R0); Google Drive link of unknown content.
+\item \textbf{CLC-Net} (tier 1, reproducibility R0, track C); code: \texttt{reproductions/Wang2023\_CLC-Net}; no author code; re-implemented from the paper by the user (assumptions A1-A22 in the reproduction), B-std through bench/models/clcnet.py (docs/paper/18).
+\end{itemize}
+\paragraph{Fundus-specific: relational and transformer models.}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item \textbf{RTNet} (tier 2, reproducibility R0, track C); image + vessel input.
+\item \textbf{VTA} (tier 3, reproducibility R0).
+\item \textbf{TC-Net} (tier 1, reproducibility R0, track C); code: \texttt{reproductions/Zhang2023\_TC-Net}; no author code; re-implemented from the paper by the user (assumptions in the reproduction), B-std through bench/models/tcnet.py (docs/paper/18).
+\end{itemize}
+\paragraph{Fundus-specific: semi-supervised.}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item \textbf{SSMD-UNet} (tier 3, reproducibility R0); author split 70/5/25; EyePACS pretraining overlaps Retinal-Lesions source.
+\item \textbf{Zhou2019-CL} (tier 3, reproducibility R0).
+\end{itemize}
+\paragraph{Foundation models.}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item \textbf{SAM} (tier 1, reproducibility R2, track B); code: \texttt{official\_code/segment-anything}.
+\item \textbf{SAM2} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/sam2}.
+\item \textbf{SAM3} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/sam3}; shallow clone 2026-10-04; train entry sam3/train/train.py; checkpoints are gated on Hugging Face.
+\item \textbf{MedSAM} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/MedSAM}.
+\item \textbf{SAMed} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/SAMed}.
+\item \textbf{SAM-Adapter} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/SAM-Adapter}.
+\item \textbf{SAM2-UNet} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/SAM2-UNet}.
+\item \textbf{RETFound} (tier 1, reproducibility R3, track B); code: \texttt{official\_code/RETFound}; rmaphoh/RETFound\_MAE, shallow clone 2026-10-04; main\_finetune.py is classification. UPerNet head is still to be added. Weights on Hugging Face.
+\item \textbf{PerSAM} (tier 2, reproducibility R2, track B); code: \texttt{official\_code/PerSAM}.
+\item \textbf{TP-DRSeg} (tier 3, reproducibility R0); code: \texttt{official\_code/TP-DRSeg}; paper link 404; mirror has README only.
+\item \textbf{SAM2-DR-Chen2025} (tier 3, reproducibility R0).
+\item \textbf{Ophthalmology-SAM} (tier 3, reproducibility R0).
+\end{itemize}

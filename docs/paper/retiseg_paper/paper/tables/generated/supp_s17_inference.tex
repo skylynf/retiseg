@@ -1,0 +1,37 @@
+\begin{landscape}
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l c c c c c c c c }
+\caption{\textbf{Foundation models without training, on every test set.} Zero-shot automatic masks (density and area cap chosen on the validation pool), SAM 3 text prompts with the wording chosen on the validation pool, and prompts derived from the ground truth (an upper bound that reads the test labels). Values are \mAUPR{} where the output carries classes and the any-lesion AUPR$^{\rm a}$ where it does not.}\label{stab:inference}\\
+\toprule
+Model & Setting & IDRiD & DDR & TJDR std & TJDR UWF & MAPLES & FGADR & Retinal-L. & DiaRetDB1 \\
+\midrule
+\endfirsthead
+\multicolumn{10}{l}{\textit{continued}}\\
+\toprule
+Model & Setting & IDRiD & DDR & TJDR std & TJDR UWF & MAPLES & FGADR & Retinal-L. & DiaRetDB1 \\
+\midrule
+\endhead
+\midrule
+\multicolumn{10}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{10}{l}{\textbf{Zero-shot (any-lesion AUPR of the class-agnostic map; text prompts per class)}}\\
+SAM 2 & zero\_shot:auto\_any\_lesion & .023 & .008 & .012 & .007 & .003 & .010 & .014 & .010 \\
+SAM 2 & zero\_shot:auto\_oracle\_class & .029 & .009 & .012 & .007 & .003 & .010 & .014 & .010 \\
+SAM 2 & zero\_shot:auto\_stability & .026 & .011 & .008 & .018 & .004 & .011 & .014 & .008 \\
+SAM & zero\_shot:auto\_any\_lesion & .020 & .008 & .008 & .004 & .003 & .012 & .014 & .007 \\
+SAM & zero\_shot:auto\_oracle\_class & .022 & .008 & .009 & .005 & .003 & .013 & .014 & .007 \\
+SAM & zero\_shot:auto\_stability & .031 & .014 & .028 & .015 & .004 & .020 & .015 & .009 \\
+\multicolumn{10}{l}{\textbf{Oracle boxes, every component}}\\
+MedSAM & oracle:box:all & .665 & .648 & .840 & .860 & .738 & .827 & .864 & .714 \\
+SAM 2 & oracle:box:all & .848 & .756 & .932 & .922 & .826 & .825 & .835 & .771 \\
+SAM & oracle:box:all & .860 & .772 & .870 & .869 & .824 & .759 & .747 & .777 \\
+\multicolumn{10}{l}{\textbf{Oracle points, one per component}}\\
+SAM 2 & oracle:point:all & .116 & .019 & .081 & .291 & .009 & .050 & .058 & .074 \\
+\multicolumn{10}{l}{\textbf{SAM 3, selected wording}}\\
+SAM 3 & text:selected & .228 & .125 & .111 & .185 & .079 & .108 & .066 & .088 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize $^{\rm a}$ any-lesion AUPR of a class-agnostic map. Variant tokens as in the run records (density, cap, canvas).}
+\end{landscape}

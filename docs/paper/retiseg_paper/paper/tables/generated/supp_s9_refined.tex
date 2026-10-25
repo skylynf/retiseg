@@ -1,0 +1,41 @@
+\begin{landscape}
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l c c c c c c c c c c c}
+\caption{\textbf{Refined IDRiD (label revision): per-class AUPR of every IDRiD-trained model against the official and the refined labels through the same 1,024-pixel geometry.} Test maps of the main-table checkpoints (seed 0), moved through the recovered crop and scored with the protocol evaluator against both label sets; no model is retrained or re-run.}\label{stab:refined}\\
+\toprule
+Model & MA off. & MA ref. & HE off. & HE ref. & EX off. & EX ref. & SE off. & SE ref. & \mAUPR{} off. & \mAUPR{} ref. & $\Delta$ \\
+\midrule
+\endfirsthead
+\multicolumn{12}{l}{\textit{continued}}\\
+\toprule
+Model & MA off. & MA ref. & HE off. & HE ref. & EX off. & EX ref. & SE off. & SE ref. & \mAUPR{} off. & \mAUPR{} ref. & $\Delta$ \\
+\midrule
+\endhead
+\midrule
+\multicolumn{12}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+CLC-Net & .423 & .420 & .686 & .685 & .890 & .889 & .641 & .640 & .660 & .659 & $-$0.001 \\
+DeepLabv3 & .091 & .091 & .643 & .643 & .736 & .736 & .664 & .664 & .533 & .533 & +0.000 \\
+FCT & .079 & .078 & .165 & .165 & .687 & .686 & .115 & .115 & .261 & .261 & $-$0.000 \\
+HACDR-Net & .358 & .356 & .504 & .504 & .828 & .827 & .561 & .560 & .563 & .561 & $-$0.001 \\
+HRDecoder & .407 & .405 & .634 & .633 & .827 & .826 & .730 & .730 & .649 & .649 & $-$0.001 \\
+HRNet-W48 & .442 & .438 & .685 & .684 & .885 & .883 & .783 & .783 & .699 & .697 & $-$0.002 \\
+M2MRF & .439 & .436 & .625 & .625 & .879 & .878 & .681 & .680 & .656 & .655 & $-$0.001 \\
+MedSAM (full FT) & .370 & .368 & .666 & .666 & .858 & .858 & .676 & .676 & .643 & .642 & $-$0.001 \\
+PMCNet & .411 & .409 & .610 & .610 & .883 & .881 & .698 & .698 & .651 & .649 & $-$0.001 \\
+RETFound + UPerNet & .483 & .480 & .719 & .718 & .896 & .895 & .736 & .736 & .709 & .707 & $-$0.001 \\
+SAM2-UNet & .423 & .421 & .683 & .682 & .875 & .874 & .681 & .681 & .666 & .665 & $-$0.001 \\
+SAM-Adapter & .442 & .439 & .745 & .745 & .887 & .887 & .756 & .756 & .708 & .707 & $-$0.001 \\
+SAMed & .445 & .442 & .737 & .737 & .893 & .892 & .791 & .790 & .717 & .715 & $-$0.001 \\
+Swin-Unet & .473 & .471 & .712 & .712 & .895 & .894 & .689 & .689 & .692 & .691 & $-$0.001 \\
+TC-Net & .353 & .351 & .651 & .651 & .855 & .854 & .755 & .755 & .654 & .653 & $-$0.001 \\
+U-Net & .386 & .384 & .623 & .622 & .895 & .894 & .710 & .711 & .653 & .653 & $-$0.001 \\
+WSRFNet & .388 & .386 & .602 & .602 & .856 & .855 & .506 & .506 & .588 & .587 & $-$0.001 \\
+nnU-Net & .482 & .480 & .673 & .673 & .878 & .876 & .645 & .644 & .669 & .668 & $-$0.001 \\
+nnU-Net ResEnc-M & .442 & .440 & .667 & .666 & .878 & .877 & .541 & .540 & .632 & .631 & $-$0.001 \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize Label differences over the 27 test images: MA: 13 images changed, 28,847 $\to$ 28,886 labelled pixels, 1,083 $\to$ 1,083 components; HE: 13 images changed, 311,289 $\to$ 311,524 labelled pixels, 532 $\to$ 532 components; EX: 16 images changed, 320,363 $\to$ 320,160 labelled pixels, 3,895 $\to$ 3,882 components; SE: 6 images changed, 53,684 $\to$ 53,597 labelled pixels, 38 $\to$ 38 components. The crop geometry of every image (all 27: padded to a square and resized; NCC $\geq$ 0.9988) is runs/REFINED/RefinedIDRiD\_geometry.json.}
+\end{landscape}

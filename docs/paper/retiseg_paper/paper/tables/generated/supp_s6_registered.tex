@@ -1,0 +1,32 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l l c c c c c}
+\caption{\textbf{Registered and revised recipes of the three models whose per-image loss term emptied a rare-class channel (seed 0, internal tests).} The registered recipe is the one frozen before training (per-image Dice or IoU with smoothing 1); the revised recipe pools the term over the batch (Methods, rare-class collapse). The main tables carry the revised runs; the registered runs stay in the repository under the \texttt{\_registered} suffix.}\label{stab:registered}\\
+\toprule
+Model & Source & Recipe & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endfirsthead
+\multicolumn{8}{l}{\textit{continued}}\\
+\toprule
+Model & Source & Recipe & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{8}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+U-Net & IDRiD & registered & .376 & .534 & .859 & .605 & .594 \\
+U-Net & IDRiD & revised (main table) & .406 & .622 & .896 & .707 & .658 \\
+U-Net & DDR & registered & .005 & .031 & .418 & .000 & .114 \\
+U-Net & DDR & revised (main table) & .141 & .410 & .553 & .410 & .378 \\
+SAM2-UNet & IDRiD & registered & .439 & .665 & .870 & .571 & .636 \\
+SAM2-UNet & IDRiD & revised (main table) & .439 & .670 & .871 & .678 & .664 \\
+SAM2-UNet & DDR & registered & .023 & .265 & .528 & .022 & .210 \\
+SAM2-UNet & DDR & revised (main table) & .153 & .493 & .518 & .278 & .360 \\
+MedSAM & IDRiD & registered & .382 & .731 & .867 & .357 & .584 \\
+MedSAM & IDRiD & revised (main table) & .373 & .665 & .855 & .674 & .642 \\
+MedSAM & DDR & registered & .000 & .487 & .573 & .001 & .265 \\
+MedSAM & DDR & revised (main table) & .136 & .529 & .626 & .361 & .413 \\
+\end{longtable}
+}

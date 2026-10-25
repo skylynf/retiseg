@@ -1,6 +1,7 @@
 # Build the paper. Run from paper/ or with: make -C paper
 #   make            placeholder data (only if data/results.csv is missing), figures, tables, numbers, bibliography, PDF
 #   make collect    replace placeholder rows with measured ones from ../runs, then rebuild
+#   make supplement supplementary tables (scripts/make_supplement.py) and supplement.pdf
 #   make final      rebuild with every number printed as measured (use when no placeholder row is left)
 #   make clean
 PY ?= python3
@@ -25,6 +26,10 @@ refs.bib: scripts/make_bib.py
 
 pdf: figures tables numbers refs.bib
 	latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+
+supplement: data/results.csv numbers
+	$(PY) scripts/make_supplement.py
+	latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 
 collect:
 	$(PY) scripts/collect_runs.py

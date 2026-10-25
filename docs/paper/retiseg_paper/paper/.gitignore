@@ -9,3 +9,4 @@
 *.synctex.gz
 main_final.*
 __pycache__/
+*.toc

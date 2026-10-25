@@ -1,0 +1,41 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l c c c c c c c c }
+\caption{\textbf{Ensembles of the main-table probability maps and the reference model, \mAUPR{} on every test set.} Compositions fixed before any ensemble was scored (Methods): all 18 registered members, the five and three best by validation \mAUPR{}, the best of each family, and each family alone. The reference model's two cells are trained on the three fine-grained sources merged; their ensemble is the pixel mean of their maps.}\label{stab:ensembles}\\
+\toprule
+Composition & IDRiD & DDR & TJDR std & TJDR UWF & MAPLES & FGADR & Retinal-L. & DiaRetDB1 \\
+\midrule
+\endfirsthead
+\multicolumn{9}{l}{\textit{continued}}\\
+\toprule
+Composition & IDRiD & DDR & TJDR std & TJDR UWF & MAPLES & FGADR & Retinal-L. & DiaRetDB1 \\
+\midrule
+\endhead
+\midrule
+\multicolumn{9}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{9}{l}{\textbf{Members trained on IDRiD}}\\
+E-all & .764 & .400 & .594 & .311 & .455 & .279$^{\rm p}$ & .216$^{\rm p}$ & .317 \\
+E-top5 & .754 & .410 & .598 & .292 & .449 & .290 & .251 & .316 \\
+E-top3 & .742 & .394 & .559 & .279 & .437 & .273 & .252 & .325 \\
+E-1perfam & .741 & .381 & .555 & .284 & .445 & .256 & .239 & .318 \\
+E-fam:general & .727 & .352 & .513 & .276 & .410 & .244 & .194 & .302 \\
+E-fam:auto & .693 & .316 & .485 & .229 & .406 & .242 & .177 & .269 \\
+E-fam:fundus & .736 & .371 & .568 & .292 & .436 & .250$^{\rm p}$ & .214$^{\rm p}$ & .300 \\
+E-fam:foundation & .757 & .411 & .609 & .297 & .442 & .294 & .250 & .318 \\
+\multicolumn{9}{l}{\textbf{Members trained on DDR}}\\
+E-all & .677 & .505 & .637 & .266 & .496 & .291$^{\rm p}$ & .278$^{\rm p}$ & .335 \\
+E-top5 & .680 & .511 & .652 & .242 & .506 & .298 & .290 & .335 \\
+E-top3 & .672 & .510 & .655 & .226 & .497 & .300 & .291 & .339 \\
+E-1perfam & .665 & .494 & .625 & .228 & .486 & .281 & .278 & .321 \\
+E-fam:general & .650 & .483 & .606 & .227 & .470 & .268 & .266 & .324 \\
+E-fam:auto & .641 & .463 & .572 & .210 & .473 & .275 & .227 & .334 \\
+E-fam:fundus & .637 & .444 & .568 & .246 & .452 & .251$^{\rm p}$ & .218$^{\rm p}$ & .305 \\
+E-fam:foundation & .676 & .509 & .657 & .248 & .494 & .302 & .294 & .340 \\
+\multicolumn{9}{l}{\textbf{Reference model: trained on IDRiD + DDR + TJDR std merged (DDR budget and validation)}}\\
+SAMed (fine merged) & \na & .477 & \na & \na & \na & \na & \na & \na \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize $^{\rm p}$, computed without HACDR-Net, whose maps for that set could not be regenerated (members named in the run record). In-source test sets of the reference model (IDRiD, DDR, TJDR std) are the official test splits of sources that entered its training.}

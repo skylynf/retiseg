@@ -218,13 +218,17 @@ def retrained():
     put("impl.max", f3((eleven - exact).max()), sim)
     put("impl.moved", int((sps.rankdata(-exact) != sps.rankdata(-eleven)).sum()), sim)
     put("impl.tau", f2(D.bstats.kendall_tau(exact.to_numpy(), eleven.to_numpy())["tau"]), sim)
-    b1 = D.sel(experiment="E2b", metric="aupr").groupby(["model", "train_set"])["value"].mean().unstack("train_set")
-    for train in D.TRAIN_MAIN:
-        d = b1[train] - D.score_matrix(train, models=list(b1.index))[train]
-        put(f"b1.{train}.worst.model", d.idxmin(), True)
-        put(f"b1.{train}.worst.delta", f2(-d.min()), True)
-        put(f"b1.{train}.nlower", int((d < 0).sum()), True)
-    put("b1.n", len(b1), True)
+    # the source-recipe column (B1 / E2b) was stopped before any run finished (2026-10-11); its placeholder rows were
+    # retired on 2026-10-26, so the b1.* keys exist only while rows are present
+    b1 = D.sel(experiment="E2b", metric="aupr")
+    if len(b1):
+        b1 = b1.groupby(["model", "train_set"])["value"].mean().unstack("train_set")
+        for train in [t for t in D.TRAIN_MAIN if t in b1.columns]:
+            d = b1[train] - D.score_matrix(train, models=list(b1.index))[train]
+            put(f"b1.{train}.worst.model", d.idxmin(), True)
+            put(f"b1.{train}.worst.delta", f2(-d.min()), True)
+            put(f"b1.{train}.nlower", int((d < 0).sum()), True)
+        put("b1.n", len(b1), True)
     for metric, tag in (("lesion_recall_small", "small"), ("lesion_recall_large", "large")):
         v = D.score_matrix("DDR", metric=metric)["DDR"]
         put(f"recall.DDR.{tag}.median", f2(v.median()), sim)

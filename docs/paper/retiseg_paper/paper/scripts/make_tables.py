@@ -246,7 +246,7 @@ def table_models():
         "tab_models",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Models entering the retraining tracks.}} {len(all_reg)} variants are registered: {n1} in tier~1 (main tables), {n2} in tier~2 (if time allows) and {n3} in tier~3 (paper audit only; Supplementary Table~2). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, reported in a separate column.}}
+\caption{{\textbf{{Models entering the retraining tracks.}} {len(all_reg)} variants are registered: {n1} in tier~1 (main tables), {n2} in tier~2 (if time allows) and {n3} in tier~3 (paper audit only; Supplementary Note~1). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, reported in a separate column.}}
 \label{{tab:models}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l c l c c c l l@{{}}}}
@@ -564,7 +564,7 @@ def table_independent():
         "tab_independent",
         rf"""\begin{{table*}}[t]
 \centering\tablefont\setlength{{\tabcolsep}}{{3.0pt}}
-\caption{{\textbf{{Unified retraining (B-std): independent tests.}} The checkpoints of Table~\ref{{tab:main}} are applied without any adaptation to six test sets from sources never used for training. Values are mAUPR (mean of three seeds); the DiaRetDB1 column is the official image-level ROC AUC, averaged over the four lesion types, because its region-consensus ground truth biases pixel precision. $\Delta$ is the mean of the three fine-grained independent test sets (TJDR standard-field, TJDR ultra-widefield and MAPLES-DR) minus the internal test. Average rank is over the eight test sets of Fig.~\ref{{fig:retrained}}e (Friedman $\chi^2$ = \ph{{{fr['statistic']:.1f}}}; Nemenyi critical difference \ph{{{fr['critical_difference']:.2f}}}).}}
+\caption{{\textbf{{Unified retraining (B-std): independent tests.}} The checkpoints of Table~\ref{{tab:main}} are applied without any adaptation to six test sets from sources never used for training. Values are mAUPR (mean of three seeds); the DiaRetDB1 column is the official image-level ROC AUC, averaged over the four lesion types, because its region-consensus ground truth biases pixel precision. $\Delta$ is the mean of the three fine-grained independent test sets (TJDR standard-field, TJDR ultra-widefield and MAPLES-DR) minus the internal test. Average rank is over the eight test sets of Fig.~\ref{{fig:retrained}}e (Friedman $\chi^2$ = {num(fr['statistic'], '{:.1f}', D.simulated(D.main_runs()), strip=False)}; Nemenyi critical difference {num(fr['critical_difference'], '{:.2f}', D.simulated(D.main_runs()), strip=False)}).}}
 \label{{tab:independent}}
 \begin{{adjustbox}}{{max width=\textwidth}}
 \begin{{threeparttable}}
@@ -683,9 +683,10 @@ def table_foundation():
     any_ref = []
     for model in ("M2MRF", "nnU-Net"):
         cells = [f"\\famchip{{{D.FAMILY_OF[model]}}}\; {model}", "reference, Table~\\ref{tab:main}", "--"]
+        ref_sim = D.simulated(D.main_runs()[(D.main_runs().model == model)])
         for k in ("IDRiD", "DDR"):
             v = ref.loc[(model, k)].to_numpy()
-            cells += [num(x, "{:.2f}") for x in v] + [num(v.mean(), "{:.2f}")]
+            cells += [num(x, "{:.2f}", sim=ref_sim) for x in v] + [num(v.mean(), "{:.2f}", sim=ref_sim)]
         rows.append(" & ".join(cells) + " \\\\")
         parts = []
         for k in ("IDRiD", "DDR"):
@@ -728,22 +729,26 @@ def table_factors():
     def block(exp, levels, prefix, test, ref, labels=None, metric="aupr"):
         r = D.sel(experiment=exp, metric=metric, test_set=test)
         g = r.groupby(["model", "variant"])["value"].mean()
+        simf = r.groupby(["model", "variant"])["source"].apply(lambda x: bool((x != "measured").any()))   # placeholder flag per cell (2026-10-26: used to print every cell as a placeholder)
         present = [m for m in cols if m in g.index.get_level_values(0)]
         rows = []
         for lv, lab in zip(levels, labels or levels):
             cells = [("\\quad " + lab) + (" {\\scriptsize\\color{inkmuted}(ref.)}" if lv == ref else "")]
-            vals, base = [], []
+            vals, base, sims = [], [], []
             for m in cols:
                 if m not in present or (m, prefix + lv) not in g.index:
                     cells.append("--")
                     continue
                 v, b = g[(m, prefix + lv)], g[(m, prefix + ref)]
+                sim = bool(simf[(m, prefix + lv)]) or bool(simf[(m, prefix + ref)])
                 vals.append(v)
                 base.append(b)
-                cells.append(num(v, "{:.2f}") + ("" if lv == ref else " " + delta(v - b, True, "{:+.2f}")))
+                sims.append(sim)
+                cells.append(num(v, "{:.2f}", sim=sim) + ("" if lv == ref else " " + delta(v - b, sim, "{:+.2f}")))
             vals, base = np.array(vals), np.array(base)
             d = vals.mean() - base.mean()
-            cells.append((div_tint(d, 0.3) if lv != ref else "") + num(vals.mean(), "{:.2f}") + ("" if lv == ref else " {\\scriptsize " + signed(d, True) + "}"))
+            any_sim = any(sims)
+            cells.append((div_tint(d, 0.3) if lv != ref else "") + num(vals.mean(), "{:.2f}", sim=any_sim) + ("" if lv == ref else " {\\scriptsize " + signed(d, any_sim) + "}"))
             rows.append(" & ".join(cells) + " \\\\")
         return rows
 

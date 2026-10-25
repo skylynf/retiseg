@@ -1,0 +1,245 @@
+\begin{landscape}
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l l l c c c c c}
+\caption{\textbf{Every factor cell, per class (seed 0).} One factor is varied at a time on the representative models at the DDR pixel budget (Methods); the variant column names the level, the training-set column the data the cell was trained on. Each cell is listed on every test set it was applied to; in-source tests of merged cells are the rows whose test set was part of the training set.}\label{stab:factors}\\
+\toprule
+Model & Level & Trained on & Test set & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endfirsthead
+\multicolumn{9}{l}{\textit{continued}}\\
+\toprule
+Model & Level & Trained on & Test set & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{9}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{9}{l}{\textbf{Training source (E3b)}}\\
+M2MRF & bstd & FGADR & IDRiD & .141 & .320 & .729 & .557 & .437 \\
+M2MRF & bstd & FGADR & DDR & .055 & .219 & .404 & .107 & .197 \\
+M2MRF & bstd & FGADR & TJDR std & .267 & .642 & .666 & .223 & .449 \\
+M2MRF & bstd & FGADR & TJDR UWF & .035 & .480 & .282 & .176 & .243 \\
+M2MRF & bstd & FGADR & MAPLES & .086 & .336 & .492 & .090 & .251 \\
+M2MRF & bstd & FGADR & FGADR & .066 & .511 & .622 & .238 & .359 \\
+M2MRF & bstd & FGADR & Retinal-L. & .031 & .179 & .177 & .167 & .139 \\
+M2MRF & bstd & FGADR & DiaRetDB1 & .006 & .270 & .287 & .142 & .176 \\
+M2MRF & bstd & TJDR-std & IDRiD & .139 & .186 & .719 & .317 & .340 \\
+M2MRF & bstd & TJDR-std & DDR & .082 & .221 & .516 & .104 & .231 \\
+M2MRF & bstd & TJDR-std & TJDR std & .325 & .746 & .654 & .490 & .554 \\
+M2MRF & bstd & TJDR-std & TJDR UWF & .022 & .270 & .131 & .157 & .145 \\
+M2MRF & bstd & TJDR-std & MAPLES & .117 & .340 & .375 & .022 & .214 \\
+M2MRF & bstd & TJDR-std & FGADR & .014 & .161 & .270 & .099 & .136 \\
+M2MRF & bstd & TJDR-std & Retinal-L. & .030 & .103 & .231 & .084 & .112 \\
+M2MRF & bstd & TJDR-std & DiaRetDB1 & .018 & .201 & .295 & .134 & .162 \\
+RETFound + UPerNet & bstd & FGADR & IDRiD & .243 & .563 & .775 & .582 & .541 \\
+RETFound + UPerNet & bstd & FGADR & DDR & .019 & .392 & .470 & .284 & .291 \\
+RETFound + UPerNet & bstd & FGADR & TJDR std & .140 & .752 & .595 & .357 & .461 \\
+RETFound + UPerNet & bstd & FGADR & TJDR UWF & .073 & .615 & .336 & .113 & .284 \\
+RETFound + UPerNet & bstd & FGADR & MAPLES & .146 & .492 & .722 & .118 & .370 \\
+RETFound + UPerNet & bstd & FGADR & FGADR & .118 & .651 & .691 & .370 & .457 \\
+RETFound + UPerNet & bstd & FGADR & Retinal-L. & .115 & .385 & .467 & .325 & .323 \\
+RETFound + UPerNet & bstd & FGADR & DiaRetDB1 & .019 & .523 & .590 & .178 & .327 \\
+RETFound + UPerNet & bstd & TJDR-std & IDRiD & .315 & .506 & .815 & .275 & .478 \\
+RETFound + UPerNet & bstd & TJDR-std & DDR & .136 & .347 & .614 & .236 & .333 \\
+RETFound + UPerNet & bstd & TJDR-std & TJDR std & .432 & .823 & .828 & .741 & .706 \\
+RETFound + UPerNet & bstd & TJDR-std & TJDR UWF & .053 & .523 & .150 & .262 & .247 \\
+RETFound + UPerNet & bstd & TJDR-std & MAPLES & .310 & .330 & .605 & .131 & .344 \\
+RETFound + UPerNet & bstd & TJDR-std & FGADR & .023 & .327 & .368 & .185 & .226 \\
+RETFound + UPerNet & bstd & TJDR-std & Retinal-L. & .085 & .226 & .336 & .125 & .193 \\
+RETFound + UPerNet & bstd & TJDR-std & DiaRetDB1 & .027 & .317 & .491 & .211 & .262 \\
+SAM2-UNet & bstd & FGADR & IDRiD & .138 & .560 & .859 & .099 & .414 \\
+SAM2-UNet & bstd & FGADR & DDR & .062 & .385 & .537 & .092 & .269 \\
+SAM2-UNet & bstd & FGADR & TJDR std & .320 & .752 & .768 & .001 & .461 \\
+SAM2-UNet & bstd & FGADR & TJDR UWF & .060 & .593 & .270 & .000 & .231 \\
+SAM2-UNet & bstd & FGADR & MAPLES & .150 & .477 & .744 & .000 & .343 \\
+SAM2-UNet & bstd & FGADR & FGADR & .122 & .630 & .675 & .126 & .388 \\
+SAM2-UNet & bstd & FGADR & Retinal-L. & .043 & .339 & .411 & .048 & .210 \\
+SAM2-UNet & bstd & FGADR & DiaRetDB1 & .012 & .468 & .516 & .082 & .270 \\
+SAM2-UNet & bstd & TJDR-std & IDRiD & .025 & .439 & .793 & .026 & .321 \\
+SAM2-UNet & bstd & TJDR-std & DDR & .016 & .325 & .542 & .013 & .224 \\
+SAM2-UNet & bstd & TJDR-std & TJDR std & .056 & .753 & .722 & .102 & .408 \\
+SAM2-UNet & bstd & TJDR-std & TJDR UWF & .008 & .380 & .095 & .010 & .123 \\
+SAM2-UNet & bstd & TJDR-std & MAPLES & .007 & .281 & .480 & .000 & .192 \\
+SAM2-UNet & bstd & TJDR-std & FGADR & .007 & .294 & .308 & .005 & .154 \\
+SAM2-UNet & bstd & TJDR-std & Retinal-L. & .010 & .137 & .201 & .006 & .088 \\
+SAM2-UNet & bstd & TJDR-std & DiaRetDB1 & .000 & .233 & .230 & .006 & .117 \\
+U-Net & bstd & FGADR & IDRiD & .092 & .294 & .793 & .276 & .364 \\
+U-Net & bstd & FGADR & DDR & .032 & .259 & .467 & .199 & .239 \\
+U-Net & bstd & FGADR & TJDR std & .135 & .718 & .603 & .339 & .449 \\
+U-Net & bstd & FGADR & TJDR UWF & .028 & .482 & .208 & .273 & .248 \\
+U-Net & bstd & FGADR & MAPLES & .088 & .337 & .566 & .064 & .264 \\
+U-Net & bstd & FGADR & FGADR & .084 & .568 & .634 & .325 & .403 \\
+U-Net & bstd & FGADR & Retinal-L. & .084 & .224 & .368 & .155 & .208 \\
+U-Net & bstd & FGADR & DiaRetDB1 & .005 & .261 & .563 & .188 & .254 \\
+U-Net & bstd & TJDR-std & IDRiD & .108 & .324 & .641 & .435 & .377 \\
+U-Net & bstd & TJDR-std & DDR & .071 & .264 & .531 & .161 & .257 \\
+U-Net & bstd & TJDR-std & TJDR std & .326 & .775 & .642 & .455 & .550 \\
+U-Net & bstd & TJDR-std & TJDR UWF & .015 & .203 & .077 & .182 & .119 \\
+U-Net & bstd & TJDR-std & MAPLES & .080 & .327 & .447 & .033 & .222 \\
+U-Net & bstd & TJDR-std & FGADR & .015 & .237 & .266 & .076 & .148 \\
+U-Net & bstd & TJDR-std & Retinal-L. & .028 & .107 & .193 & .098 & .107 \\
+U-Net & bstd & TJDR-std & DiaRetDB1 & .008 & .169 & .217 & .144 & .134 \\
+nnU-Net & bstd & FGADR & IDRiD & .121 & .596 & .826 & .717 & .565 \\
+nnU-Net & bstd & FGADR & DDR & .063 & .378 & .532 & .306 & .320 \\
+nnU-Net & bstd & FGADR & TJDR std & .147 & .737 & .696 & .520 & .525 \\
+nnU-Net & bstd & FGADR & TJDR UWF & .021 & .277 & .222 & .391 & .228 \\
+nnU-Net & bstd & FGADR & MAPLES & .197 & .517 & .719 & .138 & .393 \\
+nnU-Net & bstd & FGADR & FGADR & .136 & .631 & .659 & .372 & .449 \\
+nnU-Net & bstd & FGADR & Retinal-L. & .039 & .390 & .439 & .247 & .279 \\
+nnU-Net & bstd & FGADR & DiaRetDB1 & .028 & .474 & .559 & .226 & .322 \\
+nnU-Net & bstd & TJDR-std & IDRiD & .146 & .459 & .664 & .474 & .436 \\
+nnU-Net & bstd & TJDR-std & DDR & .079 & .310 & .550 & .170 & .277 \\
+nnU-Net & bstd & TJDR-std & TJDR std & .305 & .785 & .787 & .668 & .636 \\
+nnU-Net & bstd & TJDR-std & TJDR UWF & .013 & .311 & .124 & .268 & .179 \\
+nnU-Net & bstd & TJDR-std & MAPLES & .162 & .462 & .457 & .033 & .278 \\
+nnU-Net & bstd & TJDR-std & FGADR & .019 & .322 & .299 & .157 & .199 \\
+nnU-Net & bstd & TJDR-std & Retinal-L. & .031 & .162 & .224 & .125 & .136 \\
+nnU-Net & bstd & TJDR-std & DiaRetDB1 & .027 & .395 & .338 & .157 & .229 \\
+\multicolumn{9}{l}{\textbf{Annotation granularity (E4)}}\\
+M2MRF & DDR & DDR & IDRiD & .392 & .555 & .776 & .563 & .571 \\
+M2MRF & DDR & DDR & TJDR std & .299 & .696 & .618 & .412 & .506 \\
+M2MRF & DDR & DDR & DiaRetDB1 & .049 & .218 & .177 & .247 & .173 \\
+U-Net & DDR & DDR & IDRiD & .364 & .541 & .800 & .483 & .547 \\
+U-Net & DDR & DDR & TJDR std & .296 & .676 & .614 & .392 & .494 \\
+U-Net & DDR & DDR & DiaRetDB1 & .039 & .314 & .268 & .253 & .219 \\
+M2MRF & FGADR & FGADR & IDRiD & .141 & .320 & .729 & .557 & .437 \\
+M2MRF & FGADR & FGADR & TJDR std & .267 & .642 & .666 & .223 & .449 \\
+M2MRF & FGADR & FGADR & DiaRetDB1 & .006 & .270 & .287 & .142 & .176 \\
+U-Net & FGADR & FGADR & IDRiD & .092 & .294 & .793 & .276 & .364 \\
+U-Net & FGADR & FGADR & TJDR std & .135 & .718 & .603 & .339 & .449 \\
+U-Net & FGADR & FGADR & DiaRetDB1 & .005 & .261 & .563 & .188 & .254 \\
+M2MRF & DDR + FGADR (383) & DDR + FGADR (383) & IDRiD & .386 & .446 & .799 & .594 & .556 \\
+M2MRF & DDR + FGADR (383) & DDR + FGADR (383) & DDR & .141 & .365 & .508 & .328 & .336 \\
+M2MRF & DDR + FGADR (383) & DDR + FGADR (383) & TJDR std & .285 & .669 & .661 & .321 & .484 \\
+M2MRF & DDR + FGADR (383) & DDR + FGADR (383) & TJDR UWF & .110 & .461 & .172 & .180 & .231 \\
+M2MRF & DDR + FGADR (383) & DDR + FGADR (383) & MAPLES & .252 & .378 & .482 & .134 & .311 \\
+M2MRF & DDR + FGADR (383) & DDR + FGADR (383) & Retinal-L. & .044 & .158 & .177 & .176 & .139 \\
+M2MRF & DDR + FGADR (383) & DDR + FGADR (383) & DiaRetDB1 & .043 & .197 & .222 & .182 & .161 \\
+M2MRF & DDR + FGADR & DDR + FGADR & IDRiD & .403 & .466 & .782 & .565 & .554 \\
+M2MRF & DDR + FGADR & DDR + FGADR & DDR & .139 & .366 & .492 & .282 & .320 \\
+M2MRF & DDR + FGADR & DDR + FGADR & TJDR std & .312 & .680 & .659 & .337 & .497 \\
+M2MRF & DDR + FGADR & DDR + FGADR & TJDR UWF & .109 & .474 & .186 & .264 & .258 \\
+M2MRF & DDR + FGADR & DDR + FGADR & MAPLES & .256 & .391 & .431 & .119 & .299 \\
+M2MRF & DDR + FGADR & DDR + FGADR & Retinal-L. & .045 & .168 & .173 & .160 & .137 \\
+M2MRF & DDR + FGADR & DDR + FGADR & DiaRetDB1 & .041 & .208 & .176 & .151 & .144 \\
+M2MRF & DDR + Retinal-Lesions & DDR + Retinal-Lesions & IDRiD & .369 & .399 & .784 & .508 & .515 \\
+M2MRF & DDR + Retinal-Lesions & DDR + Retinal-Lesions & DDR & .108 & .296 & .449 & .291 & .286 \\
+M2MRF & DDR + Retinal-Lesions & DDR + Retinal-Lesions & TJDR std & .145 & .480 & .378 & .299 & .325 \\
+M2MRF & DDR + Retinal-Lesions & DDR + Retinal-Lesions & TJDR UWF & .086 & .419 & .223 & .080 & .202 \\
+M2MRF & DDR + Retinal-Lesions & DDR + Retinal-Lesions & MAPLES & .131 & .270 & .408 & .113 & .231 \\
+M2MRF & DDR + Retinal-Lesions & DDR + Retinal-Lesions & FGADR & .010 & .157 & .186 & .149 & .126 \\
+M2MRF & DDR + Retinal-Lesions & DDR + Retinal-Lesions & DiaRetDB1 & .048 & .199 & .308 & .185 & .185 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & IDRiD & .063 & .133 & .186 & .285 & .167 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & DDR & .024 & .097 & .130 & .166 & .104 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & TJDR std & .039 & .112 & .160 & .287 & .150 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & TJDR UWF & .015 & .121 & .053 & .120 & .077 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & MAPLES & .110 & .101 & .342 & .074 & .157 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & FGADR & .018 & .121 & .131 & .129 & .100 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & Retinal-L. & .352 & .508 & .650 & .366 & .469 \\
+M2MRF & Retinal-Lesions & Retinal-Lesions & DiaRetDB1 & .022 & .328 & .774 & .355 & .370 \\
+U-Net & DDR + FGADR (383) & DDR + FGADR (383) & IDRiD & .375 & .517 & .828 & .594 & .578 \\
+U-Net & DDR + FGADR (383) & DDR + FGADR (383) & DDR & .137 & .414 & .548 & .376 & .369 \\
+U-Net & DDR + FGADR (383) & DDR + FGADR (383) & TJDR std & .299 & .728 & .556 & .177 & .440 \\
+U-Net & DDR + FGADR (383) & DDR + FGADR (383) & TJDR UWF & .101 & .473 & .151 & .242 & .242 \\
+U-Net & DDR + FGADR (383) & DDR + FGADR (383) & MAPLES & .305 & .472 & .502 & .057 & .334 \\
+U-Net & DDR + FGADR (383) & DDR + FGADR (383) & Retinal-L. & .068 & .244 & .258 & .177 & .187 \\
+U-Net & DDR + FGADR (383) & DDR + FGADR (383) & DiaRetDB1 & .045 & .329 & .352 & .161 & .221 \\
+U-Net & DDR + FGADR & DDR + FGADR & IDRiD & .365 & .551 & .858 & .613 & .597 \\
+U-Net & DDR + FGADR & DDR + FGADR & DDR & .117 & .430 & .545 & .402 & .373 \\
+U-Net & DDR + FGADR & DDR + FGADR & TJDR std & .325 & .762 & .622 & .342 & .513 \\
+U-Net & DDR + FGADR & DDR + FGADR & TJDR UWF & .089 & .466 & .210 & .294 & .265 \\
+U-Net & DDR + FGADR & DDR + FGADR & MAPLES & .257 & .468 & .575 & .133 & .358 \\
+U-Net & DDR + FGADR & DDR + FGADR & Retinal-L. & .042 & .219 & .236 & .186 & .171 \\
+U-Net & DDR + FGADR & DDR + FGADR & DiaRetDB1 & .034 & .320 & .302 & .173 & .207 \\
+U-Net & DDR + Retinal-Lesions & DDR + Retinal-Lesions & IDRiD & .279 & .502 & .786 & .521 & .522 \\
+U-Net & DDR + Retinal-Lesions & DDR + Retinal-Lesions & DDR & .090 & .366 & .518 & .389 & .341 \\
+U-Net & DDR + Retinal-Lesions & DDR + Retinal-Lesions & TJDR std & .237 & .643 & .490 & .440 & .452 \\
+U-Net & DDR + Retinal-Lesions & DDR + Retinal-Lesions & TJDR UWF & .057 & .480 & .231 & .210 & .245 \\
+U-Net & DDR + Retinal-Lesions & DDR + Retinal-Lesions & MAPLES & .269 & .465 & .474 & .147 & .339 \\
+U-Net & DDR + Retinal-Lesions & DDR + Retinal-Lesions & FGADR & .013 & .202 & .271 & .133 & .155 \\
+U-Net & DDR + Retinal-Lesions & DDR + Retinal-Lesions & DiaRetDB1 & .052 & .278 & .386 & .278 & .248 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & IDRiD & .091 & .230 & .353 & .317 & .248 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & DDR & .039 & .146 & .239 & .234 & .164 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & TJDR std & .087 & .378 & .238 & .419 & .281 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & TJDR UWF & .026 & .208 & .091 & .163 & .122 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & MAPLES & .168 & .284 & .470 & .102 & .256 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & FGADR & .017 & .136 & .148 & .064 & .091 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & Retinal-L. & .353 & .553 & .721 & .390 & .504 \\
+U-Net & Retinal-Lesions & Retinal-Lesions & DiaRetDB1 & .045 & .494 & .874 & .483 & .474 \\
+\multicolumn{9}{l}{\textbf{Input resolution (E7)}}\\
+M2MRF & res:1440 & DDR & DDR & .148 & .402 & .547 & .422 & .380 \\
+RETFound + UPerNet & res:1440 & DDR & DDR & .189 & .491 & .640 & .546 & .466 \\
+HRDecoder & res:2880 (author canvas, equivalent epochs) & IDRiD & IDRiD & .423 & .606 & .864 & .615 & .627 \\
+M2MRF & res:512 & DDR & DDR & .114 & .411 & .531 & .378 & .358 \\
+M2MRF & res:native patches & DDR & DDR & .140 & .360 & .510 & .237 & .312 \\
+RETFound + UPerNet & res:512 & DDR & DDR & .092 & .346 & .628 & .535 & .400 \\
+RETFound + UPerNet & res:native patches & DDR & DDR & .196 & .460 & .628 & .513 & .449 \\
+\multicolumn{9}{l}{\textbf{Training amount (E8)}}\\
+M2MRF & size:DDR 100\% & DDR & DDR & .148 & .402 & .547 & .422 & .380 \\
+M2MRF & size:DDR 100\% & DDR & TJDR std & .299 & .696 & .618 & .412 & .506 \\
+M2MRF & size:DDR 100\% & DDR & FGADR & .019 & .310 & .340 & .181 & .212 \\
+U-Net & size:DDR 100\% & DDR & DDR & .141 & .410 & .553 & .410 & .378 \\
+U-Net & size:DDR 100\% & DDR & TJDR std & .296 & .676 & .614 & .392 & .494 \\
+U-Net & size:DDR 100\% & DDR & FGADR & .013 & .214 & .292 & .162 & .170 \\
+M2MRF & size:DDR 10\% & DDR & IDRiD & .264 & .481 & .735 & .413 & .473 \\
+M2MRF & size:DDR 10\% & DDR & DDR & .107 & .383 & .516 & .222 & .307 \\
+M2MRF & size:DDR 10\% & DDR & TJDR std & .211 & .625 & .579 & .225 & .410 \\
+M2MRF & size:DDR 10\% & DDR & TJDR UWF & .102 & .221 & .167 & .032 & .131 \\
+M2MRF & size:DDR 10\% & DDR & MAPLES & .188 & .345 & .446 & .067 & .262 \\
+M2MRF & size:DDR 10\% & DDR & FGADR & .011 & .242 & .187 & .148 & .147 \\
+M2MRF & size:DDR 10\% & DDR & Retinal-L. & .036 & .139 & .164 & .138 & .119 \\
+M2MRF & size:DDR 10\% & DDR & DiaRetDB1 & .030 & .190 & .186 & .205 & .153 \\
+M2MRF & size:DDR 50\% & DDR & IDRiD & .364 & .500 & .768 & .566 & .549 \\
+M2MRF & size:DDR 50\% & DDR & DDR & .140 & .364 & .532 & .332 & .342 \\
+M2MRF & size:DDR 50\% & DDR & TJDR std & .265 & .672 & .603 & .450 & .498 \\
+M2MRF & size:DDR 50\% & DDR & TJDR UWF & .103 & .365 & .234 & .045 & .187 \\
+M2MRF & size:DDR 50\% & DDR & MAPLES & .249 & .427 & .478 & .127 & .320 \\
+M2MRF & size:DDR 50\% & DDR & FGADR & .014 & .245 & .338 & .184 & .195 \\
+M2MRF & size:DDR 50\% & DDR & Retinal-L. & .046 & .166 & .184 & .177 & .143 \\
+M2MRF & size:DDR 50\% & DDR & DiaRetDB1 & .048 & .220 & .193 & .246 & .177 \\
+M2MRF & size:fine merged & DDR & IDRiD & .446 & .531 & .824 & .674 & .619 \\
+M2MRF & size:fine merged & DDR & DDR & .141 & .393 & .534 & .405 & .368 \\
+M2MRF & size:fine merged & DDR & TJDR std & .333 & .746 & .640 & .540 & .565 \\
+M2MRF & size:fine merged & DDR & TJDR UWF & .120 & .472 & .197 & .339 & .282 \\
+M2MRF & size:fine merged & DDR & MAPLES & .285 & .462 & .500 & .150 & .349 \\
+M2MRF & size:fine merged & DDR & FGADR & .020 & .347 & .333 & .194 & .224 \\
+M2MRF & size:fine merged & DDR & Retinal-L. & .049 & .191 & .184 & .187 & .153 \\
+M2MRF & size:fine merged & DDR & DiaRetDB1 & .049 & .266 & .191 & .256 & .190 \\
+U-Net & size:DDR 10\% & DDR & IDRiD & .239 & .474 & .784 & .470 & .492 \\
+U-Net & size:DDR 10\% & DDR & DDR & .106 & .337 & .508 & .334 & .321 \\
+U-Net & size:DDR 10\% & DDR & TJDR std & .197 & .525 & .479 & .308 & .378 \\
+U-Net & size:DDR 10\% & DDR & TJDR UWF & .077 & .243 & .205 & .072 & .149 \\
+U-Net & size:DDR 10\% & DDR & MAPLES & .243 & .303 & .542 & .092 & .295 \\
+U-Net & size:DDR 10\% & DDR & FGADR & .010 & .132 & .190 & .119 & .112 \\
+U-Net & size:DDR 10\% & DDR & Retinal-L. & .037 & .119 & .173 & .165 & .123 \\
+U-Net & size:DDR 10\% & DDR & DiaRetDB1 & .030 & .180 & .247 & .204 & .165 \\
+U-Net & size:DDR 50\% & DDR & IDRiD & .303 & .552 & .811 & .493 & .540 \\
+U-Net & size:DDR 50\% & DDR & DDR & .132 & .407 & .570 & .383 & .373 \\
+U-Net & size:DDR 50\% & DDR & TJDR std & .273 & .715 & .530 & .374 & .473 \\
+U-Net & size:DDR 50\% & DDR & TJDR UWF & .123 & .338 & .261 & .075 & .199 \\
+U-Net & size:DDR 50\% & DDR & MAPLES & .240 & .476 & .564 & .076 & .339 \\
+U-Net & size:DDR 50\% & DDR & FGADR & .008 & .230 & .355 & .155 & .187 \\
+U-Net & size:DDR 50\% & DDR & Retinal-L. & .045 & .192 & .214 & .189 & .160 \\
+U-Net & size:DDR 50\% & DDR & DiaRetDB1 & .035 & .307 & .262 & .234 & .210 \\
+U-Net & size:fine merged & DDR & IDRiD & .432 & .563 & .859 & .574 & .607 \\
+U-Net & size:fine merged & DDR & DDR & .154 & .393 & .582 & .337 & .367 \\
+U-Net & size:fine merged & DDR & TJDR std & .367 & .779 & .643 & .458 & .562 \\
+U-Net & size:fine merged & DDR & TJDR UWF & .118 & .489 & .179 & .288 & .268 \\
+U-Net & size:fine merged & DDR & MAPLES & .295 & .491 & .596 & .107 & .372 \\
+U-Net & size:fine merged & DDR & FGADR & .014 & .276 & .322 & .154 & .192 \\
+U-Net & size:fine merged & DDR & Retinal-L. & .050 & .229 & .240 & .191 & .177 \\
+U-Net & size:fine merged & DDR & DiaRetDB1 & .041 & .338 & .292 & .202 & .218 \\
+M2MRF & size:DDR 10\%:fov & DDR & TJDR UWF & .087 & .304 & .076 & .096 & .141 \\
+M2MRF & size:DDR 50\%:fov & DDR & TJDR UWF & .115 & .432 & .160 & .163 & .218 \\
+U-Net & size:DDR 10\%:fov & DDR & TJDR UWF & .047 & .238 & .080 & .121 & .122 \\
+U-Net & size:DDR 50\%:fov & DDR & TJDR UWF & .065 & .412 & .187 & .221 & .221 \\
+\multicolumn{9}{l}{\textbf{Loss (E9)}}\\
+U-Net & loss:CE + Dice & DDR & DDR & .141 & .410 & .553 & .410 & .378 \\
+U-Net & loss:CE & DDR & DDR & .126 & .429 & .602 & .271 & .357 \\
+U-Net & loss:Dice & DDR & DDR & .124 & .268 & .397 & .160 & .237 \\
+U-Net & loss:CE + per-image Dice & DDR & DDR & .006 & .010 & .460 & .000 & .119 \\
+\end{longtable}
+}
+\end{landscape}

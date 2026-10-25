@@ -1,0 +1,28 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l c c c c c c c}
+\caption{\textbf{Human reference on DiaRetDB1: each expert against the consensus of the other three.} The expert's own markings, with their confidence levels mapped to scores, are the probability map and the consensus of the other three experts ($\geq$ 0.75) is the ground truth; thresholds come from the official training list. A map with four confidence levels gives a four-point precision--recall curve, so the pixel-level AUPR is a lower bound.}\label{stab:experts}\\
+\toprule
+Reader & MA & HE & EX & SE & \mAUPR{} & Image AUC & Dice \\
+\midrule
+\endfirsthead
+\multicolumn{8}{l}{\textit{continued}}\\
+\toprule
+Reader & MA & HE & EX & SE & \mAUPR{} & Image AUC & Dice \\
+\midrule
+\endhead
+\midrule
+\multicolumn{8}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Expert 01 & .008 & .246 & .414 & .102 & .193 & .870 & .349 \\
+Expert 02 & .001 & .166 & .273 & .162 & .150 & .931 & .261 \\
+Expert 03 & .015 & .341 & .516 & .244 & .279 & .931 & .448 \\
+Expert 04 & .022 & .271 & .366 & .220 & .219 & .913 & .360 \\
+\multicolumn{8}{l}{\textit{Models trained on IDRiD, against the four-expert consensus (median over 19 models; range in brackets)}}\\
+models & \na & \na & \na & \na & 0.245 [0.10--0.32] & 0.833 [0.71--0.92] & \na \\
+\multicolumn{8}{l}{\textit{Models trained on DDR, against the four-expert consensus (median over 19 models; range in brackets)}}\\
+models & \na & \na & \na & \na & 0.284 [0.09--0.32] & 0.840 [0.74--0.94] & \na \\
+\end{longtable}
+}

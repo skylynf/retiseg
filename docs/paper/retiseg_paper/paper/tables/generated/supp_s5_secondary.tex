@@ -1,0 +1,61 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l c c c c c c c c c c }
+\caption{\textbf{Secondary metrics of every main-table model on the internal tests (mean over the four classes and over seeds).} 11-thr., the 11-threshold AUPR of the M2MRF evaluation code on the same maps; Dice and IoU at the threshold chosen on the validation split; lesion-level precision and recall by lesion size (S, M, L: small, medium, large; Methods) at the same threshold; image-level AUC of the maximum probability inside the field of view.}\label{stab:secondary}\\
+\toprule
+Model & Seeds & \mAUPR{} & 11-thr. & Dice & IoU & Lesion prec. & Recall S & Recall M & Recall L & Image AUC \\
+\midrule
+\endfirsthead
+\multicolumn{11}{l}{\textit{continued}}\\
+\toprule
+Model & Seeds & \mAUPR{} & 11-thr. & Dice & IoU & Lesion prec. & Recall S & Recall M & Recall L & Image AUC \\
+\midrule
+\endhead
+\midrule
+\multicolumn{11}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{11}{l}{\textbf{Trained on IDRiD (internal test; mean over seeds)}}\\
+U-Net & 3 & .644\sd{.015} & .638\sd{.013} & .622\sd{.020} & .465\sd{.021} & .489\sd{.023} & .654\sd{.047} & .851\sd{.032} & .800\sd{.040} & .797\sd{.041} \\
+DeepLabv3 & 3 & .537\sd{.006} & .536\sd{.004} & .515\sd{.006} & .366\sd{.005} & .551\sd{.019} & .270\sd{.049} & .533\sd{.033} & .776\sd{.026} & \na \\
+HRNet-W48 & 3 & .700\sd{.004} & .691\sd{.003} & .627\sd{.004} & .468\sd{.004} & .485\sd{.010} & .584\sd{.040} & .879\sd{.013} & .862\sd{.018} & \na \\
+Swin-Unet & 3 & .688\sd{.003} & .686\sd{.002} & .640\sd{.002} & .481\sd{.002} & .419\sd{.007} & .671\sd{.050} & .849\sd{.008} & .827\sd{.014} & \na \\
+FCT & 3 & .298\sd{.084} & .359\sd{.071} & .330\sd{.066} & .217\sd{.048} & .267\sd{.047} & .205\sd{.032} & .523\sd{.029} & .726\sd{.027} & \na \\
+nnU-Net & 3 & .665\sd{.008} & .675\sd{.006} & .656\sd{.009} & .498\sd{.010} & .552\sd{.016} & .649\sd{.044} & .828\sd{.003} & .739\sd{.004} & .786\sd{.016} \\
+nnU-Net ResEnc-M & 1 & .631 & .631 & .638 & .479 & .526 & .600 & .852 & .695 & \na \\
+M2MRF & 3 & .657\sd{.010} & .650\sd{.004} & .648\sd{.004} & .490\sd{.004} & .531\sd{.008} & .615\sd{.015} & .824\sd{.009} & .736\sd{.018} & \na \\
+HACDR-Net & 3 & .538\sd{.031} & .559\sd{.013} & .520\sd{.025} & .367\sd{.022} & .495\sd{.040} & .411\sd{.019} & .749\sd{.046} & .764\sd{.014} & .698\sd{.163} \\
+HRDecoder & 1 & .647 & .637 & .636 & .476 & .605 & .456 & .792 & .785 & .885 \\
+PMCNet & 1 & .652 & .648 & .616 & .458 & .529 & .592 & .825 & .804 & .786 \\
+WSRFNet & 1 & .582 & .605 & .641 & .482 & .538 & .611 & .808 & .701 & .852 \\
+CLC-Net & 1 & .661 & .665 & .632 & .475 & .495 & .565 & .832 & .864 & .868 \\
+TC-Net & 1 & .653 & .643 & .607 & .449 & .536 & .443 & .804 & .815 & .874 \\
+SAMed & 3 & .706\sd{.015} & .703\sd{.012} & .658\sd{.007} & .502\sd{.008} & .519\sd{.007} & .553\sd{.055} & .798\sd{.033} & .838\sd{.030} & .907\sd{.033} \\
+SAM-Adapter & 1 & .706 & .704 & .663 & .508 & .527 & .624 & .851 & .809 & .832 \\
+SAM2-UNet & 1 & .664 & .683 & .653 & .495 & .440 & .846 & .925 & .826 & .835 \\
+MedSAM (full FT) & 1 & .642 & .654 & .609 & .451 & .507 & .392 & .759 & .791 & .791 \\
+RETFound + UPerNet & 3 & .699\sd{.009} & .692\sd{.008} & .650\sd{.008} & .492\sd{.009} & .469\sd{.014} & .683\sd{.015} & .873\sd{.014} & .856\sd{.028} & .821\sd{.040} \\
+\multicolumn{11}{l}{\textbf{Trained on DDR (internal test; mean over seeds)}}\\
+U-Net & 3 & .371\sd{.009} & .421\sd{.008} & .405\sd{.017} & .260\sd{.014} & .435\sd{.042} & .247\sd{.016} & .482\sd{.012} & .646\sd{.009} & .786\sd{.008} \\
+DeepLabv3 & 3 & .377\sd{.005} & .382\sd{.003} & .380\sd{.006} & .246\sd{.004} & .497\sd{.015} & .062\sd{.005} & .287\sd{.020} & .655\sd{.010} & \na \\
+HRNet-W48 & 3 & .447\sd{.009} & .461\sd{.009} & .448\sd{.004} & .297\sd{.004} & .513\sd{.006} & .217\sd{.007} & .495\sd{.006} & .680\sd{.012} & \na \\
+Swin-Unet & 3 & .431\sd{.001} & .447\sd{.003} & .440\sd{.003} & .289\sd{.003} & .424\sd{.008} & .312\sd{.012} & .543\sd{.013} & .674\sd{.002} & \na \\
+FCT & 1 & .176 & .344 & .197 & .125 & .224 & .096 & .351 & .608 & \na \\
+nnU-Net & 3 & .431\sd{.003} & .467\sd{.001} & .458\sd{.010} & .304\sd{.008} & .515\sd{.008} & .258\sd{.006} & .470\sd{.006} & .622\sd{.007} & .796\sd{.004} \\
+nnU-Net ResEnc-M & 1 & .428 & .448 & .463 & .310 & .491 & .294 & .490 & .664 & \na \\
+M2MRF & 3 & .369\sd{.011} & .406\sd{.008} & .407\sd{.012} & .262\sd{.009} & .454\sd{.007} & .276\sd{.003} & .556\sd{.001} & .696\sd{.023} & \na \\
+HACDR-Net & 3 & .252\sd{.017} & .289\sd{.022} & .289\sd{.022} & .175\sd{.014} & .416\sd{.019} & .106\sd{.022} & .350\sd{.028} & .562\sd{.016} & .719\sd{.012} \\
+HRDecoder & 1 & .296 & .333 & .373 & .236 & .459 & .234 & .496 & .629 & .714 \\
+PMCNet & 1 & .312 & .342 & .338 & .206 & .431 & .200 & .454 & .629 & .770 \\
+WSRFNet & 1 & .234 & .264 & .341 & .211 & .431 & .284 & .458 & .531 & .659 \\
+CLC-Net & 1 & .414 & .433 & .462 & .309 & .506 & .266 & .470 & .639 & .781 \\
+TC-Net & 1 & .361 & .365 & .352 & .223 & .443 & .102 & .376 & .634 & .785 \\
+SAMed & 3 & .460\sd{.027} & .472\sd{.027} & .454\sd{.025} & .301\sd{.022} & .497\sd{.008} & .242\sd{.029} & .474\sd{.031} & .674\sd{.007} & .842\sd{.005} \\
+SAM-Adapter & 1 & .433 & .465 & .457 & .304 & .471 & .257 & .496 & .690 & .657 \\
+SAM2-UNet & 1 & .360 & .445 & .413 & .265 & .459 & .298 & .559 & .698 & .749 \\
+MedSAM (full FT) & 1 & .413 & .433 & .432 & .283 & .516 & .212 & .484 & .675 & .795 \\
+RETFound + UPerNet & 3 & .450\sd{.018} & .458\sd{.016} & .447\sd{.006} & .294\sd{.005} & .472\sd{.006} & .290\sd{.006} & .538\sd{.007} & .696\sd{.009} & .844\sd{.002} \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize $\pm$, standard deviation over seeds where more than one seed was run.}

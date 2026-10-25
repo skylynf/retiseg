@@ -506,7 +506,20 @@ def collect_e3a(runs_dir):
             continue
         experiment, variant, model, train, seed = key
         for setdir in sorted(src.iterdir()):
-            if "__" in setdir.name or setdir.name not in E3A_SET or not (setdir / "done.json").exists():
+            if "__" in setdir.name or setdir.name not in E3A_SET:
+                continue
+            if not (setdir / "done.json").exists():
+                # a per-degree set whose main variant cannot be run for this source (bench/e3a.py: the training
+                # sources set no single field of view -- E3b on TJDR_std or FGADR, E8 / REF merged cells): the
+                # registered rule runs the fov variant only, which then stands in for the main row (2026-10-26)
+                fov = src / f"{setdir.name}__fov"
+                if not (fov / "done.json").exists() or not (fov / "metrics.json").exists():
+                    continue
+                report = load_report(fov / "metrics.json")
+                if report is None:
+                    continue
+                rows += rows_from_report(report, experiment, variant, model, train, seed, E3A_SET[setdir.name])
+                seen.append((f"E3a/{src.name}", f"{setdir.name} (fov stands in)", report.get("summary", {}).get("mAUPR")))
                 continue
             path = setdir / "metrics.json"
             if not path.exists():
@@ -516,6 +529,13 @@ def collect_e3a(runs_dir):
                 continue
             rows += rows_from_report(report, experiment, variant, model, train, seed, E3A_SET[setdir.name])
             seen.append((f"E3a/{src.name}", setdir.name, report.get("summary", {}).get("mAUPR")))
+            # the comparison variant of a per-degree set next to its main variant (Extended Data Fig. 9: the
+            # ultra-widefield images resized to the 1,440 canvas against native resolution), variant "<variant>:fov"
+            fov = src / f"{setdir.name}__fov"
+            if (fov / "done.json").exists() and (fov / "metrics.json").exists():
+                fov_report = load_report(fov / "metrics.json")
+                if fov_report is not None:
+                    rows += rows_from_report(fov_report, experiment, f"{variant}:fov", model, train, seed, E3A_SET[setdir.name])
     return pd.DataFrame(rows), seen
 
 
@@ -831,6 +851,52 @@ def derive_reported(table):
     return table, len(inserted)
 
 
+def drop_retired_placeholders(table):
+    """Placeholder rows for things the paper no longer plans to measure (2026-10-26, docs/paper/14 note 65): the WSRFNet
+    author weights (never arrived), the author-recipe reruns cut from the scope (M2MRF on DDR, HACDR-Net), the source-recipe
+    column (stopped before any run finished), the learning-rate sweep's unrun half, the encoder cells' untested sets and
+    the oracle-prompt k-curves on sets where only k = all was registered. Nothing measured is touched; a figure or key
+    that still read these rows reads nothing and marks itself pending."""
+    t = table
+    retired = (
+        ((t.experiment == "E1") & (t.model == "WSRFNet"))
+        | ((t.experiment == "E1r") & (t.variant == "author_recipe"))
+        | (t.experiment == "E2b")
+        | (t.experiment == "E2c")
+        | ((t.experiment == "E5") & (t.variant == "encoder_control"))
+        | ((t.experiment == "E5") & t.variant.str.match(r"^oracle:(box|point):(1|5|20)$", na=False) & (t.test_set == "TJDR-std"))
+        | ((t.experiment == "E10") & t.metric.isin(["flops_g", "peak_mem_gb", "infer_s_per_image"]))
+    ) & (t.source == "placeholder")
+    return t[~retired].reset_index(drop=True), int(retired.sum())
+
+
+def derive_funnel(table):
+    """The last stage of figure 2a, "reported number reproduced within 0.02 mAUPR by the author recipe": the number
+    of methods whose measured author-recipe rerun (E1r, author metric, mean over its seeds) lies within 0.02 of the
+    number printed in the paper. Measured as soon as one rerun is; the E1r rows and the paper rows (E1_REPORTED /
+    build_placeholder) are the inputs. The "authors contacted / replied" rows are typed from the e-mail ledger."""
+    table = table.copy()
+    runs = table[(table.experiment == "E1r") & (table.variant == "author_recipe") & (table.metric == "aupr_author_impl")
+                 & (table.cls == "mean") & (table.source == "measured")]
+    if runs.empty:
+        return table, None
+    reproduced = 0
+    for (model, train), group in runs.groupby(["model", "train_set"]):
+        paper = table[(table.experiment == "E1r") & (table.model == model) & (table.variant == "paper") & (table.train_set == train)
+                      & (table.cls == "mean") & (table.source == "measured")]
+        if paper.empty:
+            paper = table[(table.experiment == "E1") & (table.model == model) & (table.variant == "paper") & (table.train_set == train)
+                          & (table.cls == "mean") & (table.source == "measured")]
+        if paper.empty:
+            continue
+        if abs(float(group["value"].mean()) - float(paper["value"].iloc[0])) <= 0.02:
+            reproduced += 1
+    mask = (table.experiment == "L2") & (table.variant == "reproduced within 0.02 mAUPR")
+    table.loc[mask, "value"] = float(reproduced)
+    table.loc[mask, "source"] = "measured"
+    return table, reproduced
+
+
 def derive_encoder_reference(table):
     """The RETFound-MAE row of the encoder comparison is the main-table RETFound + UPerNet run (E5 / encoder_decoder,
     seed 0) of the same training source: its measured rows replace the placeholder rows under
@@ -916,6 +982,10 @@ def main():
     print(f"{filled} encoder-comparison reference rows copied from the main-table RETFound run")
     merged, filled = derive_reported(merged)
     print(f"{filled} reported-number rows written for the released checkpoints (E1_REPORTED)")
+    merged, dropped = drop_retired_placeholders(merged)
+    print(f"{dropped} retired placeholder rows dropped (things the paper no longer plans to measure)")
+    merged, reproduced = derive_funnel(merged)
+    print(f"funnel: {reproduced} method(s) reproduced within 0.02 mAUPR by the author recipe" if reproduced is not None else "funnel: no measured rerun yet")
     left = merged[(merged.experiment.isin(["E2", "E2b"])) & (merged.source != "measured")]
     print(f"placeholder rows left in E2/E2b: {len(left)}")
     if not args.dry_run:

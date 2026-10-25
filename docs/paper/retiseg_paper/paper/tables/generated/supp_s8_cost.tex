@@ -1,0 +1,40 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l c c c c c c c}
+\caption{\textbf{Computational cost (E10).} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\,GB A100, one task per card), and, where the cost audit has run, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.}\label{stab:cost}\\
+\toprule
+Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak mem.\ (GB) & Infer.\ (s/image) \\
+\midrule
+\endfirsthead
+\multicolumn{8}{l}{\textit{continued}}\\
+\toprule
+Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak mem.\ (GB) & Infer.\ (s/image) \\
+\midrule
+\endhead
+\midrule
+\multicolumn{8}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+U-Net & 7.8 & \na & 1.5 & 5.4 & \na & \na & \na \\
+DeepLabv3 & 58.6 & \na & 3.6 & 12.8 & \na & \na & \na \\
+HRNet-W48 & 65.8 & \na & 2.6 & 10.1 & \na & \na & \na \\
+Swin-Unet & 27.2 & \na & 2.6 & 10.4 & \na & \na & \na \\
+FCT & 1.9 & \na & 19.7 & 72.0 & \na & \na & \na \\
+nnU-Net & \ph{33.4} & \na & 7.2 & 7.2 & \na & \na & \na \\
+nnU-Net ResEnc-M & \ph{57.5} & \na & 12.8 & 11.4 & \na & \na & \na \\
+M2MRF & 70.3 & \na & 3.0 & 11.6 & \na & \na & \na \\
+HACDR-Net & 24.6 & \na & 5.9 & 27.8 & \na & \na & \na \\
+HRDecoder & 65.6 & \na & 1.5 & 5.9 & \na & \na & \na \\
+PMCNet & 12.9 & \na & 1.8 & 7.1 & \na & \na & \na \\
+WSRFNet & 9.7 & \na & 2.7 & 10.5 & \na & \na & \na \\
+CLC-Net & 119.7 & \na & 9.9 & 39.2 & \na & \na & \na \\
+TC-Net & 14.9 & \na & 6.0 & 24.7 & \na & \na & \na \\
+SAMed & 91.6 & \na & 2.1 & 7.4 & \na & \na & \na \\
+SAM-Adapter & 641.3 & 4.3 & 6.5 & 26.3 & \na & \na & \na \\
+SAM2-UNet & 216.5 & 4.4 & 4.1 & 16.2 & \na & \na & \na \\
+MedSAM (full FT) & 93.7 & 93.7 & 2.8 & 11.1 & \na & \na & \na \\
+RETFound + UPerNet & 352.6 & 352.6 & 6.1 & 24.2 & \na & \na & \na \\
+\end{longtable}
+}
+\vspace{-6pt}\noindent{\scriptsize nnU-Net follows its own schedule of 1,000 epochs rather than the pixel budget. Cells without a value were not measured; the cost audit (FLOPs, memory, inference) is pending.}

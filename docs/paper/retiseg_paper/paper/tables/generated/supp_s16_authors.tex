@@ -1,0 +1,52 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l l l c c c c c}
+\caption{\textbf{Released checkpoints on every test set, per class, under this protocol.} Each checkpoint is run through its authors' own test pipeline (resize, normalisation, whole image or sliding window as configured) and the maps are scored with the protocol evaluator; a source the checkpoint was trained on is its internal test.}\label{stab:authors}\\
+\toprule
+Checkpoint & Trained on & Test set & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endfirsthead
+\multicolumn{8}{l}{\textit{continued}}\\
+\toprule
+Checkpoint & Trained on & Test set & MA & HE & EX & SE & \mAUPR{} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{8}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+M2MRF & IDRiD & IDRiD & .408 & .654 & .832 & .664 & .639 \\
+M2MRF & IDRiD & DDR & .122 & .289 & .506 & .061 & .244 \\
+M2MRF & IDRiD & TJDR std & .294 & .387 & .566 & .241 & .372 \\
+M2MRF & IDRiD & TJDR UWF & .047 & .066 & .044 & .096 & .063 \\
+M2MRF & IDRiD & MAPLES & .220 & .363 & .457 & .048 & .272 \\
+M2MRF & IDRiD & FGADR & .010 & .243 & .210 & .113 & .144 \\
+M2MRF & IDRiD & Retinal-L. & .033 & .136 & .179 & .068 & .104 \\
+M2MRF & IDRiD & DiaRetDB1 & .043 & .247 & .265 & .107 & .165 \\
+M2MRF & DDR & IDRiD & .276 & .549 & .678 & .573 & .519 \\
+M2MRF & DDR & DDR & .165 & .426 & .558 & .456 & .401 \\
+M2MRF & DDR & TJDR std & .300 & .628 & .664 & .479 & .518 \\
+M2MRF & DDR & TJDR UWF & .073 & .512 & .164 & .075 & .206 \\
+M2MRF & DDR & MAPLES & .204 & .455 & .429 & .102 & .297 \\
+M2MRF & DDR & FGADR & .015 & .263 & .312 & .163 & .188 \\
+M2MRF & DDR & Retinal-L. & .044 & .148 & .195 & .188 & .144 \\
+M2MRF & DDR & DiaRetDB1 & .055 & .234 & .178 & .247 & .179 \\
+HRDecoder & IDRiD & IDRiD & .475 & .699 & .892 & .763 & .707 \\
+HRDecoder & IDRiD & DDR & .110 & .355 & .556 & .148 & .292 \\
+HRDecoder & IDRiD & TJDR std & .298 & .578 & .610 & .426 & .478 \\
+HRDecoder & IDRiD & TJDR UWF & .075 & .413 & .161 & .359 & .252 \\
+HRDecoder & IDRiD & MAPLES & .287 & .444 & .692 & .083 & .377 \\
+HRDecoder & IDRiD & FGADR & .016 & .285 & .338 & .102 & .186 \\
+HRDecoder & IDRiD & Retinal-L. & .038 & .157 & .338 & .125 & .165 \\
+HRDecoder & IDRiD & DiaRetDB1 & .047 & .329 & .452 & .175 & .251 \\
+HRDecoder & DDR & IDRiD & .291 & .639 & .799 & .633 & .590 \\
+HRDecoder & DDR & DDR & .172 & .557 & .629 & .486 & .461 \\
+HRDecoder & DDR & TJDR std & .298 & .707 & .693 & .517 & .554 \\
+HRDecoder & DDR & TJDR UWF & .077 & .543 & .148 & .102 & .218 \\
+HRDecoder & DDR & MAPLES & .279 & .471 & .617 & .159 & .382 \\
+HRDecoder & DDR & FGADR & .013 & .302 & .291 & .211 & .204 \\
+HRDecoder & DDR & Retinal-L. & .064 & .216 & .283 & .232 & .199 \\
+HRDecoder & DDR & DiaRetDB1 & .060 & .409 & .323 & .306 & .275 \\
+\end{longtable}
+}
