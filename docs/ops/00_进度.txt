@@ -602,3 +602,17 @@ IDRiD/fam:foundation Retinal-Lesions mAUPR 0.2505 (4 members)
 参考模型：SAMed 仍在 GPU 4。15:09 的 history 到 epoch 340/400，验证 0.6059；目前最高是 epoch 320 的 0.6225。RETFound 仍在 GPU 2（pid 2313457），13:26 起约 1 小时 43 分，进程在算，history 还是空的（第一次验证在 epoch 20）。启动器 pid 88417 没重启。GPU 0、1 仍是别人的。GPU 3、5、6、7 空着。
 
 2026-10-25 15:11 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261025.tar.gz（70 MB，6769 个文件，1407 行指标，0 个未对齐）。对照 v4 的 runs/handoff_manifest_20261024.tsv。summary/new_since.tsv 是 18 行：第 56 条八个集成，第 57 条两格内部测试和各四个外部集合。10-24 的四个包没有被覆盖。参考模型那一包还没打。
+
+2026-10-25 16:17 +0800，pull 到 abffb91。第 59 条没开（低优先）。第 63 条等两格参考模型训完。启动器 pid 88417 没重启：干跑当前队列是 0 项，两格参考模型都已派出，空卡不会再被派任务（21 第 93 条的后一种做法）。
+第 60 条：RETFound-DINOv2 的 IDRiD 格在 GPU 3，16:16:45 启动，pid 2395137。预训练权重复制 340 个、缺 0、多 19，来源 RETFound_dinov2_meh.pth。16:17 显存约 22956 MiB。诊断运行，训完由等待脚本在同一张卡打内部测试并补 TJDR 标准、TJDR 超广角、MAPLES-DR（目录是 runs/E5enc_vitup_rfdinov2_idrid_seed0_lr1）。日志 runs/logs/20261025_item60.log。
+第 61 条：M2MRF 作者配方种子 1 在 GPU 5（pid 2394428，日志 runs/logs/20261025_161642_e1r_seed1.log），种子 2 在 GPU 7（pid 2394444，日志 runs/logs/20261025_161642_e1r_seed2.log）。两格都已复制骨干 865/1513，effective batch 4。目录 runs/E1r_m2mrf_idrid_seed1_bs4_a100 与 seed2。各约 30 小时。
+第 62 条：M2MRF 作者检查点的逐类数在 GPU 6，16:16:42 起，先 IDRiD 再 DDR。做完删概率图、留下 json，并对照 runs/handoff_manifest_20261025.tsv 打今天的下一包。日志 runs/logs/20261025_item62.log。
+参考模型：SAMed 仍在 GPU 4，16:12 的 history 到 epoch 380/400，验证 0.6226，目前最高就是这一步。RETFound 仍在 GPU 2，history 到 epoch 20/400，验证 0.4707；13:26 起约 2 小时 46 分走到这一步。GPU 0、1 仍是别人的。第 49 条没开。
+
+2026-10-26 03:27 +0800。第 62 条 16:29 退出 0，概率图已删，json 留下。作者函数 mAUPR：IDRiD 0.6755、DDR 0.4920。本协议：IDRiD 0.6394（n=27，排除 0；MA 0.4078、HE 0.6537、EX 0.8317、SE 0.6644），DDR 0.4013（n=225，排除 0；MA 0.1649、HE 0.4255、EX 0.5584、SE 0.4563）。文件 runs/E1_m2mrf/metrics_idrid.json、metrics_ddr.json、author_idrid_test.json、author_ddr_test.json。
+2026-10-25 16:29 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261025_v2.tar.gz（71 MB，6794 个文件，1407 行指标，0 个未对齐）。对照当时的 runs/handoff_manifest_20261025.tsv。summary/new_since.tsv 是空的：这两份指标文件名是 metrics_idrid.json、metrics_ddr.json，不进指标行。四个 json 在包里。15:11 的包没有被覆盖。
+第 60 条 23:43 训练退出 0，用了 26781.6 秒。诊断运行，验证曲线在 console。内部测试 mAUPR 0.7109（n=27，排除 0），文件 runs/E5enc_vitup_rfdinov2_idrid_seed0_lr1/metrics_test.json。外部排除都是 0：TJDR 标准 0.5586（n=55），TJDR 超广角 0.2227（n=58），fov 0.3013（n=58），MAPLES-DR 0.4166（n=60）。E3a 10-26 00:22 退出 0。
+SAMed 参考格 17:10 退出 0，训练 40253.6 秒。验证最高 epoch 380 的 0.6226，最后一步 epoch 400 是 0.6134。DDR 内部测试 mAUPR 0.4775（n=225，排除 0），文件 runs/BF_ref_samed_fine_seed0/metrics_test.json。
+2026-10-26 00:23 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261026.tar.gz（72 MB，6824 个文件，1413 行指标，0 个未对齐）。summary/new_since.tsv 是 6 行：SAMed 参考格的内部测试，第 60 条的内部测试和四个外部集合。
+第 61 条仍在训。03:27 种子 1 约 26340/40000 步（GPU 5），种子 2 约 26660/40000 步（GPU 7），显存都约 29 GB。16:16 起约 11 小时。
+RETFound 参考格仍在 GPU 2。03:27 的 history 到 epoch 120/400，验证 0.6138，目前最高就是这一步。13:26 起约 14 小时。第 63 条没开。第 59 条没开。第 49 条没开。启动器 pid 88417 没重启。GPU 3、4、6 空着。GPU 0、1 仍是别人的。
