@@ -132,7 +132,7 @@ stages:
     experiment: REF
     models: [RETFound, SAMed]
     enabled: true
-    max_concurrent: 1
+    max_concurrent: 2
 
   # 8. Independent tests of the B-std seed-1/2 checkpoints (error bars of R4 / figure 6): behind every
   #    training stage, so the two E3a cards go to training once the seed-0 sources are done.
