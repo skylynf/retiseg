@@ -336,6 +336,19 @@ def foundation():
         put(f"fm.enc.{pair}.std.abs", f3(abs(enc["table"].loc[a, "TJDR-std"] - enc["table"].loc[b, "TJDR-std"])), sim)
     labels = [names.get(t, t) for t in enc["sets"]]
     put("fm.enc.sets", (", ".join(labels[:-1]) + " and " + labels[-1] if len(labels) > 1 else (labels[0] if labels else "pending")), not enc["sets"])
+    # the IDRiD column (14 note 59): MAE-IN1k and DINOv2 trained on IDRiD, RETFound-MAE copied from the main table;
+    # keys fm.enc.i.<encoder>.* and fm.enc.i.c1.* (C2 on IDRiD waits for RETFound-DINOv2, note 62)
+    enc_i = D.encoder_table("IDRiD")
+    for model, short in key.items():
+        put(f"fm.enc.i.{short}.int", f2(enc_i["internal"][model]), enc_i["simulated"][model])
+        put(f"fm.enc.i.{short}.ind", f2(enc_i["independent"][model]), enc_i["simulated"][model])
+        for t in ("TJDR-std", "TJDR-uwf", "MAPLES-DR"):
+            put(f"fm.enc.i.{short}.{t}", f2(enc_i["table"].loc[model, t]), not enc_i["measured"].loc[model, t])
+    for pair, (a, b) in {"c1": ("RETFound-MAE", "MAE-IN1k ViT-L"), "c2": ("RETFound-DINOv2", "DINOv2 ViT-L")}.items():
+        sim = enc_i["simulated"][a] or enc_i["simulated"][b]
+        put(f"fm.enc.i.{pair}.int", f3(enc_i["internal"][a] - enc_i["internal"][b]), sim)
+        put(f"fm.enc.i.{pair}.int.abs", f3(abs(enc_i["internal"][a] - enc_i["internal"][b])), sim)
+        put(f"fm.enc.i.{pair}.ind", f3(enc_i["independent"][a] - enc_i["independent"][b]), sim)
     # the old keys keep working for the simtext of R5 until it is rewritten
     put("fm.enc.retfound.int", f2(enc["internal"]["RETFound-DINOv2"]), enc["simulated"]["RETFound-DINOv2"])
     put("fm.enc.imagenet.int", f2(enc["internal"]["MAE-IN1k ViT-L"]), enc["simulated"]["MAE-IN1k ViT-L"])

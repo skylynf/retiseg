@@ -3,7 +3,7 @@
 \renewcommand{\figurename}{Extended Data Fig.}
 \setcounter{figure}{0}
 
-\noindent Nine Extended Data figures are planned (the comparison with the source recipes moved to Supplementary Table~4 when that column was cut back to the runs already finished). Three of them need no images and are drawn below from the same data table as the main figures; the others are listed with their content and data source.
+\noindent Nine Extended Data figures are planned (the comparison with the source recipes was withdrawn when that track was stopped before any run finished). Three of them need no images and are drawn below from the same data table as the main figures; the others are listed with their content and data source.
 
 \begin{center}\small\sffamily
 \begin{tabular}{@{}l l l l@{}}
@@ -15,7 +15,7 @@
 3 & Leakage audit: near-duplicates between sources and splits & hash and feature audit & audit not run \\
 4 & Sensitivity to the metric implementation (thresholds, FOV, overlap) & evaluation switches & with Fig.~\ref{fig:literature}d,e \\
 5 & Per-image distributions and threshold sensitivity & per-image histograms & after E2 \\
-6 & (withdrawn; source recipes are Supplementary Table~4) & E2b & -- \\
+6 & (withdrawn; the source-recipe track was stopped before any run finished) & E2b & -- \\
 7 & Learning-rate sweep (DDR) & E2c & drawn \\
 8 & Loss with the architecture fixed (U-Net) & E9 & drawn \\
 9 & DiaRetDB1 official protocol; ultra-widefield at two scales & E3a & after E3a \\
@@ -52,10 +52,12 @@
 \item Datasets: source, camera, field of view, resolution, annotation procedure, splits, licence; DiaRetDB1 positive-image counts against the original paper.
 \item Models: all \rn{n.models} registered variants with tier, code, weights, reproducibility level, tracks and environment.
 \item Reported numbers extracted from the literature (one row per paper, baseline, dataset, class and metric), with split, resolution, metric implementation and provenance.
-\item Recipe and deviations of every run; source recipes (B1) against the unified protocol for the runs that completed.
+\item Recipe and deviations of every run.
 \item Per-class results of every model on every test set: AUPR with bootstrap interval, 11-threshold AUPR, Dice and intersection over union at both thresholds, lesion-level precision, recall and F1 by lesion size.
 \item Split lists.
 \item Computational cost.
 \item Refined IDRiD: the crop geometry recovered for each of the 27 test images, the label differences per class, and every IDRiD-trained model's per-class AUPR against the refined and the official labels through the same geometry.
+\item Encoder comparison: the four ViT-L encoders under the UPerNet head on DDR and the three available on IDRiD, per class, on the internal test and the three independent fine-grained sets; validation curves and the selected epoch of each cell.
+\item Ensembles: every registered composition from each training source on every test set, with its member list and, where a member was left out on a set, the members used; the reference model's two cells and their ensemble.
 \end{enumerate}
 \noindent\textbf{Supplementary notes.} One note per model (source, reproducibility level, environment, changes, differences from the paper); the budget probe with every version of the rule; protocol details.

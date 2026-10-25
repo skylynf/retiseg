@@ -576,14 +576,15 @@
    处理条件：无。
    来源：10-23 包进表。
 
-87  2026-10-23  3 级 → traceback 已到（服务器 10-24 12:19：空卡 GPU 7、retiseg-hacdr、CUDA_LAUNCH_BLOCKING=1，两集合都在第一张图的第一次前向、mmcv modulated_deform_conv_forward 里的 cublasSgemm 报 CUBLAS_STATUS_NOT_SUPPORTED）；本机 10-24 第二次：代码路径与 10-13 / 10-17 的成功运行相同，原因在环境本身，探针在 17 第四节第 55 条；10-25 按第 56 条用 --without 兜底
+87  2026-10-23  3 级 → 兜底已出数（服务器 10-25 07:20：all / fam:fundus 在 FGADR、Retinal-Lesions 按 --without HACDR-Net 算出，done.json 记 members_missing，表 5 角标 p，R4 写明）；探针（10-25 05:23）排除了环境：纯矩阵乘、DCN 单测、seed2 的 FGADR 重推（553 张）都正常，只有 seed0 的检查点在这条路径上报错；最后一步探针在 17 第四节第 59 条，低优先
    问题：第 23 条成员图重推（--regenerate-maps）里 HACDR-Net DDR 两次退出 1：modulated_deform_conv 的 CUBLAS_STATUS_NOT_SUPPORTED（10:31、10:46），官方代码没改。HACDR 原来的 E3a（runs/E3a/BS_hacdr_ddr_seed0/FGADR/predicted.json）是在 torch 1.10.0、A100-40GB 上跑通的，也就是 retiseg-hacdr 环境；成员重推的循环若在 retiseg（torch 2.x）环境里跑，mmcv 1.x 的 DCN 算子在新 cuBLAS 下会报这个错——最像的原因。
    影响：FGADR、Retinal-Lesions 的集成缺 HACDR 成员，整列等它。
    状态与决定：服务器在 retiseg-hacdr 里单独重推这一格（命令在 17 第 46 条）；若环境对了仍报错，贴 traceback 与 conda list 里 torch / mmcv 版本，本机再看。
    2026-10-24 本机：环境与原运行一致，所以不是环境；原 E3a（10-13，同代码路径 run_source → load_run_model → predict_image）能跑而现在不能，差别只可能在卡上的其他进程、失败发生的图（console 每 50 张一行，可定位区间）或两套集合在同一进程里连跑。要服务器的：完整 traceback、失败前最后一行进度、`nvidia-smi` 当时的占用；并试 CUDA_LAUNCH_BLOCKING=1 单独跑 --sets Retinal-Lesions 与 --sets FGADR。兜底：ensemble.py 加 --without（只对命名集合去掉该成员，done.json 记 members_missing，collect 记 variant ensemble:without …，表 5 加角标 p）——HACDR 到 10-25 仍不行就对 all、fam:fundus 的 FGADR / Retinal-Lesions 用它，论文写明。
    2026-10-24 本机第二次（读 12:19 记录）：失败在第一张图（Retinal-Lesions 10037_left、FGADR 0017_2）的第一次前向，栈是 bench/infer.py canvas_logits 的整画布 model(padded) → 官方 backbone 的 conv0（mmcv ModulatedDeformConv）→ cublasSgemm，与卡上的其他进程、集合顺序、具体哪张图都无关（CUDA_LAUNCH_BLOCKING=1 下栈是准确的）。本机比对：成功过的三次 HACDR DDR 独立测试（10-13 seed0 的 FGADR / Retinal-Lesions，git 3c505bb；10-17 seed2 的 FGADR，git eb2691e）与现在走的是同一条代码路径——git diff 3c505bb HEAD 在 e3a.py / predict.py / infer.py / models/hacdr.py / runtime.py 上的改动只有 HRDecoder 的 author_recipe 绑定、BF 的 apply_cell_geometry、带 output_margin 的滑窗分支（HACDR 的 window 是 None，不进这个分支）和 --regenerate-maps 的待办筛选，HACDR 的前向一行没动；检查点 runs/BS_hacdr_ddr_seed0/best.pt 没动过；驱动 560.28.03 与 10-17 相同。剩下的只有环境：同一个 conda 环境在 10-19 到 10-21 装过 HRDecoder 的依赖（它也用 mmcv / mmseg），mmcv 的编译扩展或 torch 自带的 cuBLAS 库若被换过（版本号相同、构建不同，或两者不配），DCN 算子里的 gemm 会报这个错而 HRDecoder（不用 DCN）照常。所以第 55 条先做探针：纯 torch 矩阵乘、mmcv 的 DCN 算子单独跑、mmcv / torch 的编译 CUDA 版本与 .so 的修改时间；再对 seed2 做一次同样的重推，分开“检查点”与“环境”。报错出在 ATen 的 at::cuda::blas::gemm（mmcv 的 forward 调 torch 的 addmm_），所以若 DCN 单测也报错，就是环境层面的问题，与本项目的代码无关；修环境（重装 mmcv-full cu113 轮子或重建环境）要等本机看过探针再定，服务器不要先动。
-   处理条件：第 55 条的探针结果；10-25 的兜底不等它。
-   来源：服务器 10-23 10:42、10:45、10-24 06:36、12:19 记录；本机 git diff 3c505bb HEAD。
+   2026-10-25 本机（读 05:23、13:17 记录）：探针结果——torch 1.10.0 / CUDA 11.3 / cudnn 8200 的 512 方阵乘通过；mmcv 1.6.2（编译 CUDA 11.3、GCC 9.3）的 ModulatedDeformConv2dPack 单测通过；libcublas 11.5.1.109 与 mmcv/_ext 的文件时间都在 10-17 之前，没有被换过；seed2 的 FGADR --regenerate-maps 553 张全部跑完、第一次前向没有报错。所以“环境”这个解释也排除了：同一环境、同一代码、同一集合，seed0 的 best.pt 报错而 seed2 的不报。检查点能改变的只有张量本身（数值、dtype、是否连续、设备），不是 gemm 的形状；cuBLAS 对 NaN 不会报 NOT_SUPPORTED，load_state_dict 又是按模型参数的布局拷贝值，所以本机现在没有一个能解释的机制，只剩两件可查的事：best.pt 里各张量的 dtype / 步幅 / 设备（与 seed2 对比）和 TF32 开关（apply_matmul_precision 对两个 run 读的是同一份 card，但可以反过来试）；都在第 59 条，低优先——集成已按 --without 出数并写进论文，HACDR 的两份图只影响 all / fam:fundus 在两个粗标注集合上从 17 / 6 人回到 18 / 7 人。
+   处理条件：第 59 条；不阻塞任何事。
+   来源：服务器 10-23 10:42、10:45、10-24 06:36、12:19、10-25 05:23、13:17 记录；本机 git diff 3c505bb HEAD。
 
 88  2026-10-24  2 级 → 已处理并重算完（服务器 10-24 17:37：members.json 18 人、MedSAM 不在表内；DDR 源 all 五个集合重算 IDRiD 0.6772、TJDR_std 0.6373、TJDR_uwf 0.2663、DiaRetDB1 0.3351、MAPLES-DR 0.4959；v4 包进表，R4 的集成一句已改）
    问题：ensemble.py 的 MEMBERS 列表含 MedSAM，成员表只看有没有 metrics_test.json；10-20 登记时 MedSAM 没有运行（18 人），10-22 修订 run 出分后，10-23 第 38 条重算 DDR 源 all 的五个外部集合时成员表自动收进 MedSAM，变成 19 人（服务器 10-23 09:40 记录"都是 19 个成员"），而 DDR 内部集合与 IDRiD 源的全部集成仍是 18 人。M15 / 备注 47 登记的是"组合登记后不增减"。
@@ -606,3 +607,20 @@
    处理条件：服务器跑完进表。
    来源：10-24 核对图 6a 的来源列。
 
+91  2026-10-25  2 级 → 已处理（2026-10-25，本机）
+   问题：核对论文全文时发现图 3 与表 3 还在画已经不存在的东西：图 3a/3d 与表 3a 的检查点列表是 M2MRF 与 WSRFNet（WSRFNet 的权重向作者索取后一直没有到，行里全是占位），而实测齐全的 HRDecoder 两份检查点（E1，八个集合）没有画；图 3c 对 M2MRF DDR 与 HACDR-Net 两库画的是 build_placeholder 的三粒占位种子，这些重训在 16 第八节已经砍掉、队列里也没有，表 3b 同样列着占位行；图 3d 的八个测试集块按七个集合的间距排，第八块与右侧汇总块重叠；图 3d 的角标是写死的“simulated except M2MRF internal”，而 M2MRF 两份检查点的独立测试早已实测（runs/E3a/E1_m2mrf_*），缺的只是 M2MRF DDR 检查点在自己测试集上按本协议的逐类数（build_placeholder 只录了均值）。另外 HRDecoder 的“论文数”一直是 README 的 71.34 / 49.24（占位标记），论文表 1 的三次平均是 71.29 / 49.27。
+   影响：图 3 三个面板、表 3；R3 正文两句 simtext。
+   状态与决定：fig3_original.py 的 CKPT 改为 M2MRF 与 HRDecoder，面板 c 只画有实测 run 的组、砍掉的重训在报告值旁标 “not rerun”，面板 d 的块距按八个集合排、角标按数据生成；make_tables 的表 3 去掉 WSRFNet 行、作者配方块跳过全占位的行；collect_runs 加 E1_REPORTED（HRDecoder 论文表 1、HACDR-Net 的 L1 抽取）写进 E1 / E1r 的 paper 行，build_placeholder 同步。R3 两句 simtext 改为实情（砍掉的重训、M2MRF 检查点的独立测试数、WSRFNet 权重未到）。M2MRF DDR 检查点自己测试集的逐类数由服务器补（17 第四节第 62 条）。
+   处理条件：第 62 条跑完进表后图 3d 的角标自动消失。
+   来源：10-25 全文对照。
+
+92  2026-10-25  3 级 → 已处理（2026-10-25，本机）
+   问题：论文里还有四处写着已经不成立的状态：方法的稀有类塌缩段（上轮已改）之外，R4 写“来源配方列对已完成的运行见补充表 4”，而 B1 在 10-11 停队列时六个运行一个也没跑完（最远的 DeepLabv3 DDR 到 15000/30000），补充表 4 无数可报；讨论的局限段把 PMCNet、WSRFNet 列为“未来工作的二档模型”，但两者已是主表行；R1 的一档清单只写 M2MRF 与 HACDR-Net 两个专用模型；R4 的独立测试段还写“MedSAM 用登记配方、修订 run 待跑”。摘要整段还是占位文字。
+   状态与决定：B1 在 R4、方法、讨论局限、补充表清单、ED 表、STRUCTURE.md 六处改为“已启动六个运行、未完成即停止、不报数”；局限段的二档清单去掉 PMCNet、WSRFNet；R1 列出七个专用网络并加引用；MedSAM 一句改为修订配方；摘要按实测重写（n、funnel、11 阈值 0.676 对 0.639、作者代码重训低 6 分、主表四类领先且差在种子散布内、12 个不可分、独立测试随标注风格与视野、粗标注 / 区域 / 超广角跌 40–50%、编码器预训练无加分、集成 +0.02–0.06）。
+   来源：10-25 全文对照。
+
+93  2026-10-25  3 级 → 记录（服务器 10-25 05:23、13:17、13:28）
+   问题：参考模型两格的两件事。（a）SAMed 格登记估计 3 小时（make_factor_jobs 的 DDR_HOURS["SAMed"]），实际 05:23 开到 13:17 才到 epoch 280/400，约 14 小时——估计用了 IDRiD 的时长；RETFound 的 22 小时估计是对的。（b）05:20 启动器把 RETFound 格派到 GPU 3，而 GPU 3 上正跑着 launch_extra 开的 DINOv2 编码器格：队列的空卡判断只看自己的 claim.json，看不见 launch_extra 的进程；服务器停掉了刚开始的 RETFound，启动器 13:26 改派到 GPU 2。与 21 第 89 条是同一类问题的另一面（两套启动器互不知道对方）。
+   影响：无结果损失；SAMed 格比计划多占一张卡约 11 小时。
+   状态与决定：make_factor_jobs 的 SAMed 时长改 14（下次生成 factor_jobs.yaml 时生效）；两套启动器并用时，launch_extra 的卡要从 RETISEG_GPUS 里拿出来（17 第一节的规则本来如此，第 57 条给卡时没写明，本机的疏忽）。
+   来源：服务器 10-25 记录。

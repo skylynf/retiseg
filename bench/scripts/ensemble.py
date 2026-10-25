@@ -31,6 +31,11 @@ Retinal-Lesions were run with --drop-maps, so their member maps have to be regen
 Output: runs/ENS/<train>/<composition>/prob_val (the ensemble's validation maps, used for the val_opt
 thresholds exactly as a single model's are) and <set>/{prob_test, metrics.json, metrics.npz, done.json}.
 The paper reads these through docs/paper/retiseg_paper/paper/scripts/collect_runs.py (experiment ENS).
+
+The reference model (docs/paper/26 section 5 item 2; 14 note 58) is a two-member ensemble of named run
+directories, the REF cells trained on IDRiD + DDR + TJDR_std, with no registered composition:
+    python bench/scripts/ensemble.py reference --members runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0 [--sets ...] [--drop-maps]
+Output runs/ENS/REF/reference/<set>/...; done.json carries the paper key (N8, reference:ensemble).
 """
 
 import argparse
@@ -305,6 +310,120 @@ def run(train, composition, sets=None, drop_maps=False, runs_root=None, e3a_root
     return results
 
 
+REFERENCE_NAME = "RetiSeg-Ref"
+REFERENCE_PAPER = {"experiment": "N8", "variant": "reference:ensemble"}
+SET_LABEL = {"TJDR_std": "TJDR-std", "TJDR_uwf": "TJDR-uwf"}   # the paper's names (collect_runs E3A_SET), for done.json's paper key
+
+
+def reference_members(run_dirs):
+    """(validation / internal-test source, merged training sources) shared by the reference cells, from their configs."""
+    import yaml
+
+    seen = None
+    for run_dir in run_dirs:
+        cfg = Path(run_dir) / "config.yaml"
+        config = yaml.safe_load(cfg.read_text()) if cfg.is_file() else {}
+        if config.get("experiment") != "BF" or config.get("factor") != "REF":
+            raise ValueError(f"{run_dir}: not a REF cell (bench/factor.py; 14 note 58)")
+        test_source = e3a.PREPARED_TO_SET.get(Path(config["dataset"]).name, Path(config["dataset"]).name)
+        train_names = tuple(e3a.train_sources_of(config))
+        scale_known = e3a.scale_source_of(config) is not None
+        if seen is not None and seen != (test_source, train_names, scale_known):
+            raise ValueError(f"the reference cells disagree on their sources: {seen} vs {(test_source, train_names, scale_known)}")
+        seen = (test_source, train_names, scale_known)
+    if seen is None:
+        raise ValueError("no member run directories")
+    return seen
+
+
+def reference_map_dir(run_dir, test_name, test_source, train_names, scale_known, frozen, e3a_root=None):
+    """(maps directory, e3a variant) of a REF member on one test set: prob_test for the validation source's own
+    test split, insource_<set>/prob for the other merged sources (17 section 4 item 27), the E3a directory otherwise;
+    a per-degree set uses its fov variant, as e3a does for a run whose sources set no single scale."""
+    run_dir = Path(run_dir)
+    if test_name == test_source:
+        return run_dir / "prob_test", e3a.MAIN
+    if test_name in train_names:
+        return run_dir / f"insource_{test_name}" / "prob", e3a.MAIN
+    variant = e3a.MAIN
+    if test_name in frozen.get("per_degree_sets", ()) and not scale_known:
+        variant = frozen["comparison_variants"][test_name]
+    e3a_root = Path(e3a_root) if e3a_root is not None else run_dir.parent / "E3a"
+    return e3a_root / run_dir.name / e3a.set_dirname(test_name, variant) / "prob_test", variant
+
+
+def run_reference(member_run_dirs, sets=None, drop_maps=False, runs_root=None, e3a_root=None):
+    """The reference model's ensemble (26 section 5 item 2; 14 note 58): the pixel mean of the maps of the named
+    runs, the two REF cells, scored like every other ensemble. The members are run directories, not a registered
+    composition; their configs name the merged training sources and the validation source. Thresholds come from
+    the mean of the members' prob_val (the validation source's split); the test sets are the validation source's test
+    split, the in-source test splits of the other merged sources and every E3a set the members were tested on.
+    Output runs/ENS/REF/reference/<set>/{metrics.json, done.json}; done.json carries the paper key
+    (experiment N8, variant reference:ensemble, train_set the merged sources) that collect_runs reads."""
+    from bench.eval.evaluate import evaluate, load_protocol
+
+    frozen = e3a.load_frozen()
+    proto = load_protocol(REPO / frozen["eval_protocol"])
+    run_dirs = [Path(d) if Path(d).is_absolute() else REPO / d for d in member_run_dirs]
+    for d in run_dirs:
+        if not (d / "metrics_test.json").is_file():
+            raise FileNotFoundError(f"{d}: not scored yet (metrics_test.json)")
+    test_source, train_names, scale_known = reference_members(run_dirs)
+    out = ens_root(runs_root) / "REF" / "reference"
+    data_val = e3a.test_data_dir(test_source, frozen)
+    classes = [c for c in proto["classes"] if c in io.load_meta(data_val)["classes"]]
+    val_dir = out / "prob_val"
+    if not (val_dir / "done.json").is_file():
+        val_ids = io.load_split(data_val, "val")
+        missing = missing_maps([d / "prob_val" for d in run_dirs], val_ids, classes)
+        if missing:
+            raise FileNotFoundError(f"validation maps missing: {missing}")
+        average_maps([d / "prob_val" for d in run_dirs], val_ids, classes, val_dir)
+        (val_dir / "done.json").write_text(json.dumps({"members": [d.name for d in run_dirs], "n_images": len(val_ids), "validation_source": test_source}) + "\n")
+    others = [t for t in train_names if t != test_source]
+    default_sets = [test_source] + others + [t for t in frozen["test_sets"] if t not in train_names]
+    test_names = [t for t in (sets or default_sets)]
+    results = {}
+    for test_name in test_names:
+        directory = out / test_name
+        if (directory / "done.json").is_file():
+            print(f"REF/reference {test_name}: done", flush=True)
+            continue
+        data_test = e3a.test_data_dir(test_name, frozen)
+        if test_name in train_names:
+            ids, excluded = io.load_split(data_test, frozen["split"]), []
+        else:
+            ids, excluded = e3a.test_ids(test_name, frozen, list(train_names))
+        located = [reference_map_dir(d, test_name, test_source, train_names, scale_known, frozen, e3a_root) for d in run_dirs]
+        member_dirs = [m for m, _v in located]
+        variant = located[0][1]
+        missing = missing_maps(member_dirs, ids, classes)
+        if missing:
+            raise FileNotFoundError(f"{test_name}: member maps missing (bench.e3a run / insource prediction, 17 section 4 item 47): {missing}")
+        started = time.perf_counter()
+        n = average_maps(member_dirs, ids, classes, directory / "prob_test")
+        result = evaluate(
+            data_test, frozen["split"], directory / "prob_test", proto,
+            val_pred_dir=val_dir, val_split="val", out_prefix=directory / "metrics", val_dataset_dir=data_val, exclude=excluded,
+        )
+        done = {
+            "experiment": "ENS", "composition": "reference", "name": REFERENCE_NAME, "train_source": "+".join(train_names), "train_sources": list(train_names),
+            "validation_source": test_source, "test_set": test_name, "variant": variant,
+            "members": [d.name for d in run_dirs], "member_runs": [d.name for d in run_dirs], "rule": "pixelwise mean of 16-bit maps",
+            "in_source": test_name in train_names, "n_images": n, "excluded": excluded, "seconds": round(time.perf_counter() - started, 1),
+            "summary": result["summary"], "maps_dropped": bool(drop_maps),
+            "paper": dict(REFERENCE_PAPER, train_set=" + ".join(SET_LABEL.get(t, t) for t in train_names)),
+        }
+        (directory / "done.json").write_text(json.dumps(done, indent=1) + "\n")
+        if drop_maps:
+            import shutil
+
+            shutil.rmtree(directory / "prob_test")
+        results[test_name] = result["summary"]["mAUPR"]
+        print(f"REF/reference {test_name} mAUPR {results[test_name]:.4f} ({len(run_dirs)} members; variant {variant})", flush=True)
+    return results
+
+
 def plan(train, compositions, runs_root=None, e3a_root=None):
     frozen = e3a.load_frozen()
     table = members_table(train, frozen, None, runs_root)
@@ -326,6 +445,12 @@ def plan(train, compositions, runs_root=None, e3a_root=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
+    ref = sub.add_parser("reference", help="the reference model's two-member ensemble (14 note 58): explicit run directories")
+    ref.add_argument("--members", required=True, help="comma-separated run directories, e.g. runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0")
+    ref.add_argument("--sets", default=None, help="comma-separated test sets (default: validation source's test, in-source sets, then every E3a set)")
+    ref.add_argument("--drop-maps", action="store_true")
+    ref.add_argument("--runs", default=None)
+    ref.add_argument("--e3a", default=None)
     for command in ("members", "plan", "run"):
         p = sub.add_parser(command)
         p.add_argument("--train", required=True, choices=["IDRiD", "DDR"])
@@ -340,6 +465,9 @@ def main(argv=None):
         if command == "members":
             p.add_argument("--force", action="store_true", help="recompute the validation table")
     args = parser.parse_args(argv)
+    if args.command == "reference":
+        run_reference([m.strip() for m in args.members.split(",") if m.strip()], e3a._sets(args.sets), args.drop_maps, args.runs, args.e3a)
+        return
     if args.command == "members":
         members_table(args.train, runs_root=args.runs, force=args.force)
         return

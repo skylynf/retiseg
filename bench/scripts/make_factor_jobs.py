@@ -32,7 +32,7 @@ JOBS = REPO / "bench" / "configs" / "factor_jobs.yaml"
 SUBSETS = "bench/data/splits/subsets"
 PREP = "dataset/prepared"
 # DDR seed-0 hours at the B-std budget (docs/ops/00; SAM2-UNet and RETFound from design/15 estimates).
-DDR_HOURS = {"U-Net": 6.0, "M2MRF": 11.6, "SAM2-UNet": 16.0, "RETFound": 22.0, "SAMed": 3.0}
+DDR_HOURS = {"U-Net": 6.0, "M2MRF": 11.6, "SAM2-UNet": 16.0, "RETFound": 22.0, "SAMed": 14.0}   # SAMed: 3.0 was the IDRiD time; the DDR-budget REF cell took ~14 h (21 item 93)
 SAM2_E3B_BATCH = """
 # Loader batch 12 does not fit a 40GB A100 (the B-std smoke, and this cell on 2026-10-18:
 # 37.90 GiB allocated, 324 MiB short, history empty). Batch 4 fits. Effective batch stays 12.

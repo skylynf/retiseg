@@ -64,7 +64,7 @@ Nature Methods 的 Analysis 正文通常不放表。表 1–7 按 CVPR/ICLR 风�
 |  | d | 输入分辨率 512、1440、原分辨率块：mAUPR 与小病灶召回（M2MRF、RETFound 加 UPerNet） | 折线 | E7 | 拟 |
 |  | e | 训练量 10%、50%、100% 与细粒度合并（U-Net、M2MRF） | 折线（模板图 5d） | E8 | 拟 |
 
-扩展数据图：ED1 各库示例与标注风格；ED2 视野与画布；ED3 泄漏审计；ED4 评测实现敏感性；ED5 逐图分布与阈值；ED6（取消，B1 已完成的运行改为补充表）；**ED7 小规模调参（只有 DDR）**；**ED8 损失（U-Net 四种损失；血管面板取消）**；ED9 DiaRetDB1 官方协议与超广角；**ED10 计算代价**（参数量、IDRiD 训练时已填实数；FLOPs、推理时间、推理显存待 `bench/scripts/cost_audit.py`）。加粗的三张已出占位图，其余需要图像或尚未实现的审计。
+扩展数据图：ED1 各库示例与标注风格；ED2 视野与画布；ED3 泄漏审计；ED4 评测实现敏感性；ED5 逐图分布与阈值；ED6（取消；B1 在任何运行完成前停止，无数可报）；**ED7 小规模调参（只有 DDR）**；**ED8 损失（U-Net 四种损失；血管面板取消）**；ED9 DiaRetDB1 官方协议与超广角；**ED10 计算代价**（参数量、IDRiD 训练时已填实数；FLOPs、推理时间、推理显存待 `bench/scripts/cost_audit.py`）。加粗的三张已出占位图，其余需要图像或尚未实现的审计。
 
 ## 三、表（LaTeX，`tables/generated/`）
 

@@ -12,7 +12,7 @@
 #       bash bench/scripts/server_run.sh probe  the two-times-budget sensitivity runs of docs/paper/26 (N1b); one card,
 #                                               cells run one after another; score each finished run afterwards with
 #                                               python bench/train.py --config <cell> --run-dir runs/BSprobe_<cell#bs_probe_> --score-only
-#   bash bench/scripts/server_run.sh e1r        M2MRF author retrain, effective batch 4
+#   [E1R_SEED=1] bash bench/scripts/server_run.sh e1r   M2MRF author retrain, effective batch 4 (seed 0 by default; 1, 2 added 2026-10-25)
 #   E1R_GPU=7 bash bench/scripts/server_run.sh e1r-hrdecoder
 #                                               HRDecoder author retrain (retiseg-hacdr), author metric of every
 #                                               2000-step checkpoint, protocol score of the last step (26 N1a)
@@ -196,15 +196,25 @@ stage_probe() {
 }
 
 stage_e1r() {
+  # M2MRF author recipe on IDRiD, effective batch 4. E1R_SEED (default 0) picks bench/configs/e1r_m2mrf_idrid_seed<k>.yaml
+  # and runs/E1r_m2mrf_idrid_seed<k>_bs4_a100 (17 section 4 item 61, 2026-10-25: seeds 1 and 2). After training the
+  # chain scores the last step the way seed 0 was scored on 2026-10-12 (score_console.log): the author pipeline and
+  # metric (bench/predict_m2mrf.py), then this protocol (bench.eval) on the same maps -> metrics_test.json.
   require_clean
-  local run=runs/E1r_m2mrf_idrid_seed0_bs4_a100
+  local seed="${E1R_SEED:-0}"
+  local run="runs/E1r_m2mrf_idrid_seed${seed}_bs4_a100"
+  local cfg="bench/configs/e1r_m2mrf_idrid_seed${seed}.yaml"
+  local tool
+  tool="$(pick_tool)"
   mkdir -p "$run"
   local resume=()
   if [ -f "$run/last.pt" ]; then
     resume=(--resume "$run/last.pt")
   fi
-  CUDA_VISIBLE_DEVICES="${E1R_GPU:-4}" background e1r "$(pick_tool)" run -n retiseg --no-capture-output \
-    python bench/train_m2mrf.py --run-dir "$run" ${resume[@]+"${resume[@]}"}
+  CUDA_VISIBLE_DEVICES="${E1R_GPU:-4}" background "e1r_seed${seed}" bash -c "\
+$tool run -n retiseg --no-capture-output python bench/train_m2mrf.py --config $cfg --run-dir $run ${resume[*]+${resume[*]}} && \
+$tool run -n retiseg --no-capture-output python bench/predict_m2mrf.py --dataset idrid --checkpoint $run/iter_40000.pt --prob-dir $run/prob_test --summary $run/author_idrid_test.json && \
+$tool run -n retiseg --no-capture-output python -m bench.eval.cli evaluate --data dataset/prepared/IDRiD --split test --pred $run/prob_test --out $run/metrics_test"
 }
 
 stage_e1r_hrdecoder() {

@@ -81,7 +81,9 @@ def test_queue_file_in_the_repository_loads_and_names_known_kinds():
     assert by_name["e5_infer_test"]["max_concurrent"] == 2
     # the HRDecoder case study at its author canvas (docs/paper/26 N1c): on since 2026-10-21, the longest job left
     assert by_name["factor_hrdecoder_2880"]["models"] == ["HRDecoder"] and by_name["factor_hrdecoder_2880"].get("enabled", True)
-    assert by_name["ref_model"]["experiment"] == "REF" and by_name["ref_model"]["models"] == ["RETFound", "SAMed"] and by_name["ref_model"]["enabled"] is False
+    # registered closed (14 note 58); the server opened it on 2026-10-25 when the queue had closed (17 section 4 item 57)
+    assert by_name["ref_model"]["experiment"] == "REF" and by_name["ref_model"]["models"] == ["RETFound", "SAMed"] and by_name["ref_model"]["enabled"] is True
+    assert by_name["ref_model"]["max_concurrent"] == 2
     # fourth edit, 2026-10-19 (docs/paper/26): SAMed and RETFound seeds are not cut any more; the other E5 seeds wait in e5_rest2
     assert by_name["e5_rest"]["only"] == ["SAMed", "RETFound"] and by_name["e5_rest"].get("enabled", True)
     assert by_name["e5_rest2"]["only"] == ["SAM2-UNet", "SAM-Adapter"] and not by_name["e5_rest2"].get("enabled", True)

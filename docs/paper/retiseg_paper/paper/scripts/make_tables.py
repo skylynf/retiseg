@@ -277,7 +277,7 @@ def e1(model, variant, train, metric, cls="mean", test=None):
 
 def table_original():
     rows = []
-    for model in ("M2MRF", "HRDecoder", "WSRFNet"):
+    for model in ("M2MRF", "HRDecoder"):   # WSRFNet's weights never arrived (docs/paper/18 section 3); its row was dropped 2026-10-25
         for train in D.TRAIN_MAIN:
             paper = e1(model, "paper", train, "aupr_author_impl")
             auth = e1(model, "author_function", train, "aupr_author_impl")
@@ -299,8 +299,8 @@ def table_original():
         for train in D.TRAIN_MAIN:
             a = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr_author_impl", cls="mean")
             x = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr", cls="mean")
-            if not len(a):
-                continue
+            if not len(a) or D.simulated(a):
+                continue   # the reruns cut from the scope (16 section 8) have no row; the figure marks them "not rerun"
             p = D.sel(experiment="E1r", model=model, variant="paper", train_set=train, metric="aupr_author_impl")
             pv, p_sim = (float(p["value"].iloc[0]), D.simulated(p)) if len(p) else e1(model, "paper", train, "aupr_author_impl")
             a_sim, x_sim = D.simulated(a), D.simulated(x)

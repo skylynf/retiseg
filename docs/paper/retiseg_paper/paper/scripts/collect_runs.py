@@ -532,6 +532,20 @@ def collect_ens(runs_dir):
     if not root.is_dir():
         return pd.DataFrame(rows), seen
     for train_dir in sorted(root.iterdir()):
+        if train_dir.name == "REF":
+            # the reference model's two-member ensemble (ensemble.py reference; 14 note 58): runs/ENS/REF/reference/<set>,
+            # whose done.json carries the paper key (experiment N8, variant reference:ensemble, train_set the merged sources)
+            for setdir in sorted(p for p in (train_dir / "reference").iterdir() if p.is_dir()) if (train_dir / "reference").is_dir() else []:
+                if setdir.name not in E3A_SET or not (setdir / "done.json").exists() or not (setdir / "metrics.json").exists():
+                    continue
+                report = load_report(setdir / "metrics.json")
+                done = json.loads((setdir / "done.json").read_text())
+                paper = done.get("paper")
+                if report is None or not paper:
+                    continue
+                rows += rows_from_report(report, paper["experiment"], paper["variant"], done.get("name", "RetiSeg-Ref"), paper["train_set"], 0, E3A_SET[setdir.name])
+                seen.append(("ENS/REF/reference", setdir.name, report.get("summary", {}).get("mAUPR")))
+            continue
         if train_dir.name not in ("IDRiD", "DDR"):
             continue
         for comp in sorted(p for p in train_dir.iterdir() if p.is_dir()):
@@ -784,20 +798,55 @@ def derive_references(table):
     return table, int(sum(len(r) for r in inserted))
 
 
+# Numbers printed in the HRDecoder paper (Xu et al., MICCAI 2024; arXiv 2411.03976, Table 1, mean of three
+# repetitions, in %), the "paper" value of the released checkpoints' rows (table 3a) and of the author-recipe
+# rerun (table 3b); read on 2026-10-25 for 14 M5 / L1 (the README's 71.34 / 49.24 are the released checkpoint's
+# own scores and stay in the author_function rows). M2MRF's were typed into build_placeholder.
+E1_REPORTED = {
+    ("HRDecoder", "IDRiD"): {"mean": 0.7129, "EX": 0.8755, "HE": 0.7080, "SE": 0.7765, "MA": 0.4916},
+    ("HRDecoder", "DDR"): {"mean": 0.4927, "EX": 0.6484, "HE": 0.5569, "SE": 0.5193, "MA": 0.2460},
+    # HACDR-Net (Xu et al. 2024), Tables 1 and 2 of literature/meta/reported_results.tsv (L1): no weights are
+    # released, so only the E1r "paper" rows (the reported value the cut reruns would be compared with) use these
+    ("HACDR-Net", "IDRiD"): {"mean": 0.6879, "EX": 0.8690, "HE": 0.6850, "SE": 0.7673, "MA": 0.4302},
+    ("HACDR-Net", "DDR"): {"mean": 0.5036, "EX": 0.6515, "HE": 0.5502, "SE": 0.5675, "MA": 0.2450},
+}
+
+
+def derive_reported(table):
+    """Replace the placeholder "paper" rows of E1 / E1r for the checkpoints in E1_REPORTED by the printed numbers."""
+    table = table.copy()
+    inserted, drop = [], []
+    for (model, train), values in E1_REPORTED.items():
+        for experiment in ("E1", "E1r"):
+            mask = (table.experiment == experiment) & (table.model == model) & (table.variant == "paper") & (table.train_set == train)
+            if not mask.any():
+                continue   # only the rows the placeholder table has (E1r has a paper row for the registered reruns; E1 for released weights)
+            drop.extend(table.index[mask].tolist())
+            for cls, value in values.items():
+                inserted.append(dict(experiment=experiment, model=model, variant="paper", train_set=train, seed=-1, test_set=train,
+                                     cls=cls, metric="aupr_author_impl", value=value, source="measured"))
+    if not inserted:
+        return table, 0
+    table = pd.concat([table.drop(index=drop), pd.DataFrame(inserted)], ignore_index=True)
+    return table, len(inserted)
+
+
 def derive_encoder_reference(table):
     """The RETFound-MAE row of the encoder comparison is the main-table RETFound + UPerNet run (E5 / encoder_decoder,
-    DDR, seed 0): its measured rows replace the placeholder rows under (E5, encoder_control, RETFound-MAE) per test set."""
+    seed 0) of the same training source: its measured rows replace the placeholder rows under
+    (E5, encoder_control, RETFound-MAE) per training source and test set. The DDR column was the first (14 note 56);
+    the IDRiD column followed when its two encoder cells were trained (note 59, 2026-10-25)."""
     table = table.copy()
     table["seed"] = table["seed"].astype(int)
     targets = table[(table.experiment == "E5") & (table.variant == "encoder_control") & (table.model == ENCODER_REFERENCE)
-                    & (table.train_set == "DDR") & (table.source != "measured")]
+                    & (table.source != "measured")]
     if targets.empty:
         return table, 0
-    src = table[(table.experiment == "E5") & (table.variant == "encoder_decoder") & (table.model == "RETFound + UPerNet")
-                & (table.train_set == "DDR") & (table.seed == 0) & (table.source == "measured")]
     inserted, drop = [], []
-    for test, group in targets.groupby("test_set"):
-        rows = src[src.test_set == test].drop_duplicates(subset=["cls", "metric"], keep="first")
+    for (train, test), group in targets.groupby(["train_set", "test_set"]):
+        src = table[(table.experiment == "E5") & (table.variant == "encoder_decoder") & (table.model == "RETFound + UPerNet")
+                    & (table.train_set == train) & (table.test_set == test) & (table.seed == 0) & (table.source == "measured")]
+        rows = src.drop_duplicates(subset=["cls", "metric"], keep="first")
         if rows.empty:
             continue
         inserted.append(rows.assign(variant="encoder_control", model=ENCODER_REFERENCE, seed=0, source="measured"))
@@ -865,6 +914,8 @@ def main():
     print(f"{filled} factor reference rows copied from their main-table / E3b runs (seed 0, all classes and metrics)")
     merged, filled = derive_encoder_reference(merged)
     print(f"{filled} encoder-comparison reference rows copied from the main-table RETFound run")
+    merged, filled = derive_reported(merged)
+    print(f"{filled} reported-number rows written for the released checkpoints (E1_REPORTED)")
     left = merged[(merged.experiment.isin(["E2", "E2b"])) & (merged.source != "measured")]
     print(f"placeholder rows left in E2/E2b: {len(left)}")
     if not args.dry_run:

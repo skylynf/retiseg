@@ -92,8 +92,6 @@ E1,WSRFNet,this_protocol,DDR,-1,DiaRetDB1,EX,aupr,0.24481,placeholder
 E1,WSRFNet,this_protocol,DDR,-1,DiaRetDB1,SE,aupr,0.13209,placeholder
 E1,WSRFNet,this_protocol,DDR,-1,DDR,mean,aupr,0.41274,placeholder
 E1,WSRFNet,this_protocol,DDR,-1,DDR,mean,aupr_11pt,0.43274,placeholder
-E1,HRDecoder,paper,IDRiD,-1,IDRiD,mean,aupr_author_impl,0.7134,placeholder
-E1,HRDecoder,paper,DDR,-1,DDR,mean,aupr_author_impl,0.4924,placeholder
 E1r,M2MRF,bs1_first_run,IDRiD,0,IDRiD,mean,aupr_author_impl,0.5763,measured
 E1r,M2MRF,bs1_first_run,IDRiD,0,IDRiD,mean,aupr,0.493,measured
 E1r,M2MRF,bs1_first_run,IDRiD,0,IDRiD,MA,aupr,0.282,measured
@@ -108,14 +106,12 @@ E1r,M2MRF,author_recipe,DDR,1,DDR,mean,aupr_author_impl,0.44661,placeholder
 E1r,M2MRF,author_recipe,DDR,1,DDR,mean,aupr,0.41543,placeholder
 E1r,M2MRF,author_recipe,DDR,2,DDR,mean,aupr_author_impl,0.45586,placeholder
 E1r,M2MRF,author_recipe,DDR,2,DDR,mean,aupr,0.41206,placeholder
-E1r,HACDR-Net,paper,IDRiD,-1,IDRiD,mean,aupr_author_impl,0.7,placeholder
 E1r,HACDR-Net,author_recipe,IDRiD,0,IDRiD,mean,aupr_author_impl,0.59346,placeholder
 E1r,HACDR-Net,author_recipe,IDRiD,0,IDRiD,mean,aupr,0.56551,placeholder
 E1r,HACDR-Net,author_recipe,IDRiD,1,IDRiD,mean,aupr_author_impl,0.5825,placeholder
 E1r,HACDR-Net,author_recipe,IDRiD,1,IDRiD,mean,aupr,0.56429,placeholder
 E1r,HACDR-Net,author_recipe,IDRiD,2,IDRiD,mean,aupr_author_impl,0.58677,placeholder
 E1r,HACDR-Net,author_recipe,IDRiD,2,IDRiD,mean,aupr,0.54043,placeholder
-E1r,HACDR-Net,paper,DDR,-1,DDR,mean,aupr_author_impl,0.52,placeholder
 E1r,HACDR-Net,author_recipe,DDR,0,DDR,mean,aupr_author_impl,0.43775,placeholder
 E1r,HACDR-Net,author_recipe,DDR,0,DDR,mean,aupr,0.39417,placeholder
 E1r,HACDR-Net,author_recipe,DDR,1,DDR,mean,aupr_author_impl,0.41832,placeholder
@@ -293,102 +289,6 @@ E5,MedSAM,oracle:box:20,none,-1,TJDR-std,MA,aupr,0.07927,placeholder
 E5,MedSAM,oracle:box:20,none,-1,TJDR-std,HE,aupr,0.31827,placeholder
 E5,MedSAM,oracle:box:20,none,-1,TJDR-std,EX,aupr,0.15257,placeholder
 E5,MedSAM,oracle:box:20,none,-1,TJDR-std,SE,aupr,0.59712,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.27968,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.57843,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.77775,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.59428,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,aupr,0.05866,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,aupr,0.29088,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,aupr,0.39151,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,aupr,0.19696,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.06625,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.31584,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.46279,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.23025,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.02622,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.15164,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.23532,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.11825,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.07735,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.33918,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.48203,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.27618,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,aupr,0.04212,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,aupr,0.2926,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,aupr,0.37446,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,aupr,0.19164,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.02488,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.18774,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.24623,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.13323,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.0285,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.19047,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.24723,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.13947,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.27662,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.58097,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.78293,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.58013,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,MA,aupr,0.05619,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,HE,aupr,0.28445,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,EX,aupr,0.39034,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DDR,SE,aupr,0.19093,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.06645,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.31082,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.44269,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.23308,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02694,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.15346,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.22457,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.11438,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.0725,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.33333,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.45964,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.25924,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,MA,aupr,0.03993,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,HE,aupr,0.29333,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,EX,aupr,0.37338,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,FGADR,SE,aupr,0.19517,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,MA,aupr,0.02386,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,HE,aupr,0.18881,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,EX,aupr,0.24314,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,Retinal-Lesions,SE,aupr,0.13651,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.02735,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.18801,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.23142,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.13439,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.24764,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.55378,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.7581,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.56724,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,MA,aupr,0.0562,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,HE,aupr,0.27118,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,EX,aupr,0.36508,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DDR,SE,aupr,0.17591,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.06048,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.29156,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.43444,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.21278,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.02263,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.14729,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.21579,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.10661,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.06765,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.32857,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.44805,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.24037,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,MA,aupr,0.03592,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,HE,aupr,0.27035,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,EX,aupr,0.3594,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,FGADR,SE,aupr,0.1779,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,MA,aupr,0.02153,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,HE,aupr,0.17073,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,EX,aupr,0.22232,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,Retinal-Lesions,SE,aupr,0.12896,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,MA,aupr,0.02351,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,HE,aupr,0.17231,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,EX,aupr,0.21433,placeholder
-E5,RETFound-MAE,encoder_control,IDRiD,2,DiaRetDB1,SE,aupr,0.1223,placeholder
 E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.31158,placeholder
 E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.62328,placeholder
 E5,RETFound-DINOv2,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.80784,placeholder
@@ -533,26 +433,10 @@ E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.02811,placeholder
 E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.17655,placeholder
 E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.23363,placeholder
 E5,RETFound-DINOv2,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.14116,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.2969,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.60506,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.79876,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.60128,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,MA,aupr,0.05931,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,HE,aupr,0.29072,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,EX,aupr,0.42412,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DDR,SE,aupr,0.2006,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.08413,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.37253,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.54141,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.29149,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.02881,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.17023,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.25634,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.12288,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.06934,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.33021,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.45315,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.24576,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,MA,aupr,0.03709,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,HE,aupr,0.28597,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,FGADR,EX,aupr,0.36437,placeholder
@@ -565,26 +449,10 @@ E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.03073,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.19888,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.24275,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.14797,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.29628,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.60406,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.80066,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.61994,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,MA,aupr,0.05927,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,HE,aupr,0.29104,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,EX,aupr,0.41077,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DDR,SE,aupr,0.20013,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.08196,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.36573,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.53308,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.29135,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02729,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.16656,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.24696,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.12475,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.07087,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.32228,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.45406,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.252,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,MA,aupr,0.03548,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,HE,aupr,0.26594,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,FGADR,EX,aupr,0.3672,placeholder
@@ -597,26 +465,10 @@ E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.02928,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.19971,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.25254,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.15249,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.27444,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.56577,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.77108,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.5891,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,MA,aupr,0.05803,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,HE,aupr,0.27457,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,EX,aupr,0.37644,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,2,DDR,SE,aupr,0.18501,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.07387,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.36807,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.51363,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.27431,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.02412,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.15251,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.23702,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.10994,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.06393,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.29662,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.41153,placeholder
-E5,DINOv2 ViT-L,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.23207,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,MA,aupr,0.0344,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,HE,aupr,0.25539,placeholder
 E5,DINOv2 ViT-L,encoder_control,IDRiD,2,FGADR,EX,aupr,0.34273,placeholder
@@ -677,26 +529,10 @@ E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,MA,aupr,0.03503,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,HE,aupr,0.23021,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,EX,aupr,0.29088,placeholder
 E5,DINOv2 ViT-L,encoder_control,DDR,2,DiaRetDB1,SE,aupr,0.17041,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.23287,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.52375,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.73459,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.54042,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DDR,MA,aupr,0.03977,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DDR,HE,aupr,0.21002,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DDR,EX,aupr,0.31084,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DDR,SE,aupr,0.13568,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.04743,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.27117,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.39544,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.20054,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.01991,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.12653,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.1888,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.09068,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.0554,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.26808,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.39916,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.20757,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,FGADR,MA,aupr,0.02719,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,FGADR,HE,aupr,0.22063,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,FGADR,EX,aupr,0.30276,placeholder
@@ -709,26 +545,10 @@ E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.01707,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.12843,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.15644,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.0933,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,IDRiD,MA,aupr,0.24759,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,IDRiD,HE,aupr,0.53962,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,IDRiD,EX,aupr,0.7627,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,IDRiD,SE,aupr,0.55589,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DDR,MA,aupr,0.04183,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DDR,HE,aupr,0.23,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DDR,EX,aupr,0.3242,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DDR,SE,aupr,0.14827,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-std,MA,aupr,0.05833,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-std,HE,aupr,0.29768,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-std,EX,aupr,0.42945,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-std,SE,aupr,0.22273,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-uwf,MA,aupr,0.02066,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-uwf,HE,aupr,0.13423,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-uwf,EX,aupr,0.21155,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,TJDR-uwf,SE,aupr,0.10069,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,MAPLES-DR,MA,aupr,0.05831,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,MAPLES-DR,HE,aupr,0.29787,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,MAPLES-DR,EX,aupr,0.41872,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,MAPLES-DR,SE,aupr,0.22319,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,FGADR,MA,aupr,0.02943,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,FGADR,HE,aupr,0.24496,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,FGADR,EX,aupr,0.30505,placeholder
@@ -741,26 +561,10 @@ E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DiaRetDB1,MA,aupr,0.01929,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DiaRetDB1,HE,aupr,0.13901,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DiaRetDB1,EX,aupr,0.17464,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,1,DiaRetDB1,SE,aupr,0.09801,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,IDRiD,MA,aupr,0.24318,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,IDRiD,HE,aupr,0.53552,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,IDRiD,EX,aupr,0.74572,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,IDRiD,SE,aupr,0.5509,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,DDR,MA,aupr,0.03909,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,DDR,HE,aupr,0.21634,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,DDR,EX,aupr,0.30971,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,DDR,SE,aupr,0.14867,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-std,MA,aupr,0.053,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-std,HE,aupr,0.27644,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-std,EX,aupr,0.42201,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-std,SE,aupr,0.20467,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-uwf,MA,aupr,0.01849,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-uwf,HE,aupr,0.12737,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-uwf,EX,aupr,0.19843,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,TJDR-uwf,SE,aupr,0.10225,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,MAPLES-DR,MA,aupr,0.05751,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,MAPLES-DR,HE,aupr,0.26724,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,MAPLES-DR,EX,aupr,0.40021,placeholder
-E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,MAPLES-DR,SE,aupr,0.21469,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,FGADR,MA,aupr,0.02897,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,FGADR,HE,aupr,0.22505,placeholder
 E5,MAE-IN1k ViT-L,encoder_control,IDRiD,2,FGADR,EX,aupr,0.30385,placeholder
@@ -2547,6 +2351,430 @@ E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,SE,lesion_recall_large,0.31578947
 E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,SE,img_auc,0.7476190476190476,measured
 E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,SE,img_auc_top100,0.7559523809523809,measured
 E5,RETFound-MAE,encoder_control,DDR,0,TJDR-uwf,any,aupr_any_lesion,0.06894445921430765,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,aupr,0.15185854261133552,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,aupr_11pt,0.16112475965089462,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,aupr_ci_lo,0.11636074230116762,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,aupr_ci_hi,0.19274094165279992,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,dice_fixed,0.23809580354810364,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,dice_valopt,0.2180778393675016,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,iou_valopt,0.1223834823907764,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,lesion_precision,0.1893421052631579,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,lesion_recall_small,0.6495098039215687,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,lesion_recall_medium,0.7776365946632783,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,lesion_recall_large,0.4666666666666667,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,img_auc,0.6448019801980196,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,MA,img_auc_top100,0.5927818588310445,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,aupr,0.41329412241652674,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,aupr_11pt,0.4349942242007829,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,aupr_ci_lo,0.32080218372254937,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,aupr_ci_hi,0.5024775652662393,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,dice_fixed,0.4040886745404234,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,dice_valopt,0.4386508963591895,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,iou_valopt,0.2809435092615274,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,lesion_precision,0.3738158853534127,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,lesion_recall_small,0.33363349842413326,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,lesion_recall_medium,0.5557011795543906,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,lesion_recall_large,0.7853107344632768,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,img_auc,0.8431160625207849,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,HE,img_auc_top100,0.8540073162620553,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,aupr,0.5716317677683391,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,aupr_11pt,0.5746798378627282,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,aupr_ci_lo,0.503767835036661,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,aupr_ci_hi,0.6284673805728863,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,dice_fixed,0.5561300178262686,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,dice_valopt,0.5430454439581013,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,iou_valopt,0.3727264118885013,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,lesion_precision,0.3799625718486833,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,lesion_recall_small,0.6019953300785396,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,lesion_recall_medium,0.9005823627287853,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,lesion_recall_large,0.9410788381742738,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,img_auc,0.8911089452025123,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,EX,img_auc_top100,0.8836907082521117,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,aupr,0.2783568375050488,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,aupr_11pt,0.27622481491871,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,aupr_ci_lo,0.12582058818267328,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,aupr_ci_hi,0.4312959074117674,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,dice_fixed,0.2847628900989982,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,dice_valopt,0.24632910671747957,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,iou_valopt,0.1404648430107663,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,lesion_precision,0.1948608137044968,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,lesion_recall_small,0.08,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,lesion_recall_medium,0.18181818181818182,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,lesion_recall_large,0.6564885496183206,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,img_auc,0.8335935467083008,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,SE,img_auc_top100,0.8321623731459797,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DDR,any,aupr_any_lesion,0.4826773470964071,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr,0.03903441145598689,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr_11pt,0.04657637787267335,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr_ci_lo,0.020305717498491666,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,aupr_ci_hi,0.05828586006368853,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,dice_fixed,0.09643763511608233,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,dice_valopt,0.07900604581507571,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,iou_valopt,0.04112769102836552,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,lesion_precision,0.06,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,lesion_recall_small,0.7272727272727273,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,lesion_recall_medium,0.9545454545454546,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,lesion_recall_large,1.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,img_auc,0.48333333333333334,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,MA,img_auc_top100,0.6892857142857144,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr,0.45948542330443026,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr_11pt,0.4929891693806471,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr_ci_lo,0.3362980416925375,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,aupr_ci_hi,0.5560949404501773,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,dice_fixed,0.3519196764586192,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,dice_valopt,0.46225357212733215,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,iou_valopt,0.30060454945541176,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,lesion_precision,0.3046808510638298,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,lesion_recall_small,0.2222222222222222,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,lesion_recall_medium,0.7777777777777778,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,lesion_recall_large,0.9856115107913669,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,img_auc,0.9832041343669251,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,HE,img_auc_top100,0.9832041343669251,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr,0.4737676320852898,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr_11pt,0.45628578781031887,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr_ci_lo,0.292037550317219,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,aupr_ci_hi,0.5462285713468289,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,dice_fixed,0.22251236695731963,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,dice_valopt,0.27041511213804215,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,iou_valopt,0.1563468286730455,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,lesion_precision,0.6029055690072639,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,lesion_recall_small,0.2,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,lesion_recall_medium,0.7777777777777778,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,lesion_recall_large,1.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,img_auc,0.9670731707317073,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,EX,img_auc_top100,0.9634146341463414,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr,0.25738641516126864,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr_11pt,0.2660058128022266,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr_ci_lo,0.0677224101504082,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,aupr_ci_hi,0.4009613177170777,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,dice_fixed,0.299619820317312,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,dice_valopt,0.30174027932009956,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,iou_valopt,0.17767616792989557,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,lesion_precision,0.15294117647058825,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,lesion_recall_small,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,lesion_recall_medium,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.7857142857142857,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,img_auc,0.9722222222222222,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.9743589743589743,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.46197454727230214,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,aupr,0.022691880358831712,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,aupr_11pt,0.03541376338453349,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,aupr_ci_lo,0.018724659062744474,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,aupr_ci_hi,0.025259128393420188,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,dice_fixed,0.05588320114371469,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,dice_valopt,0.06825802788775927,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,iou_valopt,0.03533496133188188,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,lesion_precision,0.04222833981775886,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,lesion_recall_small,0.8516129032258064,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,lesion_recall_medium,0.869120654396728,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,lesion_recall_large,0.904126213592233,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,img_auc,0.6484356505957547,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,MA,img_auc_top100,0.6563757594886768,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,aupr,0.3323380933871762,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,aupr_11pt,0.35583076884267545,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,aupr_ci_lo,0.2878858469275056,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,aupr_ci_hi,0.38078503773858186,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,dice_fixed,0.379587517180744,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,dice_valopt,0.3407118250227123,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,iou_valopt,0.20533613760453392,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,lesion_precision,0.12651502983728488,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,lesion_recall_small,0.6564019448946515,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,lesion_recall_medium,0.6755932941432615,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,lesion_recall_large,0.8934076746474254,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,img_auc,0.770820844822763,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,HE,img_auc_top100,0.7775046956799744,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,aupr,0.35704959133661107,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,aupr_11pt,0.4370273875665194,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,aupr_ci_lo,0.2936427979639334,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,aupr_ci_hi,0.4206125447374742,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,dice_fixed,0.3781389273248874,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,dice_valopt,0.40950932889338487,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,iou_valopt,0.2574735811612531,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,lesion_precision,0.3710295607736024,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,lesion_recall_small,0.8471272229822161,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9274654597427346,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,lesion_recall_large,0.9178340517241379,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,img_auc,0.8940562125633542,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,EX,img_auc_top100,0.9041775456919059,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,aupr,0.2149015112947695,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,aupr_11pt,0.25114852875241317,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,aupr_ci_lo,0.1620467980708862,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,aupr_ci_hi,0.2765698146866939,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,dice_fixed,0.2704137293898883,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,dice_valopt,0.2968697924856061,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,iou_valopt,0.17430833601317422,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,lesion_precision,0.2467850581751378,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,lesion_recall_small,0.46153846153846156,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,lesion_recall_medium,0.16279069767441862,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,lesion_recall_large,0.5520504731861199,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,img_auc,0.8025096812630325,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,SE,img_auc_top100,0.8010723860589812,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,FGADR,any,aupr_any_lesion,0.3366487283406763,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.4840463207168265,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr_11pt,0.4837103215571398,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.4486843127986362,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,aupr_ci_hi,0.5214449688524837,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,dice_fixed,0.396759631978671,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,dice_valopt,0.494564025881308,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,iou_valopt,0.32851880410977574,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,lesion_precision,0.4565096952908587,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_small,0.6483739837398373,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_medium,0.8534031413612565,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_large,0.7,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,img_auc,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,MA,img_auc_top100,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.7175232061240782,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr_11pt,0.709331777663684,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr_ci_lo,0.6632597097290569,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,aupr_ci_hi,0.7546043237628123,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,dice_fixed,0.6262829926461565,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,dice_valopt,0.6389471526064432,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,iou_valopt,0.46945065640179934,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,lesion_precision,0.2945823927765237,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_small,0.625,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_medium,0.8382352941176471,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_large,0.9564102564102565,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,img_auc,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,HE,img_auc_top100,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.8947905695865402,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr_11pt,0.8845670854138346,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr_ci_lo,0.8181387940052559,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,aupr_ci_hi,0.9263151978766478,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,dice_fixed,0.800667791696599,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,dice_valopt,0.8076733505951962,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,iou_valopt,0.6773926851323652,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,lesion_precision,0.7278911564625851,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_small,0.7221404025527737,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_medium,0.9628422425032594,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_large,0.9779816513761468,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,img_auc,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,EX,img_auc_top100,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.7340743544701271,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,aupr_11pt,0.7260677730173064,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,aupr_ci_lo,0.4964785607289953,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,aupr_ci_hi,0.851482232689423,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,dice_fixed,0.662104207935872,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,dice_valopt,0.6964930580875895,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,iou_valopt,0.5343224770753776,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,lesion_precision,0.4430379746835443,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_small,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_medium,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_large,0.8947368421052632,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,img_auc,0.8406593406593407,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,SE,img_auc_top100,0.8351648351648351,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,IDRiD,any,aupr_any_lesion,0.8225291702193588,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.3754131305495693,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_11pt,0.4110571776179339,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_ci_lo,0.286143507065934,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_ci_hi,0.4498704506768581,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,dice_fixed,0.16939687267311987,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,dice_valopt,0.3024867933219903,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,iou_valopt,0.17819407362016895,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_precision,0.6787807737397421,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_small,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_medium,0.4737903225806452,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_large,0.5513513513513514,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,img_auc,0.6949152542372882,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,MA,img_auc_top100,0.576271186440678,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.5028400698403297,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_11pt,0.5410588487627261,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_ci_lo,0.30027739397407277,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_ci_hi,0.6357476935231928,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,dice_fixed,0.45589645254074784,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,dice_valopt,0.5164113785557987,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,iou_valopt,0.3480825958702065,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_precision,0.26523297491039427,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_small,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_medium,0.13636363636363635,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_large,0.6407766990291263,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,img_auc,0.7452725250278086,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,HE,img_auc_top100,0.7563959955506119,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.6803436570451117,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_11pt,0.6519540031038766,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_ci_lo,0.3793449106907096,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_ci_hi,0.8104508334368448,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,dice_fixed,0.4940301738207231,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,dice_valopt,0.5690734077788756,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,iou_valopt,0.397695738462407,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_precision,0.5854738706820195,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_small,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_medium,0.6,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_large,0.8678571428571429,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,img_auc,0.8242491657397109,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,EX,img_auc_top100,0.7953281423804227,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.0923213843065577,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_11pt,0.11288564783758513,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_ci_lo,0.027744815653882243,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_ci_hi,0.23439110594292756,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,dice_fixed,0.11438620826315268,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,dice_valopt,0.1364883401920439,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,iou_valopt,0.07324254692675745,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_precision,0.24390243902439024,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_small,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_medium,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.23809523809523808,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,img_auc,0.6997354497354498,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7103174603174603,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.5648176864385274,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr,0.08085266873810326,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.14721817764727244,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.06380846822945327,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.08177125952468414,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.03315038086284633,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.06979718006998246,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.03616054196445173,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.42720428735485516,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.3404255319148936,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6308139534883721,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,img_auc,0.8255284987958255,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.8008429221300508,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr,0.2878142775796396,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.364659577830141,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.2332714271753784,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.321958377605851,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.16992242550916237,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.26962565090091023,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.15581926017412903,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.4345506284088214,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.2571428571428571,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.5980848861283644,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9100512661177567,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.9142457666614883,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr,0.29871323894935925,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.3758215253216447,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.2189954730192193,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.3568682563691389,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.19230131788092658,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.23399103921722134,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.13249708490352474,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.45157746994568865,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.4166666666666667,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.9080459770114943,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8696874179143683,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.85973207249803,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr,0.15582134514674167,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.17816285038626756,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.11056099767862164,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.20056622523809758,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.22913477665810214,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.23695388719667176,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.134400277721553,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.1790953545232274,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.7357954545454546,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,img_auc,0.7455921490352628,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.7450515635395876,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.2991864541493642,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.393035033627426,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,aupr_11pt,0.4061565384638165,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.24749733409200694,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,aupr_ci_hi,0.49391209737515024,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,dice_fixed,0.4534007429297065,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,dice_valopt,0.3652035717652763,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,iou_valopt,0.22339391343032738,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,lesion_precision,0.2535496957403651,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_small,0.45,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_medium,0.8557692307692307,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_large,0.8709677419354839,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,img_auc,0.8732782369146005,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,MA,img_auc_top100,0.8939393939393939,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.581510860788108,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,aupr_11pt,0.586139067101433,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,aupr_ci_lo,0.46020192132778315,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,aupr_ci_hi,0.6719058068625112,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,dice_fixed,0.5723335480259316,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,dice_valopt,0.3978979566851304,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,iou_valopt,0.2483599333422293,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,lesion_precision,0.1671957671957672,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_small,0.2,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_medium,0.6,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_large,0.8444444444444444,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,img_auc,0.8201754385964912,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,HE,img_auc_top100,0.8260233918128654,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.7760764943630194,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,aupr_11pt,0.7727859987999361,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,aupr_ci_lo,0.6810603845046823,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,aupr_ci_hi,0.8554228423773172,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,dice_fixed,0.705906737639537,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,dice_valopt,0.685614458670443,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,iou_valopt,0.5216235549707241,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,lesion_precision,0.3956442831215971,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_small,1.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_medium,1.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_large,0.9921259842519685,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,img_auc,0.973389355742297,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,EX,img_auc_top100,0.9789915966386554,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.06998531563286695,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,aupr_11pt,0.12102494975806002,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,aupr_ci_lo,0.021265457159407176,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,aupr_ci_hi,0.1530872831271495,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,dice_fixed,0.13170168879019925,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,dice_valopt,0.12821869594585114,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,iou_valopt,0.06850089573399323,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,lesion_precision,0.15503875968992248,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_small,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_medium,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_large,0.5526315789473685,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,img_auc,0.6721611721611722,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,SE,img_auc_top100,0.6703296703296704,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-std,any,aupr_any_lesion,0.36676810344445987,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.09941127415246248,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_11pt,0.10625539324796304,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_ci_lo,0.042039458622789995,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_ci_hi,0.1775708963838101,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,dice_fixed,0.18284970238095238,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,dice_valopt,0.1631790249897583,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,iou_valopt,0.08883774042750597,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_precision,0.05747738158594997,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_small,0.9047619047619048,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_medium,0.5416666666666666,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_large,,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,img_auc,0.8790697674418604,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,MA,img_auc_top100,0.9286821705426357,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.49399105759184825,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_11pt,0.5053057522505163,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_ci_lo,0.27536089640051065,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_ci_hi,0.6340070685152032,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,dice_fixed,0.5210813328265106,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,dice_valopt,0.3747448624468249,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,iou_valopt,0.23057602082772313,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_precision,0.09742925037805142,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_small,0.8083333333333333,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_medium,0.9583333333333334,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_large,0.9701492537313433,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,img_auc,0.7818181818181819,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,HE,img_auc_top100,0.776969696969697,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.10630767691911668,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_11pt,0.10173422784081718,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_ci_lo,0.045204556668187304,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_ci_hi,0.2718437873505826,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,dice_fixed,0.14194859500184961,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,dice_valopt,0.1347544676720579,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,iou_valopt,0.07224489502134122,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_precision,0.1305229936880072,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_small,0.9356435643564357,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_medium,0.8686868686868687,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_large,0.7804878048780488,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,img_auc,0.6757246376811594,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,EX,img_auc_top100,0.6594202898550725,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.31118083360980525,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_11pt,0.32368583786355654,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_ci_lo,0.1499651310408514,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_ci_hi,0.5080363990101384,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,dice_fixed,0.35491968720360206,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,dice_valopt,0.32954704904433646,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,iou_valopt,0.19728005440428784,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_precision,0.1522491349480969,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_small,0.0,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_medium,0.4666666666666667,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_large,0.868421052631579,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,img_auc,0.7392857142857143,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,SE,img_auc_top100,0.7404761904761905,measured
+E5,RETFound-MAE,encoder_control,IDRiD,0,TJDR-uwf,any,aupr_any_lesion,0.3785684164585798,measured
 E10,SAM2-UNet,,,-1,,,params_trainable_m,4.38,measured
 E10,SAM-Adapter,,,-1,,,params_trainable_m,4.25,measured
 E10,MedSAM (full FT),,,-1,,,params_trainable_m,93.74,measured
@@ -8244,6 +8472,59 @@ E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,lesion_recall_large,0.7709923664122
 E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,img_auc,0.9194639604475672,measured
 E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,SE,img_auc_top100,0.9193338537600833,measured
 E5,DINOv2 ViT-L,encoder_control,DDR,0,DDR,any,aupr_any_lesion,0.6176837734594753,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.5147745059750968,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr_11pt,0.5119733433817719,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.47369367031842835,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr_ci_hi,0.552939538977801,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,dice_fixed,0.49561010060297583,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,dice_valopt,0.5145491004875524,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,iou_valopt,0.3463925335104896,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_precision,0.5030048076923077,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_small,0.676829268292683,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_medium,0.8586387434554974,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_large,0.75,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,img_auc,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,MA,img_auc_top100,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.7650771876945515,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr_11pt,0.7513635257761861,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr_ci_lo,0.6905805248035385,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr_ci_hi,0.8103821512517276,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,dice_fixed,0.6759495453411303,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,dice_valopt,0.6667469685826174,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,iou_valopt,0.5000903450966079,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_precision,0.3865546218487395,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_small,0.625,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_medium,0.7941176470588235,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_large,0.941025641025641,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,img_auc,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,HE,img_auc_top100,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.9050235028431728,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr_11pt,0.8945550665902943,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr_ci_lo,0.8342007679383596,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr_ci_hi,0.9326992225935289,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,dice_fixed,0.8179638440903403,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,dice_valopt,0.8171785267601849,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,iou_valopt,0.6908722450919719,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_precision,0.6548584999010488,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_small,0.8595974472263133,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_medium,0.9810951760104303,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_large,0.9889908256880734,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,img_auc,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,EX,img_auc_top100,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.7719426584804996,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr_11pt,0.7567553576109378,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr_ci_lo,0.5865968917715596,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr_ci_hi,0.8617149704320656,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,dice_fixed,0.6640210443059766,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,dice_valopt,0.68315652912845,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,iou_valopt,0.5187833969942567,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_precision,0.4146341463414634,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_small,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_medium,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_large,0.8421052631578947,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,img_auc,0.9340659340659341,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,SE,img_auc_top100,0.9340659340659341,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,IDRiD,any,aupr_any_lesion,0.84394138900932,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,MA,aupr,0.20606314524357625,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,MA,aupr_11pt,0.21071569525281014,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,MA,aupr_ci_lo,0.1583144186693378,measured
@@ -8297,6 +8578,59 @@ E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,SE,lesion_recall_large,0.79389312977
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,SE,img_auc,0.9034608378870673,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,SE,img_auc_top100,0.9035909445745511,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,DDR,any,aupr_any_lesion,0.6190752301643412,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr,0.4925597026739942,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr_11pt,0.48996211268525974,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.45524221634937434,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,aupr_ci_hi,0.5301306544946139,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,dice_fixed,0.301242467447949,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,dice_valopt,0.4990128093999807,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,iou_valopt,0.3324564077062513,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_precision,0.501813784764208,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_small,0.676829268292683,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_medium,0.8464223385689355,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,lesion_recall_large,0.55,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,img_auc,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,MA,img_auc_top100,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr,0.7439751075797219,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr_11pt,0.7338164993998055,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr_ci_lo,0.6746520299983598,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,aupr_ci_hi,0.7832232228665085,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,dice_fixed,0.6663089880077381,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,dice_valopt,0.6517287206115285,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,iou_valopt,0.4833810009712065,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_precision,0.3559322033898305,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_small,0.625,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_medium,0.7647058823529411,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,lesion_recall_large,0.9435897435897436,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,img_auc,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,HE,img_auc_top100,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr,0.8997610610206167,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr_11pt,0.8901482608596492,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr_ci_lo,0.8285109677582483,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,aupr_ci_hi,0.9284502966411451,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,dice_fixed,0.8079779918290159,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,dice_valopt,0.810925383403725,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,iou_valopt,0.6819802324306595,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_precision,0.7151413512218495,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_small,0.7825233186057928,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_medium,0.9661016949152542,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,lesion_recall_large,0.9834862385321101,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,img_auc,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,EX,img_auc_top100,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr,0.7782381437021679,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr_11pt,0.7618723460507926,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr_ci_lo,0.5758150239329716,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,aupr_ci_hi,0.8683583967418113,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,dice_fixed,0.6807251631617114,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,dice_valopt,0.6904702023805247,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,iou_valopt,0.5272657435025104,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_precision,0.43209876543209874,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_small,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_medium,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,lesion_recall_large,0.8157894736842105,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,img_auc,0.8846153846153847,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,SE,img_auc_top100,0.8901098901098902,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,IDRiD,any,aupr_any_lesion,0.835296188693629,measured
 E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,MA,aupr,0.1844932152420757,measured
 E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,MA,aupr_11pt,0.1868053598167608,measured
 E5,RETFound-DINOv2,encoder_control,DDR,0,DDR,MA,aupr_ci_lo,0.14057508000856397,measured
@@ -41721,6 +42055,165 @@ E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,lesion_recall_large,0.31578947
 E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,img_auc,0.661904761904762,measured
 E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,img_auc_top100,0.6690476190476191,measured
 E5,DINOv2 ViT-L,encoder_control,DDR,0,TJDR-uwf,any,aupr_any_lesion,0.11212086873742472,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.3921593156969045,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_11pt,0.4152493054721268,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_ci_lo,0.30910120603566055,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_ci_hi,0.4636708255001728,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,dice_fixed,0.2242210293856892,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,dice_valopt,0.2789480092536223,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,iou_valopt,0.1620799434029006,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_precision,0.6387478849407784,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_small,0.5,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_medium,0.6320564516129032,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_large,0.5783783783783784,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,img_auc,0.8305084745762712,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,img_auc_top100,0.5084745762711864,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.49003362337469436,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_11pt,0.5349501084101257,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_ci_lo,0.31222807591948665,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_ci_hi,0.6143919366714939,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,dice_fixed,0.4311139656033683,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,dice_valopt,0.504754491521858,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,iou_valopt,0.33757298628209637,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_precision,0.26229508196721313,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_small,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_medium,0.22727272727272727,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_large,0.5922330097087378,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,img_auc,0.8109010011123471,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,img_auc_top100,0.8020022246941045,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.6927483340305745,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_11pt,0.6782963684081819,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_ci_lo,0.423669779575013,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_ci_hi,0.8039969369756166,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,dice_fixed,0.5368169739806035,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,dice_valopt,0.5798447242549885,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,iou_valopt,0.4082967082249529,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_precision,0.4996530187369882,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_small,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_medium,0.6625,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_large,0.8642857142857143,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,img_auc,0.8042269187986653,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,img_auc_top100,0.7886540600667409,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.1936372522150807,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_11pt,0.20315600056927013,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_ci_lo,0.05886116523748503,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_ci_hi,0.3398133016332354,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,dice_fixed,0.18752144292506004,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,dice_valopt,0.24833919219456202,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,iou_valopt,0.1417735620320768,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_precision,0.25,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_small,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_medium,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.47619047619047616,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,img_auc,0.7671957671957672,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7791005291005292,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.6045195187016081,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.3406806076781972,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr_11pt,0.3526708600148467,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.23353084523199605,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr_ci_hi,0.43472266517739383,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,dice_fixed,0.39089498742844914,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,dice_valopt,0.35430192819753015,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,iou_valopt,0.21528975105954695,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_precision,0.203125,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_small,0.75,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_medium,0.9423076923076923,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_large,0.9354838709677419,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,img_auc,0.9077134986225898,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,img_auc_top100,0.900826446280992,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.6580825022841359,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr_11pt,0.6511676899214338,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr_ci_lo,0.5594230992159742,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr_ci_hi,0.7303992232364266,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,dice_fixed,0.5968617298419057,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,dice_valopt,0.5668996918677605,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,iou_valopt,0.39557572393979956,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_precision,0.3538083538083538,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_small,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_medium,0.4,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_large,0.8166666666666667,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,img_auc,0.9035087719298246,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,img_auc_top100,0.8991228070175439,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.6763880737937357,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr_11pt,0.6686837895586137,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr_ci_lo,0.5178006796739931,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr_ci_hi,0.7740415193591742,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,dice_fixed,0.6146021063030869,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,dice_valopt,0.5885064883833412,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,iou_valopt,0.41693885486536403,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_precision,0.24344978165938866,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_small,0.9166666666666666,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_medium,1.0,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_large,0.9921259842519685,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,img_auc,0.9607843137254902,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,img_auc_top100,0.957983193277311,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.42657643293797853,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr_11pt,0.4087427342017213,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr_ci_lo,0.2320449381864617,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr_ci_hi,0.6223288012003964,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,dice_fixed,0.4038927346805316,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,dice_valopt,0.4275015578461134,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,iou_valopt,0.2718613553985814,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_precision,0.27848101265822783,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_small,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_medium,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_large,0.5263157894736842,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,img_auc,0.8846153846153846,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,img_auc_top100,0.8864468864468865,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-std,any,aupr_any_lesion,0.6813160101813631,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.10245320737447677,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_11pt,0.11558814333720076,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_ci_lo,0.046243600101580906,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_ci_hi,0.17778309536710837,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,dice_fixed,0.19094404100811618,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,dice_valopt,0.17832626690894407,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,iou_valopt,0.0978914410794935,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_precision,0.06566820276497695,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_small,0.9238095238095239,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_medium,0.7083333333333334,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_large,,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,img_auc,0.9519379844961241,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,img_auc_top100,0.9596899224806202,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.5568289415892587,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_11pt,0.5900096876516568,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_ci_lo,0.34469433953038564,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_ci_hi,0.7005014514235651,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,dice_fixed,0.5164268652344279,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,dice_valopt,0.5636539401039423,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,iou_valopt,0.3924221020557759,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_precision,0.31947652040030794,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_small,0.4666666666666667,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_medium,0.9027777777777778,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_large,0.9402985074626866,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,img_auc,0.9042424242424242,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,img_auc_top100,0.9090909090909091,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.2394782542228614,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_11pt,0.2571270644580329,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_ci_lo,0.12102434898597766,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_ci_hi,0.39429415646124205,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,dice_fixed,0.30367960890125256,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,dice_valopt,0.30370308332918944,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,iou_valopt,0.17903887010844996,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_precision,0.12936979785969085,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_small,0.9752475247524752,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_medium,1.0,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_large,0.8292682926829268,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,img_auc,0.6014492753623188,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,img_auc_top100,0.6811594202898552,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.0911249080674651,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_11pt,0.10403701240444714,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_ci_lo,0.025087909802906247,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_ci_hi,0.20855914474333997,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,dice_fixed,0.141932333517052,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,dice_valopt,0.16867746053853297,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,iou_valopt,0.09210691011761127,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_precision,0.1021021021021021,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_small,0.0,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_medium,0.3333333333333333,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_large,0.4473684210526316,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,img_auc,0.6678571428571429,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,img_auc_top100,0.6666666666666667,measured
+E5,DINOv2 ViT-L,encoder_control,IDRiD,0,TJDR-uwf,any,aupr_any_lesion,0.4315039271778992,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.40621669897364876,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr_11pt,0.43203144643812236,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,MAPLES-DR,MA,aupr_ci_lo,0.32571531536356824,measured
@@ -41880,6 +42373,165 @@ E5,MAE-IN1k ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,lesion_recall_large,0.368421
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,img_auc,0.6559523809523811,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,TJDR-uwf,SE,img_auc_top100,0.6547619047619048,measured
 E5,MAE-IN1k ViT-L,encoder_control,DDR,0,TJDR-uwf,any,aupr_any_lesion,0.09633512615987494,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr,0.37014803543385866,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_11pt,0.3987383663014158,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_ci_lo,0.2830989620789457,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,aupr_ci_hi,0.44923379431014593,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,dice_fixed,0.11627354965757941,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,dice_valopt,0.2812410313732006,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,iou_valopt,0.1636302916853419,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_precision,0.6603585657370518,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_small,0.0,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_medium,0.5493951612903226,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,lesion_recall_large,0.5351351351351351,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,img_auc,0.6271186440677966,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,MA,img_auc_top100,0.5423728813559322,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr,0.46899893543299126,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_11pt,0.5128210471564987,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_ci_lo,0.2843076894306229,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,aupr_ci_hi,0.6062746863688728,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,dice_fixed,0.41798612217699294,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,dice_valopt,0.500385767450304,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,iou_valopt,0.33367632594386015,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_precision,0.25842696629213485,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_small,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_medium,0.2727272727272727,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,lesion_recall_large,0.5631067961165048,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,img_auc,0.7942157953281423,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,HE,img_auc_top100,0.8131256952169077,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr,0.6588965922964845,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_11pt,0.630655405814677,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_ci_lo,0.3654682212738947,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,aupr_ci_hi,0.7997277827121954,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,dice_fixed,0.5179986827462469,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,dice_valopt,0.569932309763276,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,iou_valopt,0.39853519777719976,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_precision,0.5371762740183793,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_small,0.0,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_medium,0.6125,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,lesion_recall_large,0.875,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,img_auc,0.8120133481646273,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,EX,img_auc_top100,0.7942157953281425,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr,0.203064424935275,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_11pt,0.2232605041744049,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_ci_lo,0.06670219618694406,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,aupr_ci_hi,0.339670269444919,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,dice_fixed,0.18928344958782498,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,dice_valopt,0.23762607396339186,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,iou_valopt,0.13483294915613492,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_precision,0.3488372093023256,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_small,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_medium,0.0,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.3333333333333333,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,img_auc,0.8082010582010583,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.8042328042328043,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.573517590856198,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr,0.39229106584601425,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr_11pt,0.40022387951058613,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.26952135167349284,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,aupr_ci_hi,0.48733098913282485,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,dice_fixed,0.4291759286536865,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,dice_valopt,0.37523109088342266,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,iou_valopt,0.2309442830780434,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_precision,0.24119718309859156,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_small,0.75,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_medium,0.8942307692307693,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,lesion_recall_large,0.9032258064516129,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,img_auc,0.9201101928374655,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,MA,img_auc_top100,0.921487603305785,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr,0.5471955073614676,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr_11pt,0.552786575724574,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr_ci_lo,0.4386929754154829,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,aupr_ci_hi,0.6442423070553117,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,dice_fixed,0.5388830861448576,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,dice_valopt,0.4566633548402543,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,iou_valopt,0.2958935474463425,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_precision,0.3252747252747253,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_small,0.2,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_medium,0.52,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,lesion_recall_large,0.7944444444444444,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,img_auc,0.8538011695906432,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,HE,img_auc_top100,0.8581871345029239,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr,0.7091550921006228,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr_11pt,0.7051069859458783,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr_ci_lo,0.5768989157650942,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,aupr_ci_hi,0.8026970016036964,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,dice_fixed,0.6440212925257026,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,dice_valopt,0.6393242174390055,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,iou_valopt,0.4698578644765045,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_precision,0.3523654159869494,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_small,0.9166666666666666,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_medium,0.9886363636363636,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,lesion_recall_large,0.9921259842519685,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,img_auc,0.9523809523809524,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,EX,img_auc_top100,0.9663865546218487,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr,0.5070763276722325,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr_11pt,0.5084013628169785,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr_ci_lo,0.24772303505969162,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,aupr_ci_hi,0.6857610985636584,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,dice_fixed,0.501747330525801,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,dice_valopt,0.5298924436110285,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,iou_valopt,0.36044467719940476,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_precision,0.5121951219512195,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_small,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_medium,0.0,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,lesion_recall_large,0.5,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,img_auc,0.8864468864468864,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,SE,img_auc_top100,0.8846153846153846,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-std,any,aupr_any_lesion,0.6259274212165917,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr,0.09879635784204858,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_11pt,0.1029072154684853,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_ci_lo,0.046002832982117166,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,aupr_ci_hi,0.17554285608446626,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,dice_fixed,0.1409283334585807,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,dice_valopt,0.17832076943072525,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,iou_valopt,0.09788812785388128,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_precision,0.09426627793974733,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_small,0.8,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_medium,0.5,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,lesion_recall_large,,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,img_auc,0.8813953488372093,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,MA,img_auc_top100,0.8837209302325582,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr,0.5857913145288882,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_11pt,0.5961006213408956,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_ci_lo,0.34599387586455754,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,aupr_ci_hi,0.7118330988427577,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,dice_fixed,0.5908875118291943,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,dice_valopt,0.5530705451879021,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,iou_valopt,0.38223739474549945,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_precision,0.2455638236977676,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_small,0.775,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_medium,0.9398148148148148,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,lesion_recall_large,0.9552238805970149,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,img_auc,0.8884848484848484,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,HE,img_auc_top100,0.9078787878787878,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr,0.24429891403616127,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_11pt,0.2552737660282957,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_ci_lo,0.12015772186131278,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,aupr_ci_hi,0.3898867049175099,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,dice_fixed,0.2821459513956501,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,dice_valopt,0.2996722983780023,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,iou_valopt,0.17624384881345823,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_precision,0.170375775264502,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_small,0.9455445544554455,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_medium,0.9292929292929293,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,lesion_recall_large,0.8048780487804879,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,img_auc,0.6286231884057971,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,EX,img_auc_top100,0.6684782608695652,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr,0.14734022203889446,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_11pt,0.176153660837093,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_ci_lo,0.03553751134990259,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,aupr_ci_hi,0.33888494673987307,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,dice_fixed,0.21458492606776328,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,dice_valopt,0.21357192522741508,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,iou_valopt,0.11955249038201726,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_precision,0.125,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_small,0.0,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_medium,0.5333333333333333,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,lesion_recall_large,0.5,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,img_auc,0.6416666666666667,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,SE,img_auc_top100,0.6392857142857143,measured
+E5,MAE-IN1k ViT-L,encoder_control,IDRiD,0,TJDR-uwf,any,aupr_any_lesion,0.5024667569983136,measured
 E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,MA,aupr,0.4215347148710459,measured
 E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,MA,aupr_11pt,0.4396356629824844,measured
 E5,RETFound-DINOv2,encoder_control,DDR,0,MAPLES-DR,MA,aupr_ci_lo,0.3426189578519967,measured
@@ -55797,6 +56449,59 @@ ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.967948717948718,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9700854700854701,measured
 ENS,E-all,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.4762495765252802,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr,0.027205872996226108,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr_11pt,0.0696986702868943,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr_ci_lo,0.022081271115052536,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr_ci_hi,0.03104547465626851,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,dice_fixed,0.045420567676012616,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,dice_valopt,0.0728159476282111,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,iou_valopt,0.03778359806298541,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_precision,0.1698852504897845,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_recall_small,0.7591397849462366,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_recall_medium,0.7556237218813906,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_recall_large,0.6419902912621359,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,img_auc,0.6719699360845892,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,MA,img_auc_top100,0.6805215813146059,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr,0.4386253982664615,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr_11pt,0.5017055727570483,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr_ci_lo,0.3964250710469791,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr_ci_hi,0.4844938222988884,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,dice_fixed,0.3048269682906334,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,dice_valopt,0.4500275540250443,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,iou_valopt,0.2903455188469304,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_precision,0.5539362232187345,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_recall_small,0.4619124797406807,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_recall_medium,0.5471369475288482,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_recall_large,0.8397835355854378,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,img_auc,0.9040682572033728,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,HE,img_auc_top100,0.9081844702873357,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr,0.40866242401737285,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr_11pt,0.5036636030746289,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr_ci_lo,0.35044654423107624,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr_ci_hi,0.4696662896755394,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,dice_fixed,0.3725411219546508,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,dice_valopt,0.413938488410477,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,iou_valopt,0.26098514173995374,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_precision,0.7701587698462308,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_recall_small,0.396374829001368,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_recall_medium,0.7625059552167699,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_recall_large,0.8278556034482759,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,img_auc,0.9227768391952081,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,EX,img_auc_top100,0.9277223160804793,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr,0.2895251121947423,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr_11pt,0.32802352698676895,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr_ci_lo,0.23536220472887778,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr_ci_hi,0.3529122314263409,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,dice_fixed,0.31451411517805905,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,dice_valopt,0.372699477398345,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,iou_valopt,0.22902928636837763,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_precision,0.24978466838931956,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_recall_medium,0.23255813953488372,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_recall_large,0.7965299684542587,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,img_auc,0.8398346738159072,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,SE,img_auc_top100,0.8418677390527257,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,FGADR,any,aupr_any_lesion,0.41547506540380297,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr,0.4533825933716109,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.46109909148517775,measured
 ENS,E-all,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.41503435226476637,measured
@@ -55903,6 +56608,59 @@ ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.4523809523809524,mea
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.8108465608465608,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.8095238095238094,measured
 ENS,E-all,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.615979867516582,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr,0.12018809206085933,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.24976252293904555,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.09538563709719733,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.12300145813431879,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,dice_fixed,0.027572402732624277,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,dice_valopt,0.05627197088802134,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,iou_valopt,0.028950537341240087,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_precision,0.554132082280765,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.19148936170212766,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.5932468694096601,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,img_auc,0.876036928017126,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8347939523682097,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr,0.28596870142177216,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.3915542823744183,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.22601208655980307,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.3308382923537345,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,dice_fixed,0.1088006796617903,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,dice_valopt,0.18551752062714486,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,iou_valopt,0.10224266298303736,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_precision,0.6833652007648183,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.2857142857142857,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.6218944099378882,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,img_auc,0.9420343327637098,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.9433548236756253,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr,0.3934492546276594,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.48546215303140766,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.2976542160350806,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.4501109077067669,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,dice_fixed,0.13113885482919302,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,dice_valopt,0.15356705834575698,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,iou_valopt,0.08316958329836462,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_precision,0.8131278143401455,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.7279693486590039,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,img_auc,0.9048769809999124,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.9068557919621748,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr,0.31106521247507424,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.37103949371612016,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.2575738150775678,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.3559859219818584,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,dice_fixed,0.2798823089079265,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,dice_valopt,0.3382566965068734,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,iou_valopt,0.2035553239756278,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_precision,0.3496868475991649,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.8352272727272727,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,img_auc,0.9061356453759148,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.9059797072521623,measured
+ENS,E-all,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.3685379089602161,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr,0.42820924133739235,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.4353627192142903,measured
 ENS,E-all,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.2917551829839655,measured
@@ -56963,6 +57721,59 @@ ENS,E-fam:fundus,ensemble,DDR,0,DiaRetDB1,SE,lesion_recall_large,1.0,measured
 ENS,E-fam:fundus,ensemble,DDR,0,DiaRetDB1,SE,img_auc,0.9529914529914529,measured
 ENS,E-fam:fundus,ensemble,DDR,0,DiaRetDB1,SE,img_auc_top100,0.9615384615384616,measured
 ENS,E-fam:fundus,ensemble,DDR,0,DiaRetDB1,any,aupr_any_lesion,0.429471291771656,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr,0.022608975104037494,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr_11pt,0.04763904766683457,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr_ci_lo,0.018080867799540483,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,aupr_ci_hi,0.026123466773709025,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,dice_fixed,0.041991657623440044,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,dice_valopt,0.06669801992538367,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,iou_valopt,0.034499535309434406,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_precision,0.16570210173621688,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_recall_small,0.7247311827956989,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_recall_medium,0.6850715746421268,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,lesion_recall_large,0.5606796116504854,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,img_auc,0.6550935058786398,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,MA,img_auc_top100,0.6573029274836266,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr,0.3802894359311582,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr_11pt,0.4626573025703957,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr_ci_lo,0.3334105954113449,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,aupr_ci_hi,0.42208369541544805,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,dice_fixed,0.26105869770239054,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,dice_valopt,0.39435935698872054,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,iou_valopt,0.24560872864374186,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_precision,0.5200365965233302,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_recall_small,0.4181523500810373,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_recall_medium,0.537992597430873,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,lesion_recall_large,0.7961626762873073,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,img_auc,0.8827878351916237,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,HE,img_auc_top100,0.8883627063101946,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr,0.3852932582133556,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr_11pt,0.4452183593764512,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr_ci_lo,0.3228620414561281,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,aupr_ci_hi,0.43249304410737216,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,dice_fixed,0.31246486959940134,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,dice_valopt,0.3994878322712751,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,iou_valopt,0.24959999700482463,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_precision,0.6866941015089163,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_recall_small,0.48084815321477425,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_recall_medium,0.7775131014768938,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,lesion_recall_large,0.8327047413793104,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,img_auc,0.9062125633543233,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,EX,img_auc_top100,0.9190446935954538,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr,0.21562803798552513,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr_11pt,0.2628293447704583,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr_ci_lo,0.16649775216196203,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,aupr_ci_hi,0.26937912490125077,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,dice_fixed,0.2047171196379684,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,dice_valopt,0.32361996541303795,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,iou_valopt,0.19304689792059807,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_precision,0.21064638783269962,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_recall_medium,0.23255813953488372,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,lesion_recall_large,0.750788643533123,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,img_auc,0.8149836163240989,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,SE,img_auc_top100,0.8205093833780162,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,FGADR,any,aupr_any_lesion,0.3750126359579118,measured
 ENS,E-fam:fundus,ensemble,DDR,0,IDRiD,MA,aupr,0.41465960227549903,measured
 ENS,E-fam:fundus,ensemble,DDR,0,IDRiD,MA,aupr_11pt,0.4463630540757594,measured
 ENS,E-fam:fundus,ensemble,DDR,0,IDRiD,MA,aupr_ci_lo,0.3783314415820574,measured
@@ -57069,6 +57880,59 @@ ENS,E-fam:fundus,ensemble,DDR,0,MAPLES-DR,SE,lesion_recall_large,0.3571428571428
 ENS,E-fam:fundus,ensemble,DDR,0,MAPLES-DR,SE,img_auc,0.7566137566137566,measured
 ENS,E-fam:fundus,ensemble,DDR,0,MAPLES-DR,SE,img_auc_top100,0.7592592592592593,measured
 ENS,E-fam:fundus,ensemble,DDR,0,MAPLES-DR,any,aupr_any_lesion,0.5416812922240309,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr,0.08888036174426642,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr_11pt,0.16458787885190196,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr_ci_lo,0.06563847788970126,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,aupr_ci_hi,0.08420024659138434,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,dice_fixed,0.027710389012983675,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,dice_valopt,0.0517919452433912,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,iou_valopt,0.026584401556568667,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_precision,0.5696131564193608,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_recall_medium,0.19148936170212766,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,lesion_recall_large,0.589221824686941,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,img_auc,0.8891992239764517,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,MA,img_auc_top100,0.8481402194273481,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr,0.2456047803440195,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr_11pt,0.3442206919548736,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr_ci_lo,0.1787409851770963,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,aupr_ci_hi,0.2642290473335178,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,dice_fixed,0.10927249970720501,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,dice_valopt,0.18035082843250982,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,iou_valopt,0.0991129670765883,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_precision,0.6321097883597884,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_recall_medium,0.45714285714285713,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,lesion_recall_large,0.6601966873706004,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,img_auc,0.9170712288333074,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,HE,img_auc_top100,0.9279944073326085,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr,0.32071137109238124,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr_11pt,0.40461447079009305,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr_ci_lo,0.20512424286469483,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,aupr_ci_hi,0.327205772213302,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,dice_fixed,0.12193379488486998,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,dice_valopt,0.15829392524067323,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,iou_valopt,0.08594961346443894,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_precision,0.7729153405474221,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_recall_medium,0.08333333333333333,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,lesion_recall_large,0.7509578544061303,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,img_auc,0.8800980649680413,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,EX,img_auc_top100,0.8973820155853253,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr,0.21870329826323678,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr_11pt,0.2749879478148416,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr_ci_lo,0.16678227549633323,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,aupr_ci_hi,0.2592818020720655,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,dice_fixed,0.2485669674201222,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,dice_valopt,0.30699621501995905,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,iou_valopt,0.18133226738390207,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_precision,0.26540284360189575,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,lesion_recall_large,0.8267045454545454,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,img_auc,0.8666625083166999,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,SE,img_auc_top100,0.8669951763140387,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,DDR,0,Retinal-Lesions,any,aupr_any_lesion,0.3047109066141574,measured
 ENS,E-fam:fundus,ensemble,DDR,0,TJDR-std,MA,aupr,0.38522894889943926,measured
 ENS,E-fam:fundus,ensemble,DDR,0,TJDR-std,MA,aupr_11pt,0.3919523076056483,measured
 ENS,E-fam:fundus,ensemble,DDR,0,TJDR-std,MA,aupr_ci_lo,0.24986962882722855,measured
@@ -58977,6 +59841,59 @@ ENS,E-all,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.8571428571428571,m
 ENS,E-all,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.9700854700854701,measured
 ENS,E-all,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.9700854700854701,measured
 ENS,E-all,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.44900732732018844,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr,0.027068665766135803,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr_11pt,0.06046685972822708,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr_ci_lo,0.023160129432956186,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr_ci_hi,0.030901181335533438,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,dice_fixed,0.044485850073519934,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,dice_valopt,0.0663256416772204,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,iou_valopt,0.03430031607532386,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_precision,0.1309411985722337,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_recall_small,0.8623655913978494,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_recall_medium,0.815439672801636,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_recall_large,0.691747572815534,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,img_auc,0.6391245166890239,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,img_auc_top100,0.6401799100449774,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr,0.4083906887281851,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr_11pt,0.45165221565798774,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr_ci_lo,0.3630338321684124,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr_ci_hi,0.4596226539757366,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,dice_fixed,0.4058455176746031,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,dice_valopt,0.1847915291709378,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,iou_valopt,0.1018018217414652,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_precision,0.059089646601356724,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_recall_small,0.9108589951377634,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_recall_medium,0.9327237099934683,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_recall_large,0.9773696293866841,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,img_auc,0.9085041761579347,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,img_auc_top100,0.9089637533469209,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr,0.397389312925736,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr_11pt,0.47359029245419854,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr_ci_lo,0.3421187631854008,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr_ci_hi,0.45505024635795555,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,dice_fixed,0.39627473192373647,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,dice_valopt,0.4322350996012197,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,iou_valopt,0.2757014776203214,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_precision,0.488412852969815,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_recall_small,0.8850889192886456,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9377084325869461,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_recall_large,0.9181034482758621,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,img_auc,0.9002610966057442,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,img_auc_top100,0.9224235908462601,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr,0.2840998494661219,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr_11pt,0.3200605957660368,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr_ci_lo,0.22710362115036334,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr_ci_hi,0.35004546887306315,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,dice_fixed,0.30776720762804066,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,dice_valopt,0.3590913246124113,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,iou_valopt,0.2188368737386269,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_precision,0.21691889794334498,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_recall_medium,0.23255813953488372,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_recall_large,0.7618296529968455,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,img_auc,0.8435284480190647,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,img_auc_top100,0.8427464998510574,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,FGADR,any,aupr_any_lesion,0.39034871183098374,measured
 ENS,E-all,ensemble,IDRiD,0,IDRiD,MA,aupr,0.5582391117062777,measured
 ENS,E-all,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5541049499039263,measured
 ENS,E-all,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.5200111783235851,measured
@@ -59083,6 +60000,59 @@ ENS,E-all,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.42857142857142855,
 ENS,E-all,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.787037037037037,measured
 ENS,E-all,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7870370370370371,measured
 ENS,E-all,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.6018440516323516,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr,0.09170727214803495,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.22409908051738717,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.07761542587345503,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.09756346625030463,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.03848169854774299,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.06299991230391891,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.03252447571071236,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.5020977128163486,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.40425531914893614,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6891771019677997,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,img_auc,0.8707184907679956,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.8411158683435912,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr,0.2868470607732365,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.43802403117387334,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.24715616393700374,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.3201096213195428,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.14667554554695197,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.30119882106371276,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.17730080765090467,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.4246176939675392,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.5142857142857142,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.7339544513457557,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9254699394127699,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.929625601988504,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr,0.2529181284262638,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.3923930871938685,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.19687518410018182,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.3086604823505797,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.19256823826851235,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.2193185962167072,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.12316554536411506,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.5445926966292135,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.5,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.9032567049808429,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8780141843971631,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8903248402066368,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr,0.2335981285776368,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.2517087997045855,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.18706619960408777,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.27952276172678886,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.28708129725643167,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.28185847560302885,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.16404846259795436,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.17704918032786884,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.8409090909090909,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,img_auc,0.8308799068529608,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.8280522288755823,measured
+ENS,E-all,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.2788860575705008,measured
 ENS,E-all,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.3910148805593548,measured
 ENS,E-all,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.40373294216730504,measured
 ENS,E-all,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.2798155652644823,measured
@@ -60143,6 +61113,59 @@ ENS,E-fam:fundus,ensemble,IDRiD,0,DiaRetDB1,SE,lesion_recall_large,0.85714285714
 ENS,E-fam:fundus,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc,0.9551282051282052,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,DiaRetDB1,SE,img_auc_top100,0.952991452991453,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,DiaRetDB1,any,aupr_any_lesion,0.42350981251735936,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr,0.022263766805202465,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr_11pt,0.03648950538073558,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr_ci_lo,0.01814452859629414,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,aupr_ci_hi,0.024367373838692367,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,dice_fixed,0.039467434651529576,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,dice_valopt,0.05634520424832461,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,iou_valopt,0.02898930631688332,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_precision,0.05425871773634658,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_recall_small,0.8451612903225807,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_recall_medium,0.7852760736196319,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,lesion_recall_large,0.7330097087378641,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,img_auc,0.6428430521581314,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,MA,img_auc_top100,0.6412057129330071,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr,0.37614160024273924,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr_11pt,0.38035501760764096,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr_ci_lo,0.3321755414328912,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,aupr_ci_hi,0.42319501900602047,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,dice_fixed,0.4165280143221724,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,dice_valopt,0.15359858552428537,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,iou_valopt,0.08318807834530373,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_precision,0.054611569469042186,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_recall_small,0.8946515397082658,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_recall_medium,0.9274983670803396,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,lesion_recall_large,0.9739258773368318,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,img_auc,0.8874235703153099,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,HE,img_auc_top100,0.8990728529752626,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr,0.38363318411334185,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr_11pt,0.4223986594063669,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr_ci_lo,0.3273279098521974,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,aupr_ci_hi,0.43534317316513305,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,dice_fixed,0.36079615398983944,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,dice_valopt,0.3963317696075008,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,iou_valopt,0.24714075024763582,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_precision,0.4854315986288563,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_recall_small,0.8693570451436389,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_recall_medium,0.9084087660790853,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,lesion_recall_large,0.8787715517241379,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,img_auc,0.8828674550760252,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,EX,img_auc_top100,0.9154200583627706,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr,0.2160765045429662,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr_11pt,0.23260324492183923,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr_ci_lo,0.16514038019564967,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,aupr_ci_hi,0.27180635992280205,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,dice_fixed,0.2768108096313283,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,dice_valopt,0.310945194865185,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,iou_valopt,0.18409420104066213,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_precision,0.38461538461538464,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_recall_small,0.6923076923076923,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_recall_medium,0.18604651162790697,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,lesion_recall_large,0.5520504731861199,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,img_auc,0.8204274649985106,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,SE,img_auc_top100,0.8173815907059876,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,FGADR,any,aupr_any_lesion,0.3562927964512669,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,IDRiD,MA,aupr,0.5152948335246734,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,IDRiD,MA,aupr_11pt,0.5177091117282479,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,IDRiD,MA,aupr_ci_lo,0.4754468950154638,measured
@@ -60249,6 +61272,59 @@ ENS,E-fam:fundus,ensemble,IDRiD,0,MAPLES-DR,SE,lesion_recall_large,0.30952380952
 ENS,E-fam:fundus,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc,0.7738095238095238,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,MAPLES-DR,SE,img_auc_top100,0.7777777777777778,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,MAPLES-DR,any,aupr_any_lesion,0.5777632424556994,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr,0.08780696882476301,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr_11pt,0.18587913572891002,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr_ci_lo,0.06675494242131856,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,aupr_ci_hi,0.08440435530217386,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,dice_fixed,0.04113106341664962,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,dice_valopt,0.05939481127669545,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,iou_valopt,0.030606334365090727,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_precision,0.5049957179560377,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_recall_small,0.0,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_recall_medium,0.39361702127659576,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,lesion_recall_large,0.6668157423971377,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,img_auc,0.8482572919454107,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,MA,img_auc_top100,0.8363326197484613,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr,0.2885005681245306,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr_11pt,0.40909041653840345,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr_ci_lo,0.22837293926248353,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,aupr_ci_hi,0.3059367337119485,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,dice_fixed,0.14675581914692354,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,dice_valopt,0.26150009442174577,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,iou_valopt,0.1504170886536611,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_precision,0.450982486117044,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_recall_small,,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_recall_medium,0.5142857142857142,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,lesion_recall_large,0.6785714285714286,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,img_auc,0.9106823830977163,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,HE,img_auc_top100,0.923392108124903,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr,0.28710230233208955,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr_11pt,0.32201818120045983,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr_ci_lo,0.19881368460201365,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,aupr_ci_hi,0.31421517943099725,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,dice_fixed,0.19066971208048167,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,dice_valopt,0.2109243204985786,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,iou_valopt,0.11789569491960164,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_precision,0.5479930191972077,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_recall_small,0.0,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_recall_medium,0.4166666666666667,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,lesion_recall_large,0.8946360153256705,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,img_auc,0.8665003064530251,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,EX,img_auc_top100,0.8824446195604588,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr,0.19319825439190913,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr_11pt,0.20893849660989444,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr_ci_lo,0.14814657068026024,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,aupr_ci_hi,0.2315705672749208,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,dice_fixed,0.2741062836787445,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,dice_valopt,0.27999716386767415,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,iou_valopt,0.16278878033555347,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_precision,0.27794871794871795,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_recall_small,,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_recall_medium,,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,lesion_recall_large,0.7130681818181818,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,img_auc,0.8136643379906854,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,SE,img_auc_top100,0.812936626746507,measured
+ENS,E-fam:fundus,ensemble:without HACDR-Net,IDRiD,0,Retinal-Lesions,any,aupr_any_lesion,0.30189695326963206,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,TJDR-std,MA,aupr,0.37712689920013753,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,TJDR-std,MA,aupr_11pt,0.3858683251340741,measured
 ENS,E-fam:fundus,ensemble,IDRiD,0,TJDR-std,MA,aupr_ci_lo,0.25433602859569904,measured
@@ -71269,3 +72345,23 @@ audit,labels,,MAPLES-DR,-1,,EX,lesions_per_image,15.555555555555555,measured
 audit,labels,,MAPLES-DR,-1,,EX,median_rel_diameter,0.009932946615431489,measured
 audit,labels,,MAPLES-DR,-1,,SE,lesions_per_image,1.005050505050505,measured
 audit,labels,,MAPLES-DR,-1,,SE,median_rel_diameter,0.024823455201431047,measured
+E1,HRDecoder,paper,IDRiD,-1,IDRiD,mean,aupr_author_impl,0.7129,measured
+E1,HRDecoder,paper,IDRiD,-1,IDRiD,EX,aupr_author_impl,0.8755,measured
+E1,HRDecoder,paper,IDRiD,-1,IDRiD,HE,aupr_author_impl,0.708,measured
+E1,HRDecoder,paper,IDRiD,-1,IDRiD,SE,aupr_author_impl,0.7765,measured
+E1,HRDecoder,paper,IDRiD,-1,IDRiD,MA,aupr_author_impl,0.4916,measured
+E1,HRDecoder,paper,DDR,-1,DDR,mean,aupr_author_impl,0.4927,measured
+E1,HRDecoder,paper,DDR,-1,DDR,EX,aupr_author_impl,0.6484,measured
+E1,HRDecoder,paper,DDR,-1,DDR,HE,aupr_author_impl,0.5569,measured
+E1,HRDecoder,paper,DDR,-1,DDR,SE,aupr_author_impl,0.5193,measured
+E1,HRDecoder,paper,DDR,-1,DDR,MA,aupr_author_impl,0.246,measured
+E1r,HACDR-Net,paper,IDRiD,-1,IDRiD,mean,aupr_author_impl,0.6879,measured
+E1r,HACDR-Net,paper,IDRiD,-1,IDRiD,EX,aupr_author_impl,0.869,measured
+E1r,HACDR-Net,paper,IDRiD,-1,IDRiD,HE,aupr_author_impl,0.685,measured
+E1r,HACDR-Net,paper,IDRiD,-1,IDRiD,SE,aupr_author_impl,0.7673,measured
+E1r,HACDR-Net,paper,IDRiD,-1,IDRiD,MA,aupr_author_impl,0.4302,measured
+E1r,HACDR-Net,paper,DDR,-1,DDR,mean,aupr_author_impl,0.5036,measured
+E1r,HACDR-Net,paper,DDR,-1,DDR,EX,aupr_author_impl,0.6515,measured
+E1r,HACDR-Net,paper,DDR,-1,DDR,HE,aupr_author_impl,0.5502,measured
+E1r,HACDR-Net,paper,DDR,-1,DDR,SE,aupr_author_impl,0.5675,measured
+E1r,HACDR-Net,paper,DDR,-1,DDR,MA,aupr_author_impl,0.245,measured

@@ -2,7 +2,7 @@
 
 a  three numbers per released checkpoint: paper, author function, this protocol
 b  where the gap comes from, step by step (M2MRF, measured)
-c  retraining with the authors' recipe against the reported number
+c  retraining with the authors' recipe against the reported number (measured groups; the cut reruns as "not rerun")
 d  author weights on every test set, per class
 """
 
@@ -13,7 +13,13 @@ from retifig import panels as P
 from retifig import style as S
 
 C_PAPER, C_AUTH, C_OURS = "#898781", "#b3261e", "#1d3f5e"
-CKPT = [("M2MRF", "IDRiD"), ("M2MRF", "DDR"), ("WSRFNet", "IDRiD"), ("WSRFNet", "DDR")]
+# the released checkpoints that were run: M2MRF (two sources) and HRDecoder (two sources); WSRFNet's weights were
+# requested from the authors and never arrived (docs/paper/18 section 3), so its row was dropped on 2026-10-25
+CKPT = [("M2MRF", "IDRiD"), ("M2MRF", "DDR"), ("HRDecoder", "IDRiD"), ("HRDecoder", "DDR")]
+# author-recipe reruns (E1r): the groups with a measured run are drawn; the reruns that were cut from the scope
+# (M2MRF on DDR and its further IDRiD seeds, HACDR-Net on both sources; docs/paper/16 section 8) appear as
+# "not rerun" marks at the reported value only
+E1R_GROUPS = [("M2MRF", "IDRiD"), ("M2MRF", "DDR"), ("HRDecoder", "IDRiD"), ("HACDR-Net", "IDRiD"), ("HACDR-Net", "DDR")]
 
 
 def get(exp, model, variant, train, test, metric, cls="mean"):
@@ -68,38 +74,50 @@ def panel_b(fig, top):
     ax.text(0.98, 1.02, "measured", transform=ax.transAxes, ha="right", va="bottom", fontsize=4.8, color=S.INK2, style="italic")
 
 
+def _reported(experiment, model, train):
+    """The number printed in the paper for a checkpoint / rerun (E1r's own paper row, else the E1 one)."""
+    for exp in (experiment, "E1"):
+        r = D.sel(experiment=exp, model=model, variant="paper", train_set=train, metric="aupr_author_impl", cls="mean")
+        if len(r):
+            return float(r["value"].iloc[0]), D.simulated(r)
+    return np.nan, True
+
+
 def panel_c(fig, top):
     ax = S.axes_mm(fig, 142, top, 34, 30)
-    groups = [("M2MRF", "IDRiD"), ("M2MRF", "DDR"), ("HACDR-Net", "IDRiD"), ("HACDR-Net", "DDR")]
     rng = np.random.default_rng(1)
     any_sim = False
+    groups = list(E1R_GROUPS)
     for i, (model, train) in enumerate(groups):
-        paper = D.sel(experiment="E1r", model=model, variant="paper", train_set=train, metric="aupr_author_impl")
-        runs = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr_author_impl")
-        any_sim |= D.simulated(runs)
-        pv = float(paper["value"].iloc[0])
+        pv, p_sim = _reported("E1r", model, train)
+        runs = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr_author_impl", cls="mean")
+        runs = runs[runs.source == "measured"]
         ax.plot([i - 0.32, i + 0.32], [pv, pv], color=C_PAPER, lw=1.4, zorder=2, solid_capstyle="round")
+        any_sim |= p_sim
+        if len(runs) == 0:
+            ax.text(i, pv - 0.012, "not\nrerun", ha="center", va="top", fontsize=4.4, color=S.INK2, style="italic", linespacing=1.0)
+            continue
         col = S.FAMILY["fundus"]
         x = i + rng.uniform(-0.14, 0.14, len(runs))
         ax.scatter(x, runs["value"], s=13, color=col, edgecolors=S.PAPER, linewidths=0.4, zorder=3)
         ax.plot([i, i], [runs["value"].mean(), pv], color=S.AXIS, lw=0.6, zorder=1)
         ax.text(i, pv + 0.012, f"{runs['value'].mean() - pv:+.3f}", ha="center", va="bottom", fontsize=5.2)
-    first = D.sel(experiment="E1r", model="M2MRF", variant="bs1_first_run", metric="aupr_author_impl")
+    first = D.sel(experiment="E1r", model="M2MRF", variant="bs1_first_run", metric="aupr_author_impl", cls="mean")
     ax.scatter([0.3], first["value"], s=16, marker="X", color=S.INK, zorder=4, linewidths=0)
-    ax.annotate("first run, batch 1\n(measured)", (0.3, float(first["value"].iloc[0])), xytext=(1.25, 0.665), fontsize=4.7, color=S.INK2,
+    ax.annotate("first run,\nbatch 1", (0.3, float(first["value"].iloc[0])), xytext=(0.0, 0.40), fontsize=4.7, color=S.INK2,
                 arrowprops=dict(arrowstyle="-", lw=0.4, color=S.MUTED), ha="center", va="center", linespacing=1.1)
-    ax.set_xticks(range(4))
-    ax.set_xticklabels([t for _, t in groups], fontsize=5.2)
-    for xc, name in ((0.5, "M2MRF"), (2.5, "HACDR-Net")):
-        ax.text(xc, -0.2, name, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=5.6)
-        ax.plot([xc - 0.8, xc + 0.8], [-0.17, -0.17], transform=ax.get_xaxis_transform(), color=S.AXIS, lw=0.6, clip_on=False)
-    ax.set_xlim(-0.6, 3.6)
+    ax.set_xticks(range(len(groups)))
+    ax.set_xticklabels([t for _, t in groups], fontsize=5.0)
+    for xc, name, half in ((0.5, "M2MRF", 0.8), (2.0, "HRDec.", 0.3), (3.5, "HACDR-Net", 0.8)):
+        ax.text(xc, -0.2, name, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=5.2)
+        ax.plot([xc - half, xc + half], [-0.17, -0.17], transform=ax.get_xaxis_transform(), color=S.AXIS, lw=0.6, clip_on=False)
+    ax.set_xlim(-0.6, len(groups) - 0.4)
     ax.set_ylim(0.3, 0.76)
     ax.set_yticks([0.3, 0.4, 0.5, 0.6, 0.7])
     ax.set_ylabel("mAUPR, author metric")
     S.light_grid(ax)
     from matplotlib.lines import Line2D
-    h = [Line2D([], [], color=C_PAPER, lw=1.4, label="reported"), Line2D([], [], marker="o", ls="", ms=3.4, color=S.FAMILY["fundus"], label="retrained, one seed")]
+    h = [Line2D([], [], color=C_PAPER, lw=1.4, label="reported"), Line2D([], [], marker="o", ls="", ms=3.4, color=S.FAMILY["fundus"], label="rerun, one seed")]
     ax.legend(handles=h, loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=2, columnspacing=1.0, handletextpad=0.3, fontsize=5.4)
     if any_sim:
         S.tag_simulated(ax, loc="br")
@@ -107,6 +125,7 @@ def panel_c(fig, top):
 
 def panel_d(fig, top):
     x0, row_h = 27.0, 3.6
+    pitch, bw = 15.0, 14.0   # eight test-set blocks and the summary block have to fit the 180 mm page (2026-10-25)
     rows = [f"{m} · {t}" for m, t in CKPT]
     means = []
     for j, test in enumerate(D.TESTS):
@@ -115,8 +134,8 @@ def panel_d(fig, top):
             for k, cls in enumerate(D.CLASSES):
                 M[i, k] = get("E1", model, "this_protocol", train, test, "aupr", cls)[0]
         means.append(np.nanmean(M, axis=1))
-        ax = S.axes_mm(fig, x0 + j * 17.6, top, 16.4, row_h * len(rows))
-        P.heat(ax, M, rows=rows if j == 0 else None, cols=D.CLASSES, vmin=0, vmax=0.9, fs=4.8)
+        ax = S.axes_mm(fig, x0 + j * pitch, top, bw, row_h * len(rows))
+        P.heat(ax, M, rows=rows if j == 0 else None, cols=D.CLASSES, vmin=0, vmax=0.9, fs=4.5)
         ax.tick_params(axis="x", labelsize=5.0)
         tier = S.DATASET_TIER[test]
         P.header_band(ax, [(0, 4, test, S.TIER[tier])], y=1.06, h=0.24, fs=5.4)
@@ -124,14 +143,21 @@ def panel_d(fig, top):
         for i, (_, train) in enumerate(CKPT):
             if train == test:
                 ax.add_patch(__import__("matplotlib").patches.Rectangle((0.03, i + 0.04), 3.94, 0.92, fill=False, ec=S.INK, lw=0.8, zorder=6))
-    ax = S.axes_mm(fig, x0 + 7 * 17.6 + 1.5, top, 22, row_h * len(rows))
+    ax = S.axes_mm(fig, x0 + len(D.TESTS) * pitch + 1.0, top, 20, row_h * len(rows))
     A = np.array(means).T
     internal = np.array([A[i, D.TESTS.index(train)] for i, (_, train) in enumerate(CKPT)])
     indep = np.array([A[i, [D.TESTS.index(t) for t in D.FINE_INDEPENDENT]].mean() for i in range(len(CKPT))])
     P.heat(ax, np.c_[internal, indep], cols=["Int.", "Ind.\nfine"], vmin=0, vmax=0.9, fs=4.8)
     ax.tick_params(axis="x", labelsize=5.0)
-    S.text_mm(fig, "mAUPR", x0 + 7 * 17.6 + 1.5, top - 5.0, fontsize=5.4)
-    S.tag_simulated(ax, loc="tr", text="simulated except M2MRF internal", dy=0.78)
+    S.text_mm(fig, "mAUPR", x0 + len(D.TESTS) * pitch + 1.0, top - 5.0, fontsize=5.4)
+    # which checkpoints still carry placeholder cells (M2MRF's independent sets wait for its weights on the server)
+    pending = []
+    for i, (model, train) in enumerate(CKPT):
+        sims = [get("E1", model, "this_protocol", train, test, "aupr", cls)[1] for test in D.TESTS for cls in D.CLASSES]
+        if any(sims):
+            pending.append(f"{model} {train}")
+    if pending:
+        S.tag_simulated(ax, loc="tr", text="simulated: " + ", ".join(pending) + " outside the internal test", dy=0.78)
     P.colorbar(fig, S.rect_mm(fig, 27, top + row_h * len(rows) + 9, 26, 1.6), S.CMAP_SEQ, 0, 0.9, "AUPR, this protocol", ticks=[0, 0.3, 0.6, 0.9])
     S.text_mm(fig, "Outlined cells: test set of the source the checkpoint was trained on (internal test). Header colour: annotation granularity (fine → region consensus).",
               60, top + row_h * len(rows) + 7.6, fontsize=5.0, color=S.INK2)

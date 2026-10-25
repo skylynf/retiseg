@@ -271,10 +271,12 @@ def original_models(sim):
         sim.add("E1", "WSRFNet", "this_protocol", train, -1, train, "mean", "aupr_11pt", np.mean(vals) + 0.02)
     # --- HRDecoder: released checkpoints (README of CVIU-CSU/HRDecoder: mAUPR 71.34 IDRiD, 49.24 DDR), run
     # through bench/predict_hrdecoder.py and bench.e3a author (docs/paper/19 section 3); collect_runs
-    # (collect_e1, collect_e3a) replaces these rows. The "paper" value is the README's until L1 extracts the table.
+    # (collect_e1, collect_e3a) replaces these rows. The "paper" value is Table 1 of the paper (arXiv 2411.03976,
+    # mean of three repetitions: 71.29 / 49.27; read 2026-10-25, 14 M5), measured; collect_runs.E1_REPORTED holds the same.
     readme = {"IDRiD": 0.7134, "DDR": 0.4924}
+    paper_hrd = {"IDRiD": 0.7129, "DDR": 0.4927}
     for train in TRAIN_MAIN:
-        sim.add("E1", "HRDecoder", "paper", train, -1, train, "mean", "aupr_author_impl", readme[train])
+        sim.add("E1", "HRDecoder", "paper", train, -1, train, "mean", "aupr_author_impl", paper_hrd[train], m)
         sim.add("E1", "HRDecoder", "author_function", train, -1, train, "mean", "aupr_author_impl", readme[train])
         vals = []
         for test in TESTS:

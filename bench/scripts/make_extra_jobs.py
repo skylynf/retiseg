@@ -113,6 +113,11 @@ def e5_jobs():
     # a supplementary row, never a main-table one (the 19 main-table rows are registered)
     for model in ("ViT-UPerNet MAE-IN1k", "ViT-UPerNet DINOv2"):
         jobs.append(_job(f"e5enc_{_SLUG[model]}_idrid_seed0_lr1", "E5enc", model, "IDRiD", cell(model, "IDRiD", 0), EST_HOURS["RETFound"][0]))
+    # the second pair's retinal encoder on IDRiD (14 note 62, 2026-10-25, decided after the two IDRiD cells above had
+    # been read): with it the IDRiD column carries both pairs, as the DDR column does; RETFound-MAE on IDRiD is the
+    # main-table BS_retfound_idrid_seed0
+    jobs.append(_job(f"e5enc_{_SLUG['ViT-UPerNet RETFound-DINOv2']}_idrid_seed0_lr1", "E5enc", "ViT-UPerNet RETFound-DINOv2", "IDRiD",
+                     cell("ViT-UPerNet RETFound-DINOv2", "IDRiD", 0), EST_HOURS["RETFound"][0]))
     return jobs
 
 

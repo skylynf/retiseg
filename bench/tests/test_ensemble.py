@@ -149,3 +149,49 @@ def test_missing_member_maps_are_reported_not_averaged(toy):
     with pytest.raises(FileNotFoundError, match="regenerate"):
         ens.run("DDR", "fam:general", sets=["TJDR_std"], runs_root=runs)
     assert not (runs / "ENS" / "DDR" / "fam_general" / "TJDR_std" / "done.json").exists()
+
+
+def test_reference_ensemble_reads_named_cells_and_their_in_source_and_e3a_maps(toy):
+    """`reference` (14 note 58): two REF cells merged over DDR + TJDR_std, validated and internally tested on DDR;
+    TJDR_std is in-source (insource_<set>/prob), a third set comes through E3a. No registered composition is read."""
+    tmp_path, runs, truth_ddr = toy
+    # a third, independent source under the toy frozen file
+    frozen_path = tmp_path / "e3a_frozen.yaml"
+    frozen = yaml.safe_load(frozen_path.read_text())
+    frozen["test_sets"]["MAPLES-DR"] = {"data": "dataset/prepared/MAPLES-DR", "tier": "fine"}
+    frozen_path.write_text(yaml.safe_dump(frozen))
+    truth_third = _source(tmp_path / "dataset" / "prepared" / "MAPLES-DR", "MAPLES-DR", {"train": [], "val": [], "test": ["m0", "m1"]}, 3)
+    truth_tjdr = {k: v for k, v in _source(tmp_path / "dataset" / "prepared" / "TJDR_std", "TJDR_std", {"train": ["x0"], "val": [], "test": ["o0", "o1"]}, 2).items() if k.startswith("o")}
+    cells = []
+    for i, name in enumerate(("BF_ref_retfound_fine_seed0", "BF_ref_samed_fine_seed0")):
+        run = runs / name
+        run.mkdir(parents=True)
+        (run / "config.yaml").write_text(yaml.safe_dump({
+            "experiment": "BF", "factor": "REF", "model": "RETFound" if i == 0 else "SAMed", "dataset": "dataset/prepared/DDR",
+            "train": [{"dataset": "dataset/prepared/DDR", "split": "train"}, {"dataset": "dataset/prepared/TJDR_std", "split": "train"}],
+            "budget_reference": "DDR", "seed": 0, "paper": {"experiment": "N8", "variant": "reference:fine merged", "train_set": "DDR + TJDR-std"}}))
+        _maps(run / "prob_val", {k: truth_ddr[k] for k in ("v0", "v1")}, 0.2, 40 + i)
+        _maps(run / "prob_test", {k: truth_ddr[k] for k in ("t0", "t1", "t2")}, 0.2, 50 + i)
+        _maps(run / "insource_TJDR_std" / "prob", truth_tjdr, 0.2, 60 + i)
+        _maps(runs / "E3a" / name / "MAPLES-DR" / "prob_test", truth_third, 0.2, 70 + i)
+        (run / "metrics_test.json").write_text("{}")
+        cells.append(str(run))
+    # train_field_degrees is absent from the toy frozen file: scale_source_of needs it, so give the two sources one field
+    frozen["train_field_degrees"] = {"DDR": 45, "TJDR_std": 45}
+    frozen_path.write_text(yaml.safe_dump(frozen))
+    results = ens.run_reference(cells, runs_root=runs)
+    assert set(results) == {"DDR", "TJDR_std", "MAPLES-DR"}, "validation source's test, the in-source set, then the E3a set"
+    out = runs / "ENS" / "REF" / "reference"
+    done = json.loads((out / "TJDR_std" / "done.json").read_text())
+    assert done["in_source"] is True and done["members"] == ["BF_ref_retfound_fine_seed0", "BF_ref_samed_fine_seed0"]
+    assert done["paper"] == {"experiment": "N8", "variant": "reference:ensemble", "train_set": "DDR + TJDR-std"}
+    assert done["train_sources"] == ["DDR", "TJDR_std"] and done["validation_source"] == "DDR"
+    assert json.loads((out / "MAPLES-DR" / "done.json").read_text())["in_source"] is False
+    assert (out / "DDR" / "metrics.json").is_file() and (out / "prob_val" / "done.json").is_file()
+    # the mean of two identical-noise members lands between them: the written map is the pixel mean
+    a = io.read_prob_quantized(runs / "BF_ref_retfound_fine_seed0" / "prob_test", "MA", "t0").astype(float)
+    b = io.read_prob_quantized(runs / "BF_ref_samed_fine_seed0" / "prob_test", "MA", "t0").astype(float)
+    m = io.read_prob_quantized(out / "DDR" / "prob_test", "MA", "t0").astype(float)
+    assert np.abs(m - (a + b) / 2).max() <= 1.0
+    with pytest.raises(ValueError):
+        ens.run_reference([str(runs / "BS_unet_ddr_seed0"), cells[0]], runs_root=runs)   # a B-std run is not a REF cell

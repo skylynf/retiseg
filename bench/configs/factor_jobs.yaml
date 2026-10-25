@@ -291,7 +291,7 @@ jobs:
   config: bench/configs/cells/ref_samed_fine_seed0.yaml
   script: bench/train.py
   run_dir: runs/BF_ref_samed_fine_seed0
-  est_hours: 3.0
+  est_hours: 14.0
 - name: e9_unet_ddr_ce_seed0
   experiment: E9
   model: U-Net
