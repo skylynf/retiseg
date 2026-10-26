@@ -64,7 +64,7 @@ Nature Methods 的 Analysis 正文通常不放表。表 1–7 按 CVPR/ICLR 风�
 |  | d | 输入分辨率 512、1440、原分辨率块：mAUPR 与小病灶召回（M2MRF、RETFound 加 UPerNet） | 折线 | E7 | 实 |
 |  | e | 训练量 10%、50%、100% 与细粒度合并（U-Net、M2MRF） | 折线（模板图 5d） | E8 | 实 |
 
-扩展数据图（2026-10-26 状态）：ED1 各库示例与标注风格（需图像，工作站画）；ED2 视野与画布（同）；ED3 泄漏审计（已做，以补充表 15 交代，不单独作图）；ED4 评测实现敏感性（并入图 2d/e）；ED5 逐图分布（撤销，直方图留仓库）；ED6（取消；B1 在任何运行完成前停止）；**ED7 学习率扫描（只有 HRNet / M2MRF 的 DDR，实）**；**ED8 损失（U-Net 四种损失，实）**；**ED9 DiaRetDB1 官方图像级协议 + 超广角两种推理尺度（实）**；**ED10 计算代价（参数量、可训参数、两源 GPU 时，实；FLOPs / 显存 / 推理时间等算力审计）**。补充材料：单独的 `supplement.tex`（`make supplement`），17 张表 + 3 个说明 + 4 项数据，全部由 `scripts/make_supplement.py` 从 results.csv 生成；清单见 `sections/extended.tex` 与 14 备注 66。
+扩展数据图（2026-10-26 状态）：ED1 各库示例与标注风格（需图像，工作站画）；ED2 视野与画布（同）；ED3 泄漏审计（已做，以补充表 15 交代，不单独作图）；ED4 评测实现敏感性（并入图 2d/e）；ED5 逐图分布（撤销，直方图留仓库）；ED6（取消；B1 在任何运行完成前停止）；**ED7 学习率扫描（只有 HRNet / M2MRF 的 DDR，实）**；**ED8 损失（U-Net 四种损失，实）**；**ED9 DiaRetDB1 官方图像级协议 + 超广角两种推理尺度（实）**；**ED10 计算代价（参数量、可训参数、两源 GPU 时，实；FLOPs / 显存 / 推理时间等算力审计）**。补充材料：单独的 `supplement.tex`（`make supplement`），18 张表（第 18 张是正文实验名称与仓库代号的对照表）+ 3 个说明 + 4 项数据，全部由 `scripts/make_supplement.py` 从 results.csv 生成；清单见 `sections/extended.tex` 与 14 备注 66。
 
 ## 三、表（LaTeX，`tables/generated/`）
 
@@ -100,5 +100,5 @@ scripts/build_placeholder.py ───────────────┘
 ## 五、需要确认的三件事
 
 1. **排名检验的区组。** 12 写“按 7 个测试集”。IDRiD、DDR 两个内部区组各用对应训练来源的检查点；5 个独立区组这里取“IDRiD 训练与 DDR 训练两组检查点的平均”。另一种做法是只用 DDR 训练的检查点，或拆成 12 个（训练, 测试）区组。`figures/retifig/data.py::block_scores` 一处可改。
-2. **DiaRetDB1 进排名时用什么分数。** 这里用官方图像级 ROC AUC（四类平均）；Friedman 只看区组内名次，各区组的指标不必相同。像素 AUPR 单列并标“区域真值”。
+2. **DiaRetDB1 进排名时用什么分数。** 这里用官方图像级 ROC AUC（四类平均，只取 DiaRetDB1 这一集的 `img_auc` 行：`retifig.data.diaretdb1_auc`，2026-10-26 之前误把八个集的图像级 AUC 平均进来了）；Friedman 只看区组内名次，各区组的指标不必相同。像素 AUPR 单列并标“区域真值”。
 3. **H2Former。** 第一批不跑，所以主表和所有图里没有它；表 2 保留并注明原因。若以后补跑，在 `scripts/build_placeholder.py::MAIN_MODELS` 加一行即可。

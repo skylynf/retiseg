@@ -1,7 +1,7 @@
 
 {\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
 \begin{longtable}{l c c c c c c c}
-\caption{\textbf{Computational cost (E10).} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\,GB A100, one task per card), and, where the cost audit has run, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.}\label{stab:cost}\\
+\caption{\textbf{Computational cost.} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\,GB A100, one task per card), and, where the cost audit has run, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.}\label{stab:cost}\\
 \toprule
 Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak mem.\ (GB) & Infer.\ (s/image) \\
 \midrule
@@ -21,8 +21,8 @@ DeepLabv3 & 58.6 & \na & 3.6 & 12.8 & \na & \na & \na \\
 HRNet-W48 & 65.8 & \na & 2.6 & 10.1 & \na & \na & \na \\
 Swin-Unet & 27.2 & \na & 2.6 & 10.4 & \na & \na & \na \\
 FCT & 1.9 & \na & 19.7 & 72.0 & \na & \na & \na \\
-nnU-Net & \ph{33.4} & \na & 7.2 & 7.2 & \na & \na & \na \\
-nnU-Net ResEnc-M & \ph{57.5} & \na & 12.8 & 11.4 & \na & \na & \na \\
+nnU-Net & 59.2 & \na & 7.2 & 7.2 & \na & \na & \na \\
+nnU-Net ResEnc-M & 105.9 & \na & 12.8 & 11.4 & \na & \na & \na \\
 M2MRF & 70.3 & \na & 3.0 & 11.6 & \na & \na & \na \\
 HACDR-Net & 24.6 & \na & 5.9 & 27.8 & \na & \na & \na \\
 HRDecoder & 65.6 & \na & 1.5 & 5.9 & \na & \na & \na \\

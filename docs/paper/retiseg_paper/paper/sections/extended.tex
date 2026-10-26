@@ -3,9 +3,10 @@
 \renewcommand{\figurename}{Extended Data Fig.}
 \setcounter{figure}{0}
 
-\noindent Ten Extended Data figures were planned; two were withdrawn (the source-recipe track stopped before any run finished; the per-image distributions duplicate what the released histograms give). Four are drawn below from the same data table as the main figures; the two that need images are made on the workstation that holds the data.
+\noindent Ten Extended Data figures were planned; two were withdrawn (the source-recipe track stopped before any run finished; the per-image distributions duplicate what the released histograms give). Four are drawn below from the same data table as the main figures; the two that need images (1 and 2) are not yet drawn and will be made on the workstation that holds the data.
 
 \begin{center}\small\sffamily
+\begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{@{}l l l l@{}}
 \toprule
 \textbf{Extended Data Fig.} & \textbf{Content} & \textbf{Source} & \textbf{Status} \\
@@ -15,13 +16,14 @@
 3 & Leakage audit: near-duplicates between sources and splits & vessel-signature audit & done; reported as Supplementary Table~15 \\
 4 & Sensitivity to the metric implementation (thresholds, FOV, overlap) & evaluation switches & with Fig.~\ref{fig:literature}d,e \\
 5 & Per-image distributions and threshold sensitivity & per-image histograms & withdrawn (histograms stay in the repository) \\
-6 & (withdrawn; the source-recipe track was stopped before any run finished) & E2b & -- \\
-7 & Learning-rate sweep (DDR) & E2c & drawn \\
-8 & Loss with the architecture fixed (U-Net) & E9 & drawn \\
-9 & DiaRetDB1 official protocol; ultra-widefield at two scales & E3a & drawn \\
-10 & Computational cost & E10 & drawn (cost audit pending) \\
+6 & (withdrawn; the source-recipe track was stopped before any run finished) & source-recipe track & -- \\
+7 & Learning-rate sweep (DDR) & learning-rate sweep & drawn \\
+8 & Loss with the architecture fixed (U-Net) & loss experiment & drawn \\
+9 & DiaRetDB1 official protocol; ultra-widefield at two scales & independent tests & drawn \\
+10 & Computational cost & cost records of every run & drawn (cost audit pending) \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \end{center}
 
 \setcounter{figure}{6}
@@ -73,5 +75,6 @@
 \item Near-duplicate audit and the images excluded.
 \item Released checkpoints on every test set, per class.
 \item Foundation models without training on every test set.
+\item Experiment names used in the text and the identifiers used in the repository.
 \end{enumerate}
 \noindent\textbf{Supplementary notes.} Note 1, one entry per registered model variant (code used, reproducibility level, changes); Note 2, the training budget, the selection rule, the disclosed revisions and the scope changes; Note 3, the evaluation protocol. \textbf{Supplementary data.} Split lists and exclusions; the literature extraction; the results table with every run's recipe and environment record; probability maps where the licence allows.

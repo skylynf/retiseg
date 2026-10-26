@@ -32,6 +32,7 @@
 \definecolor{linkblue}{HTML}{1C5CAB}
 \input{tex/retiseg-tables}
 \ifdefined\retisegfinal\retifinaltrue\fi   % "make final" sets this; or write \retifinaltrue here
+\retifinaltrue   % 2026-10-26: no placeholder row is left in data/results.csv (README, "make final"); every printed number is measured
 
 % --- numbers quoted in the text: \rn{key}, defined in generated/numbers.tex
 \makeatletter
@@ -64,7 +65,6 @@
 \newcommand{\figfile}[1]{figures/out/#1}
 \newcommand{\widefig}[1]{\includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{\figfile{#1}}}
 \newcommand{\mAUPR}{mAUPR}
-\newcommand{\Bstd}{B-std}
 
 \begin{document}
 \linenumbers

@@ -172,6 +172,21 @@ def retrained():
             put(f"indep.{train}.{test}.nlower", int((d < 0).sum()), part)   # models whose independent score is below their internal one
             put(f"indep.{train}.{test}.p", "< 0.001" if sps.wilcoxon(m[train], m[test]).pvalue < 0.001 else f"= {sps.wilcoxon(m[train], m[test]).pvalue:.3f}", part)
         put(f"indep.{train}.ndrop", int((m[D.FINE_INDEPENDENT].mean(axis=1) < m[train]).sum()), part)
+        # means, leaders and rank correlations per test set over the measured models (seed means, as Table 5), for
+        # the independent-test paragraph rewritten on 2026-10-26 over all 19 models
+        put(f"indep.{train}.int.mean", f3(m[train].mean()), part)
+        for test in D.TESTS:
+            if test == train:
+                continue
+            put(f"indep.{train}.{test}.mean", f3(m[test].mean()), part)
+            put(f"indep.{train}.{test}.pct", f"{100 * (m[test] - m[train]).mean() / m[train].mean():+.0f}".replace("-", "−"), part)
+            put(f"indep.{train}.{test}.first.model", m[test].idxmax(), part)
+            put(f"indep.{train}.{test}.first.value", f3(m[test].max()), part)
+            put(f"indep.{train}.{test}.first.intrank", int((m[train] > m[train][m[test].idxmax()]).sum()) + 1, part)
+            put(f"indep.{train}.{test}.rho", f2(sps.spearmanr(m[train], m[test]).statistic), part)
+        put(f"indep.{train}.fine.first.model", m[D.FINE_INDEPENDENT].mean(axis=1).idxmax(), part)
+        put(f"indep.{train}.fine.first.value", f3(m[D.FINE_INDEPENDENT].mean(axis=1).max()), part)
+        put(f"indep.{train}.fine.hrnet", f3(m.loc["HRNet-W48", D.FINE_INDEPENDENT].mean()), part)
         rho = sps.spearmanr(m[train], m[D.FINE_INDEPENDENT].mean(axis=1)).statistic
         put(f"indep.{train}.rho", f2(rho), part)
         top_int = m[train].idxmax()
@@ -179,6 +194,16 @@ def retrained():
         put(f"indep.{train}.top.model", top_ind, part)
         put(f"indep.{train}.top.value", f2(m.loc[top_ind, D.FINE_INDEPENDENT].mean()), part)
         put(f"indep.{train}.sametop", "the same model" if top_int == top_ind else "a different model", part)
+    # DDR-trained against IDRiD-trained checkpoint of the same model on every independent set (2026-10-26)
+    a, b = D.score_matrix("IDRiD", models=measured_models), D.score_matrix("DDR", models=measured_models)
+    better = {t: int((b[t] > a[t]).sum()) for t in D.INDEPENDENT}
+    put("indep.pairs.ddrbetter", sum(better.values()), part)
+    put("indep.pairs.n", len(measured_models) * len(D.INDEPENDENT), part)
+    for t, n in better.items():
+        put(f"indep.pairs.{t}.ddrbetter", n, part)
+    std = [better[t] for t in D.INDEPENDENT if t != "TJDR-uwf"]
+    put("indep.pairs.std.lo", min(std), part)
+    put("indep.pairs.std.hi", max(std), part)
     blocks = D.block_scores()          # measured models only (data.measured_models)
     fr = D.friedman(blocks)
     rank = np.array(fr["avg_rank"])
@@ -445,8 +470,118 @@ def factors():
     put("cost.ddr.ratio", f"{(cd_[both] / c[both]).median():.1f}", cost_sim)
 
 
+def human_reference():
+    """DiaRetDB1 human reference (14 M16a; bench/scripts/diaretdb1_experts.py) against the main-table models scored on the
+    same consensus (seed 0): the experts' band and the models' range, median and the number reaching the experts' lowest
+    image-level AUC. Written 2026-10-26, when the text's hand-typed numbers (3 and 5 of 19) were found not to match the
+    table (5 and 7 of 19)."""
+    h = D.sel(experiment="HUMAN", variant="leave_one_expert_out")
+    if not len(h):
+        return
+    sim = D.simulated(h)
+    exp_auc = h[(h.metric == "img_auc") & h["cls"].isin(D.CLASSES)].groupby("model")["value"].mean()
+    exp_m = h[(h.metric == "aupr") & h["cls"].isin(D.CLASSES)].groupby("model")["value"].mean()
+    exp_ma = h[(h.metric == "aupr") & (h["cls"] == "MA")].groupby("model")["value"].mean()
+    put("human.expert.auc.lo", f2(exp_auc.min()), sim)
+    put("human.expert.auc.hi", f2(exp_auc.max()), sim)
+    put("human.expert.maupr.lo", f2(exp_m.min()), sim)
+    put("human.expert.maupr.hi", f2(exp_m.max()), sim)
+    put("human.expert.maupr.median", f2(exp_m.median()), sim)
+    put("human.expert.MA.lo", f3(exp_ma.min()), sim)
+    put("human.expert.MA.hi", f3(exp_ma.max()), sim)
+    rows = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model=D.MAIN_MODELS, test_set="DiaRetDB1", seed=0)
+    rows = rows[rows["cls"].isin(D.CLASSES)]
+    msim = D.simulated(rows)
+    m = rows[rows.metric == "aupr"].groupby(["model", "train_set"])["value"].mean().unstack("train_set")
+    a = rows[rows.metric == "img_auc"].groupby(["model", "train_set"])["value"].mean().unstack("train_set")
+    ma = rows[(rows.metric == "aupr") & (rows["cls"] == "MA")].groupby(["model", "train_set"])["value"].mean().unstack("train_set")
+    put("human.models.maupr.lo", f2(m.min().min()), msim)
+    put("human.models.maupr.hi", f2(m.max().max()), msim)
+    put("human.models.auc.lo", f2(a.min().min()), msim)
+    put("human.models.auc.hi", f2(a.max().max()), msim)
+    put("human.models.MA.median", f3(ma.stack().median()), msim)
+    put("human.models.below", int((m < exp_m.min()).sum().sum()), msim or sim)   # (model, source) pairs below the experts' lowest pixel mAUPR
+    put("human.models.pairs", int(m.notna().sum().sum()), msim)
+    for train in D.TRAIN_MAIN:
+        put(f"human.models.{train}.maupr.median", f2(m[train].median()), msim)
+        put(f"human.models.{train}.auc.median", f2(a[train].median()), msim)
+        put(f"human.models.{train}.auc.nreach", int((a[train] >= exp_auc.min()).sum()), msim or sim)
+
+
+def intervals():
+    """Width of the 95% bootstrap intervals (seed 0, per class) on the internal tests, quoted in the text next to the
+    seed s.d. so that a difference between two models can be read against both (2026-10-26)."""
+    rows = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model=D.MAIN_MODELS, seed=0)
+    rows = rows[rows["cls"].isin(D.CLASSES) & (rows.train_set == rows.test_set) & rows.metric.isin(["aupr_ci_lo", "aupr_ci_hi"])]
+    if not len(rows):
+        return
+    sim = D.simulated(rows)
+    w = rows.pivot_table(index=["model", "train_set", "cls"], columns="metric", values="value")
+    w = (w["aupr_ci_hi"] - w["aupr_ci_lo"]).rename("w").reset_index()
+    for train in D.TRAIN_MAIN:
+        med = w[w.train_set == train].groupby("cls")["w"].median()
+        for cls in D.CLASSES:
+            put(f"ci.{train}.{cls}.width", f2(med[cls]), sim)
+        three = med[["MA", "HE", "EX"]]
+        put(f"ci.{train}.width.lo", f2(three.min()), sim)
+        put(f"ci.{train}.width.hi", f2(three.max()), sim)
+    # the intervals of the two leading DDR models per class, for the sentence that compares them
+    lo = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model=D.MAIN_MODELS, seed=0, metric="aupr_ci_lo")
+    hi = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model=D.MAIN_MODELS, seed=0, metric="aupr_ci_hi")
+    pt = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model=D.MAIN_MODELS, seed=0, metric="aupr")
+    for model, tag in (("HRNet-W48", "hrnet"), ("SAMed", "samed"), ("RETFound + UPerNet", "retfound"), ("nnU-Net", "nnunet")):
+        for train in D.TRAIN_MAIN:
+            for cls in ("MA", "HE", "SE"):
+                sel = dict(model=model, train_set=train, test_set=train, cls=cls)
+                l = lo[(lo.model == model) & (lo.train_set == train) & (lo.test_set == train) & (lo["cls"] == cls)]["value"]
+                u = hi[(hi.model == model) & (hi.train_set == train) & (hi.test_set == train) & (hi["cls"] == cls)]["value"]
+                v = pt[(pt.model == model) & (pt.train_set == train) & (pt.test_set == train) & (pt["cls"] == cls)]["value"]
+                if len(l) and len(u) and len(v):
+                    put(f"ci.{tag}.{train}.{cls}", f"{f3(v.iloc[0])} ({f2(l.iloc[0])}--{f2(u.iloc[0])})", sim)
+
+
+def cost_params():
+    """Parameter counts quoted in the text (nnU-Net's come from its plans; collect_runs.NNUNET_PARAMS)."""
+    p = D.sel(experiment="E10", metric="params_m")
+    for model, tag in (("nnU-Net", "nnunet"), ("nnU-Net ResEnc-M", "resenc")):
+        r = p[p.model == model]
+        if len(r):
+            put(f"params.{tag}", f"{float(r['value'].iloc[0]):.1f}", D.simulated(r))
+    plan = D.sel(experiment="E10", metric="params_m_plan")
+    for train in D.TRAIN_MAIN:
+        r = plan[(plan.model == "nnU-Net ResEnc-M") & (plan.train_set == train)]
+        if len(r):
+            put(f"params.resenc.{train}", f"{float(r['value'].iloc[0]):.1f}", D.simulated(r))
+
+
+def strata():
+    """Results by DR grade (14 M17a; bench/scripts/clinical_strata.py): median over the DDR-trained main-table models
+    (seed 0) within grades 0-1 and 2-4 of each graded test set, plus the image counts (2026-10-26: the hand-typed values
+    of the paragraph were off in the second decimal)."""
+    c = D.sel(experiment="CLIN", train_set="DDR", seed=0)
+    c = c[c.model.isin(D.MAIN_MODELS)]
+    if not len(c):
+        return
+    sim = D.simulated(c)
+    tag = {"DDR": "ddr", "FGADR": "fgadr", "Retinal-Lesions": "retles", "MAPLES-DR": "maples"}
+    for test, t in tag.items():
+        for variant, g in (("grade:0-1", "lo"), ("grade:2-4", "hi")):
+            r = c[(c.test_set == test) & (c.variant == variant)]
+            m = r[(r.metric == "aupr") & r["cls"].isin(D.CLASSES)].groupby("model")["value"].mean()
+            a = r[(r.metric == "img_auc") & r["cls"].isin(D.CLASSES)].groupby("model")["value"].mean()
+            n = r[r.metric == "n_images"]["value"]
+            if len(m):
+                put(f"clin.{t}.{g}.maupr", f2(m.median()), sim)
+            if len(a):
+                put(f"clin.{t}.{g}.auc", f2(a.median()), sim)
+                put(f"clin.{t}.{g}.auc.n", len(a), sim)
+            if len(n):
+                put(f"clin.{t}.{g}.n", int(n.iloc[0]), sim)
+
+
 def main():
     facts()
+    strata()
     literature()
     original()
     retrained()
@@ -454,6 +589,9 @@ def main():
     backbone_controlled()
     factors()
     refined()
+    human_reference()
+    intervals()
+    cost_params()
     lines = ["% Generated by scripts/make_numbers.py. Do not edit by hand.", "\\makeatletter"]
     for key, (text, sim) in sorted(N.items()):
         body = text.replace("%", "\\%").replace("−", "$-$").replace("<", "$<$")

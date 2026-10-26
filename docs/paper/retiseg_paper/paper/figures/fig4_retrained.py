@@ -50,7 +50,7 @@ def panel_a(fig, models, fams, top):
         axb.spines["bottom"].set_visible(False)
         axb.spines["top"].set_visible(True)
         axb.tick_params(axis="x", pad=1)
-        S.text_mm(fig, "mAUPR (mean ± s.d., 3 seeds)", x + 25.5, top - 6.4, fontsize=5.6, color=S.INK2)
+        S.text_mm(fig, "mAUPR (mean over seeds; s.d. where 3 seeds)", x + 25.5, top - 6.4, fontsize=5.6, color=S.INK2)
         if sim:
             S.tag_simulated(axb, loc="br")
         x += 72

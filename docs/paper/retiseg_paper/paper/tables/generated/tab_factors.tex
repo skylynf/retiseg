@@ -8,27 +8,27 @@
 \toprule
 \colh{Setting} & \famchip{general}\; U-Net & \famchip{fundus}\; M2MRF & \famchip{foundation}\; RETFound+UPer. & \colh{Mean} \\
 \midrule
-\grouprow{5}{Annotation granularity of the training set (E4) --- mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}
+\grouprow{5}{Annotation granularity of the training set --- mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}
 \quad DDR \tier{fine} {\scriptsize\color{inkmuted}(ref.)} & .55 & .57 & -- & .56 \\
 \quad DDR + FGADR, 383 images \tier{fine}\tier{mixed} & .58 \up{.03} & .56 \down{.02} & -- & \cellcolor[HTML]{EEEEEC}.57 {\scriptsize +.01} \\
 \quad DDR + FGADR \tier{fine}\tier{mixed} & .60 \up{.05} & .55 \down{.02} & -- & \cellcolor[HTML]{EAECEC}.58 {\scriptsize +.02} \\
 \quad DDR + Retinal-Lesions \tier{fine}\tier{coarse} & .52 \down{.03} & .51 \down{.06} & -- & \cellcolor[HTML]{EFDFDB}.52 {\scriptsize $-$.04} \\
 \quad FGADR \tier{mixed} & .36 \down{.18} & .44 \down{.13} & -- & \cellcolor[HTML]{EBB3AC}.40 {\scriptsize $-$.16} \\
 \quad Retinal-Lesions \tier{coarse} & .25 \down{.30} & .17 \down{.40} & -- & \cellcolor[HTML]{E37D74}.21 {\scriptsize $-$.35} \\
-\grouprow{5}{Input resolution, long side in pixels (E7) --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}
+\grouprow{5}{Input resolution, long side in pixels --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}
 \quad 512 & -- & .36 \down{.02} & .40 \down{.07} & \cellcolor[HTML]{EFDEDA}.38 {\scriptsize $-$.04} \\
 \quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & .38 & .47 & .42 \\
 \quad native-resolution patches & -- & .31 \down{.07} & .45 \down{.02} & \cellcolor[HTML]{EFDFDB}.38 {\scriptsize $-$.04} \\
-\grouprow{5}{Input resolution (E7) --- lesion-level recall of small lesions on DDR test}
+\grouprow{5}{Input resolution --- lesion-level recall of small lesions on DDR test}
 \quad 512 & -- & .18 \down{.09} & .11 \down{.17} & \cellcolor[HTML]{ECBDB6}.15 {\scriptsize $-$.13} \\
 \quad 1,440 {\scriptsize\color{inkmuted}(ref.)} & -- & .27 & .28 & .28 \\
 \quad native-resolution patches & -- & .33 \up{.06} & .31 \up{.02} & \cellcolor[HTML]{E2E7EC}.32 {\scriptsize +.04} \\
-\grouprow{5}{Training amount (E8) --- mAUPR on DDR test; U-Net and M2MRF}
+\grouprow{5}{Training amount --- mAUPR on DDR test; U-Net and M2MRF}
 \quad DDR, 10\% (38 images) & .32 \down{.06} & .31 \down{.07} & -- & \cellcolor[HTML]{EED7D3}.31 {\scriptsize $-$.07} \\
 \quad DDR, 50\% (192) & .37 \down{.01} & .34 \down{.04} & -- & \cellcolor[HTML]{EFE8E4}.36 {\scriptsize $-$.02} \\
 \quad DDR, 100\% (383) {\scriptsize\color{inkmuted}(ref.)} & .38 & .38 & -- & .38 \\
 \quad + IDRiD + TJDR standard field (599) & .37 \down{.01} & .37 \down{.01} & -- & \cellcolor[HTML]{F0EBE8}.37 {\scriptsize $-$.01} \\
-\grouprow{5}{Loss, architecture fixed (E9) --- mAUPR on DDR test; U-Net}
+\grouprow{5}{Loss, architecture fixed --- mAUPR on DDR test; U-Net}
 \quad cross-entropy {\scriptsize\color{inkmuted}(ref.)} & .36 & -- & -- & .36 \\
 \quad batch Dice & .24 \down{.12} & -- & -- & \cellcolor[HTML]{EDC2BC}.24 {\scriptsize $-$.12} \\
 \quad cross-entropy + batch Dice (unified protocol) & .38 \up{.02} & -- & -- & \cellcolor[HTML]{E9EBEC}.38 {\scriptsize +.02} \\
@@ -37,7 +37,6 @@
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize
 \item Granularity of the labels used for training: \tier{fine} fine \quad \tier{mixed} mixed \quad \tier{coarse} coarse. In the training-amount block the number of image passes is the same in every row. The FGADR row of the granularity block is the FGADR-trained model of the cross-source experiment.
-\phnote
 \end{tablenotes}
 \end{threeparttable}
 \end{adjustbox}

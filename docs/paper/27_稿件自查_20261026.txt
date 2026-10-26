@@ -1,0 +1,103 @@
+27 稿件自查与修订记录（2026-10-26，临床讨论版之前）
+
+依据：用户 2026-10-26 的修订清单；对照 13、14、16、26 与 docs/paper/retiseg_paper/paper/README.md。
+产出：main.pdf（33 页）、supplement.pdf（18 张补充表 + 3 个说明）；下面按"改了什么 / 为什么 / 还没解决"记。
+
+一、流水线里发现并修正的错误（影响数字）
+
+1. 表 5 的 DiaRetDB1 列、Friedman 的 DiaRetDB1 区组、图 4e、集成块的 DiaRet 列：读 img_auc 行时没有按 test_set == DiaRetDB1 过滤，实际平均了八个测试集的图像级 AUC（所以表里 0.64–0.86，而补充表 13 的 0.71–0.94 才是 DiaRetDB1 本身）。改在 retifig/data.py（新函数 diaretdb1_auc）、make_tables.py（table_independent、ensemble_rows）。后果：Friedman χ² 103.5 → 97.9，平均名次有变（SAMed 1.38 → 1.63，第三名由 RETFound+UPerNet 变为 Swin-Unet，临界差内模型数 12 → 11）；正文用 \rn 键，已自动更新；摘要与讨论的"12 个"改为键值。
+2. 人类参照段（原 p10 l309–317）：手写的"3（IDRiD 训练）与 5（DDR 训练）个模型达到专家 0.87"与表不符，按 results.csv 重算为 5 与 7；模型像素 mAUPR 范围 0.09–0.35 应为 0.09–0.32；中位数 0.24 应为 0.25。该段全部改为 make_numbers 的 human.* 键。
+3. 其余正文数字核对：
+   - R2 "17 个专用架构 + 3 个适配" → 18 + 3（funnel.dr = 21）。
+   - 内部测试段：前两名之差 0.011/0.015 → 0.012/0.016；种子 s.d. 中位数 0.006 → 键值 0.010（IDRiD）、0.009（DDR）。
+   - "RETFound 与 SAMed 的软渗出最高"不成立（HRNet-W48 最高，0.535 种子均值 / 0.550 种子 0），已改写并加区间。
+   - "TC-Net、PMCNet、WSRFNet 低于除 FCT 外所有通用网络"不成立（IDRiD 上 TC-Net 0.653、PMCNet 0.652 高于 U-Net 0.644、DeepLabv3 0.537），已改写。
+   - 病灶级召回：大病灶中位 0.65 → 0.66，EX 小病灶 0.35 → 0.34，MA 精确率 0.30 → 0.29（种子 0）。
+   - 讨论"四分之一的基线数字被转引" → "近一半"（22% + 26%）。
+   - 补充说明：R4 "与九个监督模型"的旧段落与"19 个模型"的新段落并存，现在合并为一段 19 模型叙述（种子均值，与表 5 口径一致）；摘要"下降 40–50%" → "三分之一到一半"（DDR 训练：FGADR −43%、RL −48%、UWF −53%、DiaRetDB1 像素 −32%）。
+   - 图 5d 图注"两个 TJDR 集的均值" → 三个细粒度独立集（代码本来就取三个）。
+
+二、占位 / tbd 全部清掉
+
+- results.csv 原剩 4 行占位：nnU-Net 两种配置的参数量（33.4 / 57.5 是模拟数）与 L2 的"作者联系 14 / 回复 3"。
+  nnU-Net 参数量：按 runs/NN_*/console.log 记录的 plan 用 dynamic_network_architectures 实例化计数（3 输入通道、5 类 softmax、深监督）：默认 2D plan 两源相同 59.2 M；ResEnc-M 的 plan 随数据集变化，IDRiD plan 105.9 M、DDR plan 140.0 M。写进 collect_runs.NNUNET_PARAMS（params_m 取 IDRiD plan，params_m_plan 另记两源），表 4 说明里写明。
+  L2 两行没有任何图表读取，退役（drop_retired_placeholders）。
+- 表 1 DiaRetDB1 的"Maps"由 tbd 改为公开：补充数据 4 已经写了 DiaRetDB1 概率图公开，方法的数据可用性也已改成一致；**M14 还没写这条，请确认许可**（DiaRetDB1 供研究使用；概率图不含图像数据）。
+- 表 8 Swin-Unet 步数 tbd → 63,000（runs/BS_swin_unet_idrid_seed0/recipe.json）；表 8 从 7 行补齐到 19 行（含 nnU-Net 两行按 plan 填），各行取自 recipe.json + bs_frozen.yaml + bench/models 的头部定义。
+- main.tex / supplement.tex 置 \retifinaltrue（README 的"没有占位行以后用"）：草稿框、蓝灰色、竖线、"Values in this colour are simulated placeholders"说明全部不再出现；make_tables.write() 以后只在表里真有 \ph{} 时才印该说明。
+- 参考模型（N8）那段原来是 simtext，现在写成待完成：SAMed 合并训练已完成（DDR 测试 0.477，高于最佳单模型 0.469），RETFound 合并与集成仍在训练。
+
+三、实验代号 → 实验名称
+
+正文、图 1、表题、ED 表、方法全部改为名称；仓库、runs/、results.csv、docs 的键不动。对照表生成为补充表 18（make_supplement.EXPERIMENT_NAMES），方法第一段末尾指向它。
+
+  L1          Paper audit（文献审计）
+  L2          Reproducibility funnel（复现漏斗）
+  E1          Released checkpoints / author weights（作者权重）
+  E1r         Author-recipe reruns（作者配方重训）
+  E2 / B-std  Unified retraining; the unified protocol（统一重训 / 统一协议）
+  E2b / B1    Source-recipe track（来源配方轨，已停止）
+  E2c         Learning-rate sweep（学习率扫描）
+  E3a         Independent tests（独立测试）
+  E3b         Training-source experiment（训练来源实验）
+  E4          Annotation-granularity experiment（标注粒度实验）
+  E5          Foundation models under four kinds of use（基础模型四档用法；含编码器对照）
+  E7          Input-resolution experiment（输入分辨率实验）
+  E8          Training-amount experiment（训练量实验）
+  E9          Loss experiment（损失实验）
+  E10         Computational cost（计算代价）
+  ENS         Ensembles（集成）
+  REF         Label revision, Refined IDRiD（标注修订）
+  HUMAN       Human reference（人类参照）
+  CLIN        Results by DR grade（按分级分层）
+  N8          Reference model（参考模型，训练中）
+
+四、置信区间
+
+- 表 3a 每个逐类格子下面加了 95% bootstrap 区间（E1 行本来就有 aupr_ci_lo/hi）。
+- 内部测试段新增一句：区间中位宽度（种子 0）IDRiD MA/HE/EX 0.08–0.12、SE 0.33；DDR 0.07–0.19、SE 0.24；DDR 上 RETFound / HRNet / nnU-Net 的 MA 与 SE 区间逐个给出；领先模型各类区间互相重叠。键 ci.*。
+- 表 4、表 5 图注指向补充表 4（逐类逐模型逐集区间）。
+- 还没有的：mAUPR（四类均值）的区间。可以从 metrics.npz 的逐图直方图按同一批 replicate 算，但 handoff 包不带 npz，只能在服务器 / 工作站做；讨论的局限里写了"留待终版"。
+
+五、其他
+
+- ImageNet 编码器：摘要、R5 末尾、讨论 Q2 都正面写了：MAE-IN1k / DINOv2 + UPerNet（各一种子、一学习率）DDR 0.52 / 0.51、IDRiD 0.73 / 0.74，高于每一个登记行（种子 0 最佳 0.469 / 0.717）；不进主表与名次的原因（主表 19 行预登记在先，对照格后训）写明；"补一个登记行 + 多种子 + 学习率扫描"列为未来工作第一项。
+- l347 方向：RETFound-MAE 在 UWF 0.11 < MAE-IN1k 0.13，原文"唯一的增益"写反，改为"同样低于"。
+- MAPLES-DR 分级：MAPLES-DR 用加拿大远程眼科分级（R0–R4），原文 Fig. 4 显示绝大多数为 R1，虽然图像取自 MESSIDOR 1–3 级；所以 60 张测试图 56 张在 0–1 级、4 张在 2–4 级是数据本身的分布，不是 bug。正文已写明并说 4 张太少不作比较。
+- 参考文献：[24] nnU-Net Revisited 补全（LNCS 15009，pp. 488–498，DOI 已核 Crossref）；SAM 3 补 arXiv:2511.16719 与作者；RETFound 补前 11 位作者。两处 "verify" 已无。账本条目作者仍是"第一作者 et al."，投稿前按 PDF 补。
+- 表 5 原来被 adjustbox 包了两层，已去重；ED 状态表加 adjustbox 消除 152 pt 溢出；图 4a 表头"3 seeds"改为"mean over seeds; s.d. where 3 seeds"；图 1a/1e 去代号，1e 改为实际做过的 8 个因素卡片（去掉 E6 血管图、1,024 画布、bin loss、B1）。
+- Fig. 1e 的卡片里"5 representative models"等按 16 的范围写。
+
+五之二、第二遍交叉核对（独立代理按 results.csv 逐句核对后修正）
+
+- MedSAM "低于其他适配基础模型"：DDR 上 0.413 高于 SAM2-UNet 0.360，改为"低于 SAMed、SAM-Adapter、RETFound"。
+- WSRFNet：IDRiD 上 0.582 高于 DeepLabv3 0.537，改写。
+- 11 阈值实现"IDRiD 上每个收敛模型变化 < 0.01"对 19 模型不成立（HACDR +0.021、WSRFNet +0.023、SAM2-UNet +0.019…），改为给出范围；DDR 同样改为 19 模型的范围。
+- 集成"在每个测试集上都最高"：IDRiD 训练块在 Retinal-Lesions 上 DeepLabv3 单模型 0.261 高于所有集成；改写，增益范围改为 −0.01 到 0.02。
+- **名次检验用的是种子均值而不是种子 0**：retifig.data.block_scores / score_matrix 一直用 seed means；原正文"the rank tests use seed 0"与表 5 / 图 4e 不符。本轮按代码改正文（方法的统计一节也写明"seed means of Table 4"）。若坚持用种子 0，需改 data.py 并重跑（种子 0 下 χ² 99.7、SAMed 1.50、HRNet 4.38、RETFound 4.50、Swin 4.63）。
+- 分级分层中位数：原手写 0.21/0.37、0.04/0.23、0.07/0.18、0.33/0.38、AUC 0.51/0.76 按 results.csv 重算为 0.21/0.36、0.04/0.22、0.07/0.17、0.33/0.40、0.54/0.75（DDR 的图像级 AUC 只对 12 个模型有定义）；改为 make_numbers 的 clin.* 键。
+- RETFound 小病灶召回 512 画布：0.29→0.12 实为 0.28→0.11。
+- 跨源矩阵："DDR 在每个像素级测试集上都是最好的外源"对超广角不成立（FGADR 训练 0.247 > DDR 0.173，FGADR 格按视野尺度推理），改为"标准视野像素级测试集"，并补 FGADR 在超广角上的说明；"粗标注使 M2MRF 在每个细粒度测试集上损失 0.06–0.18"改为"每个标准视野细粒度测试集"。
+- "表的跨度是种子 s.d. 的十倍"实为三四十倍，改为给出跨度 0.41 / 0.28。
+- 作者配方"多出 0.03–0.05"实为 0.03–0.06。
+- 摘要 / 讨论 Q2："两个基础模型 + HRNet + nnU-Net 领先"：nnU-Net 实为 IDRiD 第 6、DDR 第 5–6（落后 0.03–0.04）；改为"两个适配基础模型与 HRNet-W48 领先，SAM-Adapter、Swin-Unet、nnU-Net 在 0.04 内跟随"。摘要的"下降三分之一到一半"限定为 DDR 训练模型，IDRiD 训练模型在所有外部集都下降。
+- 摘要"比架构影响更大" vs 讨论"与架构差异相当"：改为"as much as or more than"。
+- 引言"five test sets from sources never used for training" → "six test sets from five sources"。
+- 表 2 "Use in this study" 列的 A / E1r / B-std 代号改为文字。
+- 表 1 脚注 `$1500\\times1500$` 的双反斜杠（排成 "1500 / times1500"）修正。
+- 图 1a "7 test sources" → "8 test sets, 7 datasets"。
+- 方法：PEFT 三模型"1,024 像素补丁"实为 512 / 1,024 / 960（表 8）；"固定输入尺寸的模型"一句补全 RETFound 224、CLC / TC / SAMed 512、SAM-Adapter / MedSAM 1,024。
+- WSRFNet"released checkpoint"与"权重未到"矛盾，改写。
+- "Halving the canvas" → 1,440 → 512。
+- 图 4e 的名次标签改为与表一致的四舍五入（1.625 → 1.63）。
+- 未能从 results.csv 核对的数：HRDecoder 双倍预算 0.615 / 0.304、HRNet 双倍 0.447→0.469、验证 0.596 / 0.562（只有 2,880 画布那格在表里），来自 14 的记录；下次 collect 时建议把这几格也读进 results.csv。
+
+六、还要做的（按优先级）
+
+1. 确认 DiaRetDB1 概率图公开（M14），否则表 1 / 方法 / 补充数据 4 三处同时改回。
+2. mAUPR 的 bootstrap 区间（服务器上用 npz 算，collect_runs 加 metric maupr_ci_lo/hi，表 4 加一列）。
+3. 参考模型 N8 训练完成后替换 R4 末那句，并补表 5 / 补充表 11。
+4. ED1、ED2 需要图像，在工作站画。
+5. refs.bib 账本条目作者补全。
+6. 算力审计（FLOPs / 显存 / 推理时间，补充表 8 的空列）。
+7. 若接受建议：为 MAE-IN1k + UPerNet 登记一个主表行（3 种子）并做学习率扫描——这是讨论里承认的最强单模型。

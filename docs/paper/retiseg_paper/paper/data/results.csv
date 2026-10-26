@@ -9,11 +9,7 @@ E1r,M2MRF,bs1_first_run,IDRiD,0,IDRiD,EX,aupr,0.746,measured
 E1r,M2MRF,bs1_first_run,IDRiD,0,IDRiD,SE,aupr,0.495,measured
 E1r,M2MRF,paper,IDRiD,-1,IDRiD,mean,aupr_author_impl,0.6724,measured
 E1r,M2MRF,paper,DDR,-1,DDR,mean,aupr_author_impl,0.4894,measured
-E10,nnU-Net,,,-1,,,params_m,33.4,placeholder
-E10,nnU-Net ResEnc-M,,,-1,,,params_m,57.5,placeholder
 L2,funnel,reproduced within 0.02 mAUPR,,-1,,,n_models,0.0,measured
-L2,funnel,authors contacted,,-1,,,n_models,14.0,placeholder
-L2,funnel,authors replied,,-1,,,n_models,3.0,placeholder
 L1,papers,split:official,IDRiD,2019,,,n_papers,2.0,measured
 L1,papers,split:own split,IDRiD,2019,,,n_papers,0.0,measured
 L1,papers,split:not stated,IDRiD,2019,,,n_papers,0.0,measured
@@ -77488,3 +77484,9 @@ E1r,HACDR-Net,paper,DDR,-1,DDR,EX,aupr_author_impl,0.6515,measured
 E1r,HACDR-Net,paper,DDR,-1,DDR,HE,aupr_author_impl,0.5502,measured
 E1r,HACDR-Net,paper,DDR,-1,DDR,SE,aupr_author_impl,0.5675,measured
 E1r,HACDR-Net,paper,DDR,-1,DDR,MA,aupr_author_impl,0.245,measured
+E10,nnU-Net,,,-1,,,params_m,59.185,measured
+E10,nnU-Net,,IDRiD,-1,,,params_m_plan,59.185,measured
+E10,nnU-Net,,DDR,-1,,,params_m_plan,59.185,measured
+E10,nnU-Net ResEnc-M,,,-1,,,params_m,105.922,measured
+E10,nnU-Net ResEnc-M,,IDRiD,-1,,,params_m_plan,105.922,measured
+E10,nnU-Net ResEnc-M,,DDR,-1,,,params_m_plan,140.024,measured

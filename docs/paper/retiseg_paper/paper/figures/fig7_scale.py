@@ -142,7 +142,7 @@ def panel_d(fig, top):
         ax.set_ylabel(ylabel)
         ax.axvspan(0.6, 1.4, color=S.SOFT, zorder=0, lw=0)
         S.light_grid(ax)
-    ax.text(1, 0.585, "B-std", ha="center", va="top", fontsize=4.9, color=S.INK2)
+    ax.text(1, 0.585, "unified protocol", ha="center", va="top", fontsize=4.6, color=S.INK2)
     S.text_mm(fig, "Long side of the training and inference canvas (pixels)", 139, top + 37, ha="center", fontsize=6.2)
 
 

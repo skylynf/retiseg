@@ -16,7 +16,7 @@ Model & Level & Trained on & Test set & MA & HE & EX & SE & \mAUPR{} \\
 \endfoot
 \bottomrule
 \endlastfoot
-\multicolumn{9}{l}{\textbf{Training source (E3b)}}\\
+\multicolumn{9}{l}{\textbf{Training source}}\\
 M2MRF & bstd & FGADR & IDRiD & .141 & .320 & .729 & .557 & .437 \\
 M2MRF & bstd & FGADR & DDR & .055 & .219 & .404 & .107 & .197 \\
 M2MRF & bstd & FGADR & TJDR std & .267 & .642 & .666 & .223 & .449 \\
@@ -97,7 +97,7 @@ nnU-Net & bstd & TJDR-std & MAPLES & .162 & .462 & .457 & .033 & .278 \\
 nnU-Net & bstd & TJDR-std & FGADR & .019 & .322 & .299 & .157 & .199 \\
 nnU-Net & bstd & TJDR-std & Retinal-L. & .031 & .162 & .224 & .125 & .136 \\
 nnU-Net & bstd & TJDR-std & DiaRetDB1 & .027 & .395 & .338 & .157 & .229 \\
-\multicolumn{9}{l}{\textbf{Annotation granularity (E4)}}\\
+\multicolumn{9}{l}{\textbf{Annotation granularity}}\\
 M2MRF & DDR & DDR & IDRiD & .392 & .555 & .776 & .563 & .571 \\
 M2MRF & DDR & DDR & TJDR std & .299 & .696 & .618 & .412 & .506 \\
 M2MRF & DDR & DDR & DiaRetDB1 & .049 & .218 & .177 & .247 & .173 \\
@@ -168,7 +168,7 @@ U-Net & Retinal-Lesions & Retinal-Lesions & MAPLES & .168 & .284 & .470 & .102 &
 U-Net & Retinal-Lesions & Retinal-Lesions & FGADR & .017 & .136 & .148 & .064 & .091 \\
 U-Net & Retinal-Lesions & Retinal-Lesions & Retinal-L. & .353 & .553 & .721 & .390 & .504 \\
 U-Net & Retinal-Lesions & Retinal-Lesions & DiaRetDB1 & .045 & .494 & .874 & .483 & .474 \\
-\multicolumn{9}{l}{\textbf{Input resolution (E7)}}\\
+\multicolumn{9}{l}{\textbf{Input resolution}}\\
 M2MRF & res:1440 & DDR & DDR & .148 & .402 & .547 & .422 & .380 \\
 RETFound + UPerNet & res:1440 & DDR & DDR & .189 & .491 & .640 & .546 & .466 \\
 HRDecoder & res:2880 (author canvas, equivalent epochs) & IDRiD & IDRiD & .423 & .606 & .864 & .615 & .627 \\
@@ -176,7 +176,7 @@ M2MRF & res:512 & DDR & DDR & .114 & .411 & .531 & .378 & .358 \\
 M2MRF & res:native patches & DDR & DDR & .140 & .360 & .510 & .237 & .312 \\
 RETFound + UPerNet & res:512 & DDR & DDR & .092 & .346 & .628 & .535 & .400 \\
 RETFound + UPerNet & res:native patches & DDR & DDR & .196 & .460 & .628 & .513 & .449 \\
-\multicolumn{9}{l}{\textbf{Training amount (E8)}}\\
+\multicolumn{9}{l}{\textbf{Training amount}}\\
 M2MRF & size:DDR 100\% & DDR & DDR & .148 & .402 & .547 & .422 & .380 \\
 M2MRF & size:DDR 100\% & DDR & TJDR std & .299 & .696 & .618 & .412 & .506 \\
 M2MRF & size:DDR 100\% & DDR & FGADR & .019 & .310 & .340 & .181 & .212 \\
@@ -235,7 +235,7 @@ M2MRF & size:DDR 10\%:fov & DDR & TJDR UWF & .087 & .304 & .076 & .096 & .141 \\
 M2MRF & size:DDR 50\%:fov & DDR & TJDR UWF & .115 & .432 & .160 & .163 & .218 \\
 U-Net & size:DDR 10\%:fov & DDR & TJDR UWF & .047 & .238 & .080 & .121 & .122 \\
 U-Net & size:DDR 50\%:fov & DDR & TJDR UWF & .065 & .412 & .187 & .221 & .221 \\
-\multicolumn{9}{l}{\textbf{Loss (E9)}}\\
+\multicolumn{9}{l}{\textbf{Loss}}\\
 U-Net & loss:CE + Dice & DDR & DDR & .141 & .410 & .553 & .410 & .378 \\
 U-Net & loss:CE & DDR & DDR & .126 & .429 & .602 & .271 & .357 \\
 U-Net & loss:Dice & DDR & DDR & .124 & .268 & .397 & .160 & .237 \\

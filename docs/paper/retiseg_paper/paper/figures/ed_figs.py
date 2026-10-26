@@ -84,7 +84,7 @@ def ed8():
     """E9: U-Net with four losses, architecture fixed (docs/paper/16: one model, seed 0)."""
     fig = S.figure(64, width=S.FULL_W)
     S.label_mm(fig, "a", 2, 2)
-    S.text_mm(fig, "Loss, architecture fixed (E9, U-Net)", 8, 2.6, fontsize=6.8, fontweight="bold")
+    S.text_mm(fig, "Loss, architecture fixed (U-Net)", 8, 2.6, fontsize=6.8, fontweight="bold")
     losses = ["CE", "Dice", "CE + Dice", "CE + per-image Dice"]
     labels = ["CE", "batch\nDice", "CE +\nbatch Dice", "CE +\nper-image Dice"]
     r = D.sel(experiment="E9", metric="aupr")
@@ -103,7 +103,7 @@ def ed8():
     ax.set_xlim(-0.3, 3.3)
     ax.set_ylim(0, 0.55)
     ax.axvspan(1.6, 2.4, color=S.SOFT, zorder=0, lw=0)
-    ax.text(2, 0.54, "B-std", ha="center", va="top", fontsize=4.9, color=S.INK2)
+    ax.text(2, 0.54, "unified\nprotocol", ha="center", va="top", fontsize=4.6, color=S.INK2, linespacing=1.1)
     ax.set_ylabel("mAUPR on DDR test")
     S.light_grid(ax)
     if D.simulated(r):
@@ -173,7 +173,7 @@ def ed9():
             ax.legend(loc="upper left", bbox_to_anchor=S.rect_mm(fig, 106, 13 + row_h * len(models) + 6, 1, 1)[:2], bbox_transform=fig.transFigure, ncol=1, handletextpad=0.2, labelspacing=0.3, fontsize=5.2)
         elif ax.get_legend():
             ax.get_legend().remove()
-    S.text_mm(fig, "Models in the order of their average rank (Fig. 4e). Native resolution is the main-table setting; the resized version is the comparison variant of the registered E3a plan.",
+    S.text_mm(fig, "Models in the order of their average rank (Fig. 4e). Native resolution is the main-table setting; the resized version is the comparison variant registered for the independent tests.",
               34, 13 + row_h * len(models) + 14, fontsize=4.9, color=S.INK2)
     S.save(fig, "ed09_diaretdb1_uwf")
 

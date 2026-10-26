@@ -1,6 +1,6 @@
 \begin{table*}[t]
 \centering\tablefont
-\caption{\textbf{What each model keeps under the unified protocol.} Data, splits, the 1,440-pixel canvas, augmentation, the training amount in pixels, checkpoint selection and evaluation are shared (Methods). Loss, optimizer, learning rate, weight decay, schedule shape and effective batch are taken from each model's source recipe; the schedule is stretched over the shared number of steps. Models with a fixed input size train on patches of that size and predict with half-overlapping windows; all others train on $960\times960$ patches and predict on the whole canvas.}
+\caption{\textbf{What each model keeps under the unified protocol.} Data, splits, the 1,440-pixel canvas, augmentation, the training amount in pixels, checkpoint selection and evaluation are shared (Methods). Loss, optimizer, learning rate, weight decay, schedule shape and effective batch are taken from each model's source recipe; the schedule is stretched over the shared number of steps. Models with a fixed input size train on patches of that size and predict with half-overlapping windows; all others train on $960\times960$ patches and predict on the whole canvas. nnU-Net runs through its own entry point and keeps its own plan.}
 \label{tab:recipes}
 \begin{adjustbox}{max width=\textwidth}
 \begin{threeparttable}
@@ -11,15 +11,27 @@
 \famchip{general}\; U-Net & none & 4 sigmoid & BCE + Dice$^a$ & Adam & 1e-4 & 0 & constant & 4 & 960 & whole canvas & 21,000 \\
 \famchip{general}\; DeepLabv3 & ImageNet, ResNet-101 & 4 sigmoid & BCE & SGD & 7e-3 & 1e-4 & poly 0.9 & 16 & 960 & whole canvas & 6,000 \\
 \famchip{general}\; HRNet-W48 & ImageNet & 4 sigmoid & BCE & SGD & 1e-2 & 5e-4 & poly & 12 & 960 & whole canvas & 7,000 \\
-\famchip{general}\; Swin-Unet & ImageNet, Swin-T & 5 softmax & 0.4 CE + 0.6 Dice & SGD & 1e-2 & 1e-4 & poly 0.9 & 24 & 224 & sliding window & \tbd \\
+\famchip{general}\; Swin-Unet & ImageNet, Swin-T & 5 softmax & 0.4 CE + 0.6 Dice & SGD & 1e-2 & 1e-4 & poly 0.9 & 24 & 224 & sliding window & 63,000 \\
 \famchip{general}\; FCT & none & 4 sigmoid & BCE & Adam & 1e-3 & 0 & constant & 4 & 384 & sliding window & 129,000 \\
+\famchip{auto}\; nnU-Net & none & 5 softmax & CE + batch Dice & SGD & 1e-2 & 3e-5 & poly 0.9 & 2 & 1024$\times$1536$^c$ & sliding window & 250,000$^c$ \\
+\famchip{auto}\; nnU-Net ResEnc-M & none & 5 softmax & CE + batch Dice & SGD & 1e-2 & 3e-5 & poly 0.9 & 13$^c$ & 384$\times$640$^c$ & sliding window & 250,000$^c$ \\
 \famchip{fundus}\; M2MRF & ImageNet, HRNet-W48 & 4 sigmoid & binary Dice & SGD & 1e-2 & 5e-4 & poly 0.9 & 4 & 960 & whole canvas & 21,000 \\
 \famchip{fundus}\; HACDR-Net & none & 5 softmax & weighted CE$^b$ & AdamW & 6e-5 & 1e-2 & poly 1.0, warm-up & 1 & 960 & whole canvas & 83,000 \\
+\famchip{fundus}\; HRDecoder & ImageNet, HRNet-W48 & 4 sigmoid & binary Dice + 0.1 Dice (HR crops) & SGD & 1e-2 & 5e-4 & poly 0.9 & 4 & 960 & sliding window & 21,000 \\
+\famchip{fundus}\; PMCNet & ImageNet, EfficientNet-B0 & 5 softmax & CE & Adam & 1e-4 & 0 & poly 0.9 & 1 & 960 & whole canvas & 83,000 \\
+\famchip{fundus}\; WSRFNet & ImageNet, EfficientNet-B1 & 4 sigmoid & binary Dice, per loop$^d$ & SGD & 1e-2 & 5e-4 & poly 0.9 & 4 & 960 & whole canvas & 21,000 \\
+\famchip{fundus}\; CLC-Net$^{\rm C}$ & none & 5 softmax & Dice + BCE (cls.\ heads)$^e$ & Adam & 3e-4 & 0 & step (1/3, 5/6) & 16 & 512 & sliding window & 73,000 \\
+\famchip{fundus}\; TC-Net$^{\rm C}$ & none & 5 softmax & CE & Adam & 5e-4 & 1e-5 & constant & 4 & 512 & sliding window & 73,000 \\
+\famchip{foundation}\; SAMed & SAM ViT-B, LoRA r=4 & 5 softmax & 0.2 CE + 0.8 Dice & AdamW & 5e-3 & 0.1 & warm-up, poly & 24 & 512 & sliding window & 13,000 \\
+\famchip{foundation}\; SAM-Adapter & SAM ViT-H, adapters & 4 sigmoid & BCE + IoU & AdamW & 2e-4 & 1e-2 & stepped cosine & 2 & 1,024 & sliding window & 37,000 \\
+\famchip{foundation}\; SAM2-UNet & SAM 2 Hiera-L, adapters & 4 sigmoid & BCE + weighted IoU$^f$ & AdamW & 1e-3 & 5e-4 & stepped cosine & 12 & 960 & whole canvas & 7,000 \\
+\famchip{foundation}\; MedSAM (full FT) & MedSAM ViT-B, all weights & 4 sigmoid & Dice + BCE & AdamW & 1e-4 & 1e-2 & constant & 2 & 1,024 & sliding window & 37,000 \\
+\famchip{foundation}\; RETFound + UPerNet & RETFound ViT-L (MAE) & 4 sigmoid & BCE + 0.4 aux. & AdamW & 4.7e-4 & 0.05 & warm-up, cosine & 24 & 224 & sliding window & 63,000 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize
-\item Batch is the effective batch (gradient accumulation where one card cannot hold it). Steps is for IDRiD at 1,000 equivalent epochs; one equivalent epoch draws as many patch pixels as the training canvases contain, so steps = $\lceil\lceil$canvas pixels\,/\,patch pixels$\rceil$\,/\,batch$\rceil$ per epoch. DDR uses 400 equivalent epochs (83,600 steps at batch 4).
-\item $^a$Per-image, per-class sigmoid Dice with smoothing 1; the other Dice losses use $10^{-5}$. $^b$IDRiD: class-weighted cross-entropy; DDR: the same plus the authors' NALoss with weight 0.2.
+\item Batch is the effective batch (gradient accumulation where one card cannot hold it). Steps is for IDRiD at 1,000 equivalent epochs; one equivalent epoch draws as many patch pixels as the training canvases contain, so steps = $\lceil\lceil$canvas pixels\,/\,patch pixels$\rceil$\,/\,batch$\rceil$ per epoch. DDR uses 400 equivalent epochs (for example 83,600 steps at batch 4 and 960-pixel patches; Supplementary Table~3 lists every run). $^{\rm C}$, re-implemented from the paper. Every run's recipe record, with its deviations from the source recipe, is in the repository.
+\item $^a$Per-image, per-class sigmoid Dice with smoothing 1 in the registered recipe; the main-table runs pool the Dice term over the batch (Methods). The other Dice losses use $10^{-5}$. $^b$IDRiD: class-weighted cross-entropy; DDR: the same plus the authors' NALoss with weight 0.2. $^c$nnU-Net plans patch and batch per dataset (IDRiD plans shown; DDR: default $1024\times1536$ at batch 2, ResEnc-M $512\times512$ at batch 12) and trains 1,000 epochs of 250 steps on both sources; its learning rate, weight decay and polynomial schedule are its defaults. $^d$The paper's loss and optimizer, written into the wrapper because the repository has no training loop. $^e$Local and contextual Dice plus binary cross-entropy of the two classification heads, as described in the paper. $^f$Registered per-image term; the main-table run pools it over the batch (Methods).
 \end{tablenotes}
 \end{threeparttable}
 \end{adjustbox}

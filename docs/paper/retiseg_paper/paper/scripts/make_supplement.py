@@ -35,6 +35,14 @@ RUN_NAME = {  # main-table models -> B-std / E5 run slug (seed 0), for recipe.js
 }
 
 
+NNUNET_PLAN = {  # from "This is the configuration used by this training" in runs/NN_*/console.log (2026-10-26)
+    ("nnU-Net", "IDRiD"): {"patch": "1024$\\times$1536", "batch": 2},
+    ("nnU-Net", "DDR"): {"patch": "1024$\\times$1536", "batch": 2},
+    ("nnU-Net ResEnc-M", "IDRiD"): {"patch": "384$\\times$640", "batch": 13},
+    ("nnU-Net ResEnc-M", "DDR"): {"patch": "512$\\times$512", "batch": 12},
+}
+
+
 def esc(s):
     s = str(s)
     for a, b in (("\\", "\\textbackslash{}"), ("&", "\\&"), ("%", "\\%"), ("_", "\\_"), ("#", "\\#"), ("$", "\\$"), ("{", "\\{"), ("}", "\\}"), ("~", "\\textasciitilde{}"), ("^", "\\textasciicircum{}")):
@@ -91,7 +99,7 @@ def s1_literature():
                                 esc(short(r.idrid_split, 10)), esc(short(r.ddr_split, 10)), esc(short(r.input_resolution, 44)),
                                 esc(short(r.aupr_impl, 14)), esc(short(r.per_image_or_pooled, 10)), esc(short(r.baseline_rerun_class, 12)), (n.group(1) if n else esc(short(r.n_compared, 6)))]) + " \\\\")
     longtable("supp_s1_literature",
-              "\\textbf{Literature audit (L1): the experimental setup stated by each method paper in the ledger.} Split, input resolution, AUPR implementation and the provenance of baseline numbers as extracted from the paper's text and tables (literature/meta/paper\\_audit.tsv in the repository holds the verbatim evidence for every cell).",
+              "\\textbf{Literature audit: the experimental setup stated by each method paper in the ledger.} Split, input resolution, AUPR implementation and the provenance of baseline numbers as extracted from the paper's text and tables (literature/meta/paper\\_audit.tsv in the repository holds the verbatim evidence for every cell).",
               "stab:literature", "p{34mm} c p{20mm} p{24mm} p{14mm} p{14mm} p{52mm} p{18mm} p{14mm} p{16mm} c",
               ["Paper", "Year", "Venue", "Datasets", "IDRiD split", "DDR split", "Input resolution", "AUPR impl.", "Pooling", "Baselines", "$n$"],
               rows, notes="``not stated'' means the paper gives no information. Baselines: how the comparison numbers were obtained (rerun, copied, mixed, not stated). $n$, number of compared methods.", landscape=True)
@@ -111,7 +119,7 @@ def s2_reported():
         rows.append(" & ".join([esc(method), ds, str(len(g)), num(g.v.min(), sim=False), num(g.v.max(), sim=False), num(g.v.max() - g.v.min(), sim=False),
                                 str(int(prov.get("rerun", 0))), str(int(prov.get("copied", 0) + prov.get("copied once", 0) + prov.get("copied again", 0))), str(int(prov.get("unverifiable", 0)))]) + " \\\\")
     longtable("supp_s2_reported",
-              "\\textbf{One method, many reported values (L1).} Every method that appears with a mean AUPR on IDRiD or DDR in at least two papers of the ledger: the number of papers, the lowest and highest value, their spread, and how many of the values were produced by the reporting paper (rerun), carried from an earlier paper (copied) or cite a source outside the ledger (unverifiable).",
+              "\\textbf{One method, many reported values.} Every method that appears with a mean AUPR on IDRiD or DDR in at least two papers of the ledger: the number of papers, the lowest and highest value, their spread, and how many of the values were produced by the reporting paper (rerun), carried from an earlier paper (copied) or cite a source outside the ledger (unverifiable).",
               "stab:reported", "l l c c c c c c c",
               ["Method", "Dataset", "Papers", "Min", "Max", "Spread", "Rerun", "Copied", "Unverif."], rows,
               notes="Values as printed, normalised to [0, 1]. The full extraction, one row per paper, baseline, dataset, class and metric, is literature/meta/reported\\_results.tsv.")
@@ -131,6 +139,14 @@ def s3_runs():
                 run = REPO / "runs" / f"{slug}_{train.lower()}_seed0"
             rec = run / "recipe.json"
             env = run / "environment.json"
+            if slug.startswith("NN_"):
+                # nnU-Net writes no recipe.json; its plan is recorded in runs/NN_*/console.log (NNUNET_PLAN below) and
+                # its schedule is the default 1,000 epochs x 250 steps; the GPU hours are the E10 rows
+                plan = NNUNET_PLAN[(model, train)]
+                hours = D.sel(experiment="E10", model=model, metric="train_gpu_h", train_set=train)["value"]
+                rows.append(" & ".join([esc(model), train, "250,000", str(plan["batch"]), "1", str(plan["batch"]), plan["patch"], "0.01",
+                                        "\\na$^{\\rm n}$", (f"{float(hours.iloc[0]):.1f}" if len(hours) else "\\na")]) + " \\\\")
+                continue
             if not rec.is_file():
                 rows.append(" & ".join([esc(model), train] + ["\\na"] * 8) + " \\\\")
                 continue
@@ -156,7 +172,7 @@ def s3_runs():
               "\\textbf{Training amount, batch and selection of every main-table run (seed 0).} Steps are the shared pixel budget expressed in the model's patch size (Methods); the loader batch is the largest that fits a 40\\,GB card and is accumulated to the recipe's effective batch; the selected checkpoint is the validation \\mAUPR{} maximum over 20 evaluations. nnU-Net follows its own 1,000-epoch schedule and planning.",
               "stab:runs", "l l r c c c c c c c",
               ["Model", "Source", "Steps", "Loader batch", "Accum.", "Eff. batch", "Patch", "LR", "Best val.\\ \\mAUPR{}", "GPU h"], rows,
-              notes="Every run's full recipe.json (deviations from the source recipe included) is in the repository's run records.")
+              notes="Every run's full recipe.json (deviations from the source recipe included) is in the repository's run records. nnU-Net: patch and batch from its own plan for each dataset (runs/NN\\_*/console.log), 1,000 epochs of 250 steps, SGD at 0.01 with polynomial decay; $^{\\rm n}$ its checkpoint is nnU-Net's own (the final checkpoint of its schedule), so no validation \\mAUPR{} maximum applies.")
 
 
 # ---------------------------------------------------------------- S4 per-class AUPR with CI on every test set
@@ -253,7 +269,7 @@ def s7_factors():
         r = t[(t.experiment == exp) & (t.metric == "aupr") & t.cls.isin(D.CLASSES) & (t.source == "measured")]
         if r.empty:
             continue
-        rows.append(f"\\multicolumn{{{4 + len(D.CLASSES) + 1}}}{{l}}{{\\textbf{{{title} ({exp})}}}}\\\\")
+        rows.append(f"\\multicolumn{{{4 + len(D.CLASSES) + 1}}}{{l}}{{\\textbf{{{title}}}}}\\\\")
         for (model, variant, train), g in r.groupby(["model", "variant", "train_set"], sort=False):
             for test in D.TESTS:
                 st = g[g.test_set == test]
@@ -282,7 +298,7 @@ def s8_cost():
         rows.append(" & ".join([esc(model), v("params_m", fmt="{:.1f}"), v("params_trainable_m", fmt="{:.1f}"), v("train_gpu_h", "IDRiD"), v("train_gpu_h", "DDR"),
                                 v("flops_g", fmt="{:.0f}"), v("peak_mem_gb"), v("infer_s_per_image", fmt="{:.2f}")]) + " \\\\")
     longtable("supp_s8_cost",
-              "\\textbf{Computational cost (E10).} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\\,GB A100, one task per card), and, where the cost audit has run, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.",
+              "\\textbf{Computational cost.} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\\,GB A100, one task per card), and, where the cost audit has run, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.",
               "stab:cost", "l c c c c c c c",
               ["Model", "Params (M)", "Trainable (M)", "GPU h IDRiD", "GPU h DDR", "GFLOPs", "Peak mem.\\ (GB)", "Infer.\\ (s/image)"], rows,
               notes="nnU-Net follows its own schedule of 1,000 epochs rather than the pixel budget. Cells without a value were not measured; the cost audit (FLOPs, memory, inference) is pending.")
@@ -543,9 +559,45 @@ def note_models():
     print("wrote generated/supp_note_models.tex")
 
 
+# ---------------------------------------------------------------- S18 experiment names and repository identifiers
+# The text names every experiment in words; the repository, the run directories, data/results.csv and the planning
+# documents (docs/design/05, docs/paper/16) use short identifiers. One row per identifier (2026-10-26).
+EXPERIMENT_NAMES = [
+    # identifier, name used in the text, what it is, where it is reported
+    ("L1", "Paper audit", "Extraction of the setup and the comparison tables of every method paper in the ledger", "Fig.~2b,c; Supplementary Tables~1 and 2"),
+    ("L2", "Reproducibility funnel", "Registered fundus-specific methods by code, training code, weights and reproduced number", "Fig.~2a"),
+    ("E1", "Released checkpoints (author weights)", "Released checkpoints scored with the paper's number, the authors' function and this protocol, on all test sets", "Fig.~3a,b,d; Table~3a; Supplementary Table~16"),
+    ("E1r", "Author-recipe reruns", "The authors' own pipelines retrained from scratch on IDRiD (M2MRF, HRDecoder)", "Fig.~3c; Table~3b"),
+    ("E2 (B-std)", "Unified retraining; the unified protocol", "Every tier-1 model with complete training code retrained on IDRiD and on DDR under the shared protocol", "Fig.~4; Tables~4 and 5"),
+    ("E2b (B1)", "Source-recipe track", "Each model trained with its source recipe on the shared data; stopped before any run finished", "Methods only"),
+    ("E2c", "Learning-rate sweep", "HRNet-W48 and M2MRF on DDR with the recipe learning rate $\\times$1/3 and $\\times$3, judged on validation only", "Extended Data Fig.~7"),
+    ("E3a", "Independent tests", "Every main-table checkpoint applied to the six test sets of sources never used for training", "Fig.~4b--e; Table~5; Extended Data Fig.~9"),
+    ("E3b", "Training-source experiment", "Five representative models trained on the standard-field TJDR images and on FGADR", "Fig.~6b--d; Supplementary Table~7"),
+    ("E4", "Annotation-granularity experiment", "U-Net and M2MRF on fine, mixed and coarse training labels, alone and combined", "Fig.~6e; Table~7; Supplementary Table~7"),
+    ("E5", "Foundation models under four kinds of use", "Zero-shot, oracle prompts, parameter-efficient fine-tuning, encoder + decoder; the encoder comparison", "Fig.~5; Table~6; Supplementary Tables~10 and 17"),
+    ("E7", "Input-resolution experiment", "M2MRF and RETFound + UPerNet at a 512- or 1,440-pixel canvas and on native-resolution patches", "Fig.~7d; Table~7"),
+    ("E8", "Training-amount experiment", "U-Net and M2MRF on 10\\%, 50\\% and 100\\% of DDR and on the merged fine-grained sources", "Fig.~7e; Table~7"),
+    ("E9", "Loss experiment", "U-Net on DDR with four losses, architecture fixed", "Extended Data Fig.~8; Table~7"),
+    ("E10", "Computational cost", "Parameters, trainable parameters and GPU hours of every run", "Extended Data Fig.~10; Supplementary Table~8"),
+    ("ENS", "Ensembles", "Pixelwise means of the probability maps in the registered compositions", "Table~5; Supplementary Table~11"),
+    ("REF", "Label revision (Refined IDRiD)", "IDRiD-trained checkpoints re-scored against the refined and the official labels", "Supplementary Table~9"),
+    ("HUMAN", "Human reference", "Each DiaRetDB1 expert against the consensus of the other three", "Table~5; Supplementary Table~13"),
+    ("CLIN", "Results by DR grade", "Every score recomputed within grades 0--1 and 2--4", "Supplementary Table~12"),
+    ("N8", "Reference model", "Two models trained on the merged fine-grained sources and averaged; in training", "Methods"),
+]
+
+
+def s18_identifiers():
+    rows = [" & ".join([f"\\texttt{{{esc(ident)}}}", name, what, where]) + " \\\\" for ident, name, what, where in EXPERIMENT_NAMES]
+    longtable("supp_s18_identifiers",
+              "\\textbf{Experiment names used in the text and the identifiers used in the repository.} The run directories under runs/, the experiment column of data/results.csv and the planning documents in docs/ carry the identifiers; the text names each experiment by what it does.",
+              "stab:identifiers", "l p{40mm} p{66mm} p{38mm}",
+              ["Identifier", "Name in the text", "What it is", "Where it is reported"], rows)
+
+
 def main():
     for fn in (s1_literature, s2_reported, s3_runs, s4_perclass, s5_secondary, s6_registered, s7_factors, s8_cost, s9_refined,
-               s10_encoders, s11_ensembles, s12_strata, s13_experts, s14_labels, s15_leaks, s16_authors, s17_inference, note_models):
+               s10_encoders, s11_ensembles, s12_strata, s13_experts, s14_labels, s15_leaks, s16_authors, s17_inference, s18_identifiers, note_models):
         fn()
 
 

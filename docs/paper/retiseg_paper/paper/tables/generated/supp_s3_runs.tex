@@ -26,10 +26,10 @@ Swin-Unet & IDRiD & 63,000 & 24 & 1 & 24 & 224$\times$224 & 0.01 & 0.644 & 2.6 \
 Swin-Unet & DDR & 255,600 & 24 & 1 & 24 & 224$\times$224 & 0.01 & 0.620 & 10.4 \\
 FCT & IDRiD & 129,000 & 4 & 1 & 4 & 384$\times$384 & 0.001 & 0.257 & 19.7 \\
 FCT & DDR & 521,600 & 4 & 1 & 4 & 384$\times$384 & 0.001 & 0.175 & 72.0 \\
-nnU-Net & IDRiD & \na & \na & \na & \na & \na & \na & \na & \na \\
-nnU-Net & DDR & \na & \na & \na & \na & \na & \na & \na & \na \\
-nnU-Net ResEnc-M & IDRiD & \na & \na & \na & \na & \na & \na & \na & \na \\
-nnU-Net ResEnc-M & DDR & \na & \na & \na & \na & \na & \na & \na & \na \\
+nnU-Net & IDRiD & 250,000 & 2 & 1 & 2 & 1024$\times$1536 & 0.01 & \na$^{\rm n}$ & 7.2 \\
+nnU-Net & DDR & 250,000 & 2 & 1 & 2 & 1024$\times$1536 & 0.01 & \na$^{\rm n}$ & 7.2 \\
+nnU-Net ResEnc-M & IDRiD & 250,000 & 13 & 1 & 13 & 384$\times$640 & 0.01 & \na$^{\rm n}$ & 12.8 \\
+nnU-Net ResEnc-M & DDR & 250,000 & 12 & 1 & 12 & 512$\times$512 & 0.01 & \na$^{\rm n}$ & 11.4 \\
 M2MRF & IDRiD & 21,000 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.541 & 3.0 \\
 M2MRF & DDR & 83,600 & 4 & 1 & 4 & 960$\times$960 & 0.01 & 0.558 & 11.6 \\
 HACDR-Net & IDRiD & 83,000 & 1 & 1 & 1 & 960$\times$960 & 6e-05 & 0.518 & 5.9 \\
@@ -56,4 +56,4 @@ RETFound + UPerNet & IDRiD & 63,000 & 24 & 1 & 24 & 224$\times$224 & 0.00046875 
 RETFound + UPerNet & DDR & 255,600 & 24 & 1 & 24 & 224$\times$224 & 0.00046875 & 0.643 & 24.2 \\
 \end{longtable}
 }
-\vspace{-6pt}\noindent{\scriptsize Every run's full recipe.json (deviations from the source recipe included) is in the repository's run records.}
+\vspace{-6pt}\noindent{\scriptsize Every run's full recipe.json (deviations from the source recipe included) is in the repository's run records. nnU-Net: patch and batch from its own plan for each dataset (runs/NN\_*/console.log), 1,000 epochs of 250 steps, SGD at 0.01 with polynomial decay; $^{\rm n}$ its checkpoint is nnU-Net's own (the final checkpoint of its schedule), so no validation \mAUPR{} maximum applies.}

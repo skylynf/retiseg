@@ -108,9 +108,15 @@ def signed(v, sim=True, fmt="{:+.2f}"):
 
 def write(name, text):
     OUT.mkdir(parents=True, exist_ok=True)
-    # Never wider than the text block: scale the tabular down when it would overflow.
-    text = text.replace("\\begin{threeparttable}", "\\begin{adjustbox}{max width=\\textwidth}\n\\begin{threeparttable}")
-    text = text.replace("\\end{threeparttable}", "\\end{threeparttable}\n\\end{adjustbox}")
+    # Never wider than the text block: scale the tabular down when it would overflow (once; a template that already
+    # wraps its threeparttable is left alone -- Table 5 used to be wrapped twice).
+    if "\\begin{adjustbox}" not in text:
+        text = text.replace("\\begin{threeparttable}", "\\begin{adjustbox}{max width=\\textwidth}\n\\begin{threeparttable}")
+        text = text.replace("\\end{threeparttable}", "\\end{threeparttable}\n\\end{adjustbox}")
+    # The placeholder note is printed only while the table still carries a placeholder value (2026-10-26): a table
+    # whose rows are all measured must not tell the reader that some of its numbers are simulated.
+    if "\\ph{" not in text:
+        text = "\n".join(line for line in text.split("\n") if line.strip() != "\\phnote")
     (OUT / f"{name}.tex").write_text(text)
     print(f"wrote tables/generated/{name}.tex")
 
@@ -145,7 +151,7 @@ def table_datasets():
                         d["ann"].replace("≥", "$\\geq$"),
                         f"\\tierbadge{{{d['tier']}}}{{{tier_text[d['tier']]}}}",
                         split,
-                        "\\tbd" if d["public"] is None else ("\\yes" if d["public"] else "\\no"),
+                        "\\tbd" if d["public"] is None else ("\\yes" if d["public"] else "\\no"),   # public=None would print "tbd"; every source is decided (data.DATASETS)
                     ]
                 )
                 + " \\\\"
@@ -166,7 +172,7 @@ def table_datasets():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item FOV, field of view; n.s., not stated in the source paper. IDRiD: 10 of the 54 official training images are held out for validation in unified retraining; author-recipe retraining uses all 54. DiaRetDB1: ground truth is the mean confidence of four experts thresholded at 0.75; the 28 official training images are used only to choose thresholds. Retinal-Lesions: split by patient; grey-level 127 regions are ignored. MAPLES-DR: labels drawn at $1500\\times1500$ on the field-of-view crop of MESSIDOR images and placed back at the original resolution; the 138 training images are not used, the official 60 test images are; uncertain red (MA or HE) and bright (EX, SE or drusen) lesions are ignored for the two classes they could belong to. The FGADR licence forbids redistribution of derived data; maps for Retinal-Lesions are not released either.
+\item FOV, field of view; n.s., not stated in the source paper. IDRiD: 10 of the 54 official training images are held out for validation in unified retraining; author-recipe retraining uses all 54. DiaRetDB1: ground truth is the mean confidence of four experts thresholded at 0.75; the 28 official training images are used only to choose thresholds. Retinal-Lesions: split by patient; grey-level 127 regions are ignored. MAPLES-DR: labels drawn at $1500\times1500$ on the field-of-view crop of MESSIDOR images and placed back at the original resolution; the 138 training images are not used, the official 60 test images are; uncertain red (MA or HE) and bright (EX, SE or drusen) lesions are ignored for the two classes they could belong to. The FGADR licence forbids redistribution of derived data; maps for Retinal-Lesions are not released either.
 \end{{tablenotes}}
 \end{{threeparttable}}
 \end{{table*}}
@@ -176,24 +182,24 @@ def table_datasets():
 
 # ------------------------------------------------------------ Table 2 models
 MODEL_NOTE = {
-    "U-Net": ("reference implementation", "B-std"),
-    "DeepLabv3": ("torchvision, ResNet-101", "B-std"),
-    "HRNet": ("official, W48", "B-std"),
+    "U-Net": ("reference implementation", "unified retraining"),
+    "DeepLabv3": ("torchvision, ResNet-101", "unified retraining"),
+    "HRNet": ("official, W48", "unified retraining"),
     "nnU-Net": ("official, 2D; default and ResEnc-M", "own entry point"),
-    "Swin-Unet": ("official", "B-std, 224 patches"),
-    "FCT": ("official PyTorch port", "B-std, 384 patches"),
+    "Swin-Unet": ("official", "unified retraining, 224 patches"),
+    "FCT": ("official PyTorch port", "unified retraining, 384 patches"),
     "H2Former": ("official", "deferred: exceeds 40\\,GB at 960"),
     "UNet++": ("official", "tier 2"),
     "UPerNet": ("official", "tier 2"),
-    "M2MRF": ("official; weights released", "A, E1r, B-std"),
-    "HACDR-Net": ("official; no weights", "E1r, B-std"),
-    "HRDecoder": ("official; weights released", "A, B-std"),
-    "WSRFNet": ("model and test code only; training loop added", "A if weights arrive; B-std"),
+    "M2MRF": ("official; weights released", "released weights; author-recipe rerun; unified retraining"),
+    "HACDR-Net": ("official; no weights", "unified retraining"),
+    "HRDecoder": ("official; weights released", "released weights; author-recipe rerun; unified retraining"),
+    "WSRFNet": ("model and test code only; training loop added", "unified retraining (weights requested)"),
     "L-Seg": ("Caffe prototxt and loss layer", "C"),
     "SAA": ("repository empty", "C"),
-    "PMCNet": ("official Keras code rewritten in PyTorch", "B-std"),
-    "CLC-Net": ("no code; re-implemented from the paper", "C, B-std"),
-    "TC-Net": ("no code; re-implemented from the paper", "C, B-std"),
+    "PMCNet": ("official Keras code rewritten in PyTorch", "unified retraining"),
+    "CLC-Net": ("no code; re-implemented from the paper", "unified retraining (re-implementation)"),
+    "TC-Net": ("no code; re-implemented from the paper", "unified retraining (re-implementation)"),
     "RTNet": ("no code; image + vessel input", "C"),
     "SAM": ("official inference", "zero-shot, oracle prompt"),
     "SAM2": ("official", "zero-shot, oracle prompt"),
@@ -259,7 +265,7 @@ def table_models():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item \famchip{{general}} general segmentation \quad \famchip{{auto}} self-configuring \quad \famchip{{fundus}} fundus-specific \quad \famchip{{foundation}} foundation model. B-std, unified retraining protocol (Methods). PEFT, parameter-efficient fine-tuning. Status as of the code audit of 2--4 October 2026; author replies are due by 31 October 2026.
+\item \famchip{{general}} general segmentation \quad \famchip{{auto}} self-configuring \quad \famchip{{fundus}} fundus-specific \quad \famchip{{foundation}} foundation model. Unified retraining, the shared protocol (Methods). PEFT, parameter-efficient fine-tuning. Status as of the code audit of 2--4 October 2026; author replies are due by 31 October 2026.
 \end{{tablenotes}}
 \end{{threeparttable}}
 \end{{table*}}
@@ -275,6 +281,13 @@ def e1(model, variant, train, metric, cls="mean", test=None):
     return float(r["value"].mean()), D.simulated(r)
 
 
+def ci_cell(lo, hi):
+    """A 95% bootstrap interval printed under a value (two decimals, no leading zero)."""
+    if not (np.isfinite(lo) and np.isfinite(hi)):
+        return ""
+    return "\\\\{\\scriptsize\\color{inkmuted}" + num(lo, "{:.2f}", sim=False) + "--" + num(hi, "{:.2f}", sim=False) + "}"
+
+
 def table_original():
     rows = []
     for model in ("M2MRF", "HRDecoder"):   # WSRFNet's weights never arrived (docs/paper/18 section 3); its row was dropped 2026-10-25
@@ -284,10 +297,11 @@ def table_original():
             stored = e1(model, "this_protocol", train, "aupr_11pt")
             exact = e1(model, "this_protocol", train, "aupr")
             cls = [e1(model, "this_protocol", train, "aupr", c) for c in D.CLASSES]
+            ci = [(e1(model, "this_protocol", train, "aupr_ci_lo", c)[0], e1(model, "this_protocol", train, "aupr_ci_hi", c)[0]) for c in D.CLASSES]
             ind = [e1(model, "this_protocol", train, "aupr", c, test=t) for t in D.FINE_INDEPENDENT for c in D.CLASSES]
             ind_v = np.nanmean([v for v, _ in ind])
             cells = [f"{model}", train, num(paper[0], sim=paper[1]), num(auth[0], sim=auth[1]), num(stored[0], sim=stored[1]), num(exact[0], sim=exact[1])]
-            cells += [tint(v, 0, 0.9) + num(v, sim=s) for v, s in cls]
+            cells += [tint(v, 0, 0.9) + "\\makecell{" + num(v, sim=s) + ci_cell(*c) + "}" for (v, s), c in zip(cls, ci)]
             cells += [delta(exact[0] - auth[0], sim=exact[1] or auth[1]), num(ind_v, sim=any(s for _v, s in ind))]
             rows.append(" & ".join(cells) + " \\\\")
         rows.append("\\addlinespace[2pt]")
@@ -324,12 +338,12 @@ def table_original():
         "tab_original",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Original models: three numbers per released checkpoint, and retraining with the authors' recipe.}} \textbf{{a}}, Each checkpoint is scored on the official test set of its training source with the number printed in the paper, the authors' evaluation function (11 thresholds, whole image, overwritten labels) on the float output, the same function on the stored 16-bit maps, and this study's protocol (exact pooled AUPR inside the field of view, overlapping labels). \textbf{{b}}, The authors' pipeline rerun from scratch; mean $\pm$ s.d. over seeds, last iteration, no checkpoint selection.}}
+\caption{{\textbf{{Original models: three numbers per released checkpoint, and retraining with the authors' recipe.}} \textbf{{a}}, Each checkpoint is scored on the official test set of its training source with the number printed in the paper, the authors' evaluation function (11 thresholds, whole image, overwritten labels) on the float output, the same function on the stored 16-bit maps, and this study's protocol (exact pooled AUPR inside the field of view, overlapping labels); under each per-class value is its 95\% bootstrap interval over test images. \textbf{{b}}, The authors' pipeline rerun from scratch; last iteration, no checkpoint selection.}}
 \label{{tab:original}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l l c c c c c c c c c c@{{}}}}
 \toprule
-\multicolumn{{12}}{{@{{}}l}}{{\textbf{{a}}\quad Author weights (E1)}}\\
+\multicolumn{{12}}{{@{{}}l}}{{\textbf{{a}}\quad Released checkpoints (author weights)}}\\
 \addlinespace[2pt]
  & & \multicolumn{{3}}{{c}}{{\colh{{mAUPR, author metric}}}} & \multicolumn{{5}}{{c}}{{\colh{{AUPR, this protocol}}}} & & \\
 \cmidrule(lr){{3-5}}\cmidrule(lr){{6-10}}
@@ -342,7 +356,7 @@ def table_original():
 \vspace{{6pt}}
 \begin{{tabular}}{{@{{}}l l c c c c c@{{}}}}
 \toprule
-\multicolumn{{7}}{{@{{}}l}}{{\textbf{{b}}\quad Author recipe, retrained (E1r)}}\\
+\multicolumn{{7}}{{@{{}}l}}{{\textbf{{b}}\quad Retrained with the authors' recipe (author-recipe reruns)}}\\
 \addlinespace[2pt]
 \colh{{Model}} & \colh{{Source}} & \colh{{Paper}} & \colh{{Retrained, author metric}} & \colh{{Seeds}} & \colh{{$\Delta$ to paper}} & \colh{{Retrained, this protocol}} \\
 \midrule
@@ -408,11 +422,17 @@ def table_main():
                 cells.append(num(d.loc[model, "mean"], sim=not dice_measured.get((model, train), False), mark=mk((train, "d"), i)))
             rows.append(" & ".join(cells) + " \\\\")
     body = "\n".join(rows)
+    plan = D.sel(experiment="E10", metric="params_m_plan")
+    plan_note = ""
+    if len(plan):
+        p = plan.set_index(["model", "train_set"])["value"]
+        plan_note = (f" nnU-Net plans its network per dataset: the default configuration has {p[('nnU-Net', 'IDRiD')]:.1f}\\,M parameters on both sources, "
+                     f"the ResEnc-M preset {p[('nnU-Net ResEnc-M', 'IDRiD')]:.1f}\\,M under its IDRiD plan (printed) and {p[('nnU-Net ResEnc-M', 'DDR')]:.1f}\\,M under its DDR plan.")
     write(
         "tab_main",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Unified retraining (B-std): internal tests.}} Every model is trained on one source under the shared protocol and scored on that source's official test set. Per-class values are exact pooled AUPR inside the field of view, mean of three seeds; mAUPR is the mean of the four classes $\pm$ s.d.\ over seeds; Dice is pooled, at the per-class threshold chosen on the validation set. Cell shading follows AUPR. \best{{Bold}}, best in column; \second{{underlined}}, second.}}
+\caption{{\textbf{{Unified retraining: internal tests.}} Every model is trained on one source under the shared protocol and scored on that source's official test set. Per-class values are exact pooled AUPR inside the field of view, averaged over seeds; mAUPR is the mean of the four classes $\pm$ s.d.\ over seeds for the models trained with three seeds (no s.d.\ is printed for the single-seed rows; Supplementary Table~3 lists every run); Dice is pooled, at the per-class threshold chosen on the validation set. 95\% bootstrap intervals over test images are given per class and model in Supplementary Table~4. Cell shading follows AUPR. \best{{Bold}}, best in column; \second{{underlined}}, second.}}
 \label{{tab:main}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l r cccc c c @{{\hspace{{10pt}}}} cccc c c@{{}}}}
@@ -425,7 +445,7 @@ def table_main():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item Params in millions. nnU-Net uses its own preprocessing and planning with the same splits, test images and evaluation. $^{{\rm C}}$, no author code: re-implemented from the paper (Track~C); the row shows what the published description yields under this protocol, not the authors' implementation. HRDecoder, M2MRF and HRNet-W48 share the HRNet-W48 backbone. H2Former is registered in tier~1 but deferred: at its 960-pixel input one training step exceeds the 40\,GB of the cards used here.
+\item Params in millions. nnU-Net uses its own preprocessing and planning with the same splits, test images and evaluation.{plan_note} $^{{\rm C}}$, no author code: re-implemented from the paper (Track~C); the row shows what the published description yields under this protocol, not the authors' implementation. HRDecoder, M2MRF and HRNet-W48 share the HRNet-W48 backbone. H2Former is registered in tier~1 but deferred: at its 960-pixel input one training step exceeds the 40\,GB of the cards used here.
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}
@@ -451,8 +471,8 @@ def ensemble_rows(pix):
     df = df[df["cls"].isin(D.CLASSES)]
     score = df.groupby(["model", "train_set", "test_set"])["value"].mean()
     partial = {k for k, g in df.groupby(["model", "train_set", "test_set"]) if (g.variant != "ensemble").any()}
-    auc = D.sel(experiment="ENS", metric="img_auc")
-    auc = auc[auc.variant.str.startswith("ensemble")]
+    auc = D.sel(experiment="ENS", metric="img_auc", test_set="DiaRetDB1")   # the DiaRetDB1 column only (2026-10-26 fix, as for the model rows)
+    auc = auc[auc.variant.str.startswith("ensemble") & auc["cls"].isin(D.CLASSES)]
     auc = auc.groupby(["model", "train_set"])["value"].mean() if not auc.empty else None
     rows = [r"\grouprow{18}{Ensembles of the rows above (pixelwise mean of the probability maps; members chosen on validation data)}"]
     for model in [m for m in ENSEMBLE_ORDER if m in score.index.get_level_values(0)]:
@@ -511,7 +531,7 @@ def table_independent():
     best / second-best marks are taken among the measured cells of a column only, so a placeholder row never earns one."""
     runs = D.main_runs()
     measured = {(m, t, s): not D.simulated(g) for (m, t, s), g in runs.groupby(["model", "train_set", "test_set"])}
-    auc_runs = D.main_runs("img_auc")
+    auc_runs = D.diaretdb1_auc()   # DiaRetDB1 only (until 2026-10-26 this column averaged the image AUC over all test sets)
     auc_measured = {(m, t): not D.simulated(g) for (m, t), g in auc_runs.groupby(["model", "train_set"])}
     blocks = D.block_scores()
     fr = D.friedman(blocks)
@@ -538,7 +558,7 @@ def table_independent():
 
     rows = []
     for fam, models in grouped_models():
-        rows.append(f"\\grouprow{{18}}{{\\famchip{{{fam}}}\; {FAMILY_TITLE[fam]}}}")
+        rows.append(f"\\grouprow{{18}}{{\\famchip{{{fam}}}\\; {FAMILY_TITLE[fam]}}}")
         for model in models:
             i = D.MAIN_MODELS.index(model)
             cells = [model]
@@ -564,9 +584,8 @@ def table_independent():
         "tab_independent",
         rf"""\begin{{table*}}[t]
 \centering\tablefont\setlength{{\tabcolsep}}{{3.0pt}}
-\caption{{\textbf{{Unified retraining (B-std): independent tests.}} The checkpoints of Table~\ref{{tab:main}} are applied without any adaptation to six test sets from sources never used for training. Values are mAUPR (mean of three seeds); the DiaRetDB1 column is the official image-level ROC AUC, averaged over the four lesion types, because its region-consensus ground truth biases pixel precision. $\Delta$ is the mean of the three fine-grained independent test sets (TJDR standard-field, TJDR ultra-widefield and MAPLES-DR) minus the internal test. Average rank is over the eight test sets of Fig.~\ref{{fig:retrained}}e (Friedman $\chi^2$ = {num(fr['statistic'], '{:.1f}', D.simulated(D.main_runs()), strip=False)}; Nemenyi critical difference {num(fr['critical_difference'], '{:.2f}', D.simulated(D.main_runs()), strip=False)}).}}
+\caption{{\textbf{{Unified retraining: independent tests.}} The checkpoints of Table~\ref{{tab:main}} are applied without any adaptation to six test sets from sources never used for training. Values are mAUPR averaged over the seeds of Table~\ref{{tab:main}}; the DiaRetDB1 column is the official image-level ROC AUC on DiaRetDB1, averaged over the four lesion types, because its region-consensus ground truth biases pixel precision. $\Delta$ is the mean of the three fine-grained independent test sets (TJDR standard-field, TJDR ultra-widefield and MAPLES-DR) minus the internal test. Average rank is over the eight test sets of Fig.~\ref{{fig:retrained}}e (Friedman $\chi^2$ = {num(fr['statistic'], '{:.1f}', D.simulated(D.main_runs()), strip=False)}; Nemenyi critical difference {num(fr['critical_difference'], '{:.2f}', D.simulated(D.main_runs()), strip=False)}). Per-class values with 95\% bootstrap intervals are in Supplementary Table~4.}}
 \label{{tab:independent}}
-\begin{{adjustbox}}{{max width=\textwidth}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l c ccccc c c @{{\hspace{{8pt}}}} c ccccc c c @{{\hspace{{8pt}}}} c@{{}}}}
 \toprule
@@ -584,7 +603,6 @@ def table_independent():
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}
-\end{{adjustbox}}
 \end{{table*}}
 """,
     )
@@ -668,7 +686,7 @@ def table_foundation():
             marks[(k, "m")] = rank_marks(summ[k]) if np.isfinite(summ[k]).sum() >= 2 else (-1, -1)
         rows.append(f"\\grouprow{{13}}{{{title}}}")
         for i, (name, how, backbone, *_fns) in enumerate(rs):
-            cells = [f"\\famchip{{foundation}}\; {name}", how, backbone]
+            cells = [f"\\famchip{{foundation}}\\; {name}", how, backbone]
             for k in ("IDRiD", "DDR"):
                 sim = sims.get((title, i, k), True)
                 for j in range(4):
@@ -682,7 +700,7 @@ def table_foundation():
     rows.append("\\midrule")
     any_ref = []
     for model in ("M2MRF", "nnU-Net"):
-        cells = [f"\\famchip{{{D.FAMILY_OF[model]}}}\; {model}", "reference, Table~\\ref{tab:main}", "--"]
+        cells = [f"\\famchip{{{D.FAMILY_OF[model]}}}\\; {model}", "reference, Table~\\ref{tab:main}", "--"]
         ref_sim = D.simulated(D.main_runs()[(D.main_runs().model == model)])
         for k in ("IDRiD", "DDR"):
             v = ref.loc[(model, k)].to_numpy()
@@ -753,19 +771,19 @@ def table_factors():
         return rows
 
     rows = []
-    rows.append("\\grouprow{5}{Annotation granularity of the training set (E4) --- mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}")
+    rows.append("\\grouprow{5}{Annotation granularity of the training set --- mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}")
     rows += block("E4", ["DDR", "DDR + FGADR (383)", "DDR + FGADR", "DDR + Retinal-Lesions", "FGADR", "Retinal-Lesions"], "", "IDRiD", "DDR",
                   ["DDR \\tier{fine}", "DDR + FGADR, 383 images \\tier{fine}\\tier{mixed}", "DDR + FGADR \\tier{fine}\\tier{mixed}", "DDR + Retinal-Lesions \\tier{fine}\\tier{coarse}", "FGADR \\tier{mixed}", "Retinal-Lesions \\tier{coarse}"])
-    rows.append("\\grouprow{5}{Input resolution, long side in pixels (E7) --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}")
+    rows.append("\\grouprow{5}{Input resolution, long side in pixels --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}")
     rows += block("E7", ["512", "1440", "native patches"], "res:", "DDR", "1440", ["512", "1,440", "native-resolution patches"])
-    rows.append("\\grouprow{5}{Input resolution (E7) --- lesion-level recall of small lesions on DDR test}")
+    rows.append("\\grouprow{5}{Input resolution --- lesion-level recall of small lesions on DDR test}")
     rows += block("E7", ["512", "1440", "native patches"], "res:", "DDR", "1440", ["512", "1,440", "native-resolution patches"], metric="lesion_recall_small")
-    rows.append("\\grouprow{5}{Training amount (E8) --- mAUPR on DDR test; U-Net and M2MRF}")
+    rows.append("\\grouprow{5}{Training amount --- mAUPR on DDR test; U-Net and M2MRF}")
     rows += block("E8", ["DDR 10%", "DDR 50%", "DDR 100%", "fine merged"], "size:", "DDR", "DDR 100%",
                   ["DDR, 10\\% (38 images)", "DDR, 50\\% (192)", "DDR, 100\\% (383)", "+ IDRiD + TJDR standard field (599)"])
-    rows.append("\\grouprow{5}{Loss, architecture fixed (E9) --- mAUPR on DDR test; U-Net}")
+    rows.append("\\grouprow{5}{Loss, architecture fixed --- mAUPR on DDR test; U-Net}")
     rows += block("E9", ["CE", "Dice", "CE + Dice", "CE + per-image Dice"], "loss:", "DDR", "CE", ["cross-entropy", "batch Dice", "cross-entropy + batch Dice (unified protocol)", "cross-entropy + per-image Dice (registered recipe)"])
-    head = " & ".join(f"\\famchip{{{D.FAMILY_OF[m]}}}\; {m.replace('RETFound + UPerNet', 'RETFound+UPer.')}" for m in cols)
+    head = " & ".join(f"\\famchip{{{D.FAMILY_OF[m]}}}\\; {m.replace('RETFound + UPerNet', 'RETFound+UPer.')}" for m in cols)
     write(
         "tab_factors",
         rf"""\begin{{table*}}[t]
@@ -792,23 +810,39 @@ def table_factors():
 
 # ------------------------------------------------------ Methods table (real)
 def table_recipes():
-    rows = [
-        # model, init, head, loss, optimizer, lr, wd, schedule, eff. batch, train patch, inference, steps IDRiD
-        ("U-Net", "none", "4 sigmoid", "BCE + Dice$^a$", "Adam", "1e-4", "0", "constant", "4", "960", "whole canvas", "21,000"),
-        ("DeepLabv3", "ImageNet, ResNet-101", "4 sigmoid", "BCE", "SGD", "7e-3", "1e-4", "poly 0.9", "16", "960", "whole canvas", "6,000"),
-        ("HRNet-W48", "ImageNet", "4 sigmoid", "BCE", "SGD", "1e-2", "5e-4", "poly", "12", "960", "whole canvas", "7,000"),
-        ("Swin-Unet", "ImageNet, Swin-T", "5 softmax", "0.4 CE + 0.6 Dice", "SGD", "1e-2", "1e-4", "poly 0.9", "24", "224", "sliding window", "\\tbd"),
-        ("FCT", "none", "4 sigmoid", "BCE", "Adam", "1e-3", "0", "constant", "4", "384", "sliding window", "129,000"),
-        ("M2MRF", "ImageNet, HRNet-W48", "4 sigmoid", "binary Dice", "SGD", "1e-2", "5e-4", "poly 0.9", "4", "960", "whole canvas", "21,000"),
-        ("HACDR-Net", "none", "5 softmax", "weighted CE$^b$", "AdamW", "6e-5", "1e-2", "poly 1.0, warm-up", "1", "960", "whole canvas", "83,000"),
-    ]
-    fam = {"M2MRF": "fundus", "HACDR-Net": "fundus"}
-    body = "\n".join(f"\\famchip{{{fam.get(r[0], 'general')}}}\\; " + " & ".join(r) + " \\\\" for r in rows)
+    """Methods table: what every main-table model keeps from its source recipe under the unified protocol. Loss,
+    optimizer, learning rate, weight decay, schedule, effective batch, patch and IDRiD step count are read from the
+    seed-0 IDRiD run record (runs/BS_<slug>_idrid_seed0/recipe.json) when the handoff holds it, else from the frozen
+    values below (identical to the records as of 2026-10-26); initialization and head are repository facts
+    (bench/models, bench/configs/bs_frozen.yaml). nnU-Net's rows come from its own plans (runs/NN_*/console.log)."""
+    frozen = {
+        # model: init, head, loss, optimizer, lr, wd, schedule, eff. batch, train patch, inference, steps IDRiD
+        "U-Net": ("none", "4 sigmoid", "BCE + Dice$^a$", "Adam", "1e-4", "0", "constant", "4", "960", "whole canvas", "21,000"),
+        "DeepLabv3": ("ImageNet, ResNet-101", "4 sigmoid", "BCE", "SGD", "7e-3", "1e-4", "poly 0.9", "16", "960", "whole canvas", "6,000"),
+        "HRNet-W48": ("ImageNet", "4 sigmoid", "BCE", "SGD", "1e-2", "5e-4", "poly", "12", "960", "whole canvas", "7,000"),
+        "Swin-Unet": ("ImageNet, Swin-T", "5 softmax", "0.4 CE + 0.6 Dice", "SGD", "1e-2", "1e-4", "poly 0.9", "24", "224", "sliding window", "63,000"),
+        "FCT": ("none", "4 sigmoid", "BCE", "Adam", "1e-3", "0", "constant", "4", "384", "sliding window", "129,000"),
+        "nnU-Net": ("none", "5 softmax", "CE + batch Dice", "SGD", "1e-2", "3e-5", "poly 0.9", "2", "1024$\\times$1536$^c$", "sliding window", "250,000$^c$"),
+        "nnU-Net ResEnc-M": ("none", "5 softmax", "CE + batch Dice", "SGD", "1e-2", "3e-5", "poly 0.9", "13$^c$", "384$\\times$640$^c$", "sliding window", "250,000$^c$"),
+        "M2MRF": ("ImageNet, HRNet-W48", "4 sigmoid", "binary Dice", "SGD", "1e-2", "5e-4", "poly 0.9", "4", "960", "whole canvas", "21,000"),
+        "HACDR-Net": ("none", "5 softmax", "weighted CE$^b$", "AdamW", "6e-5", "1e-2", "poly 1.0, warm-up", "1", "960", "whole canvas", "83,000"),
+        "HRDecoder": ("ImageNet, HRNet-W48", "4 sigmoid", "binary Dice + 0.1 Dice (HR crops)", "SGD", "1e-2", "5e-4", "poly 0.9", "4", "960", "sliding window", "21,000"),
+        "PMCNet": ("ImageNet, EfficientNet-B0", "5 softmax", "CE", "Adam", "1e-4", "0", "poly 0.9", "1", "960", "whole canvas", "83,000"),
+        "WSRFNet": ("ImageNet, EfficientNet-B1", "4 sigmoid", "binary Dice, per loop$^d$", "SGD", "1e-2", "5e-4", "poly 0.9", "4", "960", "whole canvas", "21,000"),
+        "CLC-Net": ("none", "5 softmax", "Dice + BCE (cls.\\ heads)$^e$", "Adam", "3e-4", "0", "step (1/3, 5/6)", "16", "512", "sliding window", "73,000"),
+        "TC-Net": ("none", "5 softmax", "CE", "Adam", "5e-4", "1e-5", "constant", "4", "512", "sliding window", "73,000"),
+        "SAMed": ("SAM ViT-B, LoRA r=4", "5 softmax", "0.2 CE + 0.8 Dice", "AdamW", "5e-3", "0.1", "warm-up, poly", "24", "512", "sliding window", "13,000"),
+        "SAM-Adapter": ("SAM ViT-H, adapters", "4 sigmoid", "BCE + IoU", "AdamW", "2e-4", "1e-2", "stepped cosine", "2", "1,024", "sliding window", "37,000"),
+        "SAM2-UNet": ("SAM 2 Hiera-L, adapters", "4 sigmoid", "BCE + weighted IoU$^f$", "AdamW", "1e-3", "5e-4", "stepped cosine", "12", "960", "whole canvas", "7,000"),
+        "MedSAM (full FT)": ("MedSAM ViT-B, all weights", "4 sigmoid", "Dice + BCE", "AdamW", "1e-4", "1e-2", "constant", "2", "1,024", "sliding window", "37,000"),
+        "RETFound + UPerNet": ("RETFound ViT-L (MAE)", "4 sigmoid", "BCE + 0.4 aux.", "AdamW", "4.7e-4", "0.05", "warm-up, cosine", "24", "224", "sliding window", "63,000"),
+    }
+    body = "\n".join(f"\\famchip{{{D.FAMILY_OF[m]}}}\\; {m}" + ("$^{\\rm C}$" if m in D.TRACK_C else "") + " & " + " & ".join(frozen[m]) + " \\\\" for m in D.MAIN_MODELS)
     write(
         "tab_recipes",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{What each model keeps under the unified protocol.}} Data, splits, the 1,440-pixel canvas, augmentation, the training amount in pixels, checkpoint selection and evaluation are shared (Methods). Loss, optimizer, learning rate, weight decay, schedule shape and effective batch are taken from each model's source recipe; the schedule is stretched over the shared number of steps. Models with a fixed input size train on patches of that size and predict with half-overlapping windows; all others train on $960\times960$ patches and predict on the whole canvas.}}
+\caption{{\textbf{{What each model keeps under the unified protocol.}} Data, splits, the 1,440-pixel canvas, augmentation, the training amount in pixels, checkpoint selection and evaluation are shared (Methods). Loss, optimizer, learning rate, weight decay, schedule shape and effective batch are taken from each model's source recipe; the schedule is stretched over the shared number of steps. Models with a fixed input size train on patches of that size and predict with half-overlapping windows; all others train on $960\times960$ patches and predict on the whole canvas. nnU-Net runs through its own entry point and keeps its own plan.}}
 \label{{tab:recipes}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l l l l l c c l c c l r@{{}}}}
@@ -819,8 +853,8 @@ def table_recipes():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item Batch is the effective batch (gradient accumulation where one card cannot hold it). Steps is for IDRiD at 1,000 equivalent epochs; one equivalent epoch draws as many patch pixels as the training canvases contain, so steps = $\lceil\lceil$canvas pixels\,/\,patch pixels$\rceil$\,/\,batch$\rceil$ per epoch. DDR uses 400 equivalent epochs (83,600 steps at batch 4).
-\item $^a$Per-image, per-class sigmoid Dice with smoothing 1; the other Dice losses use $10^{{-5}}$. $^b$IDRiD: class-weighted cross-entropy; DDR: the same plus the authors' NALoss with weight 0.2.
+\item Batch is the effective batch (gradient accumulation where one card cannot hold it). Steps is for IDRiD at 1,000 equivalent epochs; one equivalent epoch draws as many patch pixels as the training canvases contain, so steps = $\lceil\lceil$canvas pixels\,/\,patch pixels$\rceil$\,/\,batch$\rceil$ per epoch. DDR uses 400 equivalent epochs (for example 83,600 steps at batch 4 and 960-pixel patches; Supplementary Table~3 lists every run). $^{{\rm C}}$, re-implemented from the paper. Every run's recipe record, with its deviations from the source recipe, is in the repository.
+\item $^a$Per-image, per-class sigmoid Dice with smoothing 1 in the registered recipe; the main-table runs pool the Dice term over the batch (Methods). The other Dice losses use $10^{{-5}}$. $^b$IDRiD: class-weighted cross-entropy; DDR: the same plus the authors' NALoss with weight 0.2. $^c$nnU-Net plans patch and batch per dataset (IDRiD plans shown; DDR: default $1024\times1536$ at batch 2, ResEnc-M $512\times512$ at batch 12) and trains 1,000 epochs of 250 steps on both sources; its learning rate, weight decay and polynomial schedule are its defaults. $^d$The paper's loss and optimizer, written into the wrapper because the repository has no training loop. $^e$Local and contextual Dice plus binary cross-entropy of the two classification heads, as described in the paper. $^f$Registered per-image term; the main-table run pools it over the batch (Methods).
 \end{{tablenotes}}
 \end{{threeparttable}}
 \end{{table*}}

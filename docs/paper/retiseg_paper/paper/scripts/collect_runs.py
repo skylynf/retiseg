@@ -854,9 +854,10 @@ def derive_reported(table):
 def drop_retired_placeholders(table):
     """Placeholder rows for things the paper no longer plans to measure (2026-10-26, docs/paper/14 note 65): the WSRFNet
     author weights (never arrived), the author-recipe reruns cut from the scope (M2MRF on DDR, HACDR-Net), the source-recipe
-    column (stopped before any run finished), the learning-rate sweep's unrun half, the encoder cells' untested sets and
-    the oracle-prompt k-curves on sets where only k = all was registered. Nothing measured is touched; a figure or key
-    that still read these rows reads nothing and marks itself pending."""
+    column (stopped before any run finished), the learning-rate sweep's unrun half, the encoder cells' untested sets,
+    the oracle-prompt k-curves on sets where only k = all was registered, and (2026-10-26) the "authors contacted /
+    replied" funnel rows, which no figure or key reads and whose ledger closes on 2026-10-31. Nothing measured is
+    touched; a figure or key that still read these rows reads nothing and marks itself pending."""
     t = table
     retired = (
         ((t.experiment == "E1") & (t.model == "WSRFNet"))
@@ -866,8 +867,39 @@ def drop_retired_placeholders(table):
         | ((t.experiment == "E5") & (t.variant == "encoder_control"))
         | ((t.experiment == "E5") & t.variant.str.match(r"^oracle:(box|point):(1|5|20)$", na=False) & (t.test_set == "TJDR-std"))
         | ((t.experiment == "E10") & t.metric.isin(["flops_g", "peak_mem_gb", "infer_s_per_image"]))
+        | ((t.experiment == "L2") & t.variant.isin(["authors contacted", "authors replied"]))
     ) & (t.source == "placeholder")
     return t[~retired].reset_index(drop=True), int(retired.sum())
+
+
+# nnU-Net writes no environment.json, so its parameter count is derived from the plan its console.log records
+# (runs/NN_*/console.log, "This is the configuration used by this training"): the network is instantiated from
+# dynamic_network_architectures with that plan (3 input channels, 5 softmax classes, deep supervision on) and its
+# parameters counted. The default 2D plan is the same PlainConvUNet on IDRiD and DDR (9 stages, 32-512 features,
+# two convolutions per stage); the ResEnc-M plan depends on the dataset (IDRiD 7 stages at 384x640, DDR 8 stages at
+# 512x512), so the main table prints the IDRiD plan and the DDR plan is kept under metric params_m_plan.
+# Counted 2026-10-26 (dynamic-network-architectures 0.4.x, torch 2.x).
+NNUNET_PARAMS = {
+    "nnU-Net": {"params_m": 59.185, "plan": {"IDRiD": 59.185, "DDR": 59.185}},
+    "nnU-Net ResEnc-M": {"params_m": 105.922, "plan": {"IDRiD": 105.922, "DDR": 140.024}},
+}
+
+
+def derive_nnunet_params(table):
+    """Replace the placeholder params_m rows of the two nnU-Net configurations by the counts in NNUNET_PARAMS and add
+    one params_m_plan row per training source (the plan-dependent count the main-table note quotes)."""
+    table = table.copy()
+    inserted, drop = [], []
+    for model, spec in NNUNET_PARAMS.items():
+        mask = (table.experiment == "E10") & (table.model == model) & (table.metric.isin(["params_m", "params_m_plan"]))
+        drop.extend(table.index[mask].tolist())
+        inserted.append(dict(experiment="E10", model=model, variant="", train_set="", seed=-1, test_set="", cls="",
+                             metric="params_m", value=spec["params_m"], source="measured"))
+        for train, value in spec["plan"].items():
+            inserted.append(dict(experiment="E10", model=model, variant="", train_set=train, seed=-1, test_set="", cls="",
+                                 metric="params_m_plan", value=value, source="measured"))
+    table = pd.concat([table.drop(index=drop), pd.DataFrame(inserted)], ignore_index=True)
+    return table, len(inserted)
 
 
 def derive_funnel(table):
@@ -982,6 +1014,8 @@ def main():
     print(f"{filled} encoder-comparison reference rows copied from the main-table RETFound run")
     merged, filled = derive_reported(merged)
     print(f"{filled} reported-number rows written for the released checkpoints (E1_REPORTED)")
+    merged, filled = derive_nnunet_params(merged)
+    print(f"{filled} nnU-Net parameter rows written from the recorded plans (NNUNET_PARAMS)")
     merged, dropped = drop_retired_placeholders(merged)
     print(f"{dropped} retired placeholder rows dropped (things the paper no longer plans to measure)")
     merged, reproduced = derive_funnel(merged)

@@ -11,26 +11,26 @@
 \colh{Model} & \colh{Tier} & \colh{Reproducibility} & \colh{A} & \colh{B} & \colh{C} & \colh{Code status} & \colh{Use in this study} \\
 \midrule
 \grouprow{8}{General segmentation and self-configuring baselines}
-\famchip{general}\; U-Net & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & reference implementation & B-std \\
-\famchip{general}\; DeepLabv3 & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & torchvision, ResNet-101 & B-std \\
-\famchip{general}\; HRNet-W48 & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official, W48 & B-std \\
+\famchip{general}\; U-Net & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & reference implementation & unified retraining \\
+\famchip{general}\; DeepLabv3 & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & torchvision, ResNet-101 & unified retraining \\
+\famchip{general}\; HRNet-W48 & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official, W48 & unified retraining \\
 \famchip{auto}\; nnU-Net & 1 & \rlevel{4} {\scriptsize R4} & \no & \yes & \no & official, 2D; default and ResEnc-M & own entry point \\
-\famchip{general}\; Swin-Unet & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official & B-std, 224 patches \\
-\famchip{general}\; FCT & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official PyTorch port & B-std, 384 patches \\
+\famchip{general}\; Swin-Unet & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official & unified retraining, 224 patches \\
+\famchip{general}\; FCT & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official PyTorch port & unified retraining, 384 patches \\
 \famchip{general}\; H2Former & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official & deferred: exceeds 40\,GB at 960 \\
 \famchip{general}\; UNet++ & 2 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official & tier 2 \\
 \famchip{general}\; UPerNet & 2 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official & tier 2 \\
 \grouprow{8}{Fundus-specific, multi-scale CNN}
-\famchip{fundus}\; M2MRF & 1 & \rlevel{4} {\scriptsize R4} & \yes & \yes & \no & official; weights released & A, E1r, B-std \\
-\famchip{fundus}\; HACDR-Net & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official; no weights & E1r, B-std \\
-\famchip{fundus}\; HRDecoder & 1 & \rlevel{4} {\scriptsize R4} & \yes & \yes & \no & official; weights released & A, B-std \\
-\famchip{fundus}\; WSRFNet & 1 & \rlevel{1} {\scriptsize R1} & \yes & \yes & \no & model and test code only; training loop added & A if weights arrive; B-std \\
-\famchip{fundus}\; PMCNet & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official Keras code rewritten in PyTorch & B-std \\
-\famchip{fundus}\; CLC-Net & 1 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; re-implemented from the paper & C, B-std \\
+\famchip{fundus}\; M2MRF & 1 & \rlevel{4} {\scriptsize R4} & \yes & \yes & \no & official; weights released & released weights; author-recipe rerun; unified retraining \\
+\famchip{fundus}\; HACDR-Net & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official; no weights & unified retraining \\
+\famchip{fundus}\; HRDecoder & 1 & \rlevel{4} {\scriptsize R4} & \yes & \yes & \no & official; weights released & released weights; author-recipe rerun; unified retraining \\
+\famchip{fundus}\; WSRFNet & 1 & \rlevel{1} {\scriptsize R1} & \yes & \yes & \no & model and test code only; training loop added & unified retraining (weights requested) \\
+\famchip{fundus}\; PMCNet & 1 & \rlevel{3} {\scriptsize R3} & \no & \yes & \no & official Keras code rewritten in PyTorch & unified retraining \\
+\famchip{fundus}\; CLC-Net & 1 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; re-implemented from the paper & unified retraining (re-implementation) \\
 \famchip{fundus}\; L-Seg & 2 & \rlevel{1} {\scriptsize R1} & \no & \no & \yes & Caffe prototxt and loss layer & C \\
 \famchip{fundus}\; SAA & 2 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & repository empty & C \\
 \grouprow{8}{Fundus-specific, relation or transformer}
-\famchip{fundus}\; TC-Net & 1 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; re-implemented from the paper & C, B-std \\
+\famchip{fundus}\; TC-Net & 1 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; re-implemented from the paper & unified retraining (re-implementation) \\
 \famchip{fundus}\; RTNet & 2 & \rlevel{0} {\scriptsize R0} & \no & \no & \yes & no code; image + vessel input & C \\
 \grouprow{8}{Foundation models}
 \famchip{foundation}\; SAM & 1 & \rlevel{2} {\scriptsize R2} & \no & \yes & \no & official inference & zero-shot, oracle prompt \\
@@ -45,7 +45,7 @@
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize
-\item \famchip{general} general segmentation \quad \famchip{auto} self-configuring \quad \famchip{fundus} fundus-specific \quad \famchip{foundation} foundation model. B-std, unified retraining protocol (Methods). PEFT, parameter-efficient fine-tuning. Status as of the code audit of 2--4 October 2026; author replies are due by 31 October 2026.
+\item \famchip{general} general segmentation \quad \famchip{auto} self-configuring \quad \famchip{fundus} fundus-specific \quad \famchip{foundation} foundation model. Unified retraining, the shared protocol (Methods). PEFT, parameter-efficient fine-tuning. Status as of the code audit of 2--4 October 2026; author replies are due by 31 October 2026.
 \end{tablenotes}
 \end{threeparttable}
 \end{adjustbox}

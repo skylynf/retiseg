@@ -116,7 +116,7 @@ def panel_c(fig, top):
     S.light_grid(ax, "x")
     from matplotlib.lines import Line2D
     h = [Line2D([], [], marker="o", ls="", ms=3.2, color="#4f7ea8", label="reported in one paper"),
-         Line2D([], [], marker="D", ls="", ms=3.4, color=S.FAMILY["fundus"], label="retrained here (B-std)")]
+         Line2D([], [], marker="D", ls="", ms=3.4, color=S.FAMILY["fundus"], label="retrained here (unified protocol)")]
     ax.legend(handles=h, loc="lower left", bbox_to_anchor=(-0.4, 1.01), ncol=1, handletextpad=0.2, labelspacing=0.2, fontsize=5.4)
     if D.simulated(D.main_runs()):
         S.tag_simulated(ax, loc="tr", text="retrained values simulated")

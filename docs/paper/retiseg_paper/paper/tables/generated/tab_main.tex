@@ -1,6 +1,6 @@
 \begin{table*}[t]
 \centering\tablefont
-\caption{\textbf{Unified retraining (B-std): internal tests.} Every model is trained on one source under the shared protocol and scored on that source's official test set. Per-class values are exact pooled AUPR inside the field of view, mean of three seeds; mAUPR is the mean of the four classes $\pm$ s.d.\ over seeds; Dice is pooled, at the per-class threshold chosen on the validation set. Cell shading follows AUPR. \best{Bold}, best in column; \second{underlined}, second.}
+\caption{\textbf{Unified retraining: internal tests.} Every model is trained on one source under the shared protocol and scored on that source's official test set. Per-class values are exact pooled AUPR inside the field of view, averaged over seeds; mAUPR is the mean of the four classes $\pm$ s.d.\ over seeds for the models trained with three seeds (no s.d.\ is printed for the single-seed rows; Supplementary Table~3 lists every run); Dice is pooled, at the per-class threshold chosen on the validation set. 95\% bootstrap intervals over test images are given per class and model in Supplementary Table~4. Cell shading follows AUPR. \best{Bold}, best in column; \second{underlined}, second.}
 \label{tab:main}
 \begin{adjustbox}{max width=\textwidth}
 \begin{threeparttable}
@@ -17,8 +17,8 @@ HRNet-W48 & 65.8 & \cellcolor[HTML]{B9E1D5}.449 & \cellcolor[HTML]{80CBC7}.682 &
 Swin-Unet & 27.2 & \cellcolor[HTML]{B5E0D3}.470 & \cellcolor[HTML]{7AC9C6}.706 & \cellcolor[HTML]{51B0BD}\second{.894} & \cellcolor[HTML]{80CBC7}.683 & .688\sd{.003} & .640 & \cellcolor[HTML]{E6F2E8}\second{.174} & \cellcolor[HTML]{B8E1D4}.455 & \cellcolor[HTML]{88CEC9}\best{.654} & \cellcolor[HTML]{BAE2D5}.439 & .431\sd{.001} & .440 \\
 FCT & 1.9 & \cellcolor[HTML]{EEF5ED}.081 & \cellcolor[HTML]{D3EBE0}.304 & \cellcolor[HTML]{81CBC7}.680 & \cellcolor[HTML]{EAF4EA}.128 & .298\sd{.084} & .330 & \cellcolor[HTML]{F5F8F1}.001 & \cellcolor[HTML]{E7F3E9}.163 & \cellcolor[HTML]{AADCCF}.524 & \cellcolor[HTML]{F4F7F0}.014 & .176 & .197 \\
 \grouprow{14}{\famchip{auto}\; Self-configuring}
-nnU-Net & \ph{33.4} & \cellcolor[HTML]{AFDDD1}\best{.499} & \cellcolor[HTML]{85CDC8}.665 & \cellcolor[HTML]{54B3BE}.872 & \cellcolor[HTML]{90D1CA}.624 & .665\sd{.008} & .656 & \cellcolor[HTML]{E8F3E9}.157 & \cellcolor[HTML]{AFDDD1}.503 & \cellcolor[HTML]{91D2CA}.614 & \cellcolor[HTML]{B9E1D5}.449 & .431\sd{.003} & .458 \\
-nnU-Net ResEnc-M & \ph{57.5} & \cellcolor[HTML]{B9E1D5}.449 & \cellcolor[HTML]{85CDC8}.663 & \cellcolor[HTML]{53B2BE}.878 & \cellcolor[HTML]{A7DACF}.533 & .631 & .638 & \cellcolor[HTML]{E9F3EA}.147 & \cellcolor[HTML]{B3DFD2}.481 & \cellcolor[HTML]{88CEC9}\second{.653} & \cellcolor[HTML]{BBE2D6}.432 & .428 & \best{.463} \\
+nnU-Net & 59.2 & \cellcolor[HTML]{AFDDD1}\best{.499} & \cellcolor[HTML]{85CDC8}.665 & \cellcolor[HTML]{54B3BE}.872 & \cellcolor[HTML]{90D1CA}.624 & .665\sd{.008} & .656 & \cellcolor[HTML]{E8F3E9}.157 & \cellcolor[HTML]{AFDDD1}.503 & \cellcolor[HTML]{91D2CA}.614 & \cellcolor[HTML]{B9E1D5}.449 & .431\sd{.003} & .458 \\
+nnU-Net ResEnc-M & 105.9 & \cellcolor[HTML]{B9E1D5}.449 & \cellcolor[HTML]{85CDC8}.663 & \cellcolor[HTML]{53B2BE}.878 & \cellcolor[HTML]{A7DACF}.533 & .631 & .638 & \cellcolor[HTML]{E9F3EA}.147 & \cellcolor[HTML]{B3DFD2}.481 & \cellcolor[HTML]{88CEC9}\second{.653} & \cellcolor[HTML]{BBE2D6}.432 & .428 & \best{.463} \\
 \grouprow{14}{\famchip{fundus}\; Fundus-specific}
 M2MRF & 70.3 & \cellcolor[HTML]{B9E1D5}.450 & \cellcolor[HTML]{8ED0CA}.628 & \cellcolor[HTML]{55B4BE}.867 & \cellcolor[HTML]{81CBC7}.681 & .657\sd{.010} & .648 & \cellcolor[HTML]{E8F3E9}.148 & \cellcolor[HTML]{C0E4D8}.406 & \cellcolor[HTML]{A7DACF}.534 & \cellcolor[HTML]{C4E5D9}.386 & .369\sd{.011} & .407 \\
 HACDR-Net & 24.6 & \cellcolor[HTML]{C8E7DB}.366 & \cellcolor[HTML]{B7E0D4}.463 & \cellcolor[HTML]{5AB8BF}.837 & \cellcolor[HTML]{B3DFD2}.484 & .538\sd{.031} & .520 & \cellcolor[HTML]{ECF5EC}.105 & \cellcolor[HTML]{DAEEE3}.263 & \cellcolor[HTML]{B2DED2}.487 & \cellcolor[HTML]{E8F3E9}.155 & .252\sd{.017} & .289 \\
@@ -36,8 +36,7 @@ RETFound + UPerNet & 352.6 & \cellcolor[HTML]{B3DFD2}\second{.480} & \cellcolor[
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]\scriptsize
-\item Params in millions. nnU-Net uses its own preprocessing and planning with the same splits, test images and evaluation. $^{\rm C}$, no author code: re-implemented from the paper (Track~C); the row shows what the published description yields under this protocol, not the authors' implementation. HRDecoder, M2MRF and HRNet-W48 share the HRNet-W48 backbone. H2Former is registered in tier~1 but deferred: at its 960-pixel input one training step exceeds the 40\,GB of the cards used here.
-\phnote
+\item Params in millions. nnU-Net uses its own preprocessing and planning with the same splits, test images and evaluation. nnU-Net plans its network per dataset: the default configuration has 59.2\,M parameters on both sources, the ResEnc-M preset 105.9\,M under its IDRiD plan (printed) and 140.0\,M under its DDR plan. $^{\rm C}$, no author code: re-implemented from the paper (Track~C); the row shows what the published description yields under this protocol, not the authors' implementation. HRDecoder, M2MRF and HRNet-W48 share the HRNet-W48 backbone. H2Former is registered in tier~1 but deferred: at its 960-pixel input one training step exceeds the 40\,GB of the cards used here.
 \end{tablenotes}
 \end{threeparttable}
 \end{adjustbox}

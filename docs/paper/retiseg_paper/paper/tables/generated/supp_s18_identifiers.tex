@@ -1,0 +1,40 @@
+
+{\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{l p{40mm} p{66mm} p{38mm}}
+\caption{\textbf{Experiment names used in the text and the identifiers used in the repository.} The run directories under runs/, the experiment column of data/results.csv and the planning documents in docs/ carry the identifiers; the text names each experiment by what it does.}\label{stab:identifiers}\\
+\toprule
+Identifier & Name in the text & What it is & Where it is reported \\
+\midrule
+\endfirsthead
+\multicolumn{4}{l}{\textit{continued}}\\
+\toprule
+Identifier & Name in the text & What it is & Where it is reported \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\textit{continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{L1} & Paper audit & Extraction of the setup and the comparison tables of every method paper in the ledger & Fig.~2b,c; Supplementary Tables~1 and 2 \\
+\texttt{L2} & Reproducibility funnel & Registered fundus-specific methods by code, training code, weights and reproduced number & Fig.~2a \\
+\texttt{E1} & Released checkpoints (author weights) & Released checkpoints scored with the paper's number, the authors' function and this protocol, on all test sets & Fig.~3a,b,d; Table~3a; Supplementary Table~16 \\
+\texttt{E1r} & Author-recipe reruns & The authors' own pipelines retrained from scratch on IDRiD (M2MRF, HRDecoder) & Fig.~3c; Table~3b \\
+\texttt{E2 (B-std)} & Unified retraining; the unified protocol & Every tier-1 model with complete training code retrained on IDRiD and on DDR under the shared protocol & Fig.~4; Tables~4 and 5 \\
+\texttt{E2b (B1)} & Source-recipe track & Each model trained with its source recipe on the shared data; stopped before any run finished & Methods only \\
+\texttt{E2c} & Learning-rate sweep & HRNet-W48 and M2MRF on DDR with the recipe learning rate $\times$1/3 and $\times$3, judged on validation only & Extended Data Fig.~7 \\
+\texttt{E3a} & Independent tests & Every main-table checkpoint applied to the six test sets of sources never used for training & Fig.~4b--e; Table~5; Extended Data Fig.~9 \\
+\texttt{E3b} & Training-source experiment & Five representative models trained on the standard-field TJDR images and on FGADR & Fig.~6b--d; Supplementary Table~7 \\
+\texttt{E4} & Annotation-granularity experiment & U-Net and M2MRF on fine, mixed and coarse training labels, alone and combined & Fig.~6e; Table~7; Supplementary Table~7 \\
+\texttt{E5} & Foundation models under four kinds of use & Zero-shot, oracle prompts, parameter-efficient fine-tuning, encoder + decoder; the encoder comparison & Fig.~5; Table~6; Supplementary Tables~10 and 17 \\
+\texttt{E7} & Input-resolution experiment & M2MRF and RETFound + UPerNet at a 512- or 1,440-pixel canvas and on native-resolution patches & Fig.~7d; Table~7 \\
+\texttt{E8} & Training-amount experiment & U-Net and M2MRF on 10\%, 50\% and 100\% of DDR and on the merged fine-grained sources & Fig.~7e; Table~7 \\
+\texttt{E9} & Loss experiment & U-Net on DDR with four losses, architecture fixed & Extended Data Fig.~8; Table~7 \\
+\texttt{E10} & Computational cost & Parameters, trainable parameters and GPU hours of every run & Extended Data Fig.~10; Supplementary Table~8 \\
+\texttt{ENS} & Ensembles & Pixelwise means of the probability maps in the registered compositions & Table~5; Supplementary Table~11 \\
+\texttt{REF} & Label revision (Refined IDRiD) & IDRiD-trained checkpoints re-scored against the refined and the official labels & Supplementary Table~9 \\
+\texttt{HUMAN} & Human reference & Each DiaRetDB1 expert against the consensus of the other three & Table~5; Supplementary Table~13 \\
+\texttt{CLIN} & Results by DR grade & Every score recomputed within grades 0--1 and 2--4 & Supplementary Table~12 \\
+\texttt{N8} & Reference model & Two models trained on the merged fine-grained sources and averaged; in training & Methods \\
+\end{longtable}
+}

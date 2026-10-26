@@ -39,6 +39,8 @@ scripts/collect_runs.py       读 runs/*/metrics_*.json，按键覆盖占位行
 
 `collect_runs.py` 读入一份真实报告后，该报告覆盖的行变成 measured；一个面板只要还用到任何占位行，角标就保留。2026-10-20 起：名次统计（Friedman、临界差、配对检验、族均值、发表名次 τ）只对实测模型算（`retifig.data.measured_models`），未实测的模型（MedSAM）排在图 4/7 行序末尾并单独标记；图 6b–d、7d–e 与 make_numbers 的因素键只用实测格，缺格画 "–" / 标 pending，不再把占位值平均进去。2026-10-22 起：表 6 每格的占位标记按它读到的行是否实测决定（以前整表硬标占位），单种子行不再打 ±nan；`runs/REFINED/…`（Refined IDRiD 重评，experiment REF，含 `E1_<模型>` 的发布权重）也由 `collect_runs.py` 读入，make_numbers 给出 ref.*、cd.second/third、indep.*.nlower/gain 键。 2026-10-23 起：`runs/E5enc_<编码器>_ddr_seed0_lr1/`（编码器对照，E5 / encoder_control，RETFound-MAE 行从主表复制）也读入；占位里的对照名 ImageNet-sup. 改为 MAE-IN1k；图 5d 只画已实测的编码器。2026-10-24 起：`runs/audit/label_style.json`（bench/scripts/label_style_audit.py 的八源标注风格审计）由 `collect_runs.py` 读成 audit 行，图 6a 八个来源全为实测，其 simulated 角标只在仍有占位来源时出现；集成行的 `ensemble:without …` 变体（成员缺图时的 --without）在表 5 带角标 p。2026-10-25 起：`runs/ENS/REF/reference/<集>`（参考模型两格的集成，done.json 带 paper 键 N8 / reference:ensemble）也由 `collect_runs.py` 读入；发布检查点的“论文数”由 `collect_runs.E1_REPORTED`（HRDecoder 论文表 1、HACDR-Net 的 L1 抽取）写成实测；RETFound-MAE 的编码器参照行按训练源各复制一份（IDRiD 列）；图 3 只画跑过的检查点（M2MRF、HRDecoder）与作者配方重训（砍掉的组标 not rerun），表 3 同；B1（来源配方）在任何运行完成前停止，不再有补充表。2026-10-26 起：论文不再打算测的占位行由 `collect_runs.drop_retired_placeholders` 删除（14 备注 65），图 2a 漏斗末级由作者配方重训推出，`runs/E3a` 的 `__fov` 在主变体缺失时顶替主行、否则作为 `<variant>:fov` 行并入（ED9）；补充材料是单独的 `supplement.tex`（`make supplement` 先跑 `scripts/make_supplement.py` 生成 `tables/generated/supp_*.tex` 与 `generated/supp_note_models.tex`，再 latexmk），17 张表、3 个说明都从 results.csv 与仓库事实生成。
 
+2026-10-26（稿件自查，本轮）：`data/results.csv` 已无占位行（nnU-Net 两种配置的参数量由 `collect_runs.NNUNET_PARAMS` 按 console.log 记录的 plan 实例化计数写入，`params_m_plan` 另记两源各自的 plan；L2 的"作者联系 / 回复"两行无图表读取，已退役），`main.tex` 与 `supplement.tex` 改为 `\retifinaltrue`，`make_tables.write()` 只在表里确有 `\ph{}` 时才印占位说明。**修正了一处汇总错误**：`retifig.data.block_scores` 与 `make_tables.table_independent` / `ensemble_rows` 读 `img_auc` 时没有按 `test_set == DiaRetDB1` 过滤，表 5 的 DiaRet 列、Friedman 的 DiaRetDB1 区组和图 4e 实际平均了八个测试集的图像级 AUC；现在走 `retifig.data.diaretdb1_auc()`（χ² 由 103.5 变为 97.9，名次有变动）。正文的实验代号（E1、E1r、E2 / B-std、E3a、E3b、E4、E5、E7、E8、E9、E10、B1、L1、L2）全部改为实验名称，对照表是补充表 18（`make_supplement.EXPERIMENT_NAMES`）；仓库、runs/ 与 results.csv 的键不变。表 8 补齐 19 个模型（`table_recipes.frozen`，来自各 run 的 recipe.json 与 bs_frozen.yaml）；表 3a 每格下加 95% bootstrap 区间；表 1 DiaRetDB1 的概率图改为公开（与补充数据 4 一致，需核对许可）。名次检验、配对检验与表 5 都用种子均值（`retifig.data.score_matrix`），正文原来写"seed 0"，本轮按代码改正文。正文新增键：`clin.*`（按分级分层段）、`human.*`（人类参照段，原手写数 3/5 与表不符，实为 5/7）、`ci.*`（区间宽度与四个模型逐类区间）、`indep.<源>.<集>.mean/pct/first.*/rho`、`indep.pairs.*`、`params.*`。
+
 ## 服务器结果回来以后
 
 1. 把服务器的快照包（docs/ops/17 第一节的格式）解开到仓库根目录的 `runs/`（gitignore）。
@@ -69,10 +71,10 @@ scripts/collect_runs.py       读 runs/*/metrics_*.json，按键覆盖占位行
 - 方法里“FGADR 许可禁止再分发派生数据；Retinal-Lesions 按申请条款同样处理”，后一半以申请条款原文为准。
 - 文献流程里优先名单写成“27 个 DOI、TJDR 线索、另有一篇由更正 DOI 进入”，合计 29 条去向（纳入 26、排除 3）；06 第六节原文是“27 条 DOI 加 TJDR 线索”，两处请统一。
 - 表 6 的 Backbone 列（SAM ViT-H、SAM 2 Hiera-L、MedSAM/SAMed ViT-B、RETFound ViT-L）：按 E5 实际配置改。
-- 表 8 的 Swin-Unet 步数（标了 tbd）和 DDR 各模型的步数。
 - `refs.bib`：账本条目的作者只有“第一作者 et al.”，需要按 PDF 补全；`make_bib.py` 末尾手写的 7 条（nnU-Net、nnU-Net Revisited、RETFound、Maier-Hein 2018、Demšar 2006、DINOv2、SAM 3）要逐条对出版页。
 - 图 2c、表 3b 里 HACDR-Net、WSRFNet 的“论文报告值”是占位，L1 抽取后替换。
-- 表 1 里 DiaRetDB1 的概率图能否公开（14 的 M14 没有写，表里标了 tbd）。
+- 表 1 里 DiaRetDB1 的概率图 2026-10-26 改为"公开"（与补充数据 4、方法的数据可用性一致）；M14 仍未写，请确认许可。
+- 参考文献：账本条目的作者仍只有"第一作者 et al."（make_bib.py 从 meta 生成），投稿前按 PDF 补全；nnU-Net Revisited、SAM 3、RETFound 三条已按 Crossref / arXiv 核对。
 
 ## 换版式
 

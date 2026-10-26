@@ -180,10 +180,19 @@ def block_scores(models=None):
     out["IDRiD"], out["DDR"] = a["IDRiD"], b["DDR"]
     for test in INDEPENDENT:
         out[test] = (a[test] + b[test]) / 2
-    auc = main_runs("img_auc")
+    auc = diaretdb1_auc()
     if len(auc):
         out["DiaRetDB1"] = auc.groupby("model")["value"].mean().reindex(models)
     return out
+
+
+def diaretdb1_auc(cls=None):
+    """Image-level ROC AUC rows of the main-table models on DiaRetDB1 only (the four lesion classes; seed means are
+    taken by the caller). Until 2026-10-26 the DiaRetDB1 block and the Table 5 column read main_runs("img_auc")
+    without a test-set filter, so they averaged the image-level AUC over all eight test sets."""
+    df = main_runs("img_auc")
+    df = df[(df["test_set"] == "DiaRetDB1") & df["cls"].isin(CLASSES if cls is None else [cls])]
+    return df
 
 
 def internal_vs_independent(train, models=None, tests=None):
@@ -242,7 +251,9 @@ DATASETS = [
     dict(name="MAPLES-DR", ref="Lepetit-Aimon 2024", n=198, train=0, val=0, test=60, role="independent", tier="fine", res="1440×960–2304×1536", fov="45°", ann="pixel masks, 7 retinologists; MA/HE/EX AI-assisted", public=True),
     dict(name="FGADR", ref="Zhou 2021", n=1842, train=1096, val=193, test=553, role="independent", tier="mixed", res="1280×1280", fov="n.s.", ann="pixel masks, 2 residents + senior", public=False),
     dict(name="Retinal-Lesions", ref="Wei 2020", n=1593, train=951, val=164, test=478, role="independent", tier="coarse", res="896×896", fov="n.s.", ann="ellipses and polygons, ≥3 of 45 graders", public=False),
-    dict(name="DiaRetDB1", ref="Kauppi 2007", n=89, train=0, val=28, test=61, role="independent", tier="region", res="1500×1152", fov="50°", ann="regions with confidence, 4 experts", public=None),
+    # DiaRetDB1 maps: the images are distributed for research use and the maps hold no image data; released with
+    # the other public sources (Supplementary Data 4; Methods, Data availability). Decided 2026-10-26.
+    dict(name="DiaRetDB1", ref="Kauppi 2007", n=89, train=0, val=28, test=61, role="independent", tier="region", res="1500×1152", fov="50°", ann="regions with confidence, 4 experts", public=True),
 ]
 
 # literature/06 and 08: fixed search of 2026-10-03, frozen at 2026-09-30.

@@ -25,8 +25,9 @@ def _find_repo(start):
 REPO = _find_repo(PAPER)
 META = REPO / "literature" / "meta"
 
-# Works cited in the text that are not in the ledger. Check each against the
-# publisher page before submission.
+# Works cited in the text that are not in the ledger. nnU-Net Revisited (LNCS 15009, pp. 488-498, DOI) and SAM 3
+# (arXiv:2511.16719, author list) were checked against Crossref / arXiv on 2026-10-26; RETFound's author list is the
+# first eleven of the Nature paper (the consortium follows).
 EXTRA = r"""
 @article{isensee2021nnunet,
   author  = {Isensee, Fabian and Jaeger, Paul F. and Kohl, Simon A. A. and Petersen, Jens and Maier-Hein, Klaus H.},
@@ -34,16 +35,16 @@ EXTRA = r"""
   journal = {Nature Methods}, volume = {18}, pages = {203--211}, year = {2021}, doi = {10.1038/s41592-020-01008-z}
 }
 @inproceedings{isensee2024revisited,
-  author    = {Isensee, Fabian and Wald, Tassilo and Ulrich, Constantin and Baumgartner, Michael and Roy, Saikat and Maier-Hein, Klaus and Jaeger, Paul F.},
+  author    = {Isensee, Fabian and Wald, Tassilo and Ulrich, Constantin and Baumgartner, Michael and Roy, Saikat and Maier-Hein, Klaus and J{\"a}ger, Paul F.},
   title     = {{nnU-Net} Revisited: A Call for Rigorous Validation in {3D} Medical Image Segmentation},
-  booktitle = {Medical Image Computing and Computer Assisted Intervention (MICCAI)}, year = {2024},
-  note      = {verify pages and DOI}
+  booktitle = {Medical Image Computing and Computer Assisted Intervention -- MICCAI 2024},
+  series    = {Lecture Notes in Computer Science}, volume = {15009}, pages = {488--498},
+  publisher = {Springer}, address = {Cham}, year = {2024}, doi = {10.1007/978-3-031-72114-4_47}
 }
 @article{zhou2023retfound,
-  author  = {Zhou, Yukun and others},
+  author  = {Zhou, Yukun and Chia, Mark A. and Wagner, Siegfried K. and Ayhan, Murat S. and Williamson, Dominic J. and Struyven, Robbert R. and Liu, Timing and Xu, Moucheng and Lozano, Mateo G. and Woodward-Court, Peter and Kihara, Yuka and others},
   title   = {A foundation model for generalizable disease detection from retinal images},
-  journal = {Nature}, volume = {622}, pages = {156--163}, year = {2023}, doi = {10.1038/s41586-023-06555-x},
-  annote  = {authors: complete from the PDF}
+  journal = {Nature}, volume = {622}, pages = {156--163}, year = {2023}, doi = {10.1038/s41586-023-06555-x}
 }
 @article{maierhein2018rankings,
   author  = {Maier-Hein, Lena and others},
@@ -68,10 +69,9 @@ EXTRA = r"""
   year   = {2017}, howpublished = {arXiv:1706.05587}
 }
 @misc{carion2025sam3,
-  author = {Carion, Nicolas and others},
+  author = {Carion, Nicolas and Gustafson, Laura and Hu, Yuan-Ting and Debnath, Shoubhik and Hu, Ronghang and Suris, Didac and Ryali, Chaitanya and Alwala, Kalyan Vasudev and Khedr, Haitham and Huang, Andrew and others},
   title  = {{SAM 3}: Segment Anything with Concepts},
-  year   = {2025},
-  note   = {verify authors, venue and identifier}
+  year   = {2025}, howpublished = {arXiv:2511.16719}, eprint = {2511.16719}
 }
 """
 

@@ -183,7 +183,9 @@ def cd_diagram(ax, names, avg_ranks, cd, colors, fs=5.6, title=None):
         x_text = lo - 0.45 if left else hi + 0.45
         ax.plot([r[idx], r[idx], x_text], [0, y, y], color=colors[idx], lw=0.7, solid_joinstyle="miter")
         ax.plot([r[idx]], [0], "o", ms=2.6, color=colors[idx], zorder=5)
-        label = f"{names[idx]}  {r[idx]:.2f}" if left else f"{r[idx]:.2f}  {names[idx]}"
+        from decimal import ROUND_HALF_UP, Decimal
+        rank_text = str(Decimal(repr(round(float(r[idx]), 10))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))   # half up, as the tables (1.625 -> 1.63)
+        label = f"{names[idx]}  {rank_text}" if left else f"{rank_text}  {names[idx]}"
         ax.text(x_text - (0.08 if left else -0.08), y, label, ha="right" if left else "left", va="center", fontsize=fs, color=S.INK)
     S.bare(ax)
 

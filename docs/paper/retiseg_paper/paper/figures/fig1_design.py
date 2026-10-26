@@ -92,7 +92,7 @@ def panel_a(fig):
         ax.text(xx + 1.8, y0 + 1.3, S.LESION_NAME[cls].lower(), fontsize=4.5, va="center", color=S.INK2)
     # --- data
     x = 42
-    ax.text(x, top + 7.4, f"7 test sources · {n_img:,} images", fontsize=5.6, color=S.INK2, va="top")
+    ax.text(x, top + 7.4, f"8 test sets, 7 datasets · {n_img:,} images", fontsize=5.2, color=S.INK2, va="top")
     groups = [("Training sources", [d for d in D.DATASETS if d["role"] == "train"], "#3d3d3a"),
               ("Independent sources", [d for d in D.DATASETS if d["role"] != "train"], "#8f8d86")]
     y = top + 12.5
@@ -121,18 +121,19 @@ def panel_a(fig):
     ax.text(x, y + 0.8, "Reproducibility level R0–R4\nrecorded for every variant;\nfailures stay in the denominator", fontsize=5.1, color=S.INK2, va="top", linespacing=1.25)
     # --- evaluations
     x = 110
+    # the four evaluations are named in words; the repository identifiers (L1, E1, E1r, E2) are listed in
+    # Supplementary Table 18 and no longer printed on the figure (2026-10-26)
     evals = [
-        ("Paper audit", "numbers as reported,\nand where they came from", "L1", "#e4e3dc", S.INK),
-        ("Author weights", "released checkpoints,\nthree numbers each", "E1", "#f6c9b3", S.INK),
-        ("Author recipe", "retrained with the\nauthors' own pipeline", "E1r", "#f2a37f", S.INK),
-        ("Unified retraining", "shared data, budget,\naugmentation, selection", "E2", "#eb6834", "#ffffff"),
+        ("Paper audit", "numbers as reported,\nand where they came from", "#e4e3dc", S.INK),
+        ("Released checkpoints", "scored with the paper's number,\nthe authors' metric and ours", "#f6c9b3", S.INK),
+        ("Author-recipe reruns", "retrained with the\nauthors' own pipeline", "#f2a37f", S.INK),
+        ("Unified retraining", "shared data, budget,\naugmentation, selection", "#eb6834", "#ffffff"),
     ]
     y = top + 7.6
-    for title, sub, tag, fc, ink in evals:
+    for title, sub, fc, ink in evals:
         box(ax, x, y, 30, 9.6, fc, r=0.9)
         ax.text(x + 1.8, y + 2.5, title, fontsize=5.7, fontweight="bold", color=ink, va="center")
         ax.text(x + 1.8, y + 6.3, sub, fontsize=4.8, color=ink, va="center", linespacing=1.15)
-        ax.text(x + 28.4, y + 2.5, tag, fontsize=5.0, color=ink, va="center", ha="right", style="italic")
         y += 10.55
     # --- scenarios and metrics
     x = 146
@@ -252,26 +253,28 @@ def panel_e(fig, top):
     ax.set_xlim(0, 86)
     ax.set_ylim(38, 0)
     S.bare(ax)
+    # the factors as they were run (docs/paper/16: the vessel-map input, the 1,024-pixel canvas, the bin loss and the
+    # source-recipe track were cut or stopped and are not shown); models named under each card (2026-10-26)
     cards = [
-        ("Training source", "E3b", "IDRiD · DDR ·\nTJDR-std · FGADR"),
-        ("Label granularity", "E4", "fine · mixed · coarse,\nalone and combined"),
-        ("Training amount", "E8", "10–100% of DDR,\nmerged sources"),
-        ("Input resolution", "E7", "512 · 1,024 · 1,440 ·\nnative patches"),
-        ("Loss", "E9", "CE · Dice ·\nCE + Dice · bin loss"),
-        ("Extra input", "E6", "image alone or\nwith vessel map"),
-        ("Foundation models", "E5", "zero-shot · oracle\nprompt · PEFT ·\nencoder + decoder"),
-        ("Training recipe", "E2b, E2c", "source recipe (B1);\nlearning rate ×⅓, 1, 3"),
+        ("Training source", "IDRiD · DDR ·\nTJDR-std · FGADR", "5 representative models", False),
+        ("Label granularity", "fine · mixed · coarse,\nalone and combined", "U-Net · M2MRF", False),
+        ("Training amount", "10 · 50 · 100% of DDR;\nfine sources merged", "U-Net · M2MRF", False),
+        ("Input resolution", "512 · 1,440 canvas ·\nnative-resolution patches", "M2MRF · RETFound", False),
+        ("Loss", "CE · Dice · CE + Dice ·\nCE + per-image Dice", "U-Net", False),
+        ("Learning rate", "recipe value × ⅓, 1, 3;\nvalidation only", "HRNet-W48 · M2MRF", False),
+        ("Foundation models", "zero-shot · oracle prompt\nPEFT · encoder + decoder", "8 models", True),
+        ("Encoder pretraining", "retinal vs natural-image\nViT-L, one UPerNet head", "4 encoders", True),
     ]
     w, h, gx, gy = 20.3, 16.5, 1.6, 1.8
-    for k, (title, tag, body) in enumerate(cards):
+    for k, (title, body, models, foundation) in enumerate(cards):
         col, row = k % 4, k // 4
         x, y = col * (w + gx), 0.5 + row * (h + gy)
         box(ax, x, y, w, h, S.SOFT, r=1.0)
-        ax.add_patch(Rectangle((x, y + 1.2), 0.9, 5.2, fc=S.FAMILY["fundus"] if tag != "E5" else S.FAMILY["foundation"], ec="none", zorder=3))
+        ax.add_patch(Rectangle((x, y + 1.2), 0.9, 5.2, fc=S.FAMILY["foundation"] if foundation else S.FAMILY["fundus"], ec="none", zorder=3))
         ax.text(x + 2.0, y + 2.4, title, fontsize=5.5, fontweight="bold", va="center")
-        ax.text(x + 2.0, y + 5.4, tag, fontsize=4.9, style="italic", color=S.INK2, va="center")
+        ax.text(x + 2.0, y + 5.4, models, fontsize=4.3, style="italic", color=S.INK2, va="center")
         ax.text(x + 2.0, y + 11.6, body, fontsize=4.9, color=S.INK2, va="center", linespacing=1.2)
-    S.text_mm(fig, "One factor changes at a time; everything else stays fixed. E3b–E9 use five representative models: U-Net,\nnnU-Net, M2MRF, SAM2-UNet, RETFound + UPerNet.",
+    S.text_mm(fig, "One factor changes at a time; everything else stays fixed. The five representative models are U-Net,\nnnU-Net, M2MRF, SAM2-UNet and RETFound + UPerNet.",
               92, top + 38.5, fontsize=5.0, color=S.INK2, linespacing=1.25)
 
 

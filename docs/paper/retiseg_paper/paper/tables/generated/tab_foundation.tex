@@ -36,7 +36,6 @@
 \begin{tablenotes}[flushleft]\scriptsize
 \item $^\ddagger$The zero-shot block is summarised by the any-lesion AUPR (union of the four classes against the pixelwise maximum of the maps); automatic masks carry no class, so their per-class cells are empty, and SAM~3's per-class cells are its own text prompts. The any-lesion AUPR of the references on the same test sets (IDRiD / DDR): M2MRF -- / --; nnU-Net 0.78 / 0.57 (-- where the run predates the metric).
 \item $^\dagger$Each automatic mask is assigned the class it overlaps most in the ground truth, an upper bound for class-agnostic proposals. Scores of automatic masks use the predicted IoU.
-\phnote
 \end{tablenotes}
 \end{threeparttable}
 \end{adjustbox}
