@@ -618,3 +618,9 @@ SAMed 参考格 17:10 退出 0，训练 40253.6 秒。验证最高 epoch 380 的
 2026-10-26 00:23 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261026.tar.gz（72 MB，6824 个文件，1413 行指标，0 个未对齐）。summary/new_since.tsv 是 6 行：SAMed 参考格的内部测试，第 60 条的内部测试和四个外部集合。
 第 61 条仍在训。03:27 种子 1 约 26340/40000 步（GPU 5），种子 2 约 26660/40000 步（GPU 7），显存都约 29 GB。16:16 起约 11 小时。
 RETFound 参考格仍在 GPU 2。03:27 的 history 到 epoch 120/400，验证 0.6138，目前最高就是这一步。13:26 起约 14 小时。第 63 条没开。第 59 条没开。第 49 条没开。启动器 pid 88417 没重启。GPU 3、4、6 空着。GPU 0、1 仍是别人的。
+
+2026-10-28 13:41 +0800。第 61 条两条都到 40000 步并退出。种子 1 的 metrics_test.json 写于 10-26 09:13：作者函数 mAUPR 0.6049、mIoU 0.4129，本协议 0.5400（n=27，排除 0；MA 0.2624、HE 0.5153、EX 0.8067、SE 0.5757）。种子 2 写于 10-26 09:05：作者函数 mAUPR 0.6267、mIoU 0.4326，本协议 0.5663（n=27，排除 0；MA 0.2908、HE 0.5266、EX 0.8149、SE 0.6328）。文件在 runs/E1r_m2mrf_idrid_seed1_bs4_a100 与 seed2。
+RETFound 参考格 10-27 10:26 退出 0，训练 160381.2 秒。验证最高 epoch 240 的 0.6367，最后一步 epoch 400 是 0.6355。DDR 内部测试 mAUPR 0.4508（n=225，排除 0；MA 0.1851、HE 0.5202、EX 0.6223、SE 0.4755），文件 runs/BF_ref_retfound_fine_seed0/metrics_test.json。
+第 63 条没开：没有 runs/E3a/BF_ref_*，没有 insource_*，没有 runs/ENS/REF。GPU 2–7 空着。GPU 0、1 仍是别人的。第 59 条没开。第 49 条没开。启动器 pid 88417 还在，没有子进程。这一包对照 runs/handoff_manifest_20261026.tsv，收第 61 条两格和 RETFound 的内部测试。第 63 条的包留到那一步做完。
+
+2026-10-28 13:43 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261028.tar.gz（73 MB，6842 个文件，1416 行指标，0 个未对齐）。summary/new_since.tsv 是 3 行：RETFound 参考格的内部测试，第 61 条种子 1 和种子 2 的 metrics_test.json。10-26 的包没有被覆盖。作者函数的 json 在包里，不进指标行。
