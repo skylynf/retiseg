@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RetiSeg Clinical Review</title>
+<!--
+  RetiSeg clinical error review, reader tool (docs/clinical/28 section 6; docs/clinical/30 reader guide).
+  One self-contained file: no network, no install. It sits in a pack folder next to pack.js (written by
+  clinical/scripts/build_pack.py) and is opened by double-click. Answers are saved in this browser's local
+  storage and exported as JSON; nothing leaves the computer unless the reader sends the exported file.
+  Colour is reserved for the four lesion classes; the interface itself is achromatic so it never competes with
+  the photograph or the outlines.
+-->
+<style>
+:root {
+  --app: #1d1e20;
+  --viewer: #141516;
+  --panel: #242528;
+  --raise: #2d2f32;
+  --raise-hover: #37393d;
+  --line: #3a3c40;
+  --text: #ebe9e5;
+  --muted: #a4a29e;
+  --faint: #73726f;
+  --inverse: #ebe9e5;
+  --inverse-text: #18191a;
+  --warn: #e3a64f;
+  --focus: #ffffff;
+  --radius-s: 4px;
+  --radius-m: 7px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--app);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--app); }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.hidden { display: none !important; }
+
+/* ---------- top bar */
+#top {
+  height: 46px; display: flex; align-items: center; gap: 14px; padding: 0 14px;
+  border-bottom: 1px solid var(--line); background: var(--panel);
+}
+#top .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 32vw; }
+#top .where { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+#top .spacer { flex: 1; }
+#progress { width: 160px; height: 4px; background: var(--raise); border-radius: 2px; overflow: hidden; }
+#progress > div { height: 100%; width: 0; background: var(--inverse); transition: width .25s; }
+#saveState { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+#saveState.warn { color: var(--warn); }
+.btn {
+  border: 1px solid var(--line); background: var(--raise); border-radius: var(--radius-s);
+  padding: 5px 11px; white-space: nowrap;
+}
+.btn:hover { background: var(--raise-hover); }
+.btn.primary { background: var(--inverse); color: var(--inverse-text); border-color: var(--inverse); font-weight: 600; }
+.btn.primary:disabled { background: var(--raise); color: var(--faint); border-color: var(--line); cursor: not-allowed; }
+.btn.small { padding: 3px 8px; font-size: 12.5px; }
+.reader-tag { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--muted); font-size: 12.5px; }
+
+/* ---------- main grid */
+#main { display: grid; grid-template-columns: 168px 1fr 400px; height: calc(100% - 46px); }
+#main.nocases { grid-template-columns: 0 1fr 400px; }
+#cases { border-right: 1px solid var(--line); overflow-y: auto; background: var(--panel); }
+#cases h3 { font-size: 12.5px; font-weight: 600; color: var(--muted); margin: 12px 12px 6px; }
+.case-item {
+  display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: 0; background: none;
+  padding: 6px 12px; color: var(--text); font-variant-numeric: tabular-nums;
+}
+.case-item:hover { background: var(--raise); }
+.case-item.current { background: var(--raise-hover); }
+.case-item .dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--muted); flex: none; }
+.case-item.partial .dot { background: linear-gradient(90deg, var(--muted) 50%, transparent 50%); }
+.case-item.done .dot { background: var(--inverse); border-color: var(--inverse); }
+.case-item .badge { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+
+/* ---------- viewer */
+#viewerWrap { position: relative; background: var(--viewer); overflow: hidden; }
+#viewer { position: absolute; inset: 0; cursor: grab; touch-action: none; }
+#viewer.dragging { cursor: grabbing; }
+#viewer.placing { cursor: crosshair; }
+#viewer canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#baseCanvas { image-rendering: auto; }
+#loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); pointer-events: none; }
+#placeHint {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%); background: var(--inverse); color: var(--inverse-text);
+  padding: 5px 12px; border-radius: var(--radius-s); font-weight: 600; pointer-events: none;
+}
+#toolbar {
+  position: absolute; left: 12px; bottom: 12px; right: 212px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  pointer-events: none;
+}
+#toolbar > * { pointer-events: auto; }
+.tgroup { display: flex; gap: 2px; background: rgba(36, 37, 40, .92); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 3px; align-items: center; }
+.tbtn { border: 0; background: none; border-radius: var(--radius-s); padding: 4px 8px; font-size: 12.5px; color: var(--text); white-space: nowrap; }
+.tbtn:hover { background: var(--raise-hover); }
+.tbtn.on { background: var(--inverse); color: var(--inverse-text); }
+.tbtn:disabled { color: var(--faint); background: none; cursor: not-allowed; }
+.tbtn .sw { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -0.5px; }
+.tgroup label { font-size: 12px; color: var(--muted); padding: 0 4px 0 6px; }
+.tgroup input[type=range] { width: 74px; accent-color: #d8d6d1; }
+#minimap {
+  position: absolute; right: 12px; bottom: 12px; width: 188px; height: 140px; border: 1px solid var(--line);
+  border-radius: var(--radius-m); background: rgba(20, 21, 22, .9); cursor: pointer;
+}
+#legend {
+  position: absolute; top: 12px; left: 12px; background: rgba(36, 37, 40, .92); border: 1px solid var(--line);
+  border-radius: var(--radius-m); padding: 6px 10px; font-size: 12px; color: var(--muted); display: flex; gap: 14px; align-items: center;
+}
+#legend svg { vertical-align: middle; margin-right: 4px; }
+
+/* ---------- side panel */
+#side { border-left: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
+#rail { display: flex; gap: 3px; padding: 12px 16px 0; }
+#rail .seg { flex: 1; height: 5px; border-radius: 2px; background: var(--raise-hover); }
+#rail .seg.done { background: var(--muted); }
+#rail .seg.cur { background: var(--inverse); }
+#stepHead { padding: 10px 16px 4px; }
+#stepHead .kicker { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+#stepHead h2 { font-size: 17px; margin: 2px 0 4px; font-weight: 650; }
+#stepHead p { margin: 0; color: var(--muted); font-size: 13px; }
+#refGrade { margin: 8px 16px 0; padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 13px; }
+#form { flex: 1; overflow-y: auto; padding: 6px 16px 16px; border-top: 1px solid var(--line); margin-top: 8px; }
+.q { padding: 12px 0; border-top: 1px solid var(--line); }
+.q:first-child { border-top: 0; }
+.q.locked { opacity: .62; }
+.q .qlabel { font-weight: 600; font-size: 13.5px; margin-bottom: 2px; }
+.q .qlabel .req { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
+.q .qhelp { color: var(--muted); font-size: 12.5px; margin-bottom: 6px; }
+.q.missing .qlabel { color: var(--warn); }
+.opts { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.opts.cols2 { display: grid; grid-template-columns: 1fr 1fr; }
+.ogroup { grid-column: 1 / -1; font-size: 11.5px; color: var(--faint); margin: 6px 0 0; }
+.opt {
+  border: 1px solid var(--line); background: var(--raise); border-radius: var(--radius-s); padding: 5px 9px;
+  text-align: left; font-size: 13px; line-height: 1.3; position: relative;
+}
+.opt:hover { background: var(--raise-hover); }
+.opt.sel { background: var(--inverse); color: var(--inverse-text); border-color: var(--inverse); }
+.opt .oh { display: block; font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+.opt.sel .oh { color: #4a4a48; }
+.opt.haskbd { padding-right: 22px; }
+.opt .kbd { position: absolute; right: 6px; top: 5px; font-size: 10.5px; color: var(--faint); }
+.opt.sel .kbd { color: #6b6a67; }
+.opt:disabled { cursor: default; }
+.multi .opt::before { content: ""; display: inline-block; width: 9px; height: 9px; border: 1.5px solid currentColor; border-radius: 2px; margin-right: 7px; vertical-align: -0.5px; opacity: .7; }
+.multi .opt.sel::before { background: currentColor; }
+textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--viewer); border: 1px solid var(--line); border-radius: var(--radius-s); padding: 7px 9px; }
+.pointrow { display: flex; gap: 8px; align-items: center; margin-top: 6px; color: var(--muted); font-size: 12.5px; }
+.flagrow { display: flex; gap: 9px; align-items: center; cursor: pointer; }
+.flagrow input { width: 16px; height: 16px; accent-color: #d8d6d1; }
+#navbar { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); align-items: center; }
+#navbar .hint { color: var(--faint); font-size: 12px; flex: 1; }
+
+/* ---------- overlays: start, help, toast */
+.screen { position: fixed; inset: 0; background: rgba(15, 16, 17, .86); display: grid; place-items: center; z-index: 20; }
+.card { width: min(620px, calc(100vw - 32px)); max-height: calc(100vh - 48px); overflow-y: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 26px 28px; }
+.card h1 { font-size: 22px; margin: 0 0 6px; font-weight: 650; }
+.card h2 { font-size: 15px; margin: 18px 0 6px; }
+.card p, .card li { color: var(--muted); }
+.card .lead { color: var(--text); }
+.card input[type=text] { background: var(--viewer); border: 1px solid var(--line); border-radius: var(--radius-s); padding: 7px 10px; width: 160px; }
+.card .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.card table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.card td { padding: 4px 6px; border-top: 1px solid var(--line); color: var(--muted); }
+.card td:first-child { color: var(--text); white-space: nowrap; }
+.card .err { color: var(--warn); }
+#toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--inverse); color: var(--inverse-text); padding: 8px 14px; border-radius: var(--radius-m); font-weight: 600; z-index: 30; }
+.practice-tag { display: inline-block; font-size: 11.5px; border: 1px solid var(--muted); border-radius: 3px; padding: 0 5px; margin-left: 6px; color: var(--muted); vertical-align: 1px; }
+
+@media (max-width: 1100px) {
+  #main { grid-template-columns: 0 1fr 360px; }
+  #cases { display: none; }
+  #toolbar { right: 12px; bottom: 160px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="redfree" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values="0 1 0 0 0  0 1 0 0 0  0 1 0 0 0  0 0 0 1 0"/>
+  </filter>
+</svg>
+
+<div id="top">
+  <span class="title" id="packTitle">RetiSeg clinical review</span>
+  <span class="where" id="where"></span>
+  <span class="spacer"></span>
+  <span id="saveState"></span>
+  <div id="progress" title="Progress"><div></div></div>
+  <button class="btn" id="btnExport">Export results</button>
+  <button class="btn" id="btnMore">Save &amp; import</button>
+  <button class="btn" id="btnHelp" title="Help (?)">Help</button>
+  <span class="reader-tag" id="readerTag"></span>
+</div>
+
+<div id="main">
+  <nav id="cases" aria-label="Images"></nav>
+  <section id="viewerWrap">
+    <div id="viewer">
+      <canvas id="baseCanvas"></canvas>
+      <canvas id="overCanvas"></canvas>
+    </div>
+    <div id="loading" class="hidden">Loading image</div>
+    <div id="placeHint" class="hidden">Click on the image to place the point &middot; Esc to cancel</div>
+    <div id="legend" class="hidden"></div>
+    <div id="toolbar">
+      <div class="tgroup">
+        <button class="tbtn" id="tFit" title="Fit (F)">Fit</button>
+        <button class="tbtn" id="tRegion" title="Zoom to region (Z)">Region</button>
+        <button class="tbtn" id="tZoomOut" title="Zoom out (-)">&minus;</button>
+        <button class="tbtn" id="tZoomIn" title="Zoom in (+)">+</button>
+      </div>
+      <div class="tgroup">
+        <label for="rBright">Brightness</label><input type="range" id="rBright" min="50" max="220" value="100">
+        <label for="rContrast">Contrast</label><input type="range" id="rContrast" min="50" max="220" value="100">
+        <button class="tbtn" id="tRedfree" title="Red-free / green channel (G)">Red-free</button>
+        <button class="tbtn" id="tReset" title="Reset image adjustments">Reset</button>
+      </div>
+      <div class="tgroup" id="ovGroup">
+        <button class="tbtn" id="tAnn" title="Dataset annotation (D)">Dataset</button>
+        <button class="tbtn" id="tModel" title="Model outline (M)">Model</button>
+        <button class="tbtn" id="tHeat" title="Model probability heat map (H)">Heat map</button>
+        <button class="tbtn" id="tMarker" title="Region marker (K)">Marker</button>
+      </div>
+      <div class="tgroup" id="clsGroup"></div>
+    </div>
+    <canvas id="minimap" title="Click to move the view"></canvas>
+  </section>
+  <aside id="side">
+    <div id="rail"></div>
+    <div id="stepHead"><div class="kicker" id="kicker"></div><h2 id="stepTitle"></h2><p id="stepIntro"></p></div>
+    <div id="refGrade" class="hidden"></div>
+    <div id="form"></div>
+    <div id="navbar">
+      <button class="btn" id="btnBack">Back</button>
+      <span class="hint" id="navHint"></span>
+      <button class="btn primary" id="btnNext">Next</button>
+    </div>
+  </aside>
+</div>
+
+<div class="screen" id="startScreen">
+  <div class="card" id="startCard"></div>
+</div>
+<div class="screen hidden" id="helpScreen">
+  <div class="card">
+    <h1>How to read</h1>
+    <p class="lead">Each image has three kinds of step.</p>
+    <ol>
+      <li><b>Image assessment.</b> Grade the photograph with no outlines shown.</li>
+      <li><b>Marked regions.</b> For each dashed circle, first say what you see (A). Then reveal the outlines of the dataset annotation and the model, and explain the difference (B). Your answer to A is locked once you reveal.</li>
+      <li><b>Image summary.</b> All outlines are shown. Judge whether the model's lesions alone would change the grade or the referral.</li>
+    </ol>
+    <h2>Outlines</h2>
+    <table id="helpLegend"></table>
+    <h2>Keys</h2>
+    <table>
+      <tr><td>1&ndash;9</td><td>choose an option of the first unanswered question</td></tr>
+      <tr><td>Enter</td><td>reveal / next</td></tr>
+      <tr><td>F &middot; Z</td><td>fit the image &middot; zoom to the region</td></tr>
+      <tr><td>+ &middot; &minus; &middot; drag &middot; wheel</td><td>zoom and pan</td></tr>
+      <tr><td>G</td><td>red-free view</td></tr>
+      <tr><td>D &middot; M &middot; H &middot; K</td><td>dataset outline &middot; model outline &middot; heat map &middot; marker (when allowed)</td></tr>
+    </table>
+    <h2>Saving</h2>
+    <p>Answers are saved in this browser as you go. Export at the end of every session and send the file to the study team.</p>
+    <div class="row"><button class="btn primary" id="btnHelpClose">Close</button></div>
+  </div>
+</div>
+<div class="screen hidden" id="moreScreen">
+  <div class="card">
+    <h1>Save and import</h1>
+    <p>Your answers are kept in this browser automatically. To be safe, keep a file as well.</p>
+    <div class="row">
+      <button class="btn" id="btnExport2">Export results now</button>
+      <button class="btn" id="btnLinkFile">Save continuously to a file</button>
+    </div>
+    <p id="linkNote"></p>
+    <h2>Continue on another computer</h2>
+    <p>Import the last file you exported. It replaces the answers stored in this browser for this pack.</p>
+    <div class="row"><input type="file" id="importFile" accept=".json,application/json"></div>
+    <p id="importNote"></p>
+    <div class="row"><button class="btn primary" id="btnMoreClose">Close</button></div>
+  </div>
+</div>
+<input type="file" id="folderPick" webkitdirectory directory multiple class="hidden">
+<div id="toast" class="hidden"></div>
+
+<script>
+"use strict";
+const TOOL_VERSION = "0.9.0";
+const $ = (id) => document.getElementById(id);
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v;
+    else if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (v !== undefined && v !== null && v !== false) n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids) if (kid !== null && kid !== undefined) n.append(kid);
+  return n;
+};
+function toast(msg, ms = 2200) {
+  const t = $("toast"); t.textContent = msg; t.classList.remove("hidden");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.add("hidden"), ms);
+}
+
+/* ======================================================================= pack loading */
+let PACK = null;
+const FILES = {};            // relative path -> object URL (folder-picker fallback)
+function assetURL(rel) { return FILES[rel] || rel; }
+
+function startWithPack(pack) {
+  PACK = pack;
+  $("packTitle").textContent = pack.title || "RetiSeg clinical review";
+  document.title = (pack.title || "RetiSeg clinical review");
+  buildHelpLegend();
+  showStart();
+}
+
+async function pickFolder(ev) {
+  const files = Array.from(ev.target.files || []);
+  let packFile = null;
+  for (const f of files) {
+    const parts = f.webkitRelativePath.split("/");
+    const rel = parts.slice(1).join("/");
+    FILES[rel] = URL.createObjectURL(f);
+    if (rel === "pack.json") packFile = f;
+  }
+  if (!packFile) { $("startError").textContent = "That folder has no pack.json. Choose the folder that contains index.html."; return; }
+  try { startWithPack(JSON.parse(await packFile.text())); }
+  catch (e) { $("startError").textContent = "pack.json could not be read: " + e.message; }
+}
+$("folderPick").addEventListener("change", pickFolder);
+
+/* ======================================================================= storage */
+let READER = "";
+let S = null;                // the reader's state (exported as JSON)
+let fileHandle = null;
+let storageOK = true;
+const storeKey = () => `retiseg-review:${PACK.pack_id}:${READER}`;
+
+function freshState() {
+  return {
+    format: "retiseg-clinical-review/1", tool_version: TOOL_VERSION, schema_version: PACK.schema.version,
+    pack_id: PACK.pack_id, reader_id: READER, started: new Date().toISOString(), updated: null,
+    user_agent: navigator.userAgent, order: null, cases: {}, debrief: { answers: {}, t: {} }, events: []
+  };
+}
+function loadState() {
+  try { const raw = localStorage.getItem(storeKey()); if (raw) return JSON.parse(raw); }
+  catch (e) { storageOK = false; }
+  return null;
+}
+let saveTimer = null, fileTimer = null;
+function save() {
+  S.updated = new Date().toISOString();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(storeKey(), JSON.stringify(S)); localStorage.setItem("retiseg-review:last-reader", READER); storageOK = true; }
+    catch (e) { storageOK = false; }
+    updateSaveState();
+  }, 250);
+  if (fileHandle) { clearTimeout(fileTimer); fileTimer = setTimeout(writeLinkedFile, 1500); }
+}
+function updateSaveState() {
+  const s = $("saveState");
+  if (!storageOK) { s.textContent = "Not saved in this browser. Export now."; s.classList.add("warn"); return; }
+  s.classList.remove("warn");
+  s.textContent = fileHandle ? `Saved here and to ${fileHandle.name}` : "Saved in this browser";
+}
+async function writeLinkedFile() {
+  try { const w = await fileHandle.createWritable(); await w.write(JSON.stringify(S, null, 1)); await w.close(); updateSaveState(); }
+  catch (e) { fileHandle = null; toast("Could not write the linked file. Export instead."); updateSaveState(); }
+}
+function logEvent(type, detail) {
+  S.events.push({ t: new Date().toISOString(), type, case: cur.caseId || null, step: cur.step ? cur.step.key : null, ...(detail || {}) });
+  if (S.events.length > 3000) S.events.splice(0, S.events.length - 3000);
+}
+function exportResults() {
+  if (!S) return;
+  logEvent("export");
+  save();
+  const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "").replace(/^(\d{8})(\d{4})$/, "$1-$2");
+  const blob = new Blob([JSON.stringify(S, null, 1)], { type: "application/json" });
+  const a = el("a", { href: URL.createObjectURL(blob), download: `retiseg_review_${PACK.pack_id}_${READER}_${stamp}.json` });
+  document.body.append(a); a.click(); a.remove();
+  toast("Results exported. Send the file to the study team.");
+}
+
+/* ======================================================================= order (seeded by reader id) */
+function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function mulberry(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffled(arr, rnd) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function makeOrder() {
+  const set = PACK.settings || {};
+  const rnd = mulberry(hashStr(PACK.pack_id + "|" + READER));
+  const practice = PACK.cases.filter(c => c.practice).map(c => c.id);
+  let main = PACK.cases.filter(c => !c.practice).map(c => c.id);
+  if (set.shuffle_cases !== false) main = shuffled(main, rnd);
+  const regions = {};
+  for (const c of PACK.cases) {
+    const ids = c.regions.map(r => r.id);
+    regions[c.id] = set.shuffle_regions !== false ? shuffled(ids, rnd) : ids;
+  }
+  return { cases: (set.practice_first !== false ? practice.concat(main) : main.concat(practice)), regions, seed: "pack_id|reader_id" };
+}
+
+/* ======================================================================= schema helpers */
+const caseById = (id) => PACK.cases.find(c => c.id === id);
+function stepsOf(caseId) {
+  const steps = [{ key: "pre", kind: "image_pre" }];
+  for (const rid of S.order.regions[caseId]) {
+    steps.push({ key: "a:" + rid, kind: "region_a", rid });
+    steps.push({ key: "b:" + rid, kind: "region_b", rid });
+  }
+  steps.push({ key: "post", kind: "image_post" });
+  return steps;
+}
+function caseState(caseId) {
+  if (!S.cases[caseId]) S.cases[caseId] = { practice: !!caseById(caseId).practice, pre: { answers: {}, t: {} }, regions: {}, post: { answers: {}, t: {} }, done: false };
+  return S.cases[caseId];
+}
+function stepRecord(caseId, step) {
+  const cs = caseState(caseId);
+  if (step.kind === "image_pre") return cs.pre;
+  if (step.kind === "image_post") return cs.post;
+  if (!cs.regions[step.rid]) cs.regions[step.rid] = { a: { answers: {}, t: {} }, b: { answers: {}, t: {} }, revealed_at: null };
+  return step.kind === "region_a" ? cs.regions[step.rid].a : cs.regions[step.rid].b;
+}
+function visible(q, answers, caseObj) {
+  const c = q.show_if;
+  if (!c) return true;
+  if (c.case_has) return !!(caseObj && caseObj[c.case_has]);
+  const v = answers[c.q];
+  if (v === undefined || v === null || v === "") return c.not_in ? false : false;
+  const vals = Array.isArray(v) ? v : [v];
+  if (c.in) return vals.some(x => c.in.includes(x));
+  if (c.not_in) return vals.every(x => !c.not_in.includes(x));
+  return true;
+}
+function empty(v) { return v === undefined || v === null || v === "" || (Array.isArray(v) && v.length === 0); }
+function missingIn(stepKind, answers, caseObj) {
+  const qs = PACK.schema.steps[stepKind].questions;
+  return qs.filter(q => q.required && visible(q, answers, caseObj) && empty(answers[q.id])).map(q => q.id);
+}
+function pruneHidden(stepKind, answers, caseObj) {
+  for (const q of PACK.schema.steps[stepKind].questions) if (!visible(q, answers, caseObj) && answers[q.id] !== undefined) delete answers[q.id];
+}
+function stepComplete(caseId, step) {
+  const rec = stepRecord(caseId, step);
+  if (step.kind === "region_a") return !!caseState(caseId).regions[step.rid].revealed_at && missingIn("region_a", rec.answers, caseById(caseId)).length === 0;
+  return !!rec.t.completed && missingIn(step.kind, rec.answers, caseById(caseId)).length === 0;
+}
+
+/* ======================================================================= navigation */
+const cur = { caseId: null, steps: [], idx: 0, step: null, debrief: false };
+
+function firstOpenStep(caseId) {
+  const steps = stepsOf(caseId);
+  const i = steps.findIndex(s => !stepComplete(caseId, s));
+  return i < 0 ? steps.length - 1 : i;
+}
+function goCase(caseId, idx) {
+  cur.debrief = false;
+  cur.caseId = caseId;
+  cur.steps = stepsOf(caseId);
+  cur.idx = idx === undefined ? firstOpenStep(caseId) : idx;
+  loadCaseImage(caseId).then(() => enterStep(true));
+  enterStep(false);
+}
+function enterStep(fitView) {
+  cur.step = cur.steps[cur.idx];
+  const rec = stepRecord(cur.caseId, cur.step);
+  if (!rec.t.first) rec.t.first = new Date().toISOString();
+  setOverlayDefaults();
+  if (fitView) fitForStep();
+  renderAll();
+}
+function next() {
+  if (cur.debrief) { finishDebrief(); return; }
+  const step = cur.step, cs = caseState(cur.caseId), caseObj = caseById(cur.caseId);
+  const rec = stepRecord(cur.caseId, step);
+  if (missingIn(step.kind, rec.answers, caseObj).length) { markMissing = true; renderForm(); return; }
+  markMissing = false;
+  if (step.kind === "region_a" && !cs.regions[step.rid].revealed_at) {
+    cs.regions[step.rid].revealed_at = new Date().toISOString();
+    logEvent("reveal", { region: step.rid });
+  }
+  rec.t.completed = rec.t.completed || new Date().toISOString();
+  if (cur.idx < cur.steps.length - 1) { cur.idx++; save(); enterStep(true); return; }
+  cs.done = true; logEvent("case_done");
+  save();
+  const order = S.order.cases;
+  const nextCase = order.find(id => !caseState(id).done);
+  if (nextCase) { goCase(nextCase); toast("Image finished"); }
+  else showDebrief();
+}
+function back() {
+  if (cur.debrief) { const last = S.order.cases[S.order.cases.length - 1]; goCase(last, stepsOf(last).length - 1); return; }
+  if (cur.idx > 0) { cur.idx--; enterStep(true); }
+}
+$("btnNext").addEventListener("click", next);
+$("btnBack").addEventListener("click", back);
+
+/* ======================================================================= form rendering */
+let markMissing = false;
+let kbdTarget = null;
+let placing = null;          // question id waiting for a click on the image
+
+function renderForm() {
+  const form = $("form");
+  const keepScroll = form._key === (cur.debrief ? "debrief" : cur.caseId + "|" + (cur.step && cur.step.key)) ? form.scrollTop : 0;
+  form._key = cur.debrief ? "debrief" : cur.caseId + "|" + (cur.step && cur.step.key);
+  form.innerHTML = "";
+  requestAnimationFrame(() => { form.scrollTop = keepScroll; });
+  kbdTarget = null;
+  if (cur.debrief) return renderDebriefForm(form);
+  const step = cur.step, caseObj = caseById(cur.caseId);
+  const sdef = PACK.schema.steps[step.kind];
+  const rec = stepRecord(cur.caseId, step);
+  const cs = caseState(cur.caseId);
+  const lockedA = step.kind === "region_a" && !!cs.regions[step.rid].revealed_at;
+
+  // when on B, show the locked A answers as a read-only reminder
+  if (step.kind === "region_b") {
+    const a = cs.regions[step.rid].a.answers;
+    const fdef = PACK.schema.steps.region_a.questions.find(q => q.id === "a_finding");
+    const lab = (fdef.options.find(o => o.code === a.a_finding) || {}).label || "-";
+    const conf = a.a_confidence ? ` (${a.a_confidence})` : "";
+    form.append(el("div", { class: "q locked" }, el("div", { class: "qlabel", text: "Your answer before the reveal" }), el("div", { class: "qhelp", text: lab + conf + (a.a_multiple ? ", more than one lesion" : "") })));
+  }
+  const missing = markMissing ? new Set(missingIn(step.kind, rec.answers, caseObj)) : new Set();
+  for (const q of sdef.questions) {
+    if (!visible(q, rec.answers, caseObj)) continue;
+    form.append(renderQuestion(q, rec, caseObj, lockedA, missing.has(q.id)));
+  }
+  updateNav();
+}
+
+function renderQuestion(q, rec, caseObj, locked, isMissing) {
+  const box = el("div", { class: "q" + (locked ? " locked" : "") + (isMissing ? " missing" : ""), "data-q": q.id });
+  box.append(el("div", { class: "qlabel" }, q.label, q.required ? el("span", { class: "req", text: "required" }) : null));
+  if (q.help) box.append(el("div", { class: "qhelp", text: q.help }));
+  const val = rec.answers[q.id];
+  const set = (v) => {
+    if (locked) return;
+    if (empty(v)) delete rec.answers[q.id]; else rec.answers[q.id] = v;
+    pruneHidden(cur.debrief ? "debrief" : cur.step.kind, rec.answers, caseObj);
+    save(); renderForm();
+  };
+  if (q.type === "single" || q.type === "multi") {
+    const isTarget = q.type === "single" && !locked && empty(val) && !kbdTarget;
+    if (isTarget) kbdTarget = { q, set };
+    const opts = el("div", { class: "opts" + (q.columns === 2 ? " cols2" : "") + (q.type === "multi" ? " multi" : "") });
+    let lastGroup = null, n = 0;
+    for (const o of q.options) {
+      if (q.columns === 2 && o.group && o.group !== lastGroup) { opts.append(el("div", { class: "ogroup", text: o.group })); lastGroup = o.group; }
+      n++;
+      const selected = q.type === "single" ? val === o.code : (val || []).includes(o.code);
+      const b = el("button", { class: "opt" + (selected ? " sel" : "") + (isTarget && n <= 9 ? " haskbd" : ""), type: "button", disabled: locked, "aria-pressed": selected ? "true" : "false" },
+        o.label, o.help ? el("span", { class: "oh", text: o.help }) : null,
+        isTarget && n <= 9 ? el("span", { class: "kbd", text: String(n) }) : null);
+      b.addEventListener("click", () => {
+        if (q.type === "single") set(selected ? null : o.code);
+        else { const arr = (val || []).slice(); const i = arr.indexOf(o.code); if (i >= 0) arr.splice(i, 1); else arr.push(o.code); set(arr); }
+      });
+      opts.append(b);
+    }
+    box.append(opts);
+  } else if (q.type === "text") {
+    const ta = el("textarea", { "aria-label": q.label, disabled: locked });
+    ta.value = val || "";
+    ta.addEventListener("input", () => { if (ta.value) rec.answers[q.id] = ta.value; else delete rec.answers[q.id]; save(); });
+    box.append(ta);
+  } else if (q.type === "flag") {
+    const cb = el("input", { type: "checkbox", disabled: locked });
+    cb.checked = !!val;
+    cb.addEventListener("change", () => set(cb.checked ? true : null));
+    box.firstChild.remove();
+    box.append(el("label", { class: "flagrow" }, cb, el("span", { text: q.label })));
+  } else if (q.type === "point") {
+    const txt = val ? `Set at x ${Math.round(val.x)}, y ${Math.round(val.y)}` : "Not set";
+    const row = el("div", { class: "pointrow" },
+      el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => { placing = { id: q.id, set }; $("viewer").classList.add("placing"); $("placeHint").classList.remove("hidden"); } }, val ? "Move" : "Set"),
+      val ? el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => set(null) }, "Clear") : null,
+      el("span", { text: txt }));
+    box.append(row);
+  }
+  return box;
+}
+
+function updateNav() {
+  const btn = $("btnNext"), hint = $("navHint");
+  $("btnBack").disabled = cur.debrief ? false : cur.idx === 0;
+  if (cur.debrief) { btn.textContent = "Finish and export"; btn.disabled = false; hint.textContent = ""; return; }
+  const step = cur.step, caseObj = caseById(cur.caseId);
+  const rec = stepRecord(cur.caseId, step);
+  const miss = missingIn(step.kind, rec.answers, caseObj).length;
+  const revealed = step.kind === "region_a" && caseState(cur.caseId).regions[step.rid].revealed_at;
+  btn.textContent = step.kind === "region_a" && !revealed ? "Reveal outlines" : (cur.idx === cur.steps.length - 1 ? "Finish image" : "Next");
+  btn.disabled = false;
+  hint.textContent = miss ? `${miss} required ${miss === 1 ? "answer" : "answers"} left` : "Enter to continue";
+}
+
+/* ======================================================================= header, rail, case list */
+function renderChrome() {
+  if (cur.debrief) {
+    $("where").textContent = "Debrief";
+    $("rail").innerHTML = "";
+    $("kicker").textContent = "All images done";
+    $("stepTitle").textContent = PACK.schema.steps.debrief.title;
+    $("stepIntro").textContent = PACK.schema.steps.debrief.intro;
+    $("refGrade").classList.add("hidden");
+  } else {
+    const order = S.order.cases, pos = order.indexOf(cur.caseId) + 1;
+    const caseObj = caseById(cur.caseId);
+    const step = cur.step, sdef = PACK.schema.steps[step.kind];
+    const nReg = S.order.regions[cur.caseId].length;
+    $("where").textContent = `Image ${pos} of ${order.length}`;
+    let kick = caseObj.practice ? "Practice image" : `Image ${pos} of ${order.length}`;
+    if (step.rid) { const k = S.order.regions[cur.caseId].indexOf(step.rid) + 1; kick += `  ·  region ${k} of ${nReg}  ·  step ${step.kind === "region_a" ? "A" : "B"}`; }
+    $("kicker").textContent = kick;
+    $("stepTitle").textContent = sdef.title;
+    $("stepIntro").textContent = sdef.intro || "";
+    const rail = $("rail"); rail.innerHTML = "";
+    cur.steps.forEach((s, i) => rail.append(el("div", { class: "seg" + (i === cur.idx ? " cur" : stepComplete(cur.caseId, s) ? " done" : ""), title: s.key })));
+    const rg = $("refGrade");
+    if (step.kind === "image_post" && caseObj.reference_grade) {
+      rg.textContent = `Dataset grade: ${caseObj.reference_grade.value} (${caseObj.reference_grade.scale})`;
+      rg.classList.remove("hidden");
+    } else rg.classList.add("hidden");
+  }
+  // case list
+  const list = $("cases"); list.innerHTML = "";
+  list.append(el("h3", { text: "Images" }));
+  S.order.cases.forEach((id, i) => {
+    const cs = S.cases[id];
+    const started = cs && (Object.keys(cs.pre.answers).length || Object.keys(cs.regions).length);
+    const cls = "case-item" + (id === cur.caseId && !cur.debrief ? " current" : "") + (cs && cs.done ? " done" : started ? " partial" : "");
+    const c = caseById(id);
+    list.append(el("button", { class: cls, type: "button", onclick: () => goCase(id) }, el("span", { class: "dot" }), `Image ${i + 1}`, c.practice ? el("span", { class: "badge", text: "practice" }) : null));
+  });
+  // progress
+  const total = PACK.cases.reduce((n, c) => n + 2 + c.regions.length, 0);
+  let done = 0;
+  for (const c of PACK.cases) { const cs = S.cases[c.id]; if (!cs) continue; if (cs.pre.t.completed) done++; if (cs.post.t.completed) done++; for (const r of Object.values(cs.regions)) if (r.b.t.completed) done++; }
+  $("progress").firstChild.style.width = (100 * done / total).toFixed(1) + "%";
+  $("progress").title = `${done} of ${total} steps`;
+}
+function renderAll() { renderChrome(); renderForm(); renderToolbar(); draw(); }
+
+/* ======================================================================= viewer */
+const V = { img: null, imgCase: null, scale: 1, tx: 0, ty: 0, dpr: window.devicePixelRatio || 1, paths: {}, heat: {},
+  showAnn: true, showModel: true, showHeat: false, showMarker: true, cls: { MA: true, HE: true, EX: true, SE: true },
+  bright: 100, contrast: 100, redfree: false };
+const base = $("baseCanvas"), over = $("overCanvas"), mini = $("minimap");
+const imgCache = new Map();
+
+function loadImage(src) {
+  if (imgCache.has(src)) return imgCache.get(src);
+  const p = new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error("cannot load " + src)); im.src = assetURL(src); });
+  imgCache.set(src, p);
+  if (imgCache.size > 6) imgCache.delete(imgCache.keys().next().value);
+  return p;
+}
+async function loadCaseImage(caseId) {
+  if (V.imgCase === caseId && V.img) return;
+  const c = caseById(caseId);
+  $("loading").classList.remove("hidden");
+  V.img = null; V.imgCase = caseId; V.paths = buildPaths(c); V.heat = {};
+  draw();
+  try {
+    const im = await loadImage(c.image);
+    if (V.imgCase !== caseId) return;
+    V.img = im;
+    for (const k of Object.keys(c.heat || {})) loadImage(c.heat[k].src).then(h => { if (V.imgCase === caseId) { V.heat[k] = h; draw(); } }).catch(() => {});
+  } catch (e) { toast(e.message, 4000); }
+  $("loading").classList.add("hidden");
+  // preload the next image in the order
+  const order = S.order.cases, i = order.indexOf(caseId);
+  if (i >= 0 && i + 1 < order.length) loadImage(caseById(order[i + 1]).image).catch(() => {});
+}
+function buildPaths(c) {
+  const out = {};
+  for (const src of ["annotation", "model", "uncertain"]) {
+    out[src] = {};
+    for (const [cls, loops] of Object.entries((c.overlays || {})[src] || {})) {
+      const p = new Path2D();
+      for (const f of loops) { p.moveTo(f[0], f[1]); for (let i = 2; i < f.length; i += 2) p.lineTo(f[i], f[i + 1]); p.closePath(); }
+      out[src][cls] = p;
+    }
+  }
+  return out;
+}
+function resize() {
+  const r = $("viewer").getBoundingClientRect();
+  V.dpr = window.devicePixelRatio || 1;
+  for (const cv of [base, over]) { cv.width = Math.max(1, Math.round(r.width * V.dpr)); cv.height = Math.max(1, Math.round(r.height * V.dpr)); }
+  mini.width = Math.round(188 * V.dpr); mini.height = Math.round(140 * V.dpr);
+  draw();
+}
+window.addEventListener("resize", () => { const keep = viewCenter(); resize(); if (keep) centerOn(keep.x, keep.y); });
+function viewSize() { const r = $("viewer").getBoundingClientRect(); return { w: r.width, h: r.height }; }
+function viewCenter() { if (!V.img) return null; const { w, h } = viewSize(); return { x: (w / 2 - V.tx) / V.scale, y: (h / 2 - V.ty) / V.scale }; }
+function centerOn(x, y) { const { w, h } = viewSize(); V.tx = w / 2 - x * V.scale; V.ty = h / 2 - y * V.scale; draw(); }
+function fitRect(x0, y0, x1, y1, pad = 0.04) {
+  const { w, h } = viewSize();
+  const bw = (x1 - x0) * (1 + 2 * pad), bh = (y1 - y0) * (1 + 2 * pad);
+  V.scale = Math.min(w / bw, h / bh);
+  centerOn((x0 + x1) / 2, (y0 + y1) / 2);
+}
+function regionOf(step) { const c = caseById(cur.caseId); return step && step.rid ? c.regions.find(r => r.id === step.rid) : null; }
+function fitForStep() {
+  const c = caseById(cur.caseId);
+  const reg = regionOf(cur.step);
+  if (reg) fitRect(...reg.crop, 0.22); else fitRect(0, 0, c.width, c.height, 0.01);
+}
+function zoomAt(f, sx, sy) {
+  const { w, h } = viewSize();
+  if (sx === undefined) { sx = w / 2; sy = h / 2; }
+  const ns = Math.min(40, Math.max(0.02, V.scale * f));
+  const ix = (sx - V.tx) / V.scale, iy = (sy - V.ty) / V.scale;
+  V.scale = ns; V.tx = sx - ix * ns; V.ty = sy - iy * ns; draw();
+}
+
+function overlayMode() {
+  if (cur.debrief || !cur.step) return "none";
+  return PACK.schema.steps[cur.step.kind].overlays || "none";
+}
+function setOverlayDefaults() {
+  const mode = overlayMode();
+  V.showAnn = V.showModel = (mode === "crop" || mode === "all");
+  V.showHeat = false;
+  V.showMarker = (mode === "marker" || mode === "crop");
+}
+
+let drawQueued = false;
+function draw() { if (!drawQueued) { drawQueued = true; requestAnimationFrame(() => { drawQueued = false; drawNow(); }); } }
+function drawNow() {
+  const bctx = base.getContext("2d"), octx = over.getContext("2d");
+  bctx.setTransform(1, 0, 0, 1, 0, 0); bctx.clearRect(0, 0, base.width, base.height);
+  octx.setTransform(1, 0, 0, 1, 0, 0); octx.clearRect(0, 0, over.width, over.height);
+  base.style.filter = `${V.redfree ? "url(#redfree) " : ""}brightness(${V.bright / 100}) contrast(${V.contrast / 100})`;
+  drawMini();
+  if (!V.img || cur.debrief) return;
+  const k = V.dpr * V.scale;
+  bctx.setTransform(k, 0, 0, k, V.dpr * V.tx, V.dpr * V.ty);
+  bctx.imageSmoothingEnabled = V.scale < 2;
+  bctx.drawImage(V.img, 0, 0);
+  octx.setTransform(k, 0, 0, k, V.dpr * V.tx, V.dpr * V.ty);
+  const mode = overlayMode();
+  const c = caseById(cur.caseId);
+  const reg = regionOf(cur.step);
+  const px = 1 / V.scale;
+  if (mode === "crop" || mode === "all") {
+    octx.save();
+    if (mode === "crop" && reg) {
+      const [x0, y0, x1, y1] = reg.crop;
+      octx.beginPath(); octx.rect(x0, y0, x1 - x0, y1 - y0); octx.clip();
+    }
+    if (V.showHeat) {
+      octx.globalAlpha = 0.75;
+      for (const cls of ["SE", "EX", "HE", "MA"]) if (V.cls[cls] && V.heat[cls]) octx.drawImage(V.heat[cls], 0, 0, c.width, c.height);
+      octx.globalAlpha = 1;
+    }
+    octx.lineJoin = "round";
+    for (const cls of ["SE", "EX", "HE", "MA"]) {
+      if (!V.cls[cls]) continue;
+      const color = PACK.classes[cls].color;
+      const unc = V.paths.uncertain[cls];
+      if (unc && V.showAnn) { octx.setLineDash([2 * px, 3 * px]); octx.lineWidth = 1.2 * px; octx.strokeStyle = "rgba(220,220,215,.8)"; octx.stroke(unc); }
+      const ann = V.paths.annotation[cls];
+      if (ann && V.showAnn) {
+        octx.setLineDash([]);
+        octx.lineWidth = 3.4 * px; octx.strokeStyle = "rgba(0,0,0,.55)"; octx.stroke(ann);
+        octx.lineWidth = 1.7 * px; octx.strokeStyle = color; octx.stroke(ann);
+      }
+      const mod = V.paths.model[cls];
+      if (mod && V.showModel) {
+        octx.setLineDash([5 * px, 3.5 * px]);
+        octx.lineWidth = 3.4 * px; octx.strokeStyle = "rgba(0,0,0,.55)"; octx.stroke(mod);
+        octx.lineWidth = 1.7 * px; octx.strokeStyle = color; octx.stroke(mod);
+      }
+    }
+    octx.setLineDash([]);
+    octx.restore();
+    if (mode === "crop" && reg) {
+      const [x0, y0, x1, y1] = reg.crop;
+      octx.lineWidth = 1 * px; octx.strokeStyle = "rgba(235,233,229,.45)"; octx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+    }
+  }
+  if (reg && V.showMarker && (mode === "marker" || mode === "crop")) {
+    const m = reg.marker;
+    octx.beginPath(); octx.arc(m.cx, m.cy, m.r, 0, Math.PI * 2);
+    octx.setLineDash([]); octx.lineWidth = 4 * px; octx.strokeStyle = "rgba(0,0,0,.6)"; octx.stroke();
+    octx.setLineDash([7 * px, 5 * px]); octx.lineWidth = 2 * px; octx.strokeStyle = "#ffffff"; octx.stroke();
+    octx.setLineDash([]);
+  }
+  // reader's points (image step)
+  const pre = S.cases[cur.caseId] && S.cases[cur.caseId].pre.answers;
+  if (pre && (cur.step.kind === "image_pre" || cur.step.kind === "image_post")) {
+    for (const [id, label] of [["pre_fovea", "Fovea"], ["pre_disc", "Disc"]]) {
+      const p = pre[id]; if (!p) continue;
+      octx.lineWidth = 2 * px; octx.strokeStyle = "#ffffff";
+      octx.beginPath(); octx.moveTo(p.x - 14 * px, p.y); octx.lineTo(p.x + 14 * px, p.y); octx.moveTo(p.x, p.y - 14 * px); octx.lineTo(p.x, p.y + 14 * px); octx.stroke();
+      octx.font = `${12 * px}px system-ui, sans-serif`; octx.fillStyle = "#ffffff"; octx.fillText(label, p.x + 8 * px, p.y - 8 * px);
+    }
+  }
+}
+function drawMini() {
+  const ctx = mini.getContext("2d");
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, mini.width, mini.height);
+  if (!V.img || cur.debrief) return;
+  const c = caseById(cur.caseId);
+  const s = Math.min(mini.width / c.width, mini.height / c.height);
+  const ox = (mini.width - c.width * s) / 2, oy = (mini.height - c.height * s) / 2;
+  mini._map = { s, ox, oy };
+  ctx.filter = base.style.filter.includes("url(") ? "none" : base.style.filter;
+  ctx.drawImage(V.img, ox, oy, c.width * s, c.height * s);
+  ctx.filter = "none";
+  const reg = regionOf(cur.step);
+  if (reg) {
+    const [x0, y0, x1, y1] = reg.crop;
+    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5 * V.dpr; ctx.setLineDash([3 * V.dpr, 2 * V.dpr]);
+    ctx.strokeRect(ox + x0 * s, oy + y0 * s, (x1 - x0) * s, (y1 - y0) * s); ctx.setLineDash([]);
+  }
+  const { w, h } = viewSize();
+  const vx0 = -V.tx / V.scale, vy0 = -V.ty / V.scale;
+  ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 1 * V.dpr;
+  ctx.strokeRect(ox + vx0 * s, oy + vy0 * s, (w / V.scale) * s, (h / V.scale) * s);
+}
+mini.addEventListener("click", (e) => {
+  if (!mini._map) return;
+  const r = mini.getBoundingClientRect(), { s, ox, oy } = mini._map;
+  centerOn(((e.clientX - r.left) * V.dpr - ox) / s, ((e.clientY - r.top) * V.dpr - oy) / s);
+});
+
+// pan, zoom, point placement
+(() => {
+  const vw = $("viewer");
+  let drag = null;
+  vw.addEventListener("pointerdown", (e) => { vw.setPointerCapture(e.pointerId); drag = { x: e.clientX, y: e.clientY, tx: V.tx, ty: V.ty, moved: false }; vw.classList.add("dragging"); });
+  vw.addEventListener("pointermove", (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true;
+    if (drag.moved) { V.tx = drag.tx + dx; V.ty = drag.ty + dy; draw(); }
+  });
+  vw.addEventListener("pointerup", (e) => {
+    vw.classList.remove("dragging");
+    if (drag && !drag.moved && placing && V.img) {
+      const r = vw.getBoundingClientRect();
+      const x = (e.clientX - r.left - V.tx) / V.scale, y = (e.clientY - r.top - V.ty) / V.scale;
+      const p = placing; cancelPlacing();
+      p.set({ x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 });
+      draw();
+    }
+    drag = null;
+  });
+  vw.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const r = vw.getBoundingClientRect();
+    zoomAt(Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)), e.clientX - r.left, e.clientY - r.top);
+  }, { passive: false });
+})();
+function cancelPlacing() { placing = null; $("viewer").classList.remove("placing"); $("placeHint").classList.add("hidden"); }
+
+/* ======================================================================= toolbar */
+function renderToolbar() {
+  const mode = overlayMode();
+  const ovAllowed = mode === "crop" || mode === "all";
+  $("ovGroup").classList.toggle("hidden", mode === "none");
+  $("clsGroup").classList.toggle("hidden", !ovAllowed);
+  for (const [id, key, allowed] of [["tAnn", "showAnn", ovAllowed], ["tModel", "showModel", ovAllowed], ["tHeat", "showHeat", ovAllowed], ["tMarker", "showMarker", mode === "marker" || mode === "crop"]]) {
+    const b = $(id); b.disabled = !allowed; b.classList.toggle("on", allowed && V[key]);
+    b.classList.toggle("hidden", !allowed && id !== "tMarker");
+  }
+  $("tRegion").disabled = !regionOf(cur.step);
+  $("tRedfree").classList.toggle("on", V.redfree);
+  const cg = $("clsGroup"); cg.innerHTML = "";
+  for (const cls of ["MA", "HE", "EX", "SE"]) {
+    const b = el("button", { class: "tbtn" + (V.cls[cls] ? " on" : ""), type: "button", title: PACK.classes[cls].name },
+      el("span", { class: "sw", style: `background:${PACK.classes[cls].color}` }), cls);
+    b.addEventListener("click", () => { V.cls[cls] = !V.cls[cls]; renderToolbar(); draw(); });
+    cg.append(b);
+  }
+  const lg = $("legend");
+  if (ovAllowed) {
+    lg.innerHTML = "";
+    lg.append(el("span", {}, svgLine(false), "Dataset annotation"), el("span", {}, svgLine(true), "Model"));
+    if (Object.values(V.paths.uncertain || {}).length) lg.append(el("span", {}, svgLine("dot"), "Uncertain (not scored)"));
+    lg.classList.remove("hidden");
+  } else lg.classList.add("hidden");
+}
+function svgLine(kind) {
+  const ns = "http://www.w3.org/2000/svg";
+  const s = document.createElementNS(ns, "svg"); s.setAttribute("width", "26"); s.setAttribute("height", "8");
+  const l = document.createElementNS(ns, "line");
+  l.setAttribute("x1", "1"); l.setAttribute("x2", "25"); l.setAttribute("y1", "4"); l.setAttribute("y2", "4");
+  l.setAttribute("stroke", "#ebe9e5"); l.setAttribute("stroke-width", "2");
+  if (kind === true) l.setAttribute("stroke-dasharray", "5 3");
+  if (kind === "dot") l.setAttribute("stroke-dasharray", "1.5 3");
+  s.append(l); return s;
+}
+function toggle(key) { const mode = overlayMode(); if (key !== "showMarker" && !(mode === "crop" || mode === "all")) return; if (key === "showMarker" && !(mode === "marker" || mode === "crop")) return; V[key] = !V[key]; renderToolbar(); draw(); }
+$("tFit").onclick = () => { const c = caseById(cur.caseId); if (c) fitRect(0, 0, c.width, c.height, 0.01); };
+$("tRegion").onclick = () => { const r = regionOf(cur.step); if (r) fitRect(...r.crop, 0.22); };
+$("tZoomIn").onclick = () => zoomAt(1.4);
+$("tZoomOut").onclick = () => zoomAt(1 / 1.4);
+$("tAnn").onclick = () => toggle("showAnn");
+$("tModel").onclick = () => toggle("showModel");
+$("tHeat").onclick = () => toggle("showHeat");
+$("tMarker").onclick = () => toggle("showMarker");
+$("tRedfree").onclick = () => { V.redfree = !V.redfree; renderToolbar(); draw(); };
+$("tReset").onclick = () => { V.bright = 100; V.contrast = 100; V.redfree = false; $("rBright").value = 100; $("rContrast").value = 100; renderToolbar(); draw(); };
+$("rBright").oninput = (e) => { V.bright = +e.target.value; draw(); };
+$("rContrast").oninput = (e) => { V.contrast = +e.target.value; draw(); };
+
+/* ======================================================================= keyboard */
+document.addEventListener("keydown", (e) => {
+  if (!S || !$("startScreen").classList.contains("hidden")) return;
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (tag === "textarea" || (tag === "input" && e.target.type === "text")) { if (e.key === "Escape") e.target.blur(); return; }
+  if (!$("helpScreen").classList.contains("hidden") || !$("moreScreen").classList.contains("hidden")) { if (e.key === "Escape") { $("helpScreen").classList.add("hidden"); $("moreScreen").classList.add("hidden"); } return; }
+  if (e.key === "Escape" && placing) { cancelPlacing(); return; }
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (k >= "1" && k <= "9" && kbdTarget) {
+    const o = kbdTarget.q.options[+k - 1];
+    if (o) { kbdTarget.set(o.code); e.preventDefault(); }
+    return;
+  }
+  if (k === "Enter") { e.preventDefault(); next(); return; }
+  const map = { f: () => $("tFit").click(), z: () => $("tRegion").click(), "+": () => zoomAt(1.4), "=": () => zoomAt(1.4), "-": () => zoomAt(1 / 1.4),
+    g: () => $("tRedfree").click(), d: () => toggle("showAnn"), m: () => toggle("showModel"), h: () => toggle("showHeat"), k: () => toggle("showMarker"),
+    "?": () => $("helpScreen").classList.remove("hidden") };
+  const fn = map[k.toLowerCase()] || map[k];
+  if (fn) { e.preventDefault(); fn(); }
+});
+
+/* ======================================================================= active-time accounting */
+let lastInput = Date.now();
+for (const ev of ["pointermove", "pointerdown", "keydown", "wheel"]) document.addEventListener(ev, () => { lastInput = Date.now(); }, { passive: true });
+setInterval(() => {
+  if (!S || !cur.step || document.visibilityState !== "visible" || Date.now() - lastInput > 90000) return;
+  if (!$("startScreen").classList.contains("hidden")) return;
+  const rec = cur.debrief ? S.debrief : stepRecord(cur.caseId, cur.step);
+  rec.t.active_ms = (rec.t.active_ms || 0) + 1000;
+  if ((rec.t.active_ms / 1000) % 15 === 0) save();
+}, 1000);
+
+/* ======================================================================= debrief */
+function showDebrief() {
+  cur.debrief = true; cur.step = { key: "debrief", kind: "debrief" };
+  V.img = null; V.imgCase = null;
+  renderAll();
+}
+function renderDebriefForm(form) {
+  const sdef = PACK.schema.steps.debrief;
+  for (const q of sdef.questions) form.append(renderQuestion(q, S.debrief, null, false, false));
+  updateNav();
+}
+function finishDebrief() {
+  S.debrief.t.completed = new Date().toISOString();
+  S.finished = new Date().toISOString();
+  logEvent("finished");
+  save(); exportResults();
+}
+
+/* ======================================================================= start screen */
+function countDone() { return Object.values(S ? S.cases : {}).filter(c => c.done).length; }
+function showStart() {
+  const card = $("startCard"); card.innerHTML = "";
+  if (!PACK) {
+    card.append(
+      el("h1", { text: "Open the review pack" }),
+      el("p", { class: "lead", text: "This page could not find pack.js next to it." }),
+      el("p", { text: "Keep index.html inside the pack folder and open it from there, or choose the pack folder below." }),
+      el("div", { class: "row" }, el("button", { class: "btn primary", type: "button", onclick: () => $("folderPick").click() }, "Open pack folder")),
+      el("p", { class: "err", id: "startError" }));
+    return;
+  }
+  const nCases = PACK.cases.filter(c => !c.practice).length, nPrac = PACK.cases.filter(c => c.practice).length;
+  const nReg = PACK.cases.filter(c => !c.practice).reduce((n, c) => n + c.regions.length, 0);
+  let last = ""; try { last = localStorage.getItem("retiseg-review:last-reader") || ""; } catch (e) { storageOK = false; }
+  const input = el("input", { type: "text", id: "readerInput", placeholder: "e.g. R1", value: last, "aria-label": "Reader code", maxlength: "24" });
+  const status = el("p", { id: "readerStatus" });
+  const startBtn = el("button", { class: "btn primary", type: "button" }, "Start");
+  const refresh = () => {
+    const code = input.value.trim();
+    if (!code) { status.textContent = ""; startBtn.textContent = "Start"; return; }
+    let prev = null; try { prev = JSON.parse(localStorage.getItem(`retiseg-review:${PACK.pack_id}:${code}`) || "null"); } catch (e) {}
+    if (prev) { const d = Object.values(prev.cases).filter(c => c.done).length; status.textContent = `Saved answers found for ${code}: ${d} of ${PACK.cases.length} images finished.`; startBtn.textContent = "Continue"; }
+    else { status.textContent = ""; startBtn.textContent = "Start"; }
+  };
+  input.addEventListener("input", refresh);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") startBtn.click(); });
+  startBtn.addEventListener("click", () => {
+    const code = input.value.trim().replace(/[^\w\-]/g, "");
+    if (!code) { status.textContent = "Enter the reader code the study team gave you."; return; }
+    begin(code);
+  });
+  card.append(
+    el("h1", { text: PACK.title || "RetiSeg clinical review" }),
+    el("p", { class: "lead", text: `${nCases} photographs with ${nReg} marked regions${nPrac ? `, after ${nPrac} practice image${nPrac > 1 ? "s" : ""}` : ""}. About one minute per region; take breaks whenever you like, everything is saved as you go.` }),
+    el("p", { text: "For each image you first grade the photograph, then judge each marked region before and after its outlines are revealed, then sum up the image." }),
+    el("div", { class: "row" }, el("label", { for: "readerInput", text: "Reader code" }), input, startBtn),
+    status,
+    el("p", { text: storageOK ? "Answers are stored in this browser on this computer until you export them." : "This browser blocks local storage: export your results before closing the page." }));
+  refresh();
+  $("startScreen").classList.remove("hidden");
+  input.focus();
+}
+function begin(code) {
+  READER = code;
+  S = loadState() || freshState();
+  if (!S.order) S.order = makeOrder();
+  logEvent("session_start", { tool_version: TOOL_VERSION });
+  $("readerTag").textContent = READER;
+  $("startScreen").classList.add("hidden");
+  $("main").classList.remove("nocases");
+  resize();
+  save();
+  const nextCase = S.order.cases.find(id => !caseState(id).done);
+  if (nextCase) goCase(nextCase); else showDebrief();
+  updateSaveState();
+}
+
+/* ======================================================================= help, export, import */
+function buildHelpLegend() {
+  const t = $("helpLegend"); t.innerHTML = "";
+  t.append(el("tr", {}, el("td", {}, svgLine(false)), el("td", { text: "Dataset annotation (solid)" })));
+  t.append(el("tr", {}, el("td", {}, svgLine(true)), el("td", { text: "Model (dashed)" })));
+  for (const [cls, v] of Object.entries(PACK.classes)) t.append(el("tr", {}, el("td", {}, el("span", { style: `display:inline-block;width:22px;height:4px;background:${v.color};vertical-align:middle` })), el("td", { text: `${cls}: ${v.name}` })));
+}
+$("btnHelp").onclick = () => $("helpScreen").classList.remove("hidden");
+$("btnHelpClose").onclick = () => $("helpScreen").classList.add("hidden");
+$("btnExport").onclick = exportResults;
+$("btnExport2").onclick = exportResults;
+$("btnMore").onclick = () => { $("linkNote").textContent = window.showSaveFilePicker ? (fileHandle ? `Saving to ${fileHandle.name}.` : "Chrome and Edge can keep writing your answers to a file you choose.") : "This browser cannot keep a file linked; use Export instead."; $("moreScreen").classList.remove("hidden"); };
+$("btnMoreClose").onclick = () => $("moreScreen").classList.add("hidden");
+$("btnLinkFile").onclick = async () => {
+  if (!window.showSaveFilePicker || !S) { $("linkNote").textContent = "This browser cannot keep a file linked; use Export instead."; return; }
+  try {
+    fileHandle = await window.showSaveFilePicker({ suggestedName: `retiseg_review_${PACK.pack_id}_${READER}.json`, types: [{ description: "JSON", accept: { "application/json": [".json"] } }] });
+    await writeLinkedFile(); $("linkNote").textContent = `Saving to ${fileHandle.name}.`; logEvent("link_file");
+  } catch (e) { $("linkNote").textContent = "No file linked."; }
+};
+$("importFile").addEventListener("change", async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const data = JSON.parse(await f.text());
+    if (data.pack_id !== PACK.pack_id) { $("importNote").textContent = `That file belongs to pack ${data.pack_id}, not ${PACK.pack_id}.`; return; }
+    if (S && data.reader_id !== READER) { $("importNote").textContent = `That file is for reader ${data.reader_id}; you are signed in as ${READER}. Reload and enter ${data.reader_id} first.`; return; }
+    S = data; logEvent("import", { file: f.name }); save();
+    $("importNote").textContent = `Imported ${Object.values(S.cases).filter(c => c.done).length} finished images.`;
+    const nextCase = S.order.cases.find(id => !caseState(id).done);
+    if (nextCase) goCase(nextCase); else showDebrief();
+  } catch (err) { $("importNote").textContent = "That file could not be read: " + err.message; }
+  e.target.value = "";
+});
+window.addEventListener("beforeunload", () => { if (S) { try { localStorage.setItem(storeKey(), JSON.stringify(S)); } catch (e) {} } });
+
+/* ======================================================================= boot */
+$("main").classList.add("nocases");
+resize();
+function boot() { if (window.RETISEG_PACK) startWithPack(window.RETISEG_PACK); else showStart(); }
+const tag = document.createElement("script");
+tag.src = "pack.js";
+tag.onload = boot;
+tag.onerror = boot;
+document.head.append(tag);
+</script>
+</body>
+</html>

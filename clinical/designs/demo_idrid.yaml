@@ -1,0 +1,30 @@
+# Demo design: exercises the whole pipeline on five IDRiD test images with the M2MRF author checkpoint
+# (runs/E1_m2mrf, docs/paper/14 M5). It is NOT the model under review and NOT a study sample; it exists so the
+# reader tool can be tried and the scripts tested. The study designs are pilot01.yaml (and main01.yaml later).
+name: demo_idrid
+seed: 20261028
+sets:
+  - set: IDRiD
+    candidates: clinical/work/mine/demo_IDRiD
+    reference_grade_scale: null
+images:
+  eligibility: {FN: 1, FP: 1, agree: 1}
+  strata:
+    - {set: IDRiD, n: 4}
+representative:
+  per_image:
+    - {kind: FN, n: 1}
+    - {kind: FP, n: 1}
+    - {kind: agree, n: 1}
+enriched:
+  - {name: confident_fp, kind: FP, n: 2, where: {prob_max_ge: 0.9}}
+  - {name: confident_fn, kind: FN, n: 2, where: {prob_max_le: 0.2}}
+  - {name: confusion, n: 1, where: {subtype_prefix: confusion}}
+  - {name: extent, kind: extent, n: 1, where: {cls: [HE, EX, SE]}}
+geometry:
+  crop_min: 384
+  crop_margin: 0.6
+  marker_min_radius: 14
+  marker_pad: 6
+  min_gap: 0
+max_per_image: 6

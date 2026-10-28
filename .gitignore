@@ -18,3 +18,9 @@ pretrained/
 
 # Server handoff tarballs stay local (52 MB each).
 *.tar.gz
+
+# Clinical review (docs/clinical/28): mining outputs, packs with images, and readers' answers stay out of the
+# public repository. Frozen designs (clinical/designs/) and selections (clinical/selections/) are committed.
+clinical/work/
+clinical/packs/
+clinical/reviews/

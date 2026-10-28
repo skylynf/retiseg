@@ -57,17 +57,23 @@
        RETISEG_GPUS="2" python bench/scripts/launch_e3a.py --submit --only BF_ref_retfound_fine_seed0,BF_ref_samed_fine_seed0
      （b）源内测试（IDRiD、TJDR_std），两格各两集，命令照第 63 条（best.pt；--val-pred 用对调后的 prob_val，--val-data dataset/prepared/DDR）。
      （c）集成（CPU，约一小时）：python bench/scripts/ensemble.py reference --members runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0 --drop-maps
+     　　 另按第 72 条（a）对五个集合不带 --drop-maps 再算一次，留下集成图（临床合作要用）。
      （d）发布打包（CPU，一分钟；复制两份 best.pt 约 1.5 GB，放在 runs/ 下让小文件随包走，.pt 不进包）：
        python -m bench.reference bundle --out runs/release/retiseg_ref
      写 weights.pt × 2、config / recipe / environment、thresholds.json（集成在 DDR 验证划分上的 val-opt 阈值）、scores.json、members.json、README.md、sha256sums.txt。
      （e）发布入口的冒烟（一张卡几分钟）：取 DDR 测试划分前三张图复制到 /tmp/ref_smoke/（从 dataset/prepared/DDR/images，id 看 splits.json 的 test），
        python -m bench.reference predict --images /tmp/ref_smoke --out runs/release/smoke --release runs/release/retiseg_ref
      然后 cmp runs/release/smoke/members/BF_ref_samed_fine_seed0/MA/<id>.png runs/BF_ref_samed_fine_seed0/prob_test/MA/<id>.png（三张图、任一类）——应逐字节相同（同一视野规则、同一几何、同一检查点）；相同与否写 00。summary.json 随包。
-     （f）集成算完再删图：runs/E3a/BF_ref_*/{FGADR,Retinal-Lesions}/prob_test 与两格的 insource_*/prob；runs/release/smoke/prob、masks、members 可删。两格的内部、五个外部、两个源内与集成八个集合的 mAUPR 贴 00。
+     （f）集成算完、第 72 条（a）做完再删图：runs/E3a/BF_ref_*/{FGADR,Retinal-Lesions}/prob_test 与两格的 insource_*/prob；runs/release/smoke/prob、masks、members 可删。两格的内部、五个外部、两个源内与集成八个集合的 mAUPR 贴 00。
   70. mAUPR 的 bootstrap 区间（21 第 98 条；CPU，约一小时；在第 68 条重评与 E3a 重跑之后、打包之前跑，这样新 metrics 也带上）：
        python bench/scripts/maupr_ci.py                                 # 每份带 metrics.npz 的 metrics*.json 写入 summary.mAUPR_ci；已有的跳过
      末行打印 written / skipped / mismatch 计数贴 00；mismatch 应为 0（逐类区间与存的不一致时不写）。
   71. 打包：第 68 + 69 + 70 条都完成后一包（对照 runs/handoff_manifest_20261028.tsv；包里要有 20 格的 metrics_test.json 与 *_laststep、runs/E3a_laststep、runs/E3a/BF_*、runs/ENS/REF、runs/release 的小文件）。第 65 条的 cost_audit.tsv 在 paper/data 下，单独 git 提交推送（或复制进 runs/audit/ 随包）。
+  72. 临床合作的前置与试点数据（docs/clinical/28 第九节；代码 clinical/，用法 clinical/README.md）。
+     （a）立即，在第 69 条（a）–（c）之后、（f）删图之前：参考模型集成在五个集合上留图（CPU 约半小时）：
+       python bench/scripts/ensemble.py reference --members runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0 --sets DDR,IDRiD,TJDR_std,TJDR_uwf,MAPLES-DR
+     确认 runs/ENS/REF/reference/<集合>/prob_test 五个目录在、图数分别是 225、27、55、58、60；mAUPR 应与带 --drop-maps 那次逐位相同（贴 00）。18 个登记成员（bench/scripts/ensemble.py MEMBERS，DDR 训练、种子 0）在这五个集合上的图（runs/BS_*_ddr_seed0/prob_test、NN_*_ddr_fold0/prob_test、runs/E3a/<成员>/<集合>/prob_test）不要删。
+     （b）等本机通知（设计 clinical/designs/pilot01.yaml 确认、许可核对之后）再做：挖掘（CPU，五个集合约半天）→ 抽样（几秒）→ 打包（几分钟），命令照 clinical/README.md 的 "Pilot on the server"。挖掘与抽样写在 runs/CLINREV/ 下，小文件随回传包走（selection.json 要在包里）；数据包 clinical/packs/pilot01 带图像，压缩后单独传到工作站，不进回传包、不进 git。每个集合挖掘的末行（各类各型区域数）与抽样的 report 贴 00。
   进度（本机 10-26，pull 到 5d738db，10-26 包（00:23）已进表：1,698 份报告、77,485 行实测；SAMed 参考格 DDR 0.4775、RETFound-DINOv2 IDRiD 0.711 与三个外部集合、M2MRF 作者检查点逐类都在 results.csv）。16:17–03:27 的记录读过：第 60、62 条完成，第 61 条两条约 10-26 上午收完，第 63 条等 RETFound 参考格（约 10-27 中午）。本机这轮主要是论文：清退不再打算测的占位（14 备注 65）、补充材料重做成单独的 supplement.pdf（备注 66）、E3b 在 TJDR_uwf 的 fov 顶替进表（备注 67）、ED9 画出、DR 分级进正文。服务器只多一件便宜的事：第 65 条算力审计（一张卡几十分钟）。第 59 条仍低优先。另外注意：第 63 条里 reference 集成之前，两格参考模型的 E3a 不要带 --drop-maps（集成要读 FGADR / Retinal-Lesions 的图）。
   65. ［仍要做；GPU 7，与第 68 条同时开］算力审计（E10 的 FLOPs / 推理时间 / 推理显存；ED10b 与补充表 8 的三列现在空着；retiseg 环境，一张 40 GB 空卡，几十分钟；HACDR / HRDecoder 两个包装器若在 retiseg 环境里建不起来就跳过，脚本会打印）：
        python bench/scripts/cost_audit.py --repeat 5 --out docs/paper/retiseg_paper/paper/data/cost_audit.tsv

@@ -1,0 +1,46 @@
+# Pilot design (docs/clinical/28 section 5). Frozen and committed before the pack is built; never edited after
+# a reader has opened the pack (a change makes a new design file, pilot02.yaml).
+# Model under review: RetiSeg-Ref (bench/reference.py; docs/paper/14 note 58), thresholds of its release
+# (validation-optimal on the DDR validation split). Its training sources are the training splits of IDRiD, DDR and
+# TJDR_std, so their official test splits are held-out in-source tests; TJDR_uwf and MAPLES-DR are external.
+# Consensus feature (zoo_frac): the 18 registered main-table models, seed 0, each at its own validation threshold.
+#
+# Before running: the candidates directories below are written by mine_discrepancies.py on the server
+# (docs/ops/17 section 4 item 72; docs/clinical/28 section 9, server step S2). MAPLES-DR enters the pack only if the MESSIDOR terms allow the
+# readers to see the images (28 section 10, item L2); otherwise delete its set and stratum and give its 2 images
+# to DDR grade 2-4.
+name: pilot01
+seed: 20261101
+sets:
+  - {set: DDR,       candidates: runs/CLINREV/mine/RetiSeg-Ref/DDR,       reference_grade_scale: "ICDR 0-4 (DDR release)"}
+  - {set: IDRiD,     candidates: runs/CLINREV/mine/RetiSeg-Ref/IDRiD,     reference_grade_scale: null}
+  - {set: TJDR_std,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_std,  reference_grade_scale: null}
+  - {set: TJDR_uwf,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_uwf,  reference_grade_scale: null}
+  - {set: MAPLES-DR, candidates: runs/CLINREV/mine/RetiSeg-Ref/MAPLES-DR, reference_grade_scale: "Canadian teleophthalmology R0-R4 (MAPLES-DR)"}
+images:
+  eligibility: {FN: 1, FP: 1, agree: 1}
+  strata:
+    - {set: DDR, grade_band: "0-1", n: 4, eligibility: {}}      # mild images: an FP alone can move grade 0 -> 1
+    - {set: DDR, grade_band: "2-4", n: 8}
+    - {set: IDRiD, n: 4}
+    - {set: TJDR_std, n: 3}
+    - {set: TJDR_uwf, n: 3}
+    - {set: MAPLES-DR, n: 2}
+representative:            # about 3 per image -> about 70 regions with design weights
+  per_image:
+    - {kind: FN, n: 1}
+    - {kind: FP, n: 1}
+    - {kind: agree, n: 1}  # controls: the reader cannot tell them from discrepancies in step A
+enriched:                  # purposive, no weights; 28 regions
+  - {name: confident_fp, kind: FP, n: 8, where: {prob_max_ge: 0.9}}
+  - {name: confident_fn, kind: FN, n: 8, where: {prob_max_le: 0.1, size_bin: [medium, large]}}
+  - {name: confusion, n: 4, where: {subtype_prefix: confusion}}
+  - {name: extent, kind: extent, n: 4, where: {cls: [HE, EX, SE]}}
+  - {name: consensus_fp, kind: FP, n: 4, where: {zoo_frac_ge: 0.8}}
+geometry:
+  crop_min: 384            # native pixels; the reader can zoom out to the whole image at any time
+  crop_margin: 0.6
+  marker_min_radius: 14
+  marker_pad: 6
+  min_gap: 0               # crop windows of one image never overlap (blinding of later regions)
+max_per_image: 6

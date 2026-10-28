@@ -21,6 +21,8 @@ LIVE_DOCS = [
     "docs/ops/21_现存问题.txt",
     "docs/paper/16_范围精简.txt",
     "docs/ops/25_albert合并记录.txt",
+    "docs/clinical/28_临床合作总计划.txt",
+    "docs/clinical/README.txt",
 ]
 PRIVATE = ("docs/notes(albert)/",)
 PRODUCED_LATER = {
