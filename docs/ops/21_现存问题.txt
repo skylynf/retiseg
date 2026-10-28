@@ -639,3 +639,15 @@
    问题：补充材料此前只是主文末尾的一张计划清单，没有一张真正的表；主文里引用的补充表编号与清单也对不上（表 3 既指文献抽取又指重训配方等）。
    状态与决定：新建 supplement.tex 与 scripts/make_supplement.py（14 备注 66），17 张表 + 3 个说明全部从 results.csv 与仓库事实生成；主文引用全部改号。仍缺的两项要在工作站做：ED1 / ED2 需要示例图与视野图；补充数据 4 的概率图发布要等许可核对。
    来源：用户 10-26 要求重做补充材料。
+
+97  2026-10-28  1 级 → 处理中（本机已改代码；服务器按 17 第四节第 68 条重打分）
+   问题：因素格（BF_*）的检查点角色不一致。bench/train.py 的 roles_for 只对 experiment == BS 返回 best.pt，BF 格落到 checkpoint_roles(declared)：作者配方登记了步数 / epoch 的模型（M2MRF、RETFound、SAMed、SAM2-UNet、HRDecoder）在因素格里以 last.pt 为主检查点打分，U-Net 的格（无作者预算）以 best.pt 打分。bench/factor.py 的说明与论文方法（"the checkpoint with the highest validation mAUPR is scored"）都写的是验证选择。31 个 BF 格里 20 格按最后一步打分（含两格参考模型）；history 里 best 与 last 的验证 mAUPR 差在 10 格为 0，其余最大 +0.070（E3b RETFound TJDR_std）、+0.039（E7 HRDecoder 2880）、+0.033（E3b M2MRF TJDR_std）、+0.027（E4 M2MRF DDR+RL）、+0.023（E7 RETFound 512）。R4 的 HRDecoder 案例段写"2880 格测试 0.627 虽然验证 0.596 高于 0.562"——0.627 是最后一步（验证 0.557）的测试数，与同一句引用的验证最高值不是一个检查点。
+   影响：表 7、图 6 / 7、补充表 7 的 20 格内部测试，13 格的 E3a 独立测试（E3b 六格、E4 四格、E8 三格；R6 的四源矩阵、图 6b/d），R4 案例段的 0.627，参考模型两格（RETFound 验证差 0.001、SAMed 0.009，影响小）。主表（BS）、集成、分层、Refined、E1 / E1r 都不受影响。
+   状态与决定：（1）roles_for 改为 BS 与 BF 都取 best.pt（测试 test_rescore_factor_roles.py）。（2）两份检查点在打分时都已预测（prob_*_sensitivity 是 best.pt 的图），所以不必重训也不必重新预测：bench/scripts/rescore_factor_roles.py 把四个图目录对调、改写 checkpoint_roles.json（旧文件留 checkpoint_roles_laststep.json）、把 metrics_test.* 改名 metrics_test_laststep.* 后用因素启动器的同一条 bench.eval 命令（带泄漏排除）重评，并把 runs/E3a/<格> 移到 runs/E3a_laststep/<格>，13 格的 E3a 由 launch_e3a --only 从 best.pt 重跑（约 8 GPU 时，可并行）。（3）参考模型两格先对调再做 E3a / 源内 / 集成（17 第 68、63、67 条的顺序）。（4）最后一步的分数留作敏感性记录（补充说明 2 的"披露的修订"段已写明）；下一包进表后表 7、图 6 / 7、R4 案例段、R6 矩阵按键重算。
+   处理条件：第 68 条的包进表；R4 案例段 0.627 一句改为 best.pt 的数并去掉"验证更高"的对照。
+   来源：10-28 核对 RETFound 参考格的 checkpoint_roles.json（primary last.pt）时发现。
+
+98  2026-10-28  3 级 → 记录（代码已到，等服务器 CPU 跑）
+   问题：27 第六节第 2 条：mAUPR（四类均值）还没有 bootstrap 区间，只有逐类的。
+   状态与决定：bench/scripts/maupr_ci.py 从每份 metrics.npz 的逐图直方图按同一批 replicate（种子 0、2000 次）算四类均值的百分位区间，写回 metrics.json 的 summary.mAUPR_ci；collect_runs 读成 cls=mean 的 aupr_ci_lo/hi 行；make_numbers 给 mci.* 键（主表种子 0 内部测试的区间与宽度中位）。方法与补充说明 3 已写明算法；讨论局限里"留待终版"一句等数进表后改。CPU，约一小时（17 第四节第 70 条）。
+   来源：27 的待办清单。

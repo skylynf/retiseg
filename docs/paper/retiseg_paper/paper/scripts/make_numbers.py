@@ -138,6 +138,15 @@ def original():
             xx = D.sel(experiment="E1r", model=model, variant="author_recipe", train_set=train, metric="aupr", cls="mean")
             xx = xx if D.simulated(xx) else xx[xx.source == "measured"]
             put(f"e1r.{model}.{train}.exact", f3(xx["value"].mean()), D.simulated(xx))
+            # the seed spread of the rerun (M2MRF IDRiD: three seeds since the 2026-10-28 handoff)
+            put(f"e1r.{model}.{train}.n", str(len(r)), sim_r)
+            if len(r) > 1:
+                put(f"e1r.{model}.{train}.fn.lo", f3(r["value"].min()), sim_r)
+                put(f"e1r.{model}.{train}.fn.hi", f3(r["value"].max()), sim_r)
+                put(f"e1r.{model}.{train}.fn.sd", f3(r["value"].std(ddof=1)), sim_r)
+                put(f"e1r.{model}.{train}.exact.lo", f3(xx["value"].min()), D.simulated(xx))
+                put(f"e1r.{model}.{train}.exact.hi", f3(xx["value"].max()), D.simulated(xx))
+                put(f"e1r.{model}.{train}.exact.sd", f3(xx["value"].std(ddof=1)), D.simulated(xx))
 
 
 def retrained():
@@ -540,6 +549,64 @@ def intervals():
                     put(f"ci.{tag}.{train}.{cls}", f"{f3(v.iloc[0])} ({f2(l.iloc[0])}--{f2(u.iloc[0])})", sim)
 
 
+def reference_model():
+    """The reference model (14 note 58; experiment N8): each member's internal DDR test and in-source tests, its
+    independent tests, and the two-member ensemble once bench/scripts/ensemble.py reference has run. Keys are
+    written only for cells that are in results.csv, so the text can name what exists."""
+    rows = D.sel(experiment="N8", metric="aupr")
+    rows = rows[rows["cls"].isin(D.CLASSES)]
+    if not len(rows):
+        return
+    tag = {"RETFound + UPerNet": "retfound", "SAMed": "samed"}
+    member = rows[rows.variant == "reference:fine merged"]
+    for model, t in tag.items():
+        m = member[member.model == model]
+        for test in sorted(m.test_set.unique()):
+            r = m[m.test_set == test]
+            put(f"n8.{t}.{test}", f3(r["value"].mean()), D.simulated(r))
+    put("n8.members.n", str(member.model.nunique()), D.simulated(member))
+    ens = rows[rows.variant == "reference:ensemble"]
+    for test in sorted(ens.test_set.unique()):
+        r = ens[ens.test_set == test]
+        put(f"n8.ens.{test}", f3(r["value"].mean()), D.simulated(r))
+    put("n8.ens.n", str(ens.test_set.nunique()), D.simulated(ens))
+    # the best single DDR-trained main-table model on the DDR test set (seed 0), the line the reference model is read against
+    ms = D.mean_sd()
+    sub = ms[(ms.train_set == "DDR") & (ms.test_set == "DDR")].sort_values("mean", ascending=False)
+    if len(sub):
+        put("n8.best.single.ddr.mean", f3(sub["mean"].iloc[0]), D.simulated(D.main_runs()))
+        put("n8.best.single.ddr.model", sub["model"].iloc[0], D.simulated(D.main_runs()))
+    seed0 = D.seed_table()
+    seed0 = seed0[(seed0.train_set == "DDR") & (seed0.test_set == "DDR") & (seed0.seed == 0)].sort_values("value", ascending=False)
+    if len(seed0):
+        put("n8.best.single.ddr.seed0", f3(seed0["value"].iloc[0]), D.simulated(D.main_runs()))
+        put("n8.best.single.ddr.seed0.model", seed0["model"].iloc[0], D.simulated(D.main_runs()))
+
+
+def maupr_intervals():
+    """95% bootstrap intervals of mAUPR (bench/scripts/maupr_ci.py; the same image resamples as the per-class
+    intervals), for the seed-0 internal tests of the main table: the interval of each model and the median width."""
+    lo = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model=D.MAIN_MODELS, seed=0, cls="mean", metric="aupr_ci_lo")
+    hi = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model=D.MAIN_MODELS, seed=0, cls="mean", metric="aupr_ci_hi")
+    if not len(lo) or not len(hi):
+        return
+    sim = D.simulated(lo) or D.simulated(hi)
+    lo = lo[lo.train_set == lo.test_set].set_index(["model", "train_set"])["value"]
+    hi = hi[hi.train_set == hi.test_set].set_index(["model", "train_set"])["value"]
+    width = (hi - lo).dropna()
+    for train in D.TRAIN_MAIN:
+        w = width[[k for k in width.index if k[1] == train]]
+        if len(w):
+            put(f"mci.{train}.width.median", f2(w.median()), sim)
+            put(f"mci.{train}.width.lo", f2(w.min()), sim)
+            put(f"mci.{train}.width.hi", f2(w.max()), sim)
+            put(f"mci.{train}.n", str(len(w)), sim)
+    for model, t in (("HRNet-W48", "hrnet"), ("SAMed", "samed"), ("RETFound + UPerNet", "retfound"), ("nnU-Net", "nnunet"), ("Swin-Unet", "swin"), ("SAM-Adapter", "samadapter")):
+        for train in D.TRAIN_MAIN:
+            if (model, train) in lo.index and (model, train) in hi.index:
+                put(f"mci.{t}.{train}", f"{f2(lo[(model, train)])}--{f2(hi[(model, train)])}", sim)
+
+
 def cost_params():
     """Parameter counts quoted in the text (nnU-Net's come from its plans; collect_runs.NNUNET_PARAMS)."""
     p = D.sel(experiment="E10", metric="params_m")
@@ -591,6 +658,8 @@ def main():
     refined()
     human_reference()
     intervals()
+    maupr_intervals()
+    reference_model()
     cost_params()
     lines = ["% Generated by scripts/make_numbers.py. Do not edit by hand.", "\\makeatletter"]
     for key, (text, sim) in sorted(N.items()):

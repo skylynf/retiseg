@@ -9,7 +9,9 @@ both at 0 and is scored from best.pt. The other checkpoint is written beside
 it. The test split is never read during training.
 
 A cell with ``experiment: BS`` is handed to bench.bstd.run_cell: shared
-pixel budget, patch augmentation, and best.pt by validation mAUPR.
+pixel budget, patch augmentation, and best.pt by validation mAUPR. A cell
+with ``experiment: BF`` (bench.factor) keeps that selection rule: best.pt is
+primary for every factor cell, whatever the model's author budget says.
 
     python -m bench.train --config bench/configs/cells/b1_unet_idrid_seed0.yaml
     python bench/train.py --config bench/configs/cells/b1_unet_idrid_seed0.yaml
@@ -399,8 +401,15 @@ def checkpoint_roles(declared):
 
 
 def roles_for(config, declared):
-    """B-std scores the highest validation mAUPR; B1 keeps checkpoint_roles."""
-    if config.get("experiment") == "BS":
+    """B-std and the factor cells (BF: the B-std protocol with one thing changed, bench/factor.py) score the
+    highest validation mAUPR; B1 keeps checkpoint_roles (the author budget's last step).
+
+    Until 2026-10-28 a BF cell fell through to checkpoint_roles, so the cells of models whose author recipe
+    sets a step budget (M2MRF, RETFound, SAMed, SAM2-UNet, HRDecoder) were scored from last.pt while the
+    U-Net cells were scored from best.pt (docs/ops/21 #97). bench/scripts/rescore_factor_roles.py swaps
+    the maps those cells already predicted for both checkpoints and re-evaluates them.
+    """
+    if config.get("experiment") in ("BS", "BF"):
         return "best.pt", "last.pt"
     return checkpoint_roles(declared)
 

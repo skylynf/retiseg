@@ -3810,6 +3810,59 @@ E9,U-Net,loss:Dice,DDR,0,DDR,SE,lesion_recall_large,0.6412213740458015,measured
 E9,U-Net,loss:Dice,DDR,0,DDR,SE,img_auc,0.6807181889149102,measured
 E9,U-Net,loss:Dice,DDR,0,DDR,SE,img_auc_top100,0.6885896435076764,measured
 E9,U-Net,loss:Dice,DDR,0,DDR,any,aupr_any_lesion,0.34520419396393065,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,aupr,0.18507054293304875,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,aupr_11pt,0.18890562479363232,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,aupr_ci_lo,0.140108996540174,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,aupr_ci_hi,0.23272161184311194,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,dice_fixed,0.2121001129877548,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,dice_valopt,0.25893907164160396,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,iou_valopt,0.14872487655314356,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,lesion_precision,0.26948375523221046,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,lesion_recall_small,0.6004901960784313,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,lesion_recall_medium,0.7636594663278272,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,lesion_recall_large,0.4,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,img_auc,0.665282657297988,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,img_auc_top100,0.6379750878313638,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,aupr,0.520235086615899,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,aupr_11pt,0.5173151705612267,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,aupr_ci_lo,0.4391523132542309,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,aupr_ci_hi,0.609495493933079,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,dice_fixed,0.4316680761222669,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,dice_valopt,0.4925019221593502,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,iou_valopt,0.3267015257922008,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,lesion_precision,0.7030319436924742,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,lesion_recall_small,0.1494822152183701,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,lesion_recall_medium,0.4071647007426824,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,lesion_recall_large,0.6933744221879815,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,img_auc,0.9095443964083806,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,HE,img_auc_top100,0.9208513468573328,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,aupr,0.6222733870595591,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,aupr_11pt,0.6279028559715916,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,aupr_ci_lo,0.5516767049507635,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,aupr_ci_hi,0.688188915411923,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,dice_fixed,0.5269641734304524,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,dice_valopt,0.5601266736369357,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,iou_valopt,0.3890110771422816,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,lesion_precision,0.6965925567907202,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,lesion_recall_small,0.4294205052005943,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,lesion_recall_medium,0.8706322795341098,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,lesion_recall_large,0.9153526970954357,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,img_auc,0.9343729694606888,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,EX,img_auc_top100,0.9317738791423001,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,aupr,0.47552919060591214,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,aupr_11pt,0.47701544629533793,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,aupr_ci_lo,0.30756961433261004,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,aupr_ci_hi,0.601143467542867,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,dice_fixed,0.482759386597318,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,dice_valopt,0.46300047436136293,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,iou_valopt,0.30123657596379677,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,lesion_precision,0.22935779816513763,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,lesion_recall_small,0.04,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,lesion_recall_medium,0.12121212121212122,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,lesion_recall_large,0.7175572519083969,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,img_auc,0.8494665625813167,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,SE,img_auc_top100,0.8484257090814469,measured
+N8,RETFound + UPerNet,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,any,aupr_any_lesion,0.5747499188589963,measured
 N8,SAMed,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,aupr,0.1563373976105537,measured
 N8,SAMed,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,aupr_11pt,0.20223893782456442,measured
 N8,SAMed,reference:fine merged,IDRiD + DDR + TJDR-std,0,DDR,MA,aupr_ci_lo,0.11818996193356078,measured
@@ -7842,6 +7895,78 @@ E1r,M2MRF,author_recipe,IDRiD,0,IDRiD,EX,aupr_author_impl,0.8110018086866329,mea
 E1r,M2MRF,author_recipe,IDRiD,0,IDRiD,HE,aupr_author_impl,0.5690933518041756,measured
 E1r,M2MRF,author_recipe,IDRiD,0,IDRiD,SE,aupr_author_impl,0.6769772991126817,measured
 E1r,M2MRF,author_recipe,IDRiD,0,IDRiD,MA,aupr_author_impl,0.3906801510500031,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,aupr,0.26237446592404506,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,aupr_11pt,0.3004958021806342,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,aupr_ci_lo,0.20554498185542305,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,aupr_ci_hi,0.28116814555353964,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,dice_fixed,0.37152620961671634,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,img_auc,,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,img_auc_top100,,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,aupr,0.5153289287118492,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,aupr_11pt,0.5070075308140465,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,aupr_ci_lo,0.4193794805317234,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,aupr_ci_hi,0.5567712469368905,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,dice_fixed,0.5119631959319588,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,img_auc,,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,img_auc_top100,,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,aupr,0.8066826591726096,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,aupr_11pt,0.7848155240844887,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,aupr_ci_lo,0.6943049640898068,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,aupr_ci_hi,0.826921390960724,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,dice_fixed,0.7836967102368932,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,img_auc,,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,img_auc_top100,,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,aupr,0.5757178920663761,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,aupr_11pt,0.6203262041426197,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,aupr_ci_lo,0.3634035514642159,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,aupr_ci_hi,0.6936808976577018,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,dice_fixed,0.6101842163219863,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,img_auc,0.7554945054945055,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,img_auc_top100,0.75,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,any,aupr_any_lesion,0.678521718884593,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,mean,aupr,0.54002598646872,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,mean,aupr_11pt,0.5531612653054473,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,mean,aupr_author_impl,0.6049475834671796,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,EX,aupr_author_impl,0.8055169240623228,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,HE,aupr_author_impl,0.5767641762061613,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,SE,aupr_author_impl,0.6545518754482105,measured
+E1r,M2MRF,author_recipe,IDRiD,1,IDRiD,MA,aupr_author_impl,0.3829573581520239,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,aupr,0.2908005097940675,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,aupr_11pt,0.3206574532815444,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,aupr_ci_lo,0.23942728435878005,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,aupr_ci_hi,0.30884211982451604,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,dice_fixed,0.40170746434687205,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,img_auc,,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,img_auc_top100,,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,aupr,0.5265777486809808,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,aupr_11pt,0.5251648332730483,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,aupr_ci_lo,0.44239135273053926,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,aupr_ci_hi,0.5501551634618401,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,dice_fixed,0.5276515367149492,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,img_auc,,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,img_auc_top100,,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,aupr,0.8148848097181045,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,aupr_11pt,0.7946904706615299,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,aupr_ci_lo,0.7153550869916262,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,aupr_ci_hi,0.8314826105199246,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,dice_fixed,0.7918128493532007,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,img_auc,,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,img_auc_top100,,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,aupr,0.6328465522510128,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,aupr_11pt,0.6484288290794149,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,aupr_ci_lo,0.4128896206679095,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,aupr_ci_hi,0.7229374095060505,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,dice_fixed,0.638971005539735,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,img_auc,0.7445054945054946,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,img_auc_top100,0.7747252747252747,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,any,aupr_any_lesion,0.685322664550066,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,mean,aupr,0.5662774051110414,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,mean,aupr_11pt,0.5722353965738843,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,mean,aupr_author_impl,0.6267105000912474,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,EX,aupr_author_impl,0.8147326597551641,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,HE,aupr_author_impl,0.584772270749101,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,SE,aupr_author_impl,0.6873846512733087,measured
+E1r,M2MRF,author_recipe,IDRiD,2,IDRiD,MA,aupr_author_impl,0.41995241858741594,measured
 E2c,HRNet-W48,lr_x1/3,DDR,0,DDR-val,mean,aupr,0.5234943707345526,measured
 E2c,HRNet-W48,lr_x3,DDR,0,DDR-val,mean,aupr,0.6302769053460214,measured
 E2c,M2MRF,lr_x1/3,DDR,0,DDR-val,mean,aupr,0.5527041399601635,measured

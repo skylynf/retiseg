@@ -43,14 +43,20 @@ RUN_NAME = re.compile(r"(BS|B1)_[a-z0-9_]+_(idrid|ddr)_seed\d+(_runner)?")
 # Factor runs that get independent tests: E3b (other training sources), E4 (merged labels), E8 (amount).
 # E7 changes the canvas and E9 is read on DDR only (docs/paper/16).
 FACTOR_RUN_NAME = re.compile(r"BF_e(3b|4|8)_[a-z0-9_]+_seed\d+")
+# The reference model's two REF cells (docs/paper/14 note 58): five sets each, queued only when named with
+# --only, never by the standing launcher's e3a stages, because those drop the FGADR / Retinal-Lesions maps
+# and the reference ensemble (bench/scripts/ensemble.py reference) reads them.
+REFERENCE_RUN_NAME = re.compile(r"BF_ref_[a-z0-9_]+_seed\d+")
 
 
 def _scored_run(run):
     return all((run / name).is_file() for name in ("config.yaml", "checkpoint_roles.json", "metrics_test.json"))
 
 
-def discover(seed0_only=False):
-    """(tier, source name, env, argv, train sources) for every source that can run."""
+def discover(seed0_only=False, only=()):
+    """(tier, source name, env, argv, train sources) for every source that can run. ``only`` admits the
+    reference cells (REFERENCE_RUN_NAME), which are never discovered on their own."""
+    only = set(only or ())
     frozen = e3a.load_frozen()
     runs = _ROOT / "runs"
     found = []
@@ -69,7 +75,9 @@ def discover(seed0_only=False):
             argv = ["-m", "bench.e3a", "run", "--run", f"runs/{run.name}"]
             found.append((tier, run.name, env, argv, [e3a.train_source_of(config)]))
     for run in sorted(runs.glob("BF_*")):
-        if not FACTOR_RUN_NAME.fullmatch(run.name) or not run.is_dir() or not _scored_run(run):
+        factor = FACTOR_RUN_NAME.fullmatch(run.name) is not None
+        reference = REFERENCE_RUN_NAME.fullmatch(run.name) is not None and run.name in only
+        if not (factor or reference) or not run.is_dir() or not _scored_run(run):
             continue
         config = yaml.safe_load((run / "config.yaml").read_text())
         if int(config["fov_diameter"]) != int(frozen["canvas_reference"]):
@@ -203,7 +211,7 @@ def plan(seed0_only=False, only=()):
     if missing:
         print("prepared test sets missing on this machine, skipped until they exist: " + ", ".join(sorted(missing)), flush=True)
     items = []
-    for tier, source, env, run_argv, trained_on in discover(seed0_only):
+    for tier, source, env, run_argv, trained_on in discover(seed0_only, only):
         if only and source not in only:
             continue
         kind = "nnunet" if source.startswith("NN_") else ("author" if source.startswith("E1_") else "run")

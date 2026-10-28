@@ -251,7 +251,7 @@ def test_e3a_plan_leaves_out_test_sets_whose_prepared_directory_is_missing(tmp_p
         (tmp_path / frozen["test_sets"][name]["data"]).mkdir(parents=True)
     missing = le.missing_test_sets(frozen)
     assert "MAPLES-DR" in missing and "IDRiD" not in missing
-    monkeypatch.setattr(le, "discover", lambda seed0_only=False: [(1, "E1_m2mrf_idrid", "retiseg", ["-m", "bench.e3a"], ["IDRiD"])])
+    monkeypatch.setattr(le, "discover", lambda seed0_only=False, only=(): [(1, "E1_m2mrf_idrid", "retiseg", ["-m", "bench.e3a"], ["IDRiD"])])
     monkeypatch.setattr(le, "in_progress", lambda run_dir: None)
     monkeypatch.setattr(le, "item_cost", lambda *args: 1.0)
     monkeypatch.setattr(e3a, "is_done", lambda source, test, variant: False)

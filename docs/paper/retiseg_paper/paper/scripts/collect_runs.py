@@ -231,6 +231,12 @@ def rows_from_report(report, experiment, variant, model, train, seed, test):
     # takes those rows as the four classes (retifig.data.seed_table averages them into mAUPR).
     if report.get("any_lesion"):
         add("any", ANY_LESION_METRIC, report["any_lesion"].get("aupr"))
+    # the interval of the four-class mean, from the same image resamples as the per-class intervals
+    # (bench/scripts/maupr_ci.py writes summary.mAUPR_ci into the report; 2026-10-28, 27 section 6 item 2)
+    ci = report.get("summary", {}).get("mAUPR_ci")
+    if ci and len(ci) == 2 and ci[0] is not None:
+        add("mean", "aupr_ci_lo", ci[0])
+        add("mean", "aupr_ci_hi", ci[1])
     return out
 
 
