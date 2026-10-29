@@ -1,0 +1,41 @@
+# DRAFT of the formal batch (docs/clinical/28 section 5). Fixed only after the trial (trial01.yaml) feedback:
+# quotas, the number of images (about 100 was the original figure; docs/clinical/31) and the questionnaire version
+# may all change. Run it only after Luming freezes it; after that, any change goes into a new file.
+# Model under review: RetiSeg-Ref, release thresholds; consensus: the 18 registered DDR-trained models, seed 0.
+# MAPLES-DR enters only if the MESSIDOR terms allow the readers to see the images (28 section 3); otherwise give its
+# images to DDR grade 2-4.
+name: batch01
+seed: 20261120
+sets:
+  - {set: DDR,       candidates: runs/CLINREV/mine/RetiSeg-Ref/DDR,       reference_grade_scale: "ICDR 0-4 (DDR release)"}
+  - {set: IDRiD,     candidates: runs/CLINREV/mine/RetiSeg-Ref/IDRiD,     reference_grade_scale: null}
+  - {set: TJDR_std,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_std,  reference_grade_scale: null}
+  - {set: TJDR_uwf,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_uwf,  reference_grade_scale: null}
+  - {set: MAPLES-DR, candidates: runs/CLINREV/mine/RetiSeg-Ref/MAPLES-DR, reference_grade_scale: "Canadian teleophthalmology R0-R4 (MAPLES-DR)"}
+images:
+  eligibility: {FN: 1, FP: 1, agree: 1}
+  strata:                     # about 100 images
+    - {set: DDR, grade_band: "0-1", n: 15, eligibility: {}}
+    - {set: DDR, grade_band: "2-4", n: 35}
+    - {set: IDRiD, n: 15}
+    - {set: TJDR_std, n: 15}
+    - {set: TJDR_uwf, n: 15}
+    - {set: MAPLES-DR, n: 5}
+representative:            # about 3 per image -> about 290 regions with design weights
+  per_image:
+    - {kind: FN, n: 1}
+    - {kind: FP, n: 1}
+    - {kind: agree, n: 1}  # controls: the reader cannot tell them from discrepancies in step A
+enriched:                  # purposive, no weights; 28 regions (scale up after the trial if useful)
+  - {name: confident_fp, kind: FP, n: 8, where: {prob_max_ge: 0.9}}
+  - {name: confident_fn, kind: FN, n: 8, where: {prob_max_le: 0.1, size_bin: [medium, large]}}
+  - {name: confusion, n: 4, where: {subtype_prefix: confusion}}
+  - {name: extent, kind: extent, n: 4, where: {cls: [HE, EX, SE]}}
+  - {name: consensus_fp, kind: FP, n: 4, where: {zoo_frac_ge: 0.8}}
+geometry:
+  crop_min: 384            # native pixels; the reader can zoom out to the whole image at any time
+  crop_margin: 0.6
+  marker_min_radius: 14
+  marker_pad: 6
+  min_gap: 0               # crop windows of one image never overlap (blinding of later regions)
+max_per_image: 6

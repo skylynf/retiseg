@@ -1,0 +1,32 @@
+# Fallback trial built on the workstation, for use only if the server's RetiSeg-Ref maps (docs/ops/17 item 72) are
+# not ready when the trial pack has to go out. It reviews the M2MRF author checkpoints (runs/E1_m2mrf: prob_test on
+# IDRiD, ddr_prob_test on DDR; fixed threshold 0.5, they have no validation maps), which are already on the
+# workstation. The trial tests the questions and the tool; its answers are feedback, never study results, so the
+# model does not need to be the one under review. No consensus feature (no zoo maps on the workstation).
+name: trial01w
+seed: 20261029
+sets:
+  - {set: DDR,   candidates: clinical/work/mine/M2MRF-author/DDR,   reference_grade_scale: "ICDR 0-4 (DDR release)"}
+  - {set: IDRiD, candidates: clinical/work/mine/M2MRF-author/IDRiD, reference_grade_scale: null}
+images:
+  eligibility: {FN: 1, FP: 1, agree: 1}
+  strata:
+    - {set: DDR, grade_band: "0-1", n: 4, eligibility: {}}
+    - {set: DDR, grade_band: "2-4", n: 8}
+    - {set: IDRiD, n: 3}
+representative:
+  per_image:
+    - {kind: FN, n: 1}
+    - {kind: FP, n: 1}
+    - {kind: agree, n: 1}
+enriched:
+  - {name: confident_fp, kind: FP, n: 4, where: {prob_max_ge: 0.9}}
+  - {name: confident_fn, kind: FN, n: 4, where: {prob_max_le: 0.1, size_bin: [medium, large]}}
+  - {name: confusion, n: 2, where: {subtype_prefix: confusion}}
+geometry:
+  crop_min: 384
+  crop_margin: 0.6
+  marker_min_radius: 14
+  marker_pad: 6
+  min_gap: 0
+max_per_image: 5

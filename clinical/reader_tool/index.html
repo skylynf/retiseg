@@ -115,48 +115,71 @@ button { cursor: pointer; }
 }
 #legend svg { vertical-align: middle; margin-right: 4px; }
 
-/* ---------- side panel */
-#side { border-left: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
-#rail { display: flex; gap: 3px; padding: 12px 16px 0; }
-#rail .seg { flex: 1; height: 5px; border-radius: 2px; background: var(--raise-hover); }
-#rail .seg.done { background: var(--muted); }
-#rail .seg.cur { background: var(--inverse); }
-#stepHead { padding: 10px 16px 4px; }
-#stepHead .kicker { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
-#stepHead h2 { font-size: 17px; margin: 2px 0 4px; font-weight: 650; }
-#stepHead p { margin: 0; color: var(--muted); font-size: 13px; }
-#refGrade { margin: 8px 16px 0; padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 13px; }
-#form { flex: 1; overflow-y: auto; padding: 6px 16px 16px; border-top: 1px solid var(--line); margin-top: 8px; }
-.q { padding: 12px 0; border-top: 1px solid var(--line); }
-.q:first-child { border-top: 0; }
-.q.locked { opacity: .62; }
-.q .qlabel { font-weight: 600; font-size: 13.5px; margin-bottom: 2px; }
-.q .qlabel .req { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
-.q .qhelp { color: var(--muted); font-size: 12.5px; margin-bottom: 6px; }
-.q.missing .qlabel { color: var(--warn); }
-.opts { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-.opts.cols2 { display: grid; grid-template-columns: 1fr 1fr; }
-.ogroup { grid-column: 1 / -1; font-size: 11.5px; color: var(--faint); margin: 6px 0 0; }
-.opt {
-  border: 1px solid var(--line); background: var(--raise); border-radius: var(--radius-s); padding: 5px 9px;
-  text-align: left; font-size: 13px; line-height: 1.3; position: relative;
+/* ---------- side panel
+   Light by default: the answer panel is read for long stretches and should stand out from the dark image
+   area; questions sit on cards that alternate white and light grey (docs/clinical/31). "Panel: dark" in the
+   top bar switches to alternating dark greys. Selected answers are inverted; hue stays reserved for lesions. */
+#side {
+  --s-bg: #e4e3df; --s-text: #1b1c1e; --s-muted: #5c5b57; --s-faint: #8a8984; --s-line: #cfcdc6;
+  --card1: #ffffff; --card2: #f2f1ed; --chip: #ffffff; --chip-alt: #f7f6f3; --chip-line: #c4c2bb; --chip-hover: #e9e8e3;
+  --sel-bg: #1d1e20; --sel-text: #ffffff; --sel-help: #c9c8c4; --s-warn: #a85a07; --s-input: #ffffff; --num-bg: #d9d8d3;
+  border-left: 1px solid var(--line); background: var(--s-bg); color: var(--s-text);
+  display: flex; flex-direction: column; min-height: 0;
 }
-.opt:hover { background: var(--raise-hover); }
-.opt.sel { background: var(--inverse); color: var(--inverse-text); border-color: var(--inverse); }
-.opt .oh { display: block; font-size: 11.5px; color: var(--muted); margin-top: 1px; }
-.opt.sel .oh { color: #4a4a48; }
+body.panel-dark #side {
+  --s-bg: #242528; --s-text: #ebe9e5; --s-muted: #a4a29e; --s-faint: #7c7b78; --s-line: #3a3c40;
+  --card1: #2d2f33; --card2: #26282b; --chip: #34363a; --chip-alt: #34363a; --chip-line: #45474c; --chip-hover: #3e4045;
+  --sel-bg: #ebe9e5; --sel-text: #18191a; --sel-help: #4a4a48; --s-warn: #e3a64f; --s-input: #1a1b1d; --num-bg: #3a3c40;
+}
+#side .btn { background: var(--chip); border-color: var(--chip-line); color: var(--s-text); }
+#side .btn:hover { background: var(--chip-hover); }
+#side .btn.primary { background: var(--sel-bg); color: var(--sel-text); border-color: var(--sel-bg); }
+#side .btn.primary:disabled { background: var(--chip); color: var(--s-faint); border-color: var(--chip-line); }
+#rail { display: flex; gap: 3px; padding: 12px 16px 0; }
+#rail .seg { flex: 1; height: 5px; border-radius: 2px; background: var(--s-line); }
+#rail .seg.done { background: var(--s-muted); }
+#rail .seg.cur { background: var(--sel-bg); }
+#stepHead { padding: 10px 16px 6px; }
+#stepHead .kicker { color: var(--s-muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+#stepHead h2 { font-size: 18px; margin: 2px 0 4px; font-weight: 650; }
+#stepHead p { margin: 0; color: var(--s-muted); font-size: 13px; }
+#refGrade { margin: 6px 16px 0; padding: 7px 11px; background: var(--card1); border: 1px solid var(--s-line); border-radius: var(--radius-m); font-size: 13.5px; font-weight: 600; }
+#form { flex: 1; overflow-y: auto; padding: 10px 12px 16px; border-top: 1px solid var(--s-line); margin-top: 8px; }
+.q { padding: 11px 13px 12px; margin-bottom: 8px; background: var(--card1); border: 1px solid var(--s-line); border-left: 3px solid transparent; border-radius: 8px; }
+.q.alt { background: var(--card2); }
+.q.locked { opacity: .7; }
+.q .qlabel { font-weight: 650; font-size: 14px; line-height: 1.35; display: flex; gap: 8px; align-items: baseline; }
+.q .qnum { flex: none; min-width: 20px; height: 20px; border-radius: 10px; background: var(--num-bg); color: var(--s-text); font-size: 11.5px; font-weight: 650; display: inline-grid; place-items: center; font-variant-numeric: tabular-nums; }
+.q.answered .qnum { background: var(--sel-bg); color: var(--sel-text); }
+.q .qlabel .req { color: var(--s-faint); font-weight: 400; font-size: 11.5px; margin-left: auto; white-space: nowrap; }
+.q .qhelp { color: var(--s-muted); font-size: 12.5px; margin: 3px 0 2px 28px; }
+.q.missing { border-left-color: var(--s-warn); }
+.q.missing .qlabel { color: var(--s-warn); }
+.opts { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0 28px; }
+.opts.cols2 { display: grid; grid-template-columns: 1fr 1fr; }
+.ogroup { grid-column: 1 / -1; font-size: 11.5px; color: var(--s-faint); margin: 6px 0 0; }
+.opt {
+  border: 1px solid var(--chip-line); background: var(--chip); color: var(--s-text); border-radius: var(--radius-s); padding: 6px 10px;
+  text-align: left; font-size: 13.5px; line-height: 1.3; position: relative;
+}
+.q.alt .opt { background: var(--chip-alt); }
+.opt:hover, .q.alt .opt:hover { background: var(--chip-hover); }
+.opt.sel, .q.alt .opt.sel { background: var(--sel-bg); color: var(--sel-text); border-color: var(--sel-bg); }
+.opt .oh { display: block; font-size: 11.5px; color: var(--s-muted); margin-top: 1px; }
+.opt.sel .oh { color: var(--sel-help); }
 .opt.haskbd { padding-right: 22px; }
-.opt .kbd { position: absolute; right: 6px; top: 5px; font-size: 10.5px; color: var(--faint); }
-.opt.sel .kbd { color: #6b6a67; }
+.opt .kbd { position: absolute; right: 6px; top: 5px; font-size: 10.5px; color: var(--s-faint); }
+.opt.sel .kbd { color: var(--sel-help); }
 .opt:disabled { cursor: default; }
 .multi .opt::before { content: ""; display: inline-block; width: 9px; height: 9px; border: 1.5px solid currentColor; border-radius: 2px; margin-right: 7px; vertical-align: -0.5px; opacity: .7; }
 .multi .opt.sel::before { background: currentColor; }
-textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--viewer); border: 1px solid var(--line); border-radius: var(--radius-s); padding: 7px 9px; }
-.pointrow { display: flex; gap: 8px; align-items: center; margin-top: 6px; color: var(--muted); font-size: 12.5px; }
+#side textarea { width: 100%; min-height: 60px; resize: vertical; background: var(--s-input); color: var(--s-text); border: 1px solid var(--chip-line); border-radius: var(--radius-s); padding: 7px 9px; margin-top: 8px; }
+.pointrow { display: flex; gap: 8px; align-items: center; margin: 8px 0 0 28px; color: var(--s-muted); font-size: 12.5px; flex-wrap: wrap; }
 .flagrow { display: flex; gap: 9px; align-items: center; cursor: pointer; }
-.flagrow input { width: 16px; height: 16px; accent-color: #d8d6d1; }
-#navbar { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); align-items: center; }
-#navbar .hint { color: var(--faint); font-size: 12px; flex: 1; }
+.flagrow input { width: 16px; height: 16px; }
+#navbar { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--s-line); align-items: center; background: var(--s-bg); }
+#navbar .hint { color: var(--s-faint); font-size: 12px; flex: 1; }
+.icdr-table td { vertical-align: top; }
 
 /* ---------- overlays: start, help, toast */
 .screen { position: fixed; inset: 0; background: rgba(15, 16, 17, .86); display: grid; place-items: center; z-index: 20; }
@@ -197,6 +220,7 @@ textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--vi
   <div id="progress" title="Progress"><div></div></div>
   <button class="btn" id="btnExport">Export results</button>
   <button class="btn" id="btnMore">Save &amp; import</button>
+  <button class="btn" id="btnPanel" title="Answer panel light or dark">Panel: light</button>
   <button class="btn" id="btnHelp" title="Help (?)">Help</button>
   <span class="reader-tag" id="readerTag"></span>
 </div>
@@ -225,9 +249,9 @@ textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--vi
         <button class="tbtn" id="tReset" title="Reset image adjustments">Reset</button>
       </div>
       <div class="tgroup" id="ovGroup">
-        <button class="tbtn" id="tAnn" title="Dataset annotation (D)">Dataset</button>
-        <button class="tbtn" id="tModel" title="Model outline (M)">Model</button>
-        <button class="tbtn" id="tHeat" title="Model probability heat map (H)">Heat map</button>
+        <button class="tbtn" id="tAnn" title="Dataset label, solid (D)">Dataset label</button>
+        <button class="tbtn" id="tModel" title="AI outline, dashed (M)">AI</button>
+        <button class="tbtn" id="tHeat" title="AI probability heat map (H)">Heat map</button>
         <button class="tbtn" id="tMarker" title="Region marker (K)">Marker</button>
       </div>
       <div class="tgroup" id="clsGroup"></div>
@@ -255,10 +279,21 @@ textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--vi
     <h1>How to read</h1>
     <p class="lead">Each image has three kinds of step.</p>
     <ol>
-      <li><b>Image assessment.</b> Grade the photograph with no outlines shown.</li>
-      <li><b>Marked regions.</b> For each dashed circle, first say what you see (A). Then reveal the outlines of the dataset annotation and the model, and explain the difference (B). Your answer to A is locked once you reveal.</li>
-      <li><b>Image summary.</b> All outlines are shown. Judge whether the model's lesions alone would change the grade or the referral.</li>
+      <li><b>Grade the image.</b> ICDR grade, DME and the fovea, with no outlines shown.</li>
+      <li><b>Each marked region.</b> First say what is in the dashed circle (A). Then reveal the dataset label and the AI outline and say who is right and what the error would change (B). Your answer to A is locked once you reveal.</li>
+      <li><b>Whole image.</b> All outlines are shown; judge the AI lesions and the dataset label for the image as a whole.</li>
     </ol>
+    <h2>ICDR quick reference</h2>
+    <table class="icdr-table">
+      <tr><td>No DR</td><td>No abnormalities</td></tr>
+      <tr><td>Mild NPDR</td><td>MA only</td></tr>
+      <tr><td>Moderate NPDR</td><td>More than MA only (any HG, HEX or CWS), less than severe</td></tr>
+      <tr><td>Severe NPDR</td><td>4-2-1 rule: &gt;20 intraretinal HG in each of 4 quadrants, or definite venous beading in &ge;2 quadrants, or prominent IRMA in &ge;1 quadrant; no PDR</td></tr>
+      <tr><td>PDR</td><td>NV, and/or vitreous or preretinal hemorrhage</td></tr>
+      <tr><td>DME</td><td>Non-center-involving or center-involving; on the photograph judged from HEX relative to the foveal center</td></tr>
+      <tr><td>Referable</td><td>Moderate NPDR or worse, and/or DME</td></tr>
+    </table>
+    <p>Of the four lesion types, only the HG count can reach severe NPDR (4-2-1); IRMA, venous beading and NV are not labelled in these datasets.</p>
     <h2>Outlines</h2>
     <table id="helpLegend"></table>
     <h2>Keys</h2>
@@ -535,23 +570,28 @@ function renderForm() {
   if (step.kind === "region_b") {
     const a = cs.regions[step.rid].a.answers;
     const fdef = PACK.schema.steps.region_a.questions.find(q => q.id === "a_finding");
-    const lab = (fdef.options.find(o => o.code === a.a_finding) || {}).label || "-";
-    const conf = a.a_confidence ? ` (${a.a_confidence})` : "";
-    form.append(el("div", { class: "q locked" }, el("div", { class: "qlabel", text: "Your answer before the reveal" }), el("div", { class: "qhelp", text: lab + conf + (a.a_multiple ? ", more than one lesion" : "") })));
+    const o = fdef.options.find(x => x.code === a.a_finding) || {};
+    const lab = (o.label || "-") + (o.help ? ` (${o.help})` : "");
+    const conf = a.a_confidence ? `, ${a.a_confidence}` : "";
+    form.append(el("div", { class: "q locked alt" }, el("div", { class: "qlabel", text: "Your answer before the reveal" }), el("div", { class: "qhelp", style: "margin-left:0", text: lab + conf })));
   }
   const missing = markMissing ? new Set(missingIn(step.kind, rec.answers, caseObj)) : new Set();
+  let n = 0;
   for (const q of sdef.questions) {
     if (!visible(q, rec.answers, caseObj)) continue;
-    form.append(renderQuestion(q, rec, caseObj, lockedA, missing.has(q.id)));
+    n++;
+    form.append(renderQuestion(q, rec, caseObj, lockedA, missing.has(q.id), n));
   }
   updateNav();
 }
 
-function renderQuestion(q, rec, caseObj, locked, isMissing) {
-  const box = el("div", { class: "q" + (locked ? " locked" : "") + (isMissing ? " missing" : ""), "data-q": q.id });
-  box.append(el("div", { class: "qlabel" }, q.label, q.required ? el("span", { class: "req", text: "required" }) : null));
-  if (q.help) box.append(el("div", { class: "qhelp", text: q.help }));
+function renderQuestion(q, rec, caseObj, locked, isMissing, num) {
   const val = rec.answers[q.id];
+  const cls = "q" + (num % 2 === 0 ? " alt" : "") + (locked ? " locked" : "") + (isMissing ? " missing" : "") + (!empty(val) ? " answered" : "");
+  const box = el("div", { class: cls, "data-q": q.id });
+  box.append(el("div", { class: "qlabel" }, el("span", { class: "qnum", text: String(num) }), el("span", { text: q.label }),
+    q.required ? el("span", { class: "req", text: "required" }) : null));
+  if (q.help) box.append(el("div", { class: "qhelp", text: q.help }));
   const set = (v) => {
     if (locked) return;
     if (empty(v)) delete rec.answers[q.id]; else rec.answers[q.id] = v;
@@ -572,7 +612,13 @@ function renderQuestion(q, rec, caseObj, locked, isMissing) {
         isTarget && n <= 9 ? el("span", { class: "kbd", text: String(n) }) : null);
       b.addEventListener("click", () => {
         if (q.type === "single") set(selected ? null : o.code);
-        else { const arr = (val || []).slice(); const i = arr.indexOf(o.code); if (i >= 0) arr.splice(i, 1); else arr.push(o.code); set(arr); }
+        else {
+          let arr = (val || []).slice(); const i = arr.indexOf(o.code);
+          if (i >= 0) arr.splice(i, 1);
+          else if (o.exclusive) arr = [o.code];
+          else { const excl = new Set(q.options.filter(x => x.exclusive).map(x => x.code)); arr = arr.filter(c => !excl.has(c)); arr.push(o.code); }
+          set(arr);
+        }
       });
       opts.append(b);
     }
@@ -586,12 +632,14 @@ function renderQuestion(q, rec, caseObj, locked, isMissing) {
     const cb = el("input", { type: "checkbox", disabled: locked });
     cb.checked = !!val;
     cb.addEventListener("change", () => set(cb.checked ? true : null));
-    box.firstChild.remove();
-    box.append(el("label", { class: "flagrow" }, cb, el("span", { text: q.label })));
+    box.firstChild.lastChild && box.firstChild.childNodes[1].remove();
+    box.firstChild.append(el("label", { class: "flagrow" }, cb, el("span", { text: q.label })));
   } else if (q.type === "point") {
-    const txt = val ? `Set at x ${Math.round(val.x)}, y ${Math.round(val.y)}` : "Not set";
+    const placed = val && val.x !== undefined;
+    const txt = placed ? "Marked on the image" : (val && val.not_visible ? "Not visible" : "Not set");
     const row = el("div", { class: "pointrow" },
-      el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => { placing = { id: q.id, set }; $("viewer").classList.add("placing"); $("placeHint").classList.remove("hidden"); } }, val ? "Move" : "Set"),
+      el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => { placing = { id: q.id, set }; $("viewer").classList.add("placing"); $("placeHint").classList.remove("hidden"); } }, placed ? "Move" : "Set"),
+      q.allow_not_visible ? el("button", { class: "btn small" + (val && val.not_visible ? " primary" : ""), type: "button", disabled: locked, onclick: () => set(val && val.not_visible ? null : { not_visible: true }) }, "Not visible") : null,
       val ? el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => set(null) }, "Clear") : null,
       el("span", { text: txt }));
     box.append(row);
@@ -658,6 +706,7 @@ function renderChrome() {
   $("progress").title = `${done} of ${total} steps`;
 }
 function renderAll() { renderChrome(); renderForm(); renderToolbar(); draw(); }
+const clsLabel = (cls) => (PACK.classes[cls] && PACK.classes[cls].label) || cls;
 
 /* ======================================================================= viewer */
 const V = { img: null, imgCase: null, scale: 1, tx: 0, ty: 0, dpr: window.devicePixelRatio || 1, paths: {}, heat: {},
@@ -683,6 +732,7 @@ async function loadCaseImage(caseId) {
     const im = await loadImage(c.image);
     if (V.imgCase !== caseId) return;
     V.img = im;
+    const csz = caseState(caseId); if (!csz.display_size) { csz.display_size = [c.width, c.height]; save(); }
     for (const k of Object.keys(c.heat || {})) loadImage(c.heat[k].src).then(h => { if (V.imgCase === caseId) { V.heat[k] = h; draw(); } }).catch(() => {});
   } catch (e) { toast(e.message, 4000); }
   $("loading").classList.add("hidden");
@@ -810,7 +860,7 @@ function drawNow() {
   const pre = S.cases[cur.caseId] && S.cases[cur.caseId].pre.answers;
   if (pre && (cur.step.kind === "image_pre" || cur.step.kind === "image_post")) {
     for (const [id, label] of [["pre_fovea", "Fovea"], ["pre_disc", "Disc"]]) {
-      const p = pre[id]; if (!p) continue;
+      const p = pre[id]; if (!p || p.x === undefined) continue;
       octx.lineWidth = 2 * px; octx.strokeStyle = "#ffffff";
       octx.beginPath(); octx.moveTo(p.x - 14 * px, p.y); octx.lineTo(p.x + 14 * px, p.y); octx.moveTo(p.x, p.y - 14 * px); octx.lineTo(p.x, p.y + 14 * px); octx.stroke();
       octx.font = `${12 * px}px system-ui, sans-serif`; octx.fillStyle = "#ffffff"; octx.fillText(label, p.x + 8 * px, p.y - 8 * px);
@@ -890,14 +940,14 @@ function renderToolbar() {
   const cg = $("clsGroup"); cg.innerHTML = "";
   for (const cls of ["MA", "HE", "EX", "SE"]) {
     const b = el("button", { class: "tbtn" + (V.cls[cls] ? " on" : ""), type: "button", title: PACK.classes[cls].name },
-      el("span", { class: "sw", style: `background:${PACK.classes[cls].color}` }), cls);
+      el("span", { class: "sw", style: `background:${PACK.classes[cls].color}` }), clsLabel(cls));
     b.addEventListener("click", () => { V.cls[cls] = !V.cls[cls]; renderToolbar(); draw(); });
     cg.append(b);
   }
   const lg = $("legend");
   if (ovAllowed) {
     lg.innerHTML = "";
-    lg.append(el("span", {}, svgLine(false), "Dataset annotation"), el("span", {}, svgLine(true), "Model"));
+    lg.append(el("span", {}, svgLine(false), "Dataset label"), el("span", {}, svgLine(true), "AI"));
     if (Object.values(V.paths.uncertain || {}).length) lg.append(el("span", {}, svgLine("dot"), "Uncertain (not scored)"));
     lg.classList.remove("hidden");
   } else lg.classList.add("hidden");
@@ -1039,11 +1089,18 @@ function begin(code) {
 /* ======================================================================= help, export, import */
 function buildHelpLegend() {
   const t = $("helpLegend"); t.innerHTML = "";
-  t.append(el("tr", {}, el("td", {}, svgLine(false)), el("td", { text: "Dataset annotation (solid)" })));
-  t.append(el("tr", {}, el("td", {}, svgLine(true)), el("td", { text: "Model (dashed)" })));
-  for (const [cls, v] of Object.entries(PACK.classes)) t.append(el("tr", {}, el("td", {}, el("span", { style: `display:inline-block;width:22px;height:4px;background:${v.color};vertical-align:middle` })), el("td", { text: `${cls}: ${v.name}` })));
+  t.append(el("tr", {}, el("td", {}, svgLine(false)), el("td", { text: "Dataset label (solid)" })));
+  t.append(el("tr", {}, el("td", {}, svgLine(true)), el("td", { text: "AI (dashed)" })));
+  for (const [cls, v] of Object.entries(PACK.classes)) t.append(el("tr", {}, el("td", {}, el("span", { style: `display:inline-block;width:22px;height:4px;background:${v.color};vertical-align:middle` })), el("td", { text: `${v.label || cls}: ${v.name}` })));
 }
 $("btnHelp").onclick = () => $("helpScreen").classList.remove("hidden");
+function applyPanelTheme(dark) {
+  document.body.classList.toggle("panel-dark", dark);
+  $("btnPanel").textContent = dark ? "Panel: dark" : "Panel: light";
+  try { localStorage.setItem("retiseg-review:panel", dark ? "dark" : "light"); } catch (e) {}
+}
+$("btnPanel").onclick = () => applyPanelTheme(!document.body.classList.contains("panel-dark"));
+try { applyPanelTheme(localStorage.getItem("retiseg-review:panel") === "dark"); } catch (e) { applyPanelTheme(false); }
 $("btnHelpClose").onclick = () => $("helpScreen").classList.add("hidden");
 $("btnExport").onclick = exportResults;
 $("btnExport2").onclick = exportResults;

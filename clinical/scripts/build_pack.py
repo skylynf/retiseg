@@ -18,8 +18,11 @@ Outlines are closed polygons on pixel corners (clinical/scripts/contours.py) of
                          (the same binary map the regions were mined from)
     ignore               the class's ignore region where the source has one (drawn dotted, labelled "uncertain")
 
-    python clinical/scripts/build_pack.py --selection clinical/work/pilot01/selection.json \
-        --out clinical/packs/pilot01 [--practice clinical/work/practice01/selection.json] [--max-side 0]
+    python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/trial01/selection.json \
+        --out clinical/packs/trial01 [--practice clinical/work/practice01/selection.json] [--max-side 0] [--zip]
+
+--zip also writes <out>.zip (the folder as one attachment) and warns when it is larger than 20 MB, the safe size
+for e-mail; send a larger pack through a shared drive instead, or rebuild with --max-side.
 """
 
 import argparse
@@ -40,14 +43,17 @@ from common import CLASSES  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 TOOL = HERE.parent / "reader_tool" / "index.html"
-SCHEMA = HERE.parent / "schema" / "review_schema_v1.json"
+SCHEMA = HERE.parent / "schema" / "review_schema.json"
 
+# Keys are the benchmark's class codes (bench/common/io.py); readers see the clinical labels (docs/clinical/31:
+# HE -> HG, EX -> HEX, SE -> CWS, so that "HE" is never read as hard exudate).
 CLASS_STYLE = {
-    "MA": {"name": "Microaneurysm", "color": "#22d3ee"},
-    "HE": {"name": "Haemorrhage", "color": "#ff4fd8"},
-    "EX": {"name": "Hard exudate", "color": "#ffe14d"},
-    "SE": {"name": "Cotton-wool spot", "color": "#7dff6b"},
+    "MA": {"label": "MA", "name": "Microaneurysms", "color": "#22d3ee"},
+    "HE": {"label": "HG", "name": "Hemorrhages", "color": "#ff4fd8"},
+    "EX": {"label": "HEX", "name": "Hard exudates", "color": "#ffe14d"},
+    "SE": {"label": "CWS", "name": "Cotton wool spots", "color": "#7dff6b"},
 }
+EMAIL_LIMIT_MB = 20
 
 
 def hex_rgb(h):
@@ -145,6 +151,7 @@ def main(argv=None):
     ap.add_argument("--heat-max-side", type=int, default=1600)
     ap.add_argument("--eps", type=float, default=0.7, help="outline simplification tolerance in pixels")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--zip", action="store_true", help="also write <out>.zip for sending by e-mail")
     args = ap.parse_args(argv)
 
     root = Path(args.root)
@@ -186,21 +193,30 @@ def main(argv=None):
     (out / "pack.json").write_text(text)
     (out / "pack.js").write_text("window.RETISEG_PACK = " + text + ";\n")
     shutil.copyfile(TOOL, out / "index.html")
-    (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], n_cases=len(cases),
-                                                         n_regions=sum(len(c["regions"]) for c in cases)))
+    n_regions = sum(len(c["regions"]) for c in cases)
+    minutes = int(round((1.5 * len(cases) + 0.8 * n_regions) / 5.0) * 5) or 5   # docs/clinical/28 section 6
+    (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], n_cases=len(cases), n_regions=n_regions, minutes=minutes))
     sums = []
     for p in sorted(out.rglob("*")):
         if p.is_file() and p.name != "SHA256SUMS.txt":
             sums.append(f"{common.sha256_file(p)}  {p.relative_to(out)}")
     (out / "SHA256SUMS.txt").write_text("\n".join(sums) + "\n")
     size = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
-    print(json.dumps({"pack": str(out), "cases": len(cases), "regions": sum(len(c["regions"]) for c in cases),
-                      "megabytes": round(size / 1e6, 1)}))
+    report = {"pack": str(out), "cases": len(cases), "regions": sum(len(c["regions"]) for c in cases),
+              "megabytes": round(size / 1e6, 1)}
+    if args.zip:
+        archive = shutil.make_archive(str(out), "zip", root_dir=out.parent, base_dir=out.name)
+        mb = Path(archive).stat().st_size / 1e6
+        report["zip"] = archive
+        report["zip_megabytes"] = round(mb, 1)
+        if mb > EMAIL_LIMIT_MB:
+            report["warning"] = f"zip is {mb:.0f} MB, above {EMAIL_LIMIT_MB} MB: send it through a shared drive or rebuild with --max-side"
+    print(json.dumps(report))
 
 
 README = """{title}
 
-{n_cases} images, {n_regions} marked regions.
+{n_cases} images, {n_regions} marked regions; about {minutes} minutes in total. You can stop and continue at any time.
 
 How to open
   1. Keep this folder together (index.html, pack.js, images/, heat/).

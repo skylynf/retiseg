@@ -1,0 +1,279 @@
+{
+  "schema_id": "retiseg-clinical-review",
+  "version": "2.0.0-trial",
+  "status": "trial (10-20 images, docs/clinical/28 section 8); revised after the trial feedback, then frozen as 2.x before the formal batch",
+  "changes": "2.0.0 (2026-10-29, docs/clinical/31): clinical labels MA / HG / HEX / CWS; fewer questions; clinical consequence anchored to ICDR, the 4-2-1 rule and DME, with a separate question on clinical relevance; fovea click required (or 'not visible'); image-level question on unlabelled lesions; debrief asks which questions were useful.",
+  "notes": "Codes are what the analysis reads; labels and help are what the reader sees. Never re-use a code for a different meaning; add a new code instead. Lesion codes map to the dataset classes: ma=MA, hg=HE, hex=EX, cws=SE.",
+  "steps": {
+    "image_pre": {
+      "title": "Grade the image",
+      "intro": "Grade the photograph as you would in clinic. No outlines are shown yet.",
+      "overlays": "none",
+      "questions": [
+        {
+          "id": "pre_quality", "type": "single", "required": true,
+          "label": "Image quality",
+          "options": [
+            {"code": "good", "label": "Gradable"},
+            {"code": "limited", "label": "Gradable with limitations"},
+            {"code": "ungradable", "label": "Ungradable"}
+          ]
+        },
+        {
+          "id": "pre_icdr", "type": "single", "required": true,
+          "label": "ICDR DR grade",
+          "options": [
+            {"code": "0", "label": "No DR"},
+            {"code": "1", "label": "Mild NPDR", "help": "MA only"},
+            {"code": "2", "label": "Moderate NPDR", "help": "More than MA, less than severe"},
+            {"code": "3", "label": "Severe NPDR", "help": "4-2-1 rule"},
+            {"code": "4", "label": "PDR", "help": "NV, vitreous or preretinal hemorrhage"},
+            {"code": "cannot", "label": "Cannot grade"}
+          ]
+        },
+        {
+          "id": "pre_dme", "type": "single", "required": true,
+          "label": "DME (judged from HEX on the photograph)",
+          "options": [
+            {"code": "none", "label": "No DME"},
+            {"code": "non_central", "label": "Non-center-involving", "help": "HEX within the macula, not at the center"},
+            {"code": "central", "label": "Center-involving", "help": "HEX at the foveal center"},
+            {"code": "cannot", "label": "Cannot assess"}
+          ]
+        },
+        {
+          "id": "pre_other_signs", "type": "multi", "required": false,
+          "label": "Signs beyond the four lesion types (optional)",
+          "help": "Not annotated in the datasets, but they drive severe NPDR and PDR.",
+          "options": [
+            {"code": "irma", "label": "IRMA"},
+            {"code": "nv", "label": "NVD / NVE"},
+            {"code": "venous_beading", "label": "Venous beading"},
+            {"code": "prh", "label": "Preretinal / vitreous hemorrhage"},
+            {"code": "laser", "label": "Laser scars"},
+            {"code": "other", "label": "Other (comment at the end of the image)"}
+          ]
+        },
+        {
+          "id": "pre_fovea", "type": "point", "required": true, "allow_not_visible": true,
+          "label": "Foveal center",
+          "help": "Click Set, then click the fovea. Used to measure how far each lesion lies from it."
+        },
+        {
+          "id": "pre_disc", "type": "point", "required": false, "allow_not_visible": true,
+          "label": "Optic disc center",
+          "help": "Optional; gives the scale in disc diameters."
+        }
+      ]
+    },
+    "region_a": {
+      "title": "What is in the circle?",
+      "intro": "Answer from the photograph alone. You are not told who marked the region or why.",
+      "overlays": "marker",
+      "questions": [
+        {
+          "id": "a_finding", "type": "single", "required": true, "columns": 2,
+          "label": "Main finding",
+          "options": [
+            {"code": "ma", "group": "The four lesion types", "label": "MA", "help": "Microaneurysm"},
+            {"code": "hg", "group": "The four lesion types", "label": "HG", "help": "Intraretinal hemorrhage"},
+            {"code": "hex", "group": "The four lesion types", "label": "HEX", "help": "Hard exudate"},
+            {"code": "cws", "group": "The four lesion types", "label": "CWS", "help": "Cotton wool spot"},
+            {"code": "irma", "group": "Other retinal findings", "label": "IRMA"},
+            {"code": "nv", "group": "Other retinal findings", "label": "NV"},
+            {"code": "prh", "group": "Other retinal findings", "label": "Preretinal / vitreous hemorrhage"},
+            {"code": "drusen", "group": "Other retinal findings", "label": "Drusen"},
+            {"code": "laser", "group": "Other retinal findings", "label": "Laser scar"},
+            {"code": "pigment", "group": "Other retinal findings", "label": "Pigment / nevus"},
+            {"code": "other_lesion", "group": "Other retinal findings", "label": "Other (comment in step B)"},
+            {"code": "vessel", "group": "Normal anatomy", "label": "Vessel, crossing or bifurcation"},
+            {"code": "disc", "group": "Normal anatomy", "label": "Optic disc / peripapillary"},
+            {"code": "reflex", "group": "Normal anatomy", "label": "Light reflex", "help": "NFL sheen, foveal or vessel reflex"},
+            {"code": "background", "group": "Normal anatomy", "label": "Normal retina"},
+            {"code": "artifact_dust", "group": "Artifact", "label": "Dust, smudge or eyelash"},
+            {"code": "artifact_light", "group": "Artifact", "label": "Flare or reflection"},
+            {"code": "artifact_edge", "group": "Artifact", "label": "Field edge / periphery distortion"},
+            {"code": "indeterminate", "group": "Cannot tell", "label": "Cannot determine"}
+          ]
+        },
+        {
+          "id": "a_confidence", "type": "single", "required": true,
+          "label": "Confidence",
+          "show_if": {"q": "a_finding", "not_in": ["indeterminate"]},
+          "options": [
+            {"code": "certain", "label": "Certain"},
+            {"code": "probable", "label": "Probable"},
+            {"code": "possible", "label": "Possible"}
+          ]
+        }
+      ]
+    },
+    "region_b": {
+      "title": "Who is right?",
+      "intro": "Dataset label: solid line. AI: dashed line. Shown inside this region's window only; your answer above is locked.",
+      "overlays": "crop",
+      "questions": [
+        {
+          "id": "b_cause", "type": "single", "required": true,
+          "label": "Who is right?",
+          "options": [
+            {"code": "agree", "label": "Both acceptable", "help": "No real difference"},
+            {"code": "label_error", "label": "AI right, dataset label wrong"},
+            {"code": "model_error", "label": "Dataset label right, AI wrong"},
+            {"code": "both_wrong", "label": "Both wrong"},
+            {"code": "ambiguous", "label": "Depends on definition", "help": "e.g. MA vs small dot HG"},
+            {"code": "image_limited", "label": "Cannot tell from this photograph"}
+          ]
+        },
+        {
+          "id": "b_label_issue", "type": "multi", "required": true,
+          "label": "What is wrong with the dataset label?",
+          "show_if": {"q": "b_cause", "in": ["label_error", "both_wrong"]},
+          "options": [
+            {"code": "omission", "label": "Lesion missed by the label"},
+            {"code": "false_label", "label": "Labelled, but no lesion"},
+            {"code": "wrong_class", "label": "Wrong lesion type"},
+            {"code": "too_large", "label": "Outline too large / several lesions in one outline"},
+            {"code": "too_small", "label": "Outline incomplete or misplaced"},
+            {"code": "convention", "label": "Dataset convention unlike clinical usage"},
+            {"code": "other", "label": "Other (comment)"}
+          ]
+        },
+        {
+          "id": "b_model_issue", "type": "multi", "required": true,
+          "label": "What is wrong with the AI?",
+          "show_if": {"q": "b_cause", "in": ["model_error", "both_wrong"]},
+          "options": [
+            {"code": "false_alarm", "label": "False alarm on normal anatomy or artifact", "help": "What it is: your answer above"},
+            {"code": "class_confusion", "label": "Right place, wrong lesion type"},
+            {"code": "missed_small", "label": "Missed a small or faint lesion"},
+            {"code": "missed_quality", "label": "Missed in a poor-quality or peripheral area"},
+            {"code": "missed_crowded", "label": "Missed next to other lesions or vessels"},
+            {"code": "extent", "label": "Extent wrong (too small, too large, merged)"},
+            {"code": "other", "label": "Other (comment)"}
+          ]
+        },
+        {
+          "id": "b_icdr", "type": "multi", "required": true,
+          "label": "If this error were used to grade the eye, what would change (ICDR)?",
+          "help": "Judge against your own grading of this image.",
+          "show_if": {"q": "b_cause", "not_in": ["agree"]},
+          "options": [
+            {"code": "none", "exclusive": true, "label": "Nothing", "help": "Grade and DME unchanged"},
+            {"code": "g01", "label": "No DR ↔ mild NPDR", "help": "The only MA in the eye"},
+            {"code": "g12", "label": "Mild ↔ moderate NPDR", "help": "The only HG, HEX or CWS in an MA-only eye; crosses the referral threshold"},
+            {"code": "g23", "label": "Moderate ↔ severe NPDR", "help": "4-2-1 rule: >20 HG in each of 4 quadrants"},
+            {"code": "dme", "label": "DME status", "help": "HEX in the macula or at the center"}
+          ]
+        },
+        {
+          "id": "b_relevance", "type": "single", "required": true,
+          "label": "Would it change what you do for this patient?",
+          "show_if": {"q": "b_cause", "not_in": ["agree"]},
+          "options": [
+            {"code": "no", "label": "No", "help": "e.g. a small lesion far from the fovea"},
+            {"code": "followup", "label": "Follow-up interval"},
+            {"code": "referral", "label": "Referral or treatment"},
+            {"code": "unsure", "label": "Unsure"}
+          ]
+        },
+        {"id": "b_comment", "type": "text", "required": false, "label": "Comment (optional)"}
+      ]
+    },
+    "image_post": {
+      "title": "Whole image",
+      "intro": "All outlines are now shown. Toggle the dataset label, the AI and the heat map to compare.",
+      "overlays": "all",
+      "questions": [
+        {
+          "id": "post_ai_grade", "type": "single", "required": true,
+          "label": "Grading from the AI lesions alone would give",
+          "options": [
+            {"code": "same", "label": "Same grade as mine"},
+            {"code": "lower", "label": "Lower grade"},
+            {"code": "higher", "label": "Higher grade"},
+            {"code": "cannot", "label": "Cannot say"}
+          ]
+        },
+        {
+          "id": "post_ai_referral", "type": "single", "required": true,
+          "label": "Referral from the AI lesions alone",
+          "help": "Referable: moderate NPDR or worse, and/or DME.",
+          "options": [
+            {"code": "same", "label": "Same as mine"},
+            {"code": "under", "label": "Would miss a referral"},
+            {"code": "over", "label": "Unnecessary referral"},
+            {"code": "cannot", "label": "Cannot say"}
+          ]
+        },
+        {
+          "id": "post_unlabelled", "type": "single", "required": true,
+          "label": "Lesions missing from the dataset label (whole image)",
+          "options": [
+            {"code": "none", "label": "None"},
+            {"code": "few_peripheral", "label": "A few, mostly far from the fovea"},
+            {"code": "few_central", "label": "A few, including near the fovea"},
+            {"code": "many", "label": "Many"}
+          ]
+        },
+        {
+          "id": "post_label_quality", "type": "single", "required": true,
+          "label": "Dataset label for this image",
+          "options": [
+            {"code": "good", "label": "Good"},
+            {"code": "acceptable", "label": "Acceptable"},
+            {"code": "poor", "label": "Poor"}
+          ]
+        },
+        {
+          "id": "post_ai_quality", "type": "single", "required": true,
+          "label": "AI lesion map for this image",
+          "options": [
+            {"code": "good", "label": "Good"},
+            {"code": "acceptable", "label": "Acceptable"},
+            {"code": "poor", "label": "Poor"}
+          ]
+        },
+        {
+          "id": "post_reference_grade", "type": "single", "required": false,
+          "label": "The dataset's own grade is shown above. Do you agree?",
+          "show_if": {"case_has": "reference_grade"},
+          "options": [
+            {"code": "agree", "label": "Agree"},
+            {"code": "too_low", "label": "Too low"},
+            {"code": "too_high", "label": "Too high"},
+            {"code": "unsure", "label": "Unsure"}
+          ]
+        },
+        {"id": "post_comment", "type": "text", "required": false, "label": "Comment on this image (optional)"}
+      ]
+    },
+    "debrief": {
+      "title": "Feedback",
+      "intro": "About five minutes. This shapes the formal batch.",
+      "overlays": "none",
+      "questions": [
+        {"id": "d_useful", "type": "text", "required": false, "label": "Which questions were useful, and which were not?"},
+        {"id": "d_options", "type": "text", "required": false, "label": "Answer options that were missing, unclear or not in clinical terms"},
+        {"id": "d_consequence", "type": "text", "required": false, "label": "Did the ICDR question and the patient-management question capture clinical consequence? What would you change?"},
+        {"id": "d_use", "type": "multi", "required": false, "label": "Where would AI lesion maps be useful?",
+         "options": [
+           {"code": "triage", "label": "Screening triage"}, {"code": "grading_support", "label": "Supporting a human grader"},
+           {"code": "dme", "label": "DME detection"}, {"code": "quantification", "label": "Lesion counts over follow-up"},
+           {"code": "trials", "label": "Clinical-trial endpoints"}, {"code": "teaching", "label": "Teaching"}, {"code": "none", "label": "Nowhere"}]},
+        {"id": "d_missing_classes", "type": "multi", "required": false, "label": "Which lesion types should future datasets annotate?",
+         "options": [
+           {"code": "irma", "label": "IRMA"}, {"code": "nv", "label": "NVD / NVE"}, {"code": "venous_beading", "label": "Venous beading"},
+           {"code": "prh", "label": "Preretinal / vitreous hemorrhage"}, {"code": "laser", "label": "Laser scars"}, {"code": "drusen", "label": "Drusen"},
+           {"code": "landmarks", "label": "Fovea and disc"}, {"code": "other", "label": "Other (comment)"}]},
+        {"id": "d_fix", "type": "multi", "required": false, "label": "What would most improve lesion AI for clinical use?",
+         "options": [
+           {"code": "guideline", "label": "Clearer lesion definitions"}, {"code": "reannotate", "label": "Re-annotation by retina specialists"},
+           {"code": "more_classes", "label": "IRMA and NV in the datasets"}, {"code": "resolution", "label": "Higher image resolution"},
+           {"code": "quality_control", "label": "Image quality control"}, {"code": "location", "label": "Weighting by distance from the fovea"},
+           {"code": "other_modality", "label": "OCT or FA alongside"}, {"code": "other", "label": "Other (comment)"}]},
+        {"id": "d_tool", "type": "text", "required": false, "label": "Comments on the tool"}
+      ]
+    }
+  }
+}

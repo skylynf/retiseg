@@ -1,28 +1,36 @@
-"""Join the readers' exported answers to the key and compute the pilot / main-study summaries.
+"""Join the readers' exported answers to the key and compute the trial / formal-batch summaries.
 
-docs/clinical/28 section 7. Inputs: selection.json (the key) and one exported JSON per reader. Outputs in --out:
+docs/clinical/28 section 7 (questionnaire 2.x, clinical/schema/review_schema.json). Inputs: selection.json (the
+key) and one exported JSON per reader. Outputs in --out:
 
-    regions_long.csv   one row per reader x region: hidden metadata (set, class, kind, arm, weight, size, model
-                       probability, model consensus, grade) + the reader's answers + derived fields + active time
-    images_long.csv    one row per reader x image: grade, DME, quality, post-review judgements, active time
-    report.md          completion and time; the blinded verdict and the stated cause by class and kind;
-                       design-weighted shares of the representative arm with 95% intervals (bootstrap over
-                       images, 2000 replicates, seed 0); agreement between readers per field (percent agreement,
-                       Cohen's kappa per pair, Fleiss' kappa, Gwet's AC1; quadratic-weighted kappa for ordinal
-                       fields); clinical impact; issue and remedy counts; free-text comments; the pilot checks
+    regions_long.csv   one row per reader x region: hidden metadata (set, class, kind, arm, weight, size, AI
+                       probability, model consensus, grade) + the reader's answers + derived fields (blinded verdict,
+                       distance from the reader's fovea in disc diameters and its band) + active time
+    images_long.csv    one row per reader x image: grade, DME, other signs, post-review judgements, active time
+    report.md          completion and time; blinded verdict and stated cause by class and kind; design-weighted
+                       shares of the representative arm with 95% intervals (bootstrap over images, 2000
+                       replicates, seed 0); distance from the fovea against verdict, ICDR consequence and clinical
+                       relevance; rule-based ICDR consequence against clinical relevance; agreement between
+                       readers (percent agreement, Cohen's and Fleiss' kappa, Gwet's AC1, quadratic kappa for the
+                       grade); issue counts; free text and the readers' feedback on the questions; trial checks
 
-The blinded verdict comes from step A only (what the reader saw before any outline was shown):
-    the reader's finding is mapped to a lesion class (ma -> MA, he -> HE, ex -> EX, se -> SE), to "other DR lesion"
-    (irma, nv, prh), "other lesion", "no lesion" (normal structures, artifacts) or "indeterminate";
-    then for a region of class c
-      FP (model only)     finding c -> model_right; no lesion -> dataset_right; another class -> other_class
-      FN (dataset only)   finding c -> dataset_right; no lesion -> model_right; another class -> other_class
+Blinded verdict (step A only, before any outline was shown): the reader's finding is mapped to a dataset class
+(ma -> MA, hg -> HE, hex -> EX, cws -> SE; the readers see MA / HG / HEX / CWS), to "other DR sign" (irma, nv,
+prh), "other lesion", "no lesion" (normal anatomy, artifacts) or "indeterminate"; then for a region of class c
+      FP (AI only)        finding c -> model_right; no lesion -> dataset_right; another class -> other_class
+      FN (label only)     finding c -> dataset_right; no lesion -> model_right; another class -> other_class
       agree / extent      finding c -> both_right;  no lesion -> both_wrong;   another class -> other_class
       indeterminate -> unresolved
+
+Distance from the fovea (docs/clinical/31: small lesions far from the fovea rarely matter, and annotators miss
+them more often): region centroid to the reader's foveal click, in disc diameters (DD). One DD is the reader's
+fovea-to-disc distance / 2.5 when the disc was clicked; otherwise, for standard-field images, the FOV equivalent
+diameter / 7.5 (flagged approximate); ultra-widefield images without a disc click get no distance. Bands, fixed
+before reading: central <= 1 DD, posterior pole 1-3 DD, peripheral > 3 DD.
 Practice cases are excluded.
 
-    python clinical/scripts/analyze_reviews.py --selection clinical/work/pilot01/selection.json \
-        --reviews clinical/reviews/pilot01/*.json --out clinical/work/pilot01/analysis
+    python clinical/scripts/analyze_reviews.py --selection clinical/selections/trial01/selection.json \
+        --reviews clinical/reviews/trial01/*.json --out clinical/work/trial01/analysis
 """
 
 import argparse
@@ -38,16 +46,22 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common  # noqa: E402
 
-FINDING_CLASS = {"ma": "MA", "he": "HE", "ex": "EX", "se": "SE"}
+FINDING_CLASS = {"ma": "MA", "hg": "HE", "hex": "EX", "cws": "SE"}
+CLASS_LABEL = {"MA": "MA", "HE": "HG", "EX": "HEX", "SE": "CWS"}     # what the readers saw (docs/clinical/31)
 FINDING_GROUP = {
-    "ma": "MA", "he": "HE", "ex": "EX", "se": "SE",
+    "ma": "MA", "hg": "HE", "hex": "EX", "cws": "SE",
     "irma": "other_dr", "nv": "other_dr", "prh": "other_dr",
     "drusen": "other_lesion", "laser": "other_lesion", "pigment": "other_lesion", "other_lesion": "other_lesion",
     "vessel": "no_lesion", "disc": "no_lesion", "reflex": "no_lesion", "background": "no_lesion",
     "artifact_dust": "no_lesion", "artifact_light": "no_lesion", "artifact_edge": "no_lesion",
     "indeterminate": "indeterminate",
 }
-ORDINAL = {"b_impact": ["0", "1", "2", "3"], "pre_icdr": ["0", "1", "2", "3", "4"], "b_difficulty": ["easy", "moderate", "hard"]}
+ORDINAL = {"pre_icdr": ["0", "1", "2", "3", "4"]}
+DD_PER_FOVEA_DISC = 2.5          # fovea-to-disc-center distance in disc diameters
+DD_PER_FOV_STANDARD = 7.5        # approximate disc diameters across a standard 45-50 degree field
+DIST_BANDS = [(1.0, "central <=1 DD"), (3.0, "posterior 1-3 DD"), (float("inf"), "peripheral >3 DD")]
+ULTRAWIDE_SETS = {"TJDR_uwf"}
+ICDR_ORDER = ["none", "g01", "g12", "dme", "g23"]    # highest consequence for the summary column
 
 
 def blind_verdict(kind, cls, finding):
@@ -61,6 +75,36 @@ def blind_verdict(kind, cls, finding):
     if group == "no_lesion":
         return {"FP": "dataset_right", "FN": "model_right"}.get(kind, "both_wrong")
     return "other_class"
+
+
+def fovea_distance(case_key, case_state, region_row):
+    """(distance in DD, band, approximate?) of a region from the reader's foveal click, or (None, None, None)."""
+    pre = case_state["pre"]["answers"]
+    fovea, disc = pre.get("pre_fovea"), pre.get("pre_disc")
+    if not fovea or fovea.get("x") is None:
+        return None, None, None
+    native_w = case_key["image_size"][0]
+    shown = case_state.get("display_size") or case_key["image_size"]
+    scale = shown[0] / native_w
+    cx, cy = (v * scale for v in region_row["centroid"])
+    if disc and disc.get("x") is not None:
+        dd = float(np.hypot(fovea["x"] - disc["x"], fovea["y"] - disc["y"])) / DD_PER_FOVEA_DISC
+        approx = False
+    elif case_key["set"] not in ULTRAWIDE_SETS and case_key.get("fov"):
+        dd = case_key["fov"]["diameter"] * scale / DD_PER_FOV_STANDARD
+        approx = True
+    else:
+        return None, None, None
+    if dd <= 0:
+        return None, None, None
+    dist = float(np.hypot(cx - fovea["x"], cy - fovea["y"])) / dd
+    band = next(name for edge, name in DIST_BANDS if dist <= edge)
+    return round(dist, 2), band, approx
+
+
+def icdr_max(codes):
+    codes = [c for c in (codes or []) if c in ICDR_ORDER]
+    return max(codes, key=ICDR_ORDER.index) if codes else None
 
 
 # ------------------------------------------------------------------------------------------------ agreement
@@ -182,7 +226,7 @@ def flatten(selection, reviews):
             c = cases[cid]
             pre, post = cs["pre"]["answers"], cs["post"]["answers"]
             images.append({"reader": reader, "case_id": cid, "set": c["set"], "image_id": c["image_id"], "grade": c.get("grade"),
-                           **{k: (json.dumps(v) if isinstance(v, (dict, list)) else v) for k, v in {**pre, **post}.items()},
+                           **{k: (";".join(v) if isinstance(v, list) else json.dumps(v) if isinstance(v, dict) else v) for k, v in {**pre, **post}.items()},
                            "done": cs.get("done"), "active_s_pre": cs["pre"]["t"].get("active_ms", 0) / 1000,
                            "active_s_post": cs["post"]["t"].get("active_ms", 0) / 1000})
             for rid, rr in cs["regions"].items():
@@ -191,17 +235,19 @@ def flatten(selection, reviews):
                 x = inst[rid]
                 row = x["row"]
                 a, b = rr["a"]["answers"], rr["b"]["answers"]
+                dist, band, approx = fovea_distance(c, cs, row)
                 regions.append({
-                    "reader": reader, "inst_id": rid, "case_id": cid, "set": x["set"], "image_id": x["image_id"], "cls": x["cls"],
+                    "reader": reader, "inst_id": rid, "case_id": cid, "set": x["set"], "image_id": x["image_id"],
+                    "cls": x["cls"], "label": CLASS_LABEL.get(x["cls"], x["cls"]),
                     "kind": x["kind"], "subtype": x.get("subtype"), "arm": x["arm"], "stratum": x["stratum"], "weight": x.get("weight"),
                     "size_bin": row["size_bin"], "prob_max": row["prob_max"], "zoo_frac": row.get("zoo_frac"), "grade": row.get("grade"),
-                    "dist_center_rel": row.get("dist_center_rel"),
+                    "reader_icdr": pre.get("pre_icdr"), "dist_fovea_dd": dist, "dist_band": band, "dist_approx": approx,
                     "a_finding": a.get("a_finding"), "a_group": FINDING_GROUP.get(a.get("a_finding")), "a_confidence": a.get("a_confidence"),
-                    "a_multiple": bool(a.get("a_multiple")), "blind_verdict": blind_verdict(x["kind"], x["cls"], a.get("a_finding")),
-                    "b_cause": b.get("b_cause"), "b_label_issue": ";".join(b.get("b_label_issue", [])), "b_model_issue": ";".join(b.get("b_model_issue", [])),
-                    "b_difficulty": b.get("b_difficulty"), "b_impact": b.get("b_impact"), "b_pivotal": b.get("b_pivotal"),
-                    "b_decisions": ";".join(b.get("b_decisions", [])), "b_fix": ";".join(b.get("b_fix", [])),
-                    "b_teaching": bool(b.get("b_teaching")), "b_comment": b.get("b_comment"),
+                    "blind_verdict": blind_verdict(x["kind"], x["cls"], a.get("a_finding")),
+                    "b_cause": b.get("b_cause"), "b_label_issue": ";".join(b.get("b_label_issue", [])),
+                    "b_model_issue": ";".join(b.get("b_model_issue", [])),
+                    "b_icdr": ";".join(b.get("b_icdr", [])), "b_icdr_max": icdr_max(b.get("b_icdr")),
+                    "b_relevance": b.get("b_relevance"), "b_comment": b.get("b_comment"),
                     "complete": bool(rr["b"]["t"].get("completed")),
                     "active_s": (rr["a"]["t"].get("active_ms", 0) + rr["b"]["t"].get("active_ms", 0)) / 1000,
                 })
@@ -235,6 +281,15 @@ def crosstab(rows, row_key, col_key):
     return "\n".join(lines)
 
 
+def agreement_row(field, vals, ordinal=None):
+    ag = agreement(vals, ordinal)
+    if not ag or ag.get("n_items", 0) < 2:
+        return None
+    pairs = "; ".join(f"{k} {fmt(v['kappa'])}" + (f" ({fmt(v['kappa_quadratic'])})" if v.get("kappa_quadratic") is not None else "")
+                      for k, v in ag["pairs"].items())
+    return f"| {field} | {ag['n_items']} | {fmt(ag['all_agree'])} | {fmt(ag['fleiss_kappa'])} | {fmt(ag['gwet_ac1'])} | {pairs} |"
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--selection", required=True)
@@ -253,75 +308,95 @@ def main(argv=None):
     write_csv(out / "images_long.csv", images)
     readers = sorted({r["reader_id"] for r in reviews})
     n_regions = len(selection["instances"])
+    for r in regions:
+        r["label_kind"] = f"{r['label']} {r['kind']}"
 
     md = [f"# Clinical review summary: {selection['design']['name']}", "",
-          f"Readers: {', '.join(readers)}. Regions in the key: {n_regions} ({selection['report']['by_arm']}). Images: {len(selection['cases'])}.", ""]
-    md += ["## Completion and time", "", "| reader | regions done | images done | median s / region | median s / image (pre+post) |", "|---|---|---|---|---|"]
+          f"Readers: {', '.join(readers)}. Regions in the key: {n_regions} ({selection['report']['by_arm']}). Images: {len(selection['cases'])}.",
+          "Lesion labels as the readers saw them: MA, HG (hemorrhage), HEX (hard exudate), CWS (cotton wool spot).", ""]
+    md += ["## Completion and time", "", "| reader | regions done | images done | median s / region | median s / image (grade + whole image) | total min |",
+           "|---|---|---|---|---|---|"]
     for rd in readers:
         rr = [r for r in regions if r["reader"] == rd and r["complete"]]
         ii = [i for i in images if i["reader"] == rd and i["done"]]
+        total = (sum(r["active_s"] for r in regions if r["reader"] == rd) + sum(i["active_s_pre"] + i["active_s_post"] for i in images if i["reader"] == rd)) / 60
         md.append(f"| {rd} | {len(rr)} / {n_regions} | {len(ii)} / {len(selection['cases'])} | "
                   f"{fmt(float(np.median([r['active_s'] for r in rr])) if rr else None, 0)} | "
-                  f"{fmt(float(np.median([i['active_s_pre'] + i['active_s_post'] for i in ii])) if ii else None, 0)} |")
+                  f"{fmt(float(np.median([i['active_s_pre'] + i['active_s_post'] for i in ii])) if ii else None, 0)} | {fmt(total, 0)} |")
     done = [r for r in regions if r["complete"]]
 
     md += ["", "## Blinded verdict (step A) by kind", "", crosstab(done, "kind", "blind_verdict"), ""]
-    md += ["## Stated cause (step B) by kind", "", crosstab(done, "kind", "b_cause"), ""]
-    md += ["## Stated cause by class (FP and FN regions)", "", crosstab([r for r in done if r["kind"] in ("FP", "FN")], "cls", "b_cause"), ""]
+    md += ["## Who is right (step B) by kind", "", crosstab(done, "kind", "b_cause"), ""]
+    md += ["## Who is right by lesion type, AI-only and label-only regions", "", crosstab([r for r in done if r["kind"] in ("FP", "FN")], "label_kind", "b_cause"), ""]
+
+    md += ["## Distance from the fovea (docs/clinical/31)", "",
+           f"Regions with a distance: {sum(1 for r in done if r['dist_band'])} of {len(done)} "
+           f"({sum(1 for r in done if r['dist_approx'])} on the approximate FOV scale).", "",
+           "AI-only regions: blinded verdict by distance (model_right = lesion missed by the label)", "",
+           crosstab([r for r in done if r["kind"] == "FP" and r["dist_band"]], "dist_band", "blind_verdict"), "",
+           "Label-only regions: blinded verdict by distance (dataset_right = lesion missed by the AI)", "",
+           crosstab([r for r in done if r["kind"] == "FN" and r["dist_band"]], "dist_band", "blind_verdict"), "",
+           "Highest ICDR consequence by distance (all differences)", "",
+           crosstab([r for r in done if r["b_cause"] not in (None, "agree") and r["dist_band"]], "dist_band", "b_icdr_max"), "",
+           "Clinical relevance by distance", "",
+           crosstab([r for r in done if r["b_cause"] not in (None, "agree") and r["dist_band"]], "dist_band", "b_relevance"), ""]
+
+    errs = [r for r in done if r["b_cause"] and r["b_cause"] != "agree"]
+    md += ["## Clinical consequence", "", "Highest ICDR consequence (rule-based) by lesion type", "", crosstab(errs, "label", "b_icdr_max"), "",
+           "ICDR consequence (rows) against the reader's clinical relevance (columns): where a threshold is crossed but the "
+           "reader would not act, the rule and practice disagree.", "", crosstab(errs, "b_icdr_max", "b_relevance"), ""]
 
     md += ["## Design-weighted shares, representative arm (each reader separately)", "",
            "| reader | kind | quantity | share | 95% interval | regions | images |", "|---|---|---|---|---|---|---|"]
     for rd in readers:
         for kind, field, value in [("FP", "blind_verdict", "model_right"), ("FP", "b_cause", "label_error"),
-                                   ("FN", "blind_verdict", "model_right"), ("FN", "b_cause", "model_error"),
+                                   ("FN", "blind_verdict", "dataset_right"), ("FN", "b_cause", "model_error"),
                                    ("agree", "blind_verdict", "both_wrong")]:
             rows = [r for r in done if r["reader"] == rd and r["arm"] == "representative" and r["kind"] == kind]
-            s = weighted_share(rows, field, value)
-            if s:
-                md.append(f"| {rd} | {kind} | {field} = {value} | {fmt(s['share'])} | {fmt(s['lo'])}-{fmt(s['hi'])} | {s['n_regions']} | {s['n_images']} |")
+            sh = weighted_share(rows, field, value)
+            if sh:
+                md.append(f"| {rd} | {kind} | {field} = {value} | {fmt(sh['share'])} | {fmt(sh['lo'])}-{fmt(sh['hi'])} | {sh['n_regions']} | {sh['n_images']} |")
 
-    md += ["", "## Agreement between readers", ""]
+    md += ["", "## Whole image", "", crosstab([i for i in images if i["done"]], "set", "post_unlabelled"), "",
+           crosstab([i for i in images if i["done"]], "pre_icdr", "post_ai_referral"), ""]
+
+    md += ["## Agreement between readers", ""]
     if len(readers) < 2:
         md.append("One reader so far; agreement needs two or more.")
     else:
         md += ["| field | items | all agree | Fleiss kappa | Gwet AC1 | Cohen kappa by pair (quadratic) |", "|---|---|---|---|---|---|"]
-        reg_fields = ["a_group", "a_finding", "blind_verdict", "b_cause", "b_impact", "b_pivotal", "b_difficulty"]
-        for field in reg_fields:
-            vals = {rd: {r["inst_id"]: r[field] for r in done if r["reader"] == rd} for rd in readers}
-            ag = agreement(vals, ORDINAL.get(field))
-            if ag and ag.get("n_items", 0) >= 2:
-                pairs = "; ".join(f"{k} {fmt(v['kappa'])}" + (f" ({fmt(v['kappa_quadratic'])})" if v.get("kappa_quadratic") is not None else "") for k, v in ag["pairs"].items())
-                md.append(f"| {field} | {ag['n_items']} | {fmt(ag['all_agree'])} | {fmt(ag['fleiss_kappa'])} | {fmt(ag['gwet_ac1'])} | {pairs} |")
-        for field in ["pre_icdr", "pre_dme", "pre_quality", "post_model_grade", "post_model_referral", "post_annotation_quality", "post_model_quality"]:
-            vals = {rd: {i["case_id"]: i.get(field) for i in images if i["reader"] == rd and i["done"]} for rd in readers}
-            ag = agreement(vals, ORDINAL.get(field))
-            if ag and ag.get("n_items", 0) >= 2:
-                pairs = "; ".join(f"{k} {fmt(v['kappa'])}" + (f" ({fmt(v['kappa_quadratic'])})" if v.get("kappa_quadratic") is not None else "") for k, v in ag["pairs"].items())
-                md.append(f"| {field} | {ag['n_items']} | {fmt(ag['all_agree'])} | {fmt(ag['fleiss_kappa'])} | {fmt(ag['gwet_ac1'])} | {pairs} |")
+        for field in ["a_group", "a_finding", "blind_verdict", "b_cause", "b_icdr_max", "b_relevance"]:
+            line = agreement_row(field, {rd: {r["inst_id"]: r[field] for r in done if r["reader"] == rd} for rd in readers}, ORDINAL.get(field))
+            if line:
+                md.append(line)
+        for field in ["pre_icdr", "pre_dme", "pre_quality", "post_ai_grade", "post_ai_referral", "post_unlabelled", "post_label_quality", "post_ai_quality"]:
+            line = agreement_row(field, {rd: {i["case_id"]: i.get(field) for i in images if i["reader"] == rd and i["done"]} for rd in readers}, ORDINAL.get(field))
+            if line:
+                md.append(line)
 
-    errs = [r for r in done if r["b_cause"] and r["b_cause"] != "agree"]
-    md += ["", "## Clinical impact of the differences (all arms, all readers)", "", crosstab(errs, "cls", "b_impact"), "",
-           f"Decisive on its own: {sum(1 for r in errs if r['b_pivotal'] == 'yes')} of {len(errs)} region readings.", ""]
-    for field, title in [("b_label_issue", "Annotation issues"), ("b_model_issue", "Model issues"), ("b_fix", "Suggested remedies"), ("b_decisions", "Decisions affected")]:
+    for field, title in [("b_label_issue", "Dataset-label issues"), ("b_model_issue", "AI issues")]:
         cnt = Counter(code for r in done for code in (r[field].split(";") if r[field] else []))
-        md += [f"## {title}", "", ", ".join(f"{k} {v}" for k, v in cnt.most_common()) or "-", ""]
+        md += ["", f"## {title}", "", ", ".join(f"{k} {v}" for k, v in cnt.most_common()) or "-"]
 
     other = [r for r in done if r["a_finding"] in ("other_lesion", "indeterminate")]
-    md += ["## Pilot checks (docs/clinical/28 section 8)", "",
+    md += ["", "## Trial checks (docs/clinical/28 section 8)", "",
            f"- median active time per region: {fmt(float(np.median([r['active_s'] for r in done])) if done else None, 0)} s (target <= 60)",
-           f"- step A 'other lesion' or 'cannot determine': {len(other)} of {len(done)} ({fmt(len(other) / len(done) if done else None)}; target < 0.15)",
-           f"- regions with a free-text comment: {sum(1 for r in done if r['b_comment'])}", ""]
-    md += ["## Free text", ""]
-    for r in done:
-        if r["b_comment"]:
-            md.append(f"- {r['reader']} {r['inst_id']} ({r['cls']}, {r['kind']}, {r['b_cause']}): {r['b_comment']}")
-    for i in images:
-        if i.get("post_key_problem") or i.get("pre_comment"):
-            md.append(f"- {i['reader']} {i['case_id']} (image): {i.get('pre_comment') or ''} {i.get('post_key_problem') or ''}".rstrip())
+           f"- step A 'other' or 'cannot determine': {len(other)} of {len(done)} ({fmt(len(other) / len(done) if done else None)}; target < 0.15)",
+           f"- regions with a comment: {sum(1 for r in done if r['b_comment'])}", ""]
+    md += ["## Reader feedback on the questions", ""]
     for rev in reviews:
         for k, v in rev.get("debrief", {}).get("answers", {}).items():
-            if isinstance(v, str) and k in ("d_taxonomy", "d_priorities", "d_tool"):
-                md.append(f"- {rev['reader_id']} debrief {k}: {v}")
+            if isinstance(v, str):
+                md.append(f"- {rev['reader_id']} {k}: {v}")
+            elif isinstance(v, list):
+                md.append(f"- {rev['reader_id']} {k}: {', '.join(v)}")
+    md += ["", "## Comments", ""]
+    for r in done:
+        if r["b_comment"]:
+            md.append(f"- {r['reader']} {r['inst_id']} ({r['label']}, {r['kind']}, {r['b_cause']}): {r['b_comment']}")
+    for i in images:
+        if i.get("post_comment"):
+            md.append(f"- {i['reader']} {i['case_id']} (image): {i['post_comment']}")
     (out / "report.md").write_text("\n".join(md) + "\n")
     print(f"[analyze] {len(regions)} region readings, {len(images)} image readings -> {out}")
 

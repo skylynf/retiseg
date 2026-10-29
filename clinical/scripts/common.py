@@ -96,9 +96,25 @@ def read_case(data_dir, image_id):
     return fov, gt, ignore
 
 
-def load_grades(path, set_name):
-    """{image id: grade} from runs/CLIN/grades.json ({set: {id: grade}}) or a flat {id: grade} json."""
+def load_grades(path, set_name, data_dir=None):
+    """{image id: grade} from runs/CLIN/grades.json ({set: {id: grade}}) or a flat {id: grade} json.
+
+    path "auto": runs/CLIN/grades.json if it exists, otherwise the grades the paper's stratification reads
+    (bench/scripts/clinical_strata.py): DDR from its release (DR_grading/<split>.txt), FGADR, Retinal-Lesions and
+    MAPLES-DR from export_cases.jsonl of the prepared directory; IDRiD and TJDR carry no per-image grade here.
+    """
     if not path:
+        return {}
+    if path == "auto":
+        cached = REPO / "runs" / "CLIN" / "grades.json"
+        if cached.is_file():
+            return load_grades(str(cached), set_name)
+        from bench.scripts import clinical_strata
+
+        if set_name == "DDR":
+            return {str(k): int(v) for k, v in clinical_strata.grades_ddr(REPO).items()}
+        if data_dir is not None and (Path(data_dir) / "export_cases.jsonl").is_file():
+            return {str(k): int(v) for k, v in clinical_strata.grades_from_prepared(data_dir).items()}
         return {}
     payload = json.loads(Path(path).read_text())
     if set_name in payload and isinstance(payload[set_name], dict):

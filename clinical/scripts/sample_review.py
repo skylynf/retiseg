@@ -22,7 +22,7 @@ docs/clinical/28 section 5. Two stages and two arms:
 Output: selection.json (the key: everything the reader must not see -- source, image id, class, kind, arm,
 weights) and selection.tsv. Case ids are anonymous (c01, c02, ...) in a random order.
 
-    python clinical/scripts/sample_review.py --design clinical/designs/pilot01.yaml --out clinical/work/pilot01
+    python clinical/scripts/sample_review.py --design clinical/designs/trial01.yaml --out runs/CLINREV/selection/trial01
 """
 
 import argparse

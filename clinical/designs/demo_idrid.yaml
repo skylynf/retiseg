@@ -1,6 +1,6 @@
 # Demo design: exercises the whole pipeline on five IDRiD test images with the M2MRF author checkpoint
 # (runs/E1_m2mrf, docs/paper/14 M5). It is NOT the model under review and NOT a study sample; it exists so the
-# reader tool can be tried and the scripts tested. The study designs are pilot01.yaml (and main01.yaml later).
+# reader tool can be tried and the scripts tested. The study designs are trial01.yaml and batch01.yaml (draft).
 name: demo_idrid
 seed: 20261028
 sets:

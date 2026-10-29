@@ -186,7 +186,7 @@ def main(argv=None):
     ap.add_argument("--model", required=True, help="name of the model under review, e.g. RetiSeg-Ref")
     ap.add_argument("--split", default="test")
     ap.add_argument("--ids", nargs="*", help="restrict to these image ids (default: the whole split)")
-    ap.add_argument("--grades", help="runs/CLIN/grades.json or a flat {id: grade} json")
+    ap.add_argument("--grades", help="runs/CLIN/grades.json, a flat {id: grade} json, or 'auto' (that file if present, else the DDR release / prepared export)")
     ap.add_argument("--zoo", nargs="*", help="NAME=PRED_DIR[:THRESHOLDS] of other models, for the consensus feature")
     ap.add_argument("--zoo-train", help="use the 18 registered ensemble members trained on this source (e.g. DDR) as the zoo")
     ap.add_argument("--extent-iou", type=float, default=0.5)
@@ -203,7 +203,7 @@ def main(argv=None):
         extra, zoo_missing = zoo_from_ensemble(args.zoo_train, args.set)
         zoo += extra
         print(f"[mine] zoo: {len(zoo)} models; missing maps for {[m['name'] for m in zoo_missing]}", flush=True)
-    grades = common.load_grades(args.grades, args.set)
+    grades = common.load_grades(args.grades, args.set, data_dir)
     edges, names = common.size_edges()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)

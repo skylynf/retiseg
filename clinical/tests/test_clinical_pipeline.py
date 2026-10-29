@@ -132,23 +132,32 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     assert (root / "packs" / "syn01" / "index.html").is_file() and (root / "packs" / "syn01" / "pack.js").is_file()
     assert {r["id"] for c in pack["cases"] for r in c["regions"]} == {x["inst_id"] for x in sel["instances"]}
 
-    # a reader export: every region read as what the model said, with an annotation error
-    export = {"format": "retiseg-clinical-review/1", "pack_id": "syn01", "reader_id": "R1", "cases": {}, "debrief": {"answers": {}}}
+    # readers see the clinical labels (docs/clinical/31), the pack keeps the benchmark's class codes as keys
+    assert {k: v["label"] for k, v in pack["classes"].items()} == {"MA": "MA", "HE": "HG", "EX": "HEX", "SE": "CWS"}
+    # a reader export: every region read as the lesion the model reported, the label judged wrong
+    code = {"MA": "ma", "HE": "hg", "EX": "hex", "SE": "cws"}
+    export = {"format": "retiseg-clinical-review/1", "pack_id": "syn01", "reader_id": "R1", "cases": {}, "debrief": {"answers": {"d_useful": "all"}}}
     for c in pack["cases"]:
         regs = {}
         for r in c["regions"]:
             x = next(i for i in sel["instances"] if i["inst_id"] == r["id"])
-            regs[r["id"]] = {"a": {"answers": {"a_finding": x["cls"].lower(), "a_confidence": "certain"}, "t": {"active_ms": 20000}},
-                             "b": {"answers": {"b_cause": "label_error", "b_label_issue": ["omission"], "b_difficulty": "easy",
-                                               "b_impact": "1", "b_pivotal": "no"}, "t": {"active_ms": 25000, "completed": "x"}},
+            regs[r["id"]] = {"a": {"answers": {"a_finding": code[x["cls"]], "a_confidence": "certain"}, "t": {"active_ms": 20000}},
+                             "b": {"answers": {"b_cause": "label_error", "b_label_issue": ["omission"], "b_icdr": ["none"],
+                                               "b_relevance": "no"}, "t": {"active_ms": 25000, "completed": "x"}},
                              "revealed_at": "x"}
-        export["cases"][c["id"]] = {"practice": False, "done": True, "regions": regs,
-                                    "pre": {"answers": {"pre_icdr": "2"}, "t": {"active_ms": 30000, "completed": "x"}},
-                                    "post": {"answers": {"post_model_grade": "same"}, "t": {"active_ms": 10000, "completed": "x"}}}
+        export["cases"][c["id"]] = {"practice": False, "done": True, "regions": regs, "display_size": [c["width"], c["height"]],
+                                    "pre": {"answers": {"pre_icdr": "2", "pre_fovea": {"x": 300, "y": 250}, "pre_disc": {"x": 400, "y": 250}},
+                                            "t": {"active_ms": 30000, "completed": "x"}},
+                                    "post": {"answers": {"post_ai_grade": "same", "post_unlabelled": "few_peripheral"}, "t": {"active_ms": 10000, "completed": "x"}}}
     (root / "R1.json").write_text(json.dumps(export))
     analyze_reviews.main(["--selection", "work/syn01/selection.json", "--reviews", "R1.json", "--out", "work/syn01/analysis"])
     report = (root / "work" / "syn01" / "analysis" / "report.md").read_text()
-    assert "Blinded verdict" in report and "R1" in report
+    assert "Blinded verdict" in report and "R1" in report and "Distance from the fovea" in report
+    import csv
+    rows = list(csv.DictReader(open(root / "work" / "syn01" / "analysis" / "regions_long.csv")))
+    assert rows and all(r["blind_verdict"] in ("model_right", "dataset_right", "both_right") for r in rows)
+    # fovea at (300, 250), disc 100 px away -> 1 DD = 40 px; every region gets a distance and a band
+    assert all(r["dist_band"] for r in rows)
 
 
 def test_blind_verdict_rules():
@@ -156,10 +165,27 @@ def test_blind_verdict_rules():
     assert bv("FP", "MA", "ma") == "model_right"
     assert bv("FP", "MA", "vessel") == "dataset_right"
     assert bv("FN", "HE", "reflex") == "model_right"
-    assert bv("FN", "HE", "he") == "dataset_right"
+    assert bv("FN", "HE", "hg") == "dataset_right"
     assert bv("agree", "EX", "drusen") == "other_class"
     assert bv("agree", "EX", "artifact_light") == "both_wrong"
     assert bv("FN", "SE", "indeterminate") == "unresolved"
+    assert bv("FP", "SE", "cws") == "model_right"
+
+
+def test_fovea_distance_bands():
+    case = {"set": "DDR", "image_size": [1000, 800], "fov": {"diameter": 750.0}}
+    state = {"pre": {"answers": {"pre_fovea": {"x": 500, "y": 400}, "pre_disc": {"x": 750, "y": 400}}}, "display_size": [1000, 800]}
+    # 1 DD = 250 / 2.5 = 100 px
+    assert analyze_reviews.fovea_distance(case, state, {"centroid": [550, 400]})[:2] == (0.5, "central <=1 DD")
+    assert analyze_reviews.fovea_distance(case, state, {"centroid": [700, 400]})[1] == "posterior 1-3 DD"
+    assert analyze_reviews.fovea_distance(case, state, {"centroid": [900, 400]})[1] == "peripheral >3 DD"
+    # no disc click: standard field falls back to FOV / 7.5 (approximate); ultra-widefield gets nothing
+    state["pre"]["answers"]["pre_disc"] = {"not_visible": True}
+    assert analyze_reviews.fovea_distance(case, state, {"centroid": [600, 400]})[2] is True
+    assert analyze_reviews.fovea_distance(dict(case, set="TJDR_uwf"), state, {"centroid": [600, 400]}) == (None, None, None)
+    # a pack shown at half size: the click is in display pixels, the centroid in native pixels
+    half = {"pre": {"answers": {"pre_fovea": {"x": 250, "y": 200}, "pre_disc": {"x": 375, "y": 200}}}, "display_size": [500, 400]}
+    assert analyze_reviews.fovea_distance(case, half, {"centroid": [550, 400]})[0] == 0.5
 
 
 def test_kappa_sanity():
@@ -171,7 +197,7 @@ def test_kappa_sanity():
 
 
 def test_schema_is_consistent():
-    schema = json.loads((HERE.parent / "schema" / "review_schema_v1.json").read_text())
+    schema = json.loads((HERE.parent / "schema" / "review_schema.json").read_text())
     ids = set()
     for step in schema["steps"].values():
         qids = {q["id"] for q in step["questions"]}
@@ -186,3 +212,8 @@ def test_schema_is_consistent():
                 assert cond["q"] in qids, f"{q['id']} depends on a question of another step"
     finding = next(q for q in schema["steps"]["region_a"]["questions"] if q["id"] == "a_finding")
     assert set(o["code"] for o in finding["options"]) == set(analyze_reviews.FINDING_GROUP)
+    icdr = next(q for q in schema["steps"]["region_b"]["questions"] if q["id"] == "b_icdr")
+    assert [o["code"] for o in icdr["options"] if o.get("exclusive")] == ["none"]
+    assert {o["code"] for o in icdr["options"]} == set(analyze_reviews.ICDR_ORDER)
+    labels = " ".join(o["label"] + " " + o.get("help", "") for st in schema["steps"].values() for q in st["questions"] for o in q.get("options", []))
+    assert " HE " not in f" {labels} " and " EX " not in f" {labels} " and " SE " not in f" {labels} ", "readers must see HG / HEX / CWS"
