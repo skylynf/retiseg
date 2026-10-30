@@ -626,3 +626,40 @@ RETFound 参考格 10-27 10:26 退出 0，训练 160381.2 秒。验证最高 epo
 第 63 条没开：没有 runs/E3a/BF_ref_*，没有 insource_*，没有 runs/ENS/REF。GPU 2–7 空着。GPU 0、1 仍是别人的。第 59 条没开。第 49 条没开。启动器 pid 88417 还在，没有子进程。这一包对照 runs/handoff_manifest_20261026.tsv，收第 61 条两格和 RETFound 的内部测试。第 63 条的包留到那一步做完。
 
 2026-10-28 13:43 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261028.tar.gz（73 MB，6842 个文件，1416 行指标，0 个未对齐）。summary/new_since.tsv 是 3 行：RETFound 参考格的内部测试，第 61 条种子 1 和种子 2 的 metrics_test.json。10-26 的包没有被覆盖。作者函数的 json 在包里，不进指标行。
+
+2026-10-28 14:35 +0800，pull 到 cb8404d。启动器 pid 88417 已停（没有子进程）。第 68 条 plan：20 格都是 ready，U-Net 不在内。apply 已开（pid 2265684，日志 runs/logs/20261028_item68_apply.log），对调后重评，E3a 目录挪到 runs/E3a_laststep。第 65 条算力审计在 GPU 7（pid 2265685，日志 runs/logs/20261028_item65_cost.log），U-Net 已写出 params 7.85、FLOPs 588.8、每图 0.02879 秒、峰值显存 1.432 GB。第 69–71 条等 apply。第 59、49 条没开。GPU 0、1 仍是别人的。
+
+2026-10-28 16:08 +0800。第 68 条 apply 退出 0。20 格都对调并重评，没有 sensitivity maps incomplete。最后一步 → 验证最高的 mAUPR：
+BF_e3b_m2mrf_fgadr_seed0: last step 0.3591 -> best validation 0.3591 (+0.0000)
+BF_e3b_m2mrf_tjdr_std_seed0: last step 0.5539 -> best validation 0.5133 (-0.0405)
+BF_e3b_retfound_fgadr_seed0: last step 0.4574 -> best validation 0.4555 (-0.0019)
+BF_e3b_retfound_tjdr_std_seed0: last step 0.7057 -> best validation 0.7021 (-0.0036)
+BF_e3b_sam2_unet_fgadr_seed0: last step 0.3880 -> best validation 0.4048 (+0.0168)
+BF_e3b_sam2_unet_tjdr_std_seed0: last step 0.4081 -> best validation 0.3777 (-0.0304)
+BF_e4_m2mrf_ddr_fgadr383_seed0: last step 0.3356 -> best validation 0.3356 (+0.0000)
+BF_e4_m2mrf_ddr_fgadr_seed0: last step 0.3199 -> best validation 0.3199 (+0.0000)
+BF_e4_m2mrf_ddr_retles_seed0: last step 0.2857 -> best validation 0.3060 (+0.0202)
+BF_e4_m2mrf_retles_seed0: last step 0.4692 -> best validation 0.4692 (+0.0000)
+BF_e7_hrdecoder_idrid_2880_seed0: last step 0.6268 -> best validation 0.6422 (+0.0153)
+BF_e7_m2mrf_ddr_512_seed0: last step 0.3585 -> best validation 0.3526 (-0.0059)
+BF_e7_m2mrf_ddr_native_seed0: last step 0.3117 -> best validation 0.3117 (+0.0000)
+BF_e7_retfound_ddr_512_seed0: last step 0.4004 -> best validation 0.4412 (+0.0407)
+BF_e7_retfound_ddr_native_seed0: last step 0.4492 -> best validation 0.4475 (-0.0017)
+BF_e8_m2mrf_ddr10_seed0: last step 0.3071 -> best validation 0.2959 (-0.0112)
+BF_e8_m2mrf_ddr50_seed0: last step 0.3420 -> best validation 0.3146 (-0.0274)
+BF_e8_m2mrf_fine_seed0: last step 0.3684 -> best validation 0.3684 (+0.0000)
+BF_ref_retfound_fine_seed0: last step 0.4508 -> best validation 0.4683 (+0.0175)
+BF_ref_samed_fine_seed0: last step 0.4775 -> best validation 0.4704 (-0.0070)
+上面两格参考模型此前记的 0.4508、0.4775 是最后一步；主指标现在是验证最高的 0.4683、0.4704，最后一步留在 metrics_test_laststep。13 格 E3a 已开（pid 2379760，GPU 3/4/5/6，86 项，带 --drop-maps FGADR,Retinal-Lesions，日志 runs/logs/20261028_item68_e3a.log）。第 69 条（a）参考模型五个外部集合在 GPU 2（pid 2379761，10 项，不带 --drop-maps，日志 runs/logs/20261028_item69a_e3a.log）。第 69 条（b）源内在 GPU 7（pid 2379764，日志 runs/logs/20261028_item69b_insource.log）；RETFound 的 IDRiD 预测 16:06 退出 0。集成、发布包、区间和第 71 条的包等这三件做完。第 59、49 条没开。启动器没有重启。GPU 0、1 仍是别人的。
+第 65 条：同一进程里 HACDR-Net 因 retiseg 环境没有 mmcv 抛 ImportError，把后面的模型一起带停（日志 runs/logs/20261028_item65_cost.log）。换新进程只跑 HACDR-Net、只跑 HRDecoder，都是缺 mmcv，按任务单跳过，没有改 official_code。其余模型在 GPU 7 写完（日志 runs/logs/20261028_item65_rest.log）。tsv 已复制到 runs/audit/cost_audit.tsv。每模型一行（参数量 / FLOPs / 每图秒 / 峰值显存 GB）：U-Net 7.85 / 588.8 / 0.02879 / 1.432；DeepLabv3 58.63 / 2543 / 0.05425 / 0.8735；Swin-Unet 27.17 / 1169 / 0.174 / 0.5439；FCT 1.946 / 2942 / 0.939 / 0.2807；HRNet-W48 65.85 / 983.6 / 0.04569 / 1.332；M2MRF 70.3 / 931.1 / 0.05303 / 1.091；PMCNet 12.92 / 442.8 / 0.03204 / 1.863；WSRFNet 9.706 / 831.2 / 0.04982 / 1.444；CLC-Net 119.7 / 11760 / 0.8586 / 3.881；TC-Net 14.9 / 9631 / 0.2949 / 8.656；SAMed 91.63（可训练 4.352）/ FLOPs 未写出 / 0.3038 / 1.9；SAM-Adapter 641.3（可训练 4.246）/ 11960 / 0.9243 / 7.42；SAM2-UNet 216.5（可训练 4.381）/ 2677 / 0.2064 / 1.595；MedSAM (full FT) 93.74（可训练 93.73）/ 1951 / 0.1894 / 5.535；RETFound + UPerNet 352.6 / 20870 / 1.097 / 2.461。
+
+2026-10-30 10:36 +0800。第 68 条 13 格外部测试 86 项全部 exit 0，最晚 10-28 18:06。每份 done.json 的检查点都是 best.pt。FGADR 与 Retinal-Lesions 的概率图已删。没有统一视野尺度的来源，TJDR 超广角的分数在 TJDR_uwf__fov，控制台在 TJDR_uwf，都是 exit 0。
+第 69 条（a）参考模型五个外部集合全部 exit 0，检查点 best.pt。RETFound：FGADR 0.2722（n=553）、Retinal-Lesions 0.2818（n=478）、TJDR 超广角 fov 0.1899（n=58）、MAPLES-DR 0.4628（n=60）、DiaRetDB1 0.3431（n=61）。SAMed：0.3056、0.2601、0.3142、0.4582、0.3181，n 与上一行相同。DDR 内部（验证最高）：RETFound 0.4683，SAMed 0.4704。
+第 69 条（b）四个源内 10-28 16:22 完成。RETFound：IDRiD 0.6722、TJDR 标准 0.7042。SAMed：IDRiD 0.6742、TJDR 标准 0.6381。
+第 69 条（c）集成 10-29 完成，日志 runs/logs/20261029_item69c_ensemble.log。八个集合的 mAUPR（排除都是 0）：DDR 0.5006（n=225）、IDRiD 0.7097（n=27）、TJDR 标准 0.6958（n=55）、TJDR 超广角 fov 0.3023（n=58）、FGADR 0.3093（n=553）、Retinal-Lesions 0.2783（n=478）、DiaRetDB1 0.3389（n=61）、MAPLES-DR 0.4817（n=60）。done.json 的 paper 键是 N8 / reference:ensemble。集成自己的 prob_test 已按 --drop-maps 删掉。
+第 69 条（d）发布目录 runs/release/retiseg_ref：两个成员、八个集合。weights.pt 是 SAMed 349.7 MB、RETFound 1345.3 MB，不进包。
+第 69 条（e）冒烟取 DDR 测试划分前三张 007-1789-100、007-1853-100、007-2403-100。SAMed 的 MA 概率图与 runs/BF_ref_samed_fine_seed0/prob_test/MA 逐字节相同，三张都相同。summary.json 留下。
+第 69 条（f）已删两格在 FGADR、Retinal-Lesions 的 prob_test，以及 insource_IDRiD/prob、insource_TJDR_std/prob，还有 runs/release/smoke 的 prob、masks、members。两份 best.pt 还在。
+第 70 条 maupr_ci：written 1551，skipped 0，mismatch 0。多出来的一份是 runs/BF_e3b_m2mrf_fgadr_seed0/metrics_test_full.npz，没有对应的 json，不是报告。日志 runs/logs/20261030_item70_maupr_ci.log。第 59、49 条没开。启动器没有重启。
+
+2026-10-30 10:57 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261030.tar.gz（79 MB，7329 个文件，1526 行指标，0 个未对齐）。对照 runs/handoff_manifest_20261028.tsv。summary/new_since.tsv 是 1526 行：区间写进了已有报告，所以对照 10-28 几乎每一份指标都算新的。包里有 20 格的 metrics_test_laststep、runs/E3a_laststep（350 个文件）、runs/ENS/REF、runs/release 的小文件和 runs/audit/cost_audit.tsv。weights.pt 不在包里。10-28 的包没有被覆盖。这一行是打包之后补的，包里的 00 停在上一段。

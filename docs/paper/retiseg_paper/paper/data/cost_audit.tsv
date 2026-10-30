@@ -1,0 +1,75 @@
+model	train_set	metric	value	note
+U-Net		params_m	7.85	cost_audit.py
+U-Net		params_trainable_m	7.85	cost_audit.py
+U-Net		flops_g	588.8	cost_audit.py, one 960x1440 canvas, windows None
+U-Net		infer_s_per_image	0.02879	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+U-Net		peak_infer_mem_gb	1.432	cost_audit.py
+DeepLabv3		params_m	58.63	cost_audit.py
+DeepLabv3		params_trainable_m	58.63	cost_audit.py
+DeepLabv3		flops_g	2543	cost_audit.py, one 960x1440 canvas, windows None
+DeepLabv3		infer_s_per_image	0.05425	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+DeepLabv3		peak_infer_mem_gb	0.8735	cost_audit.py
+Swin-Unet		params_m	27.17	cost_audit.py
+Swin-Unet		params_trainable_m	27.17	cost_audit.py
+Swin-Unet		flops_g	1169	cost_audit.py, one 960x1440 canvas, windows (224, 224)
+Swin-Unet		infer_s_per_image	0.174	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+Swin-Unet		peak_infer_mem_gb	0.5439	cost_audit.py
+FCT		params_m	1.946	cost_audit.py
+FCT		params_trainable_m	1.946	cost_audit.py
+FCT		flops_g	2942	cost_audit.py, one 960x1440 canvas, windows (384, 384)
+FCT		infer_s_per_image	0.939	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+FCT		peak_infer_mem_gb	0.2807	cost_audit.py
+HRNet-W48		params_m	65.85	cost_audit.py
+HRNet-W48		params_trainable_m	65.85	cost_audit.py
+HRNet-W48		flops_g	983.6	cost_audit.py, one 960x1440 canvas, windows None
+HRNet-W48		infer_s_per_image	0.04569	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+HRNet-W48		peak_infer_mem_gb	1.332	cost_audit.py
+M2MRF		params_m	70.3	cost_audit.py
+M2MRF		params_trainable_m	70.3	cost_audit.py
+M2MRF		flops_g	931.1	cost_audit.py, one 960x1440 canvas, windows None
+M2MRF		infer_s_per_image	0.05303	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+M2MRF		peak_infer_mem_gb	1.091	cost_audit.py
+PMCNet		params_m	12.92	cost_audit.py
+PMCNet		params_trainable_m	12.92	cost_audit.py
+PMCNet		flops_g	442.8	cost_audit.py, one 960x1440 canvas, windows None
+PMCNet		infer_s_per_image	0.03204	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+PMCNet		peak_infer_mem_gb	1.863	cost_audit.py
+WSRFNet		params_m	9.706	cost_audit.py
+WSRFNet		params_trainable_m	9.706	cost_audit.py
+WSRFNet		flops_g	831.2	cost_audit.py, one 960x1440 canvas, windows None
+WSRFNet		infer_s_per_image	0.04982	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+WSRFNet		peak_infer_mem_gb	1.444	cost_audit.py
+CLC-Net		params_m	119.7	cost_audit.py
+CLC-Net		params_trainable_m	119.7	cost_audit.py
+CLC-Net		flops_g	1.176e+04	cost_audit.py, one 960x1440 canvas, windows (512, 512)
+CLC-Net		infer_s_per_image	0.8586	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+CLC-Net		peak_infer_mem_gb	3.881	cost_audit.py
+TC-Net		params_m	14.9	cost_audit.py
+TC-Net		params_trainable_m	14.9	cost_audit.py
+TC-Net		flops_g	9631	cost_audit.py, one 960x1440 canvas, windows (512, 512)
+TC-Net		infer_s_per_image	0.2949	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+TC-Net		peak_infer_mem_gb	8.656	cost_audit.py
+SAMed		params_m	91.63	cost_audit.py
+SAMed		params_trainable_m	4.352	cost_audit.py
+SAMed		infer_s_per_image	0.3038	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+SAMed		peak_infer_mem_gb	1.9	cost_audit.py
+SAM-Adapter		params_m	641.3	cost_audit.py
+SAM-Adapter		params_trainable_m	4.246	cost_audit.py
+SAM-Adapter		flops_g	1.196e+04	cost_audit.py, one 960x1440 canvas, windows (1024, 1024)
+SAM-Adapter		infer_s_per_image	0.9243	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+SAM-Adapter		peak_infer_mem_gb	7.42	cost_audit.py
+SAM2-UNet		params_m	216.5	cost_audit.py
+SAM2-UNet		params_trainable_m	4.381	cost_audit.py
+SAM2-UNet		flops_g	2677	cost_audit.py, one 960x1440 canvas, windows None
+SAM2-UNet		infer_s_per_image	0.2064	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+SAM2-UNet		peak_infer_mem_gb	1.595	cost_audit.py
+MedSAM (full FT)		params_m	93.74	cost_audit.py
+MedSAM (full FT)		params_trainable_m	93.73	cost_audit.py
+MedSAM (full FT)		flops_g	1951	cost_audit.py, one 960x1440 canvas, windows (1024, 1024)
+MedSAM (full FT)		infer_s_per_image	0.1894	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+MedSAM (full FT)		peak_infer_mem_gb	5.535	cost_audit.py
+RETFound + UPerNet		params_m	352.6	cost_audit.py
+RETFound + UPerNet		params_trainable_m	352.6	cost_audit.py
+RETFound + UPerNet		flops_g	2.087e+04	cost_audit.py, one 960x1440 canvas, windows (224, 224)
+RETFound + UPerNet		infer_s_per_image	1.097	cost_audit.py, median of 5 on NVIDIA A100-SXM4-40GB
+RETFound + UPerNet		peak_infer_mem_gb	2.461	cost_audit.py
