@@ -193,5 +193,14 @@ def test_reference_ensemble_reads_named_cells_and_their_in_source_and_e3a_maps(t
     b = io.read_prob_quantized(runs / "BF_ref_samed_fine_seed0" / "prob_test", "MA", "t0").astype(float)
     m = io.read_prob_quantized(out / "DDR" / "prob_test", "MA", "t0").astype(float)
     assert np.abs(m - (a + b) / 2).max() <= 1.0
+    # maps dropped after scoring come back with --regenerate-maps, the scores untouched (docs/ops/17 item 72a)
+    import shutil
+
+    shutil.rmtree(out / "DDR" / "prob_test")
+    before = json.loads((out / "DDR" / "metrics.json").read_text())["summary"]["mAUPR"]
+    again = ens.run_reference(cells, sets=["DDR"], runs_root=runs, regenerate_maps=True)
+    assert (out / "DDR" / "prob_test" / "MA" / "t0.png").is_file() and again["DDR"] == before
+    assert json.loads((out / "DDR" / "metrics.json").read_text())["summary"]["mAUPR"] == before
+    assert json.loads((out / "DDR" / "done.json").read_text())["maps_dropped"] is False
     with pytest.raises(ValueError):
         ens.run_reference([str(runs / "BS_unet_ddr_seed0"), cells[0]], runs_root=runs)   # a B-std run is not a REF cell

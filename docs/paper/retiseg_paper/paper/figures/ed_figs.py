@@ -184,14 +184,14 @@ def ed10():
     fig = S.figure(92, width=S.FULL_W)
     c = D.sel(experiment="E10")
     get = lambda metric, train="": c[(c.metric == metric) & (c.train_set == train)].set_index("model")["value"]
-    params, hours, mem, sec, flops = get("params_m"), get("train_gpu_h", "IDRiD"), get("peak_mem_gb"), get("infer_s_per_image"), get("flops_g")
+    params, hours, mem, sec, flops = get("params_m"), get("train_gpu_h", "IDRiD"), get("peak_infer_mem_gb"), get("infer_s_per_image"), get("flops_g")
     trainable = get("params_trainable_m")
     score = D.score_matrix("IDRiD")["IDRiD"]
     models = [m for m in score.sort_values(ascending=False).index if m in hours.index and m in params.index]
     size = lambda p: 6 + 1.6 * np.sqrt(p)
     S.label_mm(fig, "a", 2, 2)
     S.text_mm(fig, "Accuracy against training cost", 8, 2.6, fontsize=6.8, fontweight="bold")
-    ax = S.axes_mm(fig, 16, 13, 62, 48)
+    ax = S.axes_mm(fig, 14, 13, 48, 48)
     for m in models:
         ax.scatter([hours[m]], [score[m]], s=size(params[m]), color=S.FAMILY[D.FAMILY_OF[m]], alpha=0.85, edgecolors=S.PAPER, linewidths=0.5, zorder=3)
     nudge = {"nnU-Net": (-4, 6, "right"), "nnU-Net ResEnc-M": (5, 4, "left"), "M2MRF": (5, 6, "left"), "HRNet-W48": (-4, -8, "right"), "SAM2-UNet": (7, 0, "left"),
@@ -222,27 +222,34 @@ def ed10():
         S.tag_simulated(ax, loc="tl", text="mAUPR or hours simulated")
     elif sim_params:
         S.tag_simulated(ax, loc="tl", text="unmarked parameter counts from the model's plan")
-    P.family_legend(fig, S.FAMILY_ORDER, loc="upper left", ncol=4, bbox=tuple(S.rect_mm(fig, 14, 68, 1, 1)[:2]), marker="o")
+    P.family_legend(fig, S.FAMILY_ORDER, loc="upper left", ncol=2, bbox=tuple(S.rect_mm(fig, 12, 68, 1, 1)[:2]), marker="o")
     # aligned bars
-    S.label_mm(fig, "b", 88, 2)
-    S.text_mm(fig, "Resources per model", 94, 2.6, fontsize=6.8, fontweight="bold")
+    S.label_mm(fig, "b", 68, 2)
+    S.text_mm(fig, "Resources per model", 74, 2.6, fontsize=6.8, fontweight="bold")
     tr = pd.Series({m: trainable.get(m, params[m]) for m in models})
     hours_ddr = get("train_gpu_h", "DDR")
     measured_metric = lambda metric: bool((c[(c.metric == metric) & (c.source == "measured")]).shape[0])
     cols = [(params, "Parameters (M)", "{:.0f}", 720), (tr, "Trainable (M)", "{:.0f}", 720),
             (hours, "GPU h, IDRiD\n(one seed)", "{:.1f}", 40), (hours_ddr, "GPU h, DDR\n(one seed)", "{:.0f}", 60)]
-    # FLOPs, peak memory and inference time join once bench/scripts/cost_audit.py has run (17 section 4 item 65)
-    for series, title, fmt, xmax, metric in ((flops, "FLOPs (G)", "{:.0f}", 700, "flops_g"), (mem, "Peak training\nmemory (GB)", "{:.0f}", 46, "peak_mem_gb"),
-                                             (sec, "Inference\n(s per image)", "{:.1f}", 5.6, "infer_s_per_image")):
+    # FLOPs, peak inference memory and inference time from bench/scripts/cost_audit.py (one 1,440 canvas with the
+    # model's own windows; 2026-10-28). Models the audit could not build (HACDR-Net, HRDecoder: mmcv forks) and
+    # nnU-Net (its own pipeline) have no bar. The axis of each audited column follows its data.
+    for series, title, fmt, metric in ((flops, "FLOPs (G),\none canvas", "{:.0f}", "flops_g"), (mem, "Peak infer.\nmemory (GB)", "{:.1f}", "peak_infer_mem_gb"),
+                                       (sec, "Inference\n(s/image)", "{:.2f}", "infer_s_per_image")):
         if measured_metric(metric):
-            cols.append((series, title, fmt, xmax))
+            cols.append((series, title, fmt, float(np.nanmax(series.reindex(models).to_numpy())) * 1.9))
     row = 3.05
+    step = (180 - 92 - 9) / max(len(cols) - 1, 1)
     for j, (series, title, fmt, xmax) in enumerate(cols):
-        axb = S.axes_mm(fig, 112 + j * 13.5, 17, 10, row * len(models))
-        P.score_bars(axb, series.reindex(models).to_numpy(), [S.FAMILY[D.FAMILY_OF[m]] for m in models], xmax=xmax, fmt=fmt, fs=4.9)
+        axb = S.axes_mm(fig, 92 + j * step, 17, 8.5, row * len(models))
+        vals = series.reindex(models).to_numpy(dtype=float)
+        P.score_bars(axb, np.where(np.isfinite(vals), vals, 0.0), [S.FAMILY[D.FAMILY_OF[m]] for m in models], xmax=xmax, fmt=fmt, fs=4.6)
+        for t, v in zip([t for t in axb.texts], vals):
+            if not np.isfinite(v):
+                t.set_text("–")
         axb.set_xticks([])
         axb.spines["bottom"].set_visible(False)
-        axb.set_title(title, fontsize=5.2, loc="left", pad=3, linespacing=1.1)
+        axb.set_title(title, fontsize=4.8, loc="left", pad=3, linespacing=1.1)
         if j == 0:
             axb.set_yticks(np.arange(len(models)) + 0.5)
             axb.set_yticklabels(models, fontsize=5.4)
@@ -253,7 +260,7 @@ def ed10():
             for i, m in enumerate(models):
                 if m in set(meas):
                     axb.text(-0.02, i + 0.5, "*", transform=axb.get_yaxis_transform(), ha="right", va="center", fontsize=4.6, color=S.INK2)
-    S.text_mm(fig, "Models ordered by mAUPR on the IDRiD test set. 40 GB A100, one task per card; nnU-Net follows its own\n1,000-epoch schedule. * parameter count read from the run (the others are the plan's); FLOPs, peak memory\nand inference time join when the cost audit has run.", 94, 17 + row * len(models) + 4, fontsize=4.9, color=S.INK2, linespacing=1.2)
+    S.text_mm(fig, "Models ordered by mAUPR on the IDRiD test set. 40 GB A100, one task per card; nnU-Net follows its own 1,000-epoch schedule.\n* parameter count read from the run (the others are the plan's). FLOPs, peak inference memory and inference time: one 1,440-pixel\ncanvas with the model's own windows, median of five passes on an A100; – not measured (HACDR-Net and HRDecoder: their mmcv forks\ndo not build in the audit environment; nnU-Net: its own pipeline).", 70, 17 + row * len(models) + 4, fontsize=4.9, color=S.INK2, linespacing=1.2)
     if D.simulated(c[(c.metric == "train_gpu_h") & c.model.isin(models)]):
         S.tag_simulated(axb, loc="br", dy=-0.1, text="some hours simulated")
     S.save(fig, "ed10_cost")

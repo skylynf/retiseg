@@ -287,6 +287,15 @@ def run(train, composition, sets=None, drop_maps=False, runs_root=None, e3a_root
             raise FileNotFoundError(f"{test_name}: member maps missing (regenerate with bench.e3a --regenerate-maps): {missing}")
         started = time.perf_counter()
         n = average_maps(member_dirs, ids, classes, directory / "prob_test")
+        if (directory / "done.json").is_file():
+            # regenerate_maps on a finished set: the maps are back, the scores stay as they were
+            done = json.loads((directory / "done.json").read_text())
+            done["maps_dropped"] = False
+            done["maps_regenerated"] = "pixelwise mean of the members' maps, written again without re-scoring"
+            (directory / "done.json").write_text(json.dumps(done, indent=1) + "\n")
+            results[test_name] = float(done.get("summary", {}).get("mAUPR", float("nan")))
+            print(f"REF/reference {test_name}: maps regenerated ({n} images); metrics unchanged", flush=True)
+            continue
         result = evaluate(
             e3a.test_data_dir(test_name, frozen), frozen["split"], directory / "prob_test", proto,
             val_pred_dir=val_dir, val_split="val", out_prefix=directory / "metrics", val_dataset_dir=data_train, exclude=excluded,
@@ -352,14 +361,16 @@ def reference_map_dir(run_dir, test_name, test_source, train_names, scale_known,
     return e3a_root / run_dir.name / e3a.set_dirname(test_name, variant) / "prob_test", variant
 
 
-def run_reference(member_run_dirs, sets=None, drop_maps=False, runs_root=None, e3a_root=None):
+def run_reference(member_run_dirs, sets=None, drop_maps=False, runs_root=None, e3a_root=None, regenerate_maps=False):
     """The reference model's ensemble (26 section 5 item 2; 14 note 58): the pixel mean of the maps of the named
     runs, the two REF cells, scored like every other ensemble. The members are run directories, not a registered
     composition; their configs name the merged training sources and the validation source. Thresholds come from
     the mean of the members' prob_val (the validation source's split); the test sets are the validation source's test
     split, the in-source test splits of the other merged sources and every E3a set the members were tested on.
     Output runs/ENS/REF/reference/<set>/{metrics.json, done.json}; done.json carries the paper key
-    (experiment N8, variant reference:ensemble, train_set the merged sources) that collect_runs reads."""
+    (experiment N8, variant reference:ensemble, train_set the merged sources) that collect_runs reads.
+    ``regenerate_maps`` re-averages the members' maps into a finished set's prob_test (dropped after scoring;
+    the clinical review of docs/clinical/28 reads them) without re-scoring; the members' maps must exist again."""
     from bench.eval.evaluate import evaluate, load_protocol
 
     frozen = e3a.load_frozen()
@@ -386,8 +397,8 @@ def run_reference(member_run_dirs, sets=None, drop_maps=False, runs_root=None, e
     results = {}
     for test_name in test_names:
         directory = out / test_name
-        if (directory / "done.json").is_file():
-            print(f"REF/reference {test_name}: done", flush=True)
+        if (directory / "done.json").is_file() and not (regenerate_maps and not (directory / "prob_test").is_dir()):
+            print(f"REF/reference {test_name}: done" + (" (maps present)" if regenerate_maps else ""), flush=True)
             continue
         data_test = e3a.test_data_dir(test_name, frozen)
         if test_name in train_names:
@@ -402,6 +413,15 @@ def run_reference(member_run_dirs, sets=None, drop_maps=False, runs_root=None, e
             raise FileNotFoundError(f"{test_name}: member maps missing (bench.e3a run / insource prediction, 17 section 4 item 47): {missing}")
         started = time.perf_counter()
         n = average_maps(member_dirs, ids, classes, directory / "prob_test")
+        if (directory / "done.json").is_file():
+            # regenerate_maps on a finished set: the maps are back, the scores stay as they were
+            done = json.loads((directory / "done.json").read_text())
+            done["maps_dropped"] = False
+            done["maps_regenerated"] = "pixelwise mean of the members' maps, written again without re-scoring"
+            (directory / "done.json").write_text(json.dumps(done, indent=1) + "\n")
+            results[test_name] = float(done.get("summary", {}).get("mAUPR", float("nan")))
+            print(f"REF/reference {test_name}: maps regenerated ({n} images); metrics unchanged", flush=True)
+            continue
         result = evaluate(
             data_test, frozen["split"], directory / "prob_test", proto,
             val_pred_dir=val_dir, val_split="val", out_prefix=directory / "metrics", val_dataset_dir=data_val, exclude=excluded,
@@ -449,6 +469,7 @@ def main(argv=None):
     ref.add_argument("--members", required=True, help="comma-separated run directories, e.g. runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0")
     ref.add_argument("--sets", default=None, help="comma-separated test sets (default: validation source's test, in-source sets, then every E3a set)")
     ref.add_argument("--drop-maps", action="store_true")
+    ref.add_argument("--regenerate-maps", action="store_true", help="write a finished set's prob_test again from the members' maps (no re-scoring)")
     ref.add_argument("--runs", default=None)
     ref.add_argument("--e3a", default=None)
     for command in ("members", "plan", "run"):
@@ -466,7 +487,8 @@ def main(argv=None):
             p.add_argument("--force", action="store_true", help="recompute the validation table")
     args = parser.parse_args(argv)
     if args.command == "reference":
-        run_reference([m.strip() for m in args.members.split(",") if m.strip()], e3a._sets(args.sets), args.drop_maps, args.runs, args.e3a)
+        run_reference([m.strip() for m in args.members.split(",") if m.strip()], e3a._sets(args.sets), args.drop_maps, args.runs, args.e3a,
+                      regenerate_maps=args.regenerate_maps)
         return
     if args.command == "members":
         members_table(args.train, runs_root=args.runs, force=args.force)

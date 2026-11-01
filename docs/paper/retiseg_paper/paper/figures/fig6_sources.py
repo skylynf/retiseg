@@ -19,8 +19,9 @@ CLS_MARKER = {"MA": "o", "HE": "s", "EX": "^", "SE": "D"}
 
 
 def matrix(model=None):
-    """train x test seed-mean mAUPR for one representative model, or their mean."""
-    a = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, metric="aupr", model=D.REPRESENTATIVE)
+    """train x test mAUPR (seed 0, as the caption and the text say; the E3b cells have one seed) for one
+    representative model, or their mean."""
+    a = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, metric="aupr", model=D.REPRESENTATIVE, seed=0)
     b = D.sel(experiment="E3b", metric="aupr", model=D.REPRESENTATIVE)
     df = __import__("pandas").concat([a, b])
     if model:

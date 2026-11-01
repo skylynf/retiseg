@@ -43,6 +43,8 @@ scripts/collect_runs.py       读 runs/*/metrics_*.json，按键覆盖占位行
 
 2026-10-28：10-28 包进表（M2MRF 作者配方重训种子 1、2：作者函数 0.605 / 0.627、本协议 0.540 / 0.566；RETFound 参考格 DDR 内部 0.451）。新键 `e1r.M2MRF.IDRiD.{n,fn.lo,fn.hi,fn.sd,exact.lo,exact.hi,exact.sd}`（R3 一句按三种子写）、`n8.*`（参考模型两成员与集成；R4 末尾一句不再是待完成）、`mci.*`（mAUPR 的 bootstrap 区间，等服务器跑 `bench/scripts/maupr_ci.py` 后 `collect_runs.py` 读 `summary.mAUPR_ci` 成 cls=mean 的 `aupr_ci_lo/hi` 行）。**待修的数据**：因素格（BF_*）里 M2MRF / RETFound / SAMed / SAM2-UNet / HRDecoder 的 20 格到 10-28 为止都是按最后一步打分的（bench/train.py 的 roles_for 只认 BS；docs/ops/21 第 97 条），与方法写的验证选择不符；服务器按 `bench/scripts/rescore_factor_roles.py` 换成 best.pt 并重跑 13 格的 E3a 后，表 7、图 6 / 7、ED7 之外的因素数、R4 的 HRDecoder 案例段（2880 格 0.627）、R6 的四源矩阵都会变，下一包进表后按键重算；最后一步的分数留在 run 目录的 `*_laststep` 文件里。
 
+2026-10-30：10-30 包进表（1,723 份报告；1,551 份带 `summary.mAUPR_ci`）。上一条“待修的数据”已修：因素格 20 格按验证选择重评、13 格 E3a 重跑后，R4 案例段、R6 两段、R7 两段、讨论 Q3 的数全部改为 `\rn` 键（`src.*`、`cross.max.train/test`、`e4.<模型>.*`、`e7.<模型>.*`、`e7.hrdecoder.*`、`e7.drop.*`、`e8.<模型>.*`），`fig6_sources.matrix()` 改为主表种子 0（与图注一致）。新进表：RetiSeg-Ref（`runs/ENS/REF/reference`，键 `n8.*`、`ensall.*`、`n8.vs.all.*`；R4 末段）、算力审计（`data/cost_audit.tsv`，键 `cost.{flops,infer,mem}.*`；ED10b 与补充表 8 读 `peak_infer_mem_gb`，列名“推理峰值显存”）、mAUPR 区间（cls=mean 的 `aupr_ci_lo/hi`，键 `mci.*`；补充表 4 末列）。results.csv 无占位，numbers.tex 886 键。
+
 ## 服务器结果回来以后
 
 1. 把服务器的快照包（docs/ops/17 第一节的格式）解开到仓库根目录的 `runs/`（gitignore）。

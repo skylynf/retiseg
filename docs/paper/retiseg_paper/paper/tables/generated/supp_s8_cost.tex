@@ -1,14 +1,14 @@
 
 {\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
 \begin{longtable}{l c c c c c c c}
-\caption{\textbf{Computational cost.} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\,GB A100, one task per card), and, where the cost audit has run, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.}\label{stab:cost}\\
+\caption{\textbf{Computational cost.} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\,GB A100, one task per card), and the inference cost of one 1,440-pixel canvas (a $1440\times960$ field of view) with the model's own inference geometry: floating-point operations (convolutions and matrix products, all windows), peak GPU memory allocated during inference, and the median wall time of five passes on an A100.}\label{stab:cost}\\
 \toprule
-Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak mem.\ (GB) & Infer.\ (s/image) \\
+Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak infer.\ mem.\ (GB) & Infer.\ (s/image) \\
 \midrule
 \endfirsthead
 \multicolumn{8}{l}{\textit{continued}}\\
 \toprule
-Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak mem.\ (GB) & Infer.\ (s/image) \\
+Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak infer.\ mem.\ (GB) & Infer.\ (s/image) \\
 \midrule
 \endhead
 \midrule
@@ -16,25 +16,25 @@ Model & Params (M) & Trainable (M) & GPU h IDRiD & GPU h DDR & GFLOPs & Peak mem
 \endfoot
 \bottomrule
 \endlastfoot
-U-Net & 7.8 & \na & 1.5 & 5.4 & \na & \na & \na \\
-DeepLabv3 & 58.6 & \na & 3.6 & 12.8 & \na & \na & \na \\
-HRNet-W48 & 65.8 & \na & 2.6 & 10.1 & \na & \na & \na \\
-Swin-Unet & 27.2 & \na & 2.6 & 10.4 & \na & \na & \na \\
-FCT & 1.9 & \na & 19.7 & 72.0 & \na & \na & \na \\
+U-Net & 7.8 & 7.9 & 1.5 & 5.4 & 589 & 1.4 & .03 \\
+DeepLabv3 & 58.6 & 58.6 & 3.6 & 12.8 & 2,543 & .9 & .05 \\
+HRNet-W48 & 65.8 & 65.9 & 2.6 & 10.1 & 984 & 1.3 & .05 \\
+Swin-Unet & 27.2 & 27.2 & 2.6 & 10.4 & 1,169 & .5 & .17 \\
+FCT & 1.9 & 1.9 & 19.7 & 72.0 & 2,942 & .3 & .94 \\
 nnU-Net & 59.2 & \na & 7.2 & 7.2 & \na & \na & \na \\
 nnU-Net ResEnc-M & 105.9 & \na & 12.8 & 11.4 & \na & \na & \na \\
-M2MRF & 70.3 & \na & 3.0 & 11.6 & \na & \na & \na \\
+M2MRF & 70.3 & 70.3 & 3.0 & 11.6 & 931 & 1.1 & .05 \\
 HACDR-Net & 24.6 & \na & 5.9 & 27.8 & \na & \na & \na \\
 HRDecoder & 65.6 & \na & 1.5 & 5.9 & \na & \na & \na \\
-PMCNet & 12.9 & \na & 1.8 & 7.1 & \na & \na & \na \\
-WSRFNet & 9.7 & \na & 2.7 & 10.5 & \na & \na & \na \\
-CLC-Net & 119.7 & \na & 9.9 & 39.2 & \na & \na & \na \\
-TC-Net & 14.9 & \na & 6.0 & 24.7 & \na & \na & \na \\
-SAMed & 91.6 & \na & 2.1 & 7.4 & \na & \na & \na \\
-SAM-Adapter & 641.3 & 4.3 & 6.5 & 26.3 & \na & \na & \na \\
-SAM2-UNet & 216.5 & 4.4 & 4.1 & 16.2 & \na & \na & \na \\
-MedSAM (full FT) & 93.7 & 93.7 & 2.8 & 11.1 & \na & \na & \na \\
-RETFound + UPerNet & 352.6 & 352.6 & 6.1 & 24.2 & \na & \na & \na \\
+PMCNet & 12.9 & 12.9 & 1.8 & 7.1 & 443 & 1.9 & .03 \\
+WSRFNet & 9.7 & 9.7 & 2.7 & 10.5 & 831 & 1.4 & .05 \\
+CLC-Net & 119.7 & 119.7 & 9.9 & 39.2 & 11,760 & 3.9 & .86 \\
+TC-Net & 14.9 & 14.9 & 6.0 & 24.7 & 9,631 & 8.7 & .29 \\
+SAMed & 91.6 & 4.4 & 2.1 & 7.4 & \na & 1.9 & .30 \\
+SAM-Adapter & 641.3 & 4.2 & 6.5 & 26.3 & 11,960 & 7.4 & .92 \\
+SAM2-UNet & 216.5 & 4.4 & 4.1 & 16.2 & 2,677 & 1.6 & .21 \\
+MedSAM (full FT) & 93.7 & 93.7 & 2.8 & 11.1 & 1,951 & 5.5 & .19 \\
+RETFound + UPerNet & 352.6 & 352.6 & 6.1 & 24.2 & 20,870 & 2.5 & 1.10 \\
 \end{longtable}
 }
-\vspace{-6pt}\noindent{\scriptsize nnU-Net follows its own schedule of 1,000 epochs rather than the pixel budget. Cells without a value were not measured; the cost audit (FLOPs, memory, inference) is pending.}
+\vspace{-6pt}\noindent{\scriptsize nnU-Net follows its own schedule of 1,000 epochs rather than the pixel budget and runs its own inference pipeline, so it has no audited inference columns. HACDR-Net and HRDecoder could not be built in the audit environment (their mmcv forks need another environment) and were not measured. SAMed's FLOPs were not counted (its forward is not traced by the counter). Parameters of nnU-Net are those of its plans.}

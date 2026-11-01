@@ -35,8 +35,9 @@ E-fam:auto & .641 & .463 & .572 & .210 & .473 & .275 & .227 & .334 \\
 E-fam:fundus & .637 & .444 & .568 & .246 & .452 & .251$^{\rm p}$ & .218$^{\rm p}$ & .305 \\
 E-fam:foundation & .676 & .509 & .657 & .248 & .494 & .302 & .294 & .340 \\
 \multicolumn{9}{l}{\textbf{Reference model: trained on IDRiD + DDR + TJDR std merged (DDR budget and validation)}}\\
-RETFound + UPerNet (fine merged) & \na & .451 & \na & \na & \na & \na & \na & \na \\
-SAMed (fine merged) & \na & .477 & \na & \na & \na & \na & \na & \na \\
+RETFound + UPerNet (fine merged) & .672 & .468 & .704 & .190 & .463 & .272 & .282 & .343 \\
+SAMed (fine merged) & .674 & .470 & .638 & .314 & .458 & .306 & .260 & .318 \\
+RetiSeg-Ref (ensemble) & .710 & .501 & .696 & .302 & .482 & .309 & .278 & .339 \\
 \end{longtable}
 }
 \vspace{-6pt}\noindent{\scriptsize $^{\rm p}$, computed without HACDR-Net, whose maps for that set could not be regenerated (members named in the run record). In-source test sets of the reference model (IDRiD, DDR, TJDR std) are the official test splits of sources that entered its training.}

@@ -20,7 +20,7 @@
 7 & Learning-rate sweep (DDR) & learning-rate sweep & drawn \\
 8 & Loss with the architecture fixed (U-Net) & loss experiment & drawn \\
 9 & DiaRetDB1 official protocol; ultra-widefield at two scales & independent tests & drawn \\
-10 & Computational cost & cost records of every run & drawn (cost audit pending) \\
+10 & Computational cost & cost records of every run; inference audit & drawn \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -51,7 +51,7 @@
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{\figfile{ed10_cost}}
-\caption{\textbf{Computational cost.} \textbf{a}, \mAUPR{} on the IDRiD test set against the training time of one seed on IDRiD (40\,GB A100, one task per card); marker area, number of parameters. \textbf{b}, Parameters, trainable parameters under the unified protocol and training time of one seed on each source; floating-point operations, peak memory and inference time join when the cost audit has run.}
+\caption{\textbf{Computational cost.} \textbf{a}, \mAUPR{} on the IDRiD test set against the training time of one seed on IDRiD (40\,GB A100, one task per card); marker area, number of parameters. \textbf{b}, Parameters, trainable parameters under the unified protocol, training time of one seed on each source, and the inference audit of one 1,440-pixel canvas with each model's own windows: floating-point operations, peak GPU memory during inference and the median time of five passes on an A100 (--, not measured: HACDR-Net and HRDecoder could not be built in the audit environment; nnU-Net runs its own pipeline).}
 \end{figure}
 
 \clearpage

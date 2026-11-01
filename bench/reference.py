@@ -172,7 +172,8 @@ def load_thresholds(path_or_dir):
         return {cls: float(payload["thresholds"][cls]) for cls in LESION_CLASSES}, payload.get("source", str(path))
     if "per_class" in payload:
         out = {cls: float(payload["per_class"][cls]["thresholds"]["val_opt"]["threshold"]) for cls in LESION_CLASSES}
-        return out, f"{path}: validation-optimal Dice thresholds of the reference ensemble on the DDR validation split"
+        shown = path.relative_to(_ROOT) if path.is_absolute() and str(path).startswith(str(_ROOT)) else path
+        return out, f"{shown}: validation-optimal Dice thresholds of the reference ensemble on the DDR validation split"
     raise ValueError(f"{path} holds neither a thresholds block nor per_class metrics")
 
 

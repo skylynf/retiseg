@@ -181,7 +181,7 @@ def s4_perclass():
     r = t[(t.experiment.isin(["E2", "E5"])) & (t.variant.isin(D.MAIN_VARIANTS)) & (t.seed == 0) & t.model.isin(D.MAIN_MODELS)]
     rows = []
     for train in D.TRAIN_MAIN:
-        rows.append(f"\\multicolumn{{{2 + 2 * len(D.CLASSES) + 1}}}{{l}}{{\\textbf{{Trained on {train}}}}}\\\\")
+        rows.append(f"\\multicolumn{{{2 + 2 * len(D.CLASSES) + 2}}}{{l}}{{\\textbf{{Trained on {train}}}}}\\\\")
         for model in D.MAIN_MODELS:
             sub = r[(r.model == model) & (r.train_set == train)]
             if sub.empty:
@@ -201,11 +201,14 @@ def s4_perclass():
                     if len(v):
                         vals.append(float(v.value.mean()))
                 mean = num(np.mean(vals), sim=D.simulated(st[st.metric == "aupr"])) if len(vals) == 4 else "\\na"
-                rows.append(" & ".join([esc(model), SET_NAMES.get(test, test)] + cells + [mean]) + " \\\\")
+                mlo = st[(st.cls == "mean") & (st.metric == "aupr_ci_lo")]
+                mhi = st[(st.cls == "mean") & (st.metric == "aupr_ci_hi")]
+                mci = ("\\scriptsize " + num(float(mlo.value.iloc[0]), fmt="{:.2f}", sim=D.simulated(mlo)) + "--" + num(float(mhi.value.iloc[0]), fmt="{:.2f}", sim=D.simulated(mhi))) if len(mlo) and len(mhi) and np.isfinite(float(mlo.value.iloc[0])) else "\\na"
+                rows.append(" & ".join([esc(model), SET_NAMES.get(test, test)] + cells + [mean, mci]) + " \\\\")
     longtable("supp_s4_perclass",
-              "\\textbf{Per-class AUPR of every main-table model on every test set (seed 0), with 95\\% bootstrap intervals.} Exact pooled AUPR inside the field of view; the interval is the percentile interval of 2,000 bootstrap replicates over test images. Both training sources; the internal test is the row whose test set is the training source.",
-              "stab:perclass", "l l " + "c c " * len(D.CLASSES) + "c",
-              ["Model", "Test set"] + sum([[c, "95\\% CI"] for c in D.CLASSES], []) + ["\\mAUPR{}"], rows,
+              "\\textbf{Per-class AUPR of every main-table model on every test set (seed 0), with 95\\% bootstrap intervals.} Exact pooled AUPR inside the field of view; the interval is the percentile interval of 2,000 bootstrap replicates over test images. The interval of \\mAUPR{} averages the four class values of the same replicates and drops a replicate in which any class has no positive pixel. Both training sources; the internal test is the row whose test set is the training source.",
+              "stab:perclass", "l l " + "c c " * len(D.CLASSES) + "c c",
+              ["Model", "Test set"] + sum([[c, "95\\% CI"] for c in D.CLASSES], []) + ["\\mAUPR{}", "95\\% CI"], rows,
               notes="TJDR UWF, ultra-widefield images predicted at native resolution with sliding windows. Retinal-L., Retinal-Lesions without its grey-level 127 regions. DiaRetDB1, pixel AUPR against the $\\geq$ 0.75 expert consensus (the official image-level protocol is Supplementary Table~13).", landscape=True)
 
 
@@ -296,12 +299,12 @@ def s8_cost():
             s = g[(g.metric == metric) & (g.train_set.fillna("") == train)]
             return cell(s, fmt=fmt) if len(s) else "\\na"
         rows.append(" & ".join([esc(model), v("params_m", fmt="{:.1f}"), v("params_trainable_m", fmt="{:.1f}"), v("train_gpu_h", "IDRiD"), v("train_gpu_h", "DDR"),
-                                v("flops_g", fmt="{:.0f}"), v("peak_mem_gb"), v("infer_s_per_image", fmt="{:.2f}")]) + " \\\\")
+                                v("flops_g", fmt="{:,.0f}"), v("peak_infer_mem_gb"), v("infer_s_per_image", fmt="{:.2f}")]) + " \\\\")
     longtable("supp_s8_cost",
-              "\\textbf{Computational cost.} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\\,GB A100, one task per card), and, where the cost audit has run, floating-point operations for one 1,440-pixel canvas, peak training memory and inference time per image.",
+              "\\textbf{Computational cost.} Parameters and trainable parameters under the unified protocol, training time of one seed on each source (40\\,GB A100, one task per card), and the inference cost of one 1,440-pixel canvas (a $1440\\times960$ field of view) with the model's own inference geometry: floating-point operations (convolutions and matrix products, all windows), peak GPU memory allocated during inference, and the median wall time of five passes on an A100.",
               "stab:cost", "l c c c c c c c",
-              ["Model", "Params (M)", "Trainable (M)", "GPU h IDRiD", "GPU h DDR", "GFLOPs", "Peak mem.\\ (GB)", "Infer.\\ (s/image)"], rows,
-              notes="nnU-Net follows its own schedule of 1,000 epochs rather than the pixel budget. Cells without a value were not measured; the cost audit (FLOPs, memory, inference) is pending.")
+              ["Model", "Params (M)", "Trainable (M)", "GPU h IDRiD", "GPU h DDR", "GFLOPs", "Peak infer.\\ mem.\\ (GB)", "Infer.\\ (s/image)"], rows,
+              notes="nnU-Net follows its own schedule of 1,000 epochs rather than the pixel budget and runs its own inference pipeline, so it has no audited inference columns. HACDR-Net and HRDecoder could not be built in the audit environment (their mmcv forks need another environment) and were not measured. SAMed's FLOPs were not counted (its forward is not traced by the counter). Parameters of nnU-Net are those of its plans.")
 
 
 # ---------------------------------------------------------------- S9 refined IDRiD

@@ -445,6 +445,107 @@ def factors():
     put("cross.mean", f2(-np.nanmean(off[~np.eye(4, dtype=bool)])), square_sim)
     put("cross.max", f2(-np.nanmin(off)), square_sim)
     put("cross.fgadr.fine", f2(-np.nanmean(off[3, :3])), square_sim)
+    # the whole four-source x eight-set matrix (figure 6b; five representative models, seed 0; E3b one seed), 2026-10-30
+    full, full_sim = _measured(pd.concat([a, b]))
+    Mx = full.groupby(["model", "train_set", "test_set"])["value"].mean().groupby(["train_set", "test_set"]).mean().unstack("test_set")
+    Mx = Mx.reindex(index=trains, columns=D.TESTS)
+    ttag = {"IDRiD": "idrid", "DDR": "ddr", "TJDR-std": "tjdr", "TJDR-uwf": "uwf", "MAPLES-DR": "maples", "FGADR": "fgadr", "Retinal-Lesions": "retles", "DiaRetDB1": "diaret"}
+    for tr in trains:
+        for te in D.TESTS:
+            v = Mx.loc[tr, te]
+            if np.isfinite(v):
+                put(f"src.{ttag[tr]}.{ttag[te]}", f3(v), full_sim)
+    for te in trains:
+        foreign = Mx.loc[[t for t in trains if t != te], te].dropna()
+        put(f"src.{ttag[te]}.foreign.lo", f3(foreign.min()), full_sim)
+        put(f"src.{ttag[te]}.foreign.hi", f3(foreign.max()), full_sim)
+        put(f"src.{ttag[te]}.foreign.best", foreign.idxmax(), full_sim)
+    losses = {(tr, te): Mx.loc[te, te] - Mx.loc[tr, te] for tr in trains for te in trains if tr != te}
+    worst = max(losses, key=losses.get)
+    pretty = {"TJDR-std": "standard-field TJDR", "TJDR-uwf": "ultra-widefield TJDR"}
+    put("cross.max.train", pretty.get(worst[0], worst[0]), square_sim)
+    put("cross.max.test", pretty.get(worst[1], worst[1]), square_sim)
+    # E4 per model, configuration and test set (table 7 and the granularity paragraph)
+    e4_all, e4_all_sim = _measured(D.sel(experiment="E4", metric="aupr"))
+    e4_all = e4_all[e4_all["cls"].isin(D.CLASSES)]
+    e4g = e4_all.groupby(["model", "variant", "test_set"])["value"].mean()
+    ref0 = D.seed_table()
+    ref0 = ref0[(ref0.seed == 0) & (ref0.train_set == "DDR")].set_index(["model", "test_set"])["value"]
+    cfgs = {"DDR + FGADR": "fgadr", "DDR + FGADR (383)": "fgadr383", "DDR + Retinal-Lesions": "retles", "FGADR": "fgadronly", "Retinal-Lesions": "retlesonly"}
+    for model, mtag in (("U-Net", "unet"), ("M2MRF", "m2mrf")):
+        for te, tt in (("DDR", "ddr"), ("IDRiD", "idrid"), ("TJDR-std", "tjdr"), ("MAPLES-DR", "maples"), ("Retinal-Lesions", "retles")):
+            if (model, te) in ref0.index:
+                put(f"e4.{mtag}.ref.{tt}", f3(ref0[(model, te)]), D.simulated(D.main_runs()))
+            for cfg, ctag in cfgs.items():
+                if (model, cfg, te) in e4g.index:
+                    v = e4g[(model, cfg, te)]
+                    put(f"e4.{mtag}.{ctag}.{tt}", f3(v), e4_all_sim)
+                    if (model, te) in ref0.index:
+                        put(f"e4.{mtag}.{ctag}.{tt}.delta", f"{v - ref0[(model, te)]:+.2f}".replace("-", "−"), e4_all_sim)
+        # the range of the coarse-label cost over the standard-field fine-grained test sets
+        deltas = [e4g[(model, "DDR + Retinal-Lesions", te)] - ref0[(model, te)] for te in ("DDR", "IDRiD", "TJDR-std", "MAPLES-DR") if (model, "DDR + Retinal-Lesions", te) in e4g.index and (model, te) in ref0.index]
+        if deltas:
+            put(f"e4.{mtag}.retles.cost.lo", f2(-max(deltas)), e4_all_sim)
+            put(f"e4.{mtag}.retles.cost.hi", f2(-min(deltas)), e4_all_sim)
+        mixed = [e4g[(model, cfg, te)] - ref0[(model, te)] for cfg in ("DDR + FGADR", "DDR + FGADR (383)", "DDR + Retinal-Lesions") for te in ("TJDR-std", "MAPLES-DR") if (model, cfg, te) in e4g.index]
+        if mixed:
+            put(f"e4.{mtag}.other.lo", f"{min(mixed):+.2f}".replace("-", "−"), e4_all_sim)
+            put(f"e4.{mtag}.other.hi", f"{max(mixed):+.2f}".replace("-", "−"), e4_all_sim)
+    # E7 per model: mAUPR, small-lesion recall and per-class AUPR on DDR at each canvas; the HRDecoder case study on IDRiD
+    e7_all, e7_all_sim = _measured(D.sel(experiment="E7"))
+    for model, mtag in (("M2MRF", "m2mrf"), ("RETFound + UPerNet", "retfound")):
+        r = e7_all[(e7_all.model == model) & (e7_all.test_set == "DDR")]
+        for variant, vtag in (("res:1440", "1440"), ("res:512", "512"), ("res:native patches", "native")):
+            rv = r[r.variant == variant]
+            if not len(rv):
+                continue
+            put(f"e7.{mtag}.{vtag}.aupr", f3(rv[(rv.metric == "aupr") & rv["cls"].isin(D.CLASSES)]["value"].mean()), e7_all_sim)
+            put(f"e7.{mtag}.{vtag}.small", f2(rv[(rv.metric == "lesion_recall_small") & rv["cls"].isin(D.CLASSES)]["value"].mean()), e7_all_sim)
+            for cls in D.CLASSES:
+                vv = rv[(rv.metric == "aupr") & (rv["cls"] == cls)]["value"]
+                if len(vv):
+                    put(f"e7.{mtag}.{vtag}.{cls}", f3(vv.iloc[0]), e7_all_sim)
+    drops, fracs = [], []
+    for model in ("M2MRF", "RETFound + UPerNet"):
+        r = e7_all[(e7_all.model == model) & (e7_all.test_set == "DDR")]
+        a1 = r[(r.variant == "res:1440") & (r.metric == "aupr") & r["cls"].isin(D.CLASSES)]["value"].mean()
+        a5 = r[(r.variant == "res:512") & (r.metric == "aupr") & r["cls"].isin(D.CLASSES)]["value"].mean()
+        s1 = r[(r.variant == "res:1440") & (r.metric == "lesion_recall_small") & r["cls"].isin(D.CLASSES)]["value"].mean()
+        s5 = r[(r.variant == "res:512") & (r.metric == "lesion_recall_small") & r["cls"].isin(D.CLASSES)]["value"].mean()
+        if np.isfinite(a1) and np.isfinite(a5):
+            drops.append(a1 - a5)
+        if np.isfinite(s1) and np.isfinite(s5) and s1 > 0:
+            fracs.append(1 - s5 / s1)
+    rng = lambda lo, hi: lo if lo == hi else f"{lo}--{hi}"
+    if drops:
+        put("e7.drop.aupr.range", rng(f2(min(drops)), f2(max(drops))), e7_all_sim)
+    if fracs:
+        put("e7.drop.small.pct.range", rng(str(int(round(min(fracs) * 100))), str(int(round(max(fracs) * 100)))), e7_all_sim)
+    hr = e7_all[(e7_all.model == "HRDecoder") & (e7_all.metric == "aupr")]
+    if len(hr):
+        put("e7.hrdecoder.2880.aupr", f3(hr[hr["cls"].isin(D.CLASSES)]["value"].mean()), e7_all_sim)
+        for cls in D.CLASSES:
+            vv = hr[hr["cls"] == cls]["value"]
+            if len(vv):
+                put(f"e7.hrdecoder.2880.{cls}", f3(vv.iloc[0]), e7_all_sim)
+        hr0 = D.sel(experiment=["E2", "E5"], variant=D.MAIN_VARIANTS, model="HRDecoder", metric="aupr", seed=0, train_set="IDRiD", test_set="IDRiD")
+        put("e7.hrdecoder.1440.aupr", f3(hr0[hr0["cls"].isin(D.CLASSES)]["value"].mean()), D.simulated(hr0))
+        for cls in D.CLASSES:
+            vv = hr0[hr0["cls"] == cls]["value"]
+            if len(vv):
+                put(f"e7.hrdecoder.1440.{cls}", f3(vv.iloc[0]), D.simulated(hr0))
+    # E8 per model, level and test set
+    e8_all, e8_all_sim = _measured(D.sel(experiment="E8", metric="aupr"))
+    e8_all = e8_all[e8_all["cls"].isin(D.CLASSES)]
+    e8g = e8_all.groupby(["model", "variant", "test_set"])["value"].mean()
+    for model, mtag in (("U-Net", "unet"), ("M2MRF", "m2mrf")):
+        for variant, vtag in (("size:DDR 10%", "10"), ("size:DDR 50%", "50"), ("size:DDR 100%", "100"), ("size:fine merged", "fine")):
+            for te, tt in (("DDR", "ddr"), ("IDRiD", "idrid"), ("TJDR-std", "tjdr"), ("MAPLES-DR", "maples"), ("FGADR", "fgadr"), ("Retinal-Lesions", "retles")):
+                if (model, variant, te) in e8g.index:
+                    put(f"e8.{mtag}.{vtag}.{tt}", f3(e8g[(model, variant, te)]), e8_all_sim)
+        for te, tt in (("IDRiD", "idrid"), ("TJDR-std", "tjdr"), ("MAPLES-DR", "maples"), ("FGADR", "fgadr"), ("Retinal-Lesions", "retles")):
+            if (model, te) in ref0.index:
+                put(f"e8.{mtag}.ref.{tt}", f3(ref0[(model, te)]), D.simulated(D.main_runs()))
     e4_rows, e4_sim = _measured(D.sel(experiment="E4", metric="aupr", test_set="IDRiD"))
     e4 = e4_rows.groupby("variant")["value"].mean()
     for cfg, tag in (("DDR + FGADR", "fgadr"), ("DDR + Retinal-Lesions", "retles"), ("DDR + FGADR (383)", "fgadr383"), ("Retinal-Lesions", "retlesonly"), ("FGADR", "fgadronly")):
@@ -477,6 +578,22 @@ def factors():
     put("cost.ddr.max.model", cd_.idxmax(), cost_sim)
     both = c.index.intersection(cd_.index)
     put("cost.ddr.ratio", f"{(cd_[both] / c[both]).median():.1f}", cost_sim)
+    # the inference audit (bench/scripts/cost_audit.py, 2026-10-28): one 1,440 canvas, the model's own windows
+    for metric, tag, fmt in (("flops_g", "flops", "{:,.0f}"), ("infer_s_per_image", "infer", "{:.2f}"), ("peak_infer_mem_gb", "mem", "{:.1f}")):
+        rows, sim = _measured(D.sel(experiment="E10", metric=metric))
+        rows = rows[rows.model.isin(D.MAIN_MODELS)]
+        if not len(rows):
+            continue
+        v = rows.set_index("model")["value"]
+        put(f"cost.{tag}.n", str(len(v)), sim)
+        put(f"cost.{tag}.min", fmt.format(v.min()), sim)
+        prose = {"RETFound + UPerNet": "RETFound with UPerNet", "MedSAM (full FT)": "MedSAM"}
+        put(f"cost.{tag}.min.model", prose.get(v.idxmin(), v.idxmin()), sim)
+        put(f"cost.{tag}.max", fmt.format(v.max()), sim)
+        put(f"cost.{tag}.max.model", prose.get(v.idxmax(), v.idxmax()), sim)
+        for model, mtag in (("SAMed", "samed"), ("RETFound + UPerNet", "retfound"), ("HRNet-W48", "hrnet"), ("U-Net", "unet"), ("M2MRF", "m2mrf")):
+            if model in v.index:
+                put(f"cost.{tag}.{mtag}", fmt.format(v[model]), sim)
 
 
 def human_reference():
@@ -570,6 +687,21 @@ def reference_model():
         r = ens[ens.test_set == test]
         put(f"n8.ens.{test}", f3(r["value"].mean()), D.simulated(r))
     put("n8.ens.n", str(ens.test_set.nunique()), D.simulated(ens))
+    # the 18-member DDR-trained ensemble (E-all; the --without composition on the two sets HACDR-Net's maps lack)
+    # as the line the reference model is read against on every set
+    allm = D.sel(experiment="ENS", model="E-all", train_set="DDR", metric="aupr")
+    allm = allm[allm["cls"].isin(D.CLASSES)]
+    for test in sorted(allm.test_set.unique()):
+        r = allm[allm.test_set == test]
+        main = r[r.variant == "ensemble"]
+        r = main if len(main) else r
+        put(f"ensall.{test}", f3(r["value"].mean()), D.simulated(r))
+    both = [t for t in ens.test_set.unique() if t in set(allm.test_set) and t not in ("DDR", "IDRiD", "TJDR-std", "TJDR-uwf")]
+    if both:
+        diffs = {t: float(ens[ens.test_set == t]["value"].mean() - (allm[(allm.test_set == t) & (allm.variant == "ensemble")] if len(allm[(allm.test_set == t) & (allm.variant == "ensemble")]) else allm[allm.test_set == t])["value"].mean()) for t in both}
+        put("n8.vs.all.absmax", f2(max(abs(v) for v in diffs.values())), D.simulated(ens))
+        put("n8.vs.all.above", ", ".join(t for t, v in diffs.items() if v > 0.005) or "none", D.simulated(ens))
+        put("n8.vs.all.below", ", ".join(t for t, v in diffs.items() if v < -0.005) or "none", D.simulated(ens))
     # the best single DDR-trained main-table model on the DDR test set (seed 0), the line the reference model is read against
     ms = D.mean_sd()
     sub = ms[(ms.train_set == "DDR") & (ms.test_set == "DDR")].sort_values("mean", ascending=False)

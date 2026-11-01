@@ -1,14 +1,16 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-10-28，本机；仓库 origin/main 1347976 + 本次写回）
-仓库：10-28 回传包（快照 10-28 13:42，提交 5d738db，1,416 行指标全部对齐，相对 10-26 新增 3 份：RETFound 参考格 DDR 内部 0.4508、M2MRF 作者配方种子 1 / 2）已整体替换 runs/ 并进表；本次写回：results.csv（1,701 份报告、75,440 行实测）、表 3 / 补充表 11、numbers.tex（556 键，0 占位）、main.pdf（33 页）、supplement.pdf（34 页）；10-26 用户侧的“稿件自查”提交（27；代号改名称、置信区间、\retifinaltrue、DiaRetDB1 列修正）已在本次之前并入。
+一、当前状态（2026-10-30，本机；仓库 origin/main cd290fb + 本次写回；本机的 10-28 / 10-29 临床合作写回已并入本次写回的文件）
+仓库：10-30 回传包（快照 10-30 10:56，提交 cb8404d，1,526 行指标全部对齐）已整体替换 runs/ 并进表：1,723 份报告、79,381 行实测，1,551 份带 mAUPR 区间；results.csv 无占位。本次写回：results.csv、全部表（表 7、补充表 4 / 7 / 8 / 11 变）、图 6 / 7 / 4 / ED10、numbers.tex（886 键，0 占位）、main.pdf（33 页）、supplement.pdf（34 页）。
 数据：八个测试集齐；Refined IDRiD 进表。
-论文：R3 作者配方重训一句改为三种子（作者函数 0.605–0.627、本协议 0.540–0.566，对发布权重低 5–7 分，散布只是差距的五分之一），表 3b 带 s.d.，摘要 / 讨论 Q1 同步；R4 末尾参考模型一句不再是待完成（两成员 DDR 0.477 / 0.451 对最佳单模型 0.469，指向发布入口 bench.reference），方法 Reference model 段加入口一句；方法统计段与补充说明 3 写明 mAUPR 区间的算法（数等服务器）；补充说明 2 披露因素格打分的更正。**待下一包重算**：因素格里 20 格（M2MRF / RETFound / SAMed / SAM2-UNet / HRDecoder 的 E3b / E4 / E7 / E8 与两格参考模型）此前按最后一步打分（21 第 97 条），服务器对调重评并重跑 13 格 E3a 后，表 7、图 6 / 7、补充表 7、R4 的 HRDecoder 案例段（2880 格 0.627 一句）、R6 四源矩阵都要按新数核一遍；mAUPR 区间进表后改讨论局限的“留待终版”一句并在 R4 加区间宽度。
-服务器（10-28 13:41）：GPU 2–7 空；0、1 别人的；启动器 pid 88417 还在、无子进程（本轮让它停掉）。待做：17 第四节第 68 条（因素格重打分 + 13 格 E3a 重跑，CPU 一两小时 + 四卡两小时）→ 第 69 条（参考模型外部 / 源内 / 集成 / 发布打包 / 冒烟）→ 第 70 条 mAUPR 区间（CPU 一小时）→ 第 71 条打包；第 65 条算力审计与第 68 条同时在 GPU 7 开。第 59、49 条不做。
-代码（本次写回）：bench/train.py roles_for——BF 格与 BS 一样取 best.pt；bench/scripts/rescore_factor_roles.py（plan / apply：对调图目录、重评、E3a 移到 runs/E3a_laststep）；bench/scripts/launch_e3a.py 认 BF_ref_*（只在 --only 点名时排）；bench/reference.py（RetiSeg-Ref 的 predict / bundle）；bench/scripts/maupr_ci.py（四类均值的 bootstrap 区间写回 metrics.json）；collect_runs 读 summary.mAUPR_ci；make_numbers 新键 e1r.*.{n,lo,hi,sd}、n8.*、mci.*；测试 test_rescore_factor_roles.py、test_reference.py、test_maupr_ci.py（云端 13 项通过；torch 相关 1 项在服务器跑）。
+论文（10-30）：服务器完成第 65、68–71 条后全部进表——（1）因素格 20 格按验证选择重评、13 格 E3a 重跑：R4 案例段（2880 格 0.642）、R6 两段、R7 两段、讨论 Q3 按新数重写并全部改为 \rn 键（14 备注 74；图 6 的矩阵改为主表种子 0）；两处结论随数据改：原分辨率下 RETFound 的 HE 由跌变升，E8 的“递减收益”只对 U-Net 成立。（2）RetiSeg-Ref 八个集合（DDR 0.501、IDRiD 0.710、TJDR_std 0.696、UWF fov 0.302、MAPLES 0.482、FGADR 0.309、RL 0.278、DiaRetDB1 0.339）：R4 末段改写（对照 18 人集成在四个标准尺度独立集合都在 0.02 内），讨论 Q2 / 建议 / 局限、摘要、引言末尾、方法 Code availability 各加一句（备注 58）。（3）算力审计 15 个模型进 R8（推理：443–20,870 GFLOPs、0.03–1.10 秒、0.3–8.7 GB；SAMed 0.30 秒对 RETFound 1.10 秒对 HRNet 0.05 秒）、ED10b、补充表 8（“训练峰值显存”改为“推理峰值显存”，备注 75）。（4）mAUPR 区间进 R4 内部段（宽度中位 IDRiD 0.10 / DDR 0.09，领先模型区间重叠）、补充表 4 末列、讨论局限（备注 72）。（5）全文逻辑对照：讨论 Q2 关于 HRDecoder 的一句改为与案例研究一致（备注 76）。仍待：ED1 / ED2 图像（工作站）、作者联系数（10-31 后）、refs.bib 账本作者补全、DiaRetDB1 概率图与 DDR / TJDR 派生模型的许可核对。
+服务器（10-30 10:57）：GPU 2–7 空；0、1 别人的；启动器未重启。只剩第 72 条（临床合作，用户加）：（a）先重打两格的源内图（第 69 条（f）删掉了），再 ensemble.py reference --sets … --regenerate-maps 留五个集合的图；（b）等本机通知。第 59、49 条不做；N6、N7 不做（14 备注 77）。
+代码（本次写回）：ensemble.py reference 加 --regenerate-maps（已有 done.json 的集合只重写 prob_test，不重评；test_ensemble）；make_numbers 新键 src.*、cross.max.train/test、e4.<模型>.*、e7.<模型>.*、e7.hrdecoder.*、e7.drop.*、e8.<模型>.*、cost.{flops,infer,mem}.*、ensall.<集合>、n8.vs.all.*；fig6 matrix() 种子 0；ed_figs ed10 读 peak_infer_mem_gb、七列重排；make_supplement S4 加均值区间列、S8 改列名与说明；bench/reference.py 阈值来源写相对路径。
 文献：L1 完成；作者回信截止 10-31——到期后请用户给出“联系了几位、回复几位、收到什么”；HRDecoder 的 L1 其余列待抽。
-用户待办：提交推送本机写回；10-31 后给作者联系的数；ED1 / ED2 在工作站画；临床合作按 docs/clinical/28 第十二节定 D2–D4、第九节做 L1–L3（许可核对、与斯坦福确认读者与时间并发 29、启动会里写 T3 规则）；核对 DDR / TJDR 许可是否允许再分发派生模型（发布 RetiSeg-Ref 权重前，14 M14）与 DiaRetDB1 概率图的公开（27 第六节第 1 条）。
+用户待办：提交推送本机写回（含 docs/clinical/、clinical/；见本机 10-29 一行）；10-31 后给作者联系的数；ED1 / ED2 在工作站画；临床合作（docs/clinical/28）：L1 许可核对、定 D2、出试判包发 Peranut；核对 DDR / TJDR 许可是否允许再分发派生模型（发布 RetiSeg-Ref 权重前，14 M14；方法里现在只写“按三个来源的条款”）与 DiaRetDB1 概率图的公开（27 第六节第 1 条）。
+本机 10-30 写回：10-30 包进表；上面“论文”“代码”两行；17 第四节进度与第 65、68–71 条收口、第 72（a）修订命令；21 第 97、98 条收口；14 备注 58 结果行、72 / 73 收口、74–77；27 第六节更新；26 的 10-30 一行。
+本机 10-29 写回（临床合作，按与 Dr. Peranut Chotcomwongse 的讨论）：新增 docs/clinical/31 纪要与落实；28、29、30 改写（试判 15 张 → 正式批次约 100 张；只判四类；标签 MA / HG / HEX / CWS；ICDR 门槛 + 是否改变处理两题取代 0–3 影响量表；到黄斑距离的分析）；问卷改名 clinical/schema/review_schema.json（2.0.0-trial；v1 删除）；工具答题区浅色交替卡片与题号、Panel 深浅切换、互斥选项、Not visible、记录显示尺寸；analyze_reviews.py 按新代码并加距离三档与 ICDR × 处理交叉；designs：trial01.yaml、trial01_workstation.yaml、batch01.yaml（原 pilot01.yaml）；build_pack.py 加 --zip 与临床标签；mine_discrepancies.py 加 --grades auto；17 第 72 条改为试判；clinical/tests 7 项通过。
 本机 10-28 第二次写回（临床合作）：新开 docs/clinical/（README、28 总计划、29 英文研究方案、30 英文阅读指南）与 clinical/（schema/review_schema_v1.json 问卷；reader_tool/index.html 离线单文件阅读工具；scripts/ 挖掘 mine_discrepancies.py、抽样 sample_review.py、打包 build_pack.py、分析 analyze_reviews.py；designs/pilot01.yaml 试点设计、demo_idrid.yaml 演示；tests/ 6 项，经 bench/tests/test_clinical_review.py 进 CI）；.gitignore 加 clinical/work、packs、reviews；17 第四节第 72 条（S1 保留参考模型与 18 成员在五个集合上的图，先于第 69 条 f；S2–S4 等通知），第 69 条 c、f 加指向；26 第十节一行。演示在工作站 M2MRF 作者权重的 IDRiD 5 张图上跑通（1,069 个区域、18 个进包、3.4 MB；浏览器全流程与三名模拟读者的分析都无报错），演示包在工作站 clinical/packs/demo_idrid/。
 本机 10-28 写回：10-28 包进表（M2MRF 作者配方种子 1 / 2、RETFound 参考格内部）；上面“论文”“代码”两行；17 第四节第 68–71 条（第 63 / 66 / 67 条收口）；21 第 97–98 条；14 M5 2026-10-28 行、备注 58 进度、备注 71–73；27 第六节更新。
 本机 10-26 写回：10-26 包进表（SAMed 参考格 DDR 0.4775、RETFound-DINOv2 IDRiD 0.711 / TJDR_std 0.559 / TJDR_uwf 0.223 / MAPLES 0.417、M2MRF 作者检查点逐类）；上面“论文”一行；17 第四节第 65–67 条；21 第 94–96 条；14 备注 65–70。
@@ -28,6 +30,8 @@
 2026-10-11  B-std 种子 0 全部出数（HRNet 两库第一）；HACDR 打分修复（torch 1.10 的 weights_only）。用户决定：种子 1、2 暂缓。启动 E1r bs4（A100）、U-Net 整批 Dice 诊断、nnU-Net 两种配置、B1 补位。泄漏审计 IDRiD/DDR：无近重复。E5 设计写成 15。范围精简写成 16（剩余约 5500 A100 时压到约 810）；L1 原文数字抽取完成。
 2026-10-12  nnU-Net 默认 0.671 / 0.432，ResEnc-M 0.631 / 0.428。U-Net 整批 Dice 诊断验证 0.569 / 0.544；用户决定主表 U-Net 采用整批 Dice（bs_frozen.yaml recipe_revisions，原运行改名 *_registered）；E5 五项待定按建议（TF32、natureCFP、按代码、塌缩同 U-Net 规则、编码器对照后按 16 缩减）；以 FGADR 等训练时评测去重（leak_exclusions.json）。独立测试接线（e3a_frozen.yaml、bench/e3a.py）；全库泄漏审计（FGADR _3 批来自 EyePACS，与 Retinal-Lesions 90 张同图；FGADR 内部同眼重复；TJDR_uwf 跨划分重复 2 对）；E2c 接线；E5 训练档五个包装器接线。服务器 09:08：停 B1；E1r bs4 打分 61.19 / 0.549；U-Net 两库种子 0 重跑；E2c 只排 DDR。本机：快照接入论文、R3/R4 改写、17 任务单。
 2026-10-14  Luming 确认 E5 推理档的全部登记（D1–D9、评审修复 6/7/16、预算规则 a）、表 6/图 5 的呈现方式、加 CI、协议锁文件（E5 首个测试指标后）、MAPLES-DR 官方测试 60 张；细节在第三节前的待办清单下。
+2026-10-30  本机：因素格重评后的数进论文，R4 案例段、R6、R7、讨论 Q3 全部改读键（14 备注 74）；算力审计给的是推理峰值显存，ED10b / 补充表 8 的列按此改名（备注 75）；RetiSeg-Ref 八个集合进 R4 末段与讨论、摘要、引言（备注 58）；N6、N7 不做（备注 77）；讨论 Q2 的 HRDecoder 一句改为与案例研究一致（备注 76）。依据：10-30 包；全文对照。
+2026-10-29  Luming 与 Dr. Peranut Chotcomwongse 讨论（docs/clinical/31）：先试判 10–20 张再定正式批次；论文只判四类病灶，IRMA、NV 进讨论与未来方向；界面与协议用 MA / HG / HEX / CWS；临床后果对应 ICDR 与 4-2-1；题目减少、用临床说法；答题区用灰白交替的底色。本机按此修订 28–30、问卷、工具与流水线。
 2026-10-28  本机（第二次）：临床合作的设计定稿为待确认稿（docs/clinical/28）：医生审阅 RetiSeg-Ref 与标注的分歧区域（盲读 A → 揭示 → 归因 B → 整图小结），两阶段抽样、代表臂加权 + 富集臂；试点约 100 个区域 / 24 张图，每位读者约 2–2.5 小时；取代 26 第四节 T1，T3 并入启动会，T2 改为可选。待 Luming 定 D1–D6（28 第十二节）。
 2026-10-28  本机：因素格的检查点角色统一为验证选择（BS 与 BF 都取 best.pt）；已按最后一步打分的 20 格不重训，对调已预测的图目录重评、13 格 E3a 从 best.pt 重跑，最后一步的分数留作敏感性记录并在补充说明 2 披露（21 第 97 条、14 备注 71）。参考模型 RetiSeg-Ref 的交付定为：两成员 best.pt + 集成在 DDR 验证划分上的阈值 + bench.reference 的 predict / bundle 入口（14 备注 73）；发布前核对 DDR / TJDR 许可。mAUPR 的 bootstrap 区间用与逐类相同的 replicate 算（14 备注 72）。依据：10-28 核对参考格的 checkpoint_roles.json；27 第六节；用户要求收尾未完成的实验与参考模型。
 2026-10-26  本机：论文里不再打算测的东西从数据表里清退（WSRFNet 权重、砍掉的 E1r、B1、E2c 另一半、E10 审计量、编码器未测集合、TJDR_std 的 k 曲线），正文、图、表只保留实测或明确标 pending 的内容；补充材料从“计划清单”改为按数据生成的 17 张表 + 3 个说明（单独 supplement.pdf）；多源 / 无视野来源的 TJDR_uwf 结果按登记规则用 fov 变体顶替主变体并写进方法；ED3 以补充表 15 交代、ED5 撤销、ED9 画出；DR 分级结果进 R4。
@@ -628,3 +632,40 @@ RETFound 参考格 10-27 10:26 退出 0，训练 160381.2 秒。验证最高 epo
 第 63 条没开：没有 runs/E3a/BF_ref_*，没有 insource_*，没有 runs/ENS/REF。GPU 2–7 空着。GPU 0、1 仍是别人的。第 59 条没开。第 49 条没开。启动器 pid 88417 还在，没有子进程。这一包对照 runs/handoff_manifest_20261026.tsv，收第 61 条两格和 RETFound 的内部测试。第 63 条的包留到那一步做完。
 
 2026-10-28 13:43 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261028.tar.gz（73 MB，6842 个文件，1416 行指标，0 个未对齐）。summary/new_since.tsv 是 3 行：RETFound 参考格的内部测试，第 61 条种子 1 和种子 2 的 metrics_test.json。10-26 的包没有被覆盖。作者函数的 json 在包里，不进指标行。
+
+2026-10-28 14:35 +0800，pull 到 cb8404d。启动器 pid 88417 已停（没有子进程）。第 68 条 plan：20 格都是 ready，U-Net 不在内。apply 已开（pid 2265684，日志 runs/logs/20261028_item68_apply.log），对调后重评，E3a 目录挪到 runs/E3a_laststep。第 65 条算力审计在 GPU 7（pid 2265685，日志 runs/logs/20261028_item65_cost.log），U-Net 已写出 params 7.85、FLOPs 588.8、每图 0.02879 秒、峰值显存 1.432 GB。第 69–71 条等 apply。第 59、49 条没开。GPU 0、1 仍是别人的。
+
+2026-10-28 16:08 +0800。第 68 条 apply 退出 0。20 格都对调并重评，没有 sensitivity maps incomplete。最后一步 → 验证最高的 mAUPR：
+BF_e3b_m2mrf_fgadr_seed0: last step 0.3591 -> best validation 0.3591 (+0.0000)
+BF_e3b_m2mrf_tjdr_std_seed0: last step 0.5539 -> best validation 0.5133 (-0.0405)
+BF_e3b_retfound_fgadr_seed0: last step 0.4574 -> best validation 0.4555 (-0.0019)
+BF_e3b_retfound_tjdr_std_seed0: last step 0.7057 -> best validation 0.7021 (-0.0036)
+BF_e3b_sam2_unet_fgadr_seed0: last step 0.3880 -> best validation 0.4048 (+0.0168)
+BF_e3b_sam2_unet_tjdr_std_seed0: last step 0.4081 -> best validation 0.3777 (-0.0304)
+BF_e4_m2mrf_ddr_fgadr383_seed0: last step 0.3356 -> best validation 0.3356 (+0.0000)
+BF_e4_m2mrf_ddr_fgadr_seed0: last step 0.3199 -> best validation 0.3199 (+0.0000)
+BF_e4_m2mrf_ddr_retles_seed0: last step 0.2857 -> best validation 0.3060 (+0.0202)
+BF_e4_m2mrf_retles_seed0: last step 0.4692 -> best validation 0.4692 (+0.0000)
+BF_e7_hrdecoder_idrid_2880_seed0: last step 0.6268 -> best validation 0.6422 (+0.0153)
+BF_e7_m2mrf_ddr_512_seed0: last step 0.3585 -> best validation 0.3526 (-0.0059)
+BF_e7_m2mrf_ddr_native_seed0: last step 0.3117 -> best validation 0.3117 (+0.0000)
+BF_e7_retfound_ddr_512_seed0: last step 0.4004 -> best validation 0.4412 (+0.0407)
+BF_e7_retfound_ddr_native_seed0: last step 0.4492 -> best validation 0.4475 (-0.0017)
+BF_e8_m2mrf_ddr10_seed0: last step 0.3071 -> best validation 0.2959 (-0.0112)
+BF_e8_m2mrf_ddr50_seed0: last step 0.3420 -> best validation 0.3146 (-0.0274)
+BF_e8_m2mrf_fine_seed0: last step 0.3684 -> best validation 0.3684 (+0.0000)
+BF_ref_retfound_fine_seed0: last step 0.4508 -> best validation 0.4683 (+0.0175)
+BF_ref_samed_fine_seed0: last step 0.4775 -> best validation 0.4704 (-0.0070)
+上面两格参考模型此前记的 0.4508、0.4775 是最后一步；主指标现在是验证最高的 0.4683、0.4704，最后一步留在 metrics_test_laststep。13 格 E3a 已开（pid 2379760，GPU 3/4/5/6，86 项，带 --drop-maps FGADR,Retinal-Lesions，日志 runs/logs/20261028_item68_e3a.log）。第 69 条（a）参考模型五个外部集合在 GPU 2（pid 2379761，10 项，不带 --drop-maps，日志 runs/logs/20261028_item69a_e3a.log）。第 69 条（b）源内在 GPU 7（pid 2379764，日志 runs/logs/20261028_item69b_insource.log）；RETFound 的 IDRiD 预测 16:06 退出 0。集成、发布包、区间和第 71 条的包等这三件做完。第 59、49 条没开。启动器没有重启。GPU 0、1 仍是别人的。
+第 65 条：同一进程里 HACDR-Net 因 retiseg 环境没有 mmcv 抛 ImportError，把后面的模型一起带停（日志 runs/logs/20261028_item65_cost.log）。换新进程只跑 HACDR-Net、只跑 HRDecoder，都是缺 mmcv，按任务单跳过，没有改 official_code。其余模型在 GPU 7 写完（日志 runs/logs/20261028_item65_rest.log）。tsv 已复制到 runs/audit/cost_audit.tsv。每模型一行（参数量 / FLOPs / 每图秒 / 峰值显存 GB）：U-Net 7.85 / 588.8 / 0.02879 / 1.432；DeepLabv3 58.63 / 2543 / 0.05425 / 0.8735；Swin-Unet 27.17 / 1169 / 0.174 / 0.5439；FCT 1.946 / 2942 / 0.939 / 0.2807；HRNet-W48 65.85 / 983.6 / 0.04569 / 1.332；M2MRF 70.3 / 931.1 / 0.05303 / 1.091；PMCNet 12.92 / 442.8 / 0.03204 / 1.863；WSRFNet 9.706 / 831.2 / 0.04982 / 1.444；CLC-Net 119.7 / 11760 / 0.8586 / 3.881；TC-Net 14.9 / 9631 / 0.2949 / 8.656；SAMed 91.63（可训练 4.352）/ FLOPs 未写出 / 0.3038 / 1.9；SAM-Adapter 641.3（可训练 4.246）/ 11960 / 0.9243 / 7.42；SAM2-UNet 216.5（可训练 4.381）/ 2677 / 0.2064 / 1.595；MedSAM (full FT) 93.74（可训练 93.73）/ 1951 / 0.1894 / 5.535；RETFound + UPerNet 352.6 / 20870 / 1.097 / 2.461。
+
+2026-10-30 10:36 +0800。第 68 条 13 格外部测试 86 项全部 exit 0，最晚 10-28 18:06。每份 done.json 的检查点都是 best.pt。FGADR 与 Retinal-Lesions 的概率图已删。没有统一视野尺度的来源，TJDR 超广角的分数在 TJDR_uwf__fov，控制台在 TJDR_uwf，都是 exit 0。
+第 69 条（a）参考模型五个外部集合全部 exit 0，检查点 best.pt。RETFound：FGADR 0.2722（n=553）、Retinal-Lesions 0.2818（n=478）、TJDR 超广角 fov 0.1899（n=58）、MAPLES-DR 0.4628（n=60）、DiaRetDB1 0.3431（n=61）。SAMed：0.3056、0.2601、0.3142、0.4582、0.3181，n 与上一行相同。DDR 内部（验证最高）：RETFound 0.4683，SAMed 0.4704。
+第 69 条（b）四个源内 10-28 16:22 完成。RETFound：IDRiD 0.6722、TJDR 标准 0.7042。SAMed：IDRiD 0.6742、TJDR 标准 0.6381。
+第 69 条（c）集成 10-29 完成，日志 runs/logs/20261029_item69c_ensemble.log。八个集合的 mAUPR（排除都是 0）：DDR 0.5006（n=225）、IDRiD 0.7097（n=27）、TJDR 标准 0.6958（n=55）、TJDR 超广角 fov 0.3023（n=58）、FGADR 0.3093（n=553）、Retinal-Lesions 0.2783（n=478）、DiaRetDB1 0.3389（n=61）、MAPLES-DR 0.4817（n=60）。done.json 的 paper 键是 N8 / reference:ensemble。集成自己的 prob_test 已按 --drop-maps 删掉。
+第 69 条（d）发布目录 runs/release/retiseg_ref：两个成员、八个集合。weights.pt 是 SAMed 349.7 MB、RETFound 1345.3 MB，不进包。
+第 69 条（e）冒烟取 DDR 测试划分前三张 007-1789-100、007-1853-100、007-2403-100。SAMed 的 MA 概率图与 runs/BF_ref_samed_fine_seed0/prob_test/MA 逐字节相同，三张都相同。summary.json 留下。
+第 69 条（f）已删两格在 FGADR、Retinal-Lesions 的 prob_test，以及 insource_IDRiD/prob、insource_TJDR_std/prob，还有 runs/release/smoke 的 prob、masks、members。两份 best.pt 还在。
+第 70 条 maupr_ci：written 1551，skipped 0，mismatch 0。多出来的一份是 runs/BF_e3b_m2mrf_fgadr_seed0/metrics_test_full.npz，没有对应的 json，不是报告。日志 runs/logs/20261030_item70_maupr_ci.log。第 59、49 条没开。启动器没有重启。
+
+2026-10-30 10:57 +0800 写出：/home/qurr/luming/retiseg/retiseg_runs_handoff_20261030.tar.gz（79 MB，7329 个文件，1526 行指标，0 个未对齐）。对照 runs/handoff_manifest_20261028.tsv。summary/new_since.tsv 是 1526 行：区间写进了已有报告，所以对照 10-28 几乎每一份指标都算新的。包里有 20 格的 metrics_test_laststep、runs/E3a_laststep（350 个文件）、runs/ENS/REF、runs/release 的小文件和 runs/audit/cost_audit.tsv。weights.pt 不在包里。10-28 的包没有被覆盖。这一行是打包之后补的，包里的 00 停在上一段。
