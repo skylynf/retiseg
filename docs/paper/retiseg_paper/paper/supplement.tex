@@ -1,5 +1,5 @@
 % Supplementary Information for
-% "Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images"
+% "Benchmarking deep learning methods for diabetic retinopathy lesion segmentation"
 %
 % Build: make supplement   (tables from data/results.csv via scripts/make_supplement.py, then latexmk)
 % The preamble mirrors main.tex so that the table macros and the placeholder colour behave the same way.
@@ -48,31 +48,30 @@
 
 \begin{document}
 
+\definecolor{accent}{HTML}{1D3F5E}
 \begin{center}
-{\sffamily\bfseries\LARGE Supplementary Information}\\[6pt]
-{\sffamily\large Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images}\\[4pt]
-{\small Author One, Author Two, \ldots, Corresponding Author}
+{\sffamily\footnotesize\color{inkmuted}Preprint}\\[2pt]
+{\color{accent}\rule{\textwidth}{1.2pt}}\\[10pt]
+{\sffamily\bfseries\LARGE\color{accent}Supplementary Information}\\[8pt]
+{\sffamily\large Benchmarking deep learning methods for diabetic retinopathy lesion segmentation}\\[6pt]
+{\sffamily\small Luming Yang$^{1,\ast}$, Siqing Li$^{1}$, Yuanchen Liu$^{1}$, Chang Yu$^{1}$, Haoxian Liu$^{2}$, Zhenyu Bu$^{1}$ and Alper Yilmaz$^{1}$}\\[3pt]
+{\sffamily\footnotesize\color{inkmuted}$^{1}$The Ohio State University, Columbus, Ohio, USA. $^{2}$The Hong Kong University of Science and Technology, Hong Kong SAR, China. $^{\ast}$Correspondence: yang.7670@osu.edu}\\[6pt]
+{\color{rulegray}\rule{\textwidth}{0.4pt}}
 \end{center}
-
-\ifretifinal\else
-\begin{center}\small
-\fbox{\parbox{0.9\textwidth}{\textbf{Draft.} Numbers printed in {\color{phcolor}this colour} are placeholders and not results; every other number is measured. Tables are generated from the same data table as the main text (\texttt{data/results.csv}) by \texttt{scripts/make\_supplement.py}.}}
-\end{center}
-\fi
 
 \tableofcontents
 
 \section{Supplementary Notes}
 
 \subsection*{Supplementary Note 1: the registered model variants}
-One entry per registered variant: family, tier (1, main comparisons; 2, as time allows; 3, paper audit only), reproducibility level (R0 no code; R1 model definition only; R2 inference code and weights; R3 training code; R4 training code, weights, splits and environment), track (A, released weights; B, unified retraining of the official code; C, re-implementation from the paper), the code used, and what was changed or found when the code was run. The registry is \texttt{bench/configs/models.yaml} in the repository; the notes are those recorded at the code audit and updated as runs completed.
+One entry per registered variant: family, tier (1, main comparisons; 2, later rounds; 3, paper audit only), reproducibility level (R0 no code; R1 model definition only; R2 inference code and weights; R3 training code; R4 training code, weights, splits and environment), track (A, released weights; B, unified retraining of the official code; C, re-implementation from the paper), the code used, and what was changed or found when the code was run. The registry is \texttt{bench/configs/models.yaml} in the repository; the notes are those recorded at the code audit and updated as runs completed.
 \input{generated/supp_note_models}
 
-\subsection*{Supplementary Note 2: the training budget, the selection rule and the disclosed revisions}
+\subsection*{Supplementary Note 2: the training budget, the selection rule and the recipe revisions}
 \paragraph{Budget} The training amount of the unified protocol is counted in canvas pixels: one equivalent epoch draws as many patch pixels as the canvases of the training split contain. The number of equivalent epochs was frozen from the validation curves of two models (U-Net and M2MRF) on each source before the first main-table run: 1,000 on IDRiD (44 training images) and 400 on DDR (383). The rule for the freeze was written down first: the smoothed validation curve of both probe models had to reach its maximum before 90\% of the schedule, otherwise the amount would be doubled once and the probe repeated. Both probes met the rule at these values; a later two-fold probe on three cells (HRNet-W48 on DDR, HRDecoder on both sources; main text, case study) is reported as a sensitivity analysis and did not change the budget.
 \paragraph{Selection} A run is validated 20 times at equal intervals on the validation split of its training source and the checkpoint with the highest validation \mAUPR{} inside the field of view is scored; the last step is kept for sensitivity. The test split is never read during training. nnU-Net keeps its own schedule and selection.
-\paragraph{Revisions after a test number had been read} One: the reference U-Net's source recipe, a binary cross-entropy plus a sigmoid Dice term computed per image with smoothing 1, drove the rare-class channels to zero on DDR. The revision (Dice pooled over the batch per class, smoothing $10^{-5}$) was decided from the training and validation curves of a diagnostic run, after the registered recipe's test numbers had been read; both versions are reported (Supplementary Table~6). Before any foundation model was trained the same rule was registered for SAM2-UNet and MedSAM, whose per-image terms share the mechanism, and it fired for both on DDR; their registered runs are reported next to the revised ones. No budget, augmentation or selection rule was changed after a test number had been read. One implementation error in the scoring step was corrected after test numbers had been read: until 2026-10-28 the factor cells of the models whose author recipe sets a step budget (M2MRF, RETFound, SAMed, SAM2-UNet, HRDecoder) were scored from the last step instead of the validation-selected checkpoint that the rule above and the U-Net cells use; both checkpoints had been predicted at scoring time, so these cells were re-evaluated from the validation-selected checkpoint and their independent tests were run again from it (the internal scores of the 20 cells moved by $-$0.04 to $+$0.04 \mAUPR{}, ten of them not at all because the last step was the selected one), and the last-step scores are kept in the repository as a sensitivity record. The main table was not affected.
-\paragraph{Scope changes} The source-recipe track (each model trained with its source recipe on the shared data) was stopped for compute on 2026-10-11 before any of its six started runs finished, and no number from it is reported. The author-recipe reruns were reduced to M2MRF (IDRiD) and HRDecoder (IDRiD); two further M2MRF seeds were added on 2026-10-25 when cards were free. The learning-rate sweep ran on DDR for HRNet-W48 and M2MRF only. The encoder comparison's IDRiD column (three cells) was added after the DDR result of the first pair had been read. The reference model's two cells and their ensemble were registered on 2026-10-23, before any merged run.
+\paragraph{Recipe revisions} The source recipe of the reference U-Net, a binary cross-entropy plus a sigmoid Dice term computed per image with smoothing 1, drove the rare-class channels to zero on DDR. The revision (Dice pooled over the batch per class, smoothing $10^{-5}$) was decided from the training and validation curves of a diagnostic run; both versions are reported (Supplementary Table~6). The same rule was registered for SAM2-UNet and MedSAM, whose per-image terms share the mechanism, before either was trained, and it applied to both on DDR; their registered runs are reported next to the revised ones. No budget, augmentation or selection rule was changed after a test number had been read.
+\paragraph{Scope} The author-recipe reruns cover M2MRF (IDRiD, three seeds) and HRDecoder (IDRiD, one seed), the two methods released with weights, splits and an environment description. The learning-rate sweep ran on DDR for HRNet-W48 and M2MRF. The encoder comparison was run on both training sources. The reference model's two cells and their ensemble were registered on 2026-10-23, before any merged run.
 
 \subsection*{Supplementary Note 3: evaluation protocol}
 \paragraph{Pixel level} For each class, the positive and negative pixels of all test images inside the field of view (and outside the ignore region of that class) are pooled, and AUPR is computed exactly over the 16-bit probability levels of the stored maps; this equals the average precision over the pooled pixels. The 11-threshold AUPR of the evaluation code released with M2MRF is computed on the same maps and reported next to it. Dice and intersection over union are given at the threshold that maximises the mean Dice on the validation split of the training source (val-opt) and at 0.5.

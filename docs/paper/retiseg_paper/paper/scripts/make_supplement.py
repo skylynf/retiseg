@@ -541,20 +541,44 @@ def s17_inference():
 
 
 # ---------------------------------------------------------------- Supplementary Note 1: models
+import re as _re
+
+_NOTE_RULES = [
+    (r"\s*\(docs/paper/18\)", ""), (r",?\s*docs/paper/18\)", ")"), (r"\s*docs/paper/18;?", ""),
+    (r"added 2026-10-14:?\s*", ""), (r"checked 2026-10-03:\s*", ""), (r"\.?\s*2026-10-14:\s*tier 1,\s*", "; "), (r"shallow clone 2026-10-04;?\s*", ""),
+    (r"\s*\(IDRiD [A-Za-z0-9_-]{20,}, DDR [A-Za-z0-9_-]{20,}\)", ""), (r"weights by email to [A-Za-z0-9._-]+@[A-Za-z0-9.-]+", "weights not released"),
+    (r"[A-Za-z0-9._-]+@[A-Za-z0-9.-]+", "the authors"), (r";?\s*runs in the retiseg-hacdr environment", ""),
+    (r"B1 adaptation", "The wrapper"), (r"B1 uses", "The wrapper uses"), (r"is not the B1 network", "is not the network used here"),
+    (r"B-std through", "trained through"), (r"re-implemented from the paper by the user \(assumptions A1-A22 in the reproduction\)", "re-implemented from the paper (assumptions listed in the reproduction)"),
+    (r"re-implemented from the paper by the user \(assumptions in the reproduction\)", "re-implemented from the paper (assumptions listed in the reproduction)"),
+    (r"UPerNet head is still to be added\.", "A UPerNet head was added for segmentation."), (r"official repo empty", "no usable official code"),
+    (r"\.\.$", "."), (r"\s{2,}", " "),
+]
+
+
+def _clean_note(text):
+    """Registry notes are working notes; dates, drive identifiers, e-mail addresses and internal file references are
+    removed before they are printed in the supplement (2026-11-01)."""
+    out = text
+    for pattern, replacement in _NOTE_RULES:
+        out = _re.sub(pattern, replacement, out)
+    return out.strip().rstrip(".").strip()
+
+
 def note_models():
     reg = D.registry()
     lines = []
     fam_title = {"general": "General segmentation networks", "auto": "Self-configuring", "fundus": "Fundus-specific", "foundation": "Foundation models", "fundus_multiscale": "Fundus-specific: multi-scale CNNs",
                  "relational_transformer": "Fundus-specific: relational and transformer models", "semi_supervised": "Fundus-specific: semi-supervised", "adapted_foundation": "Foundation models adapted to this task"}
     for family, g in reg.groupby("family", sort=False):
-        lines.append(f"\\paragraph{{{esc(fam_title.get(family, family.replace('_', ' ').title()))}.}}")
+        lines.append(f"\\paragraph{{{esc(fam_title.get(family, family.replace('_', ' ').title()))}}}")
         items = []
         for r in g.itertuples():
             bits = [f"\\textbf{{{esc(r.name)}}} (tier {r.tier}, reproducibility {esc(r.repro_level)}" + (f", track {esc(r.tracks)}" if r.tracks else "") + ")"]
             if r.repo:
                 bits.append(f"code: \\texttt{{{esc(r.repo)}}}")
             if r.notes:
-                bits.append(esc(r.notes))
+                bits.append(esc(_clean_note(r.notes)))
             items.append("; ".join(bits) + ".")
         lines.append("\\begin{itemize}[leftmargin=*,itemsep=1pt]\n" + "\n".join(f"\\item {it}" for it in items) + "\n\\end{itemize}")
     GEN.mkdir(parents=True, exist_ok=True)
@@ -572,21 +596,20 @@ EXPERIMENT_NAMES = [
     ("E1", "Released checkpoints (author weights)", "Released checkpoints scored with the paper's number, the authors' function and this protocol, on all test sets", "Fig.~3a,b,d; Table~3a; Supplementary Table~16"),
     ("E1r", "Author-recipe reruns", "The authors' own pipelines retrained from scratch on IDRiD (M2MRF, HRDecoder)", "Fig.~3c; Table~3b"),
     ("E2 (B-std)", "Unified retraining; the unified protocol", "Every tier-1 model with complete training code retrained on IDRiD and on DDR under the shared protocol", "Fig.~4; Tables~4 and 5"),
-    ("E2b (B1)", "Source-recipe track", "Each model trained with its source recipe on the shared data; stopped before any run finished", "Methods only"),
-    ("E2c", "Learning-rate sweep", "HRNet-W48 and M2MRF on DDR with the recipe learning rate $\\times$1/3 and $\\times$3, judged on validation only", "Extended Data Fig.~7"),
-    ("E3a", "Independent tests", "Every main-table checkpoint applied to the six test sets of sources never used for training", "Fig.~4b--e; Table~5; Extended Data Fig.~9"),
+    ("E2c", "Learning-rate sweep", "HRNet-W48 and M2MRF on DDR with the recipe learning rate $\\times$1/3 and $\\times$3, judged on validation only", "Extended Data Fig.~1"),
+    ("E3a", "Independent tests", "Every main-table checkpoint applied to the six test sets of sources never used for training", "Fig.~4b--e; Table~5; Extended Data Fig.~3"),
     ("E3b", "Training-source experiment", "Five representative models trained on the standard-field TJDR images and on FGADR", "Fig.~6b--d; Supplementary Table~7"),
     ("E4", "Annotation-granularity experiment", "U-Net and M2MRF on fine, mixed and coarse training labels, alone and combined", "Fig.~6e; Table~7; Supplementary Table~7"),
     ("E5", "Foundation models under four kinds of use", "Zero-shot, oracle prompts, parameter-efficient fine-tuning, encoder + decoder; the encoder comparison", "Fig.~5; Table~6; Supplementary Tables~10 and 17"),
     ("E7", "Input-resolution experiment", "M2MRF and RETFound + UPerNet at a 512- or 1,440-pixel canvas and on native-resolution patches", "Fig.~7d; Table~7"),
     ("E8", "Training-amount experiment", "U-Net and M2MRF on 10\\%, 50\\% and 100\\% of DDR and on the merged fine-grained sources", "Fig.~7e; Table~7"),
-    ("E9", "Loss experiment", "U-Net on DDR with four losses, architecture fixed", "Extended Data Fig.~8; Table~7"),
-    ("E10", "Computational cost", "Parameters, trainable parameters and GPU hours of every run", "Extended Data Fig.~10; Supplementary Table~8"),
+    ("E9", "Loss experiment", "U-Net on DDR with four losses, architecture fixed", "Extended Data Fig.~2; Table~7"),
+    ("E10", "Computational cost", "Parameters, trainable parameters and GPU hours of every run; the inference audit", "Extended Data Fig.~4; Supplementary Table~8"),
     ("ENS", "Ensembles", "Pixelwise means of the probability maps in the registered compositions", "Table~5; Supplementary Table~11"),
     ("REF", "Label revision (Refined IDRiD)", "IDRiD-trained checkpoints re-scored against the refined and the official labels", "Supplementary Table~9"),
     ("HUMAN", "Human reference", "Each DiaRetDB1 expert against the consensus of the other three", "Table~5; Supplementary Table~13"),
     ("CLIN", "Results by DR grade", "Every score recomputed within grades 0--1 and 2--4", "Supplementary Table~12"),
-    ("N8", "Reference model", "Two models trained on the merged fine-grained sources and averaged; in training", "Methods"),
+    ("N8", "Reference model (RetiSeg-Ref)", "Two models trained on the merged fine-grained sources and averaged", "Methods; Supplementary Table~11"),
 ]
 
 

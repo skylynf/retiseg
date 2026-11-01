@@ -45,6 +45,8 @@ scripts/collect_runs.py       读 runs/*/metrics_*.json，按键覆盖占位行
 
 2026-10-30：10-30 包进表（1,723 份报告；1,551 份带 `summary.mAUPR_ci`）。上一条“待修的数据”已修：因素格 20 格按验证选择重评、13 格 E3a 重跑后，R4 案例段、R6 两段、R7 两段、讨论 Q3 的数全部改为 `\rn` 键（`src.*`、`cross.max.train/test`、`e4.<模型>.*`、`e7.<模型>.*`、`e7.hrdecoder.*`、`e7.drop.*`、`e8.<模型>.*`），`fig6_sources.matrix()` 改为主表种子 0（与图注一致）。新进表：RetiSeg-Ref（`runs/ENS/REF/reference`，键 `n8.*`、`ensall.*`、`n8.vs.all.*`；R4 末段）、算力审计（`data/cost_audit.tsv`，键 `cost.{flops,infer,mem}.*`；ED10b 与补充表 8 读 `peak_infer_mem_gb`，列名“推理峰值显存”）、mAUPR 区间（cls=mean 的 `aupr_ci_lo/hi`，键 `mci.*`；补充表 4 末列）。results.csv 无占位，numbers.tex 886 键。
 
+2026-11-01（定稿版，14 备注 78）：`main.tex` 改为预印本排版（题名、作者、单位、通讯邮箱、页眉、摘要框、符号脚注、去行号；`\retifinaltrue` 固定），`sections/abstract_intro.tex` 重写（摘要约 230 词，两处脚注），`results.tex` / `discussion.tex` / `methods.tex` 去模型评价式措辞与过程披露、压缩 R4 内部段与 R5，`extended.tex` 只剩四张 ED 图（编号 1–4，`\label{edfig:*}` 引用）。`fig3_original.py` 面板 c 只画有 run 的组；`fig1_design.py` 的 Tier 2 标签；`make_tables.py` 表 2 备注与表 7 分组行；`make_supplement.py` 的 `_clean_note`（补充说明 1 登记备注清洗）、补充表 18 去 E2b 行、ED 编号；`supplement.tex` 题块与补充说明 2 改写。
+
 ## 服务器结果回来以后
 
 1. 把服务器的快照包（docs/ops/17 第一节的格式）解开到仓库根目录的 `runs/`（gitignore）。

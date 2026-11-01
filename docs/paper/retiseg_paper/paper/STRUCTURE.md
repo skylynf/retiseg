@@ -1,6 +1,6 @@
 # 论文结构与图表清单
 
-题名：Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images
+题名：Benchmarking deep learning methods for diabetic retinopathy lesion segmentation（2026-11-01 定稿版；原暂定题名 Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images）
 体例模板：Lu 等，Nature Methods 23:248–259（`literature/papers/00_template/`）。
 依据：`docs/paper/13`（总纲）、`docs/paper/14`（方法素材 M1–M14）、`docs/design/05`、`docs/design/12`、`bench/configs/*.yaml`。
 本文件只定“写什么、放在哪、数据从哪来”，不改任何协议。与 13 冲突时以 13 为准；实验范围以 `docs/paper/16`（2026-10-11 范围精简）为准，下表的面板已按 16 第四节改过。
@@ -64,7 +64,7 @@ Nature Methods 的 Analysis 正文通常不放表。表 1–7 按 CVPR/ICLR 风�
 |  | d | 输入分辨率 512、1440、原分辨率块：mAUPR 与小病灶召回（M2MRF、RETFound 加 UPerNet） | 折线 | E7 | 实 |
 |  | e | 训练量 10%、50%、100% 与细粒度合并（U-Net、M2MRF） | 折线（模板图 5d） | E8 | 实 |
 
-扩展数据图（2026-10-30 状态）：ED1 各库示例与标注风格（需图像，工作站画）；ED2 视野与画布（同）；ED3 泄漏审计（已做，以补充表 15 交代，不单独作图）；ED4 评测实现敏感性（并入图 2d/e）；ED5 逐图分布（撤销，直方图留仓库）；ED6（取消；B1 在任何运行完成前停止）；**ED7 学习率扫描（只有 HRNet / M2MRF 的 DDR，实）**；**ED8 损失（U-Net 四种损失，实）**；**ED9 DiaRetDB1 官方图像级协议 + 超广角两种推理尺度（实）**；**ED10 计算代价（参数量、可训参数、两源 GPU 时，实；FLOPs / 推理峰值显存 / 每图推理秒，10-30 起实，15 / 19 个模型，HACDR-Net / HRDecoder / nnU-Net 未测）**。补充材料：单独的 `supplement.tex`（`make supplement`），18 张表（第 18 张是正文实验名称与仓库代号的对照表）+ 3 个说明 + 4 项数据，全部由 `scripts/make_supplement.py` 从 results.csv 生成；清单见 `sections/extended.tex` 与 14 备注 66。
+扩展数据图（2026-11-01 定稿：四张，编号 1–4——学习率扫描、损失、DiaRetDB1 官方协议 + 超广角两尺度、算力；ED1 / ED2 示例图未画，不列入；原编号 7–10）。原状态说明：ED1 各库示例与标注风格（需图像，工作站画）；ED2 视野与画布（同）；ED3 泄漏审计（已做，以补充表 15 交代，不单独作图）；ED4 评测实现敏感性（并入图 2d/e）；ED5 逐图分布（撤销，直方图留仓库）；ED6（取消；B1 在任何运行完成前停止）；**ED7 学习率扫描（只有 HRNet / M2MRF 的 DDR，实）**；**ED8 损失（U-Net 四种损失，实）**；**ED9 DiaRetDB1 官方图像级协议 + 超广角两种推理尺度（实）**；**ED10 计算代价（参数量、可训参数、两源 GPU 时，实；FLOPs / 推理峰值显存 / 每图推理秒，10-30 起实，15 / 19 个模型，HACDR-Net / HRDecoder / nnU-Net 未测）**。补充材料：单独的 `supplement.tex`（`make supplement`），18 张表（第 18 张是正文实验名称与仓库代号的对照表）+ 3 个说明 + 4 项数据，全部由 `scripts/make_supplement.py` 从 results.csv 生成；清单见 `sections/extended.tex` 与 14 备注 66。
 
 ## 三、表（LaTeX，`tables/generated/`）
 

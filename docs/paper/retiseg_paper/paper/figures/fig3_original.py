@@ -16,10 +16,9 @@ C_PAPER, C_AUTH, C_OURS = "#898781", "#b3261e", "#1d3f5e"
 # the released checkpoints that were run: M2MRF (two sources) and HRDecoder (two sources); WSRFNet's weights were
 # requested from the authors and never arrived (docs/paper/18 section 3), so its row was dropped on 2026-10-25
 CKPT = [("M2MRF", "IDRiD"), ("M2MRF", "DDR"), ("HRDecoder", "IDRiD"), ("HRDecoder", "DDR")]
-# author-recipe reruns (E1r): the groups with a measured run are drawn; the reruns that were cut from the scope
-# (M2MRF on DDR and its further IDRiD seeds, HACDR-Net on both sources; docs/paper/16 section 8) appear as
-# "not rerun" marks at the reported value only
-E1R_GROUPS = [("M2MRF", "IDRiD"), ("M2MRF", "DDR"), ("HRDecoder", "IDRiD"), ("HACDR-Net", "IDRiD"), ("HACDR-Net", "DDR")]
+# author-recipe reruns (E1r): the two methods released with weights, splits and an environment, both on IDRiD
+# (M2MRF three seeds, HRDecoder one); 2026-11-01: only the groups with a measured run are drawn
+E1R_GROUPS = [("M2MRF", "IDRiD"), ("HRDecoder", "IDRiD")]
 
 
 def get(exp, model, variant, train, test, metric, cls="mean"):
@@ -95,7 +94,6 @@ def panel_c(fig, top):
         ax.plot([i - 0.32, i + 0.32], [pv, pv], color=C_PAPER, lw=1.4, zorder=2, solid_capstyle="round")
         any_sim |= p_sim
         if len(runs) == 0:
-            ax.text(i, pv - 0.012, "not\nrerun", ha="center", va="top", fontsize=4.4, color=S.INK2, style="italic", linespacing=1.0)
             continue
         col = S.FAMILY["fundus"]
         x = i + rng.uniform(-0.14, 0.14, len(runs))
@@ -107,17 +105,14 @@ def panel_c(fig, top):
     ax.annotate("first run,\nbatch 1", (0.3, float(first["value"].iloc[0])), xytext=(0.0, 0.40), fontsize=4.7, color=S.INK2,
                 arrowprops=dict(arrowstyle="-", lw=0.4, color=S.MUTED), ha="center", va="center", linespacing=1.1)
     ax.set_xticks(range(len(groups)))
-    ax.set_xticklabels([t for _, t in groups], fontsize=5.0)
-    for xc, name, half in ((0.5, "M2MRF", 0.8), (2.0, "HRDec.", 0.3), (3.5, "HACDR-Net", 0.8)):
-        ax.text(xc, -0.2, name, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=5.2)
-        ax.plot([xc - half, xc + half], [-0.17, -0.17], transform=ax.get_xaxis_transform(), color=S.AXIS, lw=0.6, clip_on=False)
-    ax.set_xlim(-0.6, len(groups) - 0.4)
+    ax.set_xticklabels([f"{m}\n{t}" for m, t in groups], fontsize=5.0, linespacing=1.1)
+    ax.set_xlim(-0.7, len(groups) - 0.3)
     ax.set_ylim(0.3, 0.76)
     ax.set_yticks([0.3, 0.4, 0.5, 0.6, 0.7])
     ax.set_ylabel("mAUPR, author metric")
     S.light_grid(ax)
     from matplotlib.lines import Line2D
-    h = [Line2D([], [], color=C_PAPER, lw=1.4, label="reported"), Line2D([], [], marker="o", ls="", ms=3.4, color=S.FAMILY["fundus"], label="rerun, one seed")]
+    h = [Line2D([], [], color=C_PAPER, lw=1.4, label="reported"), Line2D([], [], marker="o", ls="", ms=3.4, color=S.FAMILY["fundus"], label="rerun, individual seeds")]
     ax.legend(handles=h, loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=2, columnspacing=1.0, handletextpad=0.3, fontsize=5.4)
     if any_sim:
         S.tag_simulated(ax, loc="br")

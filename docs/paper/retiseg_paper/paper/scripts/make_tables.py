@@ -188,15 +188,15 @@ MODEL_NOTE = {
     "nnU-Net": ("official, 2D; default and ResEnc-M", "own entry point"),
     "Swin-Unet": ("official", "unified retraining, 224 patches"),
     "FCT": ("official PyTorch port", "unified retraining, 384 patches"),
-    "H2Former": ("official", "deferred: exceeds 40\\,GB at 960"),
+    "H2Former": ("official", "deferred (memory at the unified patch size)"),
     "UNet++": ("official", "tier 2"),
     "UPerNet": ("official", "tier 2"),
     "M2MRF": ("official; weights released", "released weights; author-recipe rerun; unified retraining"),
     "HACDR-Net": ("official; no weights", "unified retraining"),
     "HRDecoder": ("official; weights released", "released weights; author-recipe rerun; unified retraining"),
-    "WSRFNet": ("model and test code only; training loop added", "unified retraining (weights requested)"),
+    "WSRFNet": ("model and test code only; training loop added", "unified retraining"),
     "L-Seg": ("Caffe prototxt and loss layer", "C"),
-    "SAA": ("repository empty", "C"),
+    "SAA": ("no usable code", "C"),
     "PMCNet": ("official Keras code rewritten in PyTorch", "unified retraining"),
     "CLC-Net": ("no code; re-implemented from the paper", "unified retraining (re-implementation)"),
     "TC-Net": ("no code; re-implemented from the paper", "unified retraining (re-implementation)"),
@@ -252,7 +252,7 @@ def table_models():
         "tab_models",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Models entering the retraining tracks.}} {len(all_reg)} variants are registered: {n1} in tier~1 (main tables), {n2} in tier~2 (if time allows) and {n3} in tier~3 (paper audit only; Supplementary Note~1). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, reported in a separate column.}}
+\caption{{\textbf{{Models entering the retraining tracks.}} {len(all_reg)} variants are registered: {n1} in tier~1 (main tables), {n2} in tier~2 (later rounds) and {n3} in tier~3 (paper audit only; Supplementary Note~1). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, reported in a separate column.}}
 \label{{tab:models}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l c l c c c l l@{{}}}}
@@ -771,17 +771,17 @@ def table_factors():
         return rows
 
     rows = []
-    rows.append("\\grouprow{5}{Annotation granularity of the training set --- mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}")
+    rows.append("\\grouprow{5}{Annotation granularity of the training set: mAUPR on IDRiD test, equal image passes; U-Net and M2MRF}")
     rows += block("E4", ["DDR", "DDR + FGADR (383)", "DDR + FGADR", "DDR + Retinal-Lesions", "FGADR", "Retinal-Lesions"], "", "IDRiD", "DDR",
                   ["DDR \\tier{fine}", "DDR + FGADR, 383 images \\tier{fine}\\tier{mixed}", "DDR + FGADR \\tier{fine}\\tier{mixed}", "DDR + Retinal-Lesions \\tier{fine}\\tier{coarse}", "FGADR \\tier{mixed}", "Retinal-Lesions \\tier{coarse}"])
-    rows.append("\\grouprow{5}{Input resolution, long side in pixels --- mAUPR on DDR test; M2MRF and RETFound + UPerNet}")
+    rows.append("\\grouprow{5}{Input resolution, long side in pixels: mAUPR on DDR test; M2MRF and RETFound + UPerNet}")
     rows += block("E7", ["512", "1440", "native patches"], "res:", "DDR", "1440", ["512", "1,440", "native-resolution patches"])
-    rows.append("\\grouprow{5}{Input resolution --- lesion-level recall of small lesions on DDR test}")
+    rows.append("\\grouprow{5}{Input resolution: lesion-level recall of small lesions on DDR test}")
     rows += block("E7", ["512", "1440", "native patches"], "res:", "DDR", "1440", ["512", "1,440", "native-resolution patches"], metric="lesion_recall_small")
-    rows.append("\\grouprow{5}{Training amount --- mAUPR on DDR test; U-Net and M2MRF}")
+    rows.append("\\grouprow{5}{Training amount: mAUPR on DDR test; U-Net and M2MRF}")
     rows += block("E8", ["DDR 10%", "DDR 50%", "DDR 100%", "fine merged"], "size:", "DDR", "DDR 100%",
                   ["DDR, 10\\% (38 images)", "DDR, 50\\% (192)", "DDR, 100\\% (383)", "+ IDRiD + TJDR standard field (599)"])
-    rows.append("\\grouprow{5}{Loss, architecture fixed --- mAUPR on DDR test; U-Net}")
+    rows.append("\\grouprow{5}{Loss, architecture fixed: mAUPR on DDR test; U-Net}")
     rows += block("E9", ["CE", "Dice", "CE + Dice", "CE + per-image Dice"], "loss:", "DDR", "CE", ["cross-entropy", "batch Dice", "cross-entropy + batch Dice (unified protocol)", "cross-entropy + per-image Dice (registered recipe)"])
     head = " & ".join(f"\\famchip{{{D.FAMILY_OF[m]}}}\\; {m.replace('RETFound + UPerNet', 'RETFound+UPer.')}" for m in cols)
     write(

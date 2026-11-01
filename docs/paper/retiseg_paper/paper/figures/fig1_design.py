@@ -110,7 +110,7 @@ def panel_a(fig):
     x = 76
     n_all = len(reg)
     ax.text(x, top + 7.4, f"{n_all} variants in the registry", fontsize=5.6, color=S.INK2, va="top")
-    tiers = [(1, "Tier 1 · main table", "#1d3f5e"), (2, "Tier 2 · if time allows", "#4f7ea8"), (3, "Tier 3 · paper audit only", "#8fb0cc")]
+    tiers = [(1, "Tier 1 · main table", "#1d3f5e"), (2, "Tier 2 · later rounds", "#4f7ea8"), (3, "Tier 3 · paper audit only", "#8fb0cc")]
     y = top + 12.5
     for t, label, fc in tiers:
         n = int((reg.tier == t).sum())
