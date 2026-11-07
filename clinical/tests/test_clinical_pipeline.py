@@ -97,7 +97,7 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     root = synthetic
     monkeypatch.chdir(root)
     mine_out = root / "clinical" / "work" / "mine" / "SYN"
-    # fovea-to-disc 100 px = 4,500 um, so 45 um / px; C <= 11.1 px, 1 DD = 33.3 px, grid 66.7 px.
+    # landmarks given as 45 um / px (as if 4,500 um over 100 px); C <= 11.1 px, 1 DD = 33.3 px, grid 66.7 px.
     # image a: fovea (300, 250); image b: fovea (255, 250), inside its agreed EX disc
     lms = {"a": {"fovea": [300.0, 250.0], "disc": [400.0, 250.0], "um_per_px": 45.0, "source": "manual"},
            "b": {"fovea": [255.0, 250.0], "disc": [355.0, 250.0], "um_per_px": 45.0, "source": "manual"}}
@@ -143,9 +143,10 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     rep = [x for x in sel["instances"] if x["arm"] == "representative"]
     assert rep and all(x["weight"] and x["weight"] >= 1 for x in rep)
 
-    # the formal design: image strata by macular HEX, region strata by ETDRS zone, weights N_ih / (pi_image n_ih)
+    # the formal design: image strata by macular HEX, region strata by ETDRS zone, weights N_ih / (pi_image n_ih),
+    # drawn once per image stratum without rejection (reading order blind_first), two reading parts
     design2 = {
-        "name": "syn01", "seed": 2,
+        "name": "syn01", "seed": 2, "reading_order": "blind_first", "parts": [1, 1],
         "sets": [{"set": "SYN", "candidates": "clinical/work/mine/SYN", "reference_grade_scale": None}],
         "images": {"eligibility": {"discrepancy": 1}, "strata": [
             {"name": "macular_hex", "set": "SYN", "n": 1, "has_regions": {"where": {"cls": "EX", "etdrs_zone": ["C", "inner"]}, "n": 1}},
@@ -159,6 +160,11 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
         "max_per_image": 6,
     }
     (root / "design2.yaml").write_text(json.dumps(design2))
+    (root / "design3.yaml").write_text(json.dumps({k: v for k, v in design2.items() if k not in ("reading_order", "parts")}))
+    with pytest.raises(SystemExit):                       # the stratified arm needs exact inclusion probabilities
+        sample_review.main(["--design", "design3.yaml", "--out", "work/syn03"])
+    sample_review.main(["--design", "design2.yaml", "--out", "work/syn02", "--dry-run"])
+    assert not (root / "work" / "syn02").exists()           # a dry run draws nothing
     sample_review.main(["--design", "design2.yaml", "--out", "work/syn02"])
     sel2 = json.loads((root / "work" / "syn02" / "selection.json").read_text())
     strata = {s["stratum"]: s for s in sel2["report"]["strata"]}
@@ -167,7 +173,14 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     assert case_b["landmark"]["um_per_px"] == 45.0 and case_b["region_strata"]["hex_macula"]["N"] == 1
     for x in sel2["instances"]:
         assert x["arm"] == "stratified"
-        assert x["weight"] == pytest.approx(x["N_stratum_image"] / (x["pi_image"] * x["pi_within"] * x["N_stratum_image"]))
+        assert x["weight"] == pytest.approx(1.0 / (x["pi_image"] * x["pi_within"]))
+    for c in sel2["cases"]:                                  # every stratum drawn in full: min(n, N), no rejection
+        for h in design2["stratified"]["strata"]:
+            got = sum(1 for x in sel2["instances"] if x["case_id"] == c["case_id"] and x["stratum"] == h["name"])
+            assert got == min(h["n"], c["region_strata"][h["name"]]["N"])
+    assert sel2["report"]["redraws"] == 0 and sel2["report"]["reading_order"] == "blind_first"
+    assert sorted(c["part"] for c in sel2["cases"]) == [1, 2]
+    assert sum(p["part1"] for p in sel2["report"]["parts"]) == 1
     hex_b = [x for x in sel2["instances"] if x["image_id"] == "b" and x["stratum"] == "hex_macula"]
     assert len(hex_b) == 1 and hex_b[0]["weight"] == pytest.approx(1.0)
 
@@ -184,10 +197,10 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     # a reader export: every region read as the lesion the model reported, the label judged wrong
     code = {"MA": "ma", "HE": "hg", "EX": "hex", "SE": "cws"}
 
-    def export_of(reader, b_answers, pre_extra=None):
+    def export_of(reader, b_answers, pre_extra=None, only=None):
         export = {"format": "retiseg-clinical-review/1", "pack_id": "syn01", "reader_id": reader, "cases": {},
-                  "schema_version": "3.0.0" if "b_label" in b_answers else "2.0.0-trial", "debrief": {"answers": {"d_useful": "all"}}}
-        for c in pack["cases"]:
+                  "schema_version": "3.1.0" if "b_label" in b_answers else "2.0.0-trial", "debrief": {"answers": {"d_useful": "all"}}}
+        for c in pack["cases"][:only]:
             regs = {}
             fx, fy = lms[next(k["image_id"] for k in sel["cases"] if k["case_id"] == c["id"])]["fovea"]
             for r in c["regions"]:
@@ -200,26 +213,36 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
                                         "post": {"answers": {"post_unlabelled": "few_peripheral"}, "t": {"active_ms": 10000, "completed": "x"}}}
         return export
 
-    # R1: questionnaire 2 (the trial of 2026-11-02); R2: questionnaire 3, both outlines wrong, central HEX, one NV mark
+    # R1: questionnaire 2 (the trial of 2026-11-02); R2: questionnaire 3.1, both outlines wrong, central HEX, one NV mark;
+    # R3: like R2 but only the first image finished
     (root / "R1.json").write_text(json.dumps(export_of("R1", {"b_cause": "label_error", "b_label_issue": ["omission"],
-                                                              "b_icdr": ["none"], "b_relevance": "no"})))
-    (root / "R2.json").write_text(json.dumps(export_of("R2", {"b_label": "missed", "b_ai": "extent", "b_icdr": ["dme_cs"], "b_relevance": "referral"},
-                                                       {"pre_dme": "central", "pre_other_signs": ["nv"], "pre_marks": [{"x": 301, "y": 200, "kind": "nv"}]})))
-    analyze_reviews.main(["--selection", "work/syn01/selection.json", "--pack", "packs/syn01", "--reviews", "R1.json", "R2.json",
+                                                              "b_icdr": ["none"], "b_relevance": "no"}, {"pre_dme": "central"})))
+    b2 = {"b_label": "missed", "b_ai": "extent", "b_icdr": ["g12", "hex_c"], "b_relevance": "referral"}
+    pre2 = {"pre_hex_zone": "central", "pre_management": "refer", "pre_other_signs": ["nv"], "pre_marks": [{"x": 301, "y": 200, "kind": "nv"}]}
+    (root / "R2.json").write_text(json.dumps(export_of("R2", b2, pre2)))
+    (root / "R3.json").write_text(json.dumps(export_of("R3", b2, pre2, only=1)))
+    analyze_reviews.main(["--selection", "work/syn01/selection.json", "--pack", "packs/syn01", "--reviews", "R1.json", "R2.json", "R3.json",
                           "--out", "work/syn01/analysis"])
     report = (root / "work" / "syn01" / "analysis" / "report.md").read_text()
-    assert "Blinded verdict" in report and "R1" in report and "ETDRS location" in report and "DME on the photograph" in report
+    assert "Blinded verdict" in report and "R1" in report and "ETDRS location" in report and "Hard-exudate location" in report
     import csv
     rows = list(csv.DictReader(open(root / "work" / "syn01" / "analysis" / "regions_long.csv")))
     assert rows and all(r["blind_verdict"] in ("model_right", "dataset_right", "both_right") for r in rows)
     assert {r["attribution"] for r in rows if r["reader"] == "R1"} == {"label_wrong"}
     assert {r["attribution"] for r in rows if r["reader"] == "R2"} == {"both_wrong"}
-    assert {r["consequence"] for r in rows if r["reader"] == "R2"} == {"3"} and {r["consequence"] for r in rows if r["reader"] == "R1"} == {"0"}
-    # the reader's fovea and disc marks give 45 um / px; every region gets a zone
+    assert {r["consequence"] for r in rows if r["reader"] == "R2"} == {"2"} and {r["consequence"] for r in rows if r["reader"] == "R1"} == {"0"}
+    assert {r["hex_change"] for r in rows if r["reader"] == "R2"} == {"central"} and {r["reader_management"] for r in rows if r["reader"] == "R2"} == {"refer"}
+    # the reader's fovea and disc marks give 47 um / px (4,700 um over 100 px); every region gets a zone
     assert all(r["zone"] in ("C", "inner", "outer", "outside") for r in rows)
+    # completion: R3 finished one of the two images of the stratum, so its weights are doubled
+    w2 = {r["inst_id"]: float(r["weight_adj"]) for r in rows if r["reader"] == "R2" and r["weight_adj"]}
+    w3 = {r["inst_id"]: float(r["weight_adj"]) for r in rows if r["reader"] == "R3" and r["weight_adj"]}
+    assert w3 and all(w3[k] == pytest.approx(2 * w2[k]) for k in w3)
     imgs = list(csv.DictReader(open(root / "work" / "syn01" / "analysis" / "images_long.csv")))
     b_img = next(i for i in imgs if i["image_id"] == "b" and i["reader"] == "R2")
-    assert b_img["dme_label"] == "central" and b_img["dme_ai"] == "central" and b_img["n_nv_marks"] == "1"
+    assert b_img["hex_zone_label"] == "central" and b_img["hex_zone_ai"] == "central" and b_img["n_nv_marks"] == "1"
+    assert b_img["hex_zone"] == "central"
+    assert not any(i["hex_zone"] for i in imgs if i["reader"] == "R1")     # questionnaire 2's DME answer is another question
     a_img = next(i for i in imgs if i["image_id"] == "a" and i["reader"] == "R2")
     assert "HG" in a_img["marks"]          # the NV mark at (301, 200) lies inside the labelled and predicted HE disc
 
@@ -240,10 +263,10 @@ def test_etdrs_location():
     key = {"set": "DDR", "image_size": [1000, 800], "landmark": {"fovea": [500, 400], "disc": [800, 400], "um_per_px": 15.0}}
     state = {"pre": {"answers": {"pre_fovea": {"x": 500, "y": 400}, "pre_disc": {"x": 750, "y": 400}}}, "display_size": [1000, 800]}
     geo = analyze_reviews.reader_geometry(key, state)
-    assert geo["source"] == "reader" and geo["umpx"] == pytest.approx(18.0)          # 4,500 um / 250 px
+    assert geo["source"] == "reader" and geo["umpx"] == pytest.approx(18.8)          # 4,700 um / 250 px
     loc = analyze_reviews.region_location
     assert loc(geo, {"bbox": [495, 395, 505, 405], "centroid": [500, 400]})[2] == "C"
-    assert loc(geo, {"bbox": [540, 395, 560, 405], "centroid": [550, 400]}) == (720, 900, "inner")  # 40 px to the box
+    assert loc(geo, {"bbox": [540, 395, 560, 405], "centroid": [550, 400]}) == (752, 940, "inner")  # 40 px to the box
     assert loc(geo, {"bbox": [600, 395, 610, 405], "centroid": [605, 400]})[2] == "outer"
     assert loc(geo, {"bbox": [700, 395, 710, 405], "centroid": [705, 400]})[2] == "outside"
     # no disc mark: the pack's estimate gives the scale; no fovea mark: no location
@@ -253,7 +276,7 @@ def test_etdrs_location():
     # a pack shown at half size: clicks in display pixels, the key in native pixels
     half = {"pre": {"answers": {"pre_fovea": {"x": 250, "y": 200}, "pre_disc": {"x": 375, "y": 200}}}, "display_size": [500, 400]}
     g2 = analyze_reviews.reader_geometry(key, half)
-    assert loc(g2, {"bbox": [540, 395, 560, 405], "centroid": [550, 400]})[0] == 720
+    assert loc(g2, {"bbox": [540, 395, 560, 405], "centroid": [550, 400]})[0] == 752
     assert analyze_reviews.zone_of(500) == "C" and analyze_reviews.zone_of(500.1) == "inner" and analyze_reviews.zone_of(3000.1) == "outside"
 
 
@@ -266,20 +289,25 @@ def test_attribution_and_consequence():
     assert att({"b_label": "unsure", "b_ai": "correct", "b_unsure_why": "definition"}) == "undecided_definition"
     assert att({"b_label": "correct"}) is None
     assert att({"b_cause": "model_error"}) == "ai_wrong" and att({"b_cause": "ambiguous"}) == "undecided_definition"
-    lvl = analyze_reviews.consequence_level
-    assert lvl(["g01", "g12"], "ai_wrong") == 2 and lvl(["dme_cs"], "both_wrong") == 3 and lvl(["none"], "label_wrong") == 0
-    assert lvl(None, "both_right") == 0 and lvl([], "ai_wrong") is None and lvl(["dme"], "ai_wrong") == 2
+    lvl, hx = analyze_reviews.consequence_level, analyze_reviews.hex_change
+    assert lvl(["g01", "g12"], "ai_wrong") == 2 and lvl(["g23", "hex_c"], "both_wrong") == 3 and lvl(["none"], "label_wrong") == 0
+    assert lvl(["g02"], "ai_wrong") == 2 and lvl(["g12", "g34"], "label_wrong") == 4
+    assert lvl(["hex_c"], "ai_wrong") == 0           # a HEX band is a location, not an ICDR threshold
+    assert lvl(None, "both_right") == 0 and lvl([], "ai_wrong") is None and lvl(["dme"], "ai_wrong") == 0
+    assert hx(["g12", "hex_1dd"], "ai_wrong") == "1dd" and hx(["hex_1dd", "hex_c"], "ai_wrong") == "central"
+    assert hx(["dme_cs"], "ai_wrong") == "central" and hx(["dme"], "ai_wrong") == "unspecified"     # questionnaires 3.0, 2
+    assert hx(["none"], "label_wrong") == "none" and hx(None, "both_right") == "none" and hx([], "ai_wrong") is None
 
 
-def test_outline_distance_and_implied_dme():
+def test_outline_distance_and_implied_zone():
     square = [[10, 10, 20, 10, 20, 20, 10, 20]]
     near = analyze_reviews.nearest_outline_px
     assert near(square, 15, 15) == 0.0 and near(square, 25, 15) == pytest.approx(5.0) and near([], 0, 0) is None
     geo = {"fx": 0.0, "fy": 0.0, "umpx": 100.0, "s": 1.0}
-    assert analyze_reviews.implied_dme(geo, square) == ("inner", 1414)    # closest corner 14.1 px x 100 um
-    assert analyze_reviews.implied_dme(dict(geo, umpx=30.0), square) == ("central", 424)
-    assert analyze_reviews.implied_dme(dict(geo, umpx=500.0), square)[0] == "none"
-    assert analyze_reviews.implied_dme(geo, None) == ("none", None)
+    assert analyze_reviews.implied_zone(geo, square) == ("inner", 1414)    # closest corner 14.1 px x 100 um
+    assert analyze_reviews.implied_zone(dict(geo, umpx=30.0), square) == ("central", 424)
+    assert analyze_reviews.implied_zone(dict(geo, umpx=500.0), square)[0] == "none"
+    assert analyze_reviews.implied_zone(geo, None) == ("none", None)
 
 
 def test_design_conditions():
@@ -306,7 +334,7 @@ def test_landmarks_on_a_synthetic_fundus():
     lm = locate_landmarks.estimate(Image.fromarray(rgb), fov, 45.0)
     assert np.hypot(lm["disc"][0] - 440, lm["disc"][1] - 250) < 10
     assert np.hypot(lm["fovea"][0] - 252, lm["fovea"][1] - 258) < 25
-    assert lm["um_per_px"] == pytest.approx(4500 / np.hypot(lm["fovea"][0] - lm["disc"][0], lm["fovea"][1] - lm["disc"][1]), rel=1e-3)
+    assert lm["um_per_px"] == pytest.approx(4700 / np.hypot(lm["fovea"][0] - lm["disc"][0], lm["fovea"][1] - lm["disc"][1]), rel=1e-3)
 
 
 def test_kappa_sanity():
@@ -336,12 +364,16 @@ def test_schema_is_consistent():
     icdr = next(q for q in schema["steps"]["region_b"]["questions"] if q["id"] == "b_icdr")
     assert [o["code"] for o in icdr["options"] if o.get("exclusive")] == ["none"]
     assert {o["code"] for o in icdr["options"]} == set(analyze_reviews.ICDR_ORDER)
-    assert set(analyze_reviews.ICDR_ORDER) <= set(analyze_reviews.CONSEQUENCE_LEVEL)
-    dme = next(q for q in schema["steps"]["image_pre"]["questions"] if q["id"] == "pre_dme")
-    assert [o["code"] for o in dme["options"] if o["code"] != "cannot"] == analyze_reviews.DME_ORDER
+    assert set(analyze_reviews.ICDR_ORDER) <= set(analyze_reviews.CONSEQUENCE_LEVEL) | set(analyze_reviews.HEX_CHANGE)
+    hz = next(q for q in schema["steps"]["image_pre"]["questions"] if q["id"] == "pre_hex_zone")
+    assert [o["code"] for o in hz["options"] if o["code"] != "cannot"] == analyze_reviews.ZONE_ORDER
+    mg = next(q for q in schema["steps"]["image_pre"]["questions"] if q["id"] == "pre_management")
+    assert [o["code"] for o in mg["options"]] == analyze_reviews.MANAGEMENT_ORDER
+    text = json.dumps(schema)
+    assert "referable DME" not in text and "DME:" not in text      # HEX bands are locations, never called DME
     for qid in ("b_label", "b_ai"):
         q = next(q for q in schema["steps"]["region_b"]["questions"] if q["id"] == qid)
         assert {o["code"] for o in q["options"]} == {"correct", "extent", "wrong_type", "false", "missed", "unsure"}
-    assert schema["etdrs"] == {"fovea_disc_um": 4500, "central_um": 500, "inner_um": 1500, "outer_um": 3000, "dd_um": 1500}
+    assert schema["etdrs"] == {"fovea_disc_um": 4700, "central_um": 500, "inner_um": 1500, "outer_um": 3000, "dd_um": 1500}
     labels = " ".join(o["label"] + " " + o.get("help", "") for st in schema["steps"].values() for q in st["questions"] for o in q.get("options", []))
     assert " HE " not in f" {labels} " and " EX " not in f" {labels} " and " SE " not in f" {labels} ", "readers must see HG / HEX / CWS"

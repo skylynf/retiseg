@@ -1,17 +1,19 @@
 # Demo of the formal batch's design (batch01.yaml, docs/clinical/32) on the five demo IDRiD images with the M2MRF
 # author checkpoint (runs/E1_m2mrf). Like demo_idrid.yaml it is NOT a study sample; it exercises the landmarks, the
-# ETDRS region strata and the stratified weights, and gives the reader tool v1.0 its test pack.
+# ETDRS region strata and the stratified weights, and gives the reader tool its test pack (1.1.0: all step A first).
 #   python clinical/scripts/locate_landmarks.py estimate --set IDRiD --data dataset/prepared/IDRiD --field-deg 50 \
 #       --ids IDRiD_55 IDRiD_59 IDRiD_63 IDRiD_67 IDRiD_72 --out clinical/work/landmarks/IDRiD   # no corrections needed
 #   python clinical/scripts/mine_discrepancies.py --set IDRiD --data dataset/prepared/IDRiD --pred runs/E1_m2mrf/prob_test \
 #       --thresholds 0.5 --model "M2MRF (author weights, demo)" --ids IDRiD_55 IDRiD_59 IDRiD_63 IDRiD_67 IDRiD_72 \
 #       --zoo U-Net-E0=runs/E0_unet_idrid_seed0/prob_test:runs/E0_unet_idrid_seed0/metrics/idrid_test.json \
-#       --landmarks clinical/work/landmarks/IDRiD/landmarks.json --out clinical/work/mine/demo_IDRiD_v3
+#       --landmarks clinical/work/landmarks/IDRiD/landmarks.json --out clinical/work/mine/demo_IDRiD_v31
 name: demo_idrid_strat
 seed: 20261103
+reading_order: blind_first
+parts: [2, 2]            # as batch01: two reading parts, proportional within image strata
 sets:
   - set: IDRiD
-    candidates: clinical/work/mine/demo_IDRiD_v3
+    candidates: clinical/work/mine/demo_IDRiD_v31
     reference_grade_scale: null
 images:
   eligibility: {discrepancy: 1}

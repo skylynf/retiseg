@@ -28,7 +28,7 @@
        b1 定位（CPU，五个集合合计约 20 分钟）：locate_landmarks.py estimate，视野角 DDR / TJDR_std / MAPLES-DR 45、IDRiD 50、TJDR_uwf 133，输出 runs/CLINREV/landmarks/<集合>/landmarks.json 与 qc.html；五个 qc.html（自带缩略图，每个几 MB，不含原图）单独传到工作站。
        b2 本机在 QC 页改定位，把 corrections_<集合>.json 传回；locate_landmarks.py apply 合并（没有改动的集合跳过）。
        b3 挖掘（CPU，五个集合约半天）：mine_discrepancies.py --grades auto --zoo-train DDR --landmarks runs/CLINREV/landmarks/<集合>/landmarks.json，输出 runs/CLINREV/mine/RetiSeg-Ref/<集合>/。每个集合的末行（各类各型区域数）贴 00；再贴一行各集合按 etdrs_zone 的分歧区域数（python -c 读 candidates.jsonl 计数即可）。
-       b4 本机提交冻结的 batch01.yaml 后：sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01（report 贴 00）→ build_pack.py --out runs/CLINREV/packs/batch01 --zip。
+       b4 先 sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01 --dry-run，把各层的 population / eligible 贴 00（2026-11-06 加；不抽样）。本机按此定好配额、提交冻结的 batch01.yaml 后：同一命令去掉 --dry-run，一次抽完 100 张并分出第一部分 20 张（report 贴 00）→ build_pack.py --part 1 --out runs/CLINREV/packs/batch01_part1 --zip。第二部分等本机通知后 build_pack.py --part 2 --out runs/CLINREV/packs/batch01_part2 --zip（同一个 selection.json，不重抽）。
        MAPLES-DR 只在本机通知许可允许时进 b1–b4。landmarks、mine、selection 的小文件随回传包走（selection.json、landmarks.json 要在包里）；数据包与 zip 带图像，单独传到工作站，不进回传包、不进 git。
   72（a）修订命令（本机 10-30；替代上面（a）的第一条命令）：
        for m in retfound samed; do for s in IDRiD TJDR_std; do python -m bench.predict --config /tmp/ref_${m}_${s}.yaml --checkpoint runs/BF_ref_${m}_fine_seed0/best.pt --pred-dir runs/BF_ref_${m}_fine_seed0/insource_${s}/prob --split test; done; done

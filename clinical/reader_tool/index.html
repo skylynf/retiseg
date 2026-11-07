@@ -278,10 +278,12 @@ body.panel-dark #side {
 <div class="screen hidden" id="helpScreen">
   <div class="card">
     <h1>How to read</h1>
-    <p class="lead">Each image has three kinds of step.</p>
+    <p class="lead">Each image has five parts, in this order.</p>
     <ol>
-      <li><b>Grade the image.</b> Mark the fovea and the disc (the ETDRS grid appears), then ICDR grade and DME, with no outlines shown.</li>
-      <li><b>Each marked region.</b> First say what is in the dashed circle (A). Then reveal the dataset label and the AI outline, judge each of them, and say what the error would change (B). Your answer to A is locked once you reveal.</li>
+      <li><b>Grade the image.</b> Mark the fovea and the disc (the ETDRS grid appears), then the ICDR grade, the location of the closest hard exudate and your management, with no outlines or regions shown. These answers lock when you move on to step A.</li>
+      <li><b>Step A, every region in turn.</b> Say what is in the dashed circle. No outline is shown for any region until you have answered step A for all of them.</li>
+      <li><b>Reveal.</b> One click after the last step A; it locks all your step A answers for this image.</li>
+      <li><b>Step B, every region in turn.</b> Judge the dataset label and the AI outline, and say what the error would change.</li>
       <li><b>Whole image.</b> All outlines are shown; judge the AI lesions and the dataset label for the image as a whole.</li>
     </ol>
     <h2>ICDR quick reference</h2>
@@ -289,24 +291,23 @@ body.panel-dark #side {
       <tr><td>No DR</td><td>No abnormalities</td></tr>
       <tr><td>Mild NPDR</td><td>MA only</td></tr>
       <tr><td>Moderate NPDR</td><td>More than MA only (any HG, HEX or CWS), less than severe</td></tr>
-      <tr><td>Severe NPDR</td><td>4-2-1 rule: &gt;20 intraretinal HG in each of 4 quadrants, or definite venous beading in &ge;2 quadrants, or prominent IRMA in &ge;1 quadrant; no PDR</td></tr>
+      <tr><td>Severe NPDR</td><td>4-2-1 rule: &gt;20 intraretinal HG in each of 4 quadrants, or definite venous beading in &ge;2 quadrants, or prominent IRMA in &ge;1 quadrant; no PDR. Any one criterion is enough</td></tr>
       <tr><td>PDR</td><td>NV, and/or vitreous or preretinal hemorrhage</td></tr>
-      <tr><td>DME (photograph)</td><td>Closest HEX to the fovea on the ETDRS grid. Within 1 DD (central subfield or inner ring) is referable; the central subfield is the closest photographic sign of center-involving DME, which strictly needs OCT (central subfield thickness)</td></tr>
-      <tr><td>Referable</td><td>Moderate NPDR or worse, and/or DME</td></tr>
+      <tr><td>HEX location</td><td>Where the closest hard exudate lies on the ETDRS grid. A location only: DME needs retinal thickening, which a single non-stereo photograph cannot show; stereo photographs or OCT can. For reference, UK screening grades exudate within 1 DD of the center of the fovea as referable maculopathy (M1), and the ETDRS counts hard exudate within 500 &micro;m of the center as clinically significant macular edema only with adjacent thickening</td></tr>
     </table>
-    <p>Of the four lesion types, only the HG count can reach severe NPDR (4-2-1); IRMA, venous beading and NV are not labelled in these datasets.</p>
+    <p>Of the four lesion types, only the HG count can reach severe NPDR (4-2-1) by itself. IRMA and venous beading are not labeled in these datasets, and NV in only one of them; when an outline calls IRMA or NV a hemorrhage, the threshold options include the severe and PDR criteria.</p>
     <h2>ETDRS grid</h2>
-    <p>Centered on your foveal mark; the scale takes the fovea-to-disc distance as 4.5 mm (about 3 DD of 1.5 mm). Circles: central subfield C (1 mm diameter), inner ring (1&ndash;3 mm), outer ring (3&ndash;6 mm); S, I, N, T are superior, inferior, nasal (disc side) and temporal. Press E to show or hide it. The scale is approximate (individual eyes differ by about 10%).</p>
+    <p>Centered on your foveal mark; it appears as soon as you mark the fovea, scaled from the folder's estimate until you mark the disc. The scale takes the fovea-to-disc distance as 4.7 mm (adult average about 4.6&ndash;4.8 mm). Circles: central subfield C (1 mm diameter), inner ring (1&ndash;3 mm), outer ring (3&ndash;6 mm); S, I, N, T are superior, inferior, nasal (disc side) and temporal. Press E to show or hide it. The scale is approximate: the fovea-to-disc distance varies with an SD of about 7%, so in some eyes the circles may be 15&ndash;20% off. 1 DD = 1.5 mm is the ETDRS convention; real discs average about 1.8 mm, so &ldquo;within 1 DD&rdquo; judged against the disc itself reaches a little beyond the inner ring. If the fovea is not visible there is no grid: answer the hard-exudate question with &ldquo;Cannot assess&rdquo;.</p>
     <h2>Outlines</h2>
     <table id="helpLegend"></table>
     <h2>Keys</h2>
     <table>
       <tr><td>1&ndash;9</td><td>choose an option of the first unanswered question</td></tr>
-      <tr><td>Enter</td><td>reveal / next</td></tr>
+      <tr><td>Enter</td><td>next / reveal (after the last step A)</td></tr>
       <tr><td>F &middot; Z</td><td>fit the image &middot; zoom to the region</td></tr>
       <tr><td>+ &middot; &minus; &middot; drag &middot; wheel</td><td>zoom and pan</td></tr>
       <tr><td>G &middot; E</td><td>red-free view &middot; ETDRS grid</td></tr>
-      <tr><td>D &middot; M &middot; H &middot; K</td><td>dataset outline &middot; model outline &middot; heat map &middot; marker (when allowed)</td></tr>
+      <tr><td>D &middot; M &middot; H &middot; K</td><td>dataset label &middot; AI outline &middot; heat map &middot; marker (when allowed)</td></tr>
     </table>
     <h2>Saving</h2>
     <p>Answers are saved in this browser as you go. Export at the end of every session and send the file to the study team.</p>
@@ -334,7 +335,7 @@ body.panel-dark #side {
 
 <script>
 "use strict";
-const TOOL_VERSION = "1.0.0";
+const TOOL_VERSION = "1.1.0";
 const $ = (id) => document.getElementById(id);
 const el = (tag, attrs = {}, ...kids) => {
   const n = document.createElement(tag);
@@ -455,15 +456,19 @@ function makeOrder() {
 
 /* ======================================================================= schema helpers */
 const caseById = (id) => PACK.cases.find(c => c.id === id);
+// Reading order (docs/clinical/33): step A for every region of the image, then one reveal that locks all of them,
+// then step B for every region. No outline of the image is shown before every step A is answered, so the crop
+// windows of one image may overlap and the regions are drawn without rejection (exact inclusion probabilities).
 function stepsOf(caseId) {
   const steps = [{ key: "pre", kind: "image_pre" }];
-  for (const rid of S.order.regions[caseId]) {
-    steps.push({ key: "a:" + rid, kind: "region_a", rid });
-    steps.push({ key: "b:" + rid, kind: "region_b", rid });
-  }
+  for (const rid of S.order.regions[caseId]) steps.push({ key: "a:" + rid, kind: "region_a", rid });
+  for (const rid of S.order.regions[caseId]) steps.push({ key: "b:" + rid, kind: "region_b", rid });
   steps.push({ key: "post", kind: "image_post" });
   return steps;
 }
+const isRevealed = (caseId) => Object.values(caseState(caseId).regions).some(r => r.revealed_at);
+const outlinesShown = (caseId) => isRevealed(caseId) || !!caseState(caseId).post.t.first;
+function lastAIndex(steps) { let k = -1; steps.forEach((s, i) => { if (s.kind === "region_a") k = i; }); return k; }
 function caseState(caseId) {
   if (!S.cases[caseId]) S.cases[caseId] = { practice: !!caseById(caseId).practice, pre: { answers: {}, t: {} }, regions: {}, post: { answers: {}, t: {} }, done: false };
   return S.cases[caseId];
@@ -499,7 +504,7 @@ function pruneHidden(stepKind, answers, caseObj) {
 }
 function stepComplete(caseId, step) {
   const rec = stepRecord(caseId, step);
-  if (step.kind === "region_a") return !!caseState(caseId).regions[step.rid].revealed_at && missingIn("region_a", rec.answers, caseById(caseId)).length === 0;
+  if (step.kind === "region_a") return (!!caseState(caseId).regions[step.rid].revealed_at || !!rec.t.completed) && missingIn("region_a", rec.answers, caseById(caseId)).length === 0;
   return !!rec.t.completed && missingIn(step.kind, rec.answers, caseById(caseId)).length === 0;
 }
 
@@ -533,9 +538,17 @@ function next() {
   const rec = stepRecord(cur.caseId, step);
   if (missingIn(step.kind, rec.answers, caseObj).length) { markMissing = true; renderForm(); return; }
   markMissing = false;
-  if (step.kind === "region_a" && !cs.regions[step.rid].revealed_at) {
-    cs.regions[step.rid].revealed_at = new Date().toISOString();
-    logEvent("reveal", { region: step.rid });
+  if (step.kind === "region_a" && !isRevealed(cur.caseId) && cur.idx === lastAIndex(cur.steps)) {
+    // one reveal per image, only when every step A of the image is answered; it locks all of them
+    const open = cur.steps.findIndex(s => s.kind === "region_a" && missingIn("region_a", stepRecord(cur.caseId, s).answers, caseObj).length > 0);
+    if (open >= 0) { markMissing = true; cur.idx = open; enterStep(true); toast("Answer step A for every region before the reveal"); return; }
+    const now = new Date().toISOString();
+    for (const s of cur.steps) if (s.kind === "region_a") {
+      const r = stepRecord(cur.caseId, s);
+      r.t.completed = r.t.completed || now;
+      cs.regions[s.rid].revealed_at = now;
+    }
+    logEvent("reveal", { regions: cur.steps.filter(s => s.kind === "region_a").map(s => s.rid) });
   }
   rec.t.completed = rec.t.completed || new Date().toISOString();
   if (cur.idx < cur.steps.length - 1) { cur.idx++; save(); enterStep(true); return; }
@@ -570,7 +583,12 @@ function renderForm() {
   const sdef = PACK.schema.steps[step.kind];
   const rec = stepRecord(cur.caseId, step);
   const cs = caseState(cur.caseId);
-  const lockedA = step.kind === "region_a" && !!cs.regions[step.rid].revealed_at;
+  // step A locks at the reveal; the grading step locks once the reader moves on from it (the circles of step A show
+  // where the label or the AI drew lesions), so the image-level answers stay blind to both
+  const lockedPre = step.kind === "image_pre" && (!!cs.pre.t.completed || outlinesShown(cur.caseId));
+  const lockedA = (step.kind === "region_a" && isRevealed(cur.caseId)) || lockedPre;
+  if (lockedPre) form.append(el("div", { class: "q locked alt" }, el("div", { class: "qhelp", style: "margin-left:0",
+    text: "Locked: you have moved on to the marked regions of this image, so the grading made before them stays as it was." })));
 
   // when on B, show the locked A answers as a read-only reminder
   if (step.kind === "region_b") {
@@ -581,7 +599,7 @@ function renderForm() {
     const conf = a.a_confidence ? `, ${a.a_confidence}` : "";
     form.append(el("div", { class: "q locked alt" }, el("div", { class: "qlabel", text: "Your answer before the reveal" }), el("div", { class: "qhelp", style: "margin-left:0", text: lab + conf })));
     const reg = regionOf(step), g = gridGeom(cur.caseId);
-    const where = g && reg ? "ETDRS location: " + zoneText(zoneOf(g, reg.marker.cx, reg.marker.cy)) : "ETDRS location not available (fovea or scale not marked)";
+    const where = g && reg ? "Circle center: " + zoneText(zoneOf(g, reg.marker.cx, reg.marker.cy)) : "ETDRS location not available (fovea or scale not marked)";
     form.append(el("div", { class: "q alt", id: "zoneLine" }, el("div", { class: "qlabel", text: where }), g ? el("div", { class: "qhelp", style: "margin-left:0", text: `From ${g.source}; 1 DD = 1.5 mm.` }) : null));
   }
   const missing = markMissing ? new Set(missingIn(step.kind, rec.answers, caseObj)) : new Set();
@@ -683,16 +701,20 @@ function updateNav() {
   const step = cur.step, caseObj = caseById(cur.caseId);
   const rec = stepRecord(cur.caseId, step);
   const miss = missingIn(step.kind, rec.answers, caseObj).length;
-  const revealed = step.kind === "region_a" && caseState(cur.caseId).regions[step.rid].revealed_at;
-  btn.textContent = step.kind === "region_a" && !revealed ? "Reveal outlines" : (cur.idx === cur.steps.length - 1 ? "Finish image" : "Next");
+  const revealed = isRevealed(cur.caseId);
+  const lastA = step.kind === "region_a" && cur.idx === lastAIndex(cur.steps);
+  btn.textContent = step.kind === "region_a" && !revealed ? (lastA ? "Reveal outlines" : "Next region") : (cur.idx === cur.steps.length - 1 ? "Finish image" : "Next");
   btn.disabled = false;
-  hint.textContent = miss ? `${miss} required ${miss === 1 ? "answer" : "answers"} left` : "Enter to continue";
+  const nA = cur.steps.filter(s => s.kind === "region_a").length;
+  const lockNote = `Revealing locks your step A answers for all ${nA} ${nA === 1 ? "region" : "regions"} of this image`;
+  hint.textContent = miss ? `${miss} required ${miss === 1 ? "answer" : "answers"} left` + (lastA && !revealed ? ` · ${lockNote}` : "")
+    : (lastA && !revealed ? lockNote : "Enter to continue");
 }
 
 /* ======================================================================= header, rail, case list */
 function renderChrome() {
   if (cur.debrief) {
-    $("where").textContent = "Debrief";
+    $("where").textContent = "Feedback";
     $("rail").innerHTML = "";
     $("kicker").textContent = "All images done";
     $("stepTitle").textContent = PACK.schema.steps.debrief.title;
@@ -744,10 +766,10 @@ const V = { img: null, imgCase: null, scale: 1, tx: 0, ty: 0, dpr: window.device
 const base = $("baseCanvas"), over = $("overCanvas"), mini = $("minimap");
 
 /* ETDRS grid (docs/clinical/32): centered on the reader's foveal mark; scale from the reader's fovea-to-disc distance
-   taken as fovea_disc_um (4,500 um), else the pack's per-image estimate (case.etdrs.um_per_px). Radii 500 / 1,500 /
+   taken as fovea_disc_um (4,700 um), else the pack's per-image estimate (case.etdrs.um_per_px). Radii 500 / 1,500 /
    3,000 um (central subfield 1 mm, inner ring 1-3 mm, outer ring 3-6 mm diameter); 1 DD = 1,500 um. Superior is up;
    nasal is the side of the disc mark. */
-const ETD = () => Object.assign({ fovea_disc_um: 4500, central_um: 500, inner_um: 1500, outer_um: 3000, dd_um: 1500 }, PACK.schema.etdrs || {});
+const ETD = () => Object.assign({ fovea_disc_um: 4700, central_um: 500, inner_um: 1500, outer_um: 3000, dd_um: 1500 }, PACK.schema.etdrs || {});
 function gridGeom(caseId) {
   const cs = S && S.cases[caseId]; if (!cs) return null;
   const a = cs.pre.answers, f = a.pre_fovea, d = a.pre_disc, c = caseById(caseId);
@@ -1177,7 +1199,7 @@ function showStart() {
   card.append(
     el("h1", { text: PACK.title || "RetiSeg clinical review" }),
     el("p", { class: "lead", text: `${nCases} photographs with ${nReg} marked regions${nPrac ? `, after ${nPrac} practice image${nPrac > 1 ? "s" : ""}` : ""}. About one minute per region; take breaks whenever you like, everything is saved as you go.` }),
-    el("p", { text: "For each image you first grade the photograph, then judge each marked region before and after its outlines are revealed, then sum up the image." }),
+    el("p", { text: "For each image you first grade the photograph, then say what is in each marked region (step A, no outlines), then reveal the outlines and judge each region (step B), then sum up the image." }),
     el("div", { class: "row" }, el("label", { for: "readerInput", text: "Reader code" }), input, startBtn),
     status,
     el("p", { text: storageOK ? "Answers are stored in this browser on this computer until you export them." : "This browser blocks local storage: export your results before closing the page." }));

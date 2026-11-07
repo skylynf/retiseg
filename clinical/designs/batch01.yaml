@@ -1,33 +1,43 @@
-# Formal batch 1 (docs/clinical/32; protocol docs/clinical/29 v2.0). PROPOSED 2026-11-03, after the trial read by
-# Dr. Peranut Chotcomwongse on 2026-11-02 (demo pack, demo_idrid.yaml): of 18 trial regions none lay in the central
-# subfield and only one within 1 DD of the fovea, and almost every answer was "clinically insignificant". The formal
-# batch therefore oversamples, with design weights, (1) hard exudates near the fovea, where an error can change the
-# DME call, and (2) suspected IRMA / new vessels, which decide severe NPDR and PDR, while still drawing one ordinary
-# discrepancy and one agreement per image so the overall shares stay estimable and step A stays blind.
+# Formal batch 1 (docs/clinical/32, 33; protocol docs/clinical/29 v2.1). PROPOSED 2026-11-03, revised 2026-11-06,
+# after the trial read by Dr. Peranut Chotcomwongse on 2026-11-02 (demo pack, demo_idrid.yaml): of 18 trial regions
+# none lay in the central subfield and only one within 1 DD of the fovea, and almost every answer was "clinically
+# insignificant". The formal batch therefore oversamples, with design weights, (1) hard exudates near the fovea, where
+# an error can move the closest exudate across an ETDRS band, and (2) suspected IRMA / new vessels, which decide
+# severe NPDR and PDR, while still drawing one ordinary discrepancy and one agreement per image so the overall shares
+# stay estimable.
+#
+# 100 images read in two parts (docs/clinical/33 section 4): part 1, 20 images, now; part 2, the other 80, after
+# part 1 is back. The split is proportional within each image stratum, so part 1 is a random subsample of the batch.
+# reading_order: blind_first (reader tool 1.1.0): the reader answers step A for every region of an image before any
+# outline of that image is shown; the regions of an image are therefore drawn once, without the crop-window
+# rejection of the trial designs, and every inclusion probability is exact (docs/clinical/33 section 1).
 #
 # Freeze rule: Luming commits this file (and the sha256 of every landmarks.json it reads, written into meta.json by
-# mine_discrepancies.py) BEFORE sample_review.py is run; after that any change makes batch02.yaml.
+# mine_discrepancies.py) BEFORE sample_review.py draws; after that any change makes batch02.yaml. Before freezing,
+# `sample_review.py --dry-run` prints the population and eligible images of every stratum without drawing; if a
+# stratum has fewer eligible images than asked, move the difference to ddr_rest so the total stays 100.
 # If the MESSIDOR terms do not allow the readers to see MAPLES-DR images (docs/clinical/28 section 3), delete the
 # three maples_* strata and the MAPLES-DR set before freezing, and raise ddr_pdr_severe and ddr_macular_hex to 25.
 #
 # Model under review: RetiSeg-Ref, release thresholds; consensus: the 18 registered DDR-trained models, seed 0.
 # Every set is mined with --landmarks (locate_landmarks.py, QC page corrected; docs/ops/17 item 72):
 #   etdrs_zone of a region = zone of its pixel closest to the estimated fovea: C <= 500 um (the central 1 mm of the
-#   ETDRS grid), inner 500-1,500 um (1 DD = 1,500 um), outer 1,500-3,000 um, outside; um_per_px = 4,500 um / the
+#   ETDRS grid), inner 500-1,500 um (1 DD = 1,500 um), outer 1,500-3,000 um, outside; um_per_px = 4,700 um / the
 #   estimated fovea-to-disc distance. dist_disc_um: closest pixel to the estimated disc center.
 #   elongation: sqrt of the ratio of the region's second moments (vessel-like >= 3).
-# Expected size: 104 images, about 3-4 regions each, about 330 regions. Trial timing (docs/clinical/32): median 48 s per
+# Expected size: 100 images, about 3-4 regions each, about 330 regions. Trial timing (docs/clinical/32): median 48 s per
 # region and 1-4 min per image for grading and the whole-image step after the first image, so about 4-6 min per
-# image and 7-10 hours per reader, in sittings of 20-25 images. Each reader's image order is random, so a reader who
-# stops early leaves a random subsample: the ratio estimates stay valid, only wider.
+# image: part 1 about 1.5-2 hours, part 2 about 6-8 hours per reader.
 name: batch01
 seed: 20261104
+reading_order: blind_first
+parts: [20, 80]
 sets:
-  - {set: DDR,       candidates: runs/CLINREV/mine/RetiSeg-Ref/DDR,       reference_grade_scale: "ICDR 0-4 (DDR release)"}
+  - {set: DDR,       candidates: runs/CLINREV/mine/RetiSeg-Ref/DDR,       reference_grade_scale: ICDR}   # shown as an ICDR name only
   - {set: IDRiD,     candidates: runs/CLINREV/mine/RetiSeg-Ref/IDRiD,     reference_grade_scale: null}
   - {set: TJDR_std,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_std,  reference_grade_scale: null}
   - {set: TJDR_uwf,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_uwf,  reference_grade_scale: null}
-  - {set: MAPLES-DR, candidates: runs/CLINREV/mine/RetiSeg-Ref/MAPLES-DR, reference_grade_scale: "MESSIDOR retinopathy grade (MAPLES-DR)"}
+  - {set: MAPLES-DR, candidates: runs/CLINREV/mine/RetiSeg-Ref/MAPLES-DR, reference_grade_scale: null}   # MESSIDOR grade is not ICDR: not shown
 exclude:                      # read in the trial by the same reader (demo pack, 2026-11-02)
   - {set: IDRiD, image_ids: [IDRiD_55, IDRiD_63, IDRiD_67, IDRiD_72]}
 images:
@@ -37,15 +47,15 @@ images:
     - {name: ddr_pdr_severe,   set: DDR, grades: [3, 4], n: 20}          # IRMA / NV, 4-2-1 hemorrhages
     - {name: ddr_macular_hex,  set: DDR, n: 20, has_regions: &hexmac {where: {cls: EX, kind: [FN, FP, extent], etdrs_zone: [C, inner]}, n: 1}}
     - {name: ddr_low,          set: DDR, grade_band: "0-1", n: 10}       # one lesion decides No DR / mild / moderate (20 in all)
-    - {name: ddr_rest,         set: DDR, n: 10}
+    - {name: ddr_rest,         set: DDR, n: 8}
     # IDRiD test (27 images; 4 excluded)
     - {name: idrid_macular_hex, set: IDRiD, n: 8, has_regions: *hexmac}
     - {name: idrid_rest,        set: IDRiD, n: 4}
     # TJDR standard field (55) and ultra-widefield (58)
     - {name: tjdr_std_macular_hex, set: TJDR_std, n: 8, has_regions: *hexmac}
-    - {name: tjdr_std_rest,        set: TJDR_std, n: 4}
+    - {name: tjdr_std_rest,        set: TJDR_std, n: 3}
     - {name: tjdr_uwf_macular_hex, set: TJDR_uwf, n: 5, has_regions: *hexmac}
-    - {name: tjdr_uwf_rest,        set: TJDR_uwf, n: 5}
+    - {name: tjdr_uwf_rest,        set: TJDR_uwf, n: 4}
     # MAPLES-DR test (60; only if the MESSIDOR terms allow): its labels include neovascularization (masks_ext/NV)
     - {name: maples_nv,          set: MAPLES-DR, n: 5, has_regions: {where: {ext_any: [NV]}, n: 1}}
     - {name: maples_macular_hex, set: MAPLES-DR, n: 3, has_regions: *hexmac}
@@ -65,12 +75,12 @@ stratified:                   # ordered: a region belongs to the FIRST stratum i
             any: [{elongation_ge: 3.0}, {dist_disc_um_le: 1500}]   # vessel-like, or on / near the disc (NVD)
     - {name: red_macula,  n: 1, where: {cls: [MA, HE], kind: [FN, FP, extent], etdrs_zone: [C, inner]}}
     - {name: other_discrepancy, n: 1, where: {kind: [FN, FP, extent]}}
-    - {name: agree,       n: 1, where: {kind: agree}}   # controls; the reader cannot tell them apart in step A
+    - {name: agree,       n: 1, where: {kind: agree}}   # controls; in step A the reader is not told which regions they are
 enriched: []                  # mechanisms come from the weighted sample; no purposive regions in this batch
 geometry:
   crop_min: 384
   crop_margin: 0.6
   marker_min_radius: 14
   marker_pad: 6
-  min_gap: 0                  # crop windows of one image never overlap (blinding of later regions)
+  min_gap: 0                  # used only without blind_first (trial designs)
 max_per_image: 6

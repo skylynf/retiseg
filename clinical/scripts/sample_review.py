@@ -1,6 +1,6 @@
 """Draw the images and regions a clinician will review, by a design file that is frozen before anyone reads.
 
-docs/clinical/28 section 5 and docs/clinical/32. Two stages and three arms:
+docs/clinical/28 section 5, docs/clinical/32 and docs/clinical/33. Two stages and three arms:
 
   stage 1  images: every image of a set belongs to the FIRST stratum of the design it matches (set; optionally
            grade_band, grades, `where` on the image row, e.g. {ex_px.dd1_ge: 1}, and `has_regions`, e.g.
@@ -11,11 +11,11 @@ docs/clinical/28 section 5 and docs/clinical/32. Two stages and three arms:
   stage 2  regions inside the chosen images
            stratified arm (formal batch, docs/clinical/32) -- `stratified.strata` is an ordered list of region
                strata; every cluster of an image belongs to the first stratum whose `where` it matches (clusters
-               matching none are outside the population and reported). In each image, n_h clusters are drawn at
-               random from stratum h (all of them when fewer). Design weight 1 / pi_image x N_ih / n_ih, with
-               N_ih the clusters of stratum h in image i and n_ih those actually drawn: Horvitz-Thompson totals over
-               all strata estimate the whole population of clusters, while small strata near the fovea are read far
-               more often than their share.
+               matching none are outside the population and reported). In each image, n_h clusters are drawn once,
+               as a simple random sample from stratum h (all of them when fewer), with no rejection or redraw.
+               Inclusion probability pi_within = n_ih / N_ih exactly, design weight 1 / (pi_image x pi_within):
+               Horvitz-Thompson totals over all strata estimate the whole population of clusters, while small
+               strata near the fovea are read far more often than their share. Needs reading_order: blind_first.
            representative arm -- per image, for each entry of `representative.per_image` (a kind, optionally a
                class): pick a class uniformly among the classes that have such clusters in the image (or the
                given class), then a cluster uniformly within it. pi_within = 1 / (#classes available) x
@@ -25,9 +25,14 @@ docs/clinical/28 section 5 and docs/clinical/32. Two stages and three arms:
                confident misses, class confusions, extent disagreements, model-consensus regions); drawn at
                random among the clusters of the chosen images that meet the condition; no design weight.
   `exclude` lists images that are left out of every stratum (e.g. those the same reader saw in the trial).
-  Crop windows of regions in one image never overlap, so revealing one region's outlines does not show the
-  reader the answer of another (docs/clinical/28 section 6). A draw that would overlap is redrawn; the number
-  of redraws is recorded, and weights of an image with redraws are flagged as approximate.
+  reading_order: blind_first (reader tool 1.1.0 and later): the reader answers step A for every region of an image
+  before any outline of that image is shown, so crop windows may overlap and nothing is rejected. Without it (the
+  trial designs, kept reproducible), crop windows of one image never overlap and a draw that would overlap is
+  redrawn; that rejection changes the inclusion probabilities (docs/clinical/33 section 1), so the stratified arm
+  refuses to run without blind_first.
+  `parts: [20, 80]` splits the drawn images into two reading parts, proportionally within each image stratum
+  (largest remainder, random tie-break; random images within the stratum). A part is then a random subsample of the
+  batch; analyze_reviews.py reweights by what each reader actually completed in each image stratum.
 
 Output: selection.json (the key: everything the reader must not see -- source, image id, class, kind, arm,
 weights) and selection.tsv. Case ids are anonymous (c01, c02, ...) in a random order.
@@ -150,11 +155,39 @@ def eligible(image_row, rule):
     return all(tot.get(k, 0) >= n for k, n in (rule or {}).items())
 
 
+def assign_parts(cases, parts, gen):
+    """Split the drawn images into two reading parts, proportionally within each image stratum.
+
+    Part 1 gets parts[0] images: floor(f x n_h) per stratum (f = parts[0] / all), the rest by largest remainder with a
+    random tie-break; inside a stratum the part-1 images are a simple random sample. Returns the allocation.
+    """
+    if len(parts) != 2 or not 0 < parts[0] < len(cases):
+        raise SystemExit(f"parts {parts}: two sizes, the first smaller than the {len(cases)} drawn images")
+    if sum(parts) != len(cases):
+        print(f"[sample] note: {len(cases)} images drawn, not {sum(parts)}; part 1 keeps {parts[0]}, part 2 gets {len(cases) - parts[0]}")
+    f = parts[0] / len(cases)
+    strata = sorted({c["stratum"] for c in cases})
+    n_h = {h: sum(1 for c in cases if c["stratum"] == h) for h in strata}
+    m_h = {h: int(np.floor(f * n_h[h])) for h in strata}
+    left = parts[0] - sum(m_h.values())
+    tie = {h: t for h, t in zip(strata, gen.permutation(len(strata)))}
+    for h in sorted(strata, key=lambda h: (-(f * n_h[h] - m_h[h]), tie[h]))[:left]:
+        m_h[h] += 1
+    for h in strata:
+        mine = sorted((c for c in cases if c["stratum"] == h), key=lambda c: c["case_id"])
+        first = set(gen.choice(len(mine), size=m_h[h], replace=False).tolist()) if m_h[h] else set()
+        for k, c in enumerate(mine):
+            c["part"] = 1 if k in first else 2
+    return [{"stratum": h, "drawn": n_h[h], "part1": m_h[h], "part2": n_h[h] - m_h[h]} for h in strata]
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--design", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--root", default=".", help="directory the design's relative paths are read from (default: cwd)")
+    ap.add_argument("--dry-run", action="store_true", help="print population and eligible images per stratum and stop "
+                                                           "(no random draw; use it to set the quotas before freezing)")
     args = ap.parse_args(argv)
 
     design = yaml.safe_load(Path(args.design).read_text())
@@ -162,6 +195,9 @@ def main(argv=None):
     gen = common.rng(design["seed"])
     geom = design.get("geometry", {})
     gap = geom.get("min_gap", 0)
+    blind_first = design.get("reading_order") == "blind_first"
+    if design.get("stratified", {}).get("strata") and not blind_first:
+        raise SystemExit("the stratified arm needs reading_order: blind_first (exact inclusion probabilities; docs/clinical/33)")
 
     sets, cands, images = {}, {}, {}
     for entry in design["sets"]:
@@ -188,6 +224,17 @@ def main(argv=None):
             if image_matches(images[key], cands.get(key, []), stratum):
                 member[key] = si
                 break
+    if args.dry_run:
+        rows = []
+        for si, stratum in enumerate(strata):
+            population = [k for k in sorted(images) if member.get(k) == si]
+            elig = [k for k in population if eligible(images[k], stratum.get("eligibility", design["images"].get("eligibility")))]
+            rows.append({"stratum": stratum.get("name") or f"{stratum['set']}|{stratum.get('grade_band', 'all')}",
+                         "population": len(population), "eligible": len(elig), "asked": stratum["n"],
+                         "short": max(0, stratum["n"] - len(elig))})
+        print(json.dumps({"dry_run": rows, "asked": sum(r["asked"] for r in rows),
+                          "would_draw": sum(min(r["asked"], r["eligible"]) for r in rows)}, indent=1))
+        return
     chosen = []
     report = {"strata": [], "excluded_images": sorted("|".join(k) for k in excluded)}
     for si, stratum in enumerate(strata):
@@ -206,6 +253,8 @@ def main(argv=None):
     for rank, i in enumerate(order, 1):
         c = chosen[i]
         cases.append({**c, "case_id": f"c{rank:02d}"})
+    if design.get("parts"):
+        report["parts"] = assign_parts(cases, design["parts"], gen)
 
     # ---- stage 2: regions
     instances = []
@@ -218,7 +267,7 @@ def main(argv=None):
         def try_take(row, arm, stratum, pi_within=None, extra=None):
             nonlocal redraws
             box = crop_box(row, geom)
-            if any(overlaps(box, b, gap) for b in boxes):
+            if not blind_first and any(overlaps(box, b, gap) for b in boxes):
                 redraws += 1
                 return False
             taken.add((row["cls"], row["cluster"]))
@@ -242,16 +291,14 @@ def main(argv=None):
                 pool = by_h.get(h["name"], [])
                 want = min(h.get("n", 1), len(pool))
                 got = []
-                for j in gen.permutation(len(pool)):
-                    if len(got) >= want:
-                        break
-                    if try_take(pool[j], "stratified", h["name"]):
-                        got.append(instances[-1])
-                for inst in got:                    # weight after the draw: N_ih / n_ih actually drawn
-                    inst["pi_within"] = len(got) / len(pool)
-                    inst["weight"] = len(pool) / (case["pi_image"] * len(got))
+                for j in (sorted(gen.choice(len(pool), size=want, replace=False)) if want else []):   # one draw, no rejection
+                    try_take(pool[j], "stratified", h["name"])
+                    got.append(instances[-1])
+                for inst in got:
+                    inst["pi_within"] = want / len(pool)
+                    inst["weight"] = len(pool) / (case["pi_image"] * want)
                     inst["N_stratum_image"] = len(pool)
-                case["region_strata"][h["name"]] = {"N": len(pool), "asked": want, "drawn": len(got)}
+                case["region_strata"][h["name"]] = {"N": len(pool), "drawn": want}
 
         for entry in design.get("representative", {}).get("per_image", []):
             kind, want = entry["kind"], entry.get("n", 1)
@@ -292,7 +339,7 @@ def main(argv=None):
                 continue
             boxes = [x["crop"] for x in instances if x["case_id"] == case["case_id"]]
             box = crop_box(r, geom)
-            if any(overlaps(box, b, gap) for b in boxes):
+            if not blind_first and any(overlaps(box, b, gap) for b in boxes):
                 continue
             instances.append({"case_id": case["case_id"], "arm": "enriched", "stratum": entry["name"], "set": r["set"],
                               "image_id": r["image_id"], "cls": r["cls"], "cluster": r["cluster"], "kind": r["kind"],
@@ -318,14 +365,15 @@ def main(argv=None):
                    "pi_image": c["pi_image"], "grade": images[c["key"]].get("grade"), "redraws": c.get("redraws", 0),
                    "image_size": images[c["key"]]["image_size"], "fov": images[c["key"]]["fov"],
                    "landmark": images[c["key"]].get("landmark"), "ex_px": images[c["key"]].get("ex_px"),
-                   "region_strata": c.get("region_strata"), "outside_population": c.get("outside_population")}
+                   "region_strata": c.get("region_strata"), "outside_population": c.get("outside_population"),
+                   "part": c.get("part")}
                   for c in sorted(cases, key=lambda c: c["case_id"])],
         "instances": instances,
         "report": {**report, "n_cases": len(cases), "n_instances": len(instances),
                    "by_arm": {a: sum(1 for x in instances if x["arm"] == a) for a in ("stratified", "representative", "enriched")},
                    "by_region_stratum": {h["name"]: sum(1 for x in instances if x["arm"] == "stratified" and x["stratum"] == h["name"])
                                          for h in design.get("stratified", {}).get("strata", [])},
-                   "redraws": redraws_total, "enriched_shortfall": shortfall},
+                   "redraws": redraws_total, "enriched_shortfall": shortfall, "reading_order": design.get("reading_order", "interleaved")},
     }
     (out / "selection.json").write_text(json.dumps(selection, indent=1, ensure_ascii=False) + "\n")
     with open(out / "selection.tsv", "w") as f:

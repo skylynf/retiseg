@@ -13,7 +13,7 @@ the expected fovea-to-disc distance from the disc, within 35 degrees of the hori
 radius and fovea-to-disc distance scale with the camera's field angle (--field-deg; 45 for most fundus cameras, 50
 for IDRiD, about 133 for the ultra-widefield TJDR images). On the four IDRiD trial images the estimates were
 80-500 um from the reader's fovea and 185-310 um from the reader's disc marks.
-Scale: um_per_px = fovea_disc_um / |fovea - disc| (4,500 um, as in the reader tool).
+Scale: um_per_px = fovea_disc_um / |fovea - disc| (4,700 um, the adult mean of about 4.6-4.8 mm, as in the reader tool).
 
     python clinical/scripts/locate_landmarks.py estimate --set DDR --data dataset/prepared/DDR --field-deg 45 \
         --out runs/CLINREV/landmarks/DDR                       # landmarks.json + qc.html
@@ -38,7 +38,7 @@ from scipy import ndimage
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common  # noqa: E402
 
-FOVEA_DISC_UM = 4500.0
+FOVEA_DISC_UM = 4700.0
 WORK_DIAMETER = 512.0
 
 

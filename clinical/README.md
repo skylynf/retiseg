@@ -22,10 +22,11 @@ analyze_reviews.py      exports + selection.json (+ the pack) -> regions_long.cs
 schema/review_schema.json  the questionnaire (version inside; codes, options, display conditions); tool and analysis read it
 ```
 
-Questionnaire 3.0.0 (docs/clinical/32): no AI grade or referral question (the AI has no grade output); DME judged on
-the ETDRS grid (closest HEX: none / outer ring / inner ring, within 1 DD / central subfield, the central 1 mm);
-the dataset label and the AI are judged separately (so "both wrong" is two answers, never a missing option);
-optional IRMA / NV marks on the image.
+Questionnaire 3.1.0 (docs/clinical/32, 33): no AI grade or referral question (the AI has no grade output); the band
+of the closest hard exudate on the ETDRS grid (none / outer ring / inner ring, within 1 DD / central subfield, the
+central 1 mm), recorded as a location and never as a DME diagnosis; the reader's own management for each eye; the
+dataset label and the AI judged separately (so "both wrong" is two answers, never a missing option); ICDR thresholds
+and HEX-band changes as separate options; optional IRMA / NV marks on the image.
 
 ## Formal batch, on the server (docs/ops/17 section 4 item 72)
 
@@ -46,12 +47,19 @@ for SET in DDR IDRiD TJDR_std TJDR_uwf MAPLES-DR; do
       --model RetiSeg-Ref --grades auto --zoo-train DDR --landmarks runs/CLINREV/landmarks/$SET/landmarks.json \
       --out runs/CLINREV/mine/RetiSeg-Ref/$SET
 done
-# 2. the frozen sample (commit designs/batch01.yaml first; seed and quotas are in it)
+# 2. population and eligible images per stratum, no draw (set the quotas so the total is 100), then freeze:
+python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01 --dry-run
+#    commit designs/batch01.yaml; then the one draw of all 100 images, split into part 1 (20) and part 2 (80)
 python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01
-# 3. the reader folder and a zip for e-mail (images included: never into git or the handoff pack)
-python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01/selection.json \
-    --out runs/CLINREV/packs/batch01 --title "RetiSeg clinical review - batch 1" --zip
+# 3. the reader folder of part 1 and a zip for e-mail (images included: never into git or the handoff pack);
+#    part 2 later from the same selection.json, with --part 2
+python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01/selection.json --part 1 \
+    --out runs/CLINREV/packs/batch01_part1 --title "RetiSeg clinical review - batch 1, part 1" --zip
 ```
+Sampling (docs/clinical/33): with `reading_order: blind_first` every region stratum of an image is drawn once, with
+no rejection, so inclusion probabilities are exact; the reader tool (1.1.0) asks step A for every region of an
+image before one reveal, so overlapping crop windows cannot unblind anything. The trial designs keep the old
+non-overlap rejection only so they reproduce; the stratified arm refuses to run without `blind_first`.
 Leave MAPLES-DR out of all three loops (and edit batch01.yaml as its header says) unless the MESSIDOR terms allow the
 readers to see the images. The landmark estimates only decide the strata; the analysis uses each reader's own marks.
 
@@ -75,12 +83,16 @@ python clinical/scripts/build_pack.py --selection clinical/work/trial01w/selecti
 
 ```bash
 python clinical/scripts/analyze_reviews.py --selection runs/CLINREV/selection/batch01/selection.json \
-    --pack runs/CLINREV/packs/batch01 --reviews runs/CLINREV/reviews/batch01/*.json --out runs/CLINREV/analysis/batch01
+    --pack runs/CLINREV/packs/batch01_part1 [runs/CLINREV/packs/batch01_part2] \
+    --reviews runs/CLINREV/reviews/batch01/*.json --out runs/CLINREV/analysis/batch01
 ```
+Weights are the exact design weights scaled, per reader and image stratum, by drawn / finished images, so the same
+command serves part 1 alone, both parts, or a partial read.
 Exports of questionnaire 2 (the trial) are read too. `--pack` gives the DME implied by the label and by the AI and what
 lies under each IRMA / NV mark; without it the implied DME comes from the estimated fovea.
 
 ## Try it
 
 `designs/demo_idrid.yaml` built the pack of the trial (four IDRiD test images, M2MRF author checkpoint);
-`designs/demo_idrid_strat.yaml` runs the formal design on the same images (its header has the commands). Tests: `python -m pytest clinical/tests -q` (synthetic data; no dataset, weights or torch).
+`designs/demo_idrid_strat.yaml` runs the formal design on the same images, in two parts of two images (its
+header has the commands). Tests: `python -m pytest clinical/tests -q` (synthetic data; no dataset, weights or torch).

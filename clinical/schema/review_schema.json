@@ -1,11 +1,11 @@
 {
   "schema_id": "retiseg-clinical-review",
-  "version": "3.0.0",
-  "status": "formal batch (docs/clinical/28 section 8); frozen before the first reader opens the pack; wording-only changes afterwards (3.0.x)",
-  "changes": "3.0.0 (2026-11-03, docs/clinical/32): after the trial with Dr. Peranut Chotcomwongse. Removed the AI grade / referral questions (the AI gives no grade). DME is the closest hard exudate to the fovea on the ETDRS grid (central subfield 1 mm, inner ring 1-3 mm, outer ring 3-6 mm; within 1 DD = central + inner), with a grid overlay in the tool. Fovea and disc are marked before grading (the grid needs both). 'Who is right?' is split into one status question for the dataset label and one for the AI, so 'both wrong' and 'both right' follow from the two answers. The ICDR consequence separates HEX within 1 DD of the fovea from HEX in the central subfield. IRMA and NV locations can be marked. 2.0.0 (2026-10-29, docs/clinical/31): clinical labels MA / HG / HEX / CWS; fewer questions.",
+  "version": "3.1.0",
+  "status": "formal batch 1 (docs/clinical/28 section 5, docs/clinical/33); frozen before the first reader opens part 1; wording-only changes afterwards (3.1.x)",
+  "changes": "3.1.0 (2026-11-06, docs/clinical/33): before any reader used 3.0.0. The ETDRS question records only where the closest hard exudate lies (an objective location band); it no longer calls the band 'DME', because hard exudate within 1 DD or in the central subfield does not establish DME without retinal thickening (OCT or stereo). The consequence options separate ICDR grade thresholds from changes of the HEX band (codes hex_1dd, hex_c replace dme_1dd, dme_cs). Management is the reader's own judgement: a baseline question per image (pre_management) and the per-region question without a leading example. Fovea-to-disc distance taken as 4.7 mm (population mean about 4.6-4.8 mm). All step A answers of an image come before any reveal, and the grading step locks when the reader moves on to step A (tool 1.1.0). Threshold options complete: No DR <-> moderate (g02), moderate <-> severe by any 4-2-1 criterion (g23), NPDR <-> PDR (g34), for IRMA or new vessels outlined as hemorrhage. 3.0.0 (2026-11-03, docs/clinical/32): after the trial with Dr. Peranut Chotcomwongse. Removed the AI grade / referral questions (the AI gives no grade). DME is the closest hard exudate to the fovea on the ETDRS grid (central subfield 1 mm, inner ring 1-3 mm, outer ring 3-6 mm; within 1 DD = central + inner), with a grid overlay in the tool. Fovea and disc are marked before grading (the grid needs both). 'Who is right?' is split into one status question for the dataset label and one for the AI, so 'both wrong' and 'both right' follow from the two answers. The ICDR consequence separates HEX within 1 DD of the fovea from HEX in the central subfield. IRMA and NV locations can be marked. 2.0.0 (2026-10-29, docs/clinical/31): clinical labels MA / HG / HEX / CWS; fewer questions.",
   "notes": "Codes are what the analysis reads; labels and help are what the reader sees. Never re-use a code for a different meaning. Lesion codes map to the dataset classes: ma=MA, hg=HE, hex=EX, cws=SE.",
   "etdrs": {
-    "fovea_disc_um": 4500,
+    "fovea_disc_um": 4700,
     "central_um": 500,
     "inner_um": 1500,
     "outer_um": 3000,
@@ -14,7 +14,7 @@
   "steps": {
     "image_pre": {
       "title": "Grade the image",
-      "intro": "Mark the fovea and the disc first; the ETDRS grid then appears on the image (E to hide). No outlines are shown yet.",
+      "intro": "Mark the fovea and the disc first; the ETDRS grid then appears on the image (E to hide). No outlines or marked regions are shown yet. These answers lock when you move on to the regions, so check your marks first.",
       "overlays": "none",
       "questions": [
         {
@@ -51,7 +51,7 @@
           "required": true,
           "allow_not_visible": true,
           "label": "Optic disc center",
-          "help": "Sets the grid scale and the nasal side."
+          "help": "Sets the grid scale and the nasal side; until then the folder's own estimate of the scale is used."
         },
         {
           "id": "pre_icdr",
@@ -90,31 +90,31 @@
           ]
         },
         {
-          "id": "pre_dme",
+          "id": "pre_hex_zone",
           "type": "single",
           "required": true,
-          "label": "DME on the photograph: closest HEX to the fovea",
-          "help": "Photographs cannot measure thickness (OCT central subfield thickness); the closest hard exudate on the ETDRS grid is the surrogate. Within 1 DD = central subfield or inner ring.",
+          "label": "Closest hard exudate to the fovea (ETDRS grid)",
+          "help": "Where the nearest HEX lies on the grid. This is a location, not a DME diagnosis: a single non-stereo photograph cannot show retinal thickening. If the fovea is not visible, choose Cannot assess.",
           "options": [
             {
               "code": "none",
-              "label": "No HEX on the grid",
-              "help": "None within 3 mm"
+              "label": "None on the grid",
+              "help": "No HEX within 3 mm"
             },
             {
               "code": "outer",
               "label": "Outer ring only",
-              "help": "1.5-3 mm"
+              "help": "1.5-3 mm from the fovea"
             },
             {
               "code": "inner",
               "label": "Inner ring",
-              "help": "0.5-1.5 mm; within 1 DD"
+              "help": "0.5-1.5 mm (within 1 DD)"
             },
             {
               "code": "central",
               "label": "Central subfield",
-              "help": "Within 0.5 mm of the fovea (C)"
+              "help": "Within 0.5 mm (C)"
             },
             {
               "code": "cannot",
@@ -127,7 +127,7 @@
           "type": "multi",
           "required": false,
           "label": "Signs beyond the four lesion types (optional)",
-          "help": "Not labelled in the datasets, but they drive severe NPDR and PDR.",
+          "help": "IRMA, venous beading and NV decide severe NPDR and PDR; they are not labeled in most of these datasets.",
           "options": [
             {
               "code": "irma",
@@ -178,12 +178,41 @@
               "label": "NV"
             }
           ]
+        },
+        {
+          "id": "pre_management",
+          "type": "single",
+          "required": true,
+          "label": "Your management for this eye, from this photograph",
+          "help": "Your own clinical judgement, as you would act in practice.",
+          "options": [
+            {
+              "code": "routine",
+              "label": "Routine rescreening"
+            },
+            {
+              "code": "shorter",
+              "label": "Shorter follow-up or monitoring"
+            },
+            {
+              "code": "refer",
+              "label": "Refer (non-urgent)"
+            },
+            {
+              "code": "urgent",
+              "label": "Refer urgently"
+            },
+            {
+              "code": "cannot",
+              "label": "Cannot decide from this photograph"
+            }
+          ]
         }
       ]
     },
     "region_a": {
       "title": "What is in the circle?",
-      "intro": "Answer from the photograph alone. You are not told who marked the region or why.",
+      "intro": "The circle marks a place where the dataset label, the AI or both drew a lesion; you are not told which, or which lesion type. Answer from the photograph alone. Your answers for all regions of this image are locked when you reveal the outlines.",
       "overlays": "marker",
       "questions": [
         {
@@ -325,7 +354,7 @@
     },
     "region_b": {
       "title": "Judge both outlines",
-      "intro": "Dataset label: solid line. AI: dashed line. Shown inside this region's window only; your answer above is locked.",
+      "intro": "Dataset label: solid line. AI: dashed line. Shown inside this region's window only; your step A answer is locked.",
       "overlays": "crop",
       "questions": [
         {
@@ -433,8 +462,8 @@
           "id": "b_icdr",
           "type": "multi",
           "required": true,
-          "label": "If the wrong outline were used to grade this eye, what would change?",
-          "help": "Judged against your own grading of this image; the region's ETDRS location is shown above.",
+          "label": "If the wrong outline were used for grading, which threshold would it cross?",
+          "help": "Against your own grading of this image. If both outlines are wrong, tick what either error would change. The HEX bands describe location only.",
           "show_if": {
             "any": [
               {
@@ -455,8 +484,8 @@
             {
               "code": "none",
               "exclusive": true,
-              "label": "Nothing",
-              "help": "Grade and DME unchanged"
+              "label": "None",
+              "help": "ICDR grade and HEX band unchanged"
             },
             {
               "code": "g01",
@@ -464,24 +493,34 @@
               "help": "The only MA in the eye"
             },
             {
+              "code": "g02",
+              "label": "No DR ↔ moderate NPDR",
+              "help": "The only HG, HEX or CWS in an eye without MA"
+            },
+            {
               "code": "g12",
               "label": "Mild ↔ moderate NPDR",
-              "help": "The only HG, HEX or CWS in an MA-only eye; referral threshold"
-            },
-            {
-              "code": "dme_1dd",
-              "label": "DME: HEX within 1 DD",
-              "help": "Inner ring or closer; referable DME on photographs"
-            },
-            {
-              "code": "dme_cs",
-              "label": "DME: HEX in the central subfield",
-              "help": "Within 0.5 mm; closest to center-involving"
+              "help": "The only HG, HEX or CWS in an MA-only eye"
             },
             {
               "code": "g23",
               "label": "Moderate ↔ severe NPDR",
-              "help": "4-2-1 rule: >20 HG in each of 4 quadrants"
+              "help": "Any 4-2-1 criterion, e.g. >20 intraretinal HG in each of 4 quadrants, or IRMA outlined as HG"
+            },
+            {
+              "code": "g34",
+              "label": "NPDR ↔ PDR",
+              "help": "e.g. new vessels outlined as HG"
+            },
+            {
+              "code": "hex_1dd",
+              "label": "Closest HEX moves into or out of 1 DD",
+              "help": "Inner ring boundary, 1.5 mm"
+            },
+            {
+              "code": "hex_c",
+              "label": "Closest HEX moves into or out of the central subfield",
+              "help": "0.5 mm"
             }
           ]
         },
@@ -489,7 +528,7 @@
           "id": "b_relevance",
           "type": "single",
           "required": true,
-          "label": "Would it change what you do for this patient?",
+          "label": "If the wrong outline were used, would your management of this patient differ?",
           "show_if": {
             "any": [
               {
@@ -509,8 +548,7 @@
           "options": [
             {
               "code": "no",
-              "label": "No",
-              "help": "e.g. a small lesion far from the fovea"
+              "label": "No"
             },
             {
               "code": "followup",
@@ -524,7 +562,8 @@
               "code": "unsure",
               "label": "Unsure"
             }
-          ]
+          ],
+          "help": "Your own clinical judgement, compared with your management for this eye in the grading step."
         },
         {
           "id": "b_comment",
@@ -659,7 +698,7 @@
           "id": "d_dme",
           "type": "text",
           "required": false,
-          "label": "Did the ETDRS grid and the DME question work for you? What would you change?"
+          "label": "Did the ETDRS grid and the hard-exudate location question work for you? What would you change?"
         },
         {
           "id": "d_use",

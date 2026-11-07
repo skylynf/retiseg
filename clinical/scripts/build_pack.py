@@ -23,6 +23,8 @@ Outlines are closed polygons on pixel corners (clinical/scripts/contours.py) of
 
 --zip also writes <out>.zip (the folder as one attachment) and warns when it is larger than 20 MB, the safe size
 for e-mail; send a larger pack through a shared drive instead, or rebuild with --max-side.
+--part 1 (or 2) keeps only the images sample_review.py put in that reading part (design key `parts`); the pack id
+becomes <design>+part1, so the reader's saved answers of the two parts never mix (docs/clinical/33).
 """
 
 import argparse
@@ -140,9 +142,16 @@ def build_case(case, insts, sets, root, out, args, practice=False):
         # reader's own fovea click, never on the estimate, which the pack does not contain)
         entry["etdrs"] = {"um_per_px": round(lm["um_per_px"] / scale, 4)}
     scale_name = s.get("reference_grade_scale")
-    if scale_name and case.get("grade") is not None:
+    if scale_name == "ICDR":
+        # shown by its ICDR name only, so the grade does not name the dataset (docs/clinical/33 section 3)
+        if case.get("grade") in ICDR_NAMES:
+            entry["reference_grade"] = {"value": ICDR_NAMES[case["grade"]], "scale": "ICDR"}
+    elif scale_name and case.get("grade") is not None:
         entry["reference_grade"] = {"value": case["grade"], "scale": scale_name}
     return entry
+
+
+ICDR_NAMES = {0: "No DR", 1: "Mild NPDR", 2: "Moderate NPDR", 3: "Severe NPDR", 4: "PDR"}
 
 
 def main(argv=None):
@@ -157,6 +166,7 @@ def main(argv=None):
     ap.add_argument("--eps", type=float, default=0.7, help="outline simplification tolerance in pixels")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--zip", action="store_true", help="also write <out>.zip for sending by e-mail")
+    ap.add_argument("--part", type=int, help="only the images of this reading part (selection with design key `parts`)")
     args = ap.parse_args(argv)
 
     root = Path(args.root)
@@ -177,7 +187,14 @@ def main(argv=None):
             pid = f"p{i:02d}"
             insts = [dict(x, inst_id=x["inst_id"].replace(case["case_id"], pid, 1)) for x in psel["instances"] if x["case_id"] == case["case_id"]]
             jobs.append((dict(case, case_id=pid), insts, psel["sets"], True))
-    for case in sel["cases"]:
+    keep = sel["cases"]
+    if args.part is not None:
+        keep = [c for c in sel["cases"] if c.get("part") == args.part]
+        if not keep:
+            raise SystemExit(f"no image of part {args.part} in {args.selection}")
+    elif any(c.get("part") for c in sel["cases"]):
+        print("[pack] note: the selection has reading parts; building all of them (use --part 1 or --part 2)")
+    for case in keep:
         jobs.append((case, [x for x in sel["instances"] if x["case_id"] == case["case_id"]], sel["sets"], False))
     t0 = time.time()
     for n, (case, insts, sets, practice) in enumerate(jobs, 1):
@@ -186,8 +203,9 @@ def main(argv=None):
 
     schema = json.loads(SCHEMA.read_text())
     pack = {
-        "pack_id": sel["design"]["name"] + ("+practice" if args.practice else ""),
-        "title": args.title or f"RetiSeg clinical review - {sel['design']['name']}",
+        "pack_id": sel["design"]["name"] + (f"+part{args.part}" if args.part is not None else "") + ("+practice" if args.practice else ""),
+        "title": args.title or "RetiSeg clinical review" + (f", part {args.part}" if args.part is not None else ""),
+        "reading_order": "blind_first",     # tool 1.1.0: all step A of an image before its one reveal
         "created": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "schema": schema,
         "classes": CLASS_STYLE,
@@ -199,7 +217,7 @@ def main(argv=None):
     (out / "pack.js").write_text("window.RETISEG_PACK = " + text + ";\n")
     shutil.copyfile(TOOL, out / "index.html")
     n_regions = sum(len(c["regions"]) for c in cases)
-    minutes = int(round((1.5 * len(cases) + 0.8 * n_regions) / 5.0) * 5) or 5   # docs/clinical/28 section 6
+    minutes = int(round((2.5 * len(cases) + 0.8 * n_regions) / 5.0) * 5) or 5   # trial timing, docs/clinical/32 section 1
     (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], n_cases=len(cases), n_regions=n_regions, minutes=minutes))
     sums = []
     for p in sorted(out.rglob("*")):
@@ -228,15 +246,17 @@ How to open
   2. Double-click index.html. Chrome, Edge or Firefox are recommended; a laptop screen of 13 inches or more.
      If the page says it cannot find the pack, click "Open pack folder" and choose this folder.
   3. Enter your reader code (given to you by the study team) and follow the steps on the right.
+  Please work only through index.html: the data files in this folder also hold the outlines, which the page
+  shows only after your blinded answers.
 
 Saving
   Every answer is saved automatically in this browser on this computer. Use "Export results" at the end of
-  each session and send the downloaded .json file to the study team. In Chrome or Edge you can also link a
-  file once ("Save to file...") so the tool keeps writing to it.
+  each session and send the downloaded .json file to the study team. In Chrome or Edge you can also choose
+  "Save & import", then "Save continuously to a file", so the page keeps writing to that file.
   If you move to another computer, import your last exported file there before continuing.
 
-Please do not share this folder outside the study: some images are licensed for research use by the
-study team only. Delete it when the study team tells you the review is closed.
+Please do not share this folder outside the study: the images are shared with you for this study under the
+terms of their datasets. Delete it when the study team tells you the review is closed.
 """
 
 

@@ -40,7 +40,7 @@ benchmark's own directories is written.
 --landmarks runs/CLINREV/landmarks/<set>/landmarks.json (locate_landmarks.py) adds the ETDRS location of every
 region (docs/clinical/32): the distance of its closest pixel and of its centroid from the estimated fovea in um and of its closest pixel from
 the estimated disc center (dist_disc_um; NVD lies on or within 1 DD of the disc)
-(um_per_px = 4,500 um / fovea-to-disc distance), the zone of the closest pixel (C <= 500 um, inner <= 1,500,
+(um_per_px = 4,700 um / fovea-to-disc distance), the zone of the closest pixel (C <= 500 um, inner <= 1,500,
 outer <= 3,000, outside) and the subfield (C, S1/I1/N1/T1, S2/I2/N2/T2; nasal = the disc side); and per image the
 label-or-AI hard-exudate pixels in C, within 1 DD (1,500 um) and on the grid (3,000 um).
 Shape (for the IRMA / NV suspects): elongation = sqrt of the ratio of the region's second-moment eigenvalues and the
