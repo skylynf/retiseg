@@ -1,6 +1,6 @@
 # 论文结构与图表清单
 
-题名：Benchmarking deep learning methods for diabetic retinopathy lesion segmentation（2026-11-01 定稿版；原暂定题名 Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images）
+题名：Assessment of computational methods for diabetic retinopathy lesion segmentation（2026-11-01 第三轮改定；第二轮曾用 Assessment of deep learning methods …；此前定稿版为 Benchmarking deep learning methods for diabetic retinopathy lesion segmentation；原暂定题名 Assessment of computational methods for diabetic retinopathy lesion segmentation in fundus images）
 体例模板：Lu 等，Nature Methods 23:248–259（`literature/papers/00_template/`）。
 依据：`docs/paper/13`（总纲）、`docs/paper/14`（方法素材 M1–M14）、`docs/design/05`、`docs/design/12`、`bench/configs/*.yaml`。
 本文件只定“写什么、放在哪、数据从哪来”，不改任何协议。与 13 冲突时以 13 为准；实验范围以 `docs/paper/16`（2026-10-11 范围精简）为准，下表的面板已按 16 第四节改过。

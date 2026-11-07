@@ -1,12 +1,14 @@
 进度
 只记已经发生的事和数字。2026-10-12 检查点：2026-10-03 到 10-12 的逐条记录移到 archive/00_进度_20261003-20261012.txt（原文未删一字），本文件保留当前状态、决定日志和最近的服务器记录；新记录继续追加在文末，超过约 150 行时再归档一次。论文要用的数字以 14 为准，实验范围以 16 为准，服务器任务以 17 为准。
 
-一、当前状态（2026-11-01，本机；仓库 origin/main cd290fb + 10-30 与 11-01 两次写回）
+一、当前状态（2026-11-03，本机；仓库 origin/main cd290fb + 10-30、11-01、11-03 写回）
 论文（11-01 定稿版，14 备注 78）：题名 Benchmarking deep learning methods for diabetic retinopathy lesion segmentation；作者 Luming Yang（通讯）、Siqing Li、Yuanchen Liu、Chang Yu、Haoxian Liu（HKUST）、Zhenyu Bu、Alper Yilmaz（其余 OSU）；预印本排版。摘要精简、口吻客观；引言首句脚注说明术语正与医生核对；正文去模型评价式措辞与过程披露，来源配方轨等与目标无关的内容删除；ED 图重编 1–4；补充说明 1 备注清洗；计算资源 8×A100 40 GB、约 2,000 GPU 时。main.pdf 32 页、supplement.pdf 34 页，numbers.tex 886 键、0 占位。
 实验：服务器侧全部完成（10-30 包：因素格重评、RetiSeg-Ref 八个集合与 runs/release/retiseg_ref、算力审计、mAUPR 区间）。不做：第 59 条探针、第 49 条 FCT、N6、N7。
-服务器：只剩临床合作第 72 条（17 第三节）：先重打两格源内图，再 ensemble.py reference --regenerate-maps 留图，打包。启动器与队列不再使用。
+服务器：只剩临床合作第 72 条（17 第三节）：（a）先重打两格源内图，再 ensemble.py reference --regenerate-maps 留图，打包；（b）11-03 改为正式批次（定位 → QC → 挖掘 → 抽样 → 打包），等本机通知。启动器与队列不再使用。
+临床合作（docs/clinical/32）：11-02 Dr. Peranut Chotcomwongse 读完试判（演示包，IDRiD 4 张图、18 个区域；有效 37 分钟，区域中位 48 秒）；18 个区域 0 个在中心子区、1 个在 1 DD 内，16 个错误全部"不改变 ICDR、不改变处理"。11-03 改为问卷 3.0.0、工具 1.0.0（ETDRS 网格、DME 按网格、标签与 AI 分开判、IRMA / NV 标点、删 AI 分级题），正式批次 batch01 按 ETDRS 位置分层抽样（提议稿，104 张、约 330 个区域）。等：L1 许可、读者人数与规模（28 D3、D4、D6、D8）、batch01 冻结。
 文档（11-01 整理）：过时规划文件移到 docs/archive/（03、05、09、11、18、19、10-09 预览 PDF）；00 第三节 10-12 到 10-27 的记录移到 ops/archive/00_进度_20261012-20261027.txt；17 改为第三版（规则、回传格式、当前待办），第二版全文在 ops/archive/。索引在 docs/README.txt 文末。
-用户待办：提交推送本机写回（含 docs/clinical/、clinical/、bench/tests/test_clinical_review.py）；DDR / TJDR 派生模型许可与 DiaRetDB1 概率图公开的核对；10-31 后作者联系数；refs.bib 账本条目作者补全；投稿前通读并核对作者单位；临床合作（docs/clinical/28）。
+用户待办：提交推送本机写回（含 docs/clinical/、clinical/、bench/tests/test_clinical_review.py；11-03 新文件 docs/clinical/32、clinical/scripts/locate_landmarks.py、clinical/designs/demo_idrid_strat.yaml 要 git add）；回复 Peranut（32 第七节要点）；DDR / TJDR 派生模型许可与 DiaRetDB1 概率图公开的核对；10-31 后作者联系数；refs.bib 账本条目作者补全；投稿前通读并核对作者单位；临床合作（docs/clinical/28）。
+本机 11-03 写回（临床合作，按试判结果）：新增 docs/clinical/32；28 修订（第五至十四节）、29 与 30 升 v2.0、clinical 与 docs 两个 README；问卷 3.0.0；工具 1.0.0（ETDRS 网格、两轮廓题、IRMA / NV 标点、B 步位置行、结束问卷题号修复）；新增 clinical/scripts/locate_landmarks.py；mine_discrepancies.py 加 --landmarks、--ext-dir（ETDRS 区带、视盘距离、伸长度、额外类重叠、图级黄斑 HEX）；sample_review.py 加分层臂、图层条件与 exclude；build_pack.py 加逐图尺度；analyze_reviews.py 3.0（也读问卷 2 的导出）；designs：batch01.yaml 改为分层提议稿、demo_idrid_strat.yaml 新增、trial01 两份标作废；17 第 72 条（b）改为正式批次；clinical/tests 11 项通过。
 本机 11-01 写回：论文定稿版（main.tex、五个 sections、supplement.tex、make_supplement / make_tables / fig1 / fig3 的改动、全部表与图重做）；14 备注 78；17 第三版；00 本块与归档；CHECKPOINT；docs/README.txt；27 第七节。
 本机 10-30 写回：10-30 包进表；上面“论文”“代码”两行；17 第四节进度与第 65、68–71 条收口、第 72（a）修订命令；21 第 97、98 条收口；14 备注 58 结果行、72 / 73 收口、74–77；27 第六节更新；26 的 10-30 一行。
 本机 10-29 写回（临床合作，按与 Dr. Peranut Chotcomwongse 的讨论）：新增 docs/clinical/31 纪要与落实；28、29、30 改写（试判 15 张 → 正式批次约 100 张；只判四类；标签 MA / HG / HEX / CWS；ICDR 门槛 + 是否改变处理两题取代 0–3 影响量表；到黄斑距离的分析）；问卷改名 clinical/schema/review_schema.json（2.0.0-trial；v1 删除）；工具答题区浅色交替卡片与题号、Panel 深浅切换、互斥选项、Not visible、记录显示尺寸；analyze_reviews.py 按新代码并加距离三档与 ICDR × 处理交叉；designs：trial01.yaml、trial01_workstation.yaml、batch01.yaml（原 pilot01.yaml）；build_pack.py 加 --zip 与临床标签；mine_discrepancies.py 加 --grades auto；17 第 72 条改为试判；clinical/tests 7 项通过。
@@ -29,6 +31,8 @@
 2026-10-11  B-std 种子 0 全部出数（HRNet 两库第一）；HACDR 打分修复（torch 1.10 的 weights_only）。用户决定：种子 1、2 暂缓。启动 E1r bs4（A100）、U-Net 整批 Dice 诊断、nnU-Net 两种配置、B1 补位。泄漏审计 IDRiD/DDR：无近重复。E5 设计写成 15。范围精简写成 16（剩余约 5500 A100 时压到约 810）；L1 原文数字抽取完成。
 2026-10-12  nnU-Net 默认 0.671 / 0.432，ResEnc-M 0.631 / 0.428。U-Net 整批 Dice 诊断验证 0.569 / 0.544；用户决定主表 U-Net 采用整批 Dice（bs_frozen.yaml recipe_revisions，原运行改名 *_registered）；E5 五项待定按建议（TF32、natureCFP、按代码、塌缩同 U-Net 规则、编码器对照后按 16 缩减）；以 FGADR 等训练时评测去重（leak_exclusions.json）。独立测试接线（e3a_frozen.yaml、bench/e3a.py）；全库泄漏审计（FGADR _3 批来自 EyePACS，与 Retinal-Lesions 90 张同图；FGADR 内部同眼重复；TJDR_uwf 跨划分重复 2 对）；E2c 接线；E5 训练档五个包装器接线。服务器 09:08：停 B1；E1r bs4 打分 61.19 / 0.549；U-Net 两库种子 0 重跑；E2c 只排 DDR。本机：快照接入论文、R3/R4 改写、17 任务单。
 2026-10-14  Luming 确认 E5 推理档的全部登记（D1–D9、评审修复 6/7/16、预算规则 a）、表 6/图 5 的呈现方式、加 CI、协议锁文件（E5 首个测试指标后）、MAPLES-DR 官方测试 60 张；细节在第三节前的待办清单下。
+2026-11-03  Luming：试判后（docs/clinical/32）——分级对照不做（AI 没有分级输出，问卷删 AI 分级与转诊题）；DME 与 ETDRS 网格该加就加（Peranut 批注：照片上用 1 DD 内的 HEX、工具里画出区域，中心区 C 为最中心 1 mm）；核对"both wrong"（问卷 2 有此选项、工具显示 6 个，医生未选；问卷 3 改为标签与 AI 分开判）；正式研究分层抽样，多抽黄斑附近的 HEX 与可疑 IRMA / NV，否则结果几乎都是临床无关。本机按此改问卷、工具、流水线与文档；batch01 为提议稿，待 L1 与 D3、D4、D6、D8 后冻结。
+2026-11-02  Dr. Peranut Chotcomwongse 读完试判（演示包 demo_idrid，4 张图、18 个区域），寄回导出 JSON、批注文档与邮件：平台好用，每张图约 3–4 分钟；多数裁定病例轻微、临床无关，但评估这些边缘病例有价值。
 2026-11-01  本机：论文定稿版——题名、作者、预印本排版；摘要精简、正文去模型评价与过程披露（来源配方轨、砍掉的重训、登记日期、因素格更正披露等与目标无关的内容删除）；ED 图重编；术语脚注；计算资源写明。文档整理：过时文件进 docs/archive/，00 旧记录与 17 已完成项归档。依据：用户 11-01 的 12 条要求；对照模板 Lu 2026。
 2026-10-30  本机：因素格重评后的数进论文，R4 案例段、R6、R7、讨论 Q3 全部改读键（14 备注 74）；算力审计给的是推理峰值显存，ED10b / 补充表 8 的列按此改名（备注 75）；RetiSeg-Ref 八个集合进 R4 末段与讨论、摘要、引言（备注 58）；N6、N7 不做（备注 77）；讨论 Q2 的 HRDecoder 一句改为与案例研究一致（备注 76）。依据：10-30 包；全文对照。
 2026-10-29  Luming 与 Dr. Peranut Chotcomwongse 讨论（docs/clinical/31）：先试判 10–20 张再定正式批次；论文只判四类病灶，IRMA、NV 进讨论与未来方向；界面与协议用 MA / HG / HEX / CWS；临床后果对应 ICDR 与 4-2-1；题目减少、用临床说法；答题区用灰白交替的底色。本机按此修订 28–30、问卷、工具与流水线。

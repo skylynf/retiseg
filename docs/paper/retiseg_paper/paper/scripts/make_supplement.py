@@ -100,7 +100,7 @@ def s1_literature():
                                 esc(short(r.aupr_impl, 14)), esc(short(r.per_image_or_pooled, 10)), esc(short(r.baseline_rerun_class, 12)), (n.group(1) if n else esc(short(r.n_compared, 6)))]) + " \\\\")
     longtable("supp_s1_literature",
               "\\textbf{Literature audit: the experimental setup stated by each method paper in the ledger.} Split, input resolution, AUPR implementation and the provenance of baseline numbers as extracted from the paper's text and tables (literature/meta/paper\\_audit.tsv in the repository holds the verbatim evidence for every cell).",
-              "stab:literature", "p{34mm} c p{20mm} p{24mm} p{14mm} p{14mm} p{52mm} p{18mm} p{14mm} p{16mm} c",
+              "stab:literature", "p{34mm} c p{20mm} p{24mm} p{14mm} p{14mm} p{48mm} p{18mm} p{14mm} p{16mm} c",
               ["Paper", "Year", "Venue", "Datasets", "IDRiD split", "DDR split", "Input resolution", "AUPR impl.", "Pooling", "Baselines", "$n$"],
               rows, notes="``not stated'' means the paper gives no information. Baselines: how the comparison numbers were obtained (rerun, copied, mixed, not stated). $n$, number of compared methods.", landscape=True)
 
@@ -249,7 +249,7 @@ def s6_registered():
     rows = []
     for model, label in (("U-Net", "U-Net"), ("SAM2-UNet", "SAM2-UNet"), ("MedSAM (full FT)", "MedSAM")):
         for train in D.TRAIN_MAIN:
-            reg = t[(t.experiment.isin(["E2", "E5"])) & (t.variant == "registered") & (t.model == model) & (t.train_set == train) & (t.test_set == train) & (t.metric == "aupr")]
+            reg = t[(t.experiment.isin(["E2", "E5"])) & (t.variant == "registered") & (t.model == model) & (t.train_set == train) & (t.test_set == train) & (t.metric == "aupr") & (t.seed == 0)]
             rev = t[(t.experiment.isin(["E2", "E5"])) & (t.variant.isin(D.MAIN_VARIANTS)) & (t.model == model) & (t.train_set == train) & (t.test_set == train) & (t.metric == "aupr") & (t.seed == 0)]
             for name, sub in (("registered", reg), ("revised (main table)", rev)):
                 if sub.empty:
@@ -493,7 +493,7 @@ def s15_leaks():
     top = sorted(ev, key=lambda e: -e.get("vessel_ncc", 0))[:12]
     ev_text = "; ".join(f"{esc(e['source'])} {esc(e['seen'])} $\\leftrightarrow$ {esc(e['test_set'])} {esc(e['test_id'])} ({e['vessel_ncc']:.2f})" for e in top)
     longtable("supp_s15_leaks",
-              "\\textbf{Near-duplicate audit between training sources and test sets, and the images excluded.} Vessel signatures (green-channel black top-hat at 192 $\\times$ 192 inside the field of view) are correlated between every train or validation image of a source and every test image; a test image at or above the pair's threshold is left out of that source's independent tests (default 0.5; 0.33 within FGADR, whose images are near-duplicates of each other at scale).",
+              "\\textbf{Near-duplicate audit between training sources and test sets, and the images excluded.} Vessel signatures (green channel of the field-of-view box at 192 $\\times$ 192, 5 $\\times$ 5 black top-hat, normalised cross-correlation inside the field of view, the larger of the direct and the mirrored comparison) are correlated between every train or validation image of a source and every test image; a test image at or above the pair's threshold is left out of that source's independent tests (default 0.5; 0.33 within FGADR, whose images are near-duplicates of each other at scale). The pretraining corpora of the foundation models are not searched image by image; their overlap with the test sets is determined from the sources (Methods).",
               "stab:leaks", "l l r", ["Training source", "Test set", "Excluded images"], rows,
               notes=f"Audit: {esc(d['audit'].get('command', ''))}, {d['audit'].get('n_images', '')} images. Strongest pairs (vessel NCC): {ev_text}. The full lists are bench/data/splits/leak\\_exclusions.json.")
 
@@ -595,19 +595,19 @@ EXPERIMENT_NAMES = [
     ("L2", "Reproducibility funnel", "Registered fundus-specific methods by code, training code, weights and reproduced number", "Fig.~2a"),
     ("E1", "Released checkpoints (author weights)", "Released checkpoints scored with the paper's number, the authors' function and this protocol, on all test sets", "Fig.~3a,b,d; Table~3a; Supplementary Table~16"),
     ("E1r", "Author-recipe reruns", "The authors' own pipelines retrained from scratch on IDRiD (M2MRF, HRDecoder)", "Fig.~3c; Table~3b"),
-    ("E2 (B-std)", "Unified retraining; the unified protocol", "Every tier-1 model with complete training code retrained on IDRiD and on DDR under the shared protocol", "Fig.~4; Tables~4 and 5"),
+    ("E2 (B-std)", "Unified retraining; the unified protocol", "Every tier-1 model with complete training code retrained on IDRiD and on DDR under the shared protocol", "Fig.~4; Tables~4 and 6"),
     ("E2c", "Learning-rate sweep", "HRNet-W48 and M2MRF on DDR with the recipe learning rate $\\times$1/3 and $\\times$3, judged on validation only", "Extended Data Fig.~1"),
-    ("E3a", "Independent tests", "Every main-table checkpoint applied to the six test sets of sources never used for training", "Fig.~4b--e; Table~5; Extended Data Fig.~3"),
+    ("E3a", "Independent tests", "Every main-table checkpoint applied to the six test sets of sources never used for training", "Fig.~4b--e; Table~6; Extended Data Fig.~3"),
     ("E3b", "Training-source experiment", "Five representative models trained on the standard-field TJDR images and on FGADR", "Fig.~6b--d; Supplementary Table~7"),
     ("E4", "Annotation-granularity experiment", "U-Net and M2MRF on fine, mixed and coarse training labels, alone and combined", "Fig.~6e; Table~7; Supplementary Table~7"),
-    ("E5", "Foundation models under four kinds of use", "Zero-shot, oracle prompts, parameter-efficient fine-tuning, encoder + decoder; the encoder comparison", "Fig.~5; Table~6; Supplementary Tables~10 and 17"),
+    ("E5", "Foundation models under four kinds of use", "Zero-shot, oracle prompts, parameter-efficient fine-tuning, encoder + decoder; the encoder comparison", "Fig.~5; Table~5; Supplementary Tables~10 and 17"),
     ("E7", "Input-resolution experiment", "M2MRF and RETFound + UPerNet at a 512- or 1,440-pixel canvas and on native-resolution patches", "Fig.~7d; Table~7"),
     ("E8", "Training-amount experiment", "U-Net and M2MRF on 10\\%, 50\\% and 100\\% of DDR and on the merged fine-grained sources", "Fig.~7e; Table~7"),
     ("E9", "Loss experiment", "U-Net on DDR with four losses, architecture fixed", "Extended Data Fig.~2; Table~7"),
     ("E10", "Computational cost", "Parameters, trainable parameters and GPU hours of every run; the inference audit", "Extended Data Fig.~4; Supplementary Table~8"),
-    ("ENS", "Ensembles", "Pixelwise means of the probability maps in the registered compositions", "Table~5; Supplementary Table~11"),
+    ("ENS", "Ensembles", "Pixelwise means of the probability maps in the registered compositions", "Table~6; Supplementary Table~11"),
     ("REF", "Label revision (Refined IDRiD)", "IDRiD-trained checkpoints re-scored against the refined and the official labels", "Supplementary Table~9"),
-    ("HUMAN", "Human reference", "Each DiaRetDB1 expert against the consensus of the other three", "Table~5; Supplementary Table~13"),
+    ("HUMAN", "Human reference", "Each DiaRetDB1 expert against the consensus of the other three", "Table~6; Supplementary Table~13"),
     ("CLIN", "Results by DR grade", "Every score recomputed within grades 0--1 and 2--4", "Supplementary Table~12"),
     ("N8", "Reference model (RetiSeg-Ref)", "Two models trained on the merged fine-grained sources and averaged", "Methods; Supplementary Table~11"),
 ]

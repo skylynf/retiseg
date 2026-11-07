@@ -1,7 +1,7 @@
 
 {\scriptsize\setlength{\tabcolsep}{3.2pt}\setlength{\LTcapwidth}{\textwidth}\renewcommand{\arraystretch}{1.08}
 \begin{longtable}{l l r}
-\caption{\textbf{Near-duplicate audit between training sources and test sets, and the images excluded.} Vessel signatures (green-channel black top-hat at 192 $\times$ 192 inside the field of view) are correlated between every train or validation image of a source and every test image; a test image at or above the pair's threshold is left out of that source's independent tests (default 0.5; 0.33 within FGADR, whose images are near-duplicates of each other at scale).}\label{stab:leaks}\\
+\caption{\textbf{Near-duplicate audit between training sources and test sets, and the images excluded.} Vessel signatures (green channel of the field-of-view box at 192 $\times$ 192, 5 $\times$ 5 black top-hat, normalised cross-correlation inside the field of view, the larger of the direct and the mirrored comparison) are correlated between every train or validation image of a source and every test image; a test image at or above the pair's threshold is left out of that source's independent tests (default 0.5; 0.33 within FGADR, whose images are near-duplicates of each other at scale). The pretraining corpora of the foundation models are not searched image by image; their overlap with the test sets is determined from the sources (Methods).}\label{stab:leaks}\\
 \toprule
 Training source & Test set & Excluded images \\
 \midrule

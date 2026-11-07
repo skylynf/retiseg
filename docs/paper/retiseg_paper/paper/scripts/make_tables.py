@@ -252,7 +252,7 @@ def table_models():
         "tab_models",
         rf"""\begin{{table*}}[t]
 \centering\tablefont
-\caption{{\textbf{{Models entering the retraining tracks.}} {len(all_reg)} variants are registered: {n1} in tier~1 (main tables), {n2} in tier~2 (later rounds) and {n3} in tier~3 (paper audit only; Supplementary Note~1). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, reported in a separate column.}}
+\caption{{\textbf{{Models entering the retraining tracks.}} {len(all_reg)} variants are registered: {n1} in tier~1 (main tables), {n2} in tier~2 (later rounds) and {n3} in tier~3 (paper audit only; Supplementary Note~1). Reproducibility level: R0, no code; R1, model definition only; R2, inference code and weights; R3, training code; R4, training code, weights, splits and environment. Tracks: A, author weights; B, unified retraining of the official code; C, re-implementation from the paper, marked $^{{\rm C}}$ in the tables.}}
 \label{{tab:models}}
 \begin{{threeparttable}}
 \begin{{tabular}}{{@{{}}l c l c c c l l@{{}}}}
@@ -265,7 +265,7 @@ def table_models():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item \famchip{{general}} general segmentation \quad \famchip{{auto}} self-configuring \quad \famchip{{fundus}} fundus-specific \quad \famchip{{foundation}} foundation model. Unified retraining, the shared protocol (Methods). PEFT, parameter-efficient fine-tuning. Status as of the code audit of 2--4 October 2026; author replies are due by 31 October 2026.
+\item \famchip{{general}} general segmentation \quad \famchip{{auto}} self-configuring \quad \famchip{{fundus}} fundus-specific \quad \famchip{{foundation}} foundation model. Unified retraining, the shared protocol (Methods). PEFT, parameter-efficient fine-tuning. Code status as of the audit of 2--4 October 2026.
 \end{{tablenotes}}
 \end{{threeparttable}}
 \end{{table*}}
@@ -525,6 +525,11 @@ def human_rows():
     return rows
 
 
+# RETFound's colour-fundus pretraining corpus contains the complete Kaggle EyePACS set, from which Retinal-Lesions and the
+# FGADR "_3" images come (Methods, test scenarios and leakage audit); its cells on these two sets are marked in Table 5.
+PRETRAIN_OVERLAP = {("RETFound + UPerNet", "FGADR"), ("RETFound + UPerNet", "Retinal-Lesions")}
+
+
 def table_independent():
     """Table 5. Simulated / measured is decided per cell (model, source, test set), so the rows measured so far read
     as results while the rest of the table is still placeholder (2026-10-15: nine supervised models on all eight sets);
@@ -567,7 +572,8 @@ def table_independent():
                 cells.append(num(m.loc[model, t], "{:.2f}", cell_sim(model, t, t), mk((t, t), i)))
                 for c in pix:
                     v = m.loc[model, c]
-                    cells.append(tint(v, 0.0, 0.7) + num(v, "{:.2f}", cell_sim(model, t, c), mk((t, c), i)))
+                    overlap = r"$^{\rm e}$" if (model, c) in PRETRAIN_OVERLAP else ""   # pretraining corpus contains these images
+                    cells.append(tint(v, 0.0, 0.7) + num(v, "{:.2f}", cell_sim(model, t, c), mk((t, c), i)) + overlap)
                 a = auc.loc[model, t] if model in auc.index else np.nan
                 cells.append(num(a, "{:.2f}", not auc_measured.get((model, t), False), mk((t, "auc"), i)))
                 d = m.loc[model, D.FINE_INDEPENDENT].mean() - m.loc[model, t]
@@ -599,7 +605,7 @@ def table_independent():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item Granularity of the test set: \tier{{fine}} fine \quad \tier{{mixed}} mixed \quad \tier{{coarse}} coarse \quad \tier{{region}} region consensus. Int., internal test (official test set of the training source). Std, standard field (35--50$^\circ$); UWF, ultra-widefield (133$^\circ$), predicted at native resolution with sliding windows; Maples, MAPLES-DR (official test split, 60 images). Retinal-Lesions excludes its grey-level 127 regions. Best and second-best are marked among the measured rows of a column. $^{{\rm p}}$, ensemble computed without a registered member whose maps could not be produced on that set (named in the run's record).
+\item Granularity of the test set: \tier{{fine}} fine \quad \tier{{mixed}} mixed \quad \tier{{coarse}} coarse \quad \tier{{region}} region consensus. Int., internal test (official test set of the training source). Std, standard field (35--50$^\circ$); UWF, ultra-widefield (133$^\circ$), predicted at native resolution with sliding windows; Maples, MAPLES-DR (official test split, 60 images). Retinal-Lesions excludes its grey-level 127 regions. Best and second-best are marked among the measured rows of a column. $^{{\rm e}}$, not fully independent: RETFound's colour-fundus encoder was pretrained (without labels) on a corpus that contains the Kaggle EyePACS images, from which Retinal-Lesions and part of FGADR are drawn (Methods; average rank without these two test sets in the text). $^{{\rm p}}$, ensemble computed without a registered member whose maps could not be produced on that set (named in the run's record).
 \phnote
 \end{{tablenotes}}
 \end{{threeparttable}}
@@ -853,7 +859,7 @@ def table_recipes():
 \bottomrule
 \end{{tabular}}
 \begin{{tablenotes}}[flushleft]\scriptsize
-\item Batch is the effective batch (gradient accumulation where one card cannot hold it). Steps is for IDRiD at 1,000 equivalent epochs; one equivalent epoch draws as many patch pixels as the training canvases contain, so steps = $\lceil\lceil$canvas pixels\,/\,patch pixels$\rceil$\,/\,batch$\rceil$ per epoch. DDR uses 400 equivalent epochs (for example 83,600 steps at batch 4 and 960-pixel patches; Supplementary Table~3 lists every run). $^{{\rm C}}$, re-implemented from the paper. Every run's recipe record, with its deviations from the source recipe, is in the repository.
+\item Batch is the effective batch (gradient accumulation where one card cannot hold it). Steps is for IDRiD at 1,000 equivalent epochs; one equivalent epoch draws as many patch pixels as the training canvases contain, so steps = $\lceil\lceil$canvas pixels\,/\,patch pixels$\rceil$\,/\,batch$\rceil$ per epoch. DDR uses 400 equivalent epochs (for example 83,600 steps at batch 4 and 960-pixel patches; Supplementary Table~3 lists every run). $^{{\rm C}}$, re-implemented from the paper. Every run's recipe record, with its deviations from the source recipe, is kept in the code repository (to be released).
 \item $^a$Per-image, per-class sigmoid Dice with smoothing 1 in the registered recipe; the main-table runs pool the Dice term over the batch (Methods). The other Dice losses use $10^{{-5}}$. $^b$IDRiD: class-weighted cross-entropy; DDR: the same plus the authors' NALoss with weight 0.2. $^c$nnU-Net plans patch and batch per dataset (IDRiD plans shown; DDR: default $1024\times1536$ at batch 2, ResEnc-M $512\times512$ at batch 12) and trains 1,000 epochs of 250 steps on both sources; its learning rate, weight decay and polynomial schedule are its defaults. $^d$The paper's loss and optimizer, written into the wrapper because the repository has no training loop. $^e$Local and contextual Dice plus binary cross-entropy of the two classification heads, as described in the paper. $^f$Registered per-image term; the main-table run pools it over the batch (Methods).
 \end{{tablenotes}}
 \end{{threeparttable}}

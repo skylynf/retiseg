@@ -1,6 +1,8 @@
 # Reader guide
 
-RetiSeg clinical review, trial. Version 1.0, 29 October 2026. About ten minutes to read; keep it open while you start.
+RetiSeg clinical review, formal batch. Version 2.0, 3 November 2026 (after the trial). About ten minutes to read; keep it open while you start.
+
+New in this version: an ETDRS grid on the photograph and DME judged on it; the dataset label and the AI are judged in two separate questions; IRMA and new vessels can be marked; the question on the AI's grade and referral is gone.
 
 ## 1. Opening the folder
 
@@ -23,6 +25,7 @@ RetiSeg clinical review, trial. Version 1.0, 29 October 2026. About ten minutes 
 - **Centre:** the photograph. Scroll to zoom, drag to move, **F** to fit the whole image, **Z** to return to the current region. The small map at the bottom right shows where you are; click it to jump.
 - **Image controls:** brightness, contrast and **Red-free** (green channel, **G**). *Reset* undoes the adjustments.
 - **Outline controls** (after a reveal): **Dataset label** (solid lines, **D**), **AI** (dashed lines, **M**), **Heat map** (the AI's probability, **H**), **Marker** (the dashed circle, **K**), and one switch per lesion type. Flipping the dataset label and the AI on and off is the quickest way to compare them.
+- **ETDRS grid** (**E**): appears once you have marked the fovea and the disc (section 6); shown by default when you grade the image and in the whole-image step, hidden in the region steps.
 - **Right:** the questions, one numbered card each. A card's number turns dark when answered; a card turns amber if a required answer is missing. **Panel: light / dark** in the top bar switches the colours of this area. Keys **1–9** choose an option of the first unanswered question; **Enter** moves on.
 
 Lesion colours: **MA cyan**, **HG magenta**, **HEX yellow**, **CWS green**. Dotted grey lines, where present, mark areas the dataset itself labelled as uncertain.
@@ -32,69 +35,73 @@ Lesion colours: **MA cyan**, **HG magenta**, **HEX yellow**, **CWS green**. Dott
 ### Grade the image (no outlines)
 
 - **Image quality.**
+- **Foveal center** and **optic disc center** (both required): click *Set*, then click the point on the image; choose *Not visible* if you cannot see it. The ETDRS grid then appears, centered on your foveal mark.
 - **ICDR grade.** No DR; mild NPDR (MA only); moderate NPDR (more than MA only, less than severe); severe NPDR (4-2-1 rule: more than 20 intraretinal HG in each of four quadrants, or definite venous beading in two or more quadrants, or prominent IRMA in one or more quadrant; no PDR); PDR (NV, and/or vitreous or preretinal hemorrhage).
-- **DME**, judged on the photograph from HEX relative to the foveal center: no DME, non-center-involving, center-involving, cannot assess.
-- **Signs beyond the four lesion types** (optional): IRMA, NVD/NVE, venous beading, preretinal or vitreous hemorrhage, laser scars. These are not labelled in the datasets but drive severe NPDR and PDR.
-- **Foveal center** (required): click *Set*, then click the fovea; choose *Not visible* if you cannot see it.
-- **Optic disc center** (optional): gives the scale in disc diameters.
+- **DME on the photograph**: where is the hard exudate closest to the fovea? No HEX on the grid; outer ring only (1.5–3 mm from the fovea); inner ring (0.5–1.5 mm, within 1 DD); central subfield (within 0.5 mm); cannot assess.
+- **Signs beyond the four lesion types** (optional): IRMA, NVD/NVE, venous beading, preretinal or vitreous hemorrhage, laser scars, other. If you tick IRMA or NVD/NVE, you can mark them: click *Add IRMA* (or *Add NV*), click each location on the image, then *Done* or Esc. *Undo last* removes the last mark.
 
 ### Each marked region, step A (blinded)
 
-A dashed white circle marks a region. It may be a lesion the AI missed, an AI finding with no label, a disagreement about extent, or a place where AI and label agree; you are not told which. Look inside the circle (zoom and red-free help) and answer from the photograph alone.
+A dashed white circle marks a region. It may be a lesion the AI missed, an AI finding with no label, a disagreement about extent, or a place where AI and label agree; you are not told which. Many regions in this batch lie near the fovea or look like vessels; that is by design and says nothing about the answer. Look inside the circle (zoom and red-free help) and answer from the photograph alone.
 
-- **Main finding**: one of the four lesion types (MA, HG, HEX, CWS), another retinal finding, normal anatomy, an artifact, or *Cannot determine*.
+- **Main finding**: one of the four lesion types (MA, HG, HEX, CWS), another retinal finding (including IRMA and NV), normal anatomy, an artifact, or *Cannot determine*.
 - **Confidence**: certain, probable, possible.
 
 When you click **Reveal outlines**, your step-A answer is locked. This blinded answer is our main measurement.
 
-### Each marked region, step B (outlines shown)
+### Each marked region, step B (judge both outlines)
 
-The dataset label (solid) and the AI (dashed) appear inside this region's window only.
+The dataset label (solid) and the AI (dashed) appear inside this region's window only. The top of the panel repeats your step-A answer and gives the region's ETDRS location (for example "outer ring, nasal (N2), 2.6 mm from the fovea").
 
-- **Who is right?** Both acceptable; AI right, dataset label wrong; dataset label right, AI wrong; both wrong; depends on definition (for example MA versus a small dot HG); cannot tell from this photograph.
-- **What is wrong** with the dataset label or with the AI (tick all that apply). For an AI false alarm, what it really is was already captured in step A.
-- **What would change under ICDR** (section 5).
-- **Would it change what you do for this patient?** No; follow-up interval; referral or treatment; unsure.
+- **Dataset label in this region** and **AI in this region**, each: *Correct* (including correctly drawing nothing); *Right lesion, wrong extent* (too large, too small, or several lesions merged); *Wrong lesion type*; *Marks a non-lesion*; *Misses a lesion*; *Can't decide* (then: depends on definition, or image quality or resolution). If both are wrong, say so in both questions.
+- If either outline is not correct: **what would change under ICDR or DME** (section 5) and **would it change what you do for this patient?** (no; follow-up interval; referral or treatment; unsure).
 - **Comment** (optional). Short notes are very valuable when no option fits.
 
-### Whole image (all outlines)
+### Whole image (all outlines, grid shown)
 
-- **Grade and referral from the AI lesions alone**, compared with yours. Referable means moderate NPDR or worse and/or DME.
-- **Lesions missing from the dataset label** for the whole image: none; a few, mostly far from the fovea; a few, including near the fovea; many.
+- **Lesions missing from the dataset label** for the whole image: none; a few, outside the grid; a few, including on the grid; many.
 - **Quality** of the dataset label and of the AI lesion map for this image.
 - Where the dataset provides its own grade, it is shown; say whether you agree.
 
-## 5. What would change under ICDR
+## 5. What would change under ICDR or DME
 
-Judge against your own grading of this image, as if the wrong outline (AI or label, as you decided) were used. Several options may apply; *Nothing* excludes the others.
+Judge against your own grading of this image, as if the wrong outline were used. Several options may apply; *Nothing* excludes the others.
 
 | Option | Applies when | Example |
 |---|---|---|
 | Nothing | Grade and DME unchanged | One of thirty HG in a moderate NPDR eye |
 | No DR ↔ mild NPDR | The only MA in the eye | AI marks a single MA the label missed in an otherwise normal eye |
 | Mild ↔ moderate NPDR | The only HG, HEX or CWS in an MA-only eye (crosses the referral threshold) | Label missed the only small HG in an eye with a few MA |
+| DME: HEX within 1 DD | The closest HEX moves into or out of the inner ring | AI misses the only HEX at 1 mm from the fovea |
+| DME: HEX in the central subfield | The closest HEX moves into or out of the central 1 mm | Label misses HEX at the foveal center |
 | Moderate ↔ severe NPDR | Hemorrhage criterion of the 4-2-1 rule (>20 HG in each of four quadrants) | Missed HG that decide whether the fourth quadrant passes 20 |
-| DME status | HEX in the macula or at the foveal center | AI misses HEX at the center (center-involving becomes non-center-involving) |
 
 The second question records what you would actually do. A lesion can cross a threshold under the rule and still not change management, for example a small isolated HG far from the fovea; that difference is exactly what we want to see.
 
-## 6. Definitions we use
+## 6. The ETDRS grid
 
-- **MA**: small, round, red dot with sharp margins, typically smaller than the width of a major vein at the disc margin (about 125 µm). Larger or irregular red lesions are HG; where you cannot tell, answer *Depends on definition*.
+The grid is centered on your foveal mark. Its scale takes your fovea-to-disc distance as 4.5 mm (about 3 DD; 1 DD = 1.5 mm); if you marked the disc as not visible, the folder's own estimate of the scale is used. Circles: central subfield C (1 mm diameter), inner ring (1–3 mm), outer ring (3–6 mm); the 45° lines divide the rings into superior (S), inferior (I), nasal (N, the disc side) and temporal (T) subfields, labelled S1–T1 and S2–T2. Individual eyes differ by about 10%, so treat the circles as a guide.
+
+On photographs, HEX within 1 DD of the fovea (central subfield or inner ring) is our surrogate for referable DME, and HEX in the central subfield is the photographic sign closest to center-involving DME. True center-involving DME is defined on OCT (central subfield thickness ≥320 µm in men, ≥305 µm in women); we do not ask you to infer it.
+
+## 7. Definitions we use
+
+- **MA**: small, round, red dot with sharp margins, typically smaller than the width of a major vein at the disc margin (about 125 µm). Larger or irregular red lesions are HG; where you cannot tell, answer *Can't decide*, then *Depends on definition*.
 - **HG**: intraretinal dot, blot or flame hemorrhage. Preretinal or vitreous hemorrhage is a separate option.
+- **IRMA** and **NV**: when the AI or the label outlines a tortuous or abnormal vessel as HG, answer what you see (IRMA, NV, or a normal vessel) in step A; in step B the outline is then *Wrong lesion type* or *Marks a non-lesion*.
 - **HEX**: yellow-white, sharply defined deposits, often in clusters or rings. Distinguish from drusen and reflexes.
 - **CWS**: white, fluffy, ill-defined lesion of the nerve fibre layer. Distinguish from nerve-fibre-layer sheen and myelinated nerve fibres.
 - **Light reflex**: reflections from the internal limiting membrane, the foveal reflex or vessel walls.
 - **Artifact**: dust or smudges on the lens, eyelashes, flare, the edge of the field, distortion at the periphery of ultra-widefield images.
 
-## 7. Good practice
+## 8. Good practice
 
-- About one minute per region is typical; take breaks whenever you like.
+- In the trial a region took about 50 seconds and an image 4–6 minutes in all. Sittings of 20–25 images work well; take breaks whenever you like. Your image order is random, so stopping early still leaves a useful sample.
 - Please do not search for the images elsewhere.
 - If the page misbehaves, export your results first, then tell us what happened (a screenshot helps).
 - Please do not share the folder, and delete it when we tell you the review is closed.
 
-## 8. Keys
+## 9. Keys
 
 | Key | Action |
 |---|---|
@@ -103,6 +110,7 @@ The second question records what you would actually do. A lesion can cross a thr
 | F, Z | Fit the image; zoom to the region |
 | +, −, wheel, drag | Zoom and move |
 | G | Red-free view |
+| E | ETDRS grid on or off (after marking the fovea and disc) |
 | D, M, H, K | Dataset label, AI, heat map, marker (when available) |
 | ? | Help, including an ICDR quick reference |
-| Esc | Cancel placing a point; close a dialog |
+| Esc | Cancel placing a point; stop adding IRMA / NV marks; close a dialog |

@@ -1,3 +1,5 @@
+# SUPERSEDED, NEVER RUN (2026-11-03): the trial was read on the demo pack (demo_idrid.yaml) by Dr. Peranut
+# Chotcomwongse on 2026-11-02; the formal batch is batch01.yaml (docs/clinical/32). Kept unchanged as written.
 # Fallback trial built on the workstation, for use only if the server's RetiSeg-Ref maps (docs/ops/17 item 72) are
 # not ready when the trial pack has to go out. It reviews the M2MRF author checkpoints (runs/E1_m2mrf: prob_test on
 # IDRiD, ddr_prob_test on DDR; fixed threshold 0.5, they have no validation maps), which are already on the

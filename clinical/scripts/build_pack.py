@@ -134,6 +134,11 @@ def build_case(case, insts, sets, root, out, args, practice=False):
         })
     entry = {"id": cid, "image": f"images/{cid}.jpg", "width": width, "height": height,
              "overlays": overlays, "heat": heat, "regions": regions, "practice": practice}
+    lm = case.get("landmark") or {}
+    if lm.get("um_per_px"):
+        # fallback scale of the ETDRS grid when the reader marks no disc (pack pixels; the grid is centred on the
+        # reader's own fovea click, never on the estimate, which the pack does not contain)
+        entry["etdrs"] = {"um_per_px": round(lm["um_per_px"] / scale, 4)}
     scale_name = s.get("reference_grade_scale")
     if scale_name and case.get("grade") is not None:
         entry["reference_grade"] = {"value": case["grade"], "scale": scale_name}

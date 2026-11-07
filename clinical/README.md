@@ -3,42 +3,62 @@
 Clinicians judge the regions where a segmentation model (the AI) and the dataset label disagree: what is there,
 who is right, and what the error would change under ICDR and for the patient. Plan:
 `docs/clinical/28_临床合作总计划.txt`; protocol for collaborators: `docs/clinical/29_protocol_en.md`; reader guide:
-`docs/clinical/30_reader_guide_en.md`; meeting of 2026-10-29: `docs/clinical/31_会议纪要_20261029.txt`.
+`docs/clinical/30_reader_guide_en.md`; meeting of 2026-10-29: `docs/clinical/31_会议纪要_20261029.txt`; trial
+results and the formal design: `docs/clinical/32_试判结果与正式批次设计_20261103.txt`.
 Readers see the lesion labels MA, HG, HEX and CWS; files and code keep the benchmark's class codes MA, HE, EX, SE.
 Nothing here writes into the benchmark's own directories.
 
 ```
-mine_discrepancies.py   prepared test set + probability maps of the model under review (+ optional model zoo)
-                        -> every disagreement / agreement region with its features   (candidates.jsonl, images.jsonl, meta.json)
-sample_review.py        frozen design (designs/*.yaml) -> two-stage, two-arm sample   (selection.json = the key)
+locate_landmarks.py     test set -> estimated fovea and disc per image + QC page for corrections (landmarks.json)
+mine_discrepancies.py   prepared test set + probability maps of the model under review (+ optional model zoo, landmarks)
+                        -> every disagreement / agreement region with its features, ETDRS zone included
+                           (candidates.jsonl, images.jsonl, meta.json)
+sample_review.py        frozen design (designs/*.yaml) -> two-stage sample, stratified by image and region strata
+                        (selection.json = the key, with design weights)
 build_pack.py           selection.json -> folder for the reader: index.html + pack.js + images/ + heat/ (--zip for e-mail)
-reader_tool/index.html  offline single-file reader tool; answers saved in the browser, exported as JSON
-analyze_reviews.py      exports + selection.json -> regions_long.csv, images_long.csv, report.md
+reader_tool/index.html  offline single-file reader tool (ETDRS grid on the reader's fovea mark); answers saved in the
+                        browser, exported as JSON
+analyze_reviews.py      exports + selection.json (+ the pack) -> regions_long.csv, images_long.csv, report.md
 schema/review_schema.json  the questionnaire (version inside; codes, options, display conditions); tool and analysis read it
 ```
 
-## Trial (10-20 images), on the server (docs/ops/17 section 4 item 72)
+Questionnaire 3.0.0 (docs/clinical/32): no AI grade or referral question (the AI has no grade output); DME judged on
+the ETDRS grid (closest HEX: none / outer ring / inner ring, within 1 DD / central subfield, the central 1 mm);
+the dataset label and the AI are judged separately (so "both wrong" is two answers, never a missing option);
+optional IRMA / NV marks on the image.
+
+## Formal batch, on the server (docs/ops/17 section 4 item 72)
 
 ```bash
-# 1. regions of RetiSeg-Ref on each test set, with the 18 registered DDR-trained models as the zoo
-for SET in DDR IDRiD TJDR_std TJDR_uwf; do
+# 0. fovea and disc estimates per test set (field angle: DDR, TJDR_std, MAPLES-DR 45; IDRiD 50; TJDR_uwf 133),
+#    then open qc.html, click the misses, export corrections_<SET>.json and merge them
+declare -A FIELD=([DDR]=45 [IDRiD]=50 [TJDR_std]=45 [TJDR_uwf]=133 [MAPLES-DR]=45)
+for SET in DDR IDRiD TJDR_std TJDR_uwf MAPLES-DR; do
+  python clinical/scripts/locate_landmarks.py estimate --set $SET --data dataset/prepared/$SET \
+      --field-deg ${FIELD[$SET]} --out runs/CLINREV/landmarks/$SET
+done
+python clinical/scripts/locate_landmarks.py apply --landmarks runs/CLINREV/landmarks/DDR/landmarks.json \
+    --corrections corrections_DDR.json                      # once per set that has corrections
+# 1. regions of RetiSeg-Ref with ETDRS zones, the 18 registered DDR-trained models as the zoo
+for SET in DDR IDRiD TJDR_std TJDR_uwf MAPLES-DR; do
   python clinical/scripts/mine_discrepancies.py --set $SET --data dataset/prepared/$SET \
       --pred runs/ENS/REF/reference/$SET/prob_test --thresholds runs/release/retiseg_ref/thresholds.json \
-      --model RetiSeg-Ref --grades auto --zoo-train DDR \
+      --model RetiSeg-Ref --grades auto --zoo-train DDR --landmarks runs/CLINREV/landmarks/$SET/landmarks.json \
       --out runs/CLINREV/mine/RetiSeg-Ref/$SET
 done
-# 2. the frozen trial sample (seed and quotas in the design file)
-python clinical/scripts/sample_review.py --design clinical/designs/trial01.yaml --out runs/CLINREV/selection/trial01
+# 2. the frozen sample (commit designs/batch01.yaml first; seed and quotas are in it)
+python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01
 # 3. the reader folder and a zip for e-mail (images included: never into git or the handoff pack)
-python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/trial01/selection.json \
-    --out clinical/packs/trial01 --title "RetiSeg clinical review - trial" --zip
+python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01/selection.json \
+    --out runs/CLINREV/packs/batch01 --title "RetiSeg clinical review - batch 1" --zip
 ```
-The formal batch uses `designs/batch01.yaml` (draft, add MAPLES-DR to the loop if it stays in) after the trial feedback.
+Leave MAPLES-DR out of all three loops (and edit batch01.yaml as its header says) unless the MESSIDOR terms allow the
+readers to see the images. The landmark estimates only decide the strata; the analysis uses each reader's own marks.
 
 ## Fallback trial on the workstation
 
-If the RetiSeg-Ref maps are not ready when the trial has to go out, the workstation can build a trial from the M2MRF
-author checkpoints it already has (feedback on the questions only; see the header of `designs/trial01_workstation.yaml`):
+Kept for the record: the trial was read on the demo pack on 2026-11-02 (docs/clinical/32), so trial01.yaml and
+trial01_workstation.yaml were never run. The workstation route below still works for a quick feedback pack:
 
 ```bash
 python clinical/scripts/mine_discrepancies.py --set DDR --data dataset/prepared/DDR --pred runs/E1_m2mrf/ddr_prob_test \
@@ -54,11 +74,13 @@ python clinical/scripts/build_pack.py --selection clinical/work/trial01w/selecti
 ## After reading
 
 ```bash
-python clinical/scripts/analyze_reviews.py --selection clinical/selections/trial01/selection.json \
-    --reviews clinical/reviews/trial01/*.json --out clinical/work/trial01/analysis
+python clinical/scripts/analyze_reviews.py --selection runs/CLINREV/selection/batch01/selection.json \
+    --pack runs/CLINREV/packs/batch01 --reviews runs/CLINREV/reviews/batch01/*.json --out runs/CLINREV/analysis/batch01
 ```
+Exports of questionnaire 2 (the trial) are read too. `--pack` gives the DME implied by the label and by the AI and what
+lies under each IRMA / NV mark; without it the implied DME comes from the estimated fovea.
 
 ## Try it
 
-`clinical/packs/demo_idrid/index.html` is a demo built from five IDRiD test images and the M2MRF author checkpoint
-(`designs/demo_idrid.yaml`). Tests: `python -m pytest clinical/tests -q` (synthetic data; no dataset, weights or torch).
+`designs/demo_idrid.yaml` built the pack of the trial (four IDRiD test images, M2MRF author checkpoint);
+`designs/demo_idrid_strat.yaml` runs the formal design on the same images (its header has the commands). Tests: `python -m pytest clinical/tests -q` (synthetic data; no dataset, weights or torch).

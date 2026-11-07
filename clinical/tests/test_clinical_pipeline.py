@@ -1,8 +1,10 @@
-"""The clinical review pipeline on a synthetic prepared source (docs/clinical/28): mine -> sample -> pack -> analyse.
+"""The clinical review pipeline on a synthetic prepared source (docs/clinical/28, 32): landmarks -> mine -> sample ->
+pack -> analyse.
 
 No dataset, weights or torch needed. Checks the parts whose failure would silently bias the study: the outline
-tracer encloses exactly the mask, the cluster kinds follow the stated rules, the pack carries none of the hidden
-metadata a reader must not see, crop windows of one image never overlap, and the analysis reads an export.
+tracer encloses exactly the mask, the cluster kinds follow the stated rules, ETDRS zones and the stratified design
+weights are what the design says, the pack carries none of the hidden metadata a reader must not see, crop windows
+of one image never overlap, and the analysis reads exports of questionnaires 2 and 3.
 """
 
 import json
@@ -19,6 +21,7 @@ sys.path.insert(0, str(HERE.parent / "scripts"))
 import analyze_reviews  # noqa: E402
 import build_pack  # noqa: E402
 import contours  # noqa: E402
+import locate_landmarks  # noqa: E402
 import mine_discrepancies  # noqa: E402
 import sample_review  # noqa: E402
 
@@ -94,14 +97,30 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     root = synthetic
     monkeypatch.chdir(root)
     mine_out = root / "clinical" / "work" / "mine" / "SYN"
+    # fovea-to-disc 100 px = 4,500 um, so 45 um / px; C <= 11.1 px, 1 DD = 33.3 px, grid 66.7 px.
+    # image a: fovea (300, 250); image b: fovea (255, 250), inside its agreed EX disc
+    lms = {"a": {"fovea": [300.0, 250.0], "disc": [400.0, 250.0], "um_per_px": 45.0, "source": "manual"},
+           "b": {"fovea": [255.0, 250.0], "disc": [355.0, 250.0], "um_per_px": 45.0, "source": "manual"}}
+    (root / "landmarks.json").write_text(json.dumps({"set": "SYN", "landmarks": lms}))
     mine_discrepancies.main(["--set", "SYN", "--data", "prepared/SYN", "--pred", "runs/SYN_model/prob_test",
-                             "--thresholds", "0.5", "--model", "synthetic", "--out", str(mine_out)])
+                             "--thresholds", "0.5", "--model", "synthetic", "--landmarks", "landmarks.json", "--out", str(mine_out)])
     rows = [json.loads(x) for x in (mine_out / "candidates.jsonl").read_text().splitlines()]
     kinds = {(r["image_id"], r["cls"], r["kind"]) for r in rows}
     assert ("a", "MA", "FN") in kinds and ("a", "MA", "FP") in kinds and ("a", "HE", "agree") in kinds
     assert ("b", "EX", "agree") in kinds and ("b", "SE", "FP") in kinds
     conf = [r for r in rows if r["image_id"] == "a" and r["cls"] == "EX"]
     assert conf and conf[0]["kind"] == "FN" and conf[0]["subtype"] == "confusion:EX->HE"
+    by = {(r["image_id"], r["cls"], r["kind"]): r for r in rows}
+    # agreed HE disc at (300, 200) r 12: closest pixel 38 px = 1,710 um from the fovea -> outer ring, superior
+    he = by[("a", "HE", "agree")]
+    assert he["etdrs_zone"] == "outer" and he["etdrs_sub"] == "S2" and abs(he["dist_min_um"] - 38 * 45) <= 90
+    # the agreed EX of image b covers the fovea -> central subfield, distance 0
+    ex = by[("b", "EX", "agree")]
+    assert ex["etdrs_zone"] == "C" and ex["dist_min_um"] == 0 and ex["etdrs_sub"] == "C"
+    images = {r["image_id"]: r for r in map(json.loads, (mine_out / "images.jsonl").read_text().splitlines())}
+    assert images["b"]["ex_px"]["c"] > 0 and images["b"]["ex_px"]["nearest_label_um"] == 0
+    assert images["a"]["ex_px"]["c"] == 0 and images["a"]["landmark"]["um_per_px"] == 45.0
+    assert all(r["elongation"] < 1.5 for r in rows)          # discs are round
 
     design = {
         "name": "syn01", "seed": 1,
@@ -124,6 +143,34 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     rep = [x for x in sel["instances"] if x["arm"] == "representative"]
     assert rep and all(x["weight"] and x["weight"] >= 1 for x in rep)
 
+    # the formal design: image strata by macular HEX, region strata by ETDRS zone, weights N_ih / (pi_image n_ih)
+    design2 = {
+        "name": "syn01", "seed": 2,
+        "sets": [{"set": "SYN", "candidates": "clinical/work/mine/SYN", "reference_grade_scale": None}],
+        "images": {"eligibility": {"discrepancy": 1}, "strata": [
+            {"name": "macular_hex", "set": "SYN", "n": 1, "has_regions": {"where": {"cls": "EX", "etdrs_zone": ["C", "inner"]}, "n": 1}},
+            {"name": "rest", "set": "SYN", "n": 1}]},
+        "stratified": {"strata": [
+            {"name": "hex_macula", "n": 1, "where": {"cls": "EX", "etdrs_zone": ["C", "inner"]}},
+            {"name": "other_discrepancy", "n": 1, "where": {"kind": ["FN", "FP", "extent"]}},
+            {"name": "agree", "n": 1, "where": {"kind": "agree"}}]},
+        "enriched": [],
+        "geometry": {"crop_min": 64, "crop_margin": 0.3, "marker_min_radius": 10, "min_gap": 0},
+        "max_per_image": 6,
+    }
+    (root / "design2.yaml").write_text(json.dumps(design2))
+    sample_review.main(["--design", "design2.yaml", "--out", "work/syn02"])
+    sel2 = json.loads((root / "work" / "syn02" / "selection.json").read_text())
+    strata = {s["stratum"]: s for s in sel2["report"]["strata"]}
+    assert strata["macular_hex"]["population"] == 1 and strata["rest"]["population"] == 1   # b has central HEX, a not
+    case_b = next(c for c in sel2["cases"] if c["image_id"] == "b")
+    assert case_b["landmark"]["um_per_px"] == 45.0 and case_b["region_strata"]["hex_macula"]["N"] == 1
+    for x in sel2["instances"]:
+        assert x["arm"] == "stratified"
+        assert x["weight"] == pytest.approx(x["N_stratum_image"] / (x["pi_image"] * x["pi_within"] * x["N_stratum_image"]))
+    hex_b = [x for x in sel2["instances"] if x["image_id"] == "b" and x["stratum"] == "hex_macula"]
+    assert len(hex_b) == 1 and hex_b[0]["weight"] == pytest.approx(1.0)
+
     build_pack.main(["--selection", "work/syn01/selection.json", "--out", "packs/syn01", "--root", "."])
     pack = json.loads((root / "packs" / "syn01" / "pack.json").read_text())
     text = (root / "packs" / "syn01" / "pack.json").read_text()
@@ -136,28 +183,45 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     assert {k: v["label"] for k, v in pack["classes"].items()} == {"MA": "MA", "HE": "HG", "EX": "HEX", "SE": "CWS"}
     # a reader export: every region read as the lesion the model reported, the label judged wrong
     code = {"MA": "ma", "HE": "hg", "EX": "hex", "SE": "cws"}
-    export = {"format": "retiseg-clinical-review/1", "pack_id": "syn01", "reader_id": "R1", "cases": {}, "debrief": {"answers": {"d_useful": "all"}}}
-    for c in pack["cases"]:
-        regs = {}
-        for r in c["regions"]:
-            x = next(i for i in sel["instances"] if i["inst_id"] == r["id"])
-            regs[r["id"]] = {"a": {"answers": {"a_finding": code[x["cls"]], "a_confidence": "certain"}, "t": {"active_ms": 20000}},
-                             "b": {"answers": {"b_cause": "label_error", "b_label_issue": ["omission"], "b_icdr": ["none"],
-                                               "b_relevance": "no"}, "t": {"active_ms": 25000, "completed": "x"}},
-                             "revealed_at": "x"}
-        export["cases"][c["id"]] = {"practice": False, "done": True, "regions": regs, "display_size": [c["width"], c["height"]],
-                                    "pre": {"answers": {"pre_icdr": "2", "pre_fovea": {"x": 300, "y": 250}, "pre_disc": {"x": 400, "y": 250}},
-                                            "t": {"active_ms": 30000, "completed": "x"}},
-                                    "post": {"answers": {"post_ai_grade": "same", "post_unlabelled": "few_peripheral"}, "t": {"active_ms": 10000, "completed": "x"}}}
-    (root / "R1.json").write_text(json.dumps(export))
-    analyze_reviews.main(["--selection", "work/syn01/selection.json", "--reviews", "R1.json", "--out", "work/syn01/analysis"])
+
+    def export_of(reader, b_answers, pre_extra=None):
+        export = {"format": "retiseg-clinical-review/1", "pack_id": "syn01", "reader_id": reader, "cases": {},
+                  "schema_version": "3.0.0" if "b_label" in b_answers else "2.0.0-trial", "debrief": {"answers": {"d_useful": "all"}}}
+        for c in pack["cases"]:
+            regs = {}
+            fx, fy = lms[next(k["image_id"] for k in sel["cases"] if k["case_id"] == c["id"])]["fovea"]
+            for r in c["regions"]:
+                x = next(i for i in sel["instances"] if i["inst_id"] == r["id"])
+                regs[r["id"]] = {"a": {"answers": {"a_finding": code[x["cls"]], "a_confidence": "certain"}, "t": {"active_ms": 20000}},
+                                 "b": {"answers": dict(b_answers), "t": {"active_ms": 25000, "completed": "x"}}, "revealed_at": "x"}
+            export["cases"][c["id"]] = {"practice": False, "done": True, "regions": regs, "display_size": [c["width"], c["height"]],
+                                        "pre": {"answers": {"pre_icdr": "2", "pre_fovea": {"x": fx, "y": fy}, "pre_disc": {"x": fx + 100, "y": fy},
+                                                            **(pre_extra or {})}, "t": {"active_ms": 30000, "completed": "x"}},
+                                        "post": {"answers": {"post_unlabelled": "few_peripheral"}, "t": {"active_ms": 10000, "completed": "x"}}}
+        return export
+
+    # R1: questionnaire 2 (the trial of 2026-11-02); R2: questionnaire 3, both outlines wrong, central HEX, one NV mark
+    (root / "R1.json").write_text(json.dumps(export_of("R1", {"b_cause": "label_error", "b_label_issue": ["omission"],
+                                                              "b_icdr": ["none"], "b_relevance": "no"})))
+    (root / "R2.json").write_text(json.dumps(export_of("R2", {"b_label": "missed", "b_ai": "extent", "b_icdr": ["dme_cs"], "b_relevance": "referral"},
+                                                       {"pre_dme": "central", "pre_other_signs": ["nv"], "pre_marks": [{"x": 301, "y": 200, "kind": "nv"}]})))
+    analyze_reviews.main(["--selection", "work/syn01/selection.json", "--pack", "packs/syn01", "--reviews", "R1.json", "R2.json",
+                          "--out", "work/syn01/analysis"])
     report = (root / "work" / "syn01" / "analysis" / "report.md").read_text()
-    assert "Blinded verdict" in report and "R1" in report and "Distance from the fovea" in report
+    assert "Blinded verdict" in report and "R1" in report and "ETDRS location" in report and "DME on the photograph" in report
     import csv
     rows = list(csv.DictReader(open(root / "work" / "syn01" / "analysis" / "regions_long.csv")))
     assert rows and all(r["blind_verdict"] in ("model_right", "dataset_right", "both_right") for r in rows)
-    # fovea at (300, 250), disc 100 px away -> 1 DD = 40 px; every region gets a distance and a band
-    assert all(r["dist_band"] for r in rows)
+    assert {r["attribution"] for r in rows if r["reader"] == "R1"} == {"label_wrong"}
+    assert {r["attribution"] for r in rows if r["reader"] == "R2"} == {"both_wrong"}
+    assert {r["consequence"] for r in rows if r["reader"] == "R2"} == {"3"} and {r["consequence"] for r in rows if r["reader"] == "R1"} == {"0"}
+    # the reader's fovea and disc marks give 45 um / px; every region gets a zone
+    assert all(r["zone"] in ("C", "inner", "outer", "outside") for r in rows)
+    imgs = list(csv.DictReader(open(root / "work" / "syn01" / "analysis" / "images_long.csv")))
+    b_img = next(i for i in imgs if i["image_id"] == "b" and i["reader"] == "R2")
+    assert b_img["dme_label"] == "central" and b_img["dme_ai"] == "central" and b_img["n_nv_marks"] == "1"
+    a_img = next(i for i in imgs if i["image_id"] == "a" and i["reader"] == "R2")
+    assert "HG" in a_img["marks"]          # the NV mark at (301, 200) lies inside the labelled and predicted HE disc
 
 
 def test_blind_verdict_rules():
@@ -172,20 +236,77 @@ def test_blind_verdict_rules():
     assert bv("FP", "SE", "cws") == "model_right"
 
 
-def test_fovea_distance_bands():
-    case = {"set": "DDR", "image_size": [1000, 800], "fov": {"diameter": 750.0}}
+def test_etdrs_location():
+    key = {"set": "DDR", "image_size": [1000, 800], "landmark": {"fovea": [500, 400], "disc": [800, 400], "um_per_px": 15.0}}
     state = {"pre": {"answers": {"pre_fovea": {"x": 500, "y": 400}, "pre_disc": {"x": 750, "y": 400}}}, "display_size": [1000, 800]}
-    # 1 DD = 250 / 2.5 = 100 px
-    assert analyze_reviews.fovea_distance(case, state, {"centroid": [550, 400]})[:2] == (0.5, "central <=1 DD")
-    assert analyze_reviews.fovea_distance(case, state, {"centroid": [700, 400]})[1] == "posterior 1-3 DD"
-    assert analyze_reviews.fovea_distance(case, state, {"centroid": [900, 400]})[1] == "peripheral >3 DD"
-    # no disc click: standard field falls back to FOV / 7.5 (approximate); ultra-widefield gets nothing
+    geo = analyze_reviews.reader_geometry(key, state)
+    assert geo["source"] == "reader" and geo["umpx"] == pytest.approx(18.0)          # 4,500 um / 250 px
+    loc = analyze_reviews.region_location
+    assert loc(geo, {"bbox": [495, 395, 505, 405], "centroid": [500, 400]})[2] == "C"
+    assert loc(geo, {"bbox": [540, 395, 560, 405], "centroid": [550, 400]}) == (720, 900, "inner")  # 40 px to the box
+    assert loc(geo, {"bbox": [600, 395, 610, 405], "centroid": [605, 400]})[2] == "outer"
+    assert loc(geo, {"bbox": [700, 395, 710, 405], "centroid": [705, 400]})[2] == "outside"
+    # no disc mark: the pack's estimate gives the scale; no fovea mark: no location
     state["pre"]["answers"]["pre_disc"] = {"not_visible": True}
-    assert analyze_reviews.fovea_distance(case, state, {"centroid": [600, 400]})[2] is True
-    assert analyze_reviews.fovea_distance(dict(case, set="TJDR_uwf"), state, {"centroid": [600, 400]}) == (None, None, None)
-    # a pack shown at half size: the click is in display pixels, the centroid in native pixels
+    assert analyze_reviews.reader_geometry(key, state)["source"] == "estimate"
+    assert analyze_reviews.reader_geometry(key, {"pre": {"answers": {}}}) is None
+    # a pack shown at half size: clicks in display pixels, the key in native pixels
     half = {"pre": {"answers": {"pre_fovea": {"x": 250, "y": 200}, "pre_disc": {"x": 375, "y": 200}}}, "display_size": [500, 400]}
-    assert analyze_reviews.fovea_distance(case, half, {"centroid": [550, 400]})[0] == 0.5
+    g2 = analyze_reviews.reader_geometry(key, half)
+    assert loc(g2, {"bbox": [540, 395, 560, 405], "centroid": [550, 400]})[0] == 720
+    assert analyze_reviews.zone_of(500) == "C" and analyze_reviews.zone_of(500.1) == "inner" and analyze_reviews.zone_of(3000.1) == "outside"
+
+
+def test_attribution_and_consequence():
+    att = analyze_reviews.attribution
+    assert att({"b_label": "correct", "b_ai": "correct"}) == "both_right"
+    assert att({"b_label": "missed", "b_ai": "correct"}) == "label_wrong"
+    assert att({"b_label": "correct", "b_ai": "false"}) == "ai_wrong"
+    assert att({"b_label": "extent", "b_ai": "wrong_type"}) == "both_wrong"
+    assert att({"b_label": "unsure", "b_ai": "correct", "b_unsure_why": "definition"}) == "undecided_definition"
+    assert att({"b_label": "correct"}) is None
+    assert att({"b_cause": "model_error"}) == "ai_wrong" and att({"b_cause": "ambiguous"}) == "undecided_definition"
+    lvl = analyze_reviews.consequence_level
+    assert lvl(["g01", "g12"], "ai_wrong") == 2 and lvl(["dme_cs"], "both_wrong") == 3 and lvl(["none"], "label_wrong") == 0
+    assert lvl(None, "both_right") == 0 and lvl([], "ai_wrong") is None and lvl(["dme"], "ai_wrong") == 2
+
+
+def test_outline_distance_and_implied_dme():
+    square = [[10, 10, 20, 10, 20, 20, 10, 20]]
+    near = analyze_reviews.nearest_outline_px
+    assert near(square, 15, 15) == 0.0 and near(square, 25, 15) == pytest.approx(5.0) and near([], 0, 0) is None
+    geo = {"fx": 0.0, "fy": 0.0, "umpx": 100.0, "s": 1.0}
+    assert analyze_reviews.implied_dme(geo, square) == ("inner", 1414)    # closest corner 14.1 px x 100 um
+    assert analyze_reviews.implied_dme(dict(geo, umpx=30.0), square) == ("central", 424)
+    assert analyze_reviews.implied_dme(dict(geo, umpx=500.0), square)[0] == "none"
+    assert analyze_reviews.implied_dme(geo, None) == ("none", None)
+
+
+def test_design_conditions():
+    m = sample_review.matches
+    row = {"cls": "HE", "kind": "FP", "grade": 4, "elongation": 4.2, "dist_disc_um": 2500, "ext_overlap": {"NV": 12},
+           "ex_px": {"dd1": 30}}
+    assert m(row, {"cls": ["HE", "MA"], "kind": ["FN", "FP", "extent"]})
+    assert m(row, {"any": [{"elongation_ge": 3.0}, {"dist_disc_um_le": 1500}]})
+    assert not m(row, {"not": {"grade": [3, 4]}})
+    assert m(row, {"ext_any": ["NV", "IRMA"]}) and not m(row, {"ext_any": "IRMA"})
+    assert m(row, {"ex_px.dd1_ge": 1}) and not m(row, {"ex_px.c_ge": 1})        # absent values fail a bound
+    assert m(dict(row, grade=None), {"not": {"grade": [0, 1, 2]}})
+
+
+def test_landmarks_on_a_synthetic_fundus():
+    H, W = 500, 600
+    yy, xx = np.mgrid[:H, :W]
+    fov = (xx - 300) ** 2 + (yy - 250) ** 2 <= 240 ** 2
+    lum = np.full((H, W), 120.0)
+    lum += 110 * np.exp(-((xx - 440) ** 2 + (yy - 250) ** 2) / (2 * 16.0 ** 2))       # disc
+    lum -= 45 * np.exp(-((xx - 252) ** 2 + (yy - 258) ** 2) / (2 * 22.0 ** 2))        # fovea, 0.39 FOV diameters away
+    rgb = np.stack([np.clip(lum * 1.4, 0, 255), np.clip(lum * 0.6, 0, 255), lum * 0.2], -1).astype(np.uint8)
+    rgb[~fov] = 0
+    lm = locate_landmarks.estimate(Image.fromarray(rgb), fov, 45.0)
+    assert np.hypot(lm["disc"][0] - 440, lm["disc"][1] - 250) < 10
+    assert np.hypot(lm["fovea"][0] - 252, lm["fovea"][1] - 258) < 25
+    assert lm["um_per_px"] == pytest.approx(4500 / np.hypot(lm["fovea"][0] - lm["disc"][0], lm["fovea"][1] - lm["disc"][1]), rel=1e-3)
 
 
 def test_kappa_sanity():
@@ -208,12 +329,19 @@ def test_schema_is_consistent():
                 codes = [o["code"] for o in q["options"]]
                 assert len(codes) == len(set(codes)), q["id"]
             cond = q.get("show_if")
-            if cond and "q" in cond:
-                assert cond["q"] in qids, f"{q['id']} depends on a question of another step"
+            for c in ([cond] if cond and "q" in cond else (cond or {}).get("any", []) + (cond or {}).get("all", [])):
+                assert c["q"] in qids, f"{q['id']} depends on a question of another step"
     finding = next(q for q in schema["steps"]["region_a"]["questions"] if q["id"] == "a_finding")
     assert set(o["code"] for o in finding["options"]) == set(analyze_reviews.FINDING_GROUP)
     icdr = next(q for q in schema["steps"]["region_b"]["questions"] if q["id"] == "b_icdr")
     assert [o["code"] for o in icdr["options"] if o.get("exclusive")] == ["none"]
     assert {o["code"] for o in icdr["options"]} == set(analyze_reviews.ICDR_ORDER)
+    assert set(analyze_reviews.ICDR_ORDER) <= set(analyze_reviews.CONSEQUENCE_LEVEL)
+    dme = next(q for q in schema["steps"]["image_pre"]["questions"] if q["id"] == "pre_dme")
+    assert [o["code"] for o in dme["options"] if o["code"] != "cannot"] == analyze_reviews.DME_ORDER
+    for qid in ("b_label", "b_ai"):
+        q = next(q for q in schema["steps"]["region_b"]["questions"] if q["id"] == qid)
+        assert {o["code"] for o in q["options"]} == {"correct", "extent", "wrong_type", "false", "missed", "unsure"}
+    assert schema["etdrs"] == {"fovea_disc_um": 4500, "central_um": 500, "inner_um": 1500, "outer_um": 3000, "dd_um": 1500}
     labels = " ".join(o["label"] + " " + o.get("help", "") for st in schema["steps"].values() for q in st["questions"] for o in q.get("options", []))
     assert " HE " not in f" {labels} " and " EX " not in f" {labels} " and " SE " not in f" {labels} ", "readers must see HG / HEX / CWS"

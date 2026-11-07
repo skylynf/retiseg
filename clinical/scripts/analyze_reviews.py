@@ -1,18 +1,17 @@
 """Join the readers' exported answers to the key and compute the trial / formal-batch summaries.
 
-docs/clinical/28 section 7 (questionnaire 2.x, clinical/schema/review_schema.json). Inputs: selection.json (the
-key) and one exported JSON per reader. Outputs in --out:
+docs/clinical/28 section 7 and docs/clinical/32 (questionnaire 3.x, clinical/schema/review_schema.json; exports of
+questionnaire 2.x, the trial of 2026-11-02, are read too). Inputs: selection.json (the key), one exported JSON per
+reader and, optionally, the pack the readers read (--pack: its outlines give the DME implied by the label and by the
+AI, and the lesions under the IRMA / NV marks). Outputs in --out:
 
-    regions_long.csv   one row per reader x region: hidden metadata (set, class, kind, arm, weight, size, AI
-                       probability, model consensus, grade) + the reader's answers + derived fields (blinded verdict,
-                       distance from the reader's fovea in disc diameters and its band) + active time
-    images_long.csv    one row per reader x image: grade, DME, other signs, post-review judgements, active time
-    report.md          completion and time; blinded verdict and stated cause by class and kind; design-weighted
-                       shares of the representative arm with 95% intervals (bootstrap over images, 2000
-                       replicates, seed 0); distance from the fovea against verdict, ICDR consequence and clinical
-                       relevance; rule-based ICDR consequence against clinical relevance; agreement between
-                       readers (percent agreement, Cohen's and Fleiss' kappa, Gwet's AC1, quadratic kappa for the
-                       grade); issue counts; free text and the readers' feedback on the questions; trial checks
+    regions_long.csv   one row per reader x region: hidden metadata (set, class, kind, arm, stratum, weight, size, AI
+                       probability, model consensus, grade, estimated ETDRS zone) + the reader's answers + derived
+                       fields (blinded verdict, attribution, consequence level, ETDRS location from the reader's own
+                       fovea and disc marks) + active time
+    images_long.csv    one row per reader x image: grade, DME, other signs and marks, the DME implied by the dataset
+                       label and by the AI, landmark check, post-review judgements, active time
+    report.md          the summaries below
 
 Blinded verdict (step A only, before any outline was shown): the reader's finding is mapped to a dataset class
 (ma -> MA, hg -> HE, hex -> EX, cws -> SE; the readers see MA / HG / HEX / CWS), to "other DR sign" (irma, nv,
@@ -22,15 +21,30 @@ prh), "other lesion", "no lesion" (normal anatomy, artifacts) or "indeterminate"
       agree / extent      finding c -> both_right;  no lesion -> both_wrong;   another class -> other_class
       indeterminate -> unresolved
 
-Distance from the fovea (docs/clinical/31: small lesions far from the fovea rarely matter, and annotators miss
-them more often): region centroid to the reader's foveal click, in disc diameters (DD). One DD is the reader's
-fovea-to-disc distance / 2.5 when the disc was clicked; otherwise, for standard-field images, the FOV equivalent
-diameter / 7.5 (flagged approximate); ultra-widefield images without a disc click get no distance. Bands, fixed
-before reading: central <= 1 DD, posterior pole 1-3 DD, peripheral > 3 DD.
-Practice cases are excluded.
+Attribution (step B). Questionnaire 3: the reader judges the dataset label and the AI separately (b_label, b_ai:
+correct / extent / wrong_type / false / missed / unsure); both correct -> both_right, only the label correct ->
+ai_wrong, only the AI correct -> label_wrong, neither -> both_wrong, either unsure -> undecided_definition /
+undecided_image (b_unsure_why). Questionnaire 2 (b_cause): agree -> both_right, label_error -> label_wrong,
+model_error -> ai_wrong, both_wrong, ambiguous -> undecided_definition, image_limited -> undecided_image.
 
-    python clinical/scripts/analyze_reviews.py --selection clinical/selections/trial01/selection.json \
-        --reviews clinical/reviews/trial01/*.json --out clinical/work/trial01/analysis
+Consequence (docs/clinical/31, 32): the highest ICDR / DME change the reader ticked, as a level: none 0;
+No DR <-> mild (g01) 1 minor; mild <-> moderate (g12, the referral threshold) and HEX within 1 DD (dme_1dd) 2
+moderate; moderate <-> severe (g23, 4-2-1) and HEX in the central subfield (dme_cs) 3 major. Questionnaire 2's
+undivided "DME status" counts as 2. A region whose two outlines are both correct has level 0.
+
+ETDRS location (docs/clinical/32): from the reader's own fovea mark; scale = 4,500 um / the reader's fovea-to-disc
+distance, else the pack's per-image estimate (locate_landmarks.py); distance of the closest point of the region's
+bounding box (and of its centroid); zones C <= 500 um (the central 1 mm), inner 500-1,500 (within 1 DD = 1,500 um),
+outer 1,500-3,000, outside. DME implied by the label / the AI: the zone of the closest HEX outline of the pack to
+the reader's fovea (none when no HEX lies within 3,000 um), against the reader's own DME answer.
+
+Design-weighted shares (stratified or representative arm; docs/clinical/28 section 5): ratio estimates
+sum(w x indicator) / sum(w) over a domain, with 95% intervals from a bootstrap over images (2,000 replicates,
+seed 0). Practice cases are excluded.
+
+    python clinical/scripts/analyze_reviews.py --selection runs/CLINREV/selection/batch01/selection.json \
+        --pack runs/CLINREV/packs/batch01 --reviews runs/CLINREV/reviews/batch01/*.json \
+        --out runs/CLINREV/analysis/batch01
 """
 
 import argparse
@@ -56,12 +70,19 @@ FINDING_GROUP = {
     "artifact_dust": "no_lesion", "artifact_light": "no_lesion", "artifact_edge": "no_lesion",
     "indeterminate": "indeterminate",
 }
-ORDINAL = {"pre_icdr": ["0", "1", "2", "3", "4"]}
-DD_PER_FOVEA_DISC = 2.5          # fovea-to-disc-center distance in disc diameters
-DD_PER_FOV_STANDARD = 7.5        # approximate disc diameters across a standard 45-50 degree field
-DIST_BANDS = [(1.0, "central <=1 DD"), (3.0, "posterior 1-3 DD"), (float("inf"), "peripheral >3 DD")]
-ULTRAWIDE_SETS = {"TJDR_uwf"}
-ICDR_ORDER = ["none", "g01", "g12", "dme", "g23"]    # highest consequence for the summary column
+ICDR_ORDER = ["none", "g01", "g12", "dme_1dd", "dme_cs", "g23"]          # questionnaire 3 options of b_icdr
+CONSEQUENCE_LEVEL = {"none": 0, "g01": 1, "g12": 2, "dme_1dd": 2, "dme": 2, "g23": 3, "dme_cs": 3}
+LEVEL_NAME = {0: "0 none", 1: "1 minor", 2: "2 moderate", 3: "3 major"}
+V2_ATTRIBUTION = {"agree": "both_right", "label_error": "label_wrong", "model_error": "ai_wrong",
+                  "both_wrong": "both_wrong", "ambiguous": "undecided_definition", "image_limited": "undecided_image"}
+DME_ORDER = ["none", "outer", "inner", "central"]                        # questionnaire 3 pre_dme, by closeness
+ORDINAL = {"pre_icdr": ["0", "1", "2", "3", "4"], "pre_dme": DME_ORDER, "consequence": ["0", "1", "2", "3"]}
+ETDRS_UM = (500.0, 1500.0, 3000.0)
+ZONES = ("C", "inner", "outer", "outside")
+FOVEA_DISC_UM = 4500.0
+DISCREPANCY = ("FN", "FP", "extent")
+# step-B codes that cannot describe an outline the region does not have (AI-only: no label outline; label-only: no AI)
+IMPLAUSIBLE = {"FP": ("b_label", {"extent", "wrong_type", "false"}), "FN": ("b_ai", {"extent", "wrong_type", "false"})}
 
 
 def blind_verdict(kind, cls, finding):
@@ -77,34 +98,125 @@ def blind_verdict(kind, cls, finding):
     return "other_class"
 
 
-def fovea_distance(case_key, case_state, region_row):
-    """(distance in DD, band, approximate?) of a region from the reader's foveal click, or (None, None, None)."""
+def attribution(b):
+    """Who is wrong in step B, from the two outline judgements (questionnaire 3) or b_cause (questionnaire 2)."""
+    if "b_label" in b or "b_ai" in b:
+        lab, ai = b.get("b_label"), b.get("b_ai")
+        if lab is None or ai is None:
+            return None
+        if "unsure" in (lab, ai):
+            return {"definition": "undecided_definition", "image": "undecided_image"}.get(b.get("b_unsure_why"), "undecided")
+        return {(True, True): "both_right", (True, False): "ai_wrong", (False, True): "label_wrong",
+                (False, False): "both_wrong"}[(lab == "correct", ai == "correct")]
+    return V2_ATTRIBUTION.get(b.get("b_cause"))
+
+
+def consequence_level(codes, attrib):
+    if attrib == "both_right":
+        return 0
+    levels = [CONSEQUENCE_LEVEL[c] for c in (codes or []) if c in CONSEQUENCE_LEVEL]
+    return max(levels) if levels else None
+
+
+def zone_of(dist_um):
+    if dist_um is None:
+        return None
+    return ZONES[int(np.searchsorted(ETDRS_UM, dist_um, side="left"))]
+
+
+def reader_geometry(case_key, case_state, pack_case=None):
+    """Fovea (display px), um per display px and its source for one reader and image; None without a fovea mark.
+
+    Display pixels are the pack's (the readers click on the pack image); s = display / native width converts the
+    key's native coordinates.
+    """
     pre = case_state["pre"]["answers"]
     fovea, disc = pre.get("pre_fovea"), pre.get("pre_disc")
-    if not fovea or fovea.get("x") is None:
-        return None, None, None
     native_w = case_key["image_size"][0]
-    shown = case_state.get("display_size") or case_key["image_size"]
-    scale = shown[0] / native_w
-    cx, cy = (v * scale for v in region_row["centroid"])
+    shown_w = (pack_case or {}).get("width") or (case_state.get("display_size") or case_key["image_size"])[0]
+    s = shown_w / native_w
+    if not fovea or fovea.get("x") is None:
+        return None
+    umpx, source, nasal = None, None, 0
     if disc and disc.get("x") is not None:
-        dd = float(np.hypot(fovea["x"] - disc["x"], fovea["y"] - disc["y"])) / DD_PER_FOVEA_DISC
-        approx = False
-    elif case_key["set"] not in ULTRAWIDE_SETS and case_key.get("fov"):
-        dd = case_key["fov"]["diameter"] * scale / DD_PER_FOV_STANDARD
-        approx = True
+        dist = float(np.hypot(fovea["x"] - disc["x"], fovea["y"] - disc["y"]))
+        if dist > 10:
+            umpx, source = FOVEA_DISC_UM / dist, "reader"
+            nasal = 1 if disc["x"] >= fovea["x"] else -1
+    if umpx is None:
+        lm = case_key.get("landmark") or {}
+        if lm.get("um_per_px"):
+            umpx, source = lm["um_per_px"] / s, "estimate"
+    if umpx is None:
+        return None
+    return {"fx": float(fovea["x"]), "fy": float(fovea["y"]), "umpx": umpx, "source": source, "s": s, "nasal": nasal}
+
+
+def region_location(geo, row):
+    """(closest-point distance um, centroid distance um, zone) of a key region from the reader's fovea."""
+    if not geo:
+        return None, None, None
+    s = geo["s"]
+    x0, y0, x1, y1 = (v * s for v in row["bbox"])
+    cx, cy = (v * s for v in row["centroid"])
+    nx, ny = min(max(geo["fx"], x0), x1), min(max(geo["fy"], y0), y1)
+    dmin = float(np.hypot(nx - geo["fx"], ny - geo["fy"])) * geo["umpx"]
+    dcen = float(np.hypot(cx - geo["fx"], cy - geo["fy"])) * geo["umpx"]
+    return round(dmin), round(dcen), zone_of(dmin)
+
+
+def _inside(px, py, pts):
+    x, y = pts[:, 0], pts[:, 1]
+    x2, y2 = np.roll(x, -1), np.roll(y, -1)
+    cond = (y > py) != (y2 > py)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        xint = x + (py - y) * (x2 - x) / (y2 - y)
+    return bool(np.sum(cond & (px < xint)) % 2)
+
+
+def nearest_outline_px(loops, px, py):
+    """Distance in px from a point to a set of outline loops (flat [x0, y0, x1, y1, ...]); 0 inside (even-odd)."""
+    best, inside = None, False
+    for flat in loops or []:
+        pts = np.asarray(flat, dtype=float).reshape(-1, 2)
+        if len(pts) == 0:
+            continue
+        if len(pts) >= 3 and _inside(px, py, pts):
+            inside = not inside
+        a, b = pts, np.roll(pts, -1, axis=0)
+        ab = b - a
+        L = (ab ** 2).sum(1)
+        t = np.clip(np.where(L > 0, ((px - a[:, 0]) * ab[:, 0] + (py - a[:, 1]) * ab[:, 1]) / np.where(L > 0, L, 1), 0), 0, 1)
+        d = np.hypot(a[:, 0] + t * ab[:, 0] - px, a[:, 1] + t * ab[:, 1] - py).min()
+        best = d if best is None else min(best, d)
+    if inside:
+        return 0.0
+    return None if best is None else float(best)
+
+
+def implied_dme(geo, loops):
+    """Zone of the closest HEX outline to the reader's fovea, as a pre_dme code (none when beyond 3,000 um)."""
+    if not geo:
+        return None, None
+    d = nearest_outline_px(loops, geo["fx"], geo["fy"])
+    if d is None:
+        return "none", None
+    um = d * geo["umpx"]
+    z = zone_of(um)
+    return {"C": "central", "inner": "inner", "outer": "outer", "outside": "none"}[z], round(um)
+
+
+def load_pack(path):
+    """The pack's data ({case id: case}) from <pack>/pack.json or pack.js; {} without a pack."""
+    if not path:
+        return {}
+    p = Path(path)
+    if (p / "pack.json").is_file():
+        data = json.loads((p / "pack.json").read_text())
     else:
-        return None, None, None
-    if dd <= 0:
-        return None, None, None
-    dist = float(np.hypot(cx - fovea["x"], cy - fovea["y"])) / dd
-    band = next(name for edge, name in DIST_BANDS if dist <= edge)
-    return round(dist, 2), band, approx
-
-
-def icdr_max(codes):
-    codes = [c for c in (codes or []) if c in ICDR_ORDER]
-    return max(codes, key=ICDR_ORDER.index) if codes else None
+        text = (p / "pack.js").read_text() if p.is_dir() else p.read_text()
+        data = json.loads(text[text.index("{"): text.rindex("}") + 1])
+    return {c["id"]: c for c in data["cases"]}
 
 
 # ------------------------------------------------------------------------------------------------ agreement
@@ -214,7 +326,11 @@ def weighted_share(rows, field, value, n_boot=2000, seed=0):
 # ------------------------------------------------------------------------------------------------ main
 
 
-def flatten(selection, reviews):
+def _flat(v):
+    return ";".join(v) if isinstance(v, list) and all(isinstance(x, str) for x in v) else json.dumps(v) if isinstance(v, (dict, list)) else v
+
+
+def flatten(selection, reviews, pack):
     inst = {x["inst_id"]: x for x in selection["instances"]}
     cases = {c["case_id"]: c for c in selection["cases"]}
     regions, images = [], []
@@ -224,30 +340,76 @@ def flatten(selection, reviews):
             if cs.get("practice") or cid not in cases:
                 continue
             c = cases[cid]
+            pc = pack.get(cid)
             pre, post = cs["pre"]["answers"], cs["post"]["answers"]
-            images.append({"reader": reader, "case_id": cid, "set": c["set"], "image_id": c["image_id"], "grade": c.get("grade"),
-                           **{k: (";".join(v) if isinstance(v, list) else json.dumps(v) if isinstance(v, dict) else v) for k, v in {**pre, **post}.items()},
-                           "done": cs.get("done"), "active_s_pre": cs["pre"]["t"].get("active_ms", 0) / 1000,
-                           "active_s_post": cs["post"]["t"].get("active_ms", 0) / 1000})
+            geo = reader_geometry(c, cs, pc)
+            marks = pre.get("pre_marks") or []
+            img = {"reader": reader, "case_id": cid, "set": c["set"], "image_id": c["image_id"], "grade": c.get("grade"),
+                   "image_stratum": c.get("stratum"),
+                   **{k: _flat(v) for k, v in {**pre, **post}.items() if k != "pre_marks"},
+                   "n_irma_marks": sum(1 for m in marks if m.get("kind") == "irma"),
+                   "n_nv_marks": sum(1 for m in marks if m.get("kind") == "nv"),
+                   "scale_source": geo["source"] if geo else None,
+                   "um_per_px_reader": round(geo["umpx"], 4) if geo else None,
+                   "done": cs.get("done"), "active_s_pre": cs["pre"]["t"].get("active_ms", 0) / 1000,
+                   "active_s_post": cs["post"]["t"].get("active_ms", 0) / 1000}
+            lm = c.get("landmark") or {}
+            if geo and lm.get("fovea"):
+                img["fovea_vs_estimate_um"] = round(float(np.hypot(lm["fovea"][0] * geo["s"] - geo["fx"], lm["fovea"][1] * geo["s"] - geo["fy"])) * geo["umpx"])
+                if geo["source"] == "reader" and lm.get("um_per_px"):
+                    img["scale_reader_over_estimate"] = round(geo["umpx"] / (lm["um_per_px"] / geo["s"]), 3)
+            if pc:
+                for src, key in (("label", "annotation"), ("ai", "model")):
+                    zone, um = implied_dme(geo, pc["overlays"][key].get("EX"))
+                    img[f"dme_{src}"], img[f"dme_{src}_um"] = zone, um
+                for m in marks:      # what the four-class outlines call the place a reader marked IRMA or NV
+                    for src, key in (("label", "annotation"), ("ai", "model")):
+                        hit = []
+                        for cls in ("HE", "MA", "EX", "SE"):
+                            d = nearest_outline_px(pc["overlays"][key].get(cls), m["x"], m["y"])
+                            if d is not None and d <= 10:
+                                hit.append(CLASS_LABEL[cls])
+                        m[f"under_{src}"] = "+".join(hit) or "nothing"
+            elif lm.get("fovea") is not None and c.get("ex_px"):
+                for src in ("label", "ai"):        # no pack: the miner's figures from the estimated fovea
+                    um = c["ex_px"].get(f"nearest_{src}_um")
+                    img[f"dme_{src}"] = "none" if um is None else {"C": "central", "inner": "inner", "outer": "outer", "outside": "none"}[zone_of(um)]
+                    img[f"dme_{src}_um"] = um
+                img["dme_implied_from"] = "estimated fovea"
+            img["marks"] = marks
+            images.append(img)
             for rid, rr in cs["regions"].items():
                 if rid not in inst:
                     continue
                 x = inst[rid]
                 row = x["row"]
                 a, b = rr["a"]["answers"], rr["b"]["answers"]
-                dist, band, approx = fovea_distance(c, cs, row)
+                dmin, dcen, zone = region_location(geo, row)
+                attrib = attribution(b)
+                level = consequence_level(b.get("b_icdr"), attrib)
+                implausible = None
+                if x["kind"] in IMPLAUSIBLE:
+                    field, bad = IMPLAUSIBLE[x["kind"]]
+                    implausible = b.get(field) in bad
                 regions.append({
                     "reader": reader, "inst_id": rid, "case_id": cid, "set": x["set"], "image_id": x["image_id"],
                     "cls": x["cls"], "label": CLASS_LABEL.get(x["cls"], x["cls"]),
-                    "kind": x["kind"], "subtype": x.get("subtype"), "arm": x["arm"], "stratum": x["stratum"], "weight": x.get("weight"),
+                    "kind": x["kind"], "subtype": x.get("subtype"), "arm": x["arm"], "stratum": x["stratum"],
+                    "image_stratum": c.get("stratum"), "weight": x.get("weight"),
                     "size_bin": row["size_bin"], "prob_max": row["prob_max"], "zoo_frac": row.get("zoo_frac"), "grade": row.get("grade"),
-                    "reader_icdr": pre.get("pre_icdr"), "dist_fovea_dd": dist, "dist_band": band, "dist_approx": approx,
+                    "elongation": row.get("elongation"), "zone_estimated": row.get("etdrs_zone"),
+                    "reader_icdr": pre.get("pre_icdr"), "reader_dme": pre.get("pre_dme"),
+                    "dist_min_um": dmin, "dist_centroid_um": dcen, "zone": zone, "scale_source": geo["source"] if geo else None,
                     "a_finding": a.get("a_finding"), "a_group": FINDING_GROUP.get(a.get("a_finding")), "a_confidence": a.get("a_confidence"),
                     "blind_verdict": blind_verdict(x["kind"], x["cls"], a.get("a_finding")),
-                    "b_cause": b.get("b_cause"), "b_label_issue": ";".join(b.get("b_label_issue", [])),
-                    "b_model_issue": ";".join(b.get("b_model_issue", [])),
-                    "b_icdr": ";".join(b.get("b_icdr", [])), "b_icdr_max": icdr_max(b.get("b_icdr")),
-                    "b_relevance": b.get("b_relevance"), "b_comment": b.get("b_comment"),
+                    "b_label": b.get("b_label"), "b_ai": b.get("b_ai"), "b_unsure_why": b.get("b_unsure_why"),
+                    "b_cause": b.get("b_cause"), "attribution": attrib, "implausible": implausible,
+                    "b_label_issue": ";".join(b.get("b_label_issue", [])), "b_model_issue": ";".join(b.get("b_model_issue", [])),
+                    "b_icdr": ";".join(b.get("b_icdr", [])),
+                    "consequence": None if level is None else str(level),
+                    "consequence_name": None if level is None else LEVEL_NAME[level],
+                    "b_relevance": b.get("b_relevance") or ("no" if attrib == "both_right" else None),
+                    "b_comment": b.get("b_comment"),
                     "complete": bool(rr["b"]["t"].get("completed")),
                     "active_s": (rr["a"]["t"].get("active_ms", 0) + rr["b"]["t"].get("active_ms", 0)) / 1000,
                 })
@@ -269,12 +431,14 @@ def fmt(x, nd=2):
     return "-" if x is None or (isinstance(x, float) and x != x) else (f"{x:.{nd}f}" if isinstance(x, float) else str(x))
 
 
-def crosstab(rows, row_key, col_key):
-    rows = [r for r in rows if r.get(col_key) is not None]
-    rk = sorted({r[row_key] for r in rows})
-    ck = sorted({r[col_key] for r in rows})
+def crosstab(rows, row_key, col_key, row_order=None, col_order=None):
+    rows = [r for r in rows if r.get(col_key) is not None and r.get(row_key) is not None]
+    if not rows:
+        return "(none)"
+    rk = [k for k in (row_order or []) if any(r[row_key] == k for r in rows)] + sorted({r[row_key] for r in rows} - set(row_order or []), key=str)
+    ck = [k for k in (col_order or []) if any(r[col_key] == k for r in rows)] + sorted({r[col_key] for r in rows} - set(col_order or []), key=str)
     cnt = Counter((r[row_key], r[col_key]) for r in rows)
-    lines = ["| " + row_key + " | " + " | ".join(ck) + " | n |", "|" + "---|" * (len(ck) + 2)]
+    lines = ["| " + row_key + " | " + " | ".join(str(c) for c in ck) + " | n |", "|" + "---|" * (len(ck) + 2)]
     for a in rk:
         tot = sum(cnt[(a, c)] for c in ck)
         lines.append(f"| {a} | " + " | ".join(str(cnt[(a, c)]) for c in ck) + f" | {tot} |")
@@ -290,10 +454,17 @@ def agreement_row(field, vals, ordinal=None):
     return f"| {field} | {ag['n_items']} | {fmt(ag['all_agree'])} | {fmt(ag['fleiss_kappa'])} | {fmt(ag['gwet_ac1'])} | {pairs} |"
 
 
+ATTRIB_ORDER = ["both_right", "label_wrong", "ai_wrong", "both_wrong", "undecided_definition", "undecided_image", "undecided"]
+VERDICT_ORDER = ["model_right", "dataset_right", "both_right", "both_wrong", "other_class", "unresolved"]
+REL_ORDER = ["no", "followup", "referral", "unsure"]
+LEVEL_ORDER = [LEVEL_NAME[k] for k in range(4)]
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--selection", required=True)
     ap.add_argument("--reviews", nargs="+", required=True)
+    ap.add_argument("--pack", help="the pack directory the readers read (outlines for the implied DME and the IRMA / NV marks)")
     ap.add_argument("--out", required=True)
     args = ap.parse_args(argv)
     selection = json.loads(Path(args.selection).read_text())
@@ -301,86 +472,182 @@ def main(argv=None):
     pack_ids = {r["pack_id"].split("+")[0] for r in reviews}
     if pack_ids != {selection["design"]["name"]}:
         raise SystemExit(f"reviews are for {pack_ids}, selection is {selection['design']['name']}")
+    pack = load_pack(args.pack)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    regions, images = flatten(selection, reviews)
+    regions, images = flatten(selection, reviews, pack)
     write_csv(out / "regions_long.csv", regions)
-    write_csv(out / "images_long.csv", images)
+    write_csv(out / "images_long.csv", [{k: (_flat(v) if k == "marks" else v) for k, v in i.items()} for i in images])
     readers = sorted({r["reader_id"] for r in reviews})
     n_regions = len(selection["instances"])
+    versions = sorted({str(r.get("schema_version")) for r in reviews})
     for r in regions:
         r["label_kind"] = f"{r['label']} {r['kind']}"
+        r["near"] = None if r["zone"] is None else ("within 1 DD" if r["zone"] in ("C", "inner") else "beyond 1 DD")
 
     md = [f"# Clinical review summary: {selection['design']['name']}", "",
-          f"Readers: {', '.join(readers)}. Regions in the key: {n_regions} ({selection['report']['by_arm']}). Images: {len(selection['cases'])}.",
-          "Lesion labels as the readers saw them: MA, HG (hemorrhage), HEX (hard exudate), CWS (cotton wool spot).", ""]
-    md += ["## Completion and time", "", "| reader | regions done | images done | median s / region | median s / image (grade + whole image) | total min |",
-           "|---|---|---|---|---|---|"]
+          f"Readers: {', '.join(readers)} (questionnaire {', '.join(versions)}). Regions in the key: {n_regions} "
+          f"({selection['report']['by_arm']}). Images: {len(selection['cases'])}.",
+          "Lesion labels as the readers saw them: MA, HG (hemorrhage), HEX (hard exudate), CWS (cotton wool spot).",
+          f"Pack outlines {'read from ' + args.pack if pack else 'not given (--pack): implied DME from the estimated fovea where the key has it'}.", ""]
+    md += ["## Completion and time", "", "| reader | regions done | images done | median s / region | median s / image (grade + whole image) | median min / image incl. regions | total min |",
+           "|---|---|---|---|---|---|---|"]
     for rd in readers:
         rr = [r for r in regions if r["reader"] == rd and r["complete"]]
         ii = [i for i in images if i["reader"] == rd and i["done"]]
+        per_img = [(i["active_s_pre"] + i["active_s_post"] + sum(r["active_s"] for r in regions if r["reader"] == rd and r["case_id"] == i["case_id"])) / 60 for i in ii]
         total = (sum(r["active_s"] for r in regions if r["reader"] == rd) + sum(i["active_s_pre"] + i["active_s_post"] for i in images if i["reader"] == rd)) / 60
         md.append(f"| {rd} | {len(rr)} / {n_regions} | {len(ii)} / {len(selection['cases'])} | "
                   f"{fmt(float(np.median([r['active_s'] for r in rr])) if rr else None, 0)} | "
-                  f"{fmt(float(np.median([i['active_s_pre'] + i['active_s_post'] for i in ii])) if ii else None, 0)} | {fmt(total, 0)} |")
+                  f"{fmt(float(np.median([i['active_s_pre'] + i['active_s_post'] for i in ii])) if ii else None, 0)} | "
+                  f"{fmt(float(np.median(per_img)) if per_img else None, 1)} | {fmt(total, 0)} |")
     done = [r for r in regions if r["complete"]]
+    disc = [r for r in done if r["kind"] in DISCREPANCY]
 
-    md += ["", "## Blinded verdict (step A) by kind", "", crosstab(done, "kind", "blind_verdict"), ""]
-    md += ["## Who is right (step B) by kind", "", crosstab(done, "kind", "b_cause"), ""]
-    md += ["## Who is right by lesion type, AI-only and label-only regions", "", crosstab([r for r in done if r["kind"] in ("FP", "FN")], "label_kind", "b_cause"), ""]
+    md += ["", "## Blinded verdict (step A) by kind", "", crosstab(done, "kind", "blind_verdict", col_order=VERDICT_ORDER), ""]
+    md += ["## Attribution (step B) by kind", "",
+           "both_right: both outlines acceptable; label_wrong: only the AI right; ai_wrong: only the label right; "
+           "both_wrong; undecided_*: the reader could not decide (definition or image).", "",
+           crosstab(done, "kind", "attribution", col_order=ATTRIB_ORDER), "",
+           "By lesion type, discrepancies only", "", crosstab(disc, "label_kind", "attribution", col_order=ATTRIB_ORDER), ""]
+    if any(r["b_label"] for r in done):
+        md += ["What is wrong with each outline (questionnaire 3)", "", "Dataset label", "", crosstab(done, "kind", "b_label"), "",
+               "AI", "", crosstab(done, "kind", "b_ai"), "",
+               f"Implausible combinations (an error ascribed to an outline the region does not have): "
+               f"{sum(1 for r in done if r['implausible'])} of {sum(1 for r in done if r['implausible'] is not None)}.", ""]
 
-    md += ["## Distance from the fovea (docs/clinical/31)", "",
-           f"Regions with a distance: {sum(1 for r in done if r['dist_band'])} of {len(done)} "
-           f"({sum(1 for r in done if r['dist_approx'])} on the approximate FOV scale).", "",
-           "AI-only regions: blinded verdict by distance (model_right = lesion missed by the label)", "",
-           crosstab([r for r in done if r["kind"] == "FP" and r["dist_band"]], "dist_band", "blind_verdict"), "",
-           "Label-only regions: blinded verdict by distance (dataset_right = lesion missed by the AI)", "",
-           crosstab([r for r in done if r["kind"] == "FN" and r["dist_band"]], "dist_band", "blind_verdict"), "",
-           "Highest ICDR consequence by distance (all differences)", "",
-           crosstab([r for r in done if r["b_cause"] not in (None, "agree") and r["dist_band"]], "dist_band", "b_icdr_max"), "",
-           "Clinical relevance by distance", "",
-           crosstab([r for r in done if r["b_cause"] not in (None, "agree") and r["dist_band"]], "dist_band", "b_relevance"), ""]
+    located = [r for r in done if r["zone"]]
+    md += ["## ETDRS location (docs/clinical/32)", "",
+           f"Regions with a location: {len(located)} of {len(done)} (scale from the reader's disc mark: "
+           f"{sum(1 for r in located if r['scale_source'] == 'reader')}; from the estimate: {sum(1 for r in located if r['scale_source'] == 'estimate')}).", "",
+           "Zone of each region (closest point) by lesion type", "", crosstab(located, "label", "zone", col_order=list(ZONES)), "",
+           "Highest consequence by zone (discrepancies)", "", crosstab([r for r in located if r["kind"] in DISCREPANCY], "zone", "consequence_name", list(ZONES), LEVEL_ORDER), "",
+           "Clinical relevance by zone (discrepancies)", "", crosstab([r for r in located if r["kind"] in DISCREPANCY], "zone", "b_relevance", list(ZONES), REL_ORDER), "",
+           "AI-only regions: blinded verdict by zone (model_right = lesion missed by the label)", "",
+           crosstab([r for r in located if r["kind"] == "FP"], "zone", "blind_verdict", list(ZONES), VERDICT_ORDER), "",
+           "Label-only regions: blinded verdict by zone (dataset_right = lesion missed by the AI)", "",
+           crosstab([r for r in located if r["kind"] == "FN"], "zone", "blind_verdict", list(ZONES), VERDICT_ORDER), "",
+           "Estimated zone (sampling) against the zone from the reader's marks", "",
+           crosstab([r for r in located if r["zone_estimated"]], "zone_estimated", "zone", list(ZONES), list(ZONES)), ""]
 
-    errs = [r for r in done if r["b_cause"] and r["b_cause"] != "agree"]
-    md += ["## Clinical consequence", "", "Highest ICDR consequence (rule-based) by lesion type", "", crosstab(errs, "label", "b_icdr_max"), "",
-           "ICDR consequence (rows) against the reader's clinical relevance (columns): where a threshold is crossed but the "
-           "reader would not act, the rule and practice disagree.", "", crosstab(errs, "b_icdr_max", "b_relevance"), ""]
+    if any(r["arm"] == "stratified" for r in done):
+        md += ["## Region strata (unweighted; docs/clinical/32)", "",
+               "| stratum | regions | label_wrong | ai_wrong | both_wrong | undecided | consequence >= moderate | relevance follow-up or referral |",
+               "|---|---|---|---|---|---|---|---|"]
+        for h in [s["name"] for s in selection["design"].get("stratified", {}).get("strata", [])]:
+            rr = [r for r in done if r["arm"] == "stratified" and r["stratum"] == h]
+            if not rr:
+                continue
+            n = len(rr)
+            md.append(f"| {h} | {n} | {sum(r['attribution'] == 'label_wrong' for r in rr)} | {sum(r['attribution'] == 'ai_wrong' for r in rr)} | "
+                      f"{sum(r['attribution'] == 'both_wrong' for r in rr)} | {sum((r['attribution'] or '').startswith('undecided') for r in rr)} | "
+                      f"{sum(r['consequence'] in ('2', '3') for r in rr)} | {sum(r['b_relevance'] in ('followup', 'referral') for r in rr)} |")
+        md += ["", "Step A finding in the IRMA / NV suspect stratum", "",
+               crosstab([r for r in done if r["stratum"] == "nv_irma_suspect"], "label_kind", "a_finding"), ""]
 
-    md += ["## Design-weighted shares, representative arm (each reader separately)", "",
-           "| reader | kind | quantity | share | 95% interval | regions | images |", "|---|---|---|---|---|---|---|"]
+    md += ["## Clinical consequence", "", "Highest consequence by lesion type (discrepancies)", "",
+           crosstab(disc, "label", "consequence_name", col_order=LEVEL_ORDER), "",
+           "Consequence under the rules (rows) against what the reader would do (columns): where a threshold is crossed but "
+           "the reader would not act, the rule and practice disagree.", "",
+           crosstab(disc, "consequence_name", "b_relevance", LEVEL_ORDER, REL_ORDER), "",
+           "ICDR / DME options ticked", "",
+           ", ".join(f"{k} {v}" for k, v in Counter(c for r in disc for c in (r["b_icdr"].split(";") if r["b_icdr"] else [])).most_common()) or "-", ""]
+
+    im_done = [i for i in images if i["done"]]
+    md += ["## DME on the photograph", "",
+           "The reader's DME answer (closest HEX to their fovea mark) against the zone of the closest HEX outline of the "
+           "dataset label and of the AI, measured from the same fovea mark with the same scale. 'within 1 DD' = inner or central.", "",
+           "Dataset label (rows) against the reader (columns)", "", crosstab(im_done, "dme_label", "pre_dme", DME_ORDER, DME_ORDER + ["cannot"]), "",
+           "AI (rows) against the reader (columns)", "", crosstab(im_done, "dme_ai", "pre_dme", DME_ORDER, DME_ORDER + ["cannot"]), ""]
+    for src in ("label", "ai"):
+        pairs = [(i[f"dme_{src}"] in ("inner", "central"), i.get("pre_dme") in ("inner", "central")) for i in im_done
+                 if i.get(f"dme_{src}") and i.get("pre_dme") in DME_ORDER]
+        if pairs:
+            both = sum(a and b for a, b in pairs)
+            md.append(f"- {src}: reader within 1 DD in {sum(b for _, b in pairs)} images, {src} within 1 DD in {sum(a for a, _ in pairs)}, "
+                      f"both {both}; {src} misses {sum(b and not a for a, b in pairs)}, {src} over-calls {sum(a and not b for a, b in pairs)}; "
+                      f"central subfield: reader {sum(1 for i in im_done if i.get('pre_dme') == 'central')}, "
+                      f"{src} {sum(1 for i in im_done if i.get(f'dme_{src}') == 'central')}")
+    md.append("")
+
+    marks = [dict(m, reader=i["reader"], case_id=i["case_id"]) for i in images for m in (i.get("marks") or [])]
+    md += ["## IRMA and new vessels (optional signs and marks)", "",
+           f"Images with IRMA ticked: {sum(1 for i in im_done if 'irma' in str(i.get('pre_other_signs') or ''))}; with NVD / NVE: "
+           f"{sum(1 for i in im_done if 'nv' in (str(i.get('pre_other_signs') or '')).split(';'))}; marks: "
+           f"{sum(1 for m in marks if m.get('kind') == 'irma')} IRMA, {sum(1 for m in marks if m.get('kind') == 'nv')} NV.", ""]
+    if marks and "under_label" in marks[0]:
+        md += ["What the four-class outlines put under each mark (within 10 px)", "", crosstab(marks, "kind", "under_label"), "", crosstab(marks, "kind", "under_ai"), ""]
+
+    md += ["## Design-weighted shares (stratified or representative arm; each reader separately)", "",
+           "| reader | domain | quantity | share | 95% interval | regions | images |", "|---|---|---|---|---|---|---|"]
+    for r in done:
+        r["conseq_ge2"] = None if r["consequence"] is None else ("yes" if r["consequence"] in ("2", "3") else "no")
+        r["acts"] = None if r["b_relevance"] in (None, "unsure") else ("yes" if r["b_relevance"] in ("followup", "referral") else "no")
     for rd in readers:
-        for kind, field, value in [("FP", "blind_verdict", "model_right"), ("FP", "b_cause", "label_error"),
-                                   ("FN", "blind_verdict", "dataset_right"), ("FN", "b_cause", "model_error"),
-                                   ("agree", "blind_verdict", "both_wrong")]:
-            rows = [r for r in done if r["reader"] == rd and r["arm"] == "representative" and r["kind"] == kind]
-            sh = weighted_share(rows, field, value)
+        weighted = [r for r in done if r["reader"] == rd and r.get("weight")]
+        specs = [("FP", lambda r: r["kind"] == "FP", "blind_verdict", "model_right"),
+                 ("FP", lambda r: r["kind"] == "FP", "attribution", "label_wrong"),
+                 ("FN", lambda r: r["kind"] == "FN", "blind_verdict", "dataset_right"),
+                 ("FN", lambda r: r["kind"] == "FN", "attribution", "ai_wrong"),
+                 ("agree", lambda r: r["kind"] == "agree", "blind_verdict", "both_wrong"),
+                 ("all discrepancies", lambda r: r["kind"] in DISCREPANCY, "attribution", "both_wrong"),
+                 ("all discrepancies", lambda r: r["kind"] in DISCREPANCY, "conseq_ge2", "yes"),
+                 ("all discrepancies", lambda r: r["kind"] in DISCREPANCY, "acts", "yes"),
+                 ("discrepancies within 1 DD", lambda r: r["kind"] in DISCREPANCY and r["near"] == "within 1 DD", "conseq_ge2", "yes"),
+                 ("discrepancies within 1 DD", lambda r: r["kind"] in DISCREPANCY and r["near"] == "within 1 DD", "acts", "yes"),
+                 ("discrepancies beyond 1 DD", lambda r: r["kind"] in DISCREPANCY and r["near"] == "beyond 1 DD", "conseq_ge2", "yes"),
+                 ("discrepancies beyond 1 DD", lambda r: r["kind"] in DISCREPANCY and r["near"] == "beyond 1 DD", "acts", "yes")]
+        for domain, keep, field, value in specs:
+            sh = weighted_share([r for r in weighted if keep(r)], field, value)
             if sh:
-                md.append(f"| {rd} | {kind} | {field} = {value} | {fmt(sh['share'])} | {fmt(sh['lo'])}-{fmt(sh['hi'])} | {sh['n_regions']} | {sh['n_images']} |")
+                md.append(f"| {rd} | {domain} | {field} = {value} | {fmt(sh['share'])} | {fmt(sh['lo'])}-{fmt(sh['hi'])} | {sh['n_regions']} | {sh['n_images']} |")
 
-    md += ["", "## Whole image", "", crosstab([i for i in images if i["done"]], "set", "post_unlabelled"), "",
-           crosstab([i for i in images if i["done"]], "pre_icdr", "post_ai_referral"), ""]
+    md += ["", "## Whole image", "", crosstab(im_done, "set", "post_unlabelled", col_order=["none", "few_peripheral", "few_central", "many"]), "",
+           crosstab(im_done, "post_label_quality", "post_ai_quality"), ""]
+    lm = [i for i in im_done if i.get("fovea_vs_estimate_um") is not None]
+    if lm:
+        d = [i["fovea_vs_estimate_um"] for i in lm]
+        ratios = [i["scale_reader_over_estimate"] for i in lm if i.get("scale_reader_over_estimate")]
+        md += [f"Estimated landmarks against the readers' marks: fovea {fmt(float(np.median(d)), 0)} um apart (median; "
+               f"max {max(d)}; {sum(x > 500 for x in d)} of {len(d)} beyond 500 um); scale reader / estimate median "
+               f"{fmt(float(np.median(ratios)) if ratios else None)}.", ""]
 
     md += ["## Agreement between readers", ""]
     if len(readers) < 2:
         md.append("One reader so far; agreement needs two or more.")
     else:
         md += ["| field | items | all agree | Fleiss kappa | Gwet AC1 | Cohen kappa by pair (quadratic) |", "|---|---|---|---|---|---|"]
-        for field in ["a_group", "a_finding", "blind_verdict", "b_cause", "b_icdr_max", "b_relevance"]:
+        for field in ["a_group", "a_finding", "blind_verdict", "attribution", "b_label", "b_ai", "consequence", "b_relevance", "zone"]:
             line = agreement_row(field, {rd: {r["inst_id"]: r[field] for r in done if r["reader"] == rd} for rd in readers}, ORDINAL.get(field))
             if line:
                 md.append(line)
-        for field in ["pre_icdr", "pre_dme", "pre_quality", "post_ai_grade", "post_ai_referral", "post_unlabelled", "post_label_quality", "post_ai_quality"]:
-            line = agreement_row(field, {rd: {i["case_id"]: i.get(field) for i in images if i["reader"] == rd and i["done"]} for rd in readers}, ORDINAL.get(field))
+        for field in ["pre_icdr", "pre_dme", "pre_quality", "post_unlabelled", "post_label_quality", "post_ai_quality"]:
+            line = agreement_row(field, {rd: {i["case_id"]: i.get(field) for i in im_done if i["reader"] == rd} for rd in readers}, ORDINAL.get(field))
             if line:
                 md.append(line)
+        fov = defaultdict(dict)
+        for rev in reviews:
+            for cid, cs in rev["cases"].items():
+                f = cs["pre"]["answers"].get("pre_fovea")
+                if f and f.get("x") is not None:
+                    fov[cid][rev["reader_id"]] = f
+        gaps = []
+        for cid, byr in fov.items():
+            geo_case = next((i for i in images if i["case_id"] == cid and i.get("um_per_px_reader")), None)
+            if geo_case and len(byr) >= 2:
+                for r1, r2 in itertools.combinations(sorted(byr), 2):
+                    gaps.append(np.hypot(byr[r1]["x"] - byr[r2]["x"], byr[r1]["y"] - byr[r2]["y"]) * geo_case["um_per_px_reader"])
+        if gaps:
+            md += ["", f"Fovea marks between readers: median {fmt(float(np.median(gaps)), 0)} um apart (pairs {len(gaps)})."]
 
-    for field, title in [("b_label_issue", "Dataset-label issues"), ("b_model_issue", "AI issues")]:
+    for field, title in [("b_label_issue", "Dataset-label issues (questionnaire 2)"), ("b_model_issue", "AI issues (questionnaire 2)")]:
         cnt = Counter(code for r in done for code in (r[field].split(";") if r[field] else []))
-        md += ["", f"## {title}", "", ", ".join(f"{k} {v}" for k, v in cnt.most_common()) or "-"]
+        if cnt:
+            md += ["", f"## {title}", "", ", ".join(f"{k} {v}" for k, v in cnt.most_common())]
 
     other = [r for r in done if r["a_finding"] in ("other_lesion", "indeterminate")]
-    md += ["", "## Trial checks (docs/clinical/28 section 8)", "",
-           f"- median active time per region: {fmt(float(np.median([r['active_s'] for r in done])) if done else None, 0)} s (target <= 60)",
+    md += ["", "## Checks", "",
+           f"- median active time per region: {fmt(float(np.median([r['active_s'] for r in done])) if done else None, 0)} s",
            f"- step A 'other' or 'cannot determine': {len(other)} of {len(done)} ({fmt(len(other) / len(done) if done else None)}; target < 0.15)",
            f"- regions with a comment: {sum(1 for r in done if r['b_comment'])}", ""]
     md += ["## Reader feedback on the questions", ""]
@@ -393,7 +660,7 @@ def main(argv=None):
     md += ["", "## Comments", ""]
     for r in done:
         if r["b_comment"]:
-            md.append(f"- {r['reader']} {r['inst_id']} ({r['label']}, {r['kind']}, {r['b_cause']}): {r['b_comment']}")
+            md.append(f"- {r['reader']} {r['inst_id']} ({r['label']}, {r['kind']}, {r['zone'] or 'no zone'}, {r['attribution']}): {r['b_comment']}")
     for i in images:
         if i.get("post_comment"):
             md.append(f"- {i['reader']} {i['case_id']} (image): {i['post_comment']}")

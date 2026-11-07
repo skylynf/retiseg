@@ -1,3 +1,5 @@
+# SUPERSEDED, NEVER RUN (2026-11-03): the trial was read on the demo pack (demo_idrid.yaml) by Dr. Peranut
+# Chotcomwongse on 2026-11-02; the formal batch is batch01.yaml (docs/clinical/32). Kept unchanged as written.
 # Trial design (docs/clinical/28 section 5; docs/clinical/31 meeting of 2026-10-29): 10-20 images read first by
 # Dr. Peranut Chotcomwongse to test the questions and the tool; the formal batch (batch01.yaml, draft) is fixed after
 # this feedback. Frozen and committed before the pack is built; never edited after the reader opens the pack

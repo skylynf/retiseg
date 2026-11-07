@@ -37,6 +37,16 @@ benchmark's own directories is written.
         --model RetiSeg-Ref --grades runs/CLIN/grades.json --out clinical/work/mine/RetiSeg-Ref/DDR \
         [--zoo-train DDR | --zoo SAMed=runs/BS_samed_ddr_seed0/prob_test:runs/BS_samed_ddr_seed0/metrics_test.json ...]
 
+--landmarks runs/CLINREV/landmarks/<set>/landmarks.json (locate_landmarks.py) adds the ETDRS location of every
+region (docs/clinical/32): the distance of its closest pixel and of its centroid from the estimated fovea in um and of its closest pixel from
+the estimated disc center (dist_disc_um; NVD lies on or within 1 DD of the disc)
+(um_per_px = 4,500 um / fovea-to-disc distance), the zone of the closest pixel (C <= 500 um, inner <= 1,500,
+outer <= 3,000, outside) and the subfield (C, S1/I1/N1/T1, S2/I2/N2/T2; nasal = the disc side); and per image the
+label-or-AI hard-exudate pixels in C, within 1 DD (1,500 um) and on the grid (3,000 um).
+Shape (for the IRMA / NV suspects): elongation = sqrt of the ratio of the region's second-moment eigenvalues and the
+minor axis in px. Extra classes: masks_ext/<CLS>/<id>.png of the prepared source (e.g. MAPLES-DR neovascularization)
+or --ext-dir give each region its overlap with IRMA / NV / other labelled extra classes (ext_overlap).
+
 --zoo-train DDR takes the 18 registered ensemble members (bench/scripts/ensemble.py MEMBERS, seed 0, trained on
 DDR) with the ensemble's own map resolver (prob_test for the internal test, runs/E3a/<run>/<set>/prob_test
 otherwise) and each member's validation-optimal thresholds (runs/<run>/metrics_test.json); members whose maps for
@@ -90,10 +100,81 @@ def zoo_from_ensemble(train, set_name):
     return zoo, missing
 
 
-def mine_image(set_name, data_dir, pred_dir, thresholds, image_id, zoo, grade, args, edges, names):
+ETDRS_UM = (500.0, 1500.0, 3000.0)
+ZONES = ("C", "inner", "outer", "outside")
+
+
+def etdrs_zone(dist_um):
+    if dist_um is None:
+        return None
+    return ZONES[int(np.searchsorted(ETDRS_UM, dist_um, side="left"))]
+
+
+def etdrs_subfield(zone, dx, dy, nasal_sign):
+    if zone in (None, "C", "outside"):
+        return zone
+    ring = "1" if zone == "inner" else "2"
+    if abs(dy) >= abs(dx):
+        return ("S" if dy < 0 else "I") + ring
+    return ("N" if np.sign(dx) == nasal_sign else "T") + ring
+
+
+def shape_of(mask):
+    """(elongation, minor axis px) of one region from its second moments."""
+    ys, xs = np.nonzero(mask)
+    if xs.size < 3:
+        return 1.0, float(max(1, xs.size))
+    cov = np.cov(np.vstack([xs, ys]).astype(np.float64))
+    l2, l1 = np.sort(np.maximum(np.linalg.eigvalsh(cov), 0.0))
+    l2 = max(l2, 1.0 / 12.0)                        # a one-pixel-wide line still has width
+    return float(np.sqrt(l1 / l2)), float(4.0 * np.sqrt(l2))
+
+
+def macular_hex(G, P, dist_um_map):
+    """Hard-exudate pixels (label or AI) in the central subfield, within 1 DD and on the ETDRS grid; the nearest one.
+
+    None without landmarks. These decide the image strata of the formal batch (docs/clinical/32): images whose label
+    or AI puts HEX near the fovea are the ones where an error can change the DME call.
+    """
+    if dist_um_map is None:
+        return None
+    ex = G["EX"] | P["EX"]
+    d = dist_um_map[ex]
+    out = {"c": int((d <= ETDRS_UM[0]).sum()), "dd1": int((d <= ETDRS_UM[1]).sum()), "grid": int((d <= ETDRS_UM[2]).sum()),
+           "nearest_um": round(float(d.min())) if d.size else None}
+    for name, m in (("label", G["EX"]), ("ai", P["EX"])):
+        dm = dist_um_map[m]
+        out[f"nearest_{name}_um"] = round(float(dm.min())) if dm.size else None
+    return out
+
+
+def ext_masks(data_dir, ext_dir, image_id, shape):
+    """{CLS: bool mask} of extra labelled classes (IRMA, NV, ...) for one image."""
+    out = {}
+    for root in [Path(data_dir) / "masks_ext"] + ([Path(ext_dir)] if ext_dir else []):
+        if not root.is_dir():
+            continue
+        for cls_dir in sorted(p for p in root.iterdir() if p.is_dir()):
+            f = cls_dir / f"{image_id}.png"
+            if f.is_file():
+                m = common.bio._read_binary(f)
+                if m.shape == shape:
+                    out[cls_dir.name] = out.get(cls_dir.name, np.zeros(shape, bool)) | m
+    return out
+
+
+def mine_image(set_name, data_dir, pred_dir, thresholds, image_id, zoo, grade, args, edges, names, landmark=None):
     fov, gt_all, ignore = common.read_case(data_dir, image_id)
     H, W = fov.shape
     geo = fov_geometry(fov)
+    dist_um_map, nasal_sign, fovea = None, 1, None
+    if landmark and landmark.get("um_per_px"):
+        fovea = landmark["fovea"]
+        nasal_sign = 1 if landmark["disc"][0] >= fovea[0] else -1
+        yy, xx = np.ogrid[:H, :W]
+        dist_um_map = (np.hypot(xx - fovea[0], yy - fovea[1]) * landmark["um_per_px"]).astype(np.float32)
+        disc_um_map = (np.hypot(xx - landmark["disc"][0], yy - landmark["disc"][1]) * landmark["um_per_px"]).astype(np.float32)
+    extra = ext_masks(data_dir, getattr(args, "ext_dir", None), image_id, fov.shape)
     valid = {c: fov & ~ignore[c] for c in CLASSES}
     prob = {c: common.read_prob(pred_dir, c, image_id) for c in CLASSES}
     for c in CLASSES:
@@ -122,6 +203,9 @@ def mine_image(set_name, data_dir, pred_dir, thresholds, image_id, zoo, grade, a
         other_g = {o: ndimage.sum_labels(G[o], lab, idx) for o in CLASSES if o != c}
         other_p = {o: ndimage.sum_labels(P[o], lab, idx) for o in CLASSES if o != c}
         zoo_hit = [ndimage.maximum(z[c], lab, idx) for z in zoo_pos]
+        dmin = ndimage.minimum(dist_um_map, lab, idx) if dist_um_map is not None else None
+        ddisc = ndimage.minimum(disc_um_map, lab, idx) if dist_um_map is not None else None
+        ext_ov = {e: ndimage.sum_labels(m, lab, idx) for e, m in extra.items()}
         slices = ndimage.find_objects(lab)
         cents = ndimage.center_of_mass(union, lab, idx)
         for k in range(n):
@@ -162,6 +246,18 @@ def mine_image(set_name, data_dir, pred_dir, thresholds, image_id, zoo, grade, a
                 "grade": grade, "grade_band": common.grade_band(grade),
                 "image_size": [W, H],
             }
+            elong, minor = shape_of(lab[sl] == k + 1)
+            row["elongation"] = round(elong, 2)
+            row["minor_axis_px"] = round(minor, 1)
+            if ext_ov:
+                row["ext_overlap"] = {e: int(v[k]) for e, v in ext_ov.items() if v[k] > 0}
+            if dmin is not None:
+                d_min = float(dmin[k])
+                d_cen = float(np.hypot(cx - fovea[0], cy - fovea[1]) * landmark["um_per_px"])
+                zone = etdrs_zone(d_min)
+                row.update({"dist_min_um": round(d_min), "dist_centroid_um": round(d_cen), "etdrs_zone": zone,
+                            "dist_disc_um": round(float(ddisc[k])),
+                            "etdrs_sub": etdrs_subfield(zone, cx - fovea[0], cy - fovea[1], nasal_sign)})
             if zoo:
                 hits = [bool(z[k]) for z in zoo_hit]
                 row["zoo_n"] = len(hits)
@@ -172,7 +268,10 @@ def mine_image(set_name, data_dir, pred_dir, thresholds, image_id, zoo, grade, a
             if subtype:
                 counts[c]["confusion"] += 1
     image_row = {"set": set_name, "image_id": image_id, "grade": grade, "grade_band": common.grade_band(grade),
-                 "image_size": [W, H], "fov": geo, "counts": counts,
+                 "image_size": [W, H], "fov": geo, "counts": counts, "landmark": landmark,
+                 "n_fp_elongated": sum(1 for r in rows if r["kind"] == "FP" and r["cls"] in ("HE", "MA") and r["elongation"] >= 3.0),
+                 "ext_classes": sorted(extra),
+                 "ex_px": macular_hex(G, P, dist_um_map),
                  "n_gt_pixels": {c: int(G[c].sum()) for c in CLASSES}, "n_pred_pixels": {c: int(P[c].sum()) for c in CLASSES}}
     return rows, image_row
 
@@ -189,6 +288,8 @@ def main(argv=None):
     ap.add_argument("--grades", help="runs/CLIN/grades.json, a flat {id: grade} json, or 'auto' (that file if present, else the DDR release / prepared export)")
     ap.add_argument("--zoo", nargs="*", help="NAME=PRED_DIR[:THRESHOLDS] of other models, for the consensus feature")
     ap.add_argument("--zoo-train", help="use the 18 registered ensemble members trained on this source (e.g. DDR) as the zoo")
+    ap.add_argument("--landmarks", help="landmarks.json of locate_landmarks.py (fovea, disc, um_per_px per image): ETDRS zones")
+    ap.add_argument("--ext-dir", help="extra labelled classes <CLS>/<id>.png (IRMA, NV, ...) besides <data>/masks_ext")
     ap.add_argument("--extent-iou", type=float, default=0.5)
     ap.add_argument("--confusion-share", type=float, default=0.3)
     ap.add_argument("--out", required=True)
@@ -204,6 +305,11 @@ def main(argv=None):
         zoo += extra
         print(f"[mine] zoo: {len(zoo)} models; missing maps for {[m['name'] for m in zoo_missing]}", flush=True)
     grades = common.load_grades(args.grades, args.set, data_dir)
+    landmarks = {}
+    if args.landmarks:
+        from locate_landmarks import load_landmarks
+        landmarks = load_landmarks(args.landmarks)
+        print(f"[mine] landmarks for {sum(1 for i in ids if i in landmarks)}/{len(ids)} images", flush=True)
     edges, names = common.size_edges()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -211,7 +317,8 @@ def main(argv=None):
     all_rows, image_rows = [], []
     t0 = time.time()
     for n, image_id in enumerate(ids, 1):
-        rows, image_row = mine_image(args.set, data_dir, args.pred, thresholds, image_id, zoo, grades.get(image_id), args, edges, names)
+        rows, image_row = mine_image(args.set, data_dir, args.pred, thresholds, image_id, zoo, grades.get(image_id), args, edges,
+                                     names, landmarks.get(image_id))
         all_rows.extend(rows)
         image_rows.append(image_row)
         if n % 10 == 0 or n == len(ids):
@@ -223,6 +330,8 @@ def main(argv=None):
         "thresholds": thresholds, "threshold_source": source, "extent_iou": args.extent_iou,
         "confusion_share": args.confusion_share, "size_edges": edges, "size_names": names,
         "zoo": [{k: v for k, v in m.items()} for m in zoo], "zoo_missing": zoo_missing, "grades": args.grades, "n_images": len(ids),
+        "landmarks": args.landmarks, "landmarks_sha256": common.sha256_file(args.landmarks) if args.landmarks else None,
+        "etdrs_um": list(ETDRS_UM), "ext_dir": args.ext_dir,
         "n_clusters": len(all_rows), "written": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "candidates_sha256": common.sha256_file(out / "candidates.jsonl"),
     }

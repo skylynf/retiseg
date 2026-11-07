@@ -248,6 +248,7 @@ body.panel-dark #side {
         <button class="tbtn" id="tRedfree" title="Red-free / green channel (G)">Red-free</button>
         <button class="tbtn" id="tReset" title="Reset image adjustments">Reset</button>
       </div>
+      <div class="tgroup"><button class="tbtn" id="tGrid" title="ETDRS grid on your foveal mark (E)">ETDRS grid</button></div>
       <div class="tgroup" id="ovGroup">
         <button class="tbtn" id="tAnn" title="Dataset label, solid (D)">Dataset label</button>
         <button class="tbtn" id="tModel" title="AI outline, dashed (M)">AI</button>
@@ -279,8 +280,8 @@ body.panel-dark #side {
     <h1>How to read</h1>
     <p class="lead">Each image has three kinds of step.</p>
     <ol>
-      <li><b>Grade the image.</b> ICDR grade, DME and the fovea, with no outlines shown.</li>
-      <li><b>Each marked region.</b> First say what is in the dashed circle (A). Then reveal the dataset label and the AI outline and say who is right and what the error would change (B). Your answer to A is locked once you reveal.</li>
+      <li><b>Grade the image.</b> Mark the fovea and the disc (the ETDRS grid appears), then ICDR grade and DME, with no outlines shown.</li>
+      <li><b>Each marked region.</b> First say what is in the dashed circle (A). Then reveal the dataset label and the AI outline, judge each of them, and say what the error would change (B). Your answer to A is locked once you reveal.</li>
       <li><b>Whole image.</b> All outlines are shown; judge the AI lesions and the dataset label for the image as a whole.</li>
     </ol>
     <h2>ICDR quick reference</h2>
@@ -290,10 +291,12 @@ body.panel-dark #side {
       <tr><td>Moderate NPDR</td><td>More than MA only (any HG, HEX or CWS), less than severe</td></tr>
       <tr><td>Severe NPDR</td><td>4-2-1 rule: &gt;20 intraretinal HG in each of 4 quadrants, or definite venous beading in &ge;2 quadrants, or prominent IRMA in &ge;1 quadrant; no PDR</td></tr>
       <tr><td>PDR</td><td>NV, and/or vitreous or preretinal hemorrhage</td></tr>
-      <tr><td>DME</td><td>Non-center-involving or center-involving; on the photograph judged from HEX relative to the foveal center</td></tr>
+      <tr><td>DME (photograph)</td><td>Closest HEX to the fovea on the ETDRS grid. Within 1 DD (central subfield or inner ring) is referable; the central subfield is the closest photographic sign of center-involving DME, which strictly needs OCT (central subfield thickness)</td></tr>
       <tr><td>Referable</td><td>Moderate NPDR or worse, and/or DME</td></tr>
     </table>
     <p>Of the four lesion types, only the HG count can reach severe NPDR (4-2-1); IRMA, venous beading and NV are not labelled in these datasets.</p>
+    <h2>ETDRS grid</h2>
+    <p>Centered on your foveal mark; the scale takes the fovea-to-disc distance as 4.5 mm (about 3 DD of 1.5 mm). Circles: central subfield C (1 mm diameter), inner ring (1&ndash;3 mm), outer ring (3&ndash;6 mm); S, I, N, T are superior, inferior, nasal (disc side) and temporal. Press E to show or hide it. The scale is approximate (individual eyes differ by about 10%).</p>
     <h2>Outlines</h2>
     <table id="helpLegend"></table>
     <h2>Keys</h2>
@@ -302,7 +305,7 @@ body.panel-dark #side {
       <tr><td>Enter</td><td>reveal / next</td></tr>
       <tr><td>F &middot; Z</td><td>fit the image &middot; zoom to the region</td></tr>
       <tr><td>+ &middot; &minus; &middot; drag &middot; wheel</td><td>zoom and pan</td></tr>
-      <tr><td>G</td><td>red-free view</td></tr>
+      <tr><td>G &middot; E</td><td>red-free view &middot; ETDRS grid</td></tr>
       <tr><td>D &middot; M &middot; H &middot; K</td><td>dataset outline &middot; model outline &middot; heat map &middot; marker (when allowed)</td></tr>
     </table>
     <h2>Saving</h2>
@@ -331,7 +334,7 @@ body.panel-dark #side {
 
 <script>
 "use strict";
-const TOOL_VERSION = "0.9.0";
+const TOOL_VERSION = "1.0.0";
 const $ = (id) => document.getElementById(id);
 const el = (tag, attrs = {}, ...kids) => {
   const n = document.createElement(tag);
@@ -472,17 +475,20 @@ function stepRecord(caseId, step) {
   if (!cs.regions[step.rid]) cs.regions[step.rid] = { a: { answers: {}, t: {} }, b: { answers: {}, t: {} }, revealed_at: null };
   return step.kind === "region_a" ? cs.regions[step.rid].a : cs.regions[step.rid].b;
 }
-function visible(q, answers, caseObj) {
-  const c = q.show_if;
-  if (!c) return true;
+// show_if: {q, in | not_in}, {case_has}, or {any: [...]} / {all: [...]} of those. An unanswered question
+// satisfies neither "in" nor "not_in", so a dependent question appears only after its trigger is answered.
+function condTrue(c, answers, caseObj) {
+  if (c.any) return c.any.some(x => condTrue(x, answers, caseObj));
+  if (c.all) return c.all.every(x => condTrue(x, answers, caseObj));
   if (c.case_has) return !!(caseObj && caseObj[c.case_has]);
   const v = answers[c.q];
-  if (v === undefined || v === null || v === "") return c.not_in ? false : false;
+  if (v === undefined || v === null || v === "" || (Array.isArray(v) && v.length === 0)) return false;
   const vals = Array.isArray(v) ? v : [v];
   if (c.in) return vals.some(x => c.in.includes(x));
   if (c.not_in) return vals.every(x => !c.not_in.includes(x));
   return true;
 }
+function visible(q, answers, caseObj) { return !q.show_if || condTrue(q.show_if, answers, caseObj); }
 function empty(v) { return v === undefined || v === null || v === "" || (Array.isArray(v) && v.length === 0); }
 function missingIn(stepKind, answers, caseObj) {
   const qs = PACK.schema.steps[stepKind].questions;
@@ -574,6 +580,9 @@ function renderForm() {
     const lab = (o.label || "-") + (o.help ? ` (${o.help})` : "");
     const conf = a.a_confidence ? `, ${a.a_confidence}` : "";
     form.append(el("div", { class: "q locked alt" }, el("div", { class: "qlabel", text: "Your answer before the reveal" }), el("div", { class: "qhelp", style: "margin-left:0", text: lab + conf })));
+    const reg = regionOf(step), g = gridGeom(cur.caseId);
+    const where = g && reg ? "ETDRS location: " + zoneText(zoneOf(g, reg.marker.cx, reg.marker.cy)) : "ETDRS location not available (fovea or scale not marked)";
+    form.append(el("div", { class: "q alt", id: "zoneLine" }, el("div", { class: "qlabel", text: where }), g ? el("div", { class: "qhelp", style: "margin-left:0", text: `From ${g.source}; 1 DD = 1.5 mm.` }) : null));
   }
   const missing = markMissing ? new Set(missingIn(step.kind, rec.answers, caseObj)) : new Set();
   let n = 0;
@@ -596,7 +605,7 @@ function renderQuestion(q, rec, caseObj, locked, isMissing, num) {
     if (locked) return;
     if (empty(v)) delete rec.answers[q.id]; else rec.answers[q.id] = v;
     pruneHidden(cur.debrief ? "debrief" : cur.step.kind, rec.answers, caseObj);
-    save(); renderForm();
+    save(); renderForm(); if (q.type === "point" || q.type === "points") { renderToolbar(); draw(); }
   };
   if (q.type === "single" || q.type === "multi") {
     const isTarget = q.type === "single" && !locked && empty(val) && !kbdTarget;
@@ -638,10 +647,30 @@ function renderQuestion(q, rec, caseObj, locked, isMissing, num) {
     const placed = val && val.x !== undefined;
     const txt = placed ? "Marked on the image" : (val && val.not_visible ? "Not visible" : "Not set");
     const row = el("div", { class: "pointrow" },
-      el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => { placing = { id: q.id, set }; $("viewer").classList.add("placing"); $("placeHint").classList.remove("hidden"); } }, placed ? "Move" : "Set"),
+      el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => armPlacing({ id: q.id, set }, `Click the ${q.label.toLowerCase()} on the image · Esc to cancel`) }, placed ? "Move" : "Set"),
       q.allow_not_visible ? el("button", { class: "btn small" + (val && val.not_visible ? " primary" : ""), type: "button", disabled: locked, onclick: () => set(val && val.not_visible ? null : { not_visible: true }) }, "Not visible") : null,
       val ? el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => set(null) }, "Clear") : null,
       el("span", { text: txt }));
+    box.append(row);
+  } else if (q.type === "points") {
+    const pts = Array.isArray(val) ? val : [];
+    const row = el("div", { class: "pointrow" });
+    for (const k of q.kinds) {
+      const n = pts.filter(p => p.kind === k.code).length;
+      const active = placing && placing.id === q.id && placing.kind === k.code;
+      row.append(el("button", { class: "btn small" + (active ? " primary" : ""), type: "button", disabled: locked, onclick: () => {
+        if (active) { cancelPlacing(); renderForm(); return; }
+        armPlacing({ id: q.id, kind: k.code, multi: true, add: (pt) => {
+          const list = (rec.answers[q.id] || []).slice(); list.push({ ...pt, kind: k.code });
+          rec.answers[q.id] = list; save(); renderForm(); draw();
+        } }, `Click each ${k.label} on the image · Esc or Done to stop`);
+        renderForm();
+      } }, active ? `Done (${k.label})` : `Add ${k.label}`), el("span", { text: `${k.label}: ${n}` }));
+    }
+    if (pts.length) {
+      row.append(el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => set(pts.slice(0, -1)) }, "Undo last"),
+        el("button", { class: "btn small", type: "button", disabled: locked, onclick: () => set(null) }, "Clear"));
+    }
     box.append(row);
   }
   return box;
@@ -711,8 +740,73 @@ const clsLabel = (cls) => (PACK.classes[cls] && PACK.classes[cls].label) || cls;
 /* ======================================================================= viewer */
 const V = { img: null, imgCase: null, scale: 1, tx: 0, ty: 0, dpr: window.devicePixelRatio || 1, paths: {}, heat: {},
   showAnn: true, showModel: true, showHeat: false, showMarker: true, cls: { MA: true, HE: true, EX: true, SE: true },
-  bright: 100, contrast: 100, redfree: false };
+  bright: 100, contrast: 100, redfree: false, showGrid: true };
 const base = $("baseCanvas"), over = $("overCanvas"), mini = $("minimap");
+
+/* ETDRS grid (docs/clinical/32): centered on the reader's foveal mark; scale from the reader's fovea-to-disc distance
+   taken as fovea_disc_um (4,500 um), else the pack's per-image estimate (case.etdrs.um_per_px). Radii 500 / 1,500 /
+   3,000 um (central subfield 1 mm, inner ring 1-3 mm, outer ring 3-6 mm diameter); 1 DD = 1,500 um. Superior is up;
+   nasal is the side of the disc mark. */
+const ETD = () => Object.assign({ fovea_disc_um: 4500, central_um: 500, inner_um: 1500, outer_um: 3000, dd_um: 1500 }, PACK.schema.etdrs || {});
+function gridGeom(caseId) {
+  const cs = S && S.cases[caseId]; if (!cs) return null;
+  const a = cs.pre.answers, f = a.pre_fovea, d = a.pre_disc, c = caseById(caseId);
+  if (!f || f.x === undefined) return null;
+  let umpx = null, nasal = 0, source = null;
+  if (d && d.x !== undefined) {
+    const dist = Math.hypot(f.x - d.x, f.y - d.y);
+    nasal = Math.sign(d.x - f.x) || 1;
+    if (dist > 10) { umpx = ETD().fovea_disc_um / dist; source = "your fovea and disc marks"; }
+  }
+  if (!umpx && c.etdrs && c.etdrs.um_per_px) { umpx = c.etdrs.um_per_px; source = "an automatic scale estimate"; }
+  return umpx ? { fx: f.x, fy: f.y, umpx, nasal, source } : null;
+}
+const RING_NAME = ["central subfield", "inner ring", "outer ring", "outside the grid"];
+const SIDE_NAME = { S: "superior", I: "inferior", N: "nasal", T: "temporal" };
+function zoneOf(g, x, y) {
+  const e = ETD(), dum = Math.hypot(x - g.fx, y - g.fy) * g.umpx;
+  const ring = dum <= e.central_um ? 0 : dum <= e.inner_um ? 1 : dum <= e.outer_um ? 2 : 3;
+  let side = null;
+  if (ring === 1 || ring === 2) {
+    const dx = x - g.fx, dy = y - g.fy;
+    if (Math.abs(dy) >= Math.abs(dx)) side = dy < 0 ? "S" : "I";
+    else if (g.nasal) side = Math.sign(dx) === g.nasal ? "N" : "T";
+  }
+  return { dum, ring, side, sub: ring === 0 ? "C" : ring === 3 ? "outside" : (side ? side + ring : "ring" + ring) };
+}
+function zoneText(z) {
+  const mm = (z.dum / 1000).toFixed(1);
+  if (z.ring === 0) return `central subfield (C), ${mm} mm from the fovea`;
+  if (z.ring === 3) return `outside the grid, ${mm} mm from the fovea`;
+  return `${RING_NAME[z.ring]}${z.side ? ", " + SIDE_NAME[z.side] + " (" + z.sub + ")" : ""}, ${mm} mm from the fovea`;
+}
+function drawGrid(octx, g, px) {
+  const e = ETD(), r = [e.central_um, e.inner_um, e.outer_um].map(u => u / g.umpx);
+  octx.save();
+  const strokeBoth = (path) => {
+    octx.lineWidth = 3.2 * px; octx.strokeStyle = "rgba(0,0,0,.45)"; octx.stroke(path);
+    octx.lineWidth = 1.4 * px; octx.strokeStyle = "rgba(255,255,255,.85)"; octx.stroke(path);
+  };
+  const path = new Path2D();
+  for (const rr of r) { path.moveTo(g.fx + rr, g.fy); path.arc(g.fx, g.fy, rr, 0, Math.PI * 2); }
+  for (const a of [45, 135, 225, 315]) {
+    const t = a * Math.PI / 180;
+    path.moveTo(g.fx + r[0] * Math.cos(t), g.fy + r[0] * Math.sin(t));
+    path.lineTo(g.fx + r[2] * Math.cos(t), g.fy + r[2] * Math.sin(t));
+  }
+  octx.setLineDash([]);
+  strokeBoth(path);
+  octx.font = `600 ${12 * px}px system-ui, sans-serif`; octx.textAlign = "center"; octx.textBaseline = "middle";
+  const label = (txt, x, y) => { octx.lineWidth = 3 * px; octx.strokeStyle = "rgba(0,0,0,.6)"; octx.strokeText(txt, x, y); octx.fillStyle = "#ffffff"; octx.fillText(txt, x, y); };
+  const dirs = { S: [0, -1], I: [0, 1], N: [g.nasal || 1, 0], T: [-(g.nasal || 1), 0] };
+  for (const [side, [dx, dy]] of Object.entries(dirs)) {
+    if (!g.nasal && (side === "N" || side === "T")) continue;
+    label(side + "1", g.fx + dx * (r[0] + r[1]) / 2, g.fy + dy * (r[0] + r[1]) / 2);
+    label(side + "2", g.fx + dx * (r[1] + r[2]) / 2, g.fy + dy * (r[1] + r[2]) / 2);
+  }
+  label("C", g.fx, g.fy - r[0] * 0.55);
+  octx.restore();
+}
 const imgCache = new Map();
 
 function loadImage(src) {
@@ -792,6 +886,7 @@ function setOverlayDefaults() {
   V.showAnn = V.showModel = (mode === "crop" || mode === "all");
   V.showHeat = false;
   V.showMarker = (mode === "marker" || mode === "crop");
+  V.showGrid = !cur.step || cur.step.kind === "image_pre" || cur.step.kind === "image_post";   // on for the image steps
 }
 
 let drawQueued = false;
@@ -856,14 +951,27 @@ function drawNow() {
     octx.setLineDash([7 * px, 5 * px]); octx.lineWidth = 2 * px; octx.strokeStyle = "#ffffff"; octx.stroke();
     octx.setLineDash([]);
   }
+  // ETDRS grid
+  const g = gridGeom(cur.caseId);
+  if (g && V.showGrid) drawGrid(octx, g, px);
   // reader's points (image step)
   const pre = S.cases[cur.caseId] && S.cases[cur.caseId].pre.answers;
   if (pre && (cur.step.kind === "image_pre" || cur.step.kind === "image_post")) {
+    for (const m of (pre.pre_marks || [])) {
+      const s = 9 * px;
+      octx.beginPath(); octx.moveTo(m.x, m.y - s); octx.lineTo(m.x + s, m.y); octx.lineTo(m.x, m.y + s); octx.lineTo(m.x - s, m.y); octx.closePath();
+      octx.lineWidth = 3.5 * px; octx.strokeStyle = "rgba(0,0,0,.6)"; octx.stroke();
+      octx.lineWidth = 1.8 * px; octx.strokeStyle = "#ffffff"; octx.stroke();
+      octx.font = `600 ${12 * px}px system-ui, sans-serif`; octx.textAlign = "left"; octx.textBaseline = "alphabetic";
+      octx.lineWidth = 3 * px; octx.strokeStyle = "rgba(0,0,0,.6)"; octx.strokeText(m.kind.toUpperCase(), m.x + 11 * px, m.y - 6 * px);
+      octx.fillStyle = "#ffffff"; octx.fillText(m.kind.toUpperCase(), m.x + 11 * px, m.y - 6 * px);
+    }
     for (const [id, label] of [["pre_fovea", "Fovea"], ["pre_disc", "Disc"]]) {
       const p = pre[id]; if (!p || p.x === undefined) continue;
       octx.lineWidth = 2 * px; octx.strokeStyle = "#ffffff";
       octx.beginPath(); octx.moveTo(p.x - 14 * px, p.y); octx.lineTo(p.x + 14 * px, p.y); octx.moveTo(p.x, p.y - 14 * px); octx.lineTo(p.x, p.y + 14 * px); octx.stroke();
-      octx.font = `${12 * px}px system-ui, sans-serif`; octx.fillStyle = "#ffffff"; octx.fillText(label, p.x + 8 * px, p.y - 8 * px);
+      octx.font = `${12 * px}px system-ui, sans-serif`; octx.textAlign = "left"; octx.textBaseline = "alphabetic"; octx.fillStyle = "#ffffff";
+      octx.fillText(label, p.x + 8 * px, p.y + (id === "pre_fovea" ? 22 : -8) * px);   // below the cross: the grid's "C" sits above
     }
   }
 }
@@ -911,8 +1019,9 @@ mini.addEventListener("click", (e) => {
     if (drag && !drag.moved && placing && V.img) {
       const r = vw.getBoundingClientRect();
       const x = (e.clientX - r.left - V.tx) / V.scale, y = (e.clientY - r.top - V.ty) / V.scale;
-      const p = placing; cancelPlacing();
-      p.set({ x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 });
+      const pt = { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+      if (placing.multi) placing.add(pt);
+      else { const p = placing; cancelPlacing(); p.set(pt); }
       draw();
     }
     drag = null;
@@ -923,6 +1032,7 @@ mini.addEventListener("click", (e) => {
     zoomAt(Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)), e.clientX - r.left, e.clientY - r.top);
   }, { passive: false });
 })();
+function armPlacing(p, hint) { placing = p; $("viewer").classList.add("placing"); $("placeHint").textContent = hint; $("placeHint").classList.remove("hidden"); }
 function cancelPlacing() { placing = null; $("viewer").classList.remove("placing"); $("placeHint").classList.add("hidden"); }
 
 /* ======================================================================= toolbar */
@@ -936,6 +1046,9 @@ function renderToolbar() {
     b.classList.toggle("hidden", !allowed && id !== "tMarker");
   }
   $("tRegion").disabled = !regionOf(cur.step);
+  const g = cur.debrief ? null : gridGeom(cur.caseId);
+  $("tGrid").disabled = !g; $("tGrid").classList.toggle("on", !!g && V.showGrid);
+  $("tGrid").title = g ? `ETDRS grid (E); scale from ${g.source}` : "ETDRS grid: mark the fovea and the disc first";
   $("tRedfree").classList.toggle("on", V.redfree);
   const cg = $("clsGroup"); cg.innerHTML = "";
   for (const cls of ["MA", "HE", "EX", "SE"]) {
@@ -972,6 +1085,7 @@ $("tModel").onclick = () => toggle("showModel");
 $("tHeat").onclick = () => toggle("showHeat");
 $("tMarker").onclick = () => toggle("showMarker");
 $("tRedfree").onclick = () => { V.redfree = !V.redfree; renderToolbar(); draw(); };
+$("tGrid").onclick = () => { V.showGrid = !V.showGrid; renderToolbar(); draw(); };
 $("tReset").onclick = () => { V.bright = 100; V.contrast = 100; V.redfree = false; $("rBright").value = 100; $("rContrast").value = 100; renderToolbar(); draw(); };
 $("rBright").oninput = (e) => { V.bright = +e.target.value; draw(); };
 $("rContrast").oninput = (e) => { V.contrast = +e.target.value; draw(); };
@@ -982,7 +1096,7 @@ document.addEventListener("keydown", (e) => {
   const tag = (e.target.tagName || "").toLowerCase();
   if (tag === "textarea" || (tag === "input" && e.target.type === "text")) { if (e.key === "Escape") e.target.blur(); return; }
   if (!$("helpScreen").classList.contains("hidden") || !$("moreScreen").classList.contains("hidden")) { if (e.key === "Escape") { $("helpScreen").classList.add("hidden"); $("moreScreen").classList.add("hidden"); } return; }
-  if (e.key === "Escape" && placing) { cancelPlacing(); return; }
+  if (e.key === "Escape" && placing) { cancelPlacing(); if (!cur.debrief) renderForm(); return; }
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   const k = e.key;
   if (k >= "1" && k <= "9" && kbdTarget) {
@@ -992,7 +1106,7 @@ document.addEventListener("keydown", (e) => {
   }
   if (k === "Enter") { e.preventDefault(); next(); return; }
   const map = { f: () => $("tFit").click(), z: () => $("tRegion").click(), "+": () => zoomAt(1.4), "=": () => zoomAt(1.4), "-": () => zoomAt(1 / 1.4),
-    g: () => $("tRedfree").click(), d: () => toggle("showAnn"), m: () => toggle("showModel"), h: () => toggle("showHeat"), k: () => toggle("showMarker"),
+    g: () => $("tRedfree").click(), e: () => $("tGrid").click(), d: () => toggle("showAnn"), m: () => toggle("showModel"), h: () => toggle("showHeat"), k: () => toggle("showMarker"),
     "?": () => $("helpScreen").classList.remove("hidden") };
   const fn = map[k.toLowerCase()] || map[k];
   if (fn) { e.preventDefault(); fn(); }
@@ -1017,7 +1131,7 @@ function showDebrief() {
 }
 function renderDebriefForm(form) {
   const sdef = PACK.schema.steps.debrief;
-  for (const q of sdef.questions) form.append(renderQuestion(q, S.debrief, null, false, false));
+  sdef.questions.forEach((q, i) => form.append(renderQuestion(q, S.debrief, null, false, false, i + 1)));
   updateNav();
 }
 function finishDebrief() {

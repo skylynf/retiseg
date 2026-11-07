@@ -19,12 +19,17 @@
 
 三、当前待办（2026-11-01）
   论文实验：全部完成，不再有待跑项。不做的（决定见 14 备注）：第 59 条 HACDR seed0 探针（21 第 87 条，低优先）、第 49 条 FCT 修正配方（14 备注 60）、N6 校准与 N7 样本量（14 备注 77）。
-  仍要做的只有临床合作（用户 10-29 加的第 72 条；代码 clinical/，用法 clinical/README.md；设计 docs/clinical/28 第九节）：
+  仍要做的只有临床合作（用户 10-29 加的第 72 条；代码 clinical/，用法 clinical/README.md；设计 docs/clinical/28 第九节、32 第七节）：
   72. 临床合作的前置与试点数据（docs/clinical/28 第九节；代码 clinical/，用法 clinical/README.md）。
      （a）参考模型集成在五个集合上留图（CPU 约半小时；第 69 条已完成且已删图，所以按下面“72（a）修订命令”做，这一条命令对已有 done.json 的集合会直接跳过）：
        python bench/scripts/ensemble.py reference --members runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0 --sets DDR,IDRiD,TJDR_std,TJDR_uwf,MAPLES-DR
      确认 runs/ENS/REF/reference/<集合>/prob_test 五个目录在、图数分别是 225、27、55、58、60；mAUPR 应与带 --drop-maps 那次逐位相同（贴 00）。18 个登记成员（bench/scripts/ensemble.py MEMBERS，DDR 训练、种子 0）在这五个集合上的图（runs/BS_*_ddr_seed0/prob_test、NN_*_ddr_fold0/prob_test、runs/E3a/<成员>/<集合>/prob_test）不要删。
-     （b）等本机通知（试判设计 clinical/designs/trial01.yaml 确认、许可核对之后）再做：挖掘（CPU，DDR、IDRiD、TJDR_std、TJDR_uwf 四个集合约半天；正式批次再加 MAPLES-DR）→ 抽样（几秒）→ 打包（几分钟，带 --zip），命令照 clinical/README.md 的 "Trial (10-20 images), on the server"（2026-10-29 改：先试判 15 张，docs/clinical/31）。挖掘与抽样写在 runs/CLINREV/ 下，小文件随回传包走（selection.json 要在包里）；数据包 clinical/packs/trial01 与 trial01.zip 带图像，单独传到工作站，不进回传包、不进 git。每个集合挖掘的末行（各类各型区域数）与抽样的 report 贴 00。
+     （b）（2026-11-03 改：试判已在演示包上做完，trial01 不跑；docs/clinical/32）等本机通知（许可核对、batch01.yaml 冻结之后）再做正式批次，命令照 clinical/README.md 的 "Formal batch, on the server"：
+       b1 定位（CPU，五个集合合计约 20 分钟）：locate_landmarks.py estimate，视野角 DDR / TJDR_std / MAPLES-DR 45、IDRiD 50、TJDR_uwf 133，输出 runs/CLINREV/landmarks/<集合>/landmarks.json 与 qc.html；五个 qc.html（自带缩略图，每个几 MB，不含原图）单独传到工作站。
+       b2 本机在 QC 页改定位，把 corrections_<集合>.json 传回；locate_landmarks.py apply 合并（没有改动的集合跳过）。
+       b3 挖掘（CPU，五个集合约半天）：mine_discrepancies.py --grades auto --zoo-train DDR --landmarks runs/CLINREV/landmarks/<集合>/landmarks.json，输出 runs/CLINREV/mine/RetiSeg-Ref/<集合>/。每个集合的末行（各类各型区域数）贴 00；再贴一行各集合按 etdrs_zone 的分歧区域数（python -c 读 candidates.jsonl 计数即可）。
+       b4 本机提交冻结的 batch01.yaml 后：sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01（report 贴 00）→ build_pack.py --out runs/CLINREV/packs/batch01 --zip。
+       MAPLES-DR 只在本机通知许可允许时进 b1–b4。landmarks、mine、selection 的小文件随回传包走（selection.json、landmarks.json 要在包里）；数据包与 zip 带图像，单独传到工作站，不进回传包、不进 git。
   72（a）修订命令（本机 10-30；替代上面（a）的第一条命令）：
        for m in retfound samed; do for s in IDRiD TJDR_std; do python -m bench.predict --config /tmp/ref_${m}_${s}.yaml --checkpoint runs/BF_ref_${m}_fine_seed0/best.pt --pred-dir runs/BF_ref_${m}_fine_seed0/insource_${s}/prob --split test; done; done
        python bench/scripts/ensemble.py reference --members runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0 --sets DDR,IDRiD,TJDR_std,TJDR_uwf,MAPLES-DR --regenerate-maps

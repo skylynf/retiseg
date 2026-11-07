@@ -1,0 +1,44 @@
+# Demo of the formal batch's design (batch01.yaml, docs/clinical/32) on the five demo IDRiD images with the M2MRF
+# author checkpoint (runs/E1_m2mrf). Like demo_idrid.yaml it is NOT a study sample; it exercises the landmarks, the
+# ETDRS region strata and the stratified weights, and gives the reader tool v1.0 its test pack.
+#   python clinical/scripts/locate_landmarks.py estimate --set IDRiD --data dataset/prepared/IDRiD --field-deg 50 \
+#       --ids IDRiD_55 IDRiD_59 IDRiD_63 IDRiD_67 IDRiD_72 --out clinical/work/landmarks/IDRiD   # no corrections needed
+#   python clinical/scripts/mine_discrepancies.py --set IDRiD --data dataset/prepared/IDRiD --pred runs/E1_m2mrf/prob_test \
+#       --thresholds 0.5 --model "M2MRF (author weights, demo)" --ids IDRiD_55 IDRiD_59 IDRiD_63 IDRiD_67 IDRiD_72 \
+#       --zoo U-Net-E0=runs/E0_unet_idrid_seed0/prob_test:runs/E0_unet_idrid_seed0/metrics/idrid_test.json \
+#       --landmarks clinical/work/landmarks/IDRiD/landmarks.json --out clinical/work/mine/demo_IDRiD_v3
+name: demo_idrid_strat
+seed: 20261103
+sets:
+  - set: IDRiD
+    candidates: clinical/work/mine/demo_IDRiD_v3
+    reference_grade_scale: null
+images:
+  eligibility: {discrepancy: 1}
+  strata:
+    - {name: idrid_macular_hex, set: IDRiD, n: 3, has_regions: {where: {cls: EX, kind: [FN, FP, extent], etdrs_zone: [C, inner]}, n: 1}}
+    - {name: idrid_rest, set: IDRiD, n: 1}
+stratified:
+  strata:
+    - {name: hex_central, n: 1, where: {cls: EX, kind: [FN, FP, extent], etdrs_zone: C}}
+    - {name: hex_inner,   n: 1, where: {cls: EX, kind: [FN, FP, extent], etdrs_zone: inner}}
+    - name: nv_irma_suspect
+      n: 1
+      where:
+        cls: [HE, MA]
+        kind: [FN, FP, extent]
+        any:
+          - {ext_any: [NV, IRMA]}
+          - not: {grade: [0, 1, 2]}
+            any: [{elongation_ge: 3.0}, {dist_disc_um_le: 1500}]
+    - {name: red_macula,  n: 1, where: {cls: [MA, HE], kind: [FN, FP, extent], etdrs_zone: [C, inner]}}
+    - {name: other_discrepancy, n: 1, where: {kind: [FN, FP, extent]}}
+    - {name: agree,       n: 1, where: {kind: agree}}
+enriched: []
+geometry:
+  crop_min: 384
+  crop_margin: 0.6
+  marker_min_radius: 14
+  marker_pad: 6
+  min_gap: 0
+max_per_image: 6
