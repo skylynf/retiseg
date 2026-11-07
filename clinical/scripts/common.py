@@ -119,6 +119,10 @@ def load_grades(path, set_name, data_dir=None):
     payload = json.loads(Path(path).read_text())
     if set_name in payload and isinstance(payload[set_name], dict):
         payload = payload[set_name]
+    elif payload and all(isinstance(v, dict) for v in payload.values()):
+        # runs/CLIN/grades.json is one file of several sets. A set that is not in it
+        # (IDRiD, TJDR) has no per-image grade here; do not read another set's table as grades.
+        return {}
     return {str(k): (int(v) if v is not None else None) for k, v in payload.items()}
 
 
