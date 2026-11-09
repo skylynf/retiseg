@@ -163,6 +163,10 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     (root / "design3.yaml").write_text(json.dumps({k: v for k, v in design2.items() if k not in ("reading_order", "parts")}))
     with pytest.raises(SystemExit):                       # the stratified arm needs exact inclusion probabilities
         sample_review.main(["--design", "design3.yaml", "--out", "work/syn03"])
+    (root / "design4.yaml").write_text(json.dumps(dict(design2, status="proposed")))
+    sample_review.main(["--design", "design4.yaml", "--out", "work/syn04", "--dry-run"])   # a dry run works on any status
+    with pytest.raises(SystemExit):                       # a proposed design does not draw
+        sample_review.main(["--design", "design4.yaml", "--out", "work/syn04"])
     sample_review.main(["--design", "design2.yaml", "--out", "work/syn02", "--dry-run"])
     assert not (root / "work" / "syn02").exists()           # a dry run draws nothing
     sample_review.main(["--design", "design2.yaml", "--out", "work/syn02"])
@@ -320,6 +324,39 @@ def test_design_conditions():
     assert m(row, {"ext_any": ["NV", "IRMA"]}) and not m(row, {"ext_any": "IRMA"})
     assert m(row, {"ex_px.dd1_ge": 1}) and not m(row, {"ex_px.c_ge": 1})        # absent values fail a bound
     assert m(dict(row, grade=None), {"not": {"grade": [0, 1, 2]}})
+
+
+def test_shortfall_moves_to_the_named_stratum():
+    zero = {k: 0 for k in ("FN", "FP", "extent", "agree", "confusion")}
+    row = lambda d: {"counts": {c: dict(zero, FN=d) for c in sample_review.CLASSES}}
+    images = {("S", f"i{k}"): row(1) for k in range(10)}
+    images[("S", "i9")] = row(0)                                  # not eligible: no discrepancy
+    member = {("S", f"i{k}"): (0 if k < 2 else 1 if k < 4 else 2) for k in range(10)}
+    strata = [{"name": "a", "n": 5}, {"name": "b", "n": 1}, {"name": "rest", "n": 2}]
+    design = {"images": {"eligibility": {"discrepancy": 1}, "strata": strata}}
+    plan = sample_review.image_quotas(strata, member, images, design)
+    assert [q["n"] for q in plan] == [2, 1, 2]                    # without the rule the batch shrinks to 5
+    design["images"]["shortfall_to"] = "rest"
+    plan = sample_review.image_quotas(strata, member, images, design)
+    assert [q["n"] for q in plan] == [2, 1, 5]                    # a is 3 short: rest gets 2 + 3 (of 5 eligible)
+    strata[2]["n"] = 4
+    plan = sample_review.image_quotas(strata, member, images, design)
+    assert plan[2]["n"] == 5                                      # capped at the eligible images
+    design["images"]["shortfall_to"] = "nope"
+    with pytest.raises(SystemExit):
+        sample_review.image_quotas(strata, member, images, design)
+
+
+def test_grades_file_with_other_sets(tmp_path):
+    import common
+
+    multi = tmp_path / "grades.json"
+    multi.write_text(json.dumps({"DDR": {"a": 2, "b": None}, "MAPLES-DR": {"c": 4}}))
+    assert common.load_grades(str(multi), "DDR") == {"a": 2, "b": None}
+    assert common.load_grades(str(multi), "IDRiD") == {}        # 2026-11-07: used to read another set's table
+    flat = tmp_path / "flat.json"
+    flat.write_text(json.dumps({"x": 1, "y": 3}))
+    assert common.load_grades(str(flat), "IDRiD") == {"x": 1, "y": 3}
 
 
 def test_landmarks_on_a_synthetic_fundus():

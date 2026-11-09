@@ -25,6 +25,10 @@ docs/clinical/28 section 5, docs/clinical/32 and docs/clinical/33. Two stages an
                confident misses, class confusions, extent disagreements, model-consensus regions); drawn at
                random among the clusters of the chosen images that meet the condition; no design weight.
   `exclude` lists images that are left out of every stratum (e.g. those the same reader saw in the trial).
+  `status: proposed | frozen` (batch01 and later): a design with a status draws only when it says frozen; --dry-run
+  runs on any status.
+  `images.shortfall_to: <stratum>`: a stratum with fewer eligible images than asked gives the difference to the named
+  stratum (capped at its eligible images), so the batch keeps its size; --dry-run prints the resulting n.
   reading_order: blind_first (reader tool 1.1.0 and later): the reader answers step A for every region of an image
   before any outline of that image is shown, so crop windows may overlap and nothing is rejected. Without it (the
   trial designs, kept reproducible), crop windows of one image never overlap and a draw that would overlap is
@@ -181,6 +185,32 @@ def assign_parts(cases, parts, gen):
     return [{"stratum": h, "drawn": n_h[h], "part1": m_h[h], "part2": n_h[h] - m_h[h]} for h in strata]
 
 
+def image_quotas(strata, member, images, design):
+    """Population, eligible pool and the number to draw of every image stratum.
+
+    `images.shortfall_to: <stratum name>` (batch01): a stratum with fewer eligible images than asked gives the
+    difference to the named stratum, so the batch keeps its size (docs/clinical/33 section 6). The rule is part of the
+    frozen design and is applied the same way by --dry-run and by the draw; the receiving stratum is itself capped at
+    its eligible images.
+    """
+    plan = []
+    for si, stratum in enumerate(strata):
+        population = [k for k in sorted(images) if member.get(k) == si]
+        pool = [k for k in population if eligible(images[k], stratum.get("eligibility", design["images"].get("eligibility")))]
+        label = stratum.get("name") or f"{stratum['set']}|{stratum.get('grade_band', 'all')}"
+        plan.append({"label": label, "population": population, "pool": pool, "asked": stratum["n"],
+                     "n": min(stratum["n"], len(pool))})
+    target = design["images"].get("shortfall_to")
+    if target:
+        receivers = [q for q in plan if q["label"] == target]
+        if len(receivers) != 1:
+            raise SystemExit(f"shortfall_to: no image stratum named {target!r}")
+        deficit = sum(q["asked"] - q["n"] for q in plan if q is not receivers[0])
+        r = receivers[0]
+        r["n"] = min(r["asked"] + deficit, len(r["pool"]))
+    return plan
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--design", required=True)
@@ -198,6 +228,10 @@ def main(argv=None):
     blind_first = design.get("reading_order") == "blind_first"
     if design.get("stratified", {}).get("strata") and not blind_first:
         raise SystemExit("the stratified arm needs reading_order: blind_first (exact inclusion probabilities; docs/clinical/33)")
+    status = design.get("status")
+    if status is not None and status != "frozen" and not args.dry_run:
+        raise SystemExit(f"design status is {status!r}: commit it with status: frozen before the draw (freeze rule; "
+                         "--dry-run works on any status)")
 
     sets, cands, images = {}, {}, {}
     for entry in design["sets"]:
@@ -224,29 +258,23 @@ def main(argv=None):
             if image_matches(images[key], cands.get(key, []), stratum):
                 member[key] = si
                 break
+    plan = image_quotas(strata, member, images, design)
     if args.dry_run:
-        rows = []
-        for si, stratum in enumerate(strata):
-            population = [k for k in sorted(images) if member.get(k) == si]
-            elig = [k for k in population if eligible(images[k], stratum.get("eligibility", design["images"].get("eligibility")))]
-            rows.append({"stratum": stratum.get("name") or f"{stratum['set']}|{stratum.get('grade_band', 'all')}",
-                         "population": len(population), "eligible": len(elig), "asked": stratum["n"],
-                         "short": max(0, stratum["n"] - len(elig))})
-        print(json.dumps({"dry_run": rows, "asked": sum(r["asked"] for r in rows),
-                          "would_draw": sum(min(r["asked"], r["eligible"]) for r in rows)}, indent=1))
+        rows = [{"stratum": q["label"], "population": len(q["population"]), "eligible": len(q["pool"]),
+                 "asked": q["asked"], "short": max(0, q["asked"] - len(q["pool"])), "n": q["n"]} for q in plan]
+        print(json.dumps({"dry_run": rows, "asked": sum(r["asked"] for r in rows), "would_draw": sum(r["n"] for r in rows),
+                          "shortfall_to": design["images"].get("shortfall_to")}, indent=1))
         return
     chosen = []
-    report = {"strata": [], "excluded_images": sorted("|".join(k) for k in excluded)}
-    for si, stratum in enumerate(strata):
-        population = [k for k in sorted(images) if member.get(k) == si]
-        pool = [k for k in population if eligible(images[k], stratum.get("eligibility", design["images"].get("eligibility")))]
-        n = min(stratum["n"], len(pool))
+    report = {"strata": [], "excluded_images": sorted("|".join(k) for k in excluded),
+              "shortfall_to": design["images"].get("shortfall_to")}
+    for q in plan:
+        pool, n = q["pool"], q["n"]
         pick = [pool[i] for i in sorted(gen.choice(len(pool), size=n, replace=False))] if n else []
-        label = stratum.get("name") or f"{stratum['set']}|{stratum.get('grade_band', 'all')}"
         for key in pick:
-            chosen.append({"key": key, "stratum": label, "pi_image": n / len(pool)})
-        report["strata"].append({"stratum": label, "population": len(population), "eligible": len(pool), "drawn": n,
-                                 "asked": stratum["n"]})
+            chosen.append({"key": key, "stratum": q["label"], "pi_image": n / len(pool)})
+        report["strata"].append({"stratum": q["label"], "population": len(q["population"]), "eligible": len(pool),
+                                 "drawn": n, "asked": q["asked"]})
 
     order = gen.permutation(len(chosen))
     cases = []

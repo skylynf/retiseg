@@ -17,7 +17,7 @@
   另附：dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json（第十节）、runs/E5/selection_*.json（第七节）。
   本机收到后：解入 runs/，python docs/paper/retiseg_paper/paper/scripts/collect_runs.py，make -C docs/paper/retiseg_paper/paper。
 
-三、当前待办（2026-11-01）
+三、当前待办（2026-11-01；第 72 条（b）2026-11-07 更新）
   论文实验：全部完成，不再有待跑项。不做的（决定见 14 备注）：第 59 条 HACDR seed0 探针（21 第 87 条，低优先）、第 49 条 FCT 修正配方（14 备注 60）、N6 校准与 N7 样本量（14 备注 77）。
   仍要做的只有临床合作（用户 10-29 加的第 72 条；代码 clinical/，用法 clinical/README.md；设计 docs/clinical/28 第九节、32 第七节）：
   72. 临床合作的前置与试点数据（docs/clinical/28 第九节；代码 clinical/，用法 clinical/README.md）。
@@ -27,6 +27,7 @@
      （b）（2026-11-03 改：试判已在演示包上做完，trial01 不跑；docs/clinical/32）等本机通知（许可核对、batch01.yaml 冻结之后）再做正式批次，命令照 clinical/README.md 的 "Formal batch, on the server"：
        b1 定位（CPU，五个集合合计约 20 分钟）：locate_landmarks.py estimate，视野角 DDR / TJDR_std / MAPLES-DR 45、IDRiD 50、TJDR_uwf 133，输出 runs/CLINREV/landmarks/<集合>/landmarks.json 与 qc.html；五个 qc.html（自带缩略图，每个几 MB，不含原图）单独传到工作站。
        b2 本机在 QC 页改定位，把 corrections_<集合>.json 传回；locate_landmarks.py apply 合并（没有改动的集合跳过）。
+          （2026-11-07 本机做完 QC，改正已提交在 clinical/landmarks/batch01/，做法与结果见 docs/clinical/34；执行见下面“72（b）11-07 后的步骤”。）
        b3 挖掘（CPU，五个集合约半天）：mine_discrepancies.py --grades auto --zoo-train DDR --landmarks runs/CLINREV/landmarks/<集合>/landmarks.json，输出 runs/CLINREV/mine/RetiSeg-Ref/<集合>/。每个集合的末行（各类各型区域数）贴 00；再贴一行各集合按 etdrs_zone 的分歧区域数（python -c 读 candidates.jsonl 计数即可）。
        b4 先 sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01 --dry-run，把各层的 population / eligible 贴 00（2026-11-06 加；不抽样）。本机按此定好配额、提交冻结的 batch01.yaml 后：同一命令去掉 --dry-run，一次抽完 100 张并分出第一部分 20 张（report 贴 00）→ build_pack.py --part 1 --out runs/CLINREV/packs/batch01_part1 --zip。第二部分等本机通知后 build_pack.py --part 2 --out runs/CLINREV/packs/batch01_part2 --zip（同一个 selection.json，不重抽）。
        MAPLES-DR 只在本机通知许可允许时进 b1–b4。landmarks、mine、selection 的小文件随回传包走（selection.json、landmarks.json 要在包里）；数据包与 zip 带图像，单独传到工作站，不进回传包、不进 git。
@@ -35,6 +36,19 @@
        python bench/scripts/ensemble.py reference --members runs/BF_ref_retfound_fine_seed0,runs/BF_ref_samed_fine_seed0 --sets DDR,IDRiD,TJDR_std,TJDR_uwf,MAPLES-DR --regenerate-maps
      （/tmp 的四份 yaml：把 runs/BF_ref_<模型>_fine_seed0/config.yaml 复制过去，dataset 改成 dataset/prepared/IDRiD 或 TJDR_std；原第 63 条的写法，已归档。）之后 runs/ENS/REF/reference/<集合>/prob_test 五个目录应各有 225 / 27 / 55 / 58 / 60 × 4 张图，done.json 的 maps_dropped 变 false、metrics.json 不变；贴 00。这些图与两格的 insource_*/prob 这次留着（临床合作要用）。
   做完后照第二节打包（对照 runs/handoff_manifest_20261030.tsv），包里要有 runs/ENS/REF/reference/<集合>/done.json（maps_dropped 为 false）。
+  72（b）11-07 后的步骤（本机 2026-11-07；b1、b3、b4 的 dry-run 已在 11-07 做过，见 00；docs/clinical/34）：
+     b2 现在做。pull 到含 clinical/landmarks/batch01/ 的提交，然后：
+       for S in DDR IDRiD TJDR_uwf MAPLES-DR; do
+         cp runs/CLINREV/landmarks/$S/landmarks.json runs/CLINREV/landmarks/$S/landmarks_auto_20261107.json
+         python clinical/scripts/locate_landmarks.py apply --landmarks runs/CLINREV/landmarks/$S/landmarks.json \
+             --corrections clinical/landmarks/batch01/corrections_$S.json
+       done
+     应各合并 93 / 2 / 19 / 2 条；TJDR_std 没有改正。贴每个集合合并的条数与新 landmarks.json 的 sha256。
+     b3' 现在做。四个集合重挖：先把 runs/CLINREV/mine/RetiSeg-Ref/{DDR,IDRiD,TJDR_uwf,MAPLES-DR} 挪到 runs/CLINREV/mine_uncorrected_20261107/ 下，再用 b3 的命令（clinical/README.md 第 1 步）只跑这四个集合。TJDR_std 的挖掘不动。贴末行与按 etdrs_zone 的分歧区域数（同 11-07 的格式）。
+     b4' 重挖后再做 dry-run（命令同 b4）。batch01.yaml 现在带 images.shortfall_to: ddr_rest，输出的 n 已是加上差额后的配额；把各层 population / eligible / asked / short / n 和 would_draw 贴 00。到这里停下。
+     b5 等本机（用户）提交 status: frozen 的 batch01.yaml（文件头写 FROZEN 与日期）。之前 sample_review.py 不带 --dry-run 会拒绝运行，这是设计如此，不要改。冻结提交到了以后：pull；sample_review.py 去掉 --dry-run 抽一次（report 贴 00）；build_pack.py --part 1 --zip（clinical/README.md 第 3 步）。数据包与 zip 带图像，单独传到工作站，不进回传包、不进 git。selection.json 进回传包。第二部分等本机通知。
+     MAPLES-DR：b2–b4' 照做（不发图）；本机定了许可后，若不允许，冻结的 batch01.yaml 里不会有 MAPLES-DR。
+     b4' 之后照第二节打包一次（对照 runs/handoff_manifest_20261107.tsv），包里要有四个新 landmarks.json 与重挖的 meta.json、images.jsonl（DDR 的 candidates.jsonl 超过 8 MB 照旧留在服务器）。
 
 四、仓库里与服务器相关的脚本（备查）
   bench/scripts/launch_queue.py（启动器，已停）、launch_e3a.py、launch_factor.py、launch_extra.py、launch_e5_infer.py、ensemble.py（含 reference 入口与 --regenerate-maps）、rescore_factor_roles.py、maupr_ci.py、cost_audit.py、pack_handoff.py、server_run.sh；bench/reference.py（RetiSeg-Ref 的 predict / bundle）。各脚本的用法在文件头。

@@ -1,0 +1,46 @@
+34 定位核对与正式批次的下一步（2026-11-07，本机）
+依据：服务器 11-07 18:25 的记录（docs/ops/00 第三节末）与 retiseg_clinrev_qc_20261107.tar（五个 qc.html）。上接 33（发送前核对）。本文件记三件事：黄斑与视盘定位的核对和改正、批次配额的规则、服务器下一步。
+
+一、服务器回传的检查
+  1. 第 72 条（a）做完：两格的 IDRiD、TJDR 标准源内图补回，集成五套图重写，maps_dropped 为 false，五个集合的 mAUPR 与 10-30 逐位相同。
+  2. b1 定位：五个集合都有 landmarks.json 与 qc.html（DDR 225、IDRiD 27、TJDR_std 55、TJDR_uwf 58、MAPLES-DR 60）。服务器没有收到改正，所以 b2 没做。
+  3. b3 挖掘在改正之前做了。IDRiD 第一次因 load_grades 把多集合等级文件里别的集合当作本集合的等级而退出；服务器的修复已在本机 pull 下来的 common.py 里，本次换成同样行为、另外在 --grades auto 下回落到本集合自己的等级来源的写法，并加了测试。
+  4. b4 只做了 dry-run：asked 100、would_draw 94；idrid_rest 可入选 2 张（要 4），maples_nv 1 张（要 5）。这组数用的是改正前的定位，DDR 的分层成员会变（见第二节第 4 条）。
+  5. 81 MB 的回传包还不在工作站仓库目录里。这一步用不到它（定位都在 qc.html 里），放到仓库根目录留档即可。
+
+二、定位核对
+  1. 做法：从五个 qc.html 取出全部 425 张缩略图（宽 320 px）与估计；先算几个合理性指标（黄斑—视盘距离占视野直径的比例、两点连线与水平的夹角、两个置信度、黄斑到视野边缘的距离），再逐张看叠了估计的缩略图；有疑问的放大 2.5 倍、加 20 px 网格读坐标。另在缩略图上跑了一个改进的黄斑搜索（第三节第 1 条），它的结果逐张看过、对的才用。最后按改正后的尺度算每张图视野的直径，45° 的集合落在 10–15.5 mm 以外的再看一遍（又改了 6 张；剩下几张黄斑清楚可见，按原样留着）。改完后另请一个独立的核对者（没有参与改正的子代理）看了全部改过的图和每个集合前 20 张的总览图，它标出两张视盘有误（DDR 007-4207-200 的视盘在过曝白斑上方的淡色斑处，MAPLES-DR 20051020_64993_0100_PP 的视盘在亮斑右下的橙色斑处），本机看过后照改。
+  2. 结果：
+     DDR：225 张里 93 张要改。黄斑偏离超过 1 DD（1.5 mm）的 88 张，其中 77 张超过 3 mm，多数落在黄斑上方或下方视野边缘的暗区；视盘错的 33 张，落在视野边缘的亮环或硬性渗出团上。
+     IDRiD：2 张（IDRiD_79、IDRiD_81，视盘都落在渗出团上）。
+     TJDR_uwf：19 张，多数在 1 DD 以内微调；4 张手读（TJDR_test_025、040、044、052），其中两张的视盘估计落在下缘的彩色伪影上（044、052）。
+     MAPLES-DR：2 张（其中 20051020_64993_0100_PP 的视盘估计落在视盘旁的亮斑上）。TJDR_std：0 张。
+     合计 116 张：68 张取第二次估计（qc-auto2），48 张手读（qc-manual）。
+  3. 文件：clinical/landmarks/batch01/corrections_<集合>.json（DDR、IDRiD、TJDR_uwf、MAPLES-DR 四份；每条有 fovea、disc、source）。坐标是原图像素（缩略图坐标除以页面里的缩放 s）。locate_landmarks.py apply 合并后，被改的图 source 记为 qc-auto2 或 qc-manual，原来的自动估计留在 estimate 字段里。核对页 runs/CLINREV/landmarks/landmark_corrections_20261107.html（工作站本地，带缩略图，不进 git）把 116 张改前（白）与改后（黄、青）画在一起，可以快速复看。
+  4. 精度与影响：DDR 的 45° 照片上缩略图 1 px 约 40–60 µm，手读的黄斑估计误差约 0.3–0.5 mm。这足够把区域分到 C（≤0.5 mm）、内环（0.5–1.5 mm）、外环（1.5–3 mm）、外围四档，档边上的区域仍可能分错。分错只影响抽样效率：入样概率按设计里的分档精确计算，分析用的是读者自己点的黄斑与视盘（33 第一节、29 §10）。改正前 DDR 约四成图的黄斑在别处，11-07 dry-run 里 ddr_macular_hex 的 90 张不可信，所以抽样前 DDR 必须重挖。
+  5. 没有把握的图（黄斑看不清，按视盘的距离和方向放）：DDR 007-3552-200、007-6525-400、007-6649-400；TJDR_test_021、TJDR_test_044（后者视盘在画面边缘）。读者在工具里会自己点黄斑和视盘。
+
+三、代码改动（clinical/，测试 13 项通过）
+  1. locate_landmarks.py：黄斑搜索改为视盘水平方向上 16° 到下方 28° 之内、离视野边缘至少 0.06 个视野直径，暗度与距离、角度的软先验一起比较（旧版在 35° 以内取最暗点，DDR 上常取到视野边缘）。在 75 张缩略图上与第二次估计逐像素一致。视盘的检测没改：DDR 视盘落在视野亮环上的问题要在原图上验证，这次只用改正文件处理。apply 认每条改正自己的 source，保留原估计，检查改正文件与 landmarks.json 是同一个集合；同一文件 apply 两次结果不变。服务器这次不用重跑 estimate。
+  2. sample_review.py：
+     images.shortfall_to（batch01 设为 ddr_rest）：某层可入选的图少于配额时，差额自动加到 ddr_rest（以 ddr_rest 的可入选数为上限），dry-run 打印最后的 n。33 第六节"差额加到 ddr_rest"的规则由代码执行，冻结时不必再按 dry-run 手改配额。按 11-07 的数，ddr_rest 是 8 + 2 + 4 = 14，总数 100；重挖后再看一次。
+     status：设计文件有 status 时，只有 status: frozen 才真正抽样；dry-run 不受限。batch01.yaml 现在是 status: proposed，冻结提交时改成 frozen。
+  3. common.py：load_grades 见第一节第 3 条。
+  4. README（clinical/README.md）的正式批次命令改为用提交的改正文件，配额一句改为 shortfall_to。
+
+四、batch01 冻结前要定的事（用户）
+  1. L1 许可：把带 DDR、TJDR（以及 MAPLES-DR 的 MESSIDOR 图）的数据包发给医生算分享，先核对条款（28 第三节）。
+  2. D4 MAPLES-DR：不允许就按 batch01.yaml 文件头删三个 maples_* 层与 MAPLES-DR 集合、ddr_pdr_severe 与 ddr_macular_hex 各改为 25；这时只剩 idrid_rest 少 2 张，ddr_rest 抽 10 张。
+  3. D3 读者人数、D8 可疑 IRMA / NV 的阈值（伸长度 ≥3，或距视盘 ≤1,500 µm，只在 DDR 3–4 级或无等级的集合）：没有新意见就按提议稿。
+  4. 定了以后：batch01.yaml 的 status 改为 frozen，文件头 PROPOSED 一句改为 FROZEN <日期>，提交推送。冻结的同时 landmarks.json 的 sha256 由挖掘写进 meta.json（抽样前不能再改定位）。
+
+五、服务器下一步（写进 17 第 72 条 b2–b5）
+  b2 现在就做：pull；四个集合先备份 landmarks.json（landmarks_auto_20261107.json），再 apply 对应的改正文件；贴各集合改了几张与新文件的 sha256。
+  b3' 现在就做：DDR、IDRiD、TJDR_uwf、MAPLES-DR 重挖（命令同 b3）；旧的挖掘目录挪到 runs/CLINREV/mine_uncorrected_20261107/ 留档。TJDR_std 不用重挖。贴每个集合的末行和按 etdrs_zone 的分歧区域数。
+  b4' 重挖后再做一次 dry-run，把各层 population / eligible / asked / short / n 贴 00。然后停下。
+  b5 等 batch01.yaml 是 status: frozen 的提交：pull、去掉 --dry-run 一次抽完 100 张（report 贴 00）→ build_pack.py --part 1 --zip。数据包与 zip 单独传到工作站，不进回传包、不进 git；selection.json 随回传包回来，本机提交到 clinical/selections/。
+
+六、用户待办（这一步）
+  1. 提交推送本机写回（新文件：docs/clinical/34、clinical/landmarks/batch01/ 四份改正）。服务器 pull 后做 b2、b3'、b4'。
+  2. 定第四节的四件事，改 status 后提交；服务器再做 b5，第一部分 20 张的数据包回到工作站后，本机先在浏览器里走一遍再发给医生。
+  3. 把 retiseg_runs_handoff_20261107.tar.gz 放到仓库根目录（留档）。

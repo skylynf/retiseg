@@ -1,0 +1,217 @@
+{
+ "set": "TJDR_uwf",
+ "written": "2026-11-07",
+ "basis": "runs/CLINREV/landmarks/TJDR_uwf/landmarks.json of the server run of 2026-11-07 18:25 +0800 (qc.html in retiseg_clinrev_qc_20261107.tar)",
+ "method": "docs/clinical/34 section 2: every QC thumbnail viewed with the estimate drawn; qc-auto2 = the fovea (and disc) of a second estimate on the thumbnail (fovea searched within 22 degrees of the expected direction), accepted after viewing it; qc-manual = read off the thumbnail by eye (a 20-px grid on the 320-px thumbnail), native pixels = thumbnail / s; afterwards every image whose fovea-to-disc distance implied a field of view outside 10-15.5 mm (45-degree sets) was viewed again; then a second reader (an independent check of the contact sheets) flagged two discs, both changed after viewing",
+ "corrections": {
+  "TJDR_test_006": {
+   "fovea": [
+    2061.1,
+    1960.9
+   ],
+   "disc": [
+    1447.4,
+    1907.1
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_009": {
+   "fovea": [
+    2331.3,
+    2468.2
+   ],
+   "disc": [
+    1739.6,
+    2437.7
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_012": {
+   "fovea": [
+    2105.1,
+    1822.7
+   ],
+   "disc": [
+    1492.7,
+    1860.6
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_014": {
+   "fovea": [
+    1761.6,
+    1902.2
+   ],
+   "disc": [
+    2328.9,
+    1874.1
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_015": {
+   "fovea": [
+    1639.4,
+    1888.8
+   ],
+   "disc": [
+    2328.9,
+    1980.4
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_017": {
+   "fovea": [
+    1737.2,
+    1859.4
+   ],
+   "disc": [
+    2441.3,
+    1821.5
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_021": {
+   "fovea": [
+    1797.1,
+    1759.2
+   ],
+   "disc": [
+    1116.1,
+    1866.8
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_024": {
+   "fovea": [
+    2152.8,
+    1943.8
+   ],
+   "disc": [
+    1597.8,
+    1814.2
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_025": {
+   "fovea": [
+    1295.8,
+    1784.8
+   ],
+   "disc": [
+    2004.9,
+    1809.3
+   ],
+   "source": "qc-manual"
+  },
+  "TJDR_test_027": {
+   "fovea": [
+    2066.0,
+    1975.6
+   ],
+   "disc": [
+    1449.9,
+    1960.9
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_030": {
+   "fovea": [
+    2068.5,
+    2191.9
+   ],
+   "disc": [
+    1493.9,
+    2023.2
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_034": {
+   "fovea": [
+    1824.0,
+    1899.8
+   ],
+   "disc": [
+    2474.3,
+    1854.5
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_037": {
+   "fovea": [
+    1876.5,
+    1968.2
+   ],
+   "disc": [
+    2503.7,
+    1975.6
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_040": {
+   "fovea": [
+    1748.2,
+    2078.2
+   ],
+   "disc": [
+    2392.4,
+    2015.9
+   ],
+   "source": "qc-manual"
+  },
+  "TJDR_test_044": {
+   "fovea": [
+    3251.8,
+    2004.9
+   ],
+   "disc": [
+    3814.2,
+    1919.3
+   ],
+   "source": "qc-manual"
+  },
+  "TJDR_test_047": {
+   "fovea": [
+    2089.3,
+    2058.7
+   ],
+   "disc": [
+    1454.8,
+    1952.3
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_052": {
+   "fovea": [
+    1833.8,
+    2145.5
+   ],
+   "disc": [
+    2396.1,
+    2047.7
+   ],
+   "source": "qc-manual"
+  },
+  "TJDR_test_053": {
+   "fovea": [
+    1732.3,
+    1985.3
+   ],
+   "disc": [
+    2368.0,
+    1947.4
+   ],
+   "source": "qc-auto2"
+  },
+  "TJDR_test_056": {
+   "fovea": [
+    1830.1,
+    1945.0
+   ],
+   "disc": [
+    2449.9,
+    1952.3
+   ],
+   "source": "qc-auto2"
+  }
+ }
+}

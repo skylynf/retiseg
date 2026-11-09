@@ -8,8 +8,10 @@ sampling efficiency, never validity.
 
 Estimate (classical image processing; no model): the image is reduced so the field of view is 512 px across and
 divided by its own large-scale background (illumination). The disc is the strongest bright blob at disc scale
-(difference of Gaussians, inside the eroded FOV). The fovea is the darkest smoothed point in a band 0.7-1.3 times
-the expected fovea-to-disc distance from the disc, within 35 degrees of the horizontal toward the FOV center. Disc
+(difference of Gaussians, inside the eroded FOV). The fovea is the darkest smoothed point, weighed against a soft
+prior on distance and angle, in a band 0.7-1.35 times the expected fovea-to-disc distance from the disc, from 16
+degrees above to 28 degrees below the horizontal toward the FOV center (2026-11-07; the first version searched
+within 35 degrees and on DDR often took the dark rim of the field, docs/clinical/34). Disc
 radius and fovea-to-disc distance scale with the camera's field angle (--field-deg; 45 for most fundus cameras, 50
 for IDRiD, about 133 for the ultra-widefield TJDR images). On the four IDRiD trial images the estimates were
 80-500 um from the reader's fovea and 185-310 um from the reader's disc marks.
@@ -20,6 +22,9 @@ Scale: um_per_px = fovea_disc_um / |fovea - disc| (4,700 um, the adult mean of a
     # open qc.html, click the misses (click = fovea, shift-click = disc), "Export corrections" -> corrections.json
     python clinical/scripts/locate_landmarks.py apply --landmarks runs/CLINREV/landmarks/DDR/landmarks.json \
         --corrections corrections.json                          # merged in place; corrected entries say source=manual
+A corrections file may give each entry its own "source" (batch01: clinical/landmarks/batch01/, docs/clinical/34);
+the automatic estimate of a corrected image is kept under "estimate". Running apply twice with the same file gives
+the same landmarks.
 """
 
 import argparse
@@ -65,18 +70,35 @@ def estimate(image, fov, field_deg=45.0):
     yy, xx = np.mgrid[:h, :w]
     dist = np.hypot(xx - dx, yy - dy)
     fd = 0.40 * d * k
-    band = (dist > 0.7 * fd) & (dist < 1.3 * fd) & ndimage.binary_erosion(f, iterations=max(1, int(0.03 * d)))
-    cy, cx = ndimage.center_of_mass(f)
-    if abs(cx - dx) > 0.05 * d:
-        toward = 0.0 if cx > dx else 180.0
-        ang = np.degrees(np.arctan2(yy - dy, xx - dx))
-        band &= np.abs((ang - toward + 180.0) % 360.0 - 180.0) < 35.0
-    if not band.any():
-        band = ndimage.binary_erosion(f, iterations=max(1, int(0.1 * d)))
     sm = ndimage.gaussian_filter(norm, 0.035 * d)
-    sm_m = np.where(band, sm, np.inf)
-    fy, fx = np.unravel_index(int(np.argmin(sm_m)), sm_m.shape)
-    fovea_z = float((sm[band].mean() - sm[fy, fx]) / (sm[band].std() + 1e-6))
+    # 2026-11-07 (docs/clinical/34): the fovea lies temporal to the disc, about 2.5 disc diameters away and a little
+    # below it. The first version searched a band within 35 degrees of the horizontal and took its darkest point; on
+    # DDR that point was often the dark rim of the field of view above or below the macula. The search is now limited
+    # to -16..+28 degrees (positive = below the disc), keeps 0.06 FOV diameters from the rim, and the darkness is
+    # weighed against a soft prior on distance and angle.
+    cy, cx = ndimage.center_of_mass(f)
+    away = ndimage.binary_erosion(f, iterations=max(1, int(0.06 * d)))
+    sides = [1.0, -1.0] if abs(cx - dx) <= 0.05 * d else ([1.0] if cx > dx else [-1.0])
+    best = None
+    for sgn in sides:
+        horiz = (xx - dx) * sgn
+        ang = np.degrees(np.arctan2(yy - dy, horiz))
+        band = (dist > 0.7 * fd) & (dist < 1.35 * fd) & (np.abs(ang - 6.0) < 22.0) & (horiz > 0) & away
+        if band.sum() < 5:
+            continue
+        z = (sm[band].mean() - sm) / (sm[band].std() + 1e-6)
+        prior = ((dist / fd - 1.0) / 0.25) ** 2 + ((ang - 6.0) / 12.0) ** 2
+        cost = np.where(band, -z + 0.35 * prior, np.inf)
+        iy, ix = np.unravel_index(int(np.argmin(cost)), cost.shape)
+        if best is None or cost[iy, ix] < best[0]:
+            best = (float(cost[iy, ix]), iy, ix, float(z[iy, ix]))
+    if best is None:                       # no room on either side: darkest point well inside the field
+        band = ndimage.binary_erosion(f, iterations=max(1, int(0.1 * d)))
+        sm_m = np.where(band, sm, np.inf)
+        fy, fx = np.unravel_index(int(np.argmin(sm_m)), sm_m.shape)
+        fovea_z = float((sm[band].mean() - sm[fy, fx]) / (sm[band].std() + 1e-6))
+    else:
+        _, fy, fx, fovea_z = best
     disc = [dx / s, dy / s]
     fovea = [fx / s, fy / s]
     sep = math.hypot(fovea[0] - disc[0], fovea[1] - disc[1])
@@ -144,15 +166,19 @@ def cmd_estimate(args):
 def cmd_apply(args):
     path = Path(args.landmarks)
     payload = json.loads(path.read_text())
-    fixes = json.loads(Path(args.corrections).read_text()).get("corrections", {})
+    corr = json.loads(Path(args.corrections).read_text())
+    if corr.get("set") and payload.get("set") and corr["set"] != payload["set"]:
+        raise SystemExit(f"{args.corrections} is for {corr['set']}, {path} for {payload['set']}")
+    fixes = corr.get("corrections", {})
     for iid, fix in fixes.items():
         lm = payload["landmarks"].get(iid)
         if lm is None:
             raise SystemExit(f"{iid} is not in {path}")
+        lm.setdefault("estimate", {"disc": lm["disc"], "fovea": lm["fovea"]})   # the automatic estimate, kept once
         lm.update({k: v for k, v in fix.items() if k in ("fovea", "disc")})
         sep = math.hypot(lm["fovea"][0] - lm["disc"][0], lm["fovea"][1] - lm["disc"][1])
         lm["um_per_px"] = round(FOVEA_DISC_UM / sep, 4) if sep > 0 else None
-        lm["source"] = "manual"
+        lm["source"] = fix.get("source", "manual")
     payload.setdefault("corrections_applied", []).append({"file": str(args.corrections), "n": len(fixes), "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")})
     path.write_text(json.dumps(payload, indent=1) + "\n")
     print(f"[landmarks] {len(fixes)} corrections merged into {path}")

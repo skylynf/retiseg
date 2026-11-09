@@ -1,0 +1,30 @@
+{
+ "set": "IDRiD",
+ "written": "2026-11-07",
+ "basis": "runs/CLINREV/landmarks/IDRiD/landmarks.json of the server run of 2026-11-07 18:25 +0800 (qc.html in retiseg_clinrev_qc_20261107.tar)",
+ "method": "docs/clinical/34 section 2: every QC thumbnail viewed with the estimate drawn; qc-auto2 = the fovea (and disc) of a second estimate on the thumbnail (fovea searched within 22 degrees of the expected direction), accepted after viewing it; qc-manual = read off the thumbnail by eye (a 20-px grid on the 320-px thumbnail), native pixels = thumbnail / s; afterwards every image whose fovea-to-disc distance implied a field of view outside 10-15.5 mm (45-degree sets) was viewed again; then a second reader (an independent check of the contact sheets) flagged two discs, both changed after viewing",
+ "corrections": {
+  "IDRiD_79": {
+   "fovea": [
+    2117.2,
+    1581.2
+   ],
+   "disc": [
+    884.4,
+    1554.4
+   ],
+   "source": "qc-manual"
+  },
+  "IDRiD_81": {
+   "fovea": [
+    2211.0,
+    1608.0
+   ],
+   "disc": [
+    1045.2,
+    1447.2
+   ],
+   "source": "qc-manual"
+  }
+ }
+}

@@ -108,7 +108,10 @@ def load_grades(path, set_name, data_dir=None):
     if path == "auto":
         cached = REPO / "runs" / "CLIN" / "grades.json"
         if cached.is_file():
-            return load_grades(str(cached), set_name)
+            payload = json.loads(cached.read_text())
+            if not _is_multi_set(payload) or set_name in payload:
+                return load_grades(str(cached), set_name)
+            # the cache holds other sets only: read this set's grades from its own source below
         from bench.scripts import clinical_strata
 
         if set_name == "DDR":
@@ -117,13 +120,15 @@ def load_grades(path, set_name, data_dir=None):
             return {str(k): int(v) for k, v in clinical_strata.grades_from_prepared(data_dir).items()}
         return {}
     payload = json.loads(Path(path).read_text())
-    if set_name in payload and isinstance(payload[set_name], dict):
-        payload = payload[set_name]
-    elif payload and all(isinstance(v, dict) for v in payload.values()):
-        # runs/CLIN/grades.json is one file of several sets. A set that is not in it
-        # (IDRiD, TJDR) has no per-image grade here; do not read another set's table as grades.
-        return {}
+    if _is_multi_set(payload):
+        # {set: {id: grade}}: a set that is not in the file has no grades (IDRiD and TJDR carry none; 2026-11-07,
+        # the server's mining of IDRiD stopped on int() of another set's table)
+        payload = payload.get(set_name, {})
     return {str(k): (int(v) if v is not None else None) for k, v in payload.items()}
+
+
+def _is_multi_set(payload):
+    return isinstance(payload, dict) and bool(payload) and all(isinstance(v, dict) for v in payload.values())
 
 
 def sha256_file(path, chunk=1 << 20):

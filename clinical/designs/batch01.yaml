@@ -14,13 +14,16 @@
 #
 # Freeze rule: Luming commits this file (and the sha256 of every landmarks.json it reads, written into meta.json by
 # mine_discrepancies.py) BEFORE sample_review.py draws; after that any change makes batch02.yaml. Before freezing,
-# `sample_review.py --dry-run` prints the population and eligible images of every stratum without drawing; if a
-# stratum has fewer eligible images than asked, move the difference to ddr_rest so the total stays 100.
+# `sample_review.py --dry-run` prints the population and eligible images of every stratum without drawing. A stratum
+# with fewer eligible images than asked gives the difference to ddr_rest (images.shortfall_to, applied by the
+# sampler), so the total stays 100. Dry run of 2026-11-07 on the uncorrected landmarks: idrid_rest 2 eligible of 4,
+# maples_nv 1 of 5, so ddr_rest would draw 8 + 6 = 14; the numbers are taken again after the landmark corrections.
 # If the MESSIDOR terms do not allow the readers to see MAPLES-DR images (docs/clinical/28 section 3), delete the
 # three maples_* strata and the MAPLES-DR set before freezing, and raise ddr_pdr_severe and ddr_macular_hex to 25.
 #
 # Model under review: RetiSeg-Ref, release thresholds; consensus: the 18 registered DDR-trained models, seed 0.
-# Every set is mined with --landmarks (locate_landmarks.py, QC page corrected; docs/ops/17 item 72):
+# Every set is mined with --landmarks (locate_landmarks.py; docs/ops/17 item 72), after the QC corrections of
+# 2026-11-07 (clinical/landmarks/batch01/, docs/clinical/34: 116 of 425 images, 93 of them DDR):
 #   etdrs_zone of a region = zone of its pixel closest to the estimated fovea: C <= 500 um (the central 1 mm of the
 #   ETDRS grid), inner 500-1,500 um (1 DD = 1,500 um), outer 1,500-3,000 um, outside; um_per_px = 4,700 um / the
 #   estimated fovea-to-disc distance. dist_disc_um: closest pixel to the estimated disc center.
@@ -29,6 +32,7 @@
 # region and 1-4 min per image for grading and the whole-image step after the first image, so about 4-6 min per
 # image: part 1 about 1.5-2 hours, part 2 about 6-8 hours per reader.
 name: batch01
+status: proposed              # -> frozen in the freeze commit; sample_review.py draws only a frozen design
 seed: 20261104
 reading_order: blind_first
 parts: [20, 80]
@@ -42,6 +46,7 @@ exclude:                      # read in the trial by the same reader (demo pack,
   - {set: IDRiD, image_ids: [IDRiD_55, IDRiD_63, IDRiD_67, IDRiD_72]}
 images:
   eligibility: {discrepancy: 1}   # at least one label-only, AI-only or extent region of any class
+  shortfall_to: ddr_rest        # docs/clinical/33 section 6
   strata:                     # ordered: an image belongs to the FIRST stratum it matches
     # DDR test (225 images, grades from the DDR release)
     - {name: ddr_pdr_severe,   set: DDR, grades: [3, 4], n: 20}          # IRMA / NV, 4-2-1 hemorrhages

@@ -1,0 +1,26 @@
+{
+ "set": "MAPLES-DR",
+ "written": "2026-11-07",
+ "basis": "runs/CLINREV/landmarks/MAPLES-DR/landmarks.json of the server run of 2026-11-07 18:25 +0800 (qc.html in retiseg_clinrev_qc_20261107.tar)",
+ "method": "docs/clinical/34 section 2: every QC thumbnail viewed with the estimate drawn; qc-auto2 = the fovea (and disc) of a second estimate on the thumbnail (fovea searched within 22 degrees of the expected direction), accepted after viewing it; qc-manual = read off the thumbnail by eye (a 20-px grid on the 320-px thumbnail), native pixels = thumbnail / s; afterwards every image whose fovea-to-disc distance implied a field of view outside 10-15.5 mm (45-degree sets) was viewed again; then a second reader (an independent check of the contact sheets) flagged two discs, both changed after viewing",
+ "corrections": {
+  "20051020_64993_0100_PP": {
+   "disc": [
+    889.0,
+    714.0
+   ],
+   "source": "qc-manual"
+  },
+  "20051205_35246_0400_PP": {
+   "fovea": [
+    713.7,
+    527.8
+   ],
+   "disc": [
+    983.7,
+    500.8
+   ],
+   "source": "qc-auto2"
+  }
+ }
+}

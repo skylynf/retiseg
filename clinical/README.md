@@ -38,8 +38,11 @@ for SET in DDR IDRiD TJDR_std TJDR_uwf MAPLES-DR; do
   python clinical/scripts/locate_landmarks.py estimate --set $SET --data dataset/prepared/$SET \
       --field-deg ${FIELD[$SET]} --out runs/CLINREV/landmarks/$SET
 done
-python clinical/scripts/locate_landmarks.py apply --landmarks runs/CLINREV/landmarks/DDR/landmarks.json \
-    --corrections corrections_DDR.json                      # once per set that has corrections
+#    batch01: the corrections are committed (clinical/landmarks/batch01/, docs/clinical/34); TJDR_std needs none
+for SET in DDR IDRiD TJDR_uwf MAPLES-DR; do
+  python clinical/scripts/locate_landmarks.py apply --landmarks runs/CLINREV/landmarks/$SET/landmarks.json \
+      --corrections clinical/landmarks/batch01/corrections_$SET.json
+done
 # 1. regions of RetiSeg-Ref with ETDRS zones, the 18 registered DDR-trained models as the zoo
 for SET in DDR IDRiD TJDR_std TJDR_uwf MAPLES-DR; do
   python clinical/scripts/mine_discrepancies.py --set $SET --data dataset/prepared/$SET \
@@ -47,7 +50,8 @@ for SET in DDR IDRiD TJDR_std TJDR_uwf MAPLES-DR; do
       --model RetiSeg-Ref --grades auto --zoo-train DDR --landmarks runs/CLINREV/landmarks/$SET/landmarks.json \
       --out runs/CLINREV/mine/RetiSeg-Ref/$SET
 done
-# 2. population and eligible images per stratum, no draw (set the quotas so the total is 100), then freeze:
+# 2. population and eligible images per stratum, no draw (a stratum short of images gives the difference to
+#    ddr_rest, images.shortfall_to, so the total stays 100), then freeze:
 python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01 --dry-run
 #    commit designs/batch01.yaml; then the one draw of all 100 images, split into part 1 (20) and part 2 (80)
 python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01
