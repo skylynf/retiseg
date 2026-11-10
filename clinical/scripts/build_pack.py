@@ -7,7 +7,8 @@ it (cases are c01, c02, ...; regions c01-1, c01-2, ...). The key stays with the 
     <pack>/index.html          the reader tool (clinical/reader_tool/index.html), opened by double-click
     <pack>/pack.js             window.RETISEG_PACK = {...}: schema, cases, outlines, regions (loaded by index.html)
     <pack>/pack.json           the same object, for the tool's "open folder" fallback
-    <pack>/images/<case>.jpg   the photograph (original JPEG bytes when the source is JPEG and not resized)
+    <pack>/images/<case>.jpg   the photograph: the original JPEG data when the source is JPEG and not resized, with
+                               the camera metadata (Exif, XMP, comments, embedded previews) removed (clean_jpeg)
     <pack>/heat/<case>_<CLS>.png  model probability as a class-coloured RGBA layer (reduced resolution)
     <pack>/READ_ME_FIRST.txt   how to open, save and return the results
     <pack>/SHA256SUMS.txt
@@ -23,6 +24,8 @@ Outlines are closed polygons on pixel corners (clinical/scripts/contours.py) of
 
 --zip also writes <out>.zip (the folder as one attachment) and warns when it is larger than 20 MB, the safe size
 for e-mail; send a larger pack through a shared drive instead, or rebuild with --max-side.
+--clean-existing PACK [--zip] removes the camera metadata from a pack built before that cleaning existed (2026-11-10,
+docs/clinical/35) without rebuilding it.
 --part 1 (or 2) keeps only the images sample_review.py put in that reading part (design key `parts`); the pack id
 becomes <design>+part1, so the reader's saved answers of the two parts never mix (docs/clinical/33).
 """
@@ -81,21 +84,124 @@ def heat_png(prob, color, max_side):
     return buf.getvalue(), f
 
 
+def clean_jpeg(data):
+    """The primary image of a JPEG file without the camera's metadata, pixels unchanged (docs/clinical/35).
+
+    Keeps SOI, the JFIF (APP0) and Adobe (APP14) segments, an ICC profile (APP2 "ICC_PROFILE"), every table, frame
+    header and scan byte for byte, and the EOI of the primary image. Drops Exif and XMP (APP1; Exif also carries a
+    thumbnail), MPF (APP2) and the other APPn segments, comments (COM: some fundus cameras write the exam id, the eye,
+    the date and the camera's serial number there) and everything after the primary image (MPF previews). Dropping
+    Exif also drops its orientation tag, so a browser shows the pixels as stored, which is how the outlines were drawn.
+    """
+    if data[:2] != b"\xff\xd8":
+        raise ValueError("not a JPEG file")
+    out = bytearray(b"\xff\xd8")
+    i, n = 2, len(data)
+    while i < n:
+        if data[i] != 0xFF:
+            raise ValueError(f"bad JPEG marker at byte {i}")
+        while i + 1 < n and data[i + 1] == 0xFF:          # fill bytes
+            i += 1
+        m = data[i + 1]
+        if m == 0xD9:                                       # EOI of the primary image: stop here
+            out += b"\xff\xd9"
+            return bytes(out)
+        if 0xD0 <= m <= 0xD7 or m == 0x01:                  # standalone markers
+            out += data[i:i + 2]
+            i += 2
+            continue
+        length = int.from_bytes(data[i + 2:i + 4], "big")
+        seg = data[i:i + 2 + length]
+        body = data[i + 4:i + 2 + length]
+        if 0xE0 <= m <= 0xEF or m == 0xFE:
+            keep = (m == 0xE0 and body.startswith(b"JFIF\x00")) or m == 0xEE or (m == 0xE2 and body.startswith(b"ICC_PROFILE\x00"))
+        else:
+            keep = True
+        if keep:
+            out += seg
+        i += 2 + length
+        if m == 0xDA:                                       # entropy-coded data up to the next real marker
+            j = i
+            while j + 1 < n and not (data[j] == 0xFF and data[j + 1] != 0x00 and not 0xD0 <= data[j + 1] <= 0xD7):
+                j += 1
+            out += data[i:j]
+            i = j
+    raise ValueError("JPEG file ends without EOI")
+
+
 def write_image(src, dst, max_side):
-    """Original bytes for an unresized JPEG; otherwise a quality-95 JPEG. Returns (width, height, scale)."""
+    """The original JPEG data (metadata removed, clean_jpeg) when the source is JPEG and needs no resizing; otherwise a
+    quality-95 JPEG, cleaned the same way. Returns (width, height, scale)."""
     im = Image.open(src)
     W, H = im.size
     scale = 1.0
     if max_side and max(W, H) > max_side:
         scale = max_side / max(W, H)
     if scale == 1.0 and src.suffix.lower() in (".jpg", ".jpeg"):
-        shutil.copyfile(src, dst)
+        dst.write_bytes(clean_jpeg(src.read_bytes()))
         return W, H, 1.0
     im = im.convert("RGB")
+    im.info.pop("comment", None)
     if scale != 1.0:
         im = im.resize((round(W * scale), round(H * scale)), Image.LANCZOS)
-    im.save(dst, format="JPEG", quality=95, subsampling=0)
+    buf = io.BytesIO()
+    im.save(buf, format="JPEG", quality=95, subsampling=0)
+    dst.write_bytes(clean_jpeg(buf.getvalue()))
     return im.size[0], im.size[1], scale
+
+
+def clean_existing(out, make_zip):
+    """Remove camera metadata from a pack built before 2026-11-10 (docs/clinical/35): clean_jpeg on images/*.jpg,
+    checked to decode to the same pixels; the README's image paragraph brought up to date; SHA256SUMS rewritten;
+    <out>.zip rebuilt with --zip. pack.json, pack.js, index.html and heat/ are not touched, so the pack id, the cases
+    and the readers' saved answers stay valid."""
+    out = Path(out)
+    if not (out / "pack.json").is_file() or not (out / "images").is_dir():
+        raise SystemExit(f"{out} is not a review pack (pack.json, images/)")
+    changed, before, after = [], 0, 0
+    for p in sorted((out / "images").glob("*.jpg")):
+        data = p.read_bytes()
+        new = clean_jpeg(data)
+        before += len(data)
+        after += len(new)
+        if new == data:
+            continue
+        a = np.asarray(Image.open(io.BytesIO(data)).convert("RGB"))
+        b = np.asarray(Image.open(io.BytesIO(new)).convert("RGB"))
+        if a.shape != b.shape or not np.array_equal(a, b):
+            raise SystemExit(f"{p}: the cleaned file decodes to different pixels; nothing written")
+        changed.append((p, new))
+    for p, new in changed:
+        p.write_bytes(new)
+    readme = out / "READ_ME_FIRST.txt"
+    text = readme.read_text()
+    readme_updated = OLD_IMAGE_NOTE in text
+    if readme_updated:
+        readme.write_text(text.replace(OLD_IMAGE_NOTE, IMAGE_NOTE))
+    report = {"pack": str(out), "images_cleaned": [p.name for p, _ in changed], "readme_updated": readme_updated,
+              "images_megabytes_before": round(before / 1e6, 2), "images_megabytes_after": round(after / 1e6, 2)}
+    report.update(finish(out, make_zip))
+    print(json.dumps(report))
+    return report
+
+
+def finish(out, make_zip):
+    """SHA256SUMS.txt over every file, then <out>.zip when asked; returns the size report."""
+    sums = []
+    for p in sorted(out.rglob("*")):
+        if p.is_file() and p.name != "SHA256SUMS.txt":
+            sums.append(f"{common.sha256_file(p)}  {p.relative_to(out)}")
+    (out / "SHA256SUMS.txt").write_text("\n".join(sums) + "\n")
+    size = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
+    report = {"megabytes": round(size / 1e6, 1)}
+    if make_zip:
+        archive = shutil.make_archive(str(out), "zip", root_dir=out.parent, base_dir=out.name)
+        mb = Path(archive).stat().st_size / 1e6
+        report["zip"] = archive
+        report["zip_megabytes"] = round(mb, 1)
+        if mb > EMAIL_LIMIT_MB:
+            report["warning"] = f"zip is {mb:.0f} MB, above {EMAIL_LIMIT_MB} MB: send it through a shared drive or rebuild with --max-side"
+    return report
 
 
 def loops_of(mask, scale, eps):
@@ -156,9 +262,9 @@ ICDR_NAMES = {0: "No DR", 1: "Mild NPDR", 2: "Moderate NPDR", 3: "Severe NPDR", 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--selection", required=True)
+    ap.add_argument("--selection", help="selection.json of sample_review.py (required unless --clean-existing)")
     ap.add_argument("--practice", help="a second selection.json whose cases come first as practice (not analysed)")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", help="the pack folder to write (required unless --clean-existing)")
     ap.add_argument("--root", default=".", help="directory the selection's relative data / prediction paths are read from")
     ap.add_argument("--title", help="pack title shown in the tool")
     ap.add_argument("--max-side", type=int, default=0, help="downscale photographs whose long side exceeds this (0 = keep)")
@@ -169,7 +275,14 @@ def main(argv=None):
     ap.add_argument("--part", type=int, help="only the images of this reading part (selection with design key `parts`)")
     ap.add_argument("--team-only", action="store_true",
                     help="allow sets whose images may not leave the team (MESSIDOR / MAPLES-DR, FGADR, ...)")
+    ap.add_argument("--clean-existing", metavar="PACK",
+                    help="remove camera metadata from the images of a pack built before 2026-11-10 and rewrite its "
+                         "README image note, SHA256SUMS (and zip with --zip); nothing else is built (docs/clinical/35)")
     args = ap.parse_args(argv)
+    if args.clean_existing:
+        return clean_existing(args.clean_existing, args.zip)
+    if not args.selection or not args.out:
+        ap.error("--selection and --out are required")
 
     root = Path(args.root)
     sel = json.loads(Path(args.selection).read_text())
@@ -228,23 +341,11 @@ def main(argv=None):
     minutes = int(round((2.5 * len(cases) + 0.8 * n_regions) / 5.0) * 5) or 5   # trial timing, docs/clinical/32 section 1
     sources = sources_text(sorted({case["set"] for case, *_ in jobs}))
     (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], n_cases=len(cases), n_regions=n_regions,
-                                                         minutes=minutes, sources=sources))
-    sums = []
-    for p in sorted(out.rglob("*")):
-        if p.is_file() and p.name != "SHA256SUMS.txt":
-            sums.append(f"{common.sha256_file(p)}  {p.relative_to(out)}")
-    (out / "SHA256SUMS.txt").write_text("\n".join(sums) + "\n")
-    size = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
-    report = {"pack": str(out), "cases": len(cases), "regions": sum(len(c["regions"]) for c in cases),
-              "megabytes": round(size / 1e6, 1)}
-    if args.zip:
-        archive = shutil.make_archive(str(out), "zip", root_dir=out.parent, base_dir=out.name)
-        mb = Path(archive).stat().st_size / 1e6
-        report["zip"] = archive
-        report["zip_megabytes"] = round(mb, 1)
-        if mb > EMAIL_LIMIT_MB:
-            report["warning"] = f"zip is {mb:.0f} MB, above {EMAIL_LIMIT_MB} MB: send it through a shared drive or rebuild with --max-side"
+                                                         minutes=minutes, sources=sources, image_note=IMAGE_NOTE))
+    report = {"pack": str(out), "cases": len(cases), "regions": sum(len(c["regions"]) for c in cases)}
+    report.update(finish(out, args.zip))
     print(json.dumps(report))
+    return report
 
 
 README = """{title}
@@ -267,12 +368,18 @@ Saving
 
 Sources and licences of the images
 {sources}
-  The images here are resized copies; the page draws outlines (from the datasets' lesion labels and from an AI
-  model) over them and shows crops around the marked regions. These adapted images keep the licence of their source.
+{image_note}
 
 Please keep this folder within the study while the review runs: other readers must not see the outlines before
 their own answers. Delete it when the study team tells you the review is closed.
 """
+
+IMAGE_NOTE = """  The images here are copies of the dataset photographs with the camera metadata removed (some re-encoded or
+  downscaled); the page draws outlines (from the datasets' lesion labels and from an AI model) over them and shows
+  crops around the marked regions. These adapted images keep the licence of their source."""
+# the note of packs built before 2026-11-10 (replaced by --clean-existing)
+OLD_IMAGE_NOTE = """  The images here are resized copies; the page draws outlines (from the datasets' lesion labels and from an AI
+  model) over them and shows crops around the marked regions. These adapted images keep the licence of their source."""
 
 # docs/clinical/28 section 3 and 34 section 7 (L1, 2026-11-10). MESSIDOR (MAPLES-DR) images may not be copied or
 # redistributed, so no pack for readers outside the team may hold them.

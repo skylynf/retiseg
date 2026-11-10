@@ -17,7 +17,7 @@
   另附：dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json（第十节）、runs/E5/selection_*.json（第七节）。
   本机收到后：解入 runs/，python docs/paper/retiseg_paper/paper/scripts/collect_runs.py，make -C docs/paper/retiseg_paper/paper。
 
-三、当前待办（2026-11-01；第 72 条（b）2026-11-07、11-10 更新）
+三、当前待办（2026-11-01；第 72 条（b）2026-11-07、11-10 更新；b5 11-10 做完，b6 等通知）
   论文实验：全部完成，不再有待跑项。不做的（决定见 14 备注）：第 59 条 HACDR seed0 探针（21 第 87 条，低优先）、第 49 条 FCT 修正配方（14 备注 60）、N6 校准与 N7 样本量（14 备注 77）。
   仍要做的只有临床合作（用户 10-29 加的第 72 条；代码 clinical/，用法 clinical/README.md；设计 docs/clinical/28 第九节、32 第七节）：
   72. 临床合作的前置与试点数据（docs/clinical/28 第九节；代码 clinical/，用法 clinical/README.md）。
@@ -55,6 +55,11 @@
      贴 00：抽样 report 的各层 population / eligible / drawn、区域总数与各区域层的数、parts（第一部分每层几张）；build_pack 的末行（图数、区域数、zip 大小，超过 20 MB 会提示）。抽样只做这一次，不要因为结果重抽；重跑同一命令会得到同一结果（种子固定）。
      数据包目录与 zip 带图像：单独传到工作站（例如 scp 到 runs/CLINREV/packs/），不进回传包、不进 git。selection.json 与抽样 report 进回传包。第二部分（--part 2）等本机通知。
      MAPLES-DR 不进本批次；它的定位与挖掘结果留在服务器即可。build_pack.py 遇到 MAPLES-DR 等不许外发的集合会拒绝打包。
+     b5 11-10 做完（00 末尾 12:08–12:57）。本机核对见 docs/clinical/35：数与设计一致；第一部分的包里 5 张 DDR 原图带相机元数据（检查号、拍摄时间、左右眼、相机序列号），本机已用 build_pack.py --clean-existing 清理后重打 zip。服务器上的 runs/CLINREV/packs/batch01_part1 与 zip 留作分析（pack.json 相同），不要再发出去。
+     b6 第二部分：等本机通知。届时先 pull（含 clean_jpeg 的提交），再
+       python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01/selection.json --part 2 \
+           --out runs/CLINREV/packs/batch01_part2 --title "RetiSeg clinical review - batch 1, part 2" --zip
+     贴 00 末行；zip 单独传到工作站。selection.json 与 selection.tsv 不进 git（答案表，读完前不公开，35 第三节）。
      b4' 之后照第二节打包一次（对照 runs/handoff_manifest_20261107.tsv），包里要有四个新 landmarks.json 与重挖的 meta.json、images.jsonl（DDR 的 candidates.jsonl 超过 8 MB 照旧留在服务器）。
 
 四、仓库里与服务器相关的脚本（备查）

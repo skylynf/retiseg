@@ -20,7 +20,10 @@ pretrained/
 *.tar.gz
 
 # Clinical review (docs/clinical/28): mining outputs, packs with images, and readers' answers stay out of the
-# public repository. Frozen designs (clinical/designs/) and selections (clinical/selections/) are committed.
+# public repository. Frozen designs (clinical/designs/) are committed; a formal batch's selection (the key) goes to
+# clinical/selections/ only when its review closes (docs/clinical/35).
 clinical/work/
 clinical/packs/
 clinical/reviews/
+# Review packs as zip hold dataset images, wherever they are saved.
+*.zip

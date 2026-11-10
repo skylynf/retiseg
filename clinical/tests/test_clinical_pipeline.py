@@ -206,6 +206,9 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     assert {r["id"] for c in pack["cases"] for r in c["regions"]} == {x["inst_id"] for x in sel["instances"]}
     readme = (root / "packs" / "syn01" / "READ_ME_FIRST.txt").read_text()
     assert "Sources and licences" in readme and "SYN: see the study team" in readme
+    assert build_pack.IMAGE_NOTE in readme and "resized copies" not in readme
+    for img in (root / "packs" / "syn01" / "images").glob("*.jpg"):     # no camera metadata in a pack image
+        assert _jpeg_markers(img.read_bytes()) & {0xE1, 0xFE} == set()
     restricted = json.loads((root / "work" / "syn01" / "selection.json").read_text())
     for c in restricted["cases"]:
         c["set"] = "MAPLES-DR"
@@ -390,6 +393,63 @@ def test_landmarks_on_a_synthetic_fundus():
     assert np.hypot(lm["disc"][0] - 440, lm["disc"][1] - 250) < 10
     assert np.hypot(lm["fovea"][0] - 252, lm["fovea"][1] - 258) < 25
     assert lm["um_per_px"] == pytest.approx(4700 / np.hypot(lm["fovea"][0] - lm["disc"][0], lm["fovea"][1] - lm["disc"][1]), rel=1e-3)
+
+
+def _jpeg_markers(data):
+    """Marker bytes of the segments before the first scan, and whether anything follows the primary image."""
+    found, i = set(), 2
+    while data[i + 1] != 0xDA:
+        found.add(data[i + 1])
+        i += 2 + int.from_bytes(data[i + 2:i + 4], "big")
+    return found
+
+
+def _camera_jpeg(path):
+    """A JPEG as some fundus cameras write it: Exif, a comment with an exam id, an MPF-style preview after the EOI."""
+    rng = np.random.default_rng(0)
+    im = Image.fromarray(rng.integers(0, 255, (48, 64, 3), dtype=np.uint8))
+    exif = Image.Exif()
+    exif[0x010F] = "CAMERA MAKER"
+    exif[0x0132] = "2001:02:03 04:05:06"
+    buf = __import__("io").BytesIO()
+    im.save(buf, format="JPEG", quality=90, exif=exif, comment=b"CAMTYPE=99;ID=12345678;DATE=01/02/03;SER=0042")
+    preview = __import__("io").BytesIO()
+    im.resize((32, 24)).save(preview, format="JPEG")
+    data = buf.getvalue() + b"\x00" * 66 + preview.getvalue()
+    path.write_bytes(data)
+    return data
+
+
+def test_clean_jpeg_drops_camera_metadata(tmp_path):
+    import io
+    data = _camera_jpeg(tmp_path / "cam.jpg")
+    assert {0xE1, 0xFE} <= _jpeg_markers(data)
+    clean = build_pack.clean_jpeg(data)
+    assert _jpeg_markers(clean) & {0xE1, 0xFE} == set()
+    assert b"12345678" not in clean and b"CAMERA MAKER" not in clean
+    assert clean.endswith(b"\xff\xd9") and clean.count(b"\xff\xd8") == 1           # no preview after the image
+    a = np.asarray(Image.open(io.BytesIO(data)).convert("RGB"))
+    b = np.asarray(Image.open(io.BytesIO(clean)).convert("RGB"))
+    assert np.array_equal(a, b)                                                     # same pixels
+    assert build_pack.clean_jpeg(clean) == clean
+
+
+def test_clean_existing_pack(tmp_path):
+    import common
+    pack = tmp_path / "batchX_part1"
+    (pack / "images").mkdir(parents=True)
+    _camera_jpeg(pack / "images" / "c01.jpg")
+    (pack / "pack.json").write_text(json.dumps({"pack_id": "batchX+part1", "cases": []}))
+    (pack / "READ_ME_FIRST.txt").write_text("Sources\n" + build_pack.OLD_IMAGE_NOTE + "\n")
+    rep = build_pack.main(["--clean-existing", str(pack), "--zip"])
+    assert rep["images_cleaned"] == ["c01.jpg"] and rep["readme_updated"]
+    assert b"12345678" not in (pack / "images" / "c01.jpg").read_bytes()
+    assert build_pack.IMAGE_NOTE in (pack / "READ_ME_FIRST.txt").read_text()
+    sums = dict(reversed(line.split("  ")) for line in (pack / "SHA256SUMS.txt").read_text().splitlines())
+    assert sums["images/c01.jpg"] == common.sha256_file(pack / "images" / "c01.jpg")
+    assert (tmp_path / "batchX_part1.zip").is_file()
+    rep2 = build_pack.main(["--clean-existing", str(pack)])                           # a second run changes nothing
+    assert rep2["images_cleaned"] == [] and not rep2["readme_updated"]
 
 
 def test_kappa_sanity():

@@ -63,7 +63,7 @@ Each of these findings mixes AI error with label error and with differences in l
 
 **AI model under review.** RetiSeg-Ref, the reference model released with the benchmark (an average of two strong models trained on three public datasets with fine pixel labels). For each region we also record, without showing you, how many of 18 other published models make the same call.
 
-**Photographs.** Official test images of public, de-identified datasets whose terms allow us to share them with you: IDRiD (CC BY 4.0), DDR (CC BY-NC-SA 4.0), and TJDR standard-field and ultra-widefield (released by its authors for direct download). Each folder lists its sources and licenses. No patient contact or identifiable information is involved. Images you read in the trial are excluded.
+**Photographs.** Official test images of public, de-identified datasets whose terms allow us to share them with you: IDRiD (CC BY 4.0), DDR (CC BY-NC-SA 4.0), and TJDR standard-field and ultra-widefield (released by its authors for direct download). Each folder lists its sources and licenses. The copies in the folder carry no camera metadata (capture dates, exam numbers or device serials). No patient contact or identifiable information is involved. Images you read in the trial are excluded.
 
 **Regions.** For every image and lesion type we overlay the dataset label and the AI output and split their union into connected regions: a lesion labeled but missed by the AI, an AI finding with no label, an extent disagreement, or an agreement (control).
 

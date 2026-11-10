@@ -69,6 +69,13 @@ build_pack.py refuses a pack holding MESSIDOR, FGADR, Retinal-Lesions or DiaRetD
 Every pack's READ_ME_FIRST.txt names the sources and licences of its images. The frozen design records the sha256 of
 the mining outputs it was fixed on (`sets[].inputs`), and the sampler stops if they differ. The landmark estimates
 only decide the strata; the analysis uses each reader's own marks.
+Pack images carry no camera metadata (docs/clinical/35): some DDR originals hold the exam number, the eye, the capture
+date and the camera serial in Exif or JPEG comments, plus embedded previews; `clean_jpeg` keeps the image data byte
+for byte and drops the rest. A pack built before 2026-11-10 is cleaned in place with
+`build_pack.py --clean-existing <pack> --zip` (pack.json and the readers' saved answers stay valid).
+The selection.json of a formal batch is the answer key: while readers read it stays out of the public repository;
+its sha256 goes into the docs (docs/clinical/35) and the file is committed to clinical/selections/ when the review
+closes. The frozen design (seed, inputs hashes) already fixes the draw before anyone reads.
 
 ## Fallback trial on the workstation
 

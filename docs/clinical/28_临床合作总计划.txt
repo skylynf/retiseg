@@ -1,5 +1,5 @@
 临床合作总计划
-建立日期 2026-10-28；2026-10-29 按与 Dr. Peranut Chotcomwongse 的讨论修订（31）：先试判 10–20 张图再定正式批次；只判四类病灶；医生看到的标签改为 MA、HG、HEX、CWS；临床后果改为挂在 ICDR / 4-2-1 / DME 上的一题加"是否改变处理"一题；题目减少、改临床说法；答题区改为浅色交替卡片；分析加入到黄斑中心的距离。改动明细在 31 第二节；10-28 版在 git 历史里。2026-11-03 按试判结果修订（32）：问卷 3.0.0（删 AI 分级与转诊题；DME 按 ETDRS 网格判；标签与 AI 分开判；IRMA / NV 可标点），工具 1.0.0（图上画 ETDRS 网格），正式批次按 ETDRS 位置分层抽样（多抽黄斑附近的 HEX 与可疑 IRMA / NV，保留设计权重），分析按 µm 与 ETDRS 区带。2026-11-06 发送前核对（33）：裁剪窗互不重叠的拒绝重抽会改变入样概率，改为每层只抽一次、同一张图所有 A 步答完再一次揭示（工具 1.1.0）；问卷 3.1.0（HEX 区带只作位置描述，不再称 DME；加图级处理题；处理由医生判断）；盲法逐步写清；黄斑—视盘距离按 4.7 mm；batch01 改为 100 张，先读 20 张，再读 80 张。2026-11-07 定位核对（34）：服务器的自动定位逐张核对后改正 116 张；配额差额与冻结标记改由抽样脚本执行。2026-11-10 冻结（34 第七节）：L1 许可查定，MAPLES-DR 不进正式批次，D8 照提议稿，batch01 冻结并记下挖掘输出的哈希；数据包写明图像出处与许可。
+建立日期 2026-10-28；2026-10-29 按与 Dr. Peranut Chotcomwongse 的讨论修订（31）：先试判 10–20 张图再定正式批次；只判四类病灶；医生看到的标签改为 MA、HG、HEX、CWS；临床后果改为挂在 ICDR / 4-2-1 / DME 上的一题加"是否改变处理"一题；题目减少、改临床说法；答题区改为浅色交替卡片；分析加入到黄斑中心的距离。改动明细在 31 第二节；10-28 版在 git 历史里。2026-11-03 按试判结果修订（32）：问卷 3.0.0（删 AI 分级与转诊题；DME 按 ETDRS 网格判；标签与 AI 分开判；IRMA / NV 可标点），工具 1.0.0（图上画 ETDRS 网格），正式批次按 ETDRS 位置分层抽样（多抽黄斑附近的 HEX 与可疑 IRMA / NV，保留设计权重），分析按 µm 与 ETDRS 区带。2026-11-06 发送前核对（33）：裁剪窗互不重叠的拒绝重抽会改变入样概率，改为每层只抽一次、同一张图所有 A 步答完再一次揭示（工具 1.1.0）；问卷 3.1.0（HEX 区带只作位置描述，不再称 DME；加图级处理题；处理由医生判断）；盲法逐步写清；黄斑—视盘距离按 4.7 mm；batch01 改为 100 张，先读 20 张，再读 80 张。2026-11-07 定位核对（34）：服务器的自动定位逐张核对后改正 116 张；配额差额与冻结标记改由抽样脚本执行。2026-11-10 冻结（34 第七节）：L1 许可查定，MAPLES-DR 不进正式批次，D8 照提议稿，batch01 冻结并记下挖掘输出的哈希；数据包写明图像出处与许可。2026-11-10 第一部分数据包核对（35）：包里的图去掉相机元数据；selection.json 读完前不进公开仓库。
 本文件是临床合作的总纲：目的与研究问题、审查单位、抽样、阅读流程与工具、问卷、分析、试判、执行分工、时间表、风险、待决定事项。与 26 第四节冲突处以本文件为准（第二节第 1 条）。代码在 clinical/（scripts、schema、reader_tool、designs、tests；用法见 clinical/README.md）。给医生的英文材料：29（研究方案 v2.1）、30（阅读指南 v2.1，随数据包发）。试判结果与正式批次设计：32；发送前核对：33。目录索引是本目录的 README.txt。
 
 零、一句话
@@ -79,7 +79,7 @@
      题二"If the wrong outline were used, would your management of this patient differ?"：No / Follow-up interval / Referral or treatment / Unsure；医生自己的临床判断，对照 a 里的图级处理。
   3. 盲法与偏倚控制（33 第三节）：分级一步只看原图，看不到区域、轮廓、数据集名称和自带分级（相机与视野可能透露来源）；A 步只看当前区域的圈，不知道是谁画的、哪一类、哪一层、概率和共识，知道圈里至少一方画了四类之一、正式批次多抽黄斑附近和像血管的区域（指南明说）；分级一步在进入 A 步时锁定；同一张图所有 A 在任何轮廓出现前答完，揭示后锁定；圈的大小和缩放跟着画出的范围，进度条显示区域数；整图小结对 DDR 图显示数据集自带的 ICDR 分级（只写分级名称，但有没有这一项会透露来源；MAPLES-DR 的 MESSIDOR 分级不是 ICDR，不显示）；前面图像的揭示会让读者熟悉标签和 AI 的风格（无法屏蔽，图序随机，可查顺序效应）；B 步和整图小结不盲，主要终点用 A；盲法靠工具流程，数据包文件含轮廓，请读者只用 index.html；图与区域的顺序按读者编号打乱；对照混入；读者之间不讨论，第二部分读完前不和读者讨论第一部分的答案；分析者持有钥匙，不盲，设计与分析计划抽样前提交。
   4. 工具（clinical/reader_tool/index.html，单个离线 HTML，1.1.0）：数据包目录里双击 index.html；Chrome、Edge、Firefox。看图区深色，可缩放、平移、小地图，亮度、对比度、无红光；数据集标签、AI、热图、四类（MA / HG / HEX / CWS）、ETDRS 网格（E）各自开关；IRMA / NV 标点画成菱形。答题区默认浅色：题目卡片白 / 浅灰交替，左侧题号（已答变深），选中项深底白字，缺答时卡片左缘与题目变琥珀色；顶栏"Panel: light / dark"切换。键盘 1–9 选项、回车下一步。答案自动存在浏览器，"Export results"导出 JSON；可绑定文件持续写入；换电脑导入后继续。记录每步有效用时、揭示时刻、图像显示尺寸。
-  5. 数据包（build_pack.py）：index.html、pack.js / pack.json、images/、heat/、READ_ME_FIRST.txt（按图数和区域数估算用时；请读者只用 index.html）、SHA256SUMS.txt；--zip 另出一个 zip 作邮件附件（超过 20 MB 会提示改用网盘或 --max-side）；--part 1 / 2 只打对应部分，包号 batch01+part1 / +part2。包里没有数据集名称、原图编号、区域类型、分层、概率、权重和估计的黄斑位置；这些在 selection.json（钥匙），留在我们这边。
+  5. 数据包（build_pack.py）：index.html、pack.js / pack.json、images/、heat/、READ_ME_FIRST.txt（按图数和区域数估算用时；请读者只用 index.html）、SHA256SUMS.txt；--zip 另出一个 zip 作邮件附件（超过 20 MB 会提示改用网盘或 --max-side）；--part 1 / 2 只打对应部分，包号 batch01+part1 / +part2。包里没有数据集名称、原图编号、区域类型、分层、概率、权重和估计的黄斑位置；这些在 selection.json（钥匙），留在我们这边，读完前不进公开仓库，只记哈希（35 第三节）。图片去掉相机元数据（Exif、XMP、注释、内嵌预览；部分 DDR 原图里有检查号、拍摄时间、左右眼、相机序列号），图像数据逐字节不变（35 第二节）。
   6. 用时（试判实测）：区域中位 48 秒；每张图的分级与小结在熟悉工具后 2–4 分钟；连同区域每张 4–6 分钟。阅读顺序改为先做完所有 A 后，每个区域约多 10–15 秒（估计）。
 
 七、分析计划（clinical/scripts/analyze_reviews.py 3.0；读者导出 + selection.json + 数据包 → regions_long.csv、images_long.csv、report.md；问卷 2 的导出也能读）
@@ -116,7 +116,7 @@
     S2 locate_landmarks.py estimate（11-07 做的五个集合，视野角 DDR / TJDR_std / MAPLES-DR 45°、IDRiD 50°、TJDR_uwf 133°），qc.html 传回工作站。
     S3 Luming 在 QC 页改明显的错，corrections 传回，apply。
     S4 mine_discrepancies.py --landmarks（--zoo-train DDR，--grades auto）；sample_review.py --dry-run 的各层可入选数贴 00。
-    S5（b5，11-10 起可做）本机提交冻结的 batch01.yaml 后：sample_review.py（100 张一次抽完并分部）→ build_pack.py --part 1 --zip；第一部分回来后 build_pack.py --part 2 --zip（同一个 selection.json）。数据包单独传到工作站。
+    S5（b5，11-10 做完，35）本机提交冻结的 batch01.yaml 后：sample_review.py（100 张一次抽完并分部）→ build_pack.py --part 1 --zip；第一部分回来后 build_pack.py --part 2 --zip（同一个 selection.json）。数据包单独传到工作站。
   本机：
     W1 先把 29、30 v2.1 发给医生，确认第一部分的时间与读者人数；W2 冻结 batch01.yaml 并提交（11-10 已做）；W3 收包检查（用测试编号走完一张图：网格位置、A 全部答完才揭示、B 窗口、导出能被分析读取；再换浏览器或清掉测试编号）；W4 发第一部分（zip + 30 + 读者编号）；W5 收导出，跑 analyze_reviews.py --pack，做中期检查；W6 发第二部分；W7 写回本文件与 14（新增 M18 临床错误审阅）。
   Luming：L1 许可核对（11-10 已定）；L2 与对方确认读者人数与时间、IRB 是否要判定、署名；L3 正式批次启动会（含 T3 规则）；L4 决定第十二节各项；L5 QC 页改定位（每个集合几分钟）。
@@ -128,7 +128,8 @@
   11-06           发送前核对：一次抽样与阅读顺序、问卷 3.1.0、盲法、20 + 80（已完成，33）。
   11-07           服务器定位、挖掘、dry-run；本机定位核对，改正 116 张（已完成，34）。服务器接着合并改正、重挖、再 dry-run。
   11-10           服务器合并改正、重挖、dry-run（已完成）；L1、D4、D8 定了，batch01 冻结（已完成，34 第七节）。
-  本周余下几天    服务器抽样、出第一部分的包；本机自查，连同 29 v2.2、30 发给读者。
+  11-10 晚        服务器抽样、出第一部分的包（已完成）；本机核对数据包、去掉相机元数据（已完成，35）。
+  本周余下几天    取回 selection.json；第一部分用网盘链接发给读者（附 29 v2.2、30）。
   之后约一周      第一部分回来，中期检查；发第二部分（6–8 小时，分 4–5 次）。若以 A 进本文，需要在 11 月底前读完能进论文的部分（26 第七节第 4 条：12 月初冻结、投稿）；随机子样本的估计仍然有效。
 
 十一、风险与对策
@@ -162,16 +163,18 @@
 十三、文件与代码
   docs/clinical/README.txt      本目录索引
   docs/clinical/28_临床合作总计划.txt  本文件
-  docs/clinical/29_protocol_en.md  英文研究方案（给合作医生，v2.1）
+  docs/clinical/29_protocol_en.md  英文研究方案（给合作医生，v2.2）
   docs/clinical/30_reader_guide_en.md  英文阅读指南（随数据包发，v2.1）
   docs/clinical/31_会议纪要_20261029.txt  与 Dr. Peranut Chotcomwongse 的讨论与落实
   docs/clinical/32_试判结果与正式批次设计_20261103.txt  试判结果、问卷 3.0.0 的修改、正式批次的分层设计
   docs/clinical/33_发送前核对_20261106.txt  入样概率（一次抽样与阅读顺序）、临床表述、盲法、20 + 80
+  docs/clinical/34_定位核对与正式批次_20261107.txt  定位核对、配额差额、许可查定与 batch01 冻结（第七节）
+  docs/clinical/35_第一部分数据包核对_20261110.txt  服务器抽样结果、第一部分数据包检查与浏览器走查、相机元数据的清理、selection 的处理
   clinical/README.md            代码用法（正式批次的服务器命令、分析、演示）
   clinical/schema/review_schema.json  问卷的唯一来源（版本号与改动记录在文件内）
   clinical/reader_tool/index.html  阅读工具（1.1.0）
   clinical/scripts/             locate_landmarks.py、mine_discrepancies.py、sample_review.py、build_pack.py、analyze_reviews.py、contours.py、common.py
-  clinical/designs/             batch01.yaml（正式批次，提议稿，100 张分两部分）、demo_idrid.yaml（试判读过的演示包）、demo_idrid_strat.yaml（正式设计的演示）、trial01.yaml 与 trial01_workstation.yaml（作废，未运行）
+  clinical/designs/             batch01.yaml（正式批次，11-10 冻结，100 张分两部分）、demo_idrid.yaml（试判读过的演示包）、demo_idrid_strat.yaml（正式设计的演示）、trial01.yaml 与 trial01_workstation.yaml（作废，未运行）
   clinical/tests/test_clinical_pipeline.py  合成数据上的全流程测试（bench/tests/test_clinical_review.py 把它带进 CI）
 
 十四、状态
@@ -182,4 +185,5 @@
   2026-11-06：按 33 修订：分层臂每层只抽一次（旧的重叠重抽改变入样概率，演示数据上偏倚明显，模拟验证修复后偏倚归零）；工具 1.1.0（同一张图所有 A 答完再一次揭示，分级一步在轮廓出现后锁定）；问卷 3.1.0（HEX 区带只描述位置，门槛与 HEX 区带分开，图级处理题，处理题去掉带倾向的提示）；黄斑—视盘距离 4.7 mm；batch01 改为 100 张、parts [20, 80]、--dry-run、--part；分析按读者完成数调整权重、层内 bootstrap；29、30 升 v2.1，盲法逐步写清。clinical/tests 11 项通过；演示两部分的包在浏览器走完（含重载续读、揭示锁定、分级锁定），导出能被分析读取；试判导出用新版分析重跑。
   2026-11-07：服务器第 72 条 b1、b3、b4（dry-run）做完；本机逐张核对 425 张的黄斑与视盘定位，DDR 约四成不可用，改正 116 张并提交（clinical/landmarks/batch01/）；配额差额由抽样脚本执行（shortfall_to: ddr_rest）；batch01 加 status，冻结后才能抽样（34）。
   2026-11-10：服务器 b2、b3'、b4' 做完，本机核对一致；L1 查定（IDRiD CC BY 4.0、DDR CC BY-NC-SA 4.0、TJDR 公开下载；MESSIDOR 禁止再分发），D4 去掉 MAPLES-DR，D8 照提议稿；batch01 冻结（DDR 70、IDRiD 10、TJDR_std 11、TJDR_uwf 9），记下挖掘输出的哈希；build_pack.py 写明出处与许可、拒绝受限集合；29 升 v2.2。clinical/tests 13 项通过（34 第七节）。
-  等：服务器 b5（抽样、第一部分的包）；本机自查后连同 29 v2.2、30 发给读者；D3 读者人数（L2）。
+  2026-11-10 晚：服务器 b5 做完（100 张、368 个区域，与设计一致；第一部分 20 张、70 个区域）。本机核对第一部分的包：校验全对、不含集合名与层，无头浏览器用测试编号走完 20 张、盲法各步正确；5 张 DDR 原图带相机元数据，build_pack.py 加 clean_jpeg（无损）与 --clean-existing，第一部分在本机清理后重打 zip（28.6 MB，网盘发）；selection.json 读完前不进公开仓库；.gitignore 加 *.zip；clinical/tests 15 项通过（35）。
+  等：selection.json 取回本机（记哈希、用测试导出跑分析）；第一部分发给读者（网盘链接，附 29 v2.2、30、读者编号）；D3 读者人数（L2）；第二部分（b6）等第一部分回来。
