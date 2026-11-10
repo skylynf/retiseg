@@ -17,7 +17,7 @@
   另附：dataset/prepared/MAPLES-DR/report.json、runs/audit/leak_maples.json（第十节）、runs/E5/selection_*.json（第七节）。
   本机收到后：解入 runs/，python docs/paper/retiseg_paper/paper/scripts/collect_runs.py，make -C docs/paper/retiseg_paper/paper。
 
-三、当前待办（2026-11-01；第 72 条（b）2026-11-07 更新）
+三、当前待办（2026-11-01；第 72 条（b）2026-11-07、11-10 更新）
   论文实验：全部完成，不再有待跑项。不做的（决定见 14 备注）：第 59 条 HACDR seed0 探针（21 第 87 条，低优先）、第 49 条 FCT 修正配方（14 备注 60）、N6 校准与 N7 样本量（14 备注 77）。
   仍要做的只有临床合作（用户 10-29 加的第 72 条；代码 clinical/，用法 clinical/README.md；设计 docs/clinical/28 第九节、32 第七节）：
   72. 临床合作的前置与试点数据（docs/clinical/28 第九节；代码 clinical/，用法 clinical/README.md）。
@@ -46,8 +46,15 @@
      应各合并 93 / 2 / 19 / 2 条；TJDR_std 没有改正。贴每个集合合并的条数与新 landmarks.json 的 sha256。
      b3' 现在做。四个集合重挖：先把 runs/CLINREV/mine/RetiSeg-Ref/{DDR,IDRiD,TJDR_uwf,MAPLES-DR} 挪到 runs/CLINREV/mine_uncorrected_20261107/ 下，再用 b3 的命令（clinical/README.md 第 1 步）只跑这四个集合。TJDR_std 的挖掘不动。贴末行与按 etdrs_zone 的分歧区域数（同 11-07 的格式）。
      b4' 重挖后再做 dry-run（命令同 b4）。batch01.yaml 现在带 images.shortfall_to: ddr_rest，输出的 n 已是加上差额后的配额；把各层 population / eligible / asked / short / n 和 would_draw 贴 00。到这里停下。
-     b5 等本机（用户）提交 status: frozen 的 batch01.yaml（文件头写 FROZEN 与日期）。之前 sample_review.py 不带 --dry-run 会拒绝运行，这是设计如此，不要改。冻结提交到了以后：pull；sample_review.py 去掉 --dry-run 抽一次（report 贴 00）；build_pack.py --part 1 --zip（clinical/README.md 第 3 步）。数据包与 zip 带图像，单独传到工作站，不进回传包、不进 git。selection.json 进回传包。第二部分等本机通知。
-     MAPLES-DR：b2–b4' 照做（不发图）；本机定了许可后，若不允许，冻结的 batch01.yaml 里不会有 MAPLES-DR。
+     b5 现在做（11-10 本机已把 batch01.yaml 冻结：status: frozen；去掉 MAPLES-DR；DDR 3–4 级与黄斑 HEX 两层各 25；每个集合记了冻结时的 landmarks_sha256 与 candidates_sha256，见 docs/clinical/34 第七节）。pull 到冻结提交后：
+       python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01 --dry-run
+     应得 would_draw 100：ddr_pdr_severe 25、ddr_macular_hex 25、ddr_low 10、ddr_rest 10、idrid_macular_hex 8、idrid_rest 2、tjdr_std_macular_hex 8、tjdr_std_rest 3、tjdr_uwf_macular_hex 5、tjdr_uwf_rest 4。如果脚本报哈希对不上，或这些数不同，停下，贴 00，不抽。对上了就抽一次：
+       python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml --out runs/CLINREV/selection/batch01
+       python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01/selection.json --part 1 \
+           --out runs/CLINREV/packs/batch01_part1 --title "RetiSeg clinical review - batch 1, part 1" --zip
+     贴 00：抽样 report 的各层 population / eligible / drawn、区域总数与各区域层的数、parts（第一部分每层几张）；build_pack 的末行（图数、区域数、zip 大小，超过 20 MB 会提示）。抽样只做这一次，不要因为结果重抽；重跑同一命令会得到同一结果（种子固定）。
+     数据包目录与 zip 带图像：单独传到工作站（例如 scp 到 runs/CLINREV/packs/），不进回传包、不进 git。selection.json 与抽样 report 进回传包。第二部分（--part 2）等本机通知。
+     MAPLES-DR 不进本批次；它的定位与挖掘结果留在服务器即可。build_pack.py 遇到 MAPLES-DR 等不许外发的集合会拒绝打包。
      b4' 之后照第二节打包一次（对照 runs/handoff_manifest_20261107.tsv），包里要有四个新 landmarks.json 与重挖的 meta.json、images.jsonl（DDR 的 candidates.jsonl 超过 8 MB 照旧留在服务器）。
 
 四、仓库里与服务器相关的脚本（备查）

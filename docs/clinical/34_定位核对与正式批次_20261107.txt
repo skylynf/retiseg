@@ -44,3 +44,25 @@
   1. 提交推送本机写回（新文件：docs/clinical/34、clinical/landmarks/batch01/ 四份改正）。服务器 pull 后做 b2、b3'、b4'。
   2. 定第四节的四件事，改 status 后提交；服务器再做 b5，第一部分 20 张的数据包回到工作站后，本机先在浏览器里走一遍再发给医生。
   3. 把 retiseg_runs_handoff_20261107.tar.gz 放到仓库根目录（留档）。
+
+七、11-10：服务器结果的核对与冻结
+  1. 服务器（00，11-10 08:10）做了 b2、b3'、b4'。回传包 retiseg_runs_handoff_20261110.tar.gz 的核对：
+     四个集合合并的条数是 93 / 2 / 19 / 2；逐条比对，坐标、source、保留的原估计与改正文件一致，没改的图一张没动。
+     五个 meta.json 里的 landmarks_sha256 与回传的 landmarks.json 一致；IDRiD、TJDR_std、TJDR_uwf、MAPLES-DR 的 candidates.jsonl 与 meta 里的哈希一致（DDR 的留在服务器）。
+     区域本身没变（类和型的计数与 11-07 相同），只是位置分档变了：DDR 黄斑 1 DD 内有 HEX 分歧的图从 90 张变为 98 张，TJDR_uwf 从 18 张变为 22 张。
+     非 DDR 各层的 dry-run 在本机用回传数据复现，数与服务器相同。
+  2. 各层可抽的区域（非 DDR，至少有一个的图数）：可疑 IRMA / NV 在 IDRiD 27 张里 23 张、TJDR_std 50 张里 16 张、TJDR_uwf 58 张里 14 张；DDR 3–4 级 40 张里 17 张至少有一个细长的 AI 多标区域（只算这一种）。中心子区的 HEX 分歧少：IDRiD 13 张、TJDR_std 2 张、TJDR_uwf 5 张。
+  3. 许可（L1，查 2026-11-10 各库的发布页）：
+     IDRiD：CC BY 4.0。
+     DDR：CC BY-NC-SA 4.0（发布页写明图像、标注都在这个许可下；非商业、署名、改编物同许可，须引用 Li et al., Information Sciences 2019）。
+     TJDR：作者写明公开发布、免申请直接下载；GitHub 仓库标 Apache-2.0；数据本身没有单独的许可文字；要求引用。
+     MESSIDOR（MAPLES-DR 的图像）："Copy, redistribution, and any unauthorized commercial use are prohibited"，并且只允许直接从它网站取得数据的个人或机构使用。发给机构外的医生不符合这一条。
+  4. 决定（Luming，11-10）：L1 三个库可以发，包里写明出处与许可；D4 去掉 MAPLES-DR；D8 照提议稿；D3 不影响抽样（每位读者拿同样的包），读者人数照 28 第十二节另定。
+  5. batch01.yaml 已冻结（status: frozen）：去掉 MAPLES-DR 与三个 maples 层，ddr_pdr_severe、ddr_macular_hex 各 25（文件头 11-03 写好的替换办法）；每个集合记下冻结时挖掘输出的 landmarks_sha256 与 candidates_sha256（sets[].inputs），抽样脚本对不上就停。按 11-10 的 dry-run，抽到的数是：DDR 25 + 25 + 10 + (8 + 2) = 70，IDRiD 8 + 2 = 10，TJDR_std 8 + 3 = 11，TJDR_uwf 5 + 4 = 9，共 100。
+  6. 代码：
+     sample_review.py：核对 sets[].inputs（meta.json 的 landmarks_sha256 与 candidates.jsonl 的 sha256），对不上就停（dry-run 也停）。
+     build_pack.py：READ_ME_FIRST.txt 加“Sources and licences”一节，按包里实际的集合列出处、许可名与改动说明（缩放、画轮廓、裁剪）；包里有 MESSIDOR（MAPLES-DR）、FGADR、Retinal-Lesions、DiaRetDB1 的图时拒绝打包，除非加 --team-only（只在团队内用的包）。
+     clinical/tests 13 项通过。
+  7. 29 升为 v2.2：样本表去掉 MAPLES-DR，DDR 两层各 25，写明差额规则与各集合总数，图片一段写明许可，时间表更新。30 不用改。
+  8. 服务器下一步：b5（17 第 72 条）。pull 到冻结提交；先 dry-run 一次（应得上面的 100 张），再去掉 --dry-run 抽样；build_pack.py --part 1 --zip。数据包与 zip 单独传到工作站，selection.json 随回传包回来。
+  9. 用户待办：提交推送（这次没有新文件）；数据包回来后本机先用测试编号走一遍，再连同 29 v2.2、30 发给医生。

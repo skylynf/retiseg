@@ -163,6 +163,15 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     (root / "design3.yaml").write_text(json.dumps({k: v for k, v in design2.items() if k not in ("reading_order", "parts")}))
     with pytest.raises(SystemExit):                       # the stratified arm needs exact inclusion probabilities
         sample_review.main(["--design", "design3.yaml", "--out", "work/syn03"])
+    sets_bad = [dict(e, inputs={"candidates_sha256": "0" * 64}) for e in design2["sets"]]
+    (root / "design5.yaml").write_text(json.dumps(dict(design2, sets=sets_bad)))
+    with pytest.raises(SystemExit):                       # mining outputs differ from the frozen hashes
+        sample_review.main(["--design", "design5.yaml", "--out", "work/syn05", "--dry-run"])
+    import common
+    good = common.sha256_file(root / "clinical/work/mine/SYN/candidates.jsonl")
+    (root / "design6.yaml").write_text(json.dumps(dict(design2, sets=[dict(e, inputs={"candidates_sha256": good})
+                                                                       for e in design2["sets"]])))
+    sample_review.main(["--design", "design6.yaml", "--out", "work/syn06", "--dry-run"])   # matching hashes pass
     (root / "design4.yaml").write_text(json.dumps(dict(design2, status="proposed")))
     sample_review.main(["--design", "design4.yaml", "--out", "work/syn04", "--dry-run"])   # a dry run works on any status
     with pytest.raises(SystemExit):                       # a proposed design does not draw
@@ -195,6 +204,15 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
         assert hidden not in text, f"pack leaks {hidden}"
     assert (root / "packs" / "syn01" / "index.html").is_file() and (root / "packs" / "syn01" / "pack.js").is_file()
     assert {r["id"] for c in pack["cases"] for r in c["regions"]} == {x["inst_id"] for x in sel["instances"]}
+    readme = (root / "packs" / "syn01" / "READ_ME_FIRST.txt").read_text()
+    assert "Sources and licences" in readme and "SYN: see the study team" in readme
+    restricted = json.loads((root / "work" / "syn01" / "selection.json").read_text())
+    for c in restricted["cases"]:
+        c["set"] = "MAPLES-DR"
+    (root / "work" / "maples_sel.json").write_text(json.dumps(restricted))
+    with pytest.raises(SystemExit):                       # MESSIDOR images do not go into a reader pack
+        build_pack.main(["--selection", "work/maples_sel.json", "--out", "packs/maples", "--root", "."])
+    assert not (root / "packs" / "maples").exists()
 
     # readers see the clinical labels (docs/clinical/31), the pack keeps the benchmark's class codes as keys
     assert {k: v["label"] for k, v in pack["classes"].items()} == {"MA": "MA", "HE": "HG", "EX": "HEX", "SE": "CWS"}

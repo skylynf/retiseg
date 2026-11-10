@@ -167,10 +167,18 @@ def main(argv=None):
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--zip", action="store_true", help="also write <out>.zip for sending by e-mail")
     ap.add_argument("--part", type=int, help="only the images of this reading part (selection with design key `parts`)")
+    ap.add_argument("--team-only", action="store_true",
+                    help="allow sets whose images may not leave the team (MESSIDOR / MAPLES-DR, FGADR, ...)")
     args = ap.parse_args(argv)
 
     root = Path(args.root)
     sel = json.loads(Path(args.selection).read_text())
+    names = {c["set"] for c in sel["cases"]}
+    if args.practice:
+        names |= {c["set"] for c in json.loads(Path(args.practice).read_text())["cases"]}
+    if names & RESTRICTED and not args.team_only:
+        raise SystemExit(f"{sorted(names & RESTRICTED)}: these images may not be copied to readers outside the team "
+                         "(docs/clinical/28 section 3, 34 section 7); pass --team-only for a pack that stays in the team")
     out = Path(args.out)
     if out.exists():
         if not args.force:
@@ -218,7 +226,9 @@ def main(argv=None):
     shutil.copyfile(TOOL, out / "index.html")
     n_regions = sum(len(c["regions"]) for c in cases)
     minutes = int(round((2.5 * len(cases) + 0.8 * n_regions) / 5.0) * 5) or 5   # trial timing, docs/clinical/32 section 1
-    (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], n_cases=len(cases), n_regions=n_regions, minutes=minutes))
+    sources = sources_text(sorted({case["set"] for case, *_ in jobs}))
+    (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], n_cases=len(cases), n_regions=n_regions,
+                                                         minutes=minutes, sources=sources))
     sums = []
     for p in sorted(out.rglob("*")):
         if p.is_file() and p.name != "SHA256SUMS.txt":
@@ -255,9 +265,41 @@ Saving
   "Save & import", then "Save continuously to a file", so the page keeps writing to that file.
   If you move to another computer, import your last exported file there before continuing.
 
-Please do not share this folder outside the study: the images are shared with you for this study under the
-terms of their datasets. Delete it when the study team tells you the review is closed.
+Sources and licences of the images
+{sources}
+  The images here are resized copies; the page draws outlines (from the datasets' lesion labels and from an AI
+  model) over them and shows crops around the marked regions. These adapted images keep the licence of their source.
+
+Please keep this folder within the study while the review runs: other readers must not see the outlines before
+their own answers. Delete it when the study team tells you the review is closed.
 """
+
+# docs/clinical/28 section 3 and 34 section 7 (L1, 2026-11-10). MESSIDOR (MAPLES-DR) images may not be copied or
+# redistributed, so no pack for readers outside the team may hold them.
+RESTRICTED = {"MAPLES-DR", "FGADR", "Retinal-Lesions", "DiaRetDB1"}
+SOURCES = {
+    "IDRiD": "IDRiD, Indian Diabetic Retinopathy Image Dataset (Porwal et al., Data 2018). "
+             "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/",
+    "DDR": "DDR (Li et al., Information Sciences 2019; github.com/nkicsl/DDR-dataset). "
+           "CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "TJDR": "TJDR (IEEE Transactions on Big Data 2024, arXiv:2312.15389; github.com/NekoPii/TJDR), released by its "
+            "authors for direct download; repository licence Apache-2.0",
+    "MAPLES-DR": "MESSIDOR images, kindly provided by the Messidor program partners (labels: MAPLES-DR). "
+                 "Not for copying or redistribution: study team only",
+}
+
+
+def sources_text(set_names):
+    keys = []
+    for s in set_names:
+        k = "TJDR" if s.startswith("TJDR") else s
+        if k not in keys:
+            keys.append(k)
+    lines = [f"  - {SOURCES[k]}" for k in keys if k in SOURCES]
+    other = [k for k in keys if k not in SOURCES]
+    if other:
+        lines.append("  - " + ", ".join(other) + ": see the study team")
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

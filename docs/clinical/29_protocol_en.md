@@ -2,7 +2,7 @@
 
 **A clinician review of AI–label disagreements in diabetic retinopathy lesion segmentation**
 
-Study protocol, version 2.1 (formal batch), 6 November 2026. Prepared by the RetiSeg team for our clinical collaborators. Version 1.0 (29 October) was revised after the trial read by Dr. Peranut Chotcomwongse on 2 November 2026 (version 2.0, 3 November) and checked again before the formal batch (this version).
+Study protocol, version 2.2 (formal batch), 10 November 2026. Prepared by the RetiSeg team for our clinical collaborators. Version 1.0 (29 October) was revised after the trial read by Dr. Peranut Chotcomwongse on 2 November 2026 (version 2.0, 3 November) and checked again before the formal batch (version 2.1, 6 November). Version 2.2 fixes the sample: MAPLES-DR is not used, because the MESSIDOR terms do not allow its photographs to be copied to readers outside our team, and its 10 images go to DDR (section 7).
 
 ---
 
@@ -32,7 +32,7 @@ The trial (4 images, 18 regions) showed that the questions and the tool work, an
 ## 3. Scope
 
 - Only the four lesion types annotated in the public datasets (MA, HG, HEX, CWS) are judged region by region.
-- IRMA, venous beading and new vessels (NVD/NVE), which decide severe NPDR and PDR, are not annotated in most of these datasets (MAPLES-DR annotates new vessels). You can tick and mark them; regions where the AI or the label calls a vessel-like structure a hemorrhage are oversampled; and the paper discusses them as a limitation of current benchmarks and a direction for future datasets.
+- IRMA, venous beading and new vessels (NVD/NVE), which decide severe NPDR and PDR, are not annotated in the datasets of this batch. You can tick and mark them; regions where the AI or the label calls a vessel-like structure a hemorrhage are oversampled; and the paper discusses them as a limitation of current benchmarks and a direction for future datasets.
 - Hard exudates are located on the photograph; we do not diagnose diabetic macular edema (section 5).
 
 ## 4. Background: what the benchmark found
@@ -63,7 +63,7 @@ Each of these findings mixes AI error with label error and with differences in l
 
 **AI model under review.** RetiSeg-Ref, the reference model released with the benchmark (an average of two strong models trained on three public datasets with fine pixel labels). For each region we also record, without showing you, how many of 18 other published models make the same call.
 
-**Photographs.** Official test images of public, de-identified datasets whose terms allow you to view them: IDRiD, DDR, TJDR standard-field and ultra-widefield, and MAPLES-DR if the MESSIDOR terms allow. No patient contact or identifiable information is involved. Images you read in the trial are excluded.
+**Photographs.** Official test images of public, de-identified datasets whose terms allow us to share them with you: IDRiD (CC BY 4.0), DDR (CC BY-NC-SA 4.0), and TJDR standard-field and ultra-widefield (released by its authors for direct download). Each folder lists its sources and licenses. No patient contact or identifiable information is involved. Images you read in the trial are excluded.
 
 **Regions.** For every image and lesion type we overlay the dataset label and the AI output and split their union into connected regions: a lesion labeled but missed by the AI, an AI finding with no label, an extent disagreement, or an agreement (control).
 
@@ -73,15 +73,14 @@ Each of these findings mixes AI error with label error and with differences in l
 
 | Dataset (test images) | Strata, in order: images drawn |
 |---|---|
-| DDR (225; dataset grades available) | grade 3–4: 20; hard-exudate disagreement within 1 DD of the fovea: 20; grade 0–1: 10; the rest: 8 |
-| IDRiD (27, less the 4 read in the trial) | hard-exudate disagreement within 1 DD: 8; the rest: 4 |
+| DDR (225; dataset grades available) | grade 3–4: 25; hard-exudate disagreement within 1 DD of the fovea: 25; grade 0–1: 10; the rest: 8, plus the images other strata lack (2 in this batch) |
+| IDRiD (27, less the 4 read in the trial) | hard-exudate disagreement within 1 DD: 8; the rest: 4 (only 2 eligible) |
 | TJDR standard field (55) | hard-exudate disagreement within 1 DD: 8; the rest: 3 |
 | TJDR ultra-widefield (58) | hard-exudate disagreement within 1 DD: 5; the rest: 4 |
-| MAPLES-DR (60), only if the MESSIDOR terms allow | a disagreement overlapping labeled new vessels: 5; hard-exudate disagreement within 1 DD: 3; the rest: 2 |
 
-If MAPLES-DR is not used, the first two DDR strata take 25 images each, so the total stays 100.
+In all: DDR 70, IDRiD 10, TJDR standard field 11, TJDR ultra-widefield 9. A stratum with fewer eligible images than planned gives the difference to the last DDR stratum, so the total stays 100. These numbers were checked on the mined data before the design was fixed (10 November).
 
-**Regions (stage 2, about 3–4 per image).** In each image, one region is drawn at random from each of: hard-exudate disagreements in the central subfield; in the inner ring; suspected IRMA or new vessels (a hemorrhage or microaneurysm disagreement that overlaps labeled new vessels or IRMA, or, in a DDR grade 3–4 image or a dataset without grades, is vessel-like or lies within 1.5 mm of the disc center); red-lesion disagreements within 1 DD; any other disagreement; agreements (controls). A region belongs to the first of these groups that fits. Each draw is made once, with no rejection or redraw, so every region's probability of being chosen is known exactly and overall shares are estimated with design weights.
+**Regions (stage 2, about 3–4 per image).** In each image, one region is drawn at random from each of: hard-exudate disagreements in the central subfield; in the inner ring; suspected IRMA or new vessels (a hemorrhage or microaneurysm disagreement that, in a DDR grade 3–4 image or a dataset without grades, is vessel-like or lies within 1.5 mm of the disc center); red-lesion disagreements within 1 DD; any other disagreement; agreements (controls). A region belongs to the first of these groups that fits. Each draw is made once, with no rejection or redraw, so every region's probability of being chosen is known exactly and overall shares are estimated with design weights.
 
 **Two parts.** After the 100 images are drawn, 20 are set aside as part 1 in proportion to each image stratum, so part 1 is a random subsample of the batch; the other 80 form part 2. The design, the random seed and the analysis plan are committed before sampling.
 
@@ -165,8 +164,9 @@ The formal batch is planned for the benchmark paper (in preparation; target *Nat
 | When | What |
 |---|---|
 | 2 Nov | Trial read (done) |
-| 3–6 Nov | Questions, tool, sampling and analysis revised (this version) |
-| Week of 9 Nov | Licence checks; fovea and disc estimates checked; design fixed; part 1 folder sent |
+| 3–6 Nov | Questions, tool, sampling and analysis revised (version 2.1) |
+| 7–10 Nov | Fovea and disc estimates checked; licenses checked; design fixed (10 Nov) |
+| Week of 9 Nov | Part 1 folder sent |
 | About one week after | Part 1 returned; interim check |
 | Then | Part 2 folder sent |
 

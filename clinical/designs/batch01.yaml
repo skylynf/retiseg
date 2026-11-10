@@ -1,4 +1,5 @@
-# Formal batch 1 (docs/clinical/32, 33; protocol docs/clinical/29 v2.1). PROPOSED 2026-11-03, revised 2026-11-06,
+# Formal batch 1 (docs/clinical/32, 33, 34; protocol docs/clinical/29 v2.1). FROZEN 2026-11-10 (proposed 2026-11-03,
+# revised 2026-11-06 and 2026-11-07),
 # after the trial read by Dr. Peranut Chotcomwongse on 2026-11-02 (demo pack, demo_idrid.yaml): of 18 trial regions
 # none lay in the central subfield and only one within 1 DD of the fovea, and almost every answer was "clinically
 # insignificant". The formal batch therefore oversamples, with design weights, (1) hard exudates near the fovea, where
@@ -12,14 +13,22 @@
 # outline of that image is shown; the regions of an image are therefore drawn once, without the crop-window
 # rejection of the trial designs, and every inclusion probability is exact (docs/clinical/33 section 1).
 #
-# Freeze rule: Luming commits this file (and the sha256 of every landmarks.json it reads, written into meta.json by
-# mine_discrepancies.py) BEFORE sample_review.py draws; after that any change makes batch02.yaml. Before freezing,
-# `sample_review.py --dry-run` prints the population and eligible images of every stratum without drawing. A stratum
-# with fewer eligible images than asked gives the difference to ddr_rest (images.shortfall_to, applied by the
-# sampler), so the total stays 100. Dry run of 2026-11-07 on the uncorrected landmarks: idrid_rest 2 eligible of 4,
-# maples_nv 1 of 5, so ddr_rest would draw 8 + 6 = 14; the numbers are taken again after the landmark corrections.
-# If the MESSIDOR terms do not allow the readers to see MAPLES-DR images (docs/clinical/28 section 3), delete the
-# three maples_* strata and the MAPLES-DR set before freezing, and raise ddr_pdr_severe and ddr_macular_hex to 25.
+# Freeze rule: this file is committed with status: frozen BEFORE sample_review.py draws; after that any change makes
+# batch02.yaml. The sampler draws only a frozen design, and only from the mining outputs whose sha256 are recorded
+# under `inputs` below (landmarks.json as read by mine_discrepancies.py, and candidates.jsonl). A stratum with fewer
+# eligible images than asked gives the difference to ddr_rest (images.shortfall_to), so the total stays 100.
+# Decisions at the freeze (2026-11-10, Luming; docs/clinical/34 section 7):
+#   L1  IDRiD (CC BY 4.0), DDR (CC BY-NC-SA 4.0) and TJDR (released for direct download; repository under Apache-2.0)
+#       may be shown to the collaborating readers; every pack names its sources and licences.
+#   D4  MAPLES-DR is left out: the MESSIDOR terms prohibit copying and redistribution and restrict use to those who
+#       downloaded the images themselves. Its three strata and the set are removed; ddr_pdr_severe and
+#       ddr_macular_hex go from 20 to 25 (the rule written here on 2026-11-03).
+#   D8  suspected IRMA / NV as proposed (elongation >= 3 or within 1,500 um of the disc; DDR grade 3-4 or no grade).
+#   D3  the number of readers does not change the draw: every reader gets the same packs.
+# Dry run of 2026-11-10 with the corrected landmarks (server, docs/ops/00), MAPLES-DR still in: population / eligible:
+#   ddr_pdr_severe 40/40, ddr_macular_hex 98/98, ddr_low 15/15, ddr_rest 72/72, idrid_macular_hex 21/21,
+#   idrid_rest 2/2, tjdr_std_macular_hex 10/10, tjdr_std_rest 45/38, tjdr_uwf_macular_hex 22/22, tjdr_uwf_rest 36/36.
+#   With this file: 25 + 25 + 10 + (8 + 2) DDR = 70, IDRiD 8 + 2 = 10, TJDR_std 8 + 3 = 11, TJDR_uwf 5 + 4 = 9; 100.
 #
 # Model under review: RetiSeg-Ref, release thresholds; consensus: the 18 registered DDR-trained models, seed 0.
 # Every set is mined with --landmarks (locate_landmarks.py; docs/ops/17 item 72), after the QC corrections of
@@ -28,20 +37,36 @@
 #   ETDRS grid), inner 500-1,500 um (1 DD = 1,500 um), outer 1,500-3,000 um, outside; um_per_px = 4,700 um / the
 #   estimated fovea-to-disc distance. dist_disc_um: closest pixel to the estimated disc center.
 #   elongation: sqrt of the ratio of the region's second moments (vessel-like >= 3).
-# Expected size: 100 images, about 3-4 regions each, about 330 regions. Trial timing (docs/clinical/32): median 48 s per
+# Expected size: 100 images (DDR 70, IDRiD 10, TJDR_std 11, TJDR_uwf 9), about 3-4 regions each, about 330 regions. Trial timing (docs/clinical/32): median 48 s per
 # region and 1-4 min per image for grading and the whole-image step after the first image, so about 4-6 min per
 # image: part 1 about 1.5-2 hours, part 2 about 6-8 hours per reader.
 name: batch01
-status: proposed              # -> frozen in the freeze commit; sample_review.py draws only a frozen design
+status: frozen                # 2026-11-10; sample_review.py draws only a frozen design
 seed: 20261104
 reading_order: blind_first
 parts: [20, 80]
 sets:
-  - {set: DDR,       candidates: runs/CLINREV/mine/RetiSeg-Ref/DDR,       reference_grade_scale: ICDR}   # shown as an ICDR name only
-  - {set: IDRiD,     candidates: runs/CLINREV/mine/RetiSeg-Ref/IDRiD,     reference_grade_scale: null}
-  - {set: TJDR_std,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_std,  reference_grade_scale: null}
-  - {set: TJDR_uwf,  candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_uwf,  reference_grade_scale: null}
-  - {set: MAPLES-DR, candidates: runs/CLINREV/mine/RetiSeg-Ref/MAPLES-DR, reference_grade_scale: null}   # MESSIDOR grade is not ICDR: not shown
+  # inputs: the server's mining of 2026-11-10 (landmarks after the corrections in clinical/landmarks/batch01/)
+  - set: DDR
+    candidates: runs/CLINREV/mine/RetiSeg-Ref/DDR
+    reference_grade_scale: ICDR   # shown as an ICDR name only
+    inputs: {landmarks_sha256: ab8cc4e8dcf14e3a033bd57f61e7552d83bc87c71745ceb4ba23d0583235a0d0,
+             candidates_sha256: 0b221b984b35ef4afc809ba896bafb2e58e423e4485ee27402bad514644e6e82}
+  - set: IDRiD
+    candidates: runs/CLINREV/mine/RetiSeg-Ref/IDRiD
+    reference_grade_scale: null
+    inputs: {landmarks_sha256: 96cba42aee459f02cfaf62673b05d43f44e91a430a918d9437fe939e38ddf594,
+             candidates_sha256: abce7cc07ff4f067be6b0d287e186dd057aeb7bc87bbeaf5f1e1b4820fe75991}
+  - set: TJDR_std
+    candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_std
+    reference_grade_scale: null
+    inputs: {landmarks_sha256: 3e3757c31b23a3a6493f3a3786632ce410c294f21f0a6755a6eeacdefcf6e987,
+             candidates_sha256: cfab5be9bc1c08f35cf35f4690cef618a29573e574e9f0f1702ae2203e1097e4}
+  - set: TJDR_uwf
+    candidates: runs/CLINREV/mine/RetiSeg-Ref/TJDR_uwf
+    reference_grade_scale: null
+    inputs: {landmarks_sha256: 51f656348de7fe031eec0b9ce66c78df79f340fa68ecdc4ffa4c9d9e7a2e20fb,
+             candidates_sha256: 91aa0b769325d59cb867b258913072c023dc5ebd6cc8aeea086618460d0a500d}
 exclude:                      # read in the trial by the same reader (demo pack, 2026-11-02)
   - {set: IDRiD, image_ids: [IDRiD_55, IDRiD_63, IDRiD_67, IDRiD_72]}
 images:
@@ -49,8 +74,8 @@ images:
   shortfall_to: ddr_rest        # docs/clinical/33 section 6
   strata:                     # ordered: an image belongs to the FIRST stratum it matches
     # DDR test (225 images, grades from the DDR release)
-    - {name: ddr_pdr_severe,   set: DDR, grades: [3, 4], n: 20}          # IRMA / NV, 4-2-1 hemorrhages
-    - {name: ddr_macular_hex,  set: DDR, n: 20, has_regions: &hexmac {where: {cls: EX, kind: [FN, FP, extent], etdrs_zone: [C, inner]}, n: 1}}
+    - {name: ddr_pdr_severe,   set: DDR, grades: [3, 4], n: 25}          # IRMA / NV, 4-2-1 hemorrhages (20 -> 25, D4)
+    - {name: ddr_macular_hex,  set: DDR, n: 25, has_regions: &hexmac {where: {cls: EX, kind: [FN, FP, extent], etdrs_zone: [C, inner]}, n: 1}}
     - {name: ddr_low,          set: DDR, grade_band: "0-1", n: 10}       # one lesion decides No DR / mild / moderate (20 in all)
     - {name: ddr_rest,         set: DDR, n: 8}
     # IDRiD test (27 images; 4 excluded)
@@ -61,10 +86,7 @@ images:
     - {name: tjdr_std_rest,        set: TJDR_std, n: 3}
     - {name: tjdr_uwf_macular_hex, set: TJDR_uwf, n: 5, has_regions: *hexmac}
     - {name: tjdr_uwf_rest,        set: TJDR_uwf, n: 4}
-    # MAPLES-DR test (60; only if the MESSIDOR terms allow): its labels include neovascularization (masks_ext/NV)
-    - {name: maples_nv,          set: MAPLES-DR, n: 5, has_regions: {where: {ext_any: [NV]}, n: 1}}
-    - {name: maples_macular_hex, set: MAPLES-DR, n: 3, has_regions: *hexmac}
-    - {name: maples_rest,        set: MAPLES-DR, n: 2}
+    # MAPLES-DR left out at the freeze (D4: MESSIDOR terms); it had maples_nv 5, maples_macular_hex 3, maples_rest 2
 stratified:                   # ordered: a region belongs to the FIRST stratum it matches; n per image
   strata:
     - {name: hex_central, n: 1, where: {cls: EX, kind: [FN, FP, extent], etdrs_zone: C}}
@@ -75,7 +97,7 @@ stratified:                   # ordered: a region belongs to the FIRST stratum i
         cls: [HE, MA]
         kind: [FN, FP, extent]
         any:
-          - {ext_any: [NV, IRMA]}                    # overlaps a labelled NV / IRMA (MAPLES-DR)
+          - {ext_any: [NV, IRMA]}                    # overlaps a labelled NV / IRMA (none in this batch since MAPLES-DR left)
           - not: {grade: [0, 1, 2]}                  # DDR grade 3-4, or a set without grades
             any: [{elongation_ge: 3.0}, {dist_disc_um_le: 1500}]   # vessel-like, or on / near the disc (NVD)
     - {name: red_macula,  n: 1, where: {cls: [MA, HE], kind: [FN, FP, extent], etdrs_zone: [C, inner]}}

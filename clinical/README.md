@@ -64,8 +64,11 @@ Sampling (docs/clinical/33): with `reading_order: blind_first` every region stra
 no rejection, so inclusion probabilities are exact; the reader tool (1.1.0) asks step A for every region of an
 image before one reveal, so overlapping crop windows cannot unblind anything. The trial designs keep the old
 non-overlap rejection only so they reproduce; the stratified arm refuses to run without `blind_first`.
-Leave MAPLES-DR out of all three loops (and edit batch01.yaml as its header says) unless the MESSIDOR terms allow the
-readers to see the images. The landmark estimates only decide the strata; the analysis uses each reader's own marks.
+batch01 (frozen 2026-11-10) leaves MAPLES-DR out: the MESSIDOR terms prohibit copying and redistribution, and
+build_pack.py refuses a pack holding MESSIDOR, FGADR, Retinal-Lesions or DiaRetDB1 images unless `--team-only`.
+Every pack's READ_ME_FIRST.txt names the sources and licences of its images. The frozen design records the sha256 of
+the mining outputs it was fixed on (`sets[].inputs`), and the sampler stops if they differ. The landmark estimates
+only decide the strata; the analysis uses each reader's own marks.
 
 ## Fallback trial on the workstation
 

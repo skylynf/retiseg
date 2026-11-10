@@ -27,6 +27,8 @@ docs/clinical/28 section 5, docs/clinical/32 and docs/clinical/33. Two stages an
   `exclude` lists images that are left out of every stratum (e.g. those the same reader saw in the trial).
   `status: proposed | frozen` (batch01 and later): a design with a status draws only when it says frozen; --dry-run
   runs on any status.
+  `sets[].inputs: {landmarks_sha256, candidates_sha256}` (batch01): the mining outputs the design was frozen on; the
+  sampler stops if meta.json or candidates.jsonl differ (also in --dry-run).
   `images.shortfall_to: <stratum>`: a stratum with fewer eligible images than asked gives the difference to the named
   stratum (capped at its eligible images), so the batch keeps its size; --dry-run prints the resulting n.
   reading_order: blind_first (reader tool 1.1.0 and later): the reader answers step A for every region of an image
@@ -237,6 +239,11 @@ def main(argv=None):
     for entry in design["sets"]:
         mdir = root / entry["candidates"]
         meta = json.loads((mdir / "meta.json").read_text())
+        for key, want in (entry.get("inputs") or {}).items():
+            got = common.sha256_file(mdir / "candidates.jsonl") if key == "candidates_sha256" else meta.get(key)
+            if got != want:
+                raise SystemExit(f"{entry['set']}: {key} is {got}, the design was frozen on {want} "
+                                 "(the mining outputs changed after the freeze: a new design is needed)")
         sets[entry["set"]] = {"meta": meta, "candidates_dir": str(entry["candidates"]),
                               "display": entry.get("display", {}), "reference_grade_scale": entry.get("reference_grade_scale")}
         for r in common.read_jsonl(mdir / "candidates.jsonl"):
