@@ -22,10 +22,14 @@ Outlines are closed polygons on pixel corners (clinical/scripts/contours.py) of
     python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/trial01/selection.json \
         --out clinical/packs/trial01 [--practice clinical/work/practice01/selection.json] [--max-side 0] [--zip]
 
---zip also writes <out>.zip (the folder as one attachment) and warns when it is larger than 20 MB, the safe size
+Versions (docs/clinical/35 section 5): the pack id (<design>+part<k>) names what is read and keys the readers' saved
+answers; it never changes for a batch part, and neither does pack.json. The release (--release, r1 for a new pack)
+counts the builds of one pack id that differ in any file; READ_ME_FIRST.txt states "Pack <id>, release <rN>, <date>"
+and the zip is retiseg_review_<out name>_<rN>.zip. A release is never rebuilt under the same name.
+--zip also writes that zip (the folder as one attachment) and warns when it is larger than 20 MB, the safe size
 for e-mail; send a larger pack through a shared drive instead, or rebuild with --max-side.
---clean-existing PACK [--zip] removes the camera metadata from a pack built before that cleaning existed (2026-11-10,
-docs/clinical/35) without rebuilding it.
+--clean-existing PACK --release rN [--zip] removes the camera metadata from a pack built before that cleaning existed
+(2026-11-10, docs/clinical/35) as release rN, without rebuilding it.
 --part 1 (or 2) keeps only the images sample_review.py put in that reading part (design key `parts`); the pack id
 becomes <design>+part1, so the reader's saved answers of the two parts never mix (docs/clinical/33).
 """
@@ -33,6 +37,7 @@ becomes <design>+part1, so the reader's saved answers of the two parts never mix
 import argparse
 import io
 import json
+import re
 import shutil
 import sys
 import time
@@ -150,14 +155,21 @@ def write_image(src, dst, max_side):
     return im.size[0], im.size[1], scale
 
 
-def clean_existing(out, make_zip):
-    """Remove camera metadata from a pack built before 2026-11-10 (docs/clinical/35): clean_jpeg on images/*.jpg,
-    checked to decode to the same pixels; the README's image paragraph brought up to date; SHA256SUMS rewritten;
-    <out>.zip rebuilt with --zip. pack.json, pack.js, index.html and heat/ are not touched, so the pack id, the cases
-    and the readers' saved answers stay valid."""
+def clean_existing(out, make_zip, release):
+    """Remove camera metadata from a pack built before 2026-11-10 (docs/clinical/35) and make it a new release:
+    clean_jpeg on images/*.jpg, checked to decode to the same pixels; the README's image paragraph and release line
+    brought up to date; SHA256SUMS rewritten; the zip rebuilt with --zip. pack.json, pack.js, index.html and heat/ are
+    not touched, so the pack id, the cases and the readers' saved answers stay valid. The release must be later than
+    the one the README states (a pack without a release line is r1)."""
     out = Path(out)
     if not (out / "pack.json").is_file() or not (out / "images").is_dir():
         raise SystemExit(f"{out} is not a review pack (pack.json, images/)")
+    pack_id = json.loads((out / "pack.json").read_text())["pack_id"]
+    readme = out / "READ_ME_FIRST.txt"
+    text = readme.read_text()
+    old = release_of(text)
+    if release_number(release) <= release_number(old):
+        raise SystemExit(f"{out} is release {old}; give a later release than that (--release r{release_number(old) + 1})")
     changed, before, after = [], 0, 0
     for p in sorted((out / "images").glob("*.jpg")):
         data = p.read_bytes()
@@ -173,31 +185,70 @@ def clean_existing(out, make_zip):
         changed.append((p, new))
     for p, new in changed:
         p.write_bytes(new)
-    readme = out / "READ_ME_FIRST.txt"
-    text = readme.read_text()
-    readme_updated = OLD_IMAGE_NOTE in text
-    if readme_updated:
-        readme.write_text(text.replace(OLD_IMAGE_NOTE, IMAGE_NOTE))
-    report = {"pack": str(out), "images_cleaned": [p.name for p, _ in changed], "readme_updated": readme_updated,
+    note_updated = OLD_IMAGE_NOTE in text
+    text = text.replace(OLD_IMAGE_NOTE, IMAGE_NOTE)
+    lines = text.split("\n")
+    new_line = release_line(pack_id, release)
+    k = next((i for i, l in enumerate(lines[:4]) if RELEASE_RE.match(l)), None)
+    if k is None:
+        lines.insert(1, new_line)
+    else:
+        lines[k] = new_line
+    readme.write_text("\n".join(lines))
+    report = {"pack": str(out), "pack_id": pack_id, "release": release, "previous_release": old,
+              "images_cleaned": [p.name for p, _ in changed], "image_note_updated": note_updated,
               "images_megabytes_before": round(before / 1e6, 2), "images_megabytes_after": round(after / 1e6, 2)}
-    report.update(finish(out, make_zip))
+    report.update(finish(out, make_zip, release))
     print(json.dumps(report))
     return report
 
 
-def finish(out, make_zip):
-    """SHA256SUMS.txt over every file, then <out>.zip when asked; returns the size report."""
+RELEASE_RE = re.compile(r"^Pack (\S+), release (r\d+), (\d{4}-\d{2}-\d{2})\.")
+
+
+def release_number(release):
+    m = re.fullmatch(r"r(\d+)", release or "")
+    if not m or int(m.group(1)) < 1:
+        raise SystemExit(f"release {release!r}: use r1, r2, ... (docs/clinical/35 section 5)")
+    return int(m.group(1))
+
+
+def release_line(pack_id, release, date=None):
+    return (f"Pack {pack_id}, release {release}, {date or time.strftime('%Y-%m-%d')}. "
+            "Please quote the pack and release when you write to us.")
+
+
+def release_of(readme_text):
+    """The release a pack's README states; packs built before releases existed (2026-11-10) are r1."""
+    for line in readme_text.split("\n")[:4]:
+        m = RELEASE_RE.match(line)
+        if m:
+            return m.group(2)
+    return "r1"
+
+
+def zip_name(out, release):
+    """retiseg_review_<pack folder>_<release>.zip next to the folder; the folder inside keeps its name."""
+    return out.parent / f"retiseg_review_{out.name}_{release}.zip"
+
+
+def finish(out, make_zip, release):
+    """SHA256SUMS.txt over every file, then the release zip when asked; returns the size and hash report."""
     sums = []
     for p in sorted(out.rglob("*")):
         if p.is_file() and p.name != "SHA256SUMS.txt":
             sums.append(f"{common.sha256_file(p)}  {p.relative_to(out)}")
     (out / "SHA256SUMS.txt").write_text("\n".join(sums) + "\n")
     size = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
-    report = {"megabytes": round(size / 1e6, 1)}
+    report = {"megabytes": round(size / 1e6, 1), "pack_json_sha256": common.sha256_file(out / "pack.json")}
     if make_zip:
-        archive = shutil.make_archive(str(out), "zip", root_dir=out.parent, base_dir=out.name)
+        target = zip_name(out, release)
+        if target.exists():
+            raise SystemExit(f"{target} exists: a release is never rebuilt under the same name; use the next release")
+        archive = shutil.make_archive(str(target.with_suffix("")), "zip", root_dir=out.parent, base_dir=out.name)
         mb = Path(archive).stat().st_size / 1e6
         report["zip"] = archive
+        report["zip_sha256"] = common.sha256_file(archive)
         report["zip_megabytes"] = round(mb, 1)
         if mb > EMAIL_LIMIT_MB:
             report["warning"] = f"zip is {mb:.0f} MB, above {EMAIL_LIMIT_MB} MB: send it through a shared drive or rebuild with --max-side"
@@ -271,7 +322,9 @@ def main(argv=None):
     ap.add_argument("--heat-max-side", type=int, default=1600)
     ap.add_argument("--eps", type=float, default=0.7, help="outline simplification tolerance in pixels")
     ap.add_argument("--force", action="store_true")
-    ap.add_argument("--zip", action="store_true", help="also write <out>.zip for sending by e-mail")
+    ap.add_argument("--zip", action="store_true", help="also write retiseg_review_<out name>_<release>.zip next to the folder")
+    ap.add_argument("--release", help="release of this pack: r1 for a new pack (default), r2, r3, ... for each later "
+                                      "change of any file in it; printed in READ_ME_FIRST.txt and the zip name")
     ap.add_argument("--part", type=int, help="only the images of this reading part (selection with design key `parts`)")
     ap.add_argument("--team-only", action="store_true",
                     help="allow sets whose images may not leave the team (MESSIDOR / MAPLES-DR, FGADR, ...)")
@@ -280,7 +333,11 @@ def main(argv=None):
                          "README image note, SHA256SUMS (and zip with --zip); nothing else is built (docs/clinical/35)")
     args = ap.parse_args(argv)
     if args.clean_existing:
-        return clean_existing(args.clean_existing, args.zip)
+        if not args.release:
+            ap.error("--clean-existing needs --release (the next release of that pack, e.g. r2)")
+        return clean_existing(args.clean_existing, args.zip, args.release)
+    args.release = args.release or "r1"
+    release_number(args.release)
     if not args.selection or not args.out:
         ap.error("--selection and --out are required")
 
@@ -340,15 +397,18 @@ def main(argv=None):
     n_regions = sum(len(c["regions"]) for c in cases)
     minutes = int(round((2.5 * len(cases) + 0.8 * n_regions) / 5.0) * 5) or 5   # trial timing, docs/clinical/32 section 1
     sources = sources_text(sorted({case["set"] for case, *_ in jobs}))
-    (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], n_cases=len(cases), n_regions=n_regions,
+    (out / "READ_ME_FIRST.txt").write_text(README.format(title=pack["title"], release_line=release_line(pack["pack_id"], args.release),
+                                                         n_cases=len(cases), n_regions=n_regions,
                                                          minutes=minutes, sources=sources, image_note=IMAGE_NOTE))
-    report = {"pack": str(out), "cases": len(cases), "regions": sum(len(c["regions"]) for c in cases)}
-    report.update(finish(out, args.zip))
+    report = {"pack": str(out), "pack_id": pack["pack_id"], "release": args.release, "cases": len(cases),
+              "regions": sum(len(c["regions"]) for c in cases)}
+    report.update(finish(out, args.zip, args.release))
     print(json.dumps(report))
     return report
 
 
 README = """{title}
+{release_line}
 
 {n_cases} images, {n_regions} marked regions; about {minutes} minutes in total. You can stop and continue at any time.
 

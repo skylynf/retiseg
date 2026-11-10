@@ -5,7 +5,7 @@
   1. 服务器 pull 到 85e7166（batch01 冻结的提交），dry-run 接受了四个集合冻结时的 landmarks_sha256 与 candidates_sha256，各层张数与 17 第 72 条 b5 写的一致（25、25、10、10、8、2、8、3、5、4），于是正式抽了一次。
   2. 抽样：100 张（DDR 70、IDRiD 10、TJDR_std 11、TJDR_uwf 9），368 个区域，redraws 0。ddr_rest 抽 10（设计 8，加 IDRiD 其余层短缺的 2），idrid_rest 2（可入选只有 2）。区域层：中心子区 HEX 22、内环 HEX 61、可疑 IRMA / NV 35、黄斑附近 HG / MA 57、其他分歧 100、一致对照 93。试判读过的 4 张 IDRiD 已排除。
   3. 第一部分 20 张、70 个区域，每个图像层按比例分（最大余数，平局随机）：DDR 3–4 级 5、黄斑 HEX 5、0–1 级 2、其余 2；IDRiD 黄斑 HEX 2、其余 0；TJDR_std 黄斑 HEX 1、其余 1；TJDR_uwf 各 1。合计与 20 + 80 的设计一致。
-  4. selection.json 与 selection.tsv 在服务器 runs/CLINREV/selection/batch01/ 和 retiseg_runs_handoff_20261110_v2.tar.gz 里，本机还没有（工作站只下载了 zip）。
+  4. selection.json 与 selection.tsv 由用户另打包传回（clinical/retiseg_batch01_selection_20261110.tar.gz），本机已核对（第三节）并放到 runs/CLINREV/selection/batch01/（不进 git）。
 
 二、数据包检查（本机，解压到单独目录）
   1. 完整性：108 项，SHA256SUMS 全部对上；index.html 与仓库的工具 1.1.0 逐字节相同；pack.json 里没有集合名、原图名、层名、权重、入样概率（逐项搜过）；20 张图都有逐图尺度（um_per_px）；病例编号 c04…c99 在 100 张里随机分配，与层无关。
@@ -15,7 +15,7 @@
        揭示       每张图最后一个 A 之后一次，之后 A 锁定
        B 步       当前区域窗口里的标签实线与 AI 虚线（70 / 70）
        总结       整图轮廓
-     每张图都是先全部 A、后全部 B，没有一张顺序错。导出能否被分析读取要用 selection.json（第四节）。
+     每张图都是先全部 A、后全部 B，没有一张顺序错。测试导出用 analyze_reviews.py 跑通（第三节第 3 条）。
   3. 发现的问题：相机元数据。build_pack.py 对不用缩小的 JPEG 原样复制字节，原图里相机写的信息就跟着进了包。20 张里 5 张（都是 DDR）：
        3 张：佳能眼底相机软件写在 JPEG 注释里的字段，含相机序列号、软件版本、拍摄日期与时间、检查号、左右眼。
        2 张：尼康相机的 Exif（相机型号、拍摄时间等）和 XMP，JPEG 注释里有相机类型、检查号、日期、时间、序列号、左右眼；文件末尾还附着一张 1620 × 1080 的预览图（MPF）。
@@ -23,19 +23,33 @@
   4. 改法（clinical/scripts/build_pack.py）：
        clean_jpeg：逐段重写 JPEG，保留 JFIF（APP0）、Adobe（APP14）、ICC 色彩配置、全部量化表、霍夫曼表、帧头和扫描数据（逐字节不变），去掉 Exif / XMP（APP1，Exif 里还有缩略图）、MPF 与其他 APPn、注释（COM），以及主图结束标记之后的内容。像素不变；Exif 的方向标记一并去掉，浏览器按存储的像素显示，与轮廓的坐标一致。
        write_image：原样复制与重新编码两条路都过 clean_jpeg。
-       --clean-existing PACK [--zip]：清理 11-10 前打好的包，只动 images/*.jpg（逐张比对解码后的像素，不同就停）、README 的图片说明与 SHA256SUMS，pack.json、pack.js、index.html、heat/ 不动，所以包 id、病例、区域和读者已存的答案都不变。
+       --clean-existing PACK --release rN [--zip]（版本号的要求见第四节）：清理 11-10 前打好的包，只动 images/*.jpg（逐张比对解码后的像素，不同就停）、README 的图片说明与 SHA256SUMS，pack.json、pack.js、index.html、heat/ 不动，所以包 id、病例、区域和读者已存的答案都不变。
        README 的图片说明改为：copies of the dataset photographs with the camera metadata removed (some re-encoded or downscaled)。
        测试：clean_jpeg（相机注释、Exif、尾部预览去掉，像素相同，重复清理不变）、--clean-existing（只清有元数据的图、README 更新、SHA256SUMS 对、zip 重建、第二次不改）、端到端的包里没有 APP1 与注释。clinical/tests 15 项通过（bench/tests/test_clinical_review.py 同样 15 项）。测试里的相机字段都是编的。
-  5. 第一部分在本机清理（--clean-existing --zip）：5 张清理（c16、c35、c52、c60、c68），解码后的像素逐张相同；其余 15 张不变；pack.json（sha256 56655749…563ea）与服务器的相同；图片合计 28.60 → 27.38 MB；新的 zip 28.6 MB（sha256 b6f788c8…95cab），包内找不到相机字符串，SHA256SUMS 全对，Chromium 载入 20 张都是原尺寸。新 zip 放在本机 clinical/packs/batch01_part1.zip（.gitignore 已排除 clinical/packs/）。
+  5. 第一部分在本机清理（11-10 下午先做了一次没有版本号的；正式发的是第四节的 r2）：5 张清理（c16、c35、c52、c60、c68），解码后的像素逐张相同；其余 15 张不变；pack.json（sha256 56655749…563ea）与服务器的相同；图片合计 28.60 → 27.38 MB；新的 zip 28.6 MB（sha256 b6f788c8…95cab），包内找不到相机字符串，SHA256SUMS 全对，Chromium 载入 20 张都是原尺寸。这一版 README 还没有版本行，已由第五节的 r2 取代，不发。
      服务器上的第一部分（runs/CLINREV/packs/batch01_part1 与 zip）没有清理：留作分析用（--pack 只读 pack.json，与清理后的相同），不要发。仓库根目录下载的 batch01_part1.zip 是未清理的，删掉。
   6. 大小：28.6 MB，超过邮件附件的稳妥上限 20 MB。用网盘链接发（只给读者）。--max-side 不划算（本机试算图片合计）：--max-side 3000 只到 24.5 MB，仍超 20 MB（IDRiD 两张原图压缩很重，约 0.4 MB，缩小后按 95 质量重新编码反而变成约 1.3 MB）；--max-side 2400 能到约 15 MB，但 20 张里 15 张要缩小。保留原分辨率对微血管瘤更稳。
   7. .gitignore 加 *.zip：仓库根目录的 zip 原先不在排除范围内，git add . 会把带图的包加进去。
 
-三、selection.json 的处理（改 28 第五节原来的“selection 提交”）
-  selection.json 是答案表（病例与原图、每个区域是标签漏、AI 多标还是一致）。仓库是公开的，读者读完之前它不进 git；进 git 的时间改为整批读完之后。抽样在读者打开之前已经固定：冻结的 batch01.yaml 带种子和挖掘输出的哈希，同样的输入重抽得到同一份 selection。本机拿到文件后把它的 sha256 记在这里与 00，作为抽样记录。clinical/selections/README.txt、.gitignore 的注释、clinical/README.md 已按此改写。
+三、selection.json：核对、记录与处理（改 28 第五节原来的“selection 提交”）
+  1. 记录：selection.json sha256 67c2c9f5c57bee3d2716de5f0e6c63e5943e66f1a14e2ebe28f347dd0effdcca，selection.tsv sha256 6b46bf7deb68cfc0995c6081ed72cb9fb7f72487628de02843196f5bb81e08ea（服务器 11-10 12:07 写出）。
+  2. 核对（逐项）：内嵌的设计与仓库里冻结的 batch01.yaml 完全相同（status frozen，种子 20261104）；集合只有 DDR 70、IDRiD 10、TJDR_std 11、TJDR_uwf 9；试判的 4 张 IDRiD 不在其中；各层抽到的张数与报告一致，π_image = 抽到数 / 可入选数；每张图每个区域层抽 min(n, N) 个，π_within = min(n, N) / N，权重 = 1 / (π_image × π_within)，368 个全对；第一部分 20 张、70 个区域与数据包逐个对上（编号、裁剪窗、圆圈位置、逐图尺度）；病例编号按随机排列分配。DDR 的挖掘输出不在本机，所以整份抽样没法在本机重抽复现，复现靠冻结设计里的种子与输入哈希（服务器上可重跑）。
+  3. 分析：analyze_reviews.py 读 selection.json、清理后的包与测试导出（ZZTEST，随机作答），70 个区域、20 张图全部进表；按层完成数调整的权重（例如 4.8 × 5 / 1 = 24）与设计一致；只在问卷 2 才有的几列为空，符合预期。
+  4. 处理：
+     selection.json 是答案表（病例与原图、每个区域是标签漏、AI 多标还是一致）。仓库是公开的，读者读完之前它不进 git；进 git 的时间改为整批读完之后。抽样在读者打开之前已经固定：冻结的 batch01.yaml 带种子和挖掘输出的哈希，同样的输入重抽得到同一份 selection。它的 sha256 记在上面与 00，作为抽样记录。clinical/selections/README.txt、.gitignore 的注释、clinical/README.md 已按此改写。
 
-四、还要做的
-  1. 用户：从服务器取 runs/CLINREV/selection/batch01/selection.json 与 selection.tsv（或下载 v2 回传包），放到本机 runs/CLINREV/selection/batch01/（runs/ 不进 git）。本机随后：记下 sha256；用 ZZTEST 的测试导出跑 analyze_reviews.py（--pack 用清理后的包），确认导出能被分析读取。
-  2. 发第一部分：clinical/packs/batch01_part1.zip 放网盘，链接只发给读者；附 29 v2.2、30；读者编号（Peranut 试判用的是 R1，可以沿用；包 id 不同，答案不会混）。
-  3. 服务器：第二部分等通知；打包前 pull，build_pack.py 会自动去元数据。服务器上未清理的第一部分 zip 不发。
+四、版本管理（2026-11-10 定）
+  1. 数据包有两个号。
+       pack id：<设计名>+part<k>，例如 batch01+part1。它是读者答案在浏览器里的钥匙，也写进每个导出文件；同一部分永远不变。pack.json（病例、区域、轮廓、问卷）在同一个 pack id 下也不许变：要改这些，就是新的抽样或新的设计，另起 pack id。
+       release：r1、r2、r3……同一个 pack id 的包里任何文件变了（图片、README、阅读工具等）就加 1；新打的包是 r1。release 写在 READ_ME_FIRST.txt 第二行（Pack batch01+part1, release r2, 2026-11-10. Please quote the pack and release when you write to us.）和 zip 文件名里（retiseg_review_batch01_part1_r2.zip，解压后的文件夹名仍是 batch01_part1）。
+     build_pack.py：--release（默认 r1）；--clean-existing 必须给 --release，而且要比包里写的更大（没有版本行的旧包算 r1）；同名的 zip 已存在就停，一个 release 只打一次。报告里给出 zip 与 pack.json 的 sha256。
+  2. 文档：29 方案、30 指南的版本写在文件开头（vX.Y 与日期）。设计或问卷变了 X 加 1；发出之后的其他改动 Y 加 1；没发出的版本可以原地改。发出的是 PDF，文件名带版本（RetiSeg_protocol_v2.2.pdf、RetiSeg_reader_guide_v2.1.pdf），由仓库里的 md 生成。
+  3. 阅读工具（index.html 里的 TOOL_VERSION，现 1.1.0）与问卷（review_schema.json，现 3.1.0）照旧用三段版本号；导出文件记下两者与 pack id，分析按此区分。
+  4. 登记：clinical/releases.tsv（进 git）一行一个发出物：日期、名称、版本、文件名、sha256、状态（current 发 / withdrawn 不发）、发给谁（读者编号:日期）。只发 current 的文件；发出后填 sent 列。
+  5. 第一部分的现状：r1（服务器打的，带相机元数据）与 11-10 下午的无编号中间版（b6f788c8…）都是 withdrawn；r2（a9c3b09d…）是 current。r2 由 r1 经 --clean-existing --release r2 得到，除 README 的版本行与 SHA256SUMS 外，与中间版逐文件相同；pack.json 与 r1 相同。29 v2.2、30 v2.1 的 PDF 也已生成（各 8 页、6 页，逐页看过）。
+
+五、还要做的
+  1. 发第一部分：clinical/packs/outbox/batch01_part1/ 里的三个文件——retiseg_review_batch01_part1_r2.zip（放网盘，链接只发给读者）、RetiSeg_protocol_v2.2.pdf、RetiSeg_reader_guide_v2.1.pdf；读者编号（Peranut 试判用 R1，可以沿用；包 id 不同，答案不会混）。发出后在 clinical/releases.tsv 的 sent 列填上。
+  2. 本机删掉不发的副本：仓库根目录的 batch01_part1.zip（r1）、clinical/batch01_part1.zip 与 clinical/packs/batch01_part1.zip（中间版）。clinical/retiseg_batch01_selection_20261110.tar.gz 已解到 runs/CLINREV/selection/batch01/，可删。
+  3. 服务器：第二部分（b6）等第一部分回来；先 pull，再 build_pack.py --part 2 --release r1 --zip。服务器上 r1 的第一部分不发。
   4. 29 v2.2 的图片一段补了一句：包里的图去掉了相机元数据（拍摄日期、检查号、设备序列号）。版本号不变（还没发出）。

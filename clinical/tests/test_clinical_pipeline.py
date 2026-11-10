@@ -207,6 +207,7 @@ def test_pipeline_end_to_end(synthetic, monkeypatch):
     readme = (root / "packs" / "syn01" / "READ_ME_FIRST.txt").read_text()
     assert "Sources and licences" in readme and "SYN: see the study team" in readme
     assert build_pack.IMAGE_NOTE in readme and "resized copies" not in readme
+    assert readme.split("\n")[1].startswith("Pack syn01, release r1, ") and build_pack.release_of(readme) == "r1"
     for img in (root / "packs" / "syn01" / "images").glob("*.jpg"):     # no camera metadata in a pack image
         assert _jpeg_markers(img.read_bytes()) & {0xE1, 0xFE} == set()
     restricted = json.loads((root / "work" / "syn01" / "selection.json").read_text())
@@ -440,16 +441,28 @@ def test_clean_existing_pack(tmp_path):
     (pack / "images").mkdir(parents=True)
     _camera_jpeg(pack / "images" / "c01.jpg")
     (pack / "pack.json").write_text(json.dumps({"pack_id": "batchX+part1", "cases": []}))
-    (pack / "READ_ME_FIRST.txt").write_text("Sources\n" + build_pack.OLD_IMAGE_NOTE + "\n")
-    rep = build_pack.main(["--clean-existing", str(pack), "--zip"])
-    assert rep["images_cleaned"] == ["c01.jpg"] and rep["readme_updated"]
+    (pack / "READ_ME_FIRST.txt").write_text("Title\n\nSources\n" + build_pack.OLD_IMAGE_NOTE + "\n")
+    pack_json = common.sha256_file(pack / "pack.json")
+    with pytest.raises(SystemExit):                       # a cleaned pack is a new release: --release is required
+        build_pack.main(["--clean-existing", str(pack), "--zip"])
+    with pytest.raises(SystemExit):                       # a pack without a release line is r1; r1 again is refused
+        build_pack.main(["--clean-existing", str(pack), "--release", "r1"])
+    rep = build_pack.main(["--clean-existing", str(pack), "--release", "r2", "--zip"])
+    assert rep["images_cleaned"] == ["c01.jpg"] and rep["image_note_updated"] and rep["previous_release"] == "r1"
     assert b"12345678" not in (pack / "images" / "c01.jpg").read_bytes()
-    assert build_pack.IMAGE_NOTE in (pack / "READ_ME_FIRST.txt").read_text()
+    readme = (pack / "READ_ME_FIRST.txt").read_text()
+    assert build_pack.IMAGE_NOTE in readme and readme.split("\n")[1].startswith("Pack batchX+part1, release r2, ")
+    assert build_pack.release_of(readme) == "r2"
     sums = dict(reversed(line.split("  ")) for line in (pack / "SHA256SUMS.txt").read_text().splitlines())
     assert sums["images/c01.jpg"] == common.sha256_file(pack / "images" / "c01.jpg")
-    assert (tmp_path / "batchX_part1.zip").is_file()
-    rep2 = build_pack.main(["--clean-existing", str(pack)])                           # a second run changes nothing
-    assert rep2["images_cleaned"] == [] and not rep2["readme_updated"]
+    assert rep["pack_json_sha256"] == pack_json                                       # pack.json untouched
+    z = tmp_path / "retiseg_review_batchX_part1_r2.zip"
+    assert z.is_file() and rep["zip_sha256"] == common.sha256_file(z)
+    with pytest.raises(SystemExit):                       # the same release is never rebuilt
+        build_pack.main(["--clean-existing", str(pack), "--release", "r2", "--zip"])
+    rep3 = build_pack.main(["--clean-existing", str(pack), "--release", "r3"])         # nothing left to clean
+    assert rep3["images_cleaned"] == [] and not rep3["image_note_updated"]
+    assert build_pack.release_of((pack / "READ_ME_FIRST.txt").read_text()) == "r3"
 
 
 def test_kappa_sanity():

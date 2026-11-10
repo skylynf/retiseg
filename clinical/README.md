@@ -15,7 +15,8 @@ mine_discrepancies.py   prepared test set + probability maps of the model under 
                            (candidates.jsonl, images.jsonl, meta.json)
 sample_review.py        frozen design (designs/*.yaml) -> two-stage sample, stratified by image and region strata
                         (selection.json = the key, with design weights)
-build_pack.py           selection.json -> folder for the reader: index.html + pack.js + images/ + heat/ (--zip for e-mail)
+build_pack.py           selection.json -> folder for the reader: index.html + pack.js + images/ + heat/ (--zip, --release)
+releases.tsv            every file sent to readers: version, sha256, current / withdrawn, sent to whom
 reader_tool/index.html  offline single-file reader tool (ETDRS grid on the reader's fovea mark); answers saved in the
                         browser, exported as JSON
 analyze_reviews.py      exports + selection.json (+ the pack) -> regions_long.csv, images_long.csv, report.md
@@ -58,7 +59,7 @@ python clinical/scripts/sample_review.py --design clinical/designs/batch01.yaml 
 # 3. the reader folder of part 1 and a zip for e-mail (images included: never into git or the handoff pack);
 #    part 2 later from the same selection.json, with --part 2
 python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01/selection.json --part 1 \
-    --out runs/CLINREV/packs/batch01_part1 --title "RetiSeg clinical review - batch 1, part 1" --zip
+    --out runs/CLINREV/packs/batch01_part1 --title "RetiSeg clinical review - batch 1, part 1" --release r1 --zip
 ```
 Sampling (docs/clinical/33): with `reading_order: blind_first` every region stratum of an image is drawn once, with
 no rejection, so inclusion probabilities are exact; the reader tool (1.1.0) asks step A for every region of an
@@ -72,7 +73,11 @@ only decide the strata; the analysis uses each reader's own marks.
 Pack images carry no camera metadata (docs/clinical/35): some DDR originals hold the exam number, the eye, the capture
 date and the camera serial in Exif or JPEG comments, plus embedded previews; `clean_jpeg` keeps the image data byte
 for byte and drops the rest. A pack built before 2026-11-10 is cleaned in place with
-`build_pack.py --clean-existing <pack> --zip` (pack.json and the readers' saved answers stay valid).
+`build_pack.py --clean-existing <pack> --release r2 --zip` (pack.json and the readers' saved answers stay valid).
+Versions (docs/clinical/35 section 4): a pack has a pack id (`batch01+part1`, fixed for that part, and so is its
+pack.json) and a release (`--release`, r1 for a new pack, +1 whenever any file in it changes), shown on line 2 of
+READ_ME_FIRST.txt and in the zip name `retiseg_review_<folder>_<rN>.zip`. Every file sent to readers (pack zip,
+protocol and guide PDFs with their vX.Y) is listed in clinical/releases.tsv with its sha256; send only `current` rows.
 The selection.json of a formal batch is the answer key: while readers read it stays out of the public repository;
 its sha256 goes into the docs (docs/clinical/35) and the file is committed to clinical/selections/ when the review
 closes. The frozen design (seed, inputs hashes) already fixes the draw before anyone reads.

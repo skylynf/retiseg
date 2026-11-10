@@ -1,0 +1,9 @@
+# 发给读者的文件登记（docs/clinical/35 第五节）。只发 status 为 current 的文件；发出后在 sent 列写 读者编号:日期（如 R1:2026-11-11），多人用逗号分开。
+# 版本规则：数据包 = pack id（<设计>+part<k>，同一部分永远不变，pack.json 也不变）+ release（r1 起，包里任何文件变了就加 1，写在 READ_ME_FIRST.txt 第二行和 zip 文件名里）；
+# 29 方案、30 指南 = vX.Y（设计或问卷变了 X 加 1；发出之后的其他改动 Y 加 1；没发出的版本可以原地改）；工具与问卷的版本在 index.html 与 review_schema.json 里，导出文件会记下。
+date	item	version	file	sha256	status	sent	notes
+2026-11-10	pack batch01+part1	r1	batch01_part1.zip	4cd838fd386fd1506e0e87f0177eed9a5586ebf4600e8fa0de52af5fcb8deea3	withdrawn		服务器 85e7166 打包（12:07）；5 张 DDR 原图带相机元数据（35 第二节）；不发
+2026-11-10	pack batch01+part1	(none)	batch01_part1.zip	b6f788c8ae264e2b7ea3e4c54273ba47a79b23eeb131202dc83390dfa4595cab	withdrawn		11-10 下午本机清理后的中间版，README 没有版本行；由 r2 取代；不发
+2026-11-10	pack batch01+part1	r2	retiseg_review_batch01_part1_r2.zip	a9c3b09d5c38983eecbc90f12f99ec533479d4777f584299a39eed2cd4a6aaef	current		r1 经 build_pack.py --clean-existing --release r2；图片去元数据（像素不变）；pack.json 566557496118… 与 r1 相同；工具 1.1.0，问卷 3.1.0；28.6 MB，网盘发
+2026-11-10	protocol (docs/clinical/29)	v2.2	RetiSeg_protocol_v2.2.pdf	a62d68eb7ed68193e9cdcfc7b8ac8f3b8d4626c746f86310b9d9c36d66ade611	current		由 29_protocol_en.md（sha256 9d1eef8e8c84…）转 PDF，8 页
+2026-11-06	reader guide (docs/clinical/30)	v2.1	RetiSeg_reader_guide_v2.1.pdf	fa0941b4c8737a127524cac43833db280e61448b8e466cfbd6779554920e11fd	current		由 30_reader_guide_en.md（sha256 c2613d51c3af…）转 PDF，6 页；若 11-06 后已发过 v2.1，在 sent 列补上
