@@ -56,10 +56,10 @@
      数据包目录与 zip 带图像：单独传到工作站（例如 scp 到 runs/CLINREV/packs/），不进回传包、不进 git。selection.json 与抽样 report 进回传包。第二部分（--part 2）等本机通知。
      MAPLES-DR 不进本批次；它的定位与挖掘结果留在服务器即可。build_pack.py 遇到 MAPLES-DR 等不许外发的集合会拒绝打包。
      b5 11-10 做完（00 末尾 12:08–12:57）。本机核对见 docs/clinical/35：数与设计一致；第一部分的包里 5 张 DDR 原图带相机元数据（检查号、拍摄时间、左右眼、相机序列号），本机已用 build_pack.py --clean-existing 清理后重打 zip。服务器上的 runs/CLINREV/packs/batch01_part1 与 zip 留作分析（pack.json 相同），不要再发出去。
-     b6 第二部分：等本机通知。届时先 pull（含 clean_jpeg 的提交），再
+     b6 第二部分：等本机通知（11-11：第一部分已读完，工具升 1.2.0、问卷 3.1.1，等医生确认措辞，见 docs/clinical/36）。届时先 pull（含 clean_jpeg、工具 1.2.0、问卷 3.1.1 的提交），再
        python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01/selection.json --part 2 \
            --out runs/CLINREV/packs/batch01_part2 --title "RetiSeg clinical review - batch 1, part 2" --release r1 --zip
-     zip 名为 retiseg_review_batch01_part2_r1.zip。贴 00 末行（含 zip_sha256 与 pack_json_sha256）；zip 单独传到工作站，本机登记进 clinical/releases.tsv 后才发（35 第四节）。selection.json 与 selection.tsv 不进 git（答案表，读完前不公开，35 第三节）。
+     zip 名为 retiseg_review_batch01_part2_r1.zip；报告里的 pack 应为 batch01+part2、80 张、298 个区域，pack.json 里 schema 3.1.1、index.html 里工具 1.2.0。贴 00 末行（含 zip_sha256 与 pack_json_sha256）；zip 单独传到工作站，本机登记进 clinical/releases.tsv 后才发（35 第四节）。selection.json 与 selection.tsv 不进 git（答案表，读完前不公开，35 第三节）。
      b4' 之后照第二节打包一次（对照 runs/handoff_manifest_20261107.tsv），包里要有四个新 landmarks.json 与重挖的 meta.json、images.jsonl（DDR 的 candidates.jsonl 超过 8 MB 照旧留在服务器）。
 
 四、仓库里与服务器相关的脚本（备查）

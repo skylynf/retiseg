@@ -248,7 +248,8 @@ body.panel-dark #side {
         <button class="tbtn" id="tRedfree" title="Red-free / green channel (G)">Red-free</button>
         <button class="tbtn" id="tReset" title="Reset image adjustments">Reset</button>
       </div>
-      <div class="tgroup"><button class="tbtn" id="tGrid" title="ETDRS grid on your foveal mark (E)">ETDRS grid</button></div>
+      <div class="tgroup"><button class="tbtn" id="tGrid" title="ETDRS grid on your foveal mark (E)">ETDRS grid</button>
+        <label for="rGrid">Opacity</label><input type="range" id="rGrid" min="15" max="100" value="50" title="How strongly the grid is drawn"></div>
       <div class="tgroup" id="ovGroup">
         <button class="tbtn" id="tAnn" title="Dataset label, solid (D)">Dataset label</button>
         <button class="tbtn" id="tModel" title="AI outline, dashed (M)">AI</button>
@@ -280,7 +281,7 @@ body.panel-dark #side {
     <h1>How to read</h1>
     <p class="lead">Each image has five parts, in this order.</p>
     <ol>
-      <li><b>Grade the image.</b> Mark the fovea and the disc (the ETDRS grid appears), then the ICDR grade, the location of the closest hard exudate and your management, with no outlines or regions shown. These answers lock when you move on to step A.</li>
+      <li><b>Grade the image.</b> Mark the fovea and the disc (the ETDRS grid appears), then the ICDR grade, the location of the closest hard exudate and your management, with no outlines or regions shown. These answers lock when you move on to step A. Brightness, contrast and red-free start fresh on every image, so check them before you grade the quality.</li>
       <li><b>Step A, every region in turn.</b> Say what is in the dashed circle. No outline is shown for any region until you have answered step A for all of them.</li>
       <li><b>Reveal.</b> One click after the last step A; it locks all your step A answers for this image.</li>
       <li><b>Step B, every region in turn.</b> Judge the dataset label and the AI outline, and say what the error would change.</li>
@@ -297,7 +298,7 @@ body.panel-dark #side {
     </table>
     <p>Of the four lesion types, only the HG count can reach severe NPDR (4-2-1) by itself. IRMA and venous beading are not labeled in these datasets, and NV in only one of them; when an outline calls IRMA or NV a hemorrhage, the threshold options include the severe and PDR criteria.</p>
     <h2>ETDRS grid</h2>
-    <p>Centered on your foveal mark; it appears as soon as you mark the fovea, scaled from the folder's estimate until you mark the disc. The scale takes the fovea-to-disc distance as 4.7 mm (adult average about 4.6&ndash;4.8 mm). Circles: central subfield C (1 mm diameter), inner ring (1&ndash;3 mm), outer ring (3&ndash;6 mm); S, I, N, T are superior, inferior, nasal (disc side) and temporal. Press E to show or hide it. The scale is approximate: the fovea-to-disc distance varies with an SD of about 7%, so in some eyes the circles may be 15&ndash;20% off. 1 DD = 1.5 mm is the ETDRS convention; real discs average about 1.8 mm, so &ldquo;within 1 DD&rdquo; judged against the disc itself reaches a little beyond the inner ring. If the fovea is not visible there is no grid: answer the hard-exudate question with &ldquo;Cannot assess&rdquo;.</p>
+    <p>Centered on your foveal mark; it appears as soon as you mark the fovea, scaled from the folder's estimate until you mark the disc. The scale takes the fovea-to-disc distance as 4.7 mm (adult average about 4.6&ndash;4.8 mm). Circles: central subfield C (1 mm diameter), inner ring (1&ndash;3 mm), outer ring (3&ndash;6 mm); S, I, N, T are superior, inferior, nasal (disc side) and temporal. Press E to show or hide it; the Opacity slider next to the button makes it lighter or stronger, and the setting is kept for the next images. The scale is approximate: the fovea-to-disc distance varies with an SD of about 7%, so in some eyes the circles may be 15&ndash;20% off. 1 DD = 1.5 mm is the ETDRS convention; real discs average about 1.8 mm, so &ldquo;within 1 DD&rdquo; judged against the disc itself reaches a little beyond the inner ring. If the fovea is not visible there is no grid: answer the hard-exudate question with &ldquo;Cannot assess&rdquo;.</p>
     <h2>Outlines</h2>
     <table id="helpLegend"></table>
     <h2>Keys</h2>
@@ -335,7 +336,7 @@ body.panel-dark #side {
 
 <script>
 "use strict";
-const TOOL_VERSION = "1.1.0";
+const TOOL_VERSION = "1.2.0";
 const $ = (id) => document.getElementById(id);
 const el = (tag, attrs = {}, ...kids) => {
   const n = document.createElement(tag);
@@ -516,8 +517,13 @@ function firstOpenStep(caseId) {
   const i = steps.findIndex(s => !stepComplete(caseId, s));
   return i < 0 ? steps.length - 1 : i;
 }
+function resetAdjustments() {
+  V.bright = 100; V.contrast = 100; V.redfree = false;
+  $("rBright").value = 100; $("rContrast").value = 100;
+}
 function goCase(caseId, idx) {
   cur.debrief = false;
+  if (cur.caseId !== caseId) resetAdjustments();   // each image opens unadjusted (tool 1.2.0: Dr. Peranut, part 1)
   cur.caseId = caseId;
   cur.steps = stepsOf(caseId);
   cur.idx = idx === undefined ? firstOpenStep(caseId) : idx;
@@ -737,6 +743,9 @@ function renderChrome() {
     if (step.kind === "image_post" && caseObj.reference_grade) {
       rg.textContent = `Dataset grade: ${caseObj.reference_grade.value} (${caseObj.reference_grade.scale})`;
       rg.classList.remove("hidden");
+    } else if (step.kind === "image_post") {
+      rg.textContent = "No dataset grade: this image's dataset gives lesion outlines but no DR grade.";
+      rg.classList.remove("hidden");
     } else rg.classList.add("hidden");
   }
   // case list
@@ -758,11 +767,16 @@ function renderChrome() {
 }
 function renderAll() { renderChrome(); renderForm(); renderToolbar(); draw(); }
 const clsLabel = (cls) => (PACK.classes[cls] && PACK.classes[cls].label) || cls;
+// grid opacity is a viewing preference kept across images and sessions (tool 1.2.0, docs/clinical/36)
+function loadGridAlpha() {
+  try { const v = parseFloat(localStorage.getItem("retiseg-review:grid-alpha")); if (v >= 0.15 && v <= 1) return v; } catch (e) {}
+  return 0.5;
+}
 
 /* ======================================================================= viewer */
 const V = { img: null, imgCase: null, scale: 1, tx: 0, ty: 0, dpr: window.devicePixelRatio || 1, paths: {}, heat: {},
   showAnn: true, showModel: true, showHeat: false, showMarker: true, cls: { MA: true, HE: true, EX: true, SE: true },
-  bright: 100, contrast: 100, redfree: false, showGrid: true };
+  bright: 100, contrast: 100, redfree: false, showGrid: true, gridAlpha: loadGridAlpha() };
 const base = $("baseCanvas"), over = $("overCanvas"), mini = $("minimap");
 
 /* ETDRS grid (docs/clinical/32): centered on the reader's foveal mark; scale from the reader's fovea-to-disc distance
@@ -805,9 +819,10 @@ function zoneText(z) {
 function drawGrid(octx, g, px) {
   const e = ETD(), r = [e.central_um, e.inner_um, e.outer_um].map(u => u / g.umpx);
   octx.save();
+  const a = V.gridAlpha;
   const strokeBoth = (path) => {
-    octx.lineWidth = 3.2 * px; octx.strokeStyle = "rgba(0,0,0,.45)"; octx.stroke(path);
-    octx.lineWidth = 1.4 * px; octx.strokeStyle = "rgba(255,255,255,.85)"; octx.stroke(path);
+    octx.lineWidth = 3 * px; octx.strokeStyle = `rgba(0,0,0,${(0.45 * a).toFixed(3)})`; octx.stroke(path);
+    octx.lineWidth = 1.2 * px; octx.strokeStyle = `rgba(255,255,255,${(0.9 * a).toFixed(3)})`; octx.stroke(path);
   };
   const path = new Path2D();
   for (const rr of r) { path.moveTo(g.fx + rr, g.fy); path.arc(g.fx, g.fy, rr, 0, Math.PI * 2); }
@@ -819,7 +834,7 @@ function drawGrid(octx, g, px) {
   octx.setLineDash([]);
   strokeBoth(path);
   octx.font = `600 ${12 * px}px system-ui, sans-serif`; octx.textAlign = "center"; octx.textBaseline = "middle";
-  const label = (txt, x, y) => { octx.lineWidth = 3 * px; octx.strokeStyle = "rgba(0,0,0,.6)"; octx.strokeText(txt, x, y); octx.fillStyle = "#ffffff"; octx.fillText(txt, x, y); };
+  const label = (txt, x, y) => { octx.lineWidth = 3 * px; octx.strokeStyle = `rgba(0,0,0,${(0.6 * a).toFixed(3)})`; octx.strokeText(txt, x, y); octx.fillStyle = `rgba(255,255,255,${Math.min(1, 0.4 + 0.6 * a).toFixed(3)})`; octx.fillText(txt, x, y); };
   const dirs = { S: [0, -1], I: [0, 1], N: [g.nasal || 1, 0], T: [-(g.nasal || 1), 0] };
   for (const [side, [dx, dy]] of Object.entries(dirs)) {
     if (!g.nasal && (side === "N" || side === "T")) continue;
@@ -1071,7 +1086,11 @@ function renderToolbar() {
   const g = cur.debrief ? null : gridGeom(cur.caseId);
   $("tGrid").disabled = !g; $("tGrid").classList.toggle("on", !!g && V.showGrid);
   $("tGrid").title = g ? `ETDRS grid (E); scale from ${g.source}` : "ETDRS grid: mark the fovea and the disc first";
+  $("rGrid").disabled = !g || !V.showGrid;
   $("tRedfree").classList.toggle("on", V.redfree);
+  const adjusted = V.bright !== 100 || V.contrast !== 100 || V.redfree;
+  $("tReset").classList.toggle("on", adjusted);
+  $("tReset").title = adjusted ? "Image adjusted: click to reset" : "Reset image adjustments";
   const cg = $("clsGroup"); cg.innerHTML = "";
   for (const cls of ["MA", "HE", "EX", "SE"]) {
     const b = el("button", { class: "tbtn" + (V.cls[cls] ? " on" : ""), type: "button", title: PACK.classes[cls].name },
@@ -1108,9 +1127,15 @@ $("tHeat").onclick = () => toggle("showHeat");
 $("tMarker").onclick = () => toggle("showMarker");
 $("tRedfree").onclick = () => { V.redfree = !V.redfree; renderToolbar(); draw(); };
 $("tGrid").onclick = () => { V.showGrid = !V.showGrid; renderToolbar(); draw(); };
-$("tReset").onclick = () => { V.bright = 100; V.contrast = 100; V.redfree = false; $("rBright").value = 100; $("rContrast").value = 100; renderToolbar(); draw(); };
-$("rBright").oninput = (e) => { V.bright = +e.target.value; draw(); };
-$("rContrast").oninput = (e) => { V.contrast = +e.target.value; draw(); };
+$("tReset").onclick = () => { resetAdjustments(); renderToolbar(); draw(); };
+$("rBright").oninput = (e) => { V.bright = +e.target.value; renderToolbar(); draw(); };
+$("rContrast").oninput = (e) => { V.contrast = +e.target.value; renderToolbar(); draw(); };
+$("rGrid").value = Math.round(V.gridAlpha * 100);
+$("rGrid").oninput = (e) => {
+  V.gridAlpha = +e.target.value / 100;
+  try { localStorage.setItem("retiseg-review:grid-alpha", String(V.gridAlpha)); } catch (err) {}
+  draw();
+};
 
 /* ======================================================================= keyboard */
 document.addEventListener("keydown", (e) => {

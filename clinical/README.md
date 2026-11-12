@@ -23,7 +23,7 @@ analyze_reviews.py      exports + selection.json (+ the pack) -> regions_long.cs
 schema/review_schema.json  the questionnaire (version inside; codes, options, display conditions); tool and analysis read it
 ```
 
-Questionnaire 3.1.0 (docs/clinical/32, 33): no AI grade or referral question (the AI has no grade output); the band
+Questionnaire 3.1.x (3.1.0 docs/clinical/32, 33; 3.1.1 wording only, docs/clinical/36): no AI grade or referral question (the AI has no grade output); the band
 of the closest hard exudate on the ETDRS grid (none / outer ring / inner ring, within 1 DD / central subfield, the
 central 1 mm), recorded as a location and never as a DME diagnosis; the reader's own management for each eye; the
 dataset label and the AI judged separately (so "both wrong" is two answers, never a missing option); ICDR thresholds
@@ -62,7 +62,7 @@ python clinical/scripts/build_pack.py --selection runs/CLINREV/selection/batch01
     --out runs/CLINREV/packs/batch01_part1 --title "RetiSeg clinical review - batch 1, part 1" --release r1 --zip
 ```
 Sampling (docs/clinical/33): with `reading_order: blind_first` every region stratum of an image is drawn once, with
-no rejection, so inclusion probabilities are exact; the reader tool (1.1.0) asks step A for every region of an
+no rejection, so inclusion probabilities are exact; the reader tool (1.1.0; 1.2.0 adds grid opacity and resets image adjustments per image, docs/clinical/36) asks step A for every region of an
 image before one reveal, so overlapping crop windows cannot unblind anything. The trial designs keep the old
 non-overlap rejection only so they reproduce; the stratified arm refuses to run without `blind_first`.
 batch01 (frozen 2026-11-10) leaves MAPLES-DR out: the MESSIDOR terms prohibit copying and redistribution, and

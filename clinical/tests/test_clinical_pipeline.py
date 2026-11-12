@@ -465,6 +465,29 @@ def test_clean_existing_pack(tmp_path):
     assert build_pack.release_of((pack / "READ_ME_FIRST.txt").read_text()) == "r3"
 
 
+def test_weighted_share_pools_single_image_strata():
+    # stratum A: two images; B and C: one image each (pooled for the interval); one heavy region dominates
+    rows = [{"case_id": "a1", "image_stratum": "A", "v": "y", "w": 1.0},
+            {"case_id": "a2", "image_stratum": "A", "v": "n", "w": 1.0},
+            {"case_id": "b1", "image_stratum": "B", "v": "n", "w": 1.0},
+            {"case_id": "c1", "image_stratum": "C", "v": "y", "w": 97.0}]
+    sh = analyze_reviews.weighted_share(rows, "v", "y", n_boot=400, wkey="w")
+    assert sh["share"] == pytest.approx(0.98)
+    assert sh["collapsed"] == 2 and sh["max_weight"] == pytest.approx(0.97)
+    assert sh["n_eff"] == pytest.approx(100 ** 2 / (3 + 97 ** 2))
+    assert sh["lo"] < sh["share"] - 0.1                  # the heavy single-image stratum now adds variance
+
+
+def test_absent_outlines_in_window():
+    case = {"regions": [{"id": "c1-1", "crop": [0, 0, 100, 100]}],
+            "overlays": {"annotation": {"EX": [[10, 10, 12, 10, 12, 12]], "MA": []},
+                         "model": {"EX": [], "MA": [[300, 300, 302, 300, 302, 302]]}}}
+    assert analyze_reviews.absent_outlines_in_window(case, "c1-1", "FP") == 1   # the label has an outline here
+    assert analyze_reviews.absent_outlines_in_window(case, "c1-1", "FN") == 0   # the AI has none in the window
+    assert analyze_reviews.absent_outlines_in_window(case, "c1-1", "agree") is None
+    assert analyze_reviews.absent_outlines_in_window(None, "c1-1", "FP") is None
+
+
 def test_kappa_sanity():
     a = ["x", "y", "x", "y", "x", "x"]
     assert analyze_reviews.cohen_kappa(a, a) == pytest.approx(1.0)

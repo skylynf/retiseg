@@ -1,8 +1,8 @@
 {
   "schema_id": "retiseg-clinical-review",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "status": "formal batch 1 (docs/clinical/28 section 5, docs/clinical/33); frozen before the first reader opens part 1; wording-only changes afterwards (3.1.x)",
-  "changes": "3.1.0 (2026-11-06, docs/clinical/33): before any reader used 3.0.0. The ETDRS question records only where the closest hard exudate lies (an objective location band); it no longer calls the band 'DME', because hard exudate within 1 DD or in the central subfield does not establish DME without retinal thickening (OCT or stereo). The consequence options separate ICDR grade thresholds from changes of the HEX band (codes hex_1dd, hex_c replace dme_1dd, dme_cs). Management is the reader's own judgement: a baseline question per image (pre_management) and the per-region question without a leading example. Fovea-to-disc distance taken as 4.7 mm (population mean about 4.6-4.8 mm). All step A answers of an image come before any reveal, and the grading step locks when the reader moves on to step A (tool 1.1.0). Threshold options complete: No DR <-> moderate (g02), moderate <-> severe by any 4-2-1 criterion (g23), NPDR <-> PDR (g34), for IRMA or new vessels outlined as hemorrhage. 3.0.0 (2026-11-03, docs/clinical/32): after the trial with Dr. Peranut Chotcomwongse. Removed the AI grade / referral questions (the AI gives no grade). DME is the closest hard exudate to the fovea on the ETDRS grid (central subfield 1 mm, inner ring 1-3 mm, outer ring 3-6 mm; within 1 DD = central + inner), with a grid overlay in the tool. Fovea and disc are marked before grading (the grid needs both). 'Who is right?' is split into one status question for the dataset label and one for the AI, so 'both wrong' and 'both right' follow from the two answers. The ICDR consequence separates HEX within 1 DD of the fovea from HEX in the central subfield. IRMA and NV locations can be marked. 2.0.0 (2026-10-29, docs/clinical/31): clinical labels MA / HG / HEX / CWS; fewer questions.",
+  "changes": "3.1.1 (2026-11-11, docs/clinical/36): wording only, after Dr. Peranut read part 1 of batch 1; no code, option or condition changed. The threshold question (b_icdr) is reworded with an example; the management questions say that urgent versus non-urgent referral follows the reader's own clinic and that the analysis mainly compares refer with not refer; 'a few' and 'many' missing lesions get counts (1 to 5, more than 5) and the label / AI quality options get anchors (part 1 answered these without them, so the analysis reports them by part). 3.1.0 (2026-11-06, docs/clinical/33): before any reader used 3.0.0. The ETDRS question records only where the closest hard exudate lies (an objective location band); it no longer calls the band 'DME', because hard exudate within 1 DD or in the central subfield does not establish DME without retinal thickening (OCT or stereo). The consequence options separate ICDR grade thresholds from changes of the HEX band (codes hex_1dd, hex_c replace dme_1dd, dme_cs). Management is the reader's own judgement: a baseline question per image (pre_management) and the per-region question without a leading example. Fovea-to-disc distance taken as 4.7 mm (population mean about 4.6-4.8 mm). All step A answers of an image come before any reveal, and the grading step locks when the reader moves on to step A (tool 1.1.0). Threshold options complete: No DR <-> moderate (g02), moderate <-> severe by any 4-2-1 criterion (g23), NPDR <-> PDR (g34), for IRMA or new vessels outlined as hemorrhage. 3.0.0 (2026-11-03, docs/clinical/32): after the trial with Dr. Peranut Chotcomwongse. Removed the AI grade / referral questions (the AI gives no grade). DME is the closest hard exudate to the fovea on the ETDRS grid (central subfield 1 mm, inner ring 1-3 mm, outer ring 3-6 mm; within 1 DD = central + inner), with a grid overlay in the tool. Fovea and disc are marked before grading (the grid needs both). 'Who is right?' is split into one status question for the dataset label and one for the AI, so 'both wrong' and 'both right' follow from the two answers. The ICDR consequence separates HEX within 1 DD of the fovea from HEX in the central subfield. IRMA and NV locations can be marked. 2.0.0 (2026-10-29, docs/clinical/31): clinical labels MA / HG / HEX / CWS; fewer questions.",
   "notes": "Codes are what the analysis reads; labels and help are what the reader sees. Never re-use a code for a different meaning. Lesion codes map to the dataset classes: ma=MA, hg=HE, hex=EX, cws=SE.",
   "etdrs": {
     "fovea_disc_um": 4700,
@@ -184,7 +184,7 @@
           "type": "single",
           "required": true,
           "label": "Your management for this eye, from this photograph",
-          "help": "Your own clinical judgement, as you would act in practice.",
+          "help": "Your own clinical judgement, as you would act in practice. Urgent or non-urgent referral follows your own clinic's pathway; the analysis mainly compares refer (either) with not refer.",
           "options": [
             {
               "code": "routine",
@@ -462,8 +462,8 @@
           "id": "b_icdr",
           "type": "multi",
           "required": true,
-          "label": "If the wrong outline were used for grading, which threshold would it cross?",
-          "help": "Against your own grading of this image. If both outlines are wrong, tick what either error would change. The HEX bands describe location only.",
+          "label": "Would this error move the eye across a grading threshold?",
+          "help": "Imagine the eye graded from the outline you judged wrong instead of from what you see. Start from your own grade in the first step and tick each boundary it would cross; tick None if the ICDR grade and the hard-exudate band stay the same. Example: you graded mild NPDR (MA only) and the AI outlines a druse as HEX, so tick Mild ↔ moderate NPDR. If both outlines are wrong, tick what either error would change. The HEX bands describe location only.",
           "show_if": {
             "any": [
               {
@@ -563,7 +563,7 @@
               "label": "Unsure"
             }
           ],
-          "help": "Your own clinical judgement, compared with your management for this eye in the grading step."
+          "help": "Your own clinical judgement, compared with your management for this eye in the grading step. A change between non-urgent and urgent referral counts as Referral or treatment."
         },
         {
           "id": "b_comment",
@@ -590,17 +590,21 @@
             },
             {
               "code": "few_peripheral",
-              "label": "A few, outside the grid"
+              "label": "A few, outside the grid",
+              "help": "1 to 5, all outside the grid"
             },
             {
               "code": "few_central",
-              "label": "A few, including on the grid"
+              "label": "A few, including on the grid",
+              "help": "1 to 5, at least one on the grid"
             },
             {
               "code": "many",
-              "label": "Many"
+              "label": "Many",
+              "help": "More than 5"
             }
-          ]
+          ],
+          "help": "DR lesions of the four types that you see and the dataset label does not outline. A few: 1 to 5 lesions; many: more than 5."
         },
         {
           "id": "post_label_quality",
@@ -610,17 +614,21 @@
           "options": [
             {
               "code": "good",
-              "label": "Good"
+              "label": "Good",
+              "help": "You would use it as a reference with at most minor edits"
             },
             {
               "code": "acceptable",
-              "label": "Acceptable"
+              "label": "Acceptable",
+              "help": "Usable after correcting a few lesions"
             },
             {
               "code": "poor",
-              "label": "Poor"
+              "label": "Poor",
+              "help": "You would redo it"
             }
-          ]
+          ],
+          "help": "Your overall view of the dataset label for this whole image."
         },
         {
           "id": "post_ai_quality",
@@ -630,17 +638,21 @@
           "options": [
             {
               "code": "good",
-              "label": "Good"
+              "label": "Good",
+              "help": "You would use it as a reference with at most minor edits"
             },
             {
               "code": "acceptable",
-              "label": "Acceptable"
+              "label": "Acceptable",
+              "help": "Usable after correcting a few lesions"
             },
             {
               "code": "poor",
-              "label": "Poor"
+              "label": "Poor",
+              "help": "You would redo it"
             }
-          ]
+          ],
+          "help": "Your overall view of the AI lesion map for this whole image."
         },
         {
           "id": "post_reference_grade",

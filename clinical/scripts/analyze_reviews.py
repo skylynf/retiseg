@@ -95,6 +95,24 @@ FOVEA_DISC_UM = 4700.0          # adult mean about 4.6-4.8 mm (docs/clinical/33)
 DISCREPANCY = ("FN", "FP", "extent")
 # step-B codes that cannot describe an outline the region does not have (AI-only: no label outline; label-only: no AI)
 IMPLAUSIBLE = {"FP": ("b_label", {"extent", "wrong_type", "false"}), "FN": ("b_ai", {"extent", "wrong_type", "false"})}
+ABSENT_SOURCE = {"FP": "annotation", "FN": "model"}
+
+
+def absent_outlines_in_window(pack_case, rid, kind):
+    """Number of outlines (any class) inside the region's window from the source that drew nothing for this region
+    (the label for FP, the AI for FN); None without the pack. The reader sees all of them in step B."""
+    if not pack_case or kind not in ABSENT_SOURCE:
+        return None
+    reg = next((g for g in pack_case.get("regions", []) if g["id"] == rid), None)
+    if reg is None:
+        return None
+    x0, y0, x1, y1 = reg["crop"]
+    n = 0
+    for polys in pack_case["overlays"][ABSENT_SOURCE[kind]].values():
+        for poly in polys:
+            if any(x0 <= x <= x1 and y0 <= y <= y1 for x, y in zip(poly[0::2], poly[1::2])):
+                n += 1
+    return n
 
 
 def blind_verdict(kind, cls, finding):
@@ -356,12 +374,24 @@ def weighted_share(rows, field, value, n_boot=2000, seed=0, wkey="weight"):
         den = sum(r[wkey] for c in sample for r in by_case[c])
         return num / den if den else float("nan")
 
+    # a stratum with one finished image adds no bootstrap variance: pool such strata (collapsed strata), or put a
+    # lone one with the smallest other stratum (docs/clinical/36)
+    singles = [s for s, cs in strata.items() if len(cs) < 2]
+    if singles:
+        pooled = [c for s in singles for c in strata.pop(s)]
+        if len(pooled) >= 2 or not strata:
+            strata[("collapsed",)] = pooled
+        else:
+            k = min(strata, key=lambda s: len(strata[s]))
+            strata[k] = strata[k] + pooled
     point = est(cases)
     gen = common.rng(seed)
     boots = [est([cs[i] for cs in strata.values() for i in gen.integers(0, len(cs), len(cs))]) for _ in range(n_boot)]
     boots = [b for b in boots if b == b]
     lo, hi = (np.percentile(boots, [2.5, 97.5]) if boots else (float("nan"), float("nan")))
-    return {"share": point, "lo": float(lo), "hi": float(hi), "n_regions": len(rows), "n_images": len(cases)}
+    w = [r[wkey] for r in rows]
+    return {"share": point, "lo": float(lo), "hi": float(hi), "n_regions": len(rows), "n_images": len(cases),
+            "n_eff": sum(w) ** 2 / sum(x * x for x in w), "max_weight": max(w) / sum(w), "collapsed": len(singles)}
 
 
 # ------------------------------------------------------------------------------------------------ main
@@ -430,9 +460,12 @@ def flatten(selection, reviews, pack):
                 attrib = attribution(b)
                 level = consequence_level(b.get("b_icdr"), attrib)
                 implausible = None
+                near_absent = absent_outlines_in_window(pc, rid, x["kind"])
                 if x["kind"] in IMPLAUSIBLE:
                     field, bad = IMPLAUSIBLE[x["kind"]]
-                    implausible = b.get(field) in bad
+                    # an answer about the outline that drew nothing here is plausible when that source has another
+                    # outline (any class) inside the region's window: the reader judged what the window shows
+                    implausible = b.get(field) in bad and not near_absent
                 regions.append({
                     "reader": reader, "inst_id": rid, "case_id": cid, "set": x["set"], "image_id": x["image_id"],
                     "cls": x["cls"], "label": CLASS_LABEL.get(x["cls"], x["cls"]),
@@ -446,6 +479,7 @@ def flatten(selection, reviews, pack):
                     "blind_verdict": blind_verdict(x["kind"], x["cls"], a.get("a_finding")),
                     "b_label": b.get("b_label"), "b_ai": b.get("b_ai"), "b_unsure_why": b.get("b_unsure_why"),
                     "b_cause": b.get("b_cause"), "attribution": attrib, "implausible": implausible,
+                    "absent_source_outlines_in_window": near_absent,
                     "b_label_issue": ";".join(b.get("b_label_issue", [])), "b_model_issue": ";".join(b.get("b_model_issue", [])),
                     "b_icdr": ";".join(b.get("b_icdr", [])),
                     "consequence": None if level is None else str(level),
@@ -572,8 +606,10 @@ def main(argv=None):
     if any(r["b_label"] for r in done):
         md += ["What is wrong with each outline (questionnaire 3)", "", "Dataset label", "", crosstab(done, "kind", "b_label"), "",
                "AI", "", crosstab(done, "kind", "b_ai"), "",
-               f"Implausible combinations (an error ascribed to an outline the region does not have): "
-               f"{sum(1 for r in done if r['implausible'])} of {sum(1 for r in done if r['implausible'] is not None)}.", ""]
+               f"Implausible combinations (an error ascribed to an outline the region does not have, and no outline of "
+               f"that source in the region's window): {sum(1 for r in done if r['implausible'])} of "
+               f"{sum(1 for r in done if r['implausible'] is not None)}; answers about another outline of that source "
+               f"in the window: {sum(1 for r in done if r['implausible'] is False and r.get('absent_source_outlines_in_window'))}.", ""]
 
     located = [r for r in done if r["zone"]]
     md += ["## ETDRS location (docs/clinical/32)", "",
@@ -639,6 +675,17 @@ def main(argv=None):
                       f"{src} {sum(1 for i in im_done if i.get(f'hex_zone_{src}') == 'central')}")
     md += ["", "The reader's management for the eye by their HEX band", "",
            crosstab(im_done, "hex_zone", "pre_management", ZONE_ORDER + ["cannot"], MANAGEMENT_ORDER), ""]
+    # urgency of referral depends on the clinic (Dr. Peranut, part 1): the main comparison is refer (either) or not
+    for i in im_done:
+        m = i.get("pre_management")
+        i["refer_any"] = None if m in (None, "cannot") else ("refer" if m in ("refer", "urgent") else "not refer")
+    md += ["The reader's management collapsed (refer = non-urgent or urgent; urgency follows the clinic) by their ICDR grade", "",
+           crosstab(im_done, "pre_icdr", "refer_any", ["0", "1", "2", "3", "4", "cannot"], ["not refer", "refer"]), ""]
+    graded = [i for i in im_done if i.get("grade") not in (None, "", "None")]
+    if graded:
+        md += ["The reader's ICDR grade (columns) against the dataset grade (rows), images with a dataset grade", "",
+               crosstab(graded, "grade", "pre_icdr", ["0", "1", "2", "3", "4"], ["0", "1", "2", "3", "4", "cannot"]),
+               f"Exact agreement {sum(1 for i in graded if str(i['grade']) == str(i.get('pre_icdr')))} of {len(graded)}.", ""]
 
     marks = [dict(m, reader=i["reader"], case_id=i["case_id"]) for i in images for m in (i.get("marks") or [])]
     md += ["## IRMA and new vessels (optional signs and marks)", "",
@@ -649,7 +696,11 @@ def main(argv=None):
         md += ["What the four-class outlines put under each mark (within 10 px)", "", crosstab(marks, "kind", "under_label"), "", crosstab(marks, "kind", "under_ai"), ""]
 
     md += ["## Design-weighted shares (stratified or representative arm; each reader separately, finished images)", "",
-           "| reader | domain | quantity | share | 95% interval | regions | images |", "|---|---|---|---|---|---|---|"]
+           "Effective n is Kish's (sum w)^2 / sum w^2; 'largest' is the largest single region's share of the weight. "
+           "Strata with one finished image are pooled for the interval (collapsed strata). With an effective n below 10 "
+           "the share rests on a few heavily weighted regions: read it with the unweighted tables above.", "",
+           "| reader | domain | quantity | share | 95% interval | regions | images | effective n | largest |",
+           "|---|---|---|---|---|---|---|---|---|"]
     for r in done:
         r["conseq_ge2"] = None if r["consequence"] is None else ("yes" if r["consequence"] in ("2", "3", "4") else "no")
         r["hex_moved"] = None if r["hex_change"] is None else ("yes" if r["hex_change"] in ("1dd", "central", "unspecified") else "no")
@@ -673,10 +724,17 @@ def main(argv=None):
         for domain, keep, field, value in specs:
             sh = weighted_share([r for r in weighted if keep(r)], field, value, wkey="weight_adj")
             if sh:
-                md.append(f"| {rd} | {domain} | {field} = {value} | {fmt(sh['share'])} | {fmt(sh['lo'])}-{fmt(sh['hi'])} | {sh['n_regions']} | {sh['n_images']} |")
+                md.append(f"| {rd} | {domain} | {field} = {value} | {fmt(sh['share'])} | {fmt(sh['lo'])}-{fmt(sh['hi'])} | "
+                          f"{sh['n_regions']} | {sh['n_images']} | {fmt(sh['n_eff'], 1)} | {fmt(sh['max_weight'])} |")
 
     md += ["", "## Whole image", "", crosstab(im_done, "set", "post_unlabelled", col_order=["none", "few_peripheral", "few_central", "many"]), "",
            crosstab(im_done, "post_label_quality", "post_ai_quality"), ""]
+    if len({i.get("part") for i in im_done}) > 1:
+        # questionnaire 3.1.1 (part 2) gives counts for 'a few' / 'many' and anchors for the quality options
+        md += ["By part (part 1 answered without the counts and anchors of questionnaire 3.1.1)", "",
+               crosstab(im_done, "part", "post_unlabelled", col_order=["none", "few_peripheral", "few_central", "many"]), "",
+               crosstab(im_done, "part", "post_label_quality", col_order=["good", "acceptable", "poor"]), "",
+               crosstab(im_done, "part", "post_ai_quality", col_order=["good", "acceptable", "poor"]), ""]
     lm = [i for i in im_done if i.get("fovea_vs_estimate_um") is not None]
     if lm:
         d = [i["fovea_vs_estimate_um"] for i in lm]

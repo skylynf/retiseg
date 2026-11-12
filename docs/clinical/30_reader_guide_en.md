@@ -1,17 +1,19 @@
 # Reader guide
 
-RetiSeg clinical review, formal batch. Version 2.1, 6 November 2026. About ten minutes to read; keep it open while you start.
+RetiSeg clinical review, formal batch. Version 2.2, 11 November 2026. About ten minutes to read; keep it open while you start.
+
+Changed after part 1 (version 2.2, from your comments): the ETDRS grid has an opacity slider; brightness, contrast and red-free start fresh on every image; the threshold question is reworded, with an example; *a few* and *many* missing lesions have counts, and the label / AI quality options have anchors; urgent and non-urgent referral follow your own clinic; images without a dataset grade say so; an epiretinal membrane or another finding outside the list goes under *Other* with a comment. The questions and options themselves are unchanged.
 
 New since the trial: an ETDRS grid on the photograph, with a question on where the closest hard exudate lies; the dataset label and the AI are judged in two separate questions; IRMA and new vessels can be marked; a question on your management for each eye; for each image you first answer step A for every region, then reveal all outlines at once. The question on the AI's grade and referral is gone.
 
-The batch has 100 photographs in two parts: part 1 (20 photographs, projected 1.5–2 hours) now, part 2 (80) after part 1 is back. Each part is its own folder and saves its answers separately.
+The batch has 100 photographs in two parts: part 1 (20 photographs; read in about 1 hour 45 minutes) and part 2 (80 photographs, projected 5–6 hours in sittings of 10–15 images). Each part is its own folder and saves its answers separately.
 
 ## 1. Opening the folder
 
 1. Unzip the folder you received and keep its contents together (`index.html`, `pack.js`, `images/`, `heat/`).
 2. Double-click `index.html`. Chrome, Edge or Firefox work best; use a screen of 13 inches or more.
 3. If the page says it cannot find the pack, click **Open pack folder** and choose the unzipped folder.
-4. Enter your **reader code** (given to you by the study team) and click **Start**. Use the same code every time; that is how the page finds your saved answers.
+4. Enter your **reader code** (given to you by the study team) and click **Start**. Use the same code every time, in part 2 the same one as in part 1; that is how the page finds your saved answers and how we link your two parts.
 
 ## 2. Saving and returning your answers
 
@@ -25,10 +27,10 @@ The batch has 100 photographs in two parts: part 1 (20 photographs, projected 1.
 
 - **Left:** the list of photographs; a dot fills as you go.
 - **Centre:** the photograph. Scroll to zoom, drag to move, **F** to fit the whole image, **Z** to return to the current region. The small map at the bottom right shows where you are; click it to jump.
-- **Image controls:** brightness, contrast and **Red-free** (green channel, **G**). *Reset* undoes the adjustments.
+- **Image controls:** brightness, contrast and **Red-free** (green channel, **G**). *Reset* undoes the adjustments; it is highlighted while the image is adjusted. Every new image opens unadjusted.
 - **Marker** (the dashed circle, **K**): on or off at any time.
 - **Outline controls** (after the reveal of an image): **Dataset label** (solid lines, **D**), **AI** (dashed lines, **M**), **Heat map** (the AI's probability, **H**), and one switch per lesion type. Flipping the dataset label and the AI on and off is the quickest way to compare them.
-- **ETDRS grid** (**E**): appears once you have marked the fovea (section 6); shown by default when you grade the image and in the whole-image step, hidden in the region steps.
+- **ETDRS grid** (**E**): appears once you have marked the fovea (section 6); shown by default when you grade the image and in the whole-image step, hidden in the region steps. The **Opacity** slider next to it makes the grid lighter or stronger; the page keeps your setting.
 - **Right:** the questions, one numbered card each. A card's number turns dark when answered; a card turns amber if a required answer is missing. **Panel: light / dark** in the top bar switches the colors of this area. Keys **1–9** choose an option of the first unanswered question; **Enter** moves on.
 
 Lesion colors: **MA cyan**, **HG magenta**, **HEX yellow**, **CWS green**. Dotted gray lines, where present, mark areas the dataset itself labeled as uncertain.
@@ -44,7 +46,7 @@ Each photograph has five parts, always in this order: grade the image; step A fo
 - **ICDR grade.** No DR; mild NPDR (MA only); moderate NPDR (more than MA only, less than severe); severe NPDR (4-2-1 rule: more than 20 intraretinal HG in each of four quadrants, or definite venous beading in two or more quadrants, or prominent IRMA in one or more quadrants; no PDR); PDR (NV, and/or vitreous or preretinal hemorrhage); cannot grade.
 - **Closest hard exudate to the fovea** (a location on the grid): none on the grid; outer ring only (1.5–3 mm from the fovea); inner ring (0.5–1.5 mm, within 1 DD); central subfield (within 0.5 mm); cannot assess (also when the fovea is not visible). This records where the exudate lies; it is not a DME diagnosis (section 6).
 - **Signs beyond the four lesion types** (optional): IRMA, NVD/NVE, venous beading, preretinal or vitreous hemorrhage, laser scars, other. If you tick IRMA or NVD/NVE, you can mark them: click *Add IRMA* (or *Add NV*), click each location on the image, then *Done* or Esc. *Undo last* removes the last mark.
-- **Your management for this eye, from this photograph**: routine rescreening; shorter follow-up or monitoring; refer (non-urgent); refer urgently; cannot decide. Answer as you would act in practice.
+- **Your management for this eye, from this photograph**: routine rescreening; shorter follow-up or monitoring; refer (non-urgent); refer urgently; cannot decide. Answer as you would act in practice. Whether a referral is urgent depends on the clinic setting: follow your own clinic's pathway; our analysis mainly compares refer (either) with not refer.
 
 These answers lock when you move on to step A, because the circles show where the label or the AI drew lesions. Check your fovea and disc marks before moving on.
 
@@ -52,7 +54,7 @@ These answers lock when you move on to step A, because the circles show where th
 
 A dashed white circle marks one region at a time. Somewhere inside it the dataset label, the AI or both drew one of the four lesion types; you are not told which, or which type. The circle's size, and the zoom, follow the size of what was drawn. Many regions in this batch lie near the fovea or look like vessels; that is by design, so please do not let it influence your answer. Look inside the circle (zoom and red-free help) and answer from the photograph alone.
 
-- **Main finding**: one of the four lesion types (MA, HG, HEX, CWS), another retinal finding (including IRMA and NV), normal anatomy, an artifact, or *Cannot determine*.
+- **Main finding**: one of the four lesion types (MA, HG, HEX, CWS), another retinal finding (including IRMA and NV), normal anatomy, an artifact, or *Cannot determine*. A finding not in the list, such as an epiretinal membrane, is *Other*; name it in the step B comment.
 - **Confidence**: certain, probable, possible.
 
 *Next region* takes you to the next circle. No outline of the image is shown until you have answered step A for all its regions; until then you can go back and change them.
@@ -66,18 +68,18 @@ On the last region, the button reads **Reveal outlines**. Clicking it locks your
 The dataset label (solid) and the AI (dashed) appear inside the square around the region. The square may also show outlines of a neighboring region; your answers for that one are already locked. The top of the panel repeats your step A answer and gives the ETDRS location of the circle's center (for example "outer ring, nasal (N2), 2.6 mm from the fovea"); part of the lesion may lie closer to the fovea.
 
 - **Dataset label in this region** and **AI in this region**, each: *Correct* (including correctly drawing nothing); *Right lesion, wrong extent* (too large, too small, or several lesions merged); *Wrong lesion type*; *Marks a non-lesion*; *Misses a lesion*; *Can't decide* (then: depends on definition, or image quality or resolution). If both are wrong, say so in both questions.
-- If either outline is not correct: **which threshold the error would cross** (next section) and **if the wrong outline were used, would your management of this patient differ?** (no; follow-up interval; referral or treatment; unsure). The second is your own clinical judgement; compare it with your management for the eye in the grading step.
+- If either outline is not correct: **would this error move the eye across a grading threshold?** (next section) and **if the wrong outline were used, would your management of this patient differ?** (no; follow-up interval; referral or treatment; unsure). The second is your own clinical judgement; compare it with your management for the eye in the grading step. A change between non-urgent and urgent referral counts as referral or treatment.
 - **Comment** (optional). Short notes are very valuable when no option fits.
 
 ### Whole image (all outlines, grid shown)
 
-- **Lesions missing from the dataset label** for the whole image: none; a few, outside the grid; a few, including on the grid; many.
-- **Quality** of the dataset label and of the AI lesion map for this image.
-- For DDR images the dataset's own ICDR grade is shown; say whether you agree.
+- **Lesions missing from the dataset label** for the whole image (DR lesions of the four types that the label does not outline): none; a few (1 to 5), outside the grid; a few (1 to 5), at least one on the grid; many (more than 5).
+- **Quality** of the dataset label and of the AI lesion map for this image: *Good*, you would use it as a reference with at most minor edits; *Acceptable*, usable after correcting a few lesions; *Poor*, you would redo it.
+- For DDR images the dataset's own ICDR grade is shown; say whether you agree. The other datasets give lesion outlines but no grade, and the page says so.
 
 ## 5. Which threshold the error would cross
 
-Judge against your own grading of this image, as if the wrong outline were used. Several options may apply; *None* excludes the others. If both outlines are wrong, tick what either error would change.
+The question asks whether the error would move the eye across a grading threshold. Imagine the eye graded from the outline you judged wrong instead of from what you see, start from your own grade in the first step, and tick each boundary it would cross. Several options may apply; *None* (grade and hard-exudate band unchanged) excludes the others. If both outlines are wrong, tick what either error would change. Example: you graded mild NPDR (MA only) and the AI outlines a druse as HEX; used for grading, that outline would make the eye moderate NPDR, so tick *Mild ↔ moderate NPDR*.
 
 | Option | Applies when | Example |
 |---|---|---|

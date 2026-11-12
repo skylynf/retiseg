@@ -2,7 +2,7 @@
 
 **A clinician review of AI–label disagreements in diabetic retinopathy lesion segmentation**
 
-Study protocol, version 2.2 (formal batch), 10 November 2026. Prepared by the RetiSeg team for our clinical collaborators. Version 1.0 (29 October) was revised after the trial read by Dr. Peranut Chotcomwongse on 2 November 2026 (version 2.0, 3 November) and checked again before the formal batch (version 2.1, 6 November). Version 2.2 fixes the sample: MAPLES-DR is not used, because the MESSIDOR terms do not allow its photographs to be copied to readers outside our team, and its 10 images go to DDR (section 7).
+Study protocol, version 2.3 (formal batch), 11 November 2026. Prepared by the RetiSeg team for our clinical collaborators. Version 1.0 (29 October) was revised after the trial read by Dr. Peranut Chotcomwongse on 2 November 2026 (version 2.0, 3 November) and checked again before the formal batch (version 2.1, 6 November). Version 2.2 fixes the sample: MAPLES-DR is not used, because the MESSIDOR terms do not allow its photographs to be copied to readers outside our team, and its 10 images go to DDR (section 7). Version 2.3 records the interim check after part 1 (section 10): wording of five questions, two tool changes and two additions to the analysis; the questions and options are unchanged.
 
 ---
 
@@ -136,17 +136,19 @@ If both outlines are wrong, tick what either error would change. The grade optio
 - **IRMA and new vessels:** what the four-class label and AI put under each of your IRMA / NV marks.
 - **Weights:** each region's weight is the inverse of its exact probability of selection, scaled within each image stratum by the share of images you finished; this keeps estimates valid after part 1 alone, after both parts, or after a partial read. 95% intervals come from a bootstrap of images within image strata.
 - **Secondary:** probability that the label is wrong given how many models disagree with it; lesion-level precision and recall after correcting label errors; agreement between readers (kappa, Gwet's AC1, weighted kappa for grades and bands); accuracy of the automatic fovea estimates against your marks.
-- An interim analysis after part 1 checks the tool, the questions and the timing. The questions are fixed before part 1; between the parts only wording may change. If a substantive change were needed, part 1 would be reported separately.
+- **Management:** whether a referral is urgent depends on the clinic setting, so the main comparison is refer (non-urgent or urgent) against not refer; urgency is reported as given.
+- **Weights in practice:** the macular strata are oversampled, so their regions carry small weights and peripheral disagreements in images with many of them carry large ones. Each weighted share is reported with its effective sample size (Kish); strata with one finished image are pooled for the interval. Where the effective sample size is below 10, the share rests on a few regions and is read together with the unweighted results per region stratum.
+- An interim analysis after part 1 checks the tool, the questions and the timing. The questions are fixed before part 1; between the parts only wording may change. If a substantive change were needed, part 1 would be reported separately. Part 1 (read 10–11 November) needed wording changes only: the threshold question has an example; *a few* and *many* missing lesions have counts (1 to 5, more than 5) and the label / AI quality options have anchors, so these whole-image answers are reported by part; the management questions say how urgency is treated. The tool now opens each image unadjusted (brightness carried over from the previous image in part 1) and lets you set the grid's opacity.
 
 ## 11. Time commitment
 
 | Activity | Time |
 |---|---|
 | Trial (done): 4 images, 18 regions | about 40 minutes of active reading |
-| Part 1: 20 images, about 65–70 regions | projected 1.5–2 hours, can be split; part 1 will check this |
-| Part 2: 80 images, about 260 regions | projected 6–8 hours, in sittings of 10–15 images |
+| Part 1 (done): 20 images, 70 regions | 1 hour 38 minutes of active reading, plus 8 minutes of feedback |
+| Part 2: 80 images, 298 regions | projected 5–6 hours, in sittings of 10–15 images |
 
-Projections assume about 4–6 minutes per image; in the trial, images after the first took 5–9 minutes with an earlier version of the questions.
+In part 1 an image took a median of 3.9 minutes with its regions (about 33 seconds per region); the projection for part 2 uses these times.
 
 ## 12. Outputs and authorship
 
@@ -166,9 +168,11 @@ The formal batch is planned for the benchmark paper (in preparation; target *Nat
 | 2 Nov | Trial read (done) |
 | 3–6 Nov | Questions, tool, sampling and analysis revised (version 2.1) |
 | 7–10 Nov | Fovea and disc estimates checked; licenses checked; design fixed (10 Nov) |
-| Week of 9 Nov | Part 1 folder sent |
-| About one week after | Part 1 returned; interim check |
-| Then | Part 2 folder sent |
+| 10 Nov | Part 1 folder sent |
+| 10–11 Nov | Part 1 read and returned |
+| 11 Nov | Interim check; wording and tool updated (version 2.3) |
+| After you confirm the wording | Part 2 folder sent |
+| About two to three weeks later | Part 2 returned; full analysis |
 
 ## References
 
