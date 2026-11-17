@@ -110,7 +110,7 @@ A short feedback page at the end asks which questions were useful, which options
 
 ## 9. Thresholds and management
 
-**If the wrong outline were used for grading, which threshold would it cross?** (several may apply; "None" excludes the others), judged against your own grading of the image:
+**Would this error move the eye across a grading threshold?** Imagine the eye graded from the outline you judged wrong, starting from your own grade of the image (several may apply; "None" excludes the others):
 
 | Option | When it applies |
 |---|---|
@@ -171,7 +171,7 @@ The formal batch is planned for the benchmark paper (in preparation; target *Nat
 | 10 Nov | Part 1 folder sent |
 | 10–11 Nov | Part 1 read and returned |
 | 11 Nov | Interim check; wording and tool updated (version 2.3) |
-| After you confirm the wording | Part 2 folder sent |
+| 17 Nov | Part 2 folder sent; tell us if the new counts or anchors do not fit your judgement |
 | About two to three weeks later | Part 2 returned; full analysis |
 
 ## References

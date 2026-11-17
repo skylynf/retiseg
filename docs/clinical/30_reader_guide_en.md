@@ -112,7 +112,7 @@ The hard-exudate question records a location only. A single non-stereo color pho
 
 ## 8. Good practice
 
-- We expect about 4–6 minutes per image (a projection; part 1 will check it). Sittings of 10–15 images work well; take breaks whenever you like. Your image order is random, so stopping early still leaves a useful sample.
+- In part 1 an image took about 4 minutes with its regions. Sittings of 10–15 images work well; take breaks whenever you like. Your image order is random, so stopping early still leaves a useful sample.
 - Please work only through `index.html`. The data files in the folder also contain the outlines, which the page shows only after your blinded answers.
 - Please do not discuss your answers with other readers. We will not discuss your part 1 answers with you until part 2 is finished, apart from problems with the page or the questions.
 - Please do not search for the images elsewhere.
